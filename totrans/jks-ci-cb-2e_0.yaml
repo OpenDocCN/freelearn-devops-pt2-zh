@@ -1,0 +1,408 @@
+- en: Preface
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins is a Java-based Continuous Integration (CI) server that supports the
+    discovery of defects early in the software cycle. Thanks to a rapidly growing
+    number of plugins (currently over 1,000), Jenkins communicates with many types
+    of systems, building and triggering a wide variety of tests.
+  prefs: []
+  type: TYPE_NORMAL
+- en: CI involves making small changes to software and then building and applying
+    quality assurance processes. Defects do not only occur in the code, but also appear
+    in naming conventions, documentation, how the software is designed, build scripts,
+    the process of deploying the software to servers, and so on. CI forces the defects
+    to emerge early, rather than waiting for software to be fully produced. If defects
+    are caught in the later stages of the software development life cycle, the process
+    will be more expensive. The cost of repair radically increases as soon as the
+    bugs escape to production. Estimates suggest it is 100 to 1,000 times cheaper
+    to capture defects early. Effective use of a CI server, such as Jenkins, could
+    be the difference between enjoying a holiday and working unplanned hours to heroically
+    save the day. And as you can imagine, in my day job as a senior developer with
+    aspirations for quality assurance, I like long boring days, at least for mission-critical
+    production environments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins can automate the building of software regularly and trigger tests pulling
+    in the results and failing based on defined criteria. Failing early via build
+    failure lowers the costs, increases confidence in the software produced, and has
+    the potential to morph subjective processes into an aggressive metrics-based process
+    that the development team feels is unbiased.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Jenkins is not just a CI server, it is also a vibrant and highly active community.
+    Enlightened self-interest dictates participation. There are a number of ways to
+    do this:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Participate in the mailing lists and Twitter ([https://wiki.jenkins-ci.org/display/JENKINS/Mailing+Lists](https://wiki.jenkins-ci.org/display/JENKINS/Mailing+Lists)).
+    First, read the postings and as you get to understand what is needed, then participate
+    in the discussions. Consistently reading the lists will generate many opportunities
+    to collaborate.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Improve code and write plugins ([https://wiki.jenkins-ci.org/display/JENKINS/Help+Wanted](https://wiki.jenkins-ci.org/display/JENKINS/Help+Wanted)).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Test Jenkins and especially the plugins and write bug reports, donating your
+    test plans.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Improve documentation by writing tutorials and case studies.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: What this book covers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '[Chapter 1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*,
+    describes common maintenance tasks such as backing up and monitoring. The recipes
+    in this chapter outline methods for proper maintenance that in turn lowers the
+    risk of failures.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*,
+    details how to secure Jenkins and the value of enabling single sign-on (SSO).
+    This chapter covers many details, ranging from setting up basic security for Jenkins,
+    deploying enterprise infrastructure such as a directory service, and a SSO solution
+    to automatically test for the OWASP top 10 security.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 3](ch03.html "Chapter 3. Building Software"), *Building Software*,
+    reviews the relationship between Jenkins and Maven builds and a small amount of
+    scripting with Groovy and Ant. The recipes include checking for license violations,
+    controlling the creation of reports, running Groovy scripts, and plotting alternative
+    metrics.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 4](ch04.html "Chapter 4. Communicating Through Jenkins"), *Communicating
+    Through Jenkins*, reviews effective communication strategies for different target
+    audiences from developers and project managers to the wider public. Jenkins is
+    a talented communicator, with its hordes of plugins notifying you by e-mail, dashboards,
+    and Google services. It shouts at you through mobile devices, radiates information
+    as you walk pass big screens, and fires at you with USB sponge missile launchers.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 5](ch05.html "Chapter 5. Using Metrics to Improve Quality"), *Using
+    Metrics to Improve Quality*, explores the use of source code metrics. To save
+    money and improve quality, you need to remove defects in the software life cycle
+    as early as possible. Jenkins test automation creates a safety net of measurements.
+    The recipes in this chapter will help you build this safety net.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 6](ch06.html "Chapter 6. Testing Remotely"), *Testing Remotely*, details
+    approaches to set up and run remote stress and functional tests. By the end of
+    this chapter, you will have run performance and functional tests against a web
+    application and web services. Two typical setup recipes are included. The first
+    is the deployment of a WAR file through Jenkins to an application server. The
+    second is the creation of multiple slave nodes, ready to move the hard work of
+    testing away from the master node.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 7](ch07.html "Chapter 7. Exploring Plugins"), *Exploring Plugins*,
+    has two purposes. The first is to show a number of interesting plugins. The second
+    is to review how plugins work.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Appendix](apa.html "Appendix A. Processes that Improve Quality"), *Processes
+    that Improve Quality*, discusses how the recipes in this book support quality
+    processes and points to other relevant resources. This will help you form a coherent
+    picture of how the recipes can support your quality processes.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: What you need for this book
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book assumes you have a running an instance of Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In order to run the recipes provided in the book, you need to have the following
+    software:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Recommended:**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Maven 3 ([http://maven.apache.org](http://maven.apache.org))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins ([http://jenkins-ci.org/](http://jenkins-ci.org/))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Java Version 1.8 ([http://java.com/en/download/index.jsp](http://java.com/en/download/index.jsp))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Optional:**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: VirtualBox ([https://www.virtualbox.org/](https://www.virtualbox.org/))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: SoapUI ([http://www.soapui.org](http://www.soapui.org))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: JMeter ([http://jmeter.apache.org/](http://jmeter.apache.org/))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Helpful:**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A local subversion or Git repository
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'OS of preference: Linux (Ubuntu)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Note that from the Jenkins GUI (`http://localhost:8080/configure`), you can
+    install different versions of Maven, Ant, and Java. You do not need to install
+    these as part of the OS.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: 'There are numerous ways to install Jenkins: as a Windows service, using the
+    repository management features of Linux such as `apt` and `yum`, using Java Web
+    Start, or running it directly from a WAR file. It is up to you to choose the approach
+    that you feel is most comfortable. However, you can run Jenkins from a WAR file,
+    using HTTPS from the command line, pointing to a custom directory. If any experiments
+    go astray, then you can simply point to another directory and start fresh.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To use this approach, first set the `JENKINS_HOME` environment variable to
+    the directory you wish Jenkins to run under. Next, run a command similar to the
+    following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: Jenkins will start to run over https on port `8443`. The HTTP port is turned
+    off by setting `httpPort=-1` and the terminal will display logging information.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can ask for help by executing the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: A wider range of installation instructions can be found at [https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins](https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins).
+  prefs: []
+  type: TYPE_NORMAL
+- en: For a more advanced recipe describing how to set up a virtual image under VirtualBox
+    with Jenkins, you can use the *Using a test Jenkins instance* recipe in [Chapter
+    1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Who this book is for
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book is for Java developers, software architects, technical project managers,
+    build managers, and development or QA engineers. A basic understanding of the
+    software development life cycle, some elementary web development knowledge, and
+    a familiarity with basic application server concepts are expected. A basic understanding
+    of Jenkins is also assumed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Sections
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this book, you will find several headings that appear frequently (Getting
+    ready, How to do it, How it works, There's more, and See also).
+  prefs: []
+  type: TYPE_NORMAL
+- en: To give clear instructions on how to complete a recipe, we use these sections
+    as follows.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This section tells you what to expect in the recipe, and describes how to set
+    up any software or any preliminary settings required for the recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it…
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This section contains the steps required to follow the recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How it works…
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This section usually consists of a detailed explanation of what happened in
+    the previous section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more…
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This section consists of additional information about the recipe in order to
+    make the reader more knowledgeable about the recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This section provides helpful links to other useful information for the recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Conventions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this book, you will find a number of text styles that distinguish between
+    different kinds of information. Here are some examples of these styles and an
+    explanation of their meaning.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Code words in text, database table names, folder names, filenames, file extensions,
+    pathnames, dummy URLs, user input, and Twitter handles are shown as follows: "The
+    job-specific configuration is then stored in `config.xml` within the subdirectory."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A block of code is set as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'When we wish to draw your attention to a particular part of a code block, the
+    relevant lines or items are set in bold:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Any command-line input or output is written as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: '**New terms** and **important words** are shown in bold. Words that you see
+    on the screen, for example, in menus or dialog boxes, appear in the text like
+    this: "Click on **Save**."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Warnings or important notes appear in a box like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Tips and tricks appear like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reader feedback
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Feedback from our readers is always welcome. Let us know what you think about
+    this book—what you liked or disliked. Reader feedback is important for us as it
+    helps us develop titles that you will really get the most out of.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To send us general feedback, simply e-mail `<[feedback@packtpub.com](mailto:feedback@packtpub.com)>`,
+    and mention the book's title in the subject of your message.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If there is a topic that you have expertise in and you are interested in either
+    writing or contributing to a book, see our author guide at [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Customer support
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that you are the proud owner of a Packt book, we have a number of things
+    to help you to get the most from your purchase.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Downloading the example code
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You can download the example code files from your account at [http://www.packtpub.com](http://www.packtpub.com)
+    for all the Packt Publishing books you have purchased. If you purchased this book
+    elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
+    and register to have the files e-mailed directly to you.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Errata
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Although we have taken every care to ensure the accuracy of our content, mistakes
+    do happen. If you find a mistake in one of our books—maybe a mistake in the text
+    or the code—we would be grateful if you could report this to us. By doing so,
+    you can save other readers from frustration and help us improve subsequent versions
+    of this book. If you find any errata, please report them by visiting [http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata),
+    selecting your book, clicking on the **Errata Submission Form** link, and entering
+    the details of your errata. Once your errata are verified, your submission will
+    be accepted and the errata will be uploaded to our website or added to any list
+    of existing errata under the Errata section of that title.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To view the previously submitted errata, go to [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
+    and enter the name of the book in the search field. The required information will
+    appear under the **Errata** section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Piracy
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Piracy of copyrighted material on the Internet is an ongoing problem across
+    all media. At Packt, we take the protection of our copyright and licenses very
+    seriously. If you come across any illegal copies of our works in any form on the
+    Internet, please provide us with the location address or website name immediately
+    so that we can pursue a remedy.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Please contact us at `<[copyright@packtpub.com](mailto:copyright@packtpub.com)>`
+    with a link to the suspected pirated material.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We appreciate your help in protecting our authors and our ability to bring you
+    valuable content.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Questions
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: If you have a problem with any aspect of this book, you can contact us at `<[questions@packtpub.com](mailto:questions@packtpub.com)>`,
+    and we will do our best to address the problem.
+  prefs: []
+  type: TYPE_NORMAL

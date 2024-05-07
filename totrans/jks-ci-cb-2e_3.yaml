@@ -1,0 +1,2527 @@
+- en: Chapter 3. Building Software
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this chapter, we will cover the following recipes:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Plotting alternative code metrics in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Running Groovy scripts through Maven
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Manipulating environmental variables
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Running Ant through Groovy in Maven
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Failing Jenkins jobs based on JSP syntax errors
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configuring Jetty for integration tests
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Looking at license violations with Rat
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reviewing license violations from within Maven
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exposing information through build descriptions
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reacting to generated data with the groovy-postbuild plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Remotely triggering jobs through the Jenkins API
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Adaptive site generation
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Introduction
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This chapter reviews the relationship between Jenkins and Maven builds, and
+    there is also a small amount of scripting with Groovy and Ant.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins is the master of flexibility. It works well across multiple platforms
+    and technologies. Jenkins has an intuitive interface with clear configuration
+    settings. This is great for getting the job done. However, it is also important
+    that you clearly define the boundaries between Jenkins plugins and Maven build
+    files. A lack of separation will make you unnecessarily dependent on Jenkins.
+    If you know that you will always run your builds through Jenkins, then you can
+    afford to place some of the core work in Jenkins plugins, gaining interesting
+    extra functionality.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'However, if you want to always be able to build, test, and deploy directly,
+    then you will need to keep the details in `pom.xml`. You will have to judge the
+    balance; it is easy to have "feature creep". The UI is easier to configure than
+    writing a long `pom.xml` file. The improved readability translates into fewer
+    configuration-related defects. It is also simpler for you to use Jenkins for most
+    of the common tasks such as transporting artifacts, communicating, and plotting
+    the trends of tests. An example of the interplay between Jenkins and Maven is
+    the use of the Jenkins Publish Over SSH plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Publish+Over+SSH+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Publish+Over+SSH+Plugin)).
+    You can configure transferring files or add a section to the `pom.xml` as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: Remembering the dependencies on specific JARs and versions, which Maven plugin
+    to use at times feels like magic. Jenkins plugins simplify details.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Maven uses profiles so that you can use different configurations in your projects—for
+    example, server names for development, acceptance, or production. This also allows
+    you to update version numbers for plugins, easing maintenance effort. For more
+    information, visit [http://maven.apache.org/guides/introduction/introduction-to-profiles.html](http://maven.apache.org/guides/introduction/introduction-to-profiles.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Later in the chapter, you will be given the chance to run Groovy scripts with
+    AntBuilder. Each approach is viable; use depends more on your preferences than
+    one clear choice.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Jenkins plugins work well together. For example, the promoted-builds plugin
+    ([https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin))
+    signals when a build has met certain criteria, placing an icon by a successful
+    build as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Introduction](img/0082OS_03_01.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: You can use this feature to signal, for example, to the QA team that they need
+    to test the build, or for system administrators to pick up artifacts and deploy.
+    Other plugins can also be triggered by promotion (for example, when a developer
+    signs off on a build using the promotions plugin), including the SSH plugin. However,
+    Maven is not aware of the promotion mechanism. As Jenkins evolves, expect more
+    plugin interrelationships.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins is well versed in the choreographing of actions. You should keep the
+    running time of a job to a minimum and offset heavier jobs to nodes. Heavy jobs
+    tend to be clustered around document generation or testing. Jenkins allows you
+    to chain jobs together and hence jobs will be coupled to specific Maven goals
+    such as integration testing ([http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference](http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference)).
+    Under these circumstances, you are left with the choice of writing a number of
+    build files perhaps as a multi-module project ([http://maven.apache.org/guides/mini/guide-multiple-modules.html](http://maven.apache.org/guides/mini/guide-multiple-modules.html))
+    or a thicker `pom.xml` file with different goals ready to be called across jobs.
+    **Keep It Simple Stupid** (**KISS**) biases the decision towards a larger single
+    file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins is an enterprise-friendly agnostic
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Jenkins is technology-agnostic and can glue together project technologies across
+    the organization, development teams, and software position in their lifecycle.
+    Jenkins lets you run scripting languages of choice, makes it easy to pull in source
+    code using Git, subversion, CVS, and a number of other version control systems.
+    If Jenkins is not compatible, developers with a little practice can write their
+    own integration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this book, you will see both subversion and GIT projects mentioned. This
+    represents a realistic mix. Many consider Git more versatile than subversion.
+    Feel free to use Git as your repository of choice for the examples in this book.
+    Designed in from the start, Jenkins makes it easy for you to choose between the
+    different revision control systems.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: If you look at the relative use of Git and subversion for a representative collection
+    from Ohoh in early 2014, for Git there were 247,103 repositories (37 percent of
+    the total) and subversion had 324,895 repositories (48 percent of the total).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Typical enterprises lag behind when using the most modern offerings because
+    of their resistance to changing their working processes. Therefore, expect this
+    category of businesses to have a higher percentage of subversion repositories
+    compared to smaller organizations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A pom.xml template
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The recipes in this chapter will include `pom.xml` examples. To save page space,
+    only the essential details will be shown. You can download the full examples from
+    the book's website.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The examples were tested against Maven 3.2.1, though the examples should work
+    with the latest version of Maven.
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the main Jenkins configuration screen (`http://localhost:8080/configure`)
+    under the **Maven** section, you will need to install this version, giving it
+    the label `3.2.1`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To generate a basic template for a Maven project, you have two choices. You
+    can create a project via the archetype goal ([http://Maven.apache.org/guides/introduction/introduction-to-archetypes.html](http://Maven.apache.org/guides/introduction/introduction-to-archetypes.html))
+    or you can start off with a simple `pom.xml` file as shown here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The template looks simple, but is only part of a larger effective `pom.xml`.
+    It is combined with default values that are hidden in Maven. To view the expanded
+    version, you will need to run the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: Unless otherwise stated, the fragments mentioned in the recipes should be inserted
+    into the template just before the `</project>` tag, updating your `groupID`, `artifactID`,
+    and `version` values based on convention. For more detail, visit [http://maven.apache.org/guides/mini/guide-naming-conventions.html](http://maven.apache.org/guides/mini/guide-naming-conventions.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Maven changes
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Maven 2 has reached the end of its life ([http://maven.apache.org/maven-2.x-eol.html](http://maven.apache.org/maven-2.x-eol.html))
+    and the development team has stopped supporting it. You cannot expect prompt removal
+    of newly discovered bugs. At the time of writing this book, Maven 4 is in planning
+    and has not been released.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If you have Maven 2 installed as a package and wish to upgrade to Maven 3,
+    then you will need to install the Maven package. To swap between the alternative
+    Maven versions, you will need to run the following Ubuntu command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: Setting up a File System SCM
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: In previous chapters, you used recipes that copied files into the workspace.
+    This is easy to explain, but OS-specific. You can also do the file copying through
+    the File System SCM plugin ([https://wiki.jenkins-ci.org/display/JENKINS/File+System+SCM](https://wiki.jenkins-ci.org/display/JENKINS/File+System+SCM)),
+    as this is OS-agnostic. You will need to install the plugin, ensuring that the
+    files have the correct permissions so that the Jenkins user can copy them. In
+    Linux, consider placing the files beneath the Jenkins home directory `/var/lib/jenkins`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Plotting alternative code metrics in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe details how to plot custom data using the plot plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin)).
+    This allows you to expose numeric build data visually.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins has many plugins that create views of the test results generated by
+    builds. The analysis-collector plugin pulls in the results from a number of these
+    plugins to create an aggregated summary and history ([https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin)).
+    This is great for plotting the history of standard result types such as JUnit,
+    JMeter, FindBugs, and NCSS. There is also a SonarQube plugin ([http://docs.codehaus.org/display/SONAR/Jenkins+Plugin](http://docs.codehaus.org/display/SONAR/Jenkins+Plugin))
+    that supports pushing data to SonarQube ([http://www.sonarsource.org/](http://www.sonarsource.org/)).
+    SonarQube specializes in reporting a project's code quality. However, despite
+    the wealth of options, there may come a time when you will need to plot custom
+    results.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s assume you want to know the history of how many hits or misses are generated
+    in your custom cache during integration testing. Plotting over builds will give
+    you an indicator of whether the changes in the code are improving or degrading
+    the performance. The data is faked: a simple Perl script will generate random
+    results.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: In the plugin **Manager** section of Jenkins (`http://localhost:8080/pluginManager/available`),
+    install the plot plugin. Create a directory named `ch3.building_software/plotting`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Create the `ch3.building_software/plotting/hit_and_miss.pl` file and add the
+    following lines of code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a free-style job with **Job name** as `ch3.plotting`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Source Code Management** section, check **File System**, and add a
+    fully qualified path of your plotting directory, such as `/var/lib/jenkins/cookbook/ch3.building_software/plotting`,
+    in the **Path** field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Build** section, select **Add a build step** for **Execute Shell**
+    or in the case of a Windows system, select the **Execute Windows** batch command.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For the command, add `perl hit_and_miss.pl`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Post-build Actions** section, select the **Plot build data** checkbox.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the following values to the newly expanded region:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Plot group**: `Cache Data`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Plot title**: `Hit and misses`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Plot y-axis label**: `Number of hits or misses`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Plot style**: **Stacked Area**'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Type `misses.properties` in **Data series file** and type `Misses` in the **Data
+    series legend** label.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Type `hits.properties` in **Data series file** and type `Hits` in the **Data
+    series legend** label.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: At the bottom of the configuration page, click on the **Save** button, as shown
+    in the following screenshot:![How to do it...](img/0082OS_03_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job multiple times.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the **Plot** link and you will see something similar to the following
+    screenshot:![How to do it...](img/0082OS_03_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'The Perl script generates two property files: `hits` and `misses`. The `hits`
+    file contains `YVALUE` between 0 and 100 and the `misses` file contains `YVALUE`
+    between `0` and 50\. The numbers are generated randomly. The plot plugin then
+    reads values out of the `YVALUE` property.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The two property files are read by the plot plugin. The plugin keeps track of
+    the history, their values displayed in a trend graph. You will have to experiment
+    with the different graph types to find the optimum plot for your custom measurements.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'There are currently two other data formats that you can use: XML and CSV. However,
+    until the online help clearly explains the structures used, I would recommend
+    staying with the properties format.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Perl was chosen for its coding brevity and because it is platform-agnostic.
+    The script could have also been written in Groovy and run from within a Maven
+    project. You can see a Groovy example in the *Running Groovy scripts through Maven*
+    recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The plot plugin allows you can choose from a number of plot types, including
+    **Area**, **Bar**, **Bar 3D**, **Line**, **Line 3D**, **Stacked Area**, **Stacked
+    Bar**, **Stacked Bar 3D**, and **Waterfall**. If you choose the right graph type,
+    you can generate beautiful plots.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you want to add these custom graphs to your reports, you will need to save
+    them. You can do so by right-clicking on the image in your browser.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You may also wish for a different graph size. You can generate an image by visiting
+    `http://host/job/JobName/plot/getPlot?index=n&width=x&height=y`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The `[Width]` and `[height]` parameters define the size of the plot. `n` is
+    an index number pointing to a specific plot. If you have only one plot, then `n=0`.
+    If you have two plots configured, then `n` could be either 0 or 1\. To discover
+    the index, visit the plot''s link and examine the **Jump to** drop-down menu and
+    take one from the highest **Plot** number, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_03_04.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: To generate a graph in PNG format of dimensions 800 x 600 based on the job in
+    this recipe, you would use a URL similar to `localhost:8080/job/ch3.plotting/plot/getPlot?index=0&width=800&height=600`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: To download the image without logging in yourself, you can use the scriptable
+    authentication method mentioned in the *Remotely triggering jobs through the Jenkins
+    API* recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Running Groovy scripts through Maven* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Adaptive site generation* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Remotely triggering jobs through the Jenkins API* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Running Groovy scripts through Maven
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe describes how to use the GMaven plugin ([http://docs.codehaus.org/display/GMAVEN/Home](http://docs.codehaus.org/display/GMAVEN/Home))
+    to run Groovy scripts.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The ability to run Groovy scripts in builds allows you to consistently use one
+    scripting language in Maven and Jenkins. Groovy can be run in any Maven phase.
+    For more detail, refer to the *Maven phases* section in this recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Maven can execute the Groovy source code from within the build file, at another
+    file location, or from a remote web server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: An alternative plugin is GMavenPlus. For a comparison between the GMaven and
+    GMavenPlus plugins, visit [http://docs.codehaus.org/display/GMAVENPLUS/Choosing+Your+Build+Tool](http://docs.codehaus.org/display/GMAVENPLUS/Choosing+Your+Build+Tool).
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will find instructions on how to configure the plugin at [http://groovy.github.io/GMavenPlus/index.html](http://groovy.github.io/GMavenPlus/index.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a directory named `ch3.building_software/running_groovy`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**Maintainability of scripting**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: For later reuse, consider centralizing your Groovy code outside the build files.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Add the following lines of code just before the `</project>` tag within your
+    template file (mentioned in the introduction). Make sure the `pom.xml` file is
+    readable by Jenkins:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a free-style job with **Job name** as `ch3.groovy_verify`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Source Code Management** section, check **File System** and a fully
+    qualified path of your plotting directory, such as `/var/lib/jenkins/cookbook/ch3.building_software/running_groovy`,
+    in the **Path** field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the **Build** section, select **Add a build step** for **Invoke top-level
+    Maven targets**. In the newly expanded section, add the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Maven Version**: `3.2.1`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Goals**: `verify`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Run the job. If your system is on a *NIX box, you''ll get the following output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'On a Windows system with Jenkins properly configured, the script will fail
+    with the following message:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You can execute the GMaven plugin multiple times during a build. In the example,
+    the `verify` phase is the trigger point.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To enable the Groovy plugin to find imported classes outside its core features,
+    you will need to add an element in the `<classpath>` tag. The source code is contained
+    within the `<source>` tag:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: The `Import` statement works as the dependency is mentioned in the `<classpath>`
+    tag.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `SystemUtils` class ([https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/SystemUtils.html](https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/SystemUtils.html))
+    provides helper methods such as the ability to discern which OS you are running,
+    the Java version, and the user's home directory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The fail method allows the Groovy script to fail the build, in this case when
+    you are not running the build on a *NIX OS. Most of the time, you will want your
+    builds to be OS-agnostic. However, during integration testing you may want to
+    use a specific OS to perform functional tests with a specific web browser. The
+    check will stop the build if your tests find themselves on the wrong node.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Once you are satisfied with your Groovy code, consider compiling the code into
+    the underlying Java byte code. You can find full instructions at [http://docs.codehaus.org/display/GMAVEN/Building+Groovy+Projects](http://docs.codehaus.org/display/GMAVEN/Building+Groovy+Projects).
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a number of tips you might find useful.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Keeping track of warnings
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'It is important to review your logfiles, not only on failure, but also for
+    the warnings. In this case, you will see the two warnings:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`[WARNING] Using platform encoding (UTF-8 actually) to copy`'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`[WARNING] JAR will be empty - no content was marked for inclusion!`'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The platform encoding warning states that the files will be copied using the
+    default platform encoding. If you change servers and the default encoding on the
+    server is different, the results of the copying may also be different. For consistency,
+    it is better to enforce a specific coding in the file by adding the following
+    lines just before the `<build>` tag:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: Update your template file to take this into account.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The JAR warning is because we are only running a script and have no content
+    to make a JAR. If you had called the script in an earlier phase than the packaging
+    of the JAR, you would not have triggered the warning.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Where's my source?
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'There are two other ways to point to Groovy scripts to be executed. The first
+    way is to point to the filesystem, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The other approach is to connect to a web server through a URL as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: Using a web server to store Groovy scripts adds an extra dependency to the infrastructure.
+    However, it is also great for centralizing code in an SCM with web access.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Maven phases
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Jenkins lumps work together in jobs. It is coarsely grained for building with
+    pre- and post-build support. Maven is much more refined, having 21 phases as trigger
+    points. For more information, visit [http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html](http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Goals bundle phases. For example, there are four phases `pre-site`, `site`,
+    `post-site`, and `site-deploy` for the site goal, all of which will be called
+    in order by the `mvn` site, or directly by using the `mvn site:phase` syntax.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The idea is to chain together a series of lightweight jobs. You should farm
+    out any heavy jobs such as integration tests or a large amount of JavaDoc generation
+    to a slave node. You should also separate by time to even the load and aid in
+    diagnosing issues.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can find the XML wiring the lifecycle code at [https://git-wip-us.apache.org/repos/asf?p=maven.git;a=blob;f=maven-core/src/main/resources/META-INF/plexus/components.xml](https://git-wip-us.apache.org/repos/asf?p=maven.git;a=blob;f=maven-core/src/main/resources/META-INF/plexus/components.xml).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You will find the Maven phases mentioned in `components.xml` under the following
+    line:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: Maven plugins bind to particular phases. For site generation, the `<reporting>`
+    tag surrounds the majority of configuration. The plugins configured under reporting
+    generate useful information whose results are saved under the `target/site` directory.
+    There are a number of plugins that pick up the generated results and then plot
+    their history. In general, Jenkins plugins do not perform the tests; they consume
+    the results. There are exceptions such as the Sloccount plugin ([https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin))
+    and task scanner plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin)).
+    These differences will be explored later in [Chapter 5](ch05.html "Chapter 5. Using
+    Metrics to Improve Quality"), *Using Metrics to Improve Quality*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: To install the sloccount plugin, you will need first to install the static analysis
+    utilities plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Groovy plugin is useful in all phases, as it is not specialized to any specific
+    task such as packaging or deployment. It gives you a uniform approach to reacting
+    to situations that are outside the common functionality of Maven.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**The differences between Maven versions**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: To upgrade between Maven 2 and Maven 3 projects, you need to know the differences
+    and incompatibilities. There are a number of differences, especially around site
+    generation. They are summarized at [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes).
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will find the plugin compatibility list at [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix).
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Running Ant through Groovy in Maven* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Adaptive site generation* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Manipulating environmental variables
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe shows you how to pass variables from Jenkins to your build job,
+    and how different variables are overwritten. It also describes one way of failing
+    the build if crucial information has not been correctly passed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In a typical development/acceptance/production environment, you will want to
+    keep the same `pom.xml` files, but pass different configuration. One example is
+    the extension names of property files such as `.dev`, `.acc`, and `.prd`. You
+    would want to fail the build if critical configuration values are missing due
+    to human error.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins has a number of plugins for passing information to builds, including
+    the EnvFile plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Envfile+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Envfile+Plugin))
+    and the EnvInject plugin ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)).
+    The EnvInject plugin was chosen for this recipe as it is reported to work with
+    nodes and offers a wide range of property-injection options.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the EnvInject plugin ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)).
+    Create the recipe directory named `ch3.building_software/environment`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Create a `pom.xml` file that is readable by Jenkins with the following lines
+    of code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Create a file named `my.properties` and place it in the same directory as the
+    `pom.xml` file. Then, add the following lines of code in the `my.properties` file:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a blank free-style job with the **Job name** as `ch3.environment`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Source Code Management** section, check **File System** and add a fully
+    qualified path of your directory, such as `/var/lib/jenkins/cookbook/ch3.building_software/environment`,
+    in the **Path** field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the **Build** section, select **Add a build step** for **Invoke top-level
+    Maven targets**. In the newly expanded section, add the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Maven Version**: `3.2.1`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Goals**: `verify`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Click on the **Advanced** button and type `longname=SuperGood` in **Properties**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Inject the values in `my.properties` by selecting the **Prepare an environment
+    for the job** checkbox (near the top of the job configuration page).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For the **Properties File Path**, add `/full_path/my.properties`; for example
+    `/home/var/lib/cookbook/ch3.building_software/environment/my.properties`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The preceding option is depicted in the following screenshot:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![How to do it...](img/0082OS_03_05.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: 'Run the job. The build will fail:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: In the **Build** section, for **Invoke top-level Maven targets**, click on the
+    **Advanced** button. In the newly expanded section, add an extra property `name.from.jenkins=The
+    build with a name`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job. It should now succeed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The EnvInject plugin is useful for injecting properties into a build.
+  prefs: []
+  type: TYPE_NORMAL
+- en: During the recipe, Maven is run twice. The first time, it is run without the
+    `name.from.jenkins` variable defined, and the Jenkins job fails. The second time,
+    it is run with the variable defined, and the Jenkins job now succeeds.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Maven expects that the `name.from.jenkins` variable is defined, or the name
+    of the project will also not be defined. Normally, this would not be enough to
+    stop your job succeeding. However, when running the Groovy code, the `println
+    "Project name: ${project.name}"` line, specifically the `project.name` call, will
+    fail the build. This is great for protecting against missing property values.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Groovy code can see instances of the `org.apache.Maven.model.Model` project
+    and the `org.apache.Maven.execution.MavenSession` class. The project instance
+    is a model of the XML configuration that you can programmatically access. You
+    can get the `longname` property by referencing it through `project.properties.longname`.
+    Your Maven goal will fail if the property does not exist. You can also get at
+    the property through the `System.getProperty("longname")` call. However, you cannot
+    get to the property by using the `System.getenv()`environment call.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'It is well worth learning the various options:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Keep Jenkins Environment Variables** and **Keep Jenkins Build Variables**:
+    Both these options affect the Jenkins-related variables that your job sees. It
+    is good to keep your environment as clean as possible as it will aid you in debugging
+    later.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Properties Content**: You can override specific values in the properties
+    files.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Environment Script File Path**: This option points to a script that will
+    set up your environment. This is useful if you want to detect specific details
+    of the running environment and configure your build accordingly.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Populate Build Cause**: You enable Jenkins to set the `BUILD_CAUSE` environment
+    variable. The variable contains information about the event that triggered the
+    job.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Maven has a plugin for reading properties ([http://mojo.codehaus.org/properties-maven-plugin/](http://mojo.codehaus.org/properties-maven-plugin/)).To
+    choose between property files, you will need to set a variable in the plugin configuration
+    and call it as part of the Jenkins job, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: If you use a relative path to the properties file, then the file can reside
+    in your source code. If you use a full path, then the property file can be stored
+    on the Jenkins server. The second option is preferable if sensitive passwords,
+    such as those for database connections, are included.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins has the ability to ask for variables when you run a job manually. This
+    is called a parameterized build ([https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build)).
+    At build time, you can choose your property files by selecting from a choice of
+    property file locations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Running Ant through Groovy in Maven* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Running Ant through Groovy in Maven
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins interacts with an audience with a wide technological background. There
+    are many developers who became proficient in Ant scripting before moving on to
+    using Maven, developers who might be happier with writing an Ant task than editing
+    a `pom.xml` file. There are mission-critical Ant scripts that still run in a significant
+    proportion of organizations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In Maven, you can run Ant tasks directly with the AntRun plugin ([http://maven.apache.org/plugins/maven-antrun-plugin/](http://maven.apache.org/plugins/maven-antrun-plugin/))
+    or through Groovy ([http://docs.codehaus.org/display/GROOVY/Using+Ant+from+Groovy](http://docs.codehaus.org/display/GROOVY/Using+Ant+from+Groovy)).
+    AntRun represents a natural migration path. This is the path of least initial
+    work.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Groovy approach makes sense for Jenkins administrators who use Groovy as
+    part of their tasks. Groovy, being a first class programming language, has a wide
+    range of control structures that are hard to replicate in Ant. You can partially
+    do this by using the `Ant-contrib` library ([http://ant-contrib.sourceforge.net](http://ant-contrib.sourceforge.net)).
+    However Groovy, as a feature-rich programming language, is much more expressive.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This recipe details how you can run two Maven POMs involving Groovy and Ant.
+    The first POM shows you how to run the simplest of Ant tasks within Groovy and
+    the second performs an Ant-contrib task to securely copy files from a large number
+    of computers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a directory named `ch3.building_software/antbuilder`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a template file and name it `pom_ant_simple.xml`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
+    your preferences.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the following XML fragment just before the `</project>` tag:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Run `mvn test –f pom_ant_simple.xml`. Review the output (note that there are
+    no warnings about empty JAR files):![How to do it...](img/0082OS_03_06.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run `mvn verify –f pom_ant_simple.xml`. Review the output; it should look similar
+    to the following screenshot:![How to do it...](img/0082OS_03_07.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a second template file named `pom_ant_contrib.xml`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
+    your preferences.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the following XML fragment just before the `</project>` tag:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'This is only representative code, unless you have set it up to point to real
+    files on real servers:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Groovy runs basic Ant tasks without the need for extra dependencies. An `AntBuilder`
+    instance ([http://groovy.codehaus.org/Using+Ant+Libraries+with+AntBuilder](http://groovy.codehaus.org/Using+Ant+Libraries+with+AntBuilder))
+    is created and then the Ant echo task is called. Under the bonnet, Groovy calls
+    the Java classes that Ant uses to perform the `echo` command. Within the `echo`
+    command, a date is printed by directly creating an anonymous object:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You configured the `pom.xml` file to fire off the Groovy scripts in two phases:
+    the `test` phase and then later in the `verify` phase. The `test` phase occurs
+    before the generation of a JAR file and thus avoids creating a warning about an
+    empty JAR file. As the name suggests, this phase is useful for testing before
+    packaging.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The second example script highlights the strength of combining Groovy with Ant.
+    The SCP task ([http://ant.apache.org/manual/Tasks/scp.html](http://ant.apache.org/manual/Tasks/scp.html))
+    is run many times across many servers. The script first asks for the username
+    and password, avoiding storage on your filesystem or your revision control system.
+    The Groovy script expects you to inject the `host`, `full_path_to_location`, and
+    `myfile` variables.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Observe the similarity between the Ant SCP task and the way it is expressed
+    in the `pom_ant_contrib.xml` file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Another example of running Ant through Groovy is the creation of custom property
+    files on the fly. This allows you to pass on information from one Jenkins job
+    to another.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can create property files through AntBuilder using the `echo` task. The
+    following lines of code creates a `value.properties` file with two lines `x=1`
+    and `y=2`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: The first `echo` command sets `append` to `false`, so that every time a build
+    occurs, a new properties file is created. The second `echo` appends its message.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: You can remove the second `append` attribute as the default value is set to
+    `true`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Running Groovy scripts through Maven* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Failing Jenkins jobs based on JSP syntax errors
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**JavaServer Pages** (**JSP**) ([http://www.oracle.com/technetwork/java/overview-138580.html](http://www.oracle.com/technetwork/java/overview-138580.html))
+    is a standard that makes the creation of simple web applications straightforward.
+    You write HTML, such as pages with extra tags interspersed with Java coding, into
+    a text file. If you do this in a running web application, then the code recompiles
+    on the next page call. This process supports agile programming practices, but
+    the risk is that developers make messy, hard-to-read JSP code that is difficult
+    to maintain. It would be nice if Jenkins could display metrics about the code
+    to defend quality.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: JSP pages are compiled on the fly the first time a user request for the page
+    is received. The user will perceive this as a slow loading of the page and this
+    may deter them from future visits. To avoid this situation, you can compile the
+    JSP page during the build process and place the compiled code in the `WEB-INF/classes`
+    directory or packaged in the `WEB-INF/lib` directory of your web app. This approach
+    has the advantage of a faster first page load.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A secondary advantage of having compiled source code is that you can run a number
+    of statistical code review tools over the code base and obtain testability metrics.
+    This generates testing data ready for Jenkins plugins to display.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This recipe describes how to compile JSP pages based on the maven-jetty-jspc-plugin
+    ([http://www.eclipse.org/jetty/documentation/current/jetty-jspc-maven-plugin.html](http://www.eclipse.org/jetty/documentation/current/jetty-jspc-maven-plugin.html)).
+    The compiled code will work with the Jetty server, which is often used for integration
+    tests.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The JSP mentioned in this recipe is deliberately insecure and hence ready for
+    testing later in this book.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A complementary plugin specifically for Tomcat deployment is the Tomcat Maven
+    plugin ([http://tomcat.apache.org/maven-plugin.html](http://tomcat.apache.org/maven-plugin.html)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a directory named `ch3.building_software/jsp_example`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Create a WAR project from a Maven archetype by typing the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Enter the following values:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**groupId**: `ch3.packt.builds`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**artifactId**: `jsp_example`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**version**: `1.0-SNAPSHOT`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**package**: `ch3.packt.builds`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Click on **Enter to confirm the values**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Edit the `jsp_example/pom.xml` file by adding the following build section:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Replace the code snippet in the `src/main/webapp/index.jsp` file with the following
+    lines of code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a WAR file by using the `mvn package` command.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Modify `./src/main/webapp/index.jsp` by adding `if (evilInput==null)` underneath
+    the line starting with `if` so that it is no longer a valid JSP file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Run the `mvn package` command. The build will now fail with the following error
+    message:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You created a template project using an archetype.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The Maven plugin, upon seeing the `index.jsp` page, compiles it into a class
+    with the `jsp.index_jsp` name, placing the compiled class under `WEB-INF/classes`.
+    The plugin then defines the class as a servlet in `WEB-INF/web.xml` with a mapping
+    to `/index.jsp`. Let''s take a look at the following example:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The list of archetypes is increasing over time. You can find the full list at
+    [http://maven-repository.com/archetypes](http://maven-repository.com/archetypes).
+    If you are running Ubuntu, you will find a local XML catalog listing all the archetypes
+    named `archetype-catalog.xml` in the`~/.m2` directory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a few things you should consider.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Different server types
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'By default, the Jetty Maven plugin (Version 6.1.14) loads JSP 2.1 libraries
+    with JDK 15\. This will not work for all server types. For example, if you deploy
+    the WAR file generated by this recipe to a Tomcat 7 server, it will fail to deploy
+    properly. If you look at `logs/catalina.out`, you will see the following error:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: This is because different servers have different assumptions about how JSP code
+    is compiled, and which libraries they depend on to run. For Tomcat, you will need
+    to tweak the compiler used and the Maven plugin dependencies. For more details,
+    visit [http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin](http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Eclipse templates for JSP pages
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'Eclipse is a popular open source IDE for Java developers ([http://www.eclipse.org/](http://www.eclipse.org/)).
+    If you are using Eclipse with its default template for JSP pages, then your pages
+    may fail to compile. This is because, at the time of writing, the default compiler
+    does not like the meta-information mentioned before the `<html>` tag as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: As the meta-information follows the JSP specification, it is likely that later
+    the JSP compiler will accept the information. Until that day, simply remove the
+    lines before compiling or change the JSP compiler that you use.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Configuring Jetty for integration tests* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configuring Jetty for integration tests
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Jenkins plugins that keep a history of tests are normally consumers of the
+    data generated within Maven builds. For Maven to automatically run integration,
+    performance, or functional tests, it will need to hit a live test server. You
+    have two main choices:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Deploy your artifacts such as WAR files to a live server**: This can be done
+    using the Maven Wagon plugin ([http://mojo.codehaus.org/wagon-maven-plugin/](http://mojo.codehaus.org/wagon-maven-plugin/))
+    or through a Jenkins plugin such as the aptly-named Deploy plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin)).'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Run the lightweight Jetty server within the build**: This simplifies your
+    infrastructure. However, the server will be run as part of a Jenkins job, consuming
+    potentially scarce resources. This will limit the number of parallel executors
+    Jenkins can run, decreasing the maximum throughput of jobs. This should be delegated
+    to dedicated slave nodes set up for this purpose.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: This recipe runs the web application developed in the *Failing Jenkins jobs
+    based on JSP syntax errors* recipe, tying Jetty into integration testing by bringing
+    the server up just before tests are run and then shutting down afterwards. The
+    build creates a self-signed certificate. Two Jetty connectors are defined for
+    HTTP and for the secure TLS traffic. To create a port to Telnet, the `shutdown`
+    command is also defined.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Follow the *Failing Jenkins jobs based on JSP syntax errors* recipe generating
+    a WAR file. Copy the project to the directory named `ch3.building_software/jsp_jetty`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Add the following XML fragment just before `</plugins>` tag within the `pom.xml`
+    file:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Run the `mvn jetty:run` command. You will now see console output from the Jetty
+    server starting up.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Using a web browser, visit the `https://localhost:9443` location. After passing
+    through the warnings about the self-signed certificate, you will see the web application
+    working.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press *Ctrl* + *C* to stop the server.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run `mvn verify`. You will now see the server starting up and then stopping.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Within the `<executions>` tag, Jetty is run in the Maven's `pre-integration-test`
+    phase and later stopped in the Maven's `post-integration-test` phase. In the `generate-resources`
+    phase, Maven uses the `keytool` plugin to create a self-signed certificate. The
+    certificate is stored in Java `keystore` with a known password and alias. The
+    key encryption is set to RSA. If the **Common Name** (**CN**) is not correctly
+    set in your certificate, then your web browser will complain about the certificate.
+    To change the **Distinguished Name** (**DN**) of the certificate to the name of
+    your host, modify `<dname>cn=HOSTNAME</dname>`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Jetty is configured with two connector types: port `8082` for HTTP and port
+    `9443` for secure connections. These ports are chosen as they are above port `1023`,
+    so you do not need administrative rights to run the build. The port numbers also
+    avoid the ports used by Jenkins. Both the `jetty` and `Keytool` plugin use the
+    `keystore` tag to define the location of the keystore.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The generated WAR file is pointed to by the `webapp` tag and Jetty runs the
+    application.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Using self-signed certificates causes extra work for functional testers. Every
+    time they encounter a new version of the certificate, they will need to accept
+    the certificate as a security exception in their web browser. It is better to
+    use certificates from well-known authorities. You can achieve this with this recipe
+    by removing the key generation and pointing the `keystore` tag to a known file
+    location.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Maven 3 is fussier about defining plugin versions than Maven 2.2.1\. There are
+    good reasons for this. If you know that your build works well with a specific
+    version of Maven, this defends against unwanted changes. For example, at the time
+    of writing this book, the Jetty plugin used in this recipe is held at Version
+    8.1.16.v20140903\. As you can see from the bug report at [http://jira.codehaus.org/browse/JETTY-1071](http://jira.codehaus.org/browse/JETTY-1071),
+    configuration details have changed over versions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Another advantage is that if the plugin version is too old, the plugin will
+    be pulled out of the central plugin repository. When you next clean up your local
+    repository, this will break your build. This is what you want as this clearly
+    signals the need to review and then upgrade.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Failing Jenkins jobs based on JSP syntax errors* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Adaptive site generation* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Looking at license violations with Rat
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe describes how to search any job in Jenkins for license violations.
+    It is based on the Apache Rat project ([http://creadur.apache.org/rat/](http://creadur.apache.org/rat/)).
+    You can search for license violations by running a Rat JAR file directly with
+    a contributed Ant task or through Maven. In this recipe, you will be running directly
+    through a JAR file. The report output goes to the console, ready for Jenkins plugins
+    such as the log-parser plugin to process the information.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create the `License_Check` directory underneath the Jenkins home directory (`/var/lib/jenkins`).
+    Log in to Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a Maven job named `License_Check`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Source Code Management** section, check **Subversion**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Fill in `http://svn.apache.org/repos/asf/creadur/rat/trunk/` for **Modules,
+    Repository URL**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Set **Check-out Strategy** to **Use 'svn update' as much as possible**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Build** section, add a clean package to **Goals and options**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Post steps** section, check **Run only if build succeeds**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add **Post-build step** for **Execute Shell** (we assume that you are running
+    a NIX system). Add the following text to the **Execute Shell** text area if necessary,
+    replacing the JAR version number:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Click on the **Save** button and run the job.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the path to the workspace of your jobs. Visit the **Configure Jenkins**
+    screen, for example, `http://localhost:8080/configure`. Just under **Home Directory**,
+    click on the **Advanced** button. The **Workspace Root Directory** values become
+    visible, as shown in the following screenshot:![How to do it...](img/0082OS_03_08.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The Rat source code is compiled and then run twice—the first time to print the
+    help out and the second time to check license headers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The code base is changing; expect the number of options to increase over time.
+    You will find the most up-to-date information by running `help`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `–d` option tells the application in which directory your source code can
+    be found. In this example, you have used the `${JENKINS_HOME}` variable to define
+    the top level of the path. Next, we assume that the job is found under the `./job/jobname/workspace`
+    directory. You checked that this assumption is true in step 9 of the recipe. If
+    incorrect, you will need to adjust the option. To generate a report for another
+    project, simply change the path by replacing the job name.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `–e` option excludes certain file name patterns from review. You have excluded
+    JavaScript files `'*.js'` and `'*target*'` for all generated files under the target
+    directory. In a complex project, expect a long list of exclusions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'Even if the directory to check does not exist, then the build will still succeed
+    with an error reported as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE31]'
+  prefs: []
+  type: TYPE_PRE
+- en: You will have to use a log-parsing plugin to force failure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'A complimentary Maven plugin for updating licenses in source code is the maven-license
+    plugin ([http://code.mycila.com/license-maven-plugin/](http://code.mycila.com/license-maven-plugin/)).
+    You can use it to keep your source code license headers up to date. To add/update
+    the source code with the `src/etc/header.txt` license, add the following XML fragment
+    to your build section:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE32]'
+  prefs: []
+  type: TYPE_PRE
+- en: You will then need to add your own `src/etc/header.txt` license file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'One powerful feature is that you can add variables to expand. In the following
+    example, `${year}` will get expanded as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE33]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To format your source code, you would then run the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE34]'
+  prefs: []
+  type: TYPE_PRE
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Reviewing license violations from within Maven* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reviewing license violations from within Maven
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this recipe, you will run Rat through Maven. It will then check for license
+    violations in your source code.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create the directory named `ch3.building_software/license_maven`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a template `pom.xml` file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
+    your preferences.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the following XML fragment just before the `</project>` tag:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE35]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a Maven project with the **Project name** as `ch3.BasicLTI_license`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Source Code Management** section, tick **Subversion** with **URL
+    Repository** as `https://source.sakaiproject.org/svn/basiclti/trunk`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Do not spam the subversion repository. Double-check that there are no build
+    triggers activated.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: 'Under the **Build** section set, add the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Root POM**: `pom.xml`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Goals and options**: `clean`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Under the **Pre Steps** section, invoke Inject environment variables and add
+    the following to the property''s context:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE36]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Under the **Post Steps** section, invoke the top-level Maven targets:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Maven Version**: `3.2.1`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Goals**: `verify`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Click on the **Advanced** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the expanded section, set the **POM** section to the full path to your Rat's
+    POM file, for example, `/var/lib/cookbook/ch3.building_software/license_maven
+    /pom.xml`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Post Steps** section, add a copy command to move the report into
+    your workspace (such as `cp /var/lib/cookbook/ch3.building_software/license_maven/target/rat.txt
+    ${WORKSPACE}`) and **Execute Shell**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job. You can now visit the workspace and view `./target/rat.txt`. The
+    file should look similar to the following screenshot:![How to do it...](img/0082OS_03_09.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You have pulled source code from an open source project; in this case, from
+    one of the subversion and Git repositories of the Apereo Foundation ([https://source.sakaiproject.org/svn/](https://source.sakaiproject.org/svn/)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: In 2013, the Sakai Foundation ([www.sakaiproject.org](http://www.sakaiproject.org))
+    merged with JASIG ([www.jasig.org](http://www.jasig.org)) to become the Apereo
+    Foundation ([www.apereo.org](http://www.apereo.org)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Sakai is a **Learning Management System** (**LMS**) used by many millions of
+    students daily. The Apereo Foundation represents over 100 organizations, mostly
+    universities.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The source code includes different licenses that are checked by the Rat Maven
+    plugin. The plugin is called during the `verify` phase and checks the workspace
+    location of your job, as defined by the `${WORKSPACE}` variable that Jenkins injected.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `excludeSubProjects` statement set to `false` tells Rat to visit any subproject
+    as well as the master project. The `numUnapprovedLicenses` statement is the number
+    of unapproved licenses that are acceptable before your job fails.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `excludes` statement excludes the target directory and any other directory.
+    The `includes` statement overrides specific file types under the `src` directory.
+    Depending on the type of frameworks used in your projects, the range of includes
+    will change.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'For information on customizing Rat for specific license types, visit:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[http://creadur.apache.org/rat/apache-rat-plugin/examples/custom-license.html](http://creadur.apache.org/rat/apache-rat-plugin/examples/custom-license.html).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a few more useful tips to review.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Multiple approaches and antipatterns
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: There were multiple approaches to configuring the Jenkins job. You can avoid
+    copying the Rat report file by fixing its location in the Maven plugins configuration.
+    This has the advantage of avoiding a copying action. You can also use the multiple-scms
+    plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin))
+    to first copy the source code into the workspace. You should also consider splitting
+    into two jobs and then pointing the Rat job at the source code's workspace. The
+    last approach is a best practice as it cleanly separates the testing.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Snapshots
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Unlike fixed versions of artifacts, snapshots have no guarantee that their details
+    will not vary over time. Snapshots are useful if you want to test the latest and
+    greatest. However, for the most maintainable code, it is much better to use fixed
+    versions artifact.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To defend base-level stability, consider writing a job triggering a small Groovy
+    script inside a `pom.xml` file to visit all your projects. The script needs to
+    search for the `SNAPSHOT` word in the `version` tag and then write a recognizable
+    warning for the groovy-postbuild plugin to pick up and, if necessary, fail the
+    job. Using this approach, you can incrementally tighten the boundaries, giving
+    time to developers to improve their builds.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Looking at license violations with Rat* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exposing information through build descriptions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The setter plugin allows you to gather information out of the build log and
+    add it as a description to a builds history. This is useful as it allows you later
+    to quickly assess the historic cause of the issue without drilling down into the
+    console output. This saves many mouse clicks. You can now see details immediately
+    in the trend report without needing to review all the build results separately.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The setter plugin uses regex expressions to scrape the descriptions. This recipe
+    shows you how to do this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the description-setter plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin)).
+    Create a directory for the recipe files named `ch3.building_software/descriptions`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a template `pom.xml` file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
+    your preferences.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the following XML fragment just before the `</project>` tag:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE37]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a Maven project with the **Job name** as `ch3.descriptions`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Source Code Management** section, check **File System** and add a fully
+    qualified path of your directory, such as `/var/lib/Jenkins/cookbook/ch3.building_software/description`,
+    in the **Path** field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Tick **Set build description** and add the values shown in the following screenshot:![How
+    to do it...](img/0082OS_03_10.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job a number of times and review the **Build History**. You will see
+    that the description of each build varies:![How to do it...](img/0082OS_03_11.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'The Groovy code is called as part of the `install` goal. The code either fails
+    the job with the `MySever issue` pattern or prints the output to the build with
+    the `Great stuff happens because` pattern:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE38]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'As a post build action, the description-setter plugin is triggered. On build
+    success, it looks for the `Great stuff happens because: (.*)` pattern.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `(.*)` pattern pulls in any text after the first part of the pattern into
+    the `"\1"` variable, which is later expanded out in the setting of the description
+    of the specific build.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The same is true for the failed build apart from some extra text that is added
+    before the expansion of `"\1"`. You defined this in the configuration of **Description
+    for failed builds**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: It is possible to have more variables than just `\1` by expanding the regex
+    expressions. For example, if the console output was `fred is happy`, then the
+    `(.*)` pattern generates `"\1"` equal to `fred` and `"\2"` equal to `happy`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The plugin gets its ability to parse text from the token-macro plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin)).
+    The token-macro plugin allows macros to be defined in text; they are then expanded
+    by calling a utility method. This approach, using utility plugins, simplifies
+    plugin creation and supports consistency.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reacting to generated data with the groovy-postbuild plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Build information is sometimes left obscure in logfiles or reports that are
+    difficult for Jenkins to expose. This recipe will show you one approach of pulling
+    those details into Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The groovy-postbuild plugin allows you to run Groovy scripts after the build
+    has run. Because the plugin runs within Jenkins, it has programmatic access to
+    services, such as being able to read console input or change a build's summary
+    page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This recipe uses a Groovy script within Maven `pom.xml` to output a file to
+    the console. The console input is then picked up by the Groovy code from the plugin
+    and vital statistics displayed in the build history. The build summary details
+    are also modified.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Follow the *Reviewing license violations from within Maven* recipe. Add the
+    groovy-postbuild plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Postbuild+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Postbuild+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Update the `pom.xml` file by adding the following XML fragment just before
+    the `</plugins>` tag:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE39]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Update the configuration of the `ch3.BasicLTI_license` job under the **Post-build
+    Actions** section. Check **Groovy Postbuild**. Add the following script to the
+    Groovy script text input:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE40]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Make sure that the **If the script fails** select box is set to **Do Nothing**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job a number of times. In **Build History**, you will see results similar
+    to the following screenshot:![How to do it...](img/0082OS_03_12.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Clicking on the newest build link displays the build page with summary information
+    about unknown licenses, as shown in the following screenshot:![How to do it...](img/0082OS_03_13.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The Rat licensing report is saved to the `target/rat.txt` file. The Groovy code
+    then reads the Rat file and prints it out to the console, ready to be picked up
+    by the groovy-postbuild plugin. You could have done all the work in the groovy-postbuild
+    plugin, but you might later want to reuse the build.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'After the build is finished, the groovy-postbuild plugin runs. A number of
+    Jenkins services are visible to the plugin:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`manager.build.logFile`: This gets the logfile, which now includes the licensing
+    information.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`manager.getMatcher`: This checks the logfile for patterns matching `"^(.*)
+    Unknown Licenses\$"`. The symbol `^` checks for the beginning of the line and
+    `\$` checks for the end of the line. Any line with the `Unknown Licenses` pattern
+    at the end of the line will be matched with anything before that stored in `matcher.group(1)`.
+    It sets the `title` string to the number of unknown licenses.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`manager.addWarningBadge(title)`: This adds a warning badge to the build history
+    box and `title` is used as the text that is displayed as the mouse hovers over
+    the icon.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`manager.addShortText`: This adds visible text next to the icon.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A summary is created through the `manager.createSummary` method. An image that
+    already exists in Jenkins is added with the title.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Pulling information into a report by searching for regular patterns is called
+    scraping. The stability of scraping relies on a consistent pattern being generated
+    in the Rat report. If you change the version of the Rat plugin, the pattern might
+    change and break your report. When possible, it is more maintainable for you to
+    use stable data sources, such as XML files, that have a well-defined syntax.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Exposing information through build descriptions* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Improving security via small configuration changes* recipe in [Chapter
+    2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Remotely triggering jobs through the Jenkins API
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins has a remote API which allows you to enable, disable, run, and delete
+    jobs; it also lets you change the configuration. The API is increasing with each
+    Jenkins version. To get the most up-to-date details, you will need to review `http://yourhost/job/Name_of_Job/api/`.
+    Where `yourhost` is the location of your Jenkins server and `Name_of_Job` is the
+    name of a job that exists on your server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This recipe details how you can trigger build remotely by using security tokens.
+    This will allow you to run other jobs from within your Maven.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This recipe expects Jenkins security to be turned on so that you can log in
+    as a user. It also assumes you have a modern version of `wget` ([http://www.gnu.org/software/wget/](http://www.gnu.org/software/wget/))
+    installed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a free-style project with **Project name** as `ch3.RunMe`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Check **This Build is parameterized**, select **String Parameter**, and add
+    the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Name**: `myvariable`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Default Value**: `Default`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Description**: `This is my example variable`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Under the **Build Triggers** section, check **Trigger builds remotely** (For
+    example, from scripts).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Authentication Token** textbox, add `changeme`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Save** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Build with Parameters** link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will be asked for the variable named `myvariable`. Click on **Build**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Visit your personal configuration page, such as `http://localhost:8080/user/your_user/configure`,
+    where you replace `your_user` with your Jenkins username.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **API Token** section, click on the **Show API Token…** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Copy the token to `apiToken`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'From a terminal console, run `wget` to log in and run the job remotely:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE41]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Check the Jenkins job to verify that it has not run and returns a `405` HTTP
+    status code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE42]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'From a terminal console, run `wget` to log in and run the job returning a `201`
+    HTTP status code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE43]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: HTTP can be packet-sniffed by a third party. Use HTTPS when transporting passwords.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: To run a job, you need to authenticate as a user and then obtain permission
+    to run the specific job. This is achieved through `apiTokens`, which you should
+    consider to be the same as passwords.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There were two remote methods calls. The first is build, which used to run the
+    build without passing parameters. The method is currently not accepted. The second
+    working method is `buildWithParameters`, which expects you to pass at least one
+    parameter to Jenkins. The parameters are separated by `\&`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `wget` tool does the heavy lifting; otherwise you would have to write some
+    tricky Groovy code. We have chosen simplicity and OS dependence for the sake of
+    a short recipe. Running an executable risks making your build OS-specific. The
+    executable will depend on how the underlying environment has been set up. However,
+    sometimes you will need to make compromises to avoid complexity.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Authenticating+scripted+clients](https://wiki.jenkins-ci.org/display/JENKINS/Authenticating+scripted+clients).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'You can find the equivalent Java code at the following URL:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API](https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a few things you should consider.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Running jobs from within Maven
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'With little fuss, you can run `wget` through the maven-antrun plugin. The following
+    is the equivalent `pom.xml` fragment:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE44]'
+  prefs: []
+  type: TYPE_PRE
+- en: You can use the exec-maven plugin for the same purpose as the maven-ant plugin.
+    For more details, visit [http://mojo.codehaus.org/exec-maven-plugin/](http://mojo.codehaus.org/exec-maven-plugin/).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Remotely generating jobs
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: There is also a project that allows you to create Jenkins jobs through Maven
+    remotely ([https://github.com/evgeny-goldin/maven-plugins/tree/master/jenkins-maven-plugin](https://github.com/evgeny-goldin/maven-plugins/tree/master/jenkins-maven-plugin)).
+    The advantage of this approach is its ability to enforce consistency and reuse
+    between Jobs. You can use one parameter to choose a Jenkins server and populate
+    it. This is useful for generating a large set of consistently structured jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Running Ant through Groovy in Maven* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Adaptive site generation
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins is a great communicator. It can consume the results of tests generated
+    by builds. Maven has a goal for site generation where, within the `pom.xml` file,
+    many of the Maven testing plugins are configured. The configuration is bounded
+    by the `reporting` tag.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A Jenkins Maven software project job run notes when a site is generated, and
+    creates a shortcut icon in the jobs home page. This is a very visible icon that
+    you can link with content:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Adaptive site generation](img/0082OS_03_14.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: You can gain fine-grained control of Maven site generation through triggering
+    Groovy scripts that structure sites in different Maven phases.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this recipe, you will use Groovy to generate a dynamic site menu that has
+    different menu links depending on a random choice made in the script. A second
+    script then generates a fresh results page per site generation. These actions
+    are useful if you want to expose your own custom test results. The *Reporting
+    alternative code metrics in Jenkins* recipe describes how you can plot custom
+    results in Jenkins, enhancing the user experience further.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: This recipe works in Version 2.2.1 of Maven or earlier. Maven 3 has a slightly
+    different approach to site generation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To enforce a minimum Maven version from within your `pom.xml` file, you will
+    need to add `<prerequisites><maven>2.2.1</maven></prerequisites>`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a directory named `ch3.building_software/sit`e. Install the Copy Data
+    to Workspace plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Copy+Data+To+Workspace+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Copy+Data+To+Workspace+Plugin)).
+    This will give you practice with another useful plugin. You will use this plugin
+    to copy the files, as mentioned in this recipe, into the Jenkins workspace. This
+    is used to copy sensitive configuration files with passwords into a project, which
+    you do not want in your Revision Control System.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Add the following XML fragment just before `</project>` within your template
+    `pom.xml` file (mentioned in the introduction), making sure the `pom.xml` file
+    is readable by Jenkins:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE45]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Create the `site_xml.Groovy` file within the same directory as your `pom.xml`
+    file with the following lines of code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE46]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Add the `site.Groovy` file within the same directory as your `pom.xml` file
+    with the following lines of code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE47]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a Maven project with the name `ch3.site`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Under the **Build** section, fill in the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Maven Version**: `2.2.1`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Root POM**: `pom.xml`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Goals and options**: `site`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Under the **Build Environment** section, select **Copy data to workspace**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add whichever directory you have placed the files in (mentioned in this recipe)
+    to the **Path to folder** field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job a number of times reviewing the generated site. On the right-hand
+    side, you should see a menu section named **My super project**. For half of the
+    runs, there will be a submenu link named **Key Performance Indicators**:![How
+    to do it...](img/0082OS_03_15.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Two Groovy scripts are run in two different phases of the site goal. The first
+    generates the `site.xml` file. Maven uses this to create an additional menu structure
+    on the left-hand side of the index page. The second Groovy script generates a
+    page of random results.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `site_xml.Groovy` file runs in the `pre-site` phase. The `site.Groovy` file
+    executes during site generation. The `site_xml.Groovy` file generates the `src/site`
+    directory and then the `src/site/site.xml` file. This is the file that the Maven
+    site generation plugin uses to define the left-hand side of a site's menu. For
+    more details of the process, visit [http://Maven.apache.org/guides/mini/guide-site.html](http://Maven.apache.org/guides/mini/guide-site.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Groovy script then randomly decides, in the `if (random.nextInt(10) > 5)`
+    line, when to show an extra menu item for the results page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `site.Groovy` file generates a random results page of 40 entries. If an
+    older results page exists, the Groovy script deletes it. The script cheats a little
+    by creating the `target/site directory` first. If you want a much longer or shorter
+    page, modify the number `40` in the `for ( i in 1..40 ) {` line.
+  prefs: []
+  type: TYPE_NORMAL
+- en: After the build script is run, Jenkins checks that a site sits in the conventional
+    place and adds an icon to the job.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: At the time of writing this book, only **Maven** project jobs sense the existence
+    of generated sites and publish the site icon. free-style jobs do not.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here is some more useful information.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Searching for example site generation configurations
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Sometimes, there can be arbitrary XML magic in configuring site generation.
+    One of the ways to learn quickly is to use a software code search engine. For
+    example, try searching for the term `<reporting>` using the Black Duck code search
+    engine ([http://code.ohloh.net/](http://code.ohloh.net/)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Maven 2 and 3 pitfalls
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Maven 3 is mostly backwards-compatible with Maven 2\. However, it does have
+    some differences that you can review at [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes).
+    For the list of compatible plugins, visit [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Under the bonnet, Maven 3 is a rewrite of Maven 2, with improved architecture
+    and performance. Emphasis has been placed on compatibility with Maven 2\. You
+    don''t want to break legacy configuration as that would cause unnecessary maintenance
+    work. Maven 3 is fussier about syntax than Maven 2\. It will complain if you forget
+    to add a version number for any of your dependencies or plugins. For example,
+    in the first edition of this book, the *Failing Jenkins jobs based on JSP syntax
+    errors* recipe included a `pom.xml` file that had its `keytool-maven-plugin` float
+    without a defined version:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE48]'
+  prefs: []
+  type: TYPE_PRE
+- en: When running with Maven 3, the recipe fails with the following output.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Maven 2 and 3 pitfalls](img/0082OS_03_16.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The `genkey` goal no longer existed because Maven 3 was scanning using the
+    newest version of the plugin, Version 1.5\. Reviewing the plugin''s website at
+    [http://mojo.codehaus.org/keytool/keytool-maven-plugin/](http://mojo.codehaus.org/keytool/keytool-maven-plugin/),
+    it was clear that we needed to update the version number and goal:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Maven 2 and 3 pitfalls](img/0082OS_03_17.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The changes are reflected in the updated `pom.xml` file:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE49]'
+  prefs: []
+  type: TYPE_PRE
+- en: Another pitfall is the use of the Maven site plugin in Maven 3 reflected in
+    the way the `<reporting>` section is configured.
+  prefs: []
+  type: TYPE_NORMAL
+- en: An efficient method of upgrading site generation from Maven 2 is to start from
+    a working archetype generated in Maven 3 and incrementally transfer and test the
+    features from the Maven 2 project. Once you have a fully featured Maven 3 project,
+    you can turn it into its own archetype later to act as a template for further
+    projects.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: You will find information on building your own archetypes at [http://maven.apache.org/guides/mini/guide-creating-archetypes.html](http://maven.apache.org/guides/mini/guide-creating-archetypes.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'When upgrading from Maven 2 to 3, you will mostly find that JAR dependencies
+    and versions are explicitly mentioned. Let''s take a look at the following example:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE50]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'An upgrade is an ideal time to look to see if you can find newer versions with
+    bugs and known security issues removed. The Maven repository search engine ([http://search.maven.org/](http://search.maven.org/))
+    is a logical place to look for new versions. You can also consider browsing the
+    repository at [http://search.maven.org/#browse](http://search.maven.org/#browse)
+    for JUnit and click on the link:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Maven 2 and 3 pitfalls](img/0082OS_03_18.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: You can now see the different version numbers and dates uploaded. In the case
+    of JUnit, I would upgrade to the latest version; if the build does not work because
+    of API incompatibilities, then fall back to the last stable point version, Version
+    3.8.2.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Running Groovy scripts through Maven* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Plotting alternative code metrics in Jenkins* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Failing Jenkins jobs based on JSP syntax errors* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL

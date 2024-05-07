@@ -1,0 +1,2783 @@
+- en: Chapter 2. Enhancing Security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this chapter, we will cover the following recipes:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Testing for OWASP's top 10 security issues
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Finding 500 errors and XSS attacks in Jenkins through fuzzing
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Improving security via small configuration changes
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Avoiding sign-up bots with JCaptcha
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Looking at the Jenkins user through Groovy
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Working with the Audit Trail plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing OpenLDAP
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Using Script Realm authentication for provisioning
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reviewing project-based matrix tactics via a custom group script
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Administering OpenLDAP
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configuring the LDAP plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing a CAS server
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Enabling SSO in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exploring the OWASP Dependency-Check plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Introduction
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we'll discuss the security of Jenkins, taking into account
+    that Jenkins can live in a rich variety of infrastructures. We will also look
+    at how to scan for known security issues in the libraries used by Java code that
+    Jenkins compiles.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The only perfectly secure system is the system that does not exist. For real
+    services, you will need to pay attention to the different surfaces open to attack.
+    Jenkins'' primary surfaces are its web-based graphical user interface and its
+    trust relationships with its slave nodes and the native OS. Online services need
+    vigorous attention to their security surface. For Jenkins, there are three main
+    reasons why:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins has the ability to communicate to a wide range of infrastructure through
+    either its plugins or the master-slave topology
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The rate of code change around the plugins is high and open to accidental inclusion
+    of security-related defects
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: You need to harden the default install that is open to the world
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A counter-balance is that developers using the Jenkins frameworks apply well-proven
+    technologies such as XStream ([http://xstream.codehaus.org/](http://xstream.codehaus.org/))
+    for configuration persistence and Jelly ([http://commons.apache.org/jelly/](http://commons.apache.org/jelly/))
+    for rendering the GUI. This use of well-known frameworks minimizes the number
+    of lines of supporting code and the code that is used is well tested, limiting
+    the scope of vulnerabilities.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Another positive is that Jenkins code is freely available for review and the
+    core community keeps a vigil eye. It is unlikely that anyone contributing code
+    would deliberately add defects or unexpected license headers. However, you should
+    trust but verify.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The first half of the chapter is devoted to the Jenkins environment. In the
+    second half, you will see how Jenkins fits into the wider infrastructure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Lightweight Directory Access** (**LDAP**) is widely available and the de
+    facto standard for Enterprise directory services. We will use LDAP for Jenkins
+    authentication and authorization and later **single sign-on** (**SSO**) by JASIG''s
+    **Central Authentication Service** (**CAS**). To know more, visit [http://www.jasig.org/cas](http://www.jasig.org/cas).
+    CAS allows you to sign on once and then go to other services without logging in
+    again. This is useful for when you want to link from Jenkins to other password-protected
+    services such as an organization''s internal wiki or code browser. Just as importantly,
+    CAS can connect behind the scenes to multiple types of authentication providers
+    such as LDAP, databases, text files, and an increasing number of other methods.
+    This allows Jenkins indirectly to use many logon protocols on top of the ones
+    its plugins already provide.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**Security Advisories**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: There is an e-mail list and RSS feed for Jenkins-related security advisories.
+    You can find the link to the advisory feed's at [https://wiki.jenkins-ci.org/display/JENKINS/Security+Advisories](https://wiki.jenkins-ci.org/display/JENKINS/Security+Advisories).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Testing for OWASP's top 10 security issues
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'This recipe details the automatic testing of Jenkins for well-known security
+    issues with w3af, a penetration testing tool from the **Open Web Application Security
+    Project** (**OWASP**). For more information, visit [http://w3af.sourceforge.net](http://w3af.sourceforge.net).
+    OWASP''s purpose is to make application security visible. The OWASP''s top 10
+    lists of insecurities for 2010 include the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**A2-Cross-site Scripting (XSS)**: An XSS attack can occur when an application
+    returns an unescaped input to a client''s browser. The Jenkins administrator can
+    do this by default through the job description.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**A6-Security Misconfiguration**: A Jenkins plugin gives you the power to write
+    custom authentication scripts. It is easy to get the scripts wrong by misconfiguration.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**A7-Insecure Cryptographic Storage**: There are over 600 plugins for Jenkins,
+    each storing its configuration in separate XML files. It is quite possible that
+    there is a rare mistake with the storage of passwords in plain text. You will
+    need to double-check.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**A9-Insufficient Transport Layer Protection**: Jenkins runs over HTTP by default.
+    It can be a hassle and involve extra costs to obtain a trusted certificate. You
+    might be tempted not to implement TLS, leaving your packets open.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: You will find the OWASP's top 10 lists of insecurities for 2013 has some changes
+    compared with the 2010 version. The most significant change is the inclusion of
+    A9-Using Known Vulnerable Components. If your software depends on older libraries,
+    then there is a window of opportunity for manipulation of known weaknesses.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins has a large set of plugins written by a motivated, diffuse, and hardworking
+    community. It is possible due to the large churn of code that security defects
+    are inadvertently added. Examples include leaving passwords in plain text in configuration
+    files or using unsafe rendering that does not remove suspicious JavaScript. You
+    can find the first type of defect by reviewing the configuration files manually.
+    The second type is accessible to a wider audience and thus more readily crackable.
+    You can attack the new plugins by hand. There are helpful cheat sheets available
+    on the Internet ([http://ha.ckers.org/xss.html](http://ha.ckers.org/xss.html)).
+    The effort is tedious; automated tests can cover more ground and be scheduled
+    as part of a Jenkins job.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the recipe named *Exploring the OWASP Dependency-Check plugin*, you will
+    configure Jenkins to give you warning of known attack vectors, based on automatically
+    reviewing your code dependencies.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**OWASP storefront**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'OWASP publish each year a list of the top 10 most common security attack vectors
+    for web applications. They publish this document and a wide range of books through
+    [http://lulu.com](http://lulu.com). At Lulu, you have free access to PDF versions
+    of OWASP''s documents, or you can buy cheap-on-demand printed versions. You can
+    find the official storefront at: [http://stores.lulu.com/owasp](http://stores.lulu.com/owasp).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Penetration tests have the potential to damage the running application. Make
+    sure that you have a backed-up copy of your Jenkins workspace. You might have
+    to reinstall. Also turn off any enabled security within Jenkins: this allows w3af
+    to freely roam the security surface.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Download the newest version of w3af from SourceForge ([http://w3af.org/download/](http://w3af.org/download/))
+    and also download and read the OWASP's top 10 list of well-known attacks from
+    [https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project).
+  prefs: []
+  type: TYPE_NORMAL
+- en: w3af has both Windows and *NIX installation packages; use the OS install of
+    your choice. However, the Windows installer is no longer supported and the installation
+    process without the installer is complex. Therefore, it's better to use a *NIX
+    version of the tool.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The Debian package for w3af is older and more unstable than the SourceForge
+    package for Linux. Therefore, do not use the `apt-get` and `yum` methods of installation,
+    but rather use the downloaded package from SourceForge.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'To install w3af, follow the instructions given on the developer site ([http://w3af.org/download/](http://w3af.org/download/)).
+    If there are any unsolvable dependency issues for Ubuntu, fall back to the `apt-get`
+    installation approach and install an older version of the tool as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Run w3af.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Profiles** tab, select **OWASP_TOP10**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Target** address window, fill in `http://localhost:8080/`, changing
+    the hostname to suit your environment.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Start** button. The penetration tests will now take place and
+    the **Start** button will change to **Stop**. At the end of the scan, the **Stop**
+    button will change to **Clear**:![How to do it...](img/0082OS_02_01.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: View the attack history by selecting the **Log** tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the results by clicking on the **Results** tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: After the first scan, select **full_audit** under **Profiles**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Clear** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Type `http://localhost:8080/` in the **Target** address window.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Start** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Wait until the scan has finished and review the **Results** tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: w3af is written by security professionals. It is a pluggable framework with
+    extensions written for different types of attacks. The profiles define which plugins
+    and their associated configuration you are going to use in the penetration test.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You first attack using the **OWASP_TOP10** profile and then attack again with
+    a fuller set of plugins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The results will vary according to your setup. Depending on the plugin, security
+    issues are occasionally flagged that do not exist. You will need to verify by
+    hand any issues mentioned.
+  prefs: []
+  type: TYPE_NORMAL
+- en: At the time of writing, no significant defects were found using this approach.
+    However, the tool pointed out slow links and generated server-side exceptions.
+    This is the sort of information you would like to note in bug reports.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Consistently securing your applications requires experienced attention to detail.
+    Here are a few more things for you to review.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Target practice with Webgoat
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The top 10 list of security defects can at times seem difficult to understand.
+    If you have some spare time and like to practice against a deliberately insecure
+    application, you should try Webgoat ([https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project](https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Webgoat is well documented with a hints system and links to video tutorials;
+    it leaves little room for misunderstanding the attacks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: More tools of the trade
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'w3af is a powerful tool, but works better in conjunction with the following
+    tools:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Nmap** ([http://nmap.org/](http://nmap.org/)): A simple to use, highly popular,
+    award-winning network scanner.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Nikto** ([http://cirt.net/nikto2](http://cirt.net/nikto2)): A Perl script
+    that quickly summarizes system details and looks for the most obvious of defects.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Skipfish** ([https://code.google.com/p/skipfish/downloads/list](https://code.google.com/p/skipfish/downloads/list)):
+    A C program that bashes away with many requests over a prolonged period. You can
+    choose from different dictionaries of attacks. This is an excellent poor man''s
+    stress test; if your system stays up; you know that it has reached a minimal level
+    of stability.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Wapiti** ([http://wapiti.sourceforge.net/](http://wapiti.sourceforge.net/)):
+    A Python-based script that discovers attackable URLs and then cycles through a
+    list of evil parameters.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins is flexible, so you can call a wide range of tools through scripts running
+    in jobs, including the security tools mentioned.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: There are a number of great resources for securing native OSes including the
+    Debian security how-to ([https://www.debian.org/doc/manuals/securing-debian-howto/](https://www.debian.org/doc/manuals/securing-debian-howto/));
+    for Windows, articles found underneath the MSDN security center ([http://msdn.microsoft.com/en-us/security/](http://msdn.microsoft.com/en-us/security/));
+    and for the Mac, Apple's official security guides ([https://www.apple.com/support/security/guides/](https://www.apple.com/support/security/guides/)).
+    Online services need vigorous attention to their security surface.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Improving security via small configuration changes* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Exploring the OWASP Dependency-Check plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Finding 500 errors and XSS attacks in Jenkins through fuzzing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe describes using a fuzzer to find server-side errors and XSS attacks
+    in your Jenkins servers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A fuzzer goes through a series of URLs, appends different parameters blindly,
+    and checks the server's response. The inputted parameters are variations on scripting
+    commands such as `<script>alert("random string");</script>`. An attack vector
+    is found if the server's response includes the unescaped version of the script.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Cross-site scripting attacks are currently one of the more popular forms of
+    attack ([http://en.wikipedia.org/wiki/Cross-site_scripting](http://en.wikipedia.org/wiki/Cross-site_scripting)).
+    The attack involves injecting script fragments into the client's browser so that
+    the script runs as if it comes from a trusted website. For example, once you have
+    logged in to an application, it is probable that your session ID is stored in
+    a cookie. The injected script might read the value in the cookie and then send
+    the information to another server ready for an attempt at reuse.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A fuzzer discovers the links on the site it is attacking and the form variables
+    that exist within the site's web pages. For the web pages discovered, it repeatedly
+    sends input based on historic attacks and lots of minor variations. If responses
+    are returned with the same random strings sent, the fuzzer knows it has found
+    an **evil URL**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To fully integrate with the build process of a web-based application, you will
+    need to build the application, deploy and run the application, run the fuzzer
+    from a script, and finally use log parsing to fail the build if evil URLs are
+    mentioned in the output. This process will be similar for other command-line tools
+    you wish to integrate. For more information about log parsing, refer to *Deliberately
+    failing builds through log parsing* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
+    Jenkins"), *Maintaining Jenkins*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Backup your sacrificial Jenkins server and turn off its security. Expect the
+    application to be unstable by the end of the attack.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will need the Python programming language installed on your computer. To
+    download and install Wapiti, you will need to follow the instructions found at
+    [http://wapiti.sourceforge.net](http://wapiti.sourceforge.net).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: If you're attacking your local machine from your local machine, then you can
+    afford to turn off its networking. The attack will stay in the Loopback network
+    driver and no packets should escape to the Internet.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this recipe, the methodology and command-line options are correct. However,
+    at the time of reading, the results mentioned may not exist. Jenkins goes through
+    a rapid lifecycle where developers remove bugs rapidly.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Within the `wapiti` bin directory, run the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'When the command has finished running, you will see the location of the final
+    report on the console output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Open the report in a web browser and review:![How to do it...](img/0082OS_02_12.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Internal Server Error** link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For one of the items named **Anomaly found in /iconSize**, copy the URL from
+    the **cURL command line** tab:![How to do it...](img/0082OS_02_13.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Open the URL in a web browser. You will now see a newly generated Jenkins bug
+    report page, as shown in the following screenshot:![How to do it...](img/0082OS_02_14.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Run the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'View the output to verify that the `permanentxss` module was run:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Wapiti loads in different modules. By default, all modules are used. You will
+    have to be selective; for Version 2.2.1 on Ubuntu Linux, this causes Wapiti to
+    crash or timeout.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To load in specific modules, use the `-m` option.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `-m "-all,xss,exec"` statement tells Wapiti to ignore all modules except
+    the `xss` and `exec` modules.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `exec` module is very good at finding 500 errors in Jenkins. This is mostly
+    due to unexpected input that Jenkins does not handle well. This is purely a cosmetic
+    set of issues. However, if you start to see errors associated with resources such
+    as files or database services, then you should give the issues higher priority
+    and send in bug reports.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `-x` option specifies which URLs to ignore. In this case, we don't want
+    to cause work for the plugin manager. If we do, it will then generate a lot of
+    requests to an innocent external service.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Wapiti crawls websites. If you are not careful, the tool might follow a link
+    to locations that you do not want testing. To avoid embarrassment, carefully use
+    the exclude URL's option `-x`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `-v2` option sets the verbosity of logging up to its highest so that you
+    can see all the attacks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the second run of Wapiti, you also used the `permanentxss` module, which
+    at times finds bonafide XSS attacks, depending on the race between developers
+    building features and cleaning bugs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**Poor man''s quality assurance**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Fuzzers are good at covering a large portion of an application's URL space,
+    triggering errors that would be costly in time to search out. Consider automating
+    through a Jenkins job as part of a project's QA process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The reports you generated in this recipe mention many more server errors than
+    XSS attacks. This is because many of the errors generated are due to unexpected
+    input causing failures that are only caught by the final layer of error handling,
+    in this case the bug report page. If you consider the error worth reporting, then
+    follow the instructions found on the bug report page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Here are some guidelines for the meaning behind the output of the stack traces:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`java.lang.SecurityException`: If a Jenkins user is doing something that the
+    programmer considers insecure, such as hitting a URL, this should only be reachable
+    once you have logged in.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`java.lang.IllegalArgumentException`: Jenkins checked for a valid range for
+    your parameter and the parameter value was outside that range. This is a deliberately
+    thrown exception.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`java.lang.NumberFormatException`: Jenkins did not check for a valid string
+    and then tried to parse a nonconformant string to a number.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`java.lang.NullPointerException`: This normally happens when you hit a URL
+    without all the parameters set that Jenkins expects. In programmer''s language:
+    the code was expecting an object that does not exist and then tries to call a
+    method of the nonexistent object without checking that the object exists. The
+    programmer needs to add more error-checking. Write a bug report.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Testing for OWASP's top 10 security issues* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Improving security via small configuration changes* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Improving security via small configuration changes
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe describes modest configuration changes that strengthen the default
+    security settings of Jenkins. The reconfiguration includes masking passwords in
+    console output and adding a one-time random number, which makes it more difficult
+    for form input to be forged. The combination of tweaks strengthens the security
+    of Jenkins considerably.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You will need to install the Mask Passwords plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Mask+Passwords+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Mask+Passwords+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a job.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Mask passwords** checkbox and add a variable.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Type `MyPassword` in the **Name** field and `changeme` in the **Password** field,
+    as shown in the following screenshot:![How to do it...](img/0082OS_02_05.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Type in `echo This is MyPassword $MyPassword` in **Execute shell**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review **Console Output**:![How to do it...](img/0082OS_02_06.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Return to the **Configure Global Security** page and click on **Prevent Cross
+    Site Request Forgery exploits**, making sure the **Default Crumb Issuer** option
+    is selected:![How to do it...](img/0082OS_02_07.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The Mask Passwords plugin removes the password from the screen or the console,
+    replacing it with **x**, thus avoiding accidental reading. You should also always
+    keep this plugin turned on, unless you find undocumented side effects or need
+    to debug a job.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: You can globally set parameters to mask within the **Configure System** under
+    the **Mask passwords – Parameters to automatically mask** section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Cross-site request forgery ([http://en.wikipedia.org/wiki/Cross-site_request_forgery](http://en.wikipedia.org/wiki/Cross-site_request_forgery))
+    occurs, for example, if you accidentally visit a third party's location; a script
+    at that location tries to make your browser perform an action (such as deleting
+    a job) by making your web browser visit a known URL within Jenkins. Jenkins, thinking
+    the browser is doing your bidding, then complies with the request. Once the nonce
+    feature is turned on, Jenkins avoids CSRF by generating a random one-time number,
+    called a **nonce**, which is returned as part of the request. The number is not
+    easily known and is also invalidated after a short period of time, limiting the
+    risk of replay attacks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Jenkins is a pleasure to use. This is because Jenkins makes it easy to get the
+    work done and can talk through plugins with a multitude of infrastructure. This
+    implies, that in many organizations, the number of administrators increases rapidly
+    as the service organically grows. Think about turning on HTML escaping early before
+    the group of administrators gets used to the flexibility of being able to add
+    arbitrary tags.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Consider occasionally replaying the *Finding 500 errors and XSS attacks in Jenkins
+    through fuzzing* recipe to verify the removal of this source of potential XSS
+    attacks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Testing for OWASP's top 10 security issues* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Avoiding sign-up bots with JCaptcha
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**CAPTCHA** stands for **Completely Automated Public Turing Test to tell Computers
+    and Humans Apart**. The most commonly viewed CAPTCHAs are sequential letters and
+    numbers displayed as graphics that you have to correctly feed into a text input.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you let anyone sign up for an account on your Jenkins server, then the last
+    thing you want are bots (automated scripts) creating accounts and then using them
+    for less-than-polite purposes. Bots have an economy of scale, being able to scan
+    the Internet rapidly and never getting bored. CAPTCHAs are a necessary defense
+    against these dumb attacks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The negative purposes of bots are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Performing a **Denial Of Service** (**DOS**) attack on your server, for example,
+    by automatically creating numerous heavyweight jobs
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Distributed Denial Of Service attack** (**DDOS**) on other servers by harvesting
+    many Jenkins servers to fire off large numbers of requests'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: By injecting unwanted advertisements or content that then points to malicious
+    sites
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: By adding scripts that are stored permanently and run when a user accidentally
+    browses Jenkins site
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: There are commercial motivations for criminals to circumvent CAPTCHAs that led
+    to well documented law cases. You can find one such law case at [http://www.wired.com/2010/10/hacking-captcha/](http://www.wired.com/2010/10/hacking-captcha/).
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Make sure you have backed up your sacrificial Jenkins server. You are going
+    to modify its security settings. It is easy to make a service changing mistake.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The JCaptcha plugin is based on Java implementation that you can find at [https://jcaptcha.atlassian.net/wiki/display/general/Home](https://jcaptcha.atlassian.net/wiki/display/general/Home).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Log in as an administrator.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Configure Global Security** link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select Jenkins' own user database under **Security Realm**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select **Allow users to sign up**, as shown in the following screenshot:![How
+    to do it...](img/0082OS_02_01a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Browse the signup location `http://localhost:8080/signup`. You will see something
+    similar to the following screenshot:![How to do it...](img/0082OS_02_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Manage Plugins** link in the **Manage Jenkins** page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the **Available** tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Install the JCaptcha plugin.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Configure Global Security** link under the **Manage Jenkins**
+    page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select Jenkins' own user database under **Security Realm**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select **Enable captcha on sign up**, as shown in the following screenshot:![How
+    to do it...](img/0082OS_02_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press **Save** and then click on the **Log Out** link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Browse the signup location `http://localhost:8080/signup`. The page is now defended
+    by a CAPTCHA, as shown in the following screenshot:![How to do it...](img/0082OS_02_04.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Installing the plugin adds the CAPTCHA image to the sign-up process. The image
+    needs pattern recognition to decipher. Humans are very good at this; automated
+    processes are a lot worse, but improving.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a couple more points for you to think about.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Defense in depth
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: There is an arms race between defensive methods such as CAPTCHAs and offensive
+    methods such as increasingly intelligent bots. No one solution will cut down the
+    risk to zero. It is best practice to consider a layered approach. Depending on
+    your requirements, consider adding authentication, keeping access down to known
+    IP addresses, backing up your configuration, reviewing your logfiles, vulnerability
+    testing, and working on the general security hygiene of your site.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The SANS institute has written a paper on the Defense in Depth strategy [http://www.sans.org/reading-room/whitepapers/basics/defense-in-depth-525](http://www.sans.org/reading-room/whitepapers/basics/defense-in-depth-525).
+  prefs: []
+  type: TYPE_NORMAL
+- en: More information on bots
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'The security arms race continues. Bots are getting cleverer and script kiddies
+    more numerous. Here are a few background articles to this arms race:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information about the script kiddie, visit [http://en.wikipedia.org/wiki/Script_kiddie](http://en.wikipedia.org/wiki/Script_kiddie)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A report by Imperva explaining why CAPTCHAs are getting easier to crack at [http://www.imperva.com/docs/HII_a_CAPTCHA_in_the_Rye.pdf](http://www.imperva.com/docs/HII_a_CAPTCHA_in_the_Rye.pdf)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Google are improving the difficulty of mimicking CAPTCHAs ([http://www.cnet.com/news/whats-up-bot-google-tries-new-captcha-method/](http://www.cnet.com/news/whats-up-bot-google-tries-new-captcha-method/))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Testing for OWASP's top 10 security issues* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Looking at the Jenkins user through Groovy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Groovy scripts run as the Jenkins user on the host server. This recipe highlights
+    the power and danger to the Jenkins application and the host server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Log in to your test Jenkins instance as an administrator.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Run the following script from **Script Console** (`http://localhost:8080/script`):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Review the output.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'For a typical *NIX system, it will be similar to the following screenshot:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![How to do it...](img/0082OS_02_17.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: 'For a Windows system, it will be similar to the following screenshot:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![How to do it...](img/0082OS_02_16.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The script you have run is less benign than it first seems. Groovy scripts can
+    do anything the Jenkins user has the power to do on the host server, as well as
+    within the test Jenkins server. A method is defined that reads in a file whose
+    location is passed as a string. The script then prints the content. If the file
+    does not exist, then that is also mentioned. Three locations are tested. It is
+    trivial for you to add a more detailed set of locations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The existence of files clearly defines the type of OS being used and the structure
+    of the disc partitioning.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `/etc/passwd` file typically does not contain passwords. The passwords are
+    hidden in a shadow password file, safely out of reach. However, the username has
+    a real login account (not `/bin/false`) and whether they have shell scripts suggest
+    accounts to try and crack by focusing dictionary attacks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can save the configuration effort if you generate a private and public key
+    for Jenkins. This allows a script to run with a user's permission, without needing
+    a password logon. It is typically used by Jenkins to control its slave nodes.
+    Retrieving the keys through a Groovy script represents further dangers to the
+    wider infrastructure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If any plugin stores passwords in plain or decipherable text, then you can capture
+    the plugin's XML configuration files and parse.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Not only can you read files, but you can also change permissions and write over
+    binaries, making the attack harder to find and more aggressive.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The best approach to limiting risk is to limit the number of logon accounts
+    that have the power to run Groovy scripts in **Script console** and to periodically
+    review the audit log.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Limiting administrator accounts is made easier by using a matrix-based strategy,
+    in which you can decide the rights of each user or group. A refinement of this
+    is the project-based matrix strategy, in which you can choose per-job permissions.
+    However, the project-based matrix strategy costs you considerably more in terms
+    of administration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Since Version 1.430 of Jenkins, there are extra permissions exposed to the matrix-based
+    security strategy to decide which group or user can run Groovy scripts. Expect
+    more permission additions over time.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Working with the Audit Trail plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Reviewing project-based matrix tactics via a custom group script* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Working with the Audit Trail plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jobs can fail. It speeds up debugging if you can see who last ran the job and
+    what their changes were. This recipe ensures that you have auditing enabled, and
+    that a set of local audit logs are created that contain a substantial history
+    of events rather than the small log size defined by default.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the Audit Trail plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Visit the **Configure Jenkins** screen (`http://localhost:8080/configure`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Audit Trail** section, click the **Add Logger** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Modify the default settings for **Audit Trail** to allow for a long observation.
+    Change **Log File Size MB** to `128` and **Log File Count** to `40`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Advanced…** button to review all the settings.![How to do it...](img/0082OS_02_08a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The audit plugin creates a log recorder named **Audit Trail** ([https://wiki.jenkins-ci.org/display/JENKINS/Logger+Configuration](https://wiki.jenkins-ci.org/display/JENKINS/Logger+Configuration)).
+    You can visit the log's **Recorders** page at `http://localhost:8080/log/?` to
+    see which recorders are logging.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The output from the log recorder is filtered via **URL Patterns to log** as
+    seen in Jenkins''s configure screen. You will find that the logfile format is
+    more readable than most, with a date timestamp at the beginning, a description
+    of what is happening in the middle of the log, and the user who acted at the end.
+    Take a look at the following example:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '*Jul 18, 2011 3:18:51 PM job/Fulltests_1/ #3 Started by user Alan*'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '*Jul 18, 2011 3:19:22 PM /job/Fulltests_1/configSubmit by Alan*'
+  prefs: []
+  type: TYPE_NORMAL
+- en: It is now clear who has done what and when.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Consider placing the `audit.log` file itself under a version control system.
+    It is a good idea to do so for three main reasons. The first is in case of storage
+    failure. The second is to make it more difficult to alter the audit logs without
+    leaving evidence. Finally, this is a central location where you can gather small
+    logfiles from your whole enterprise.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a couple more things you should consider.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A complementary plugin – JobConfigHistory
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: A complementary plugin that keeps track of configuration changes and displays
+    the information within the job itself is called the JobConfigHistory plugin ([https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin)).
+    The advantage of this plugin is that you get to see who has made those crucial
+    changes. The disadvantage is that it adds an icon to a potentially full GUI, leaving
+    less room for other features.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Missing audit logs
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: For a security officer, it helps to be mildly paranoid. If your audit logs suddenly
+    go missing, then this may well be a sign that a cracker wishes to cover their
+    trail. This is also true if one file goes missing or there is a gap in time of
+    the audit. Even if this is caused by issues with configuration or a damaged filesystem,
+    you should investigate. Missing logs should trigger a wider review of the server
+    in question. At the least, the audit plugin(s) is not behaving as expected.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Consider adding a small reporting script for these highly valued logs. For example,
+    consider modifying the *Reporting alternative code metrics in Jenkins* recipe
+    in [Chapter 3](ch03.html "Chapter 3. Building Software"), *Building Software*,
+    to parse the logfile and make metrics that are then displayed graphically. This
+    enables you to view the ebb and flow of your team's work over time. Of course,
+    the data can be faked, but that would require a lot of extra effort.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: One method to minimize the risk of logfile tampering is also to send your log
+    events to a central remote syslog server. You can configure the Audit Trail plugin
+    to work with syslog within the **Configure System** page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Swatch
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: You can imagine a situation where you do not want Groovy scripts to be run by
+    certain users and want to be e-mailed in the case of unwanted actions. If you
+    want to react immediately to specific log patterns and do not already have infrastructure
+    in place, consider using Swatch, an open source product that is freely available
+    for most *NIX distributions.([http://sourceforge.net/projects/swatch/](http://sourceforge.net/projects/swatch/)
+    and [http://www.jaxmag.com/itr/online_artikel/psecom,id,766,nodeid,147.html](http://www.jaxmag.com/itr/online_artikel/psecom,id,766,nodeid,147.html)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Swatch is a Perl script that periodically reviews logs. If a pattern is found,
+    it reacts with e-mail or by executing commands.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Improving security via small configuration changes* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Looking at Jenkins user through Groovy* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Reporting alternative code metrics in Jenkins* recipe in [Chapter 3](ch03.html
+    "Chapter 3. Building Software"), *Building Software*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing OpenLDAP
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Lightweight Directory Access Protocol** (**LDAP**) provides a highly popular
+    open standards directory service. It is used in many organizations to display
+    user information to the world. LDAP is also used as a central service to hold
+    user passwords for authentication and can contain information necessary for routing
+    mail, POSIX account administration, and various other pieces of information that
+    external systems may require. Jenkins can directly connect to LDAP for authentication
+    or indirectly through the CAS SSO server ([http://www.jasig.org/cas](http://www.jasig.org/cas)),
+    which then uses LDAP as its password container. Jenkins also has an Email plugin
+    ([https://wiki.jenkins-ci.org/display/JENKINS/LDAP+Email+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/LDAP+Email+Plugin))
+    that pulls its routing information out of LDAP.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Because LDAP is a common Enterprise service, Jenkins may also encounter LDAP
+    while running integration tests as part of the build application's testing infrastructure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This recipe shows you how to quickly install an OpenLDAP ([http://www.openldap.org/](http://www.openldap.org/))
+    server named `slapd` and then add organizations, users, and groups via **LDAP
+    Data Interchange Format** (**LDIF**), a simple text format for storing LDAP records
+    ([http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format](http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Active Directory is also popular in corporate environments. Jenkins has a plugin
+    for Active Directory ([https://wiki.jenkins-ci.org/display/JENKINS/Active+Directory+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Active+Directory+plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This recipe assumes that you are running a modern Debian-based Linux such as
+    Ubuntu.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: For a detailed description of installing OpenLDAP on the Windows, refer to [http://www.userbooster.de/en/support/feature-articles/openldap-for-windows-installation.aspx](http://www.userbooster.de/en/support/feature-articles/openldap-for-windows-installation.aspx).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Save the following LDIF entries to the `basic_example.ldif` file and place
+    it in your home directory:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Install the LDAP server `slapd` by executing the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: When asked, fill in the administration password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the LDIF records from the command line; you will then be asked for the
+    administrator password you used in step 2\. Execute the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: LDIF is a textual expression of the records inside LDAP.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Distinguished name** (**dn**): This is a unique identifier per record and
+    is structured so that objects reside in an organizational tree structure.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`objectClass`: `objectClass`, such as `organizationalUnit`, defines a set of
+    required and optional attributes. In the case of the `organizationalUnit`, the
+    `ou` attribute is required. This is useful for bundling attributes that define
+    a purpose, such as creating an organizational structure belonging to a group or
+    having an e-mail account.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: In the recipe, after installing an LDAP server, we imported via the admin account
+    (default `dn:cn=admin,dc=nodomain`) created during the package installation; if
+    this is the case, you will need to change the value of the `–D` option in step
+    2 of the recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The default `dn` of the admin account may vary, depending on which version of
+    slapd you have installed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The LDIF creates an organizational structure with three organizational units:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`dn`: ou=mycompany,dc=nodomain'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`dn`: ou=people,ou=mycompany,dc=nodomain : Location to search for people'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`dn`: ou=groups,ou=mycompany,dc=nodomain: Location to search for groups'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'A user (`dn: uid=tester1,ou=people,ou=mycompany,dc=nodomain`) is created for
+    testing. The list of attributes the record must have is defined by the `inetOrgPerson`
+    objectClass.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A group (`dn: cn=dev,ou=groups,ou=mycompany,dc=nodomain`) is created via the
+    `groupOfNames` objectClass. The user is added to the group via adding the member
+    attribute pointing to the `dn` of the user.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins looks for the username and which group the user belongs to. In Jenkins,
+    you can define which projects a user can configure, based on their group information.
+    Therefore, you should consider adding groups that match your Jenkins job structures,
+    such as development, acceptance, and also a group for those needing global powers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'What is not covered by this LDIF example is the adding of `objectClass` and
+    **Access Control Lists** (**ACLs**):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`objectClass`: LDAP uses `objectClass` as a sanity check on incoming record
+    creation requests. If the required attributes do not exist in a record, or are
+    of the wrong type, then LDAP will reject the data. Sometimes it''s necessary to
+    add a new `objectClass`; you can do this with graphical tools. The *Administering
+    OpenLDAP* recipe shows one such tool.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Access Control Lists**: These define which user or which group can do what.
+    For information on this complex subject area, visit [http://www.openldap.org/doc/admin24/access-control.html](http://www.openldap.org/doc/admin24/access-control.html).
+    You can also review the main entry on your OpenLDAP server from the `man slapd.access`
+    command line.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Administering OpenLDAP* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Configuring the LDAP plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Using Script Realm authentication for provisioning
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: For many enterprise applications, provisioning occurs during the user's first
+    login. For example, a directory with content can be made, a user added to an e-mail
+    distribution list, an access control list modified, or an e-mail sent to the marketing
+    department.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This recipe will show you how to use two scripts: one to log in through LDAP
+    and perform example provisioning and the other to return the list of groups a
+    user belongs to. Both scripts use Perl, which makes for compact code.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'You need to have the Perl and `Net::LDAP` modules installed. For a Debian distribution,
+    you should install the `libnet-ldap-perl` package via the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: You also need to have the Script Realm plugin installed ([https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm](https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'As the Jenkins user, place the following file under a directory that is controlled
+    by Jenkins, with executable permissions. Name the file `login.pl`. Verify that
+    the `$home` variable is pointing to the correct workspace:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'As the Jenkins user, place the following file under a directory that is controlled
+    by Jenkins, with executable permissions. Name the file `group.pl`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Configure the plugin via the **ConfigureGlobalSecurity** screen under the **Security
+    Realm** subsection and then add the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Check **Authenticate** via custom script
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Login Command**: `/var/lib/Jenkins/login.pl`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Groups Command**: `/var/lib/Jenkins/group.pl`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Groups Delimiter**'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Press the **Save** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in as `tester1` with the password `changeme`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Visit the provisioned content at `http://localhost:8080/userContent/tester1.html`.
+    You will see the following screenshot:![How to do it...](img/0082OS_02_09.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The `login.pl` script pulls in the username and password from the environment
+    variables `U` and `P.` The script then tries to self-bind the user to a calculated
+    unique LDAP record. For example, the distinguished name of the user `tester1`
+    is `uid=tester1, ou=people,ou=mycompany,dc=nodomain`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Self-binding happens when you search for your own LDAP record and at the same
+    time authenticate yourself. This approach has the advantage of allowing your application
+    to test a passwords, authenticity without using a global administration account.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If authentication fails, then an exit code of `1` is returned. If authentication
+    succeeds, then the provisioning process takes place followed by an exit code of
+    `0`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If the file does not already exist, then it is created. A simple HTML file is
+    created during the provisioning process. This is just an example; you can do a
+    lot more, from sending e-mail reminders to full account provisioning across the
+    breadth of your organization.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `group.pl` script simply returns two groups that includes every user, guests
+    and all. Guest is a group intended for guests only. All is a group that all users
+    belong to, including the guests. Later, if you want to send e-mails out about
+    the maintenance of services, then you can use an LDAP query to collect e-mail
+    addresses via the all group.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: LDAP servers are used for many purposes depending on the schemas used. You can
+    route mail, create login accounts, and so on. These accounts are enforced by common
+    authentication platforms such as **Pluggable Authentication Modules** (**PAM**),
+    in particular `PAM_LDAP` ([http://www.padl.com/OSS/pam_ldap.html](http://www.padl.com/OSS/pam_ldap.html)
+    and [http://www.yolinux.com/TUTORIALS/LDAP_Authentication.html](http://www.yolinux.com/TUTORIALS/LDAP_Authentication.html)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: At the University of Amsterdam, we use a custom schema so that user records
+    have an attribute for counting down records. A scheduled task performs an LDAP
+    search on the counter and then decrements the counter by one. The task notices
+    when the counter reaches certain numbers and performs actions such as sending
+    out e-mail warnings.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can imagine using this method in conjunction with a custom login script.
+    Once a consultant logs in to Jenkins for the first time, they are given a certain
+    grace period before their LDAP record is moved to a "to be ignored" branch.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Reviewing project-based matrix tactics via a custom group script* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reviewing project-based matrix tactics via a custom group script
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Security best practices dictate that you should limit the rights of individual
+    users to the level that they require.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This recipe explores the project-based matrix strategy. In this strategy, you
+    can assign different permissions to individual users or groups on a job-by-job
+    basis.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The recipe uses custom realm scripts enabled through the Script Security plugin
+    to allow you to log in with any name and password whose length is greater than
+    five characters, and places the test users in their own unique group. This will
+    allow you to test out the project-based matrix strategy.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Using custom scripts to authenticate users and define groups allows your test
+    Jenkins server to connect to a wide variety of nonstandard authentication services.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You will need to install the Script Security Realm plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm](https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm))
+    and also have Perl installed with the URI module ([http://search.cpan.org/dist/URI/URI/Escape.pm](http://search.cpan.org/dist/URI/URI/Escape.pm)).
+    The URI module is included in modern Perl distributions, so in most situations
+    the script will work out of the box.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Copy the following script to the `login2.pl` file in the Jenkins workspace:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Change the owner and group of the script to `jenkins`, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Copy the following script to the `group2.pl` file in the Jenkins workspace:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Change the owner and group of the script to `jenkins`, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Configure the plugin via the **Configure Global Security** screen under the
+    **Security Realm** subsection.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the **Authenticate via custom script** radio button and add the following
+    details:![How to do it...](img/0082OS_02_19.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Check the **Project-based Matrix Authorization Strategy** checkbox.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a user called `adm_alan` with full rights, as shown in the following screenshot:![How
+    to do it...](img/0082OS_02_10.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press the **Save** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Try to log in as `adm_alan` with a password less than five characters.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in as `adm_alan` with any password greater than five characters.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a new job with the name `project_ matrix_test` and no configuration.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Check the **Enable project-based security** checkbox within the job.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add the `grp_proj_tester` group with full rights (for example, check all the
+    checkboxes):![How to do it...](img/0082OS_02_11.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in as user `I_cant_see_you`. Notice that you cannot view the recently created
+    job `project_matrix_test`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Login as `proj_tester`. Notice that you can now view and configure `project_matrix_test`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The `login2.pl` script allows any username-password combination to succeed if
+    it is at least the length defined in the `$min` variable.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `group2.pl` script reads the username from the environment and then escapes
+    the name to make sure that no evil scripting is accidentally run later. The `group2.pl`
+    script places the user in the `grp_username` group. For example, if `proj_tester`
+    logs in, they will belong to the `grp_proj_tester` group.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The group script allows us to log in as an arbitrary user and view the users''
+    permissions. In the project-based matrix strategy, the permissions per user or
+    group are defined at two levels:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Globally via the Jenkins configuration page. This is where you should define
+    your global accounts for system-wide administration.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Per project via the job configuration screen. The global accounts can gain extra
+    permissions per project, but cannot lose permissions.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: In this recipe, you logged in with a global account `adm_alan` that behaved
+    as root admin. Then, you logged in as `I_cant_see_you`; this has no extra permissions
+    at all and can't even see the job from the front page. Finally, you logged in
+    as `proj_tester` who belonged to the `grp_proj_tester` group, which has full powers
+    within the specific job.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Using per-project permissions, you not only limit the powers of individual users
+    but you can also shape which projects they can view. This feature is particularly
+    useful for Jenkins masters that have a wealth of jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a few more things you should consider.
+  prefs: []
+  type: TYPE_NORMAL
+- en: My own custom security flaw
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'I expect you have already spotted this. The login script has a significant
+    security flaw. The username input as defined by the `U` variable has not been
+    checked for malicious content. For example, the username can be as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: Later, if an arbitrary plugin displays the username as part of a custom view,
+    then if the plugin does not safely escape, the username is run in the end user's
+    browser. This example shows how easy it is to get security wrong. You are better
+    off using well-known and trusted libraries when you can. For example, the OWASP's
+    Java specific `AntiSamy` library ([https://www.owasp.org/index.php/Category:OWASP_AntiSamy_Project](https://www.owasp.org/index.php/Category:OWASP_AntiSamy_Project))
+    does an excellent job of filtering input in the form of CSS or HTML fragments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For Perl, there are numerous excellent articles on this subject such as [http://www.perl.com/pub/2002/02/20/css.html](http://www.perl.com/pub/2002/02/20/css.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Static code review, tainting, and untainting
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Static code review is the name for tools that read code that is not running
+    and review for known code defects. PMD and FindBugs are excellent examples ([http://fsmsh.com/2804.com](http://fsmsh.com/2804.com)).
+    A number of these generic of tools can review your code for security defects.
+    One of the approaches taken is to consider input tainted if it comes from an external
+    source, such as the Internet, or directly from input from files. To untaint it,
+    the input has to be first passed through a regular expression and unwanted input
+    safely escaped, removed, or reported.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Using Script Realm authentication for provisioning* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Administering OpenLDAP
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe is a quick start to LDAP administration. It details how you can
+    add or delete user records from the command line, and highlights the use of an
+    example LDAP browser. These skills are useful for maintaining an LDAP server for
+    use in integration tests or for Jenkins account administration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: To try this out, you will need Perl installed with the `Net::LDAP` modules.
+    For example, for a Debian distribution, you should install the `libnet-ldap-perl`
+    package ([http://ldap.perl.org](http://ldap.perl.org)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will also need to install the LDAP browser JExplorer ([http://jxplorer.org/](http://jxplorer.org/)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'To add a user to LDAP, you will need to write the following LDIF record to
+    a file named `basic_example.ldif`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Add a new line at the end of the record and copy the preceding record into the
+    text file, replacing the number `121` with `122` wherever it occurs in the second
+    record.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the following `ldapadd` command, and when asked, input the LDAP administrator's
+    password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Run Jxplorer connecting with the following values:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**HOST**: `localhost`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Level**: `Anonymous`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Select the **Schema** tab and then select **account** under **objectClasses**.
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'In **Table Editor**, you will see attributes mentioned with **MAY** or **MUST**:'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '![How to do it...](img/0082OS_02_12a.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Disconnect from the `Anonymous` account by selecting **File** and then **Disconnect**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Reconnect as the `admin` account by selecting **File** and then **Connect**.
+    Add the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Host**: **Localhost**'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Level**: User + Password'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**User DN**: `cn=admin,dc=nodomain`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Password**: your password'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Under the **Explore** tab, select **tester1**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In **Table Editor**, add the **1021 XT** value to **postalCode** and click on
+    **Submit**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the **LDIF** menu option at the top of the screen and then click on **Export
+    Subtree**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **OK** button and write the name of the file that you are going
+    to export the LDIF to and then click on **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Create an executable script with the following lines of code and run it:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: In the recipe, you have performed a range of tasks. First, you have used an
+    LDIF file to add two users. This is a typical event for an LDAP administrator
+    in a small organization. You can keep the LDIF file and then make minor modifications
+    to add or delete users, groups, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, you have viewed the directory structure anonymously through an LDAP browser,
+    in this case, Jxplorer. Jxplorer runs on a wide range of OS and is open source.
+    Your actions highlight that LDAP is an Enterprise directory service where things
+    are supposed to be found even by anonymous users. The fact that pages render fast
+    in Jxplorer highlights that LDAP is a read-optimized database that returns search
+    results efficiently.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Using an LDAP browser generally gets more frustrating as the number of objects
+    to render increases. For example, at the University of Amsterdam, there are more
+    than 60,000 student records under one branch. Under these circumstances, you are
+    forced to use the command-line tools or be very careful with search filters.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Being able to view `ObjectClass`, knowing which attributes you *may* use and
+    which attributes are required and you *must* use helps you to optimize your records.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, you bind (perform some action) as an admin user and manipulate the tester1's
+    record. For small organizations, this is an efficient means of administration.
+    Exporting the record to LDIF allows you to use the record as a template for further
+    importing of records.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The deletion script is an example of programmatic control. This gives you a
+    lot of flexibility for large-scale generation, modification, and deletion of records
+    by changing just a few variables. Perl was chosen because of its lack of verbosity.
+    The use of these types of scripts is typical for the provisioning of integration
+    tests.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Within the deletion script, you will see that the number of users to delete
+    is set to 2 and the starting value of the tester accounts is 100\. This implies
+    that the two records you had previously generated are going to be deleted, for
+    example, `tester101` and `tester102`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The script binds once as the admin account and then loops through a number of
+    records using `$counter` as part of the calculation of the distinguished name
+    of each record. The delete method is called for each record and any errors generated
+    will be printed out.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'You should consider deleting the user''s Perl script as an example of how to
+    provision or cleanup an LDAP server that is needed for integration tests efficiently.
+    To create an add script instead of a delete script, you can write a similar script
+    replacing my `$result = $ldap->delete($dn)` with the following line of code:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: Here, `@$whatTOCreate` is a hash containing attributes and `objectClass`. For
+    more examples, visit [http://search.cpan.org/~gbarr/perl-ldap/lib/Net/LDAP/Examples.pod#OPERATION_-_Adding_a_new_Record](http://search.cpan.org/~gbarr/perl-ldap/lib/Net/LDAP/Examples.pod#OPERATION_-_Adding_a_new_Record).
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Installing OpenLDAP* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Configuring the LDAP plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configuring the LDAP plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: LDAP is the standard for Enterprise directory services. This recipe explains
+    how to attach Jenkins to your test LDAP server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: To try this recipe, you should first perform the steps mentioned in the *Installing
+    OpenLDAP* recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Go to the **Configure Global Security** screen and select **Enable security**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Check the **LDAP** checkbox.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add the **Server** value as `127.0.0.1`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the **Advance** button and add the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**User Search Base**: `ou=people,ou=mycompany,dc=nodomain`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**User Search filter**: `uid={0}`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Group Search base**: `ou=groups,ou=mycompany,dc=nodomain`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'The test LDAP server supports anonymous binding: you can search the server
+    without authenticating. Most LDAP servers allow this approach. However, some servers
+    are configured to enforce specific information security policies. For example,
+    your policy might enforce being able to anonymously verify that a user''s record
+    exists, but you may not be able to retrieve specific attributes such as their
+    e-mail or postal address.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Anonymous binding simplifies configuration; otherwise you will need to add account
+    details for a user in LDAP that has the rights to perform the searches. This account
+    has great LDAP powers, should never be shared, and can present a chink in your
+    security armor.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The user search filter, `uid={0}`, searches for users whose `uids` equals their
+    username. Many organizations prefer to use `cn` instead of `uid`; the choice of
+    attribute is a matter of taste. You can even imagine an e-mail attribute being
+    used to uniquely identify a person as long as that attribute cannot be changed
+    by the user.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**The Security Realm**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: When you log in, an instance of the `hudson.security.LDAPSecurityRealm` class
+    is called. The code is defined in a Groovy script that you can find under **WEB-INF/security/LDAPBindSecurityRealm.groovy**
+    within the `Jenkins.war` file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For further information, visit [http://wiki.hudson-ci.org/display/HUDSON/Standard+Security+Setup](http://wiki.hudson-ci.org/display/HUDSON/Standard+Security+Setup).
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a few more things for you to think about.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The difference between misconfiguration and bad credentials
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: While configuring the LDAP plugin for the first time, your authentication process
+    might fail due to misconfiguration. Luckily, Jenkins produces error messages.
+    For the Debian Jenkins package, you can find the logfile at `/var/log/jenkins/jenkins.log`.
+    For the Windows version running as a service, you can find the relevant logs through
+    the Events Viewer by filtering on Jenkins source.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The two main errors consistently made are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**A misconfigured DN for either userSearchBase or GroupSearch base**: The relevant
+    log entry will look as follows:'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: '**Bad credentials**: If the user does not exist in LDAP, you have either typed
+    in the wrong password or you have accidentally searched the wrong part of the
+    LDAP tree. So the log error will start with the following text:'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Searching
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'Applications retrieve information from LDAP in a number of ways:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Anonymously for generic information**: This approach works only for information
+    that is exposed to the world. However, the LDAP server can limit the search queries
+    to specific IP addresses as well. The application will then be dependent on the
+    attributes that your organization is prepared to disclose. If the information
+    security policy changes, the risk is that your application might break accidentally.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Self-bind**: The application binds as a user and then searches with that
+    user''s rights. This approach is the cleanest. However, it is not always clear
+    in the logging that the application is behind the actions.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Using an application-specific admin account with many rights**: The account
+    gets all the information that your application requires, but if disclosed to the
+    wrong people it can cause significant issues quickly.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: If the LDAP server has an account locking policy, then it is trivial for a cracker
+    to lock out the application.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: In reality, the approach chosen is defined by the predefined Access Control
+    policy of your Enterprise directory service.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**Reviewing plugin configuration**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Currently, there are over 600 plugins for Jenkins. It is possible, though unlikely,
+    that occasionally passwords are being stored in plaintext in the XML configuration
+    files in the workspace directory or plugins directory. Every time you install
+    a new plugin that requires a power user's account, you should double-check the
+    related configuration file. If you see a plain text, you should write a bug report
+    attaching a patch to the report.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Installing OpenLDAP* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Administering OpenLDAP* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing a CAS server
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Yale CAS ([http://www.jasig.org/cas](http://www.jasig.org/cas)) is a single
+    sign-on server. It is designed as a campus-wide solution and as such is easy to
+    install and relatively simple to configure to meet your specific infrastructural
+    requirements. CAS allows you to sign in once and then automatically use lots of
+    different applications without logging in again. This is made for much more pleasant
+    user interaction across the range of applications used by a typical Jenkins user
+    during their day.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Yale CAS has helper libraries in Java and PHP that makes integration of third-party
+    applications straight-forward.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Yale CAS has also the significant advantage of having a pluggable set of handlers
+    that authenticate across a range of backend servers such as LDAP, openid ([http://openid.net/](http://openid.net/)),
+    and radius ([http://en.wikipedia.org/wiki/RADIUS](http://en.wikipedia.org/wiki/RADIUS)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this recipe, you will install the complete version of a CAS server running
+    from within a Tomcat 7 server. This recipe is more detailed than the rest in this
+    chapter and it is quite easy to misconfigure. The modified configuration files
+    mentioned in this recipe are downloadable from the book's website.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Download Yale CAS ([https://www.apereo.org/cas/download](https://www.apereo.org/cas/download))
+    from the 3.4 line and unpack. This recipe was written with version 3.4.12.1, but
+    it should work with little modification with earlier or later versions of the
+    3.4 line.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Install Tomcat 7 ([http://tomcat.apache.org/download-70.cgi](http://tomcat.apache.org/download-70.cgi)).
+    The recipe assumes that the installed Tomcat server is initially turned off.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Since June 2014, the CAS 4 documentation has moved from the JASIG website to
+    [http://jasig.github.io/cas/4.0.x/index.html](http://jasig.github.io/cas/4.0.x/index.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'In the unpacked Tomcat directory, edit `conf/server.xml`, commenting out the
+    port `8080` configuration information, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Add the following underneath the text needed to enable port `9443` with a SSL
+    enabled:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'The user that Tomcat will run under creates a self-signed certificate via the
+    following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: If `keytool` is not found on your `PATH` environmental variable, then you might
+    have to fill in the full location to the `bin` directory of your installed Java.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: From underneath the root directory of the unpacked CAS server, copy the `modules/cas-server-uber-webapp-3.x.x`
+    file. (where `x.x` is the specific version number) to the Tomcat web app's directory,
+    making sure the file is renamed to `cas.war`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Start Tomcat.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in via `https://localhost:9443/cas/login` with the username equal to the
+    password, for example, `smile`/`smile`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Stop Tomcat.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Either modify the `webapps/cas/Web-INF/deployerConfigContext.xml` file or replace
+    with the example file previously downloaded from the book''s website. To modify,
+    you will need to comment out the `SimpleTestUsernamePasswordAuthenticationHandler`
+    line, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Underneath the commented-out code, add the configuration information for LDAP:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'After `</bean>`, add an extra bean configuration, replacing the `password value`
+    with yours:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Restart Tomcat.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: Log in via `https://localhost:9443/cas/login` using the `tester1` account. If
+    you see a page similar to the following screenshot, congratulations; you now have
+    running SSO!![How to do it...](img/0082OS_02_15.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: By default, Tomcat runs against port `8080`, which happens to be the same port
+    number as Jenkins. To change the port number to `9443` and turn on SSL, you must
+    modify `conf/server.xml`. For the SSL to work, Tomcat needs to have a keystore
+    with a private certificate. Use the `${user.home}` variable to point to the home
+    directory of the Tomcat user, for example, `keystoreFile="${user.home}/.keystore"
+    keystorePass="changeit"`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The protocol you chose was TLS, which is a more modern and secure version of
+    SSL. For further details, visit [http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html](http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, you generate a certificate and place it in the Tomcat user's certificate
+    store, ready for Tomcat to use. Your certificate store might contain many certificates,
+    so the `tomcat` alias uniquely identifies the certificate.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Within the downloaded CAS package, there are two CAS WAR files. The larger WAR
+    file contains the libraries for all the authentication handlers including the
+    required LDAP handler.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The default setup allows you to log in with a password equal to username. This
+    setup is for demonstration purposes. To replace or chain together handlers, you
+    have to edit `webapps/cas/Web-INF/deployerConfigContext.xml`. For more detail,
+    refer to [https://wiki.jasig.org/display/CASUM/LDAP](https://wiki.jasig.org/display/CASUM/LDAP).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If at any time you are having problems with configuration, the best place to
+    check is in Tomcat''s main log, `logs/catalina.out`. For example, a bad username
+    or password will generate the following error:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Here are a few more things you should consider.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Backend authentication
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'Yale CAS has a wide range of backend authentication handlers and it is straightforward
+    for a Java developer to write his own. The following table mentions the current
+    handlers. Expect the list to expand. Note that, by using well-supported third-party
+    frameworks such as JAAS and JDBC implementations, you can connect to a much wider
+    set of services than mentioned in the following table:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Active Directory** | This connects to your Windows infrastructure. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **JAAS** | This implements a Java version of the standard **Pluggable Authentication
+    Module** (**PAM**) framework. This allows you to pull in other authentication
+    mechanisms such as Kerberos. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **LDAP** | This connects to your Enterprise directory services. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **RADIUS** | This connects to RADIUS. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **Trusted** | This is used to offload some of the authentication to an Apache
+    server or another CAS server. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **Generic** | A set of small generic handlers such as a handler to accept
+    a user from a list or from a file. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **JDBC** | This connects to databases and there are even drivers for spreadsheets
+    and LDAP. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **Legacy** | This supports the CAS2 protocol. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **SPNEGO** | Simple and Protected GSSAPI Negotiation Mechanism allows the
+    CAS server to negotiate between protocols with a backend service. It potentially
+    allows transitioning between backend services. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| **X.509 Certificates** | This requires a trusted client certificate. |'
+  prefs: []
+  type: TYPE_TB
+- en: An alternative installation recipe using ESUP CAS
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The ESUP consortium also provides a repackaged version of CAS that includes
+    additional ease-of-use features, including an out-of-the-box demonstration version.
+    However, the ESUP version of the CAS server lags behind the most current version.
+    If you want to compare the two versions, you can find the ESUP installation documentation
+    at [http://esup-casgeneric.sourceforge.net/install-esup-cas-quick-start.html](http://esup-casgeneric.sourceforge.net/install-esup-cas-quick-start.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The ESUP package is easier to install and configure than this recipe; however,
+    it includes an older version of CAS.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Trusting LDAP SSL
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'Having SSL enabled on your test LDAP server avoids sniffable passwords being
+    sent over the wire, but you will need to get the CAS server to trust the certificate
+    of the LDAP server. The relevant quote from the JASIG WIKI is:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '*Please note that your JVM needs to trust the certificate of your SSL enabled
+    LDAP server or CAS will refuse to connect to your LDAP server. You can add the
+    LDAP server''s certificate to the JVM trust store ($JAVA_HOME/jre/lib/security/cacerts)
+    to solve that issue.*'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A few useful resources
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'There are many useful resources for the CAS 3.4 line on the JASIG WIKI ([https://wiki.jasig.org/](https://wiki.jasig.org/)):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Securing your CAS server ([https://wiki.jasig.org/display/CASUM/Securing+Your+New+CAS+Server](https://wiki.jasig.org/display/CASUM/Securing+Your+New+CAS+Server))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Connecting CAS to a database ([https://wiki.jasig.org/display/CAS/Examples+to+Configure+CAS](https://wiki.jasig.org/display/CAS/Examples+to+Configure+CAS))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a high-availability infrastructure ([http://www.ja-sig.org/wiki/download/attachments/22940141/HA+CAS.pdf?version=1](http://www.ja-sig.org/wiki/download/attachments/22940141/HA+CAS.pdf?version=1))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Enabling SSO in Jenkins* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Enabling SSO in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this recipe, you will enable CAS in Jenkins through the use of the CAS1 plugin.
+    For the CAS protocol to work, you will also need to build a trust relationship
+    between Jenkins and the CAS server. The Jenkins plugin trusts the certificate
+    of the CAS server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: To try this out, you will need to have installed a CAS server as described in
+    the *Installing a CAS server* recipe and the Cas1 plugin ([https://wiki.jenkins-ci.org/display/JENKINS/CAS1+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/CAS1+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The Cas1 plugin has performed stably in the environments where the author has
+    tried it. However, there is a second CAS plugin ([https://wiki.jenkins-ci.org/display/JENKINS/CAS+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/CAS+Plugin))
+    that is meant to replace the CAS1 plugin by providing new features along with
+    the existing ones, for example, support for the CAS 2.0 protocol.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once comfortable with this recipe consider experimenting with the CAS plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You will need to export the public certificate of the CAS server. Do this from
+    a Firefox web browser by visiting `http://localhost:9443`. In the address bar,
+    you will see an icon of a locked lock on the left-hand side. Click on the icon;
+    a security pop-up dialog will appear.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **More information** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **View Certificate** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the **Details** tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Export** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose a location for your public certificate to be stored.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Import into the keystore of the Java, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'To configure your CAS setting, visit the Jenkins **Config Global Security**
+    screen in the **Security Realm** section. Under **Access Control**, check the
+    **CAS protocol version 1** checkbox and add the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**CAS Server URL**: `https://localhost:9443`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Hudson Host Name**: `localhost:8080`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Log out of Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in to Jenkins. You will now be redirected to the CAS server.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in to the CAS server. You will now be redirected back to Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The CAS plugin cannot verify the client's credentials unless it trusts the CAS
+    server certificate. If the certificate is generated by a well-known trusted authority,
+    then their **ROOT** certificates are most likely already in the default keystore
+    (**cacerts**). This comes prepackaged with your Java installation. However, in
+    the CAS installation recipe you created a self-signed certificate.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The configuration details for the CAS plugin are trivial. Note that you left
+    the **Roles Validation Script** field blank. This implies that your matrix-based
+    strategies will have to rely on users being given specific permissions rather
+    than groups defined by a customized CAS server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Congratulations, you have a working SSO in which Jenkins can play its part seamlessly
+    with a large array of other applications and authentication services!
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Installing a CAS server* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exploring the OWASP Dependency-Check plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The OWASP Dependency-Check tool compares Java programs and JavaScript libraries
+    to known threats in the CVE database ([https://cve.mitre.org/](https://cve.mitre.org/)).
+    CVE is a dictionary of around 69,000 publicly known information security vulnerabilities
+    and exposures. This process is a natural defense against the OWASP top 10 A9 -
+    Using Known Vulnerable Components.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The CVE database is used as a standard for reporting issues by vulnerability
+    scanners, allowing for a common language that tool users can use to compare the
+    susceptibility of their software. The CVE reports include descriptions, where
+    the issue was first reported, and the estimated danger level.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The Dependency-Check tool is not always accurate as it needs to link the libraries
+    with the vulnerabilities and sometimes it hard to for it to be accurate with library
+    signatures. Therefore, you will need to review and filter actions based on the
+    output.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the OWASP Dependency-Check plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Click on the **Configure System** link in the **Manage Jenkins** page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the **OWASP Dependency-Check** section, as shown in the following screenshot:![How
+    to do it...](img/0082OS_02_05a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press the **Advanced...** button and you'll get something similar to the following
+    screenshot:![How to do it...](img/0082OS_02_06a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press the **Analyzers...** button and you'll get something similar to the following
+    screenshot:![How to do it...](img/0082OS_02_07a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Visit `http://localhost:8080/view/All/newJob`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a free-style job named `OWASP`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a **Build** step for **Invoke OWASP Dependency-Check analysis**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Path to scan** field, type `/var/lib/jenkins/workspace` or the path
+    to a project of your choice.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Make sure **Generate optional HTML reports** is the only checkbox ticked. Notice
+    that you have not selected the **Disable CPE auto-update** checkbox:![How to do
+    it...](img/0082OS_02_08.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press the **Build Now** icon.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once the job is finished, press the following workspace icon:![How to do it...](img/0082OS_02_09a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **dependency-check-vulnerabilty.html** link. Depending on the jobs
+    run within the Jenkins workspace, you will see a report similar to the one shown
+    in the following screenshot:![How to do it...](img/0082OS_02_10a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Installing the plugin automatically installs the OWASP Dependency-Check tool.
+    You can find the tool''s home page at [https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![How it works...](img/0082OS_02_11a.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Through the Jenkins interface, you configured the tool to look at every Java
+    library `.jar` file underneath the Jenkins home directory. The scan will take
+    time if your Jenkins server has many jobs configured.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The **Disable CPE auto-update** option was not selected. This was necessary,
+    as the first time the tool runs it runs needs to download security information
+    from an external CVE database. If you do not allow this to happen, then the report
+    will contain no information. Although downloading the newest threat information
+    takes time it is the safest approach to finding new issues in time.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: At the time of writing, the dependency plugin options in Jenkins lag behind
+    the options available for the command-line tool. To give you an idea of what changes
+    you can expect in the plugin, download the command-line tool from [https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once the tool is downloaded and extracted, run the advanced help as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE31]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Your output will be similar to the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_02_18.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The text is followed by a brief set of descriptions for all the options, such
+    as:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE32]'
+  prefs: []
+  type: TYPE_PRE
+- en: The options are or will be mirrored in the Jenkins GUI configuration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: You can find the most up-to-date code source for the tool at GitHub ([https://github.com/jeremylong/DependencyCheck](https://github.com/jeremylong/DependencyCheck)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Reporting overall storage usage* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
+    Jenkins"), *Maintaining Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Adding a job to warn of storage use violations through log parsing* recipe
+    in [Chapter 1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL

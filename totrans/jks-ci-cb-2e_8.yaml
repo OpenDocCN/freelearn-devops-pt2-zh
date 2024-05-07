@@ -1,0 +1,771 @@
+- en: Appendix A. Processes that Improve Quality
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Quality assurance requires that the expert pays attention to a wide range of
+    details. Rather than being purely technical, many of these details relate to human
+    behavior. This chapter mentions both the soft skills needed to run successful
+    projects and the configuration skills codified in the recipes of this book. Here
+    are a few hard-learned observations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Fail early
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The later in the software life cycle you correct a problem, the more costly
+    it will become. Failing early is significantly cheaper than failing later. Continuous
+    Integration allows you to automatically fail software early. Adding extra tests
+    through plugins or connected cloud services gives greater opportunity to face
+    your issues early, improving quality and decreasing costs. Embrace acknowledging
+    issues because you are saving time and money.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are a few relevant resources:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The *Deliberately failing builds through log parsing* recipe in [Chapter 1](ch01.html
+    "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Triggering failsafe integration tests with Selenium Webdriver* recipe in
+    [Chapter 6](ch06.html "Chapter 6. Testing Remotely"), *Testing Remotely*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Error Cost Escalation Through the Project Life Cycle at [http://ntrs.nasa.gov/search.jsp?R=20100036670](http://ntrs.nasa.gov/search.jsp?R=20100036670)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Data-driven testing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: You can efficiently cover your testing surface if you use a data-driven testing
+    approach. For example, when writing JMeter test plans, you can use the CSV configuration
+    element to read in variables from text files. This allows JMeter to read out parameters
+    from your CSV files, such as hostname, and transverse your infrastructure. This
+    enables one test plan to attack many servers. The same is true for SoapUI; by
+    adding an Excel data source and looping through the rows, you can test an application
+    with many different test users who each have a range of roles. Data-driven testing
+    has a tendency to be maintainable. During refactoring, instead of changing your
+    test plan as the URLs in your application change, you can factor the URLs out
+    into CSV files.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are a few relevant resources:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The *Creating JMeter test plans* recipe in [Chapter 6](ch06.html "Chapter 6. Testing
+    Remotely"), *Testing Remotely*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Writing test plans with SoapUI* recipe in [Chapter 6](ch06.html "Chapter 6. Testing
+    Remotely"), *Testing Remotely*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Custom setup scripts for slave nodes* recipe in [Chapter 6](ch06.html "Chapter 6. Testing
+    Remotely"), *Testing Remotely*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Test cloud-based applications with Apache JMeter at [http://www.ibm.com/developerworks/cloud/library/cl-jmeter-restful/](http://www.ibm.com/developerworks/cloud/library/cl-jmeter-restful/)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The data-driven approach with SoapUI at [http://www.soapui.org/Data-Driven-Testing/functional-tests.html](http://www.soapui.org/Data-Driven-Testing/functional-tests.html)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Learning from history
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Teams tend to have their own coding habits. If a project fails because of the
+    quality of the code, try to work out which code metrics would have stopped the
+    code reaching production. Which mistakes are seen repeatedly? Take a look at the
+    following examples:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Friday afternoon code failure**: We all are human and have secondary agendas.
+    By the end of the week, programmers may have their minds focused elsewhere other
+    than on the code. A small subset of programmers have their code quality affected,
+    consistently injecting more defects towards the tail end of their roster. Consider
+    scheduling a weekly Jenkins job that has harsher thresholds for quality metrics
+    near the time of least attention.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Code churn**: A sudden surge in code commits just before a product is being
+    moved from an acceptance environment to product indicates that there is a last-minute
+    rush. For some teams with a strong sense of code quality, this is also a sign
+    of extra vigilance. For other less disciplined teams, this could be a naïve push
+    towards destruction. If a project fails and QA is overwhelmed due to a surge of
+    code changes, look at setting up a warning Jenkins job based on commit velocity.
+    If necessary, you can display your own custom metrics. For more information, refer
+    to the *Plotting alternative code metrics in Jenkins* recipe in [Chapter 3](ch03.html
+    "Chapter 3. Building Software"), *Building Software*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**A rogue coder**: Not all developers create code of the same uniform high
+    quality. It is possible that there is consistent underachievement within a project.
+    Rogue coders are caught by human code review. However, for a secondary defense
+    consider setting thresholds on static code review reports from FindBugs and PMD.
+    If a particular developer is not following accepted practice, builds will fail
+    with great regularity. For more information, refer to the *Finding bugs with FindBugs*
+    recipe in [Chapter 5](ch05.html "Chapter 5. Using Metrics to Improve Quality"),
+    *Using Metrics to Improve Quality*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The GUI does not make sense**: Isn''t it painful when you build a web application
+    only to be told at the last moment that the GUI does not quite interact in the
+    way that the product owner expected? One solution is to write a mockup in FitNesse
+    and surround it with automatic functional tests, using fixtures. When the GUI
+    diverges from the planned workflow, then Jenkins will start shouting. For more
+    information, refer to the *Activating FitNesse HtmlUnit fixtures* recipe in [Chapter
+    6](ch06.html "Chapter 6. Testing Remotely"), *Testing Remotely*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Tracking responsibility**: Mistakes are made and lessons need to be learned.
+    However, if there is no clear chain of documented responsibility, it is difficult
+    to pin down who needs the learning opportunity. One approach is to structure the
+    workflow in Jenkins through a series of connected jobs and use the promoted builds
+    plugin to make sure the right group verifies at the right point. This methodology
+    is also good for reminding the team of the short-term tasks. For more information,
+    refer to the *Testing and then promoting builds* recipe in [Chapter 7](ch07.html
+    "Chapter 7. Exploring Plugins"), *Exploring Plugins*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Considering test automation as a software project
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: If you see automated testing as a software project and apply well-known principles,
+    then you will save on maintenance costs and increase the reliability of tests.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The **Don''t Repeat Yourself** (**DRY**) principle is a great example. Under
+    time pressure, it is tempting to cut and paste similar tests from one area of
+    the code base to another: don''t. Projects evolve bending the shape of the code
+    base; the tests need to be reusable to adapt to that change. Fragile tests push
+    up maintenance costs. One concrete example discussed briefly in [Chapter 6](ch06.html
+    "Chapter 6. Testing Remotely"), *Testing Remotely*, is the use of page objects
+    with Selenium WebDriver. If you separate the code into pages, then when the workflow
+    between pages changes most of the testing code remains intact.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information, refer to the *Activating more PMD rulesets* recipe in
+    [Chapter 5](ch05.html "Chapter 5. Using Metrics to Improve Quality"), *Using Metrics
+    to Improve Quality*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The **Keep It Simple Stupid** (**KISS**) principle implies keeping every aspect
+    of the project as simple as possible. For example, it is possible to use real
+    browsers for automated functional tests or the HtmlUnit framework to simulate
+    a browser. The second choice avoids the need to set up an in-memory X server or
+    VNC ([http://en.wikipedia.org/wiki/Virtual_Network_Computing](http://en.wikipedia.org/wiki/Virtual_Network_Computing))
+    and will also keep track of browser versioning. These extra chores decrease the
+    reliability of running a Jenkins job, but do increase the value of the tests.
+    Therefore, for small projects, consider starting with HtmlUnit. For larger projects,
+    the extra effort is worth the cost. For more detail, refer to the *Triggering
+    failsafe integration tests with Selenium WebDriver* recipe in [Chapter 3](ch03.html
+    "Chapter 3. Building Software"), *Building Software*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Consider if you need a standalone integration server or if you can get away
+    with using a Jetty server called during the integration goal in Maven. For more
+    detail, refer to the *Configuring Jetty for integration tests* recipe in [Chapter
+    3](ch03.html "Chapter 3. Building Software"), *Building Software*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Visualize, visualize, visualize
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When you have many projects scattered across multiple servers developed by different
+    teams and individuals, it is difficult to understand the key metrics and emerging
+    issues.
+  prefs: []
+  type: TYPE_NORMAL
+- en: With 80 percent of information going through to your brain being visual and
+    your brain being an excellent pattern recognizer, one of the tricks to understand
+    the underlying complexity is to visualize the results of your Jenkins jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: SonarQube is an excellent starting point to visualize and gain an overview of
+    the overall quality of projects and for delving into relationships and couplings
+    between different areas of the code. For more information, refer to the *Integrating
+    Jenkins with SonarQube* recipe in [Chapter 5](ch05.html "Chapter 5. Using Metrics
+    to Improve Quality"), *Using Metrics to Improve Quality*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: However, if you have specialized requirements, you will need to build graph
+    generation. Test results are usually stored in XML or CSV format. Once you accumulated
+    the results, you can easily transform them with your language of choice.
+  prefs: []
+  type: TYPE_NORMAL
+- en: R is a language designed for statisticians and scientists. After data is gathered,
+    it is explored to try and discover which variables are related. For this purpose,
+    the R community has created many helper graphic packages. For more detail, refer
+    to the *Analyzing project data with the R plugin* recipe in [Chapter 5](ch05.html
+    "Chapter 5. Using Metrics to Improve Quality"), *Using Metrics to Improve Quality*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The following graphic is a wordcloud summarizing this book's content. Within
+    10 lines of code, the R language generated it. R uses a combination of the `tm`
+    and `wordcloud` packages. You can download the code from the book's website.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Visualize, visualize, visualize](img/0082OS_08_01.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The graphics libraries in R have great examples of what is achievable. The
+    `example()` command placed around the function of your choice runs example code
+    based on the function. The following code displays graphs for the `plot` and `hist`
+    graphics functions. The code is included with the plots:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Once you have discovered a new, interesting function, you can explore its help
+    further by searching the documentation. For example, typing `?rchisq` outputs
+    the following information:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`Density, distribution function, quantile function and random generation for
+    the chi-squared (chi^2) distribution with df degrees of freedom and optional non-centrality
+    parameter ncp.`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information, refer to the Simplifying *powerful visualizations using
+    the R plugin* recipe in [Chapter 4](ch04.html "Chapter 4. Communicating Through
+    Jenkins"), *Communicating Through Jenkins*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot shows the graph generated by the `hist` function:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Visualize, visualize, visualize](img/0082OS_08_03.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: The `rgl` package has a wide range of features for generating impressive graphics.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To install the `rgl` package and its dependencies from the Ubuntu command line,
+    type the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To look at some examples, run the following commands from the R console:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You will see output similar to the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Visualize, visualize, visualize](img/0082OS_08_02.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The following are a few relevant resources:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A full list of official R packages at [http://cran.r-project.org/web/packages/available_packages_by_name.html](http://cran.r-project.org/web/packages/available_packages_by_name.html)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Documentation for the `rgl` package at [http://cran.r-project.org/web/packages/rgl/rgl.pdf](http://cran.r-project.org/web/packages/rgl/rgl.pdf)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Documentation for the `tm` package at [http://cran.r-project.org/web/packages/tm/tm.pdf](http://cran.r-project.org/web/packages/tm/tm.pdf)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Documentation for the `wordcloud` package at [http://cran.r-project.org/web/packages/wordcloud/wordcloud.pdf](http://cran.r-project.org/web/packages/wordcloud/wordcloud.pdf)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Conventions are good
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: By following conventions, you decrease the amount of maintenance and lower the
+    number of defects hidden in your code. Coding conventions are particularly important
+    when more than one developer is involved in writing the code. Conventions aid
+    readability. Consistently indented code focuses the eye on poorly written sections.
+    Well-structured variable names help avoid naming collisions between codes written
+    in different parts of the organization. Structure in naming highlights the data
+    that you can later move to configuration files and increases the opportunity for
+    semi-automatic refactoring using regular expressions, for example, you can write
+    a short piece of R code to visualize the number of global variables you have per
+    module. The more global variables you have, the greater the risk of using the
+    same variable for multiple purposes. Hence, the plot is a rough indicator of smelly
+    code.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are a few relevant resources:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The *Deliberately failing builds through log parsing* recipe in [Chapter 1](ch01.html
+    "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Plotting alternative code metrics in Jenkins* recipe in [Chapter 3](ch03.html
+    "Chapter 3. Building Software"), *Building Software*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Creating custom PMD rules* recipe in [Chapter 5](ch05.html "Chapter 5. Using
+    Metrics to Improve Quality"), *Using Metrics to Improve Quality*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Google's code of conventions for Java programmers at [https://google-styleguide.googlecode.com/svn/trunk/javaguide.html](https://google-styleguide.googlecode.com/svn/trunk/javaguide.html)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Coding and naming conventions for the GCC project at [https://gcc.gnu.org/codingconventions.html](https://gcc.gnu.org/codingconventions.html)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Test frameworks and commercial choices are increasing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the past few years, there has been a lot of improvement in test automation.
+    One example is that static code review is being used more thoroughly for security
+    checks. SonarQube is an all-encompassing reporter of project quality and new frameworks
+    are emerging to improve on the old. Here are a few implications:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**SonarQube**: This measures project quality. Its community is active. SonarQube
+    will evolve faster than the full range of Jenkins quality metrics plugins. Consider
+    using Jenkins plugins for early warnings of negative quality changes and SonarQube
+    for in-depth reporting. For more information, refer to the *Integrating Jenkins
+    with SonarQube* recipe in [Chapter 5](ch05.html "Chapter 5. Using Metrics to Improve
+    Quality"), *Using Metrics to Improve Quality*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Static code review tools**: These are improving. FindBugs has moved comment-making
+    into the cloud. More bug pattern detectors are being developed. Static code review
+    tools are getting better at finding security defects. Expect significantly improved
+    tools over time, possibly just by updating the version of your current tools.
+    For more detail, refer to the *Finding security defects with FindBugs* recipe
+    in [Chapter 5](ch05.html "Chapter 5. Using Metrics to Improve Quality"), *Using
+    Metrics to Improve Quality*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Code search**: Wouldn''t it be great if code search engines ranked the position
+    in their search results of a particular piece of code, based on the defect density
+    or coding practice? You could then search a wide range of open source products
+    for best practices. You could search for defects to remove and then send patches
+    back to the code''s communities.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The cloud**: CloudBees allows you to create on-demand slave nodes in the
+    cloud. Expect more kinds of cloud-like integrations around Jenkins.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: For more information about SonarQube features and the CloudBees cloud service,
+    visit [http://www.sonarqube.org/features/](http://www.sonarqube.org/features/)
+    and [http://www.CloudBees.com/products/dev](http://www.CloudBees.com/products/dev).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Offsetting work to Jenkins nodes
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Thanks to its wealth of plugins, Jenkins can easily connect to many types of
+    system. Therefore, Jenkins usage can grow virally in an organization. Testing
+    and JavaDoc generation takes up system resources. A master Jenkins is best used
+    to report back quickly on jobs distributed across a range of Jenkins nodes. This
+    approach makes it easier to analyze where the failure lies in the infrastructure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you are using JMeter for your performance tests at scale, consider offloading
+    from Jenkins to a cloud service such as BlazeMeter ([http://blazemeter.com/](http://blazemeter.com/)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: For functional testing with Selenium, there is also a wide range of cloud services.
+    Consider using them not only because of load, but also because of the use of a
+    wide range of browser types and versions offered. One example of a commercial
+    service is Sauce Labs ([https://saucelabs.com/](https://saucelabs.com/)). It is
+    worth periodically reviewing the market for new cloud services.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are a few relevant resources:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The *Monitoring via JavaMelody* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
+    Jenkins"), *Maintaining Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Creating multiple Jenkins nodes* recipe in [Chapter 6](ch06.html "Chapter 6. Testing
+    Remotely"), *Testing Remotely*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Custom setup scripts for slave nodes* recipe in [Chapter 6](ch06.html "Chapter 6. Testing
+    Remotely"), *Testing Remotely*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Starving QA/integration servers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'A few hundred years ago, coal miners would die because of the build-up of methane
+    and carbon monoxide in the mines. To give early warning of this situation, canaries
+    were brought into the mines. Being more sensitive, the birds would faint first,
+    giving the miners enough time to escape. Consider doing the same for your integration
+    servers in your acceptance environment: deliberately starve them of resources.
+    If they fall over, you will have enough time to review before watching the explosion
+    in production.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information, refer to the *Monitoring via JavaMelody* recipe in [Chapter
+    1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reading the change log of Jenkins
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Jenkins practices what it preaches. Minor version number releases occur about
+    once a week. New features appear, bugs are resolved, and new bugs introduced.
+    In general, the great majority of changes lead to improvement, but a few do not.
+    However, when introduced, bugs are generally caught early and removed quickly.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Before updating Jenkins for new features and potential stability glitches, it's
+    worth reading the changelog ([http://jenkins-ci.org/changelog](http://jenkins-ci.org/changelog)).
+    Occasionally, you might want to speed up a deployment to production because of
+    a security issue or miss a version due to a stability blooper.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'If you are focused on stability rather than feature richness, consider using
+    the older but more stable long-term support release. For more details visit: [https://wiki.jenkins-ci.org/display/JENKINS/LTS+Release+Line](https://wiki.jenkins-ci.org/display/JENKINS/LTS+Release+Line).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Avoiding human bottlenecks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The simpler your testing environment is, the less skill you'll need to maintain
+    it. As you learn to use the plugins and explore the potential of new tools and
+    scripting languages, the more knowledge the organization needs to maintain a stable
+    system. If you wish to go on holidays without random text messages asking for
+    advice, make sure that your knowledge is transferred to at least a second person.
+    This sounds obvious, but in the rush of your daily load, this principle is often
+    forgotten or put to one side.
+  prefs: []
+  type: TYPE_NORMAL
+- en: One of the easiest ways to share knowledge is to send a couple of developers
+    off to the same conferences and events together ([https://www.CloudBees.com/company/events/juc](https://www.CloudBees.com/company/events/juc)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: This is where managers play a significant role in knowledge dissemination. They
+    need to plan in time and activities for the sharing of knowledge, rather than
+    expecting it to happen by magic.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Avoiding groupthink
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: It is easy to be perfect on paper, defining the importance of a solid set of
+    JavaDocs and unit tests. However, the real world on its best days is chaotic.
+    Project momentum, motivated by the need to deliver, is an elusive force to push
+    back against.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Related to project momentum is the potential of groupthink ([http://en.wikipedia.org/wiki/Groupthink](http://en.wikipedia.org/wiki/Groupthink))
+    by the project team or resource owners. If the team has the wrong collective attitude,
+    as a quality assurance professional it is much harder to inject hard-learnt realism.
+    Quality assurance is not only about finding and capturing defects as early as
+    possible, it is also about injecting objective criteria for success or failure
+    into the different phases of a project's cycle.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Consider adding measurable criteria into the Jenkins build. Obviously, if the
+    code fails to compile, then the product should not go to acceptance and production.
+    Less obviously, are the rules around code coverage of unit tests worth defending
+    in release management meetings?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Try getting the whole team involved at the start of the project before any coding
+    has taken place and agree on metrics that fail a build. One approach is to compare
+    a small successful project to a small failed project. If later there is a disagreement,
+    then the debate is about process and numbers rather than personality.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information, refer to the *Looking for "smelly code" through code coverage*
+    recipe in [Chapter 5](ch05.html "Chapter 5. Using Metrics to Improve Quality"),
+    *Using Metrics to Improve Quality*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Training and community
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Training and participating in Jenkins and the wider tester community are vital
+    for long-term learning paths that lead to optimized environments. Here are a few
+    relevant resources:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: CloudBees is a commercial company working with Jenkins cloud services. At the
+    time of writing this book, CloudBees' CTO is Kohsuke Kawaguchi, the father of
+    Jenkins. CloudBees provides a number of training opportunities and conference
+    events. The company's training information can be found at [http://www.CloudBees.com/jenkins/training](http://www.CloudBees.com/jenkins/training).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: When starting with an online community, it is wise to first review and participate
+    in the mailing lists. This allows you to judge your own standard and gradually
+    become recognized. The mailing lists are summarized at [http://jenkins-ci.org/content/mailing-lists](http://jenkins-ci.org/content/mailing-lists).
+    Once you are confident that you can productively participate, consider progressing
+    to real-time interactions through the IRC channel at [https://wiki.jenkins-ci.org/display/JENKINS/IRC+Channel](https://wiki.jenkins-ci.org/display/JENKINS/IRC+Channel).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The ISTQB software certification body keeps example documentation on its website
+    for its software tester exams. You can find the documentation at [http://www.istqb.org/downloads.html](http://www.istqb.org/downloads.html).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The slideshow from Kohsuke Kawaguchi explaining the funnel of participation
+    as a method to build a community is available at [http://www.slideshare.net/kohsuke/building-developer-community](http://www.slideshare.net/kohsuke/building-developer-community).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Visibly rewarding successful developers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This is a call to resource managers. Developers and testers specialize in technical
+    matters that are at times hard to explain to those outside their problem domain.
+    To reach the highest level of expertise and to keep track of trends requires time
+    (sometimes a lot of their own time), energy, and motivation. Undermining their
+    motivation or underestimating the time required to build their skills will ultimately
+    decrease the quality of your products and will cost more in the end. Consider
+    what you can do to support them, from pay scale jumps, learning paths, reserving
+    time in the week for developers to read and practice new ideas, to conferences
+    and gadgets. For example, after a pay rise, Kickstarter ([https://www.kickstarter.com/](https://www.kickstarter.com/))
+    is a great place to look for motivational rewards and to stimulate the developers'
+    creative muscle.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Finally, do not make developers do non-development stuff. In general, they need
+    to be highly focused on the complex task of understanding detailed requirements
+    and turning them into rock-solid code.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Stability and code maintenance
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book mentions many plugins and a number of languages and testing tools.
+    It is OK to experiment in development and then push to acceptance, but the more
+    diversity you have in production, the more skills are needed to maintain and especially
+    to write a fluent workflow. Subtle choices, such as pinning Jenkins plugins at
+    known versions and keeping the production version of your Jenkins server stable
+    for fixed periods, help with up-time. Just as importantly, monitoring the load
+    and offsetting most of the jobs away from the master Jenkins ensues a high degree
+    of determinism in the timing of the jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To limit job maintenance implies keeping configuration simple and similar. This
+    is not realistic in a complex organization with a high degree of diversity. Using
+    a test-driven approach helps; conventions also simplify configuration. As the
+    diversity increases, communicating and agreeing the conventions becomes important.
+    Simple strategies—such as one source of documentation wisdom (for example, a communal
+    wiki), regular lessons, learned meetings, and weekly reviews—become vital.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Resources on quality assurance
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'It is a mistake to consider testing to be the sole responsibility of the testers.
+    Coders should feel responsible for the quality of their code, architects for the
+    quality of their designs, managers for the ethos of the project and project planning,
+    and so on. Here are some examples of a range of practical resources on actionable
+    quality assurance—this is not just for the testers:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: There are many wise words on avoiding classic mistakes based on years of hard
+    knocks and bruising. One well thought-out set of comments can be found at [http://www.exampler.com/testing-com/writings/classic/mistakes.html](http://www.exampler.com/testing-com/writings/classic/mistakes.html).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: If unit tests cover your code thoroughly, then if you break a piece of code
+    during an update, you will know this quickly during the next build. JUnit is arguably
+    the most well-known framework in this genre. You can find the framework's home
+    page at [http://junit.org/](http://junit.org/).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Jenkins home page ([http://jenkins-ci.org/](http://jenkins-ci.org/)) covers
+    a wealth of information around the practicalities of configuration, plugins, the
+    community, and hints and tips.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The **Open Web Application Security Project** (**OWASP**) is a great source
+    of information and tools on security testing. OWASP is focused on improving the
+    security of software. Its mission is to make software security visible so that
+    individuals and organizations worldwide can make informed decisions about true
+    software security risks. You can find the OWASP home page at [https://www.owasp.org/index.php/Main_Page](https://www.owasp.org/index.php/Main_Page).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: If you want a hardcopy or e-book of any of the OWASP material, then you can
+    download or buy from Lulu ([http://www.lulu.com/spotlight/owasp](http://www.lulu.com/spotlight/owasp)).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: You can find OWASP's security testing guide at [https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents](https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: One popular example of a commercial company selling Jenkins infrastructure in
+    the cloud is Sauce Labs ([https://docs.saucelabs.com/ci-integrations/jenkins/](https://docs.saucelabs.com/ci-integrations/jenkins/)).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There are a number of excellent and free-to-download software testing magazines.
+    The Professional Tester is one such example and is available at [http://www.professionaltester.com/](http://www.professionaltester.com/).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: uTest is the world's largest open community dedicated to professional testers
+    and software testing. Its sole purpose is to promote and advance the testing profession,
+    and the people who do this vital work. For more information, visit [http://www.utest.com/about-us](http://www.utest.com/about-us).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There are more and more free MOOC courses and a number of them support the learning
+    paths of software testers. You can find a full list of currently running MOOC
+    courses at [https://www.mooc-list.com/](https://www.mooc-list.com/).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There are many hundreds of excellent blogs centered on testing. Martin Fowler's
+    blog ([http://martinfowler.com/](http://martinfowler.com/)) is a great resource
+    and the father of Jenkins, Kohsuke Kawaguchi, has another ([http://kohsuke.org/](http://kohsuke.org/)).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Static code review allows jobs to find a wide range of issues without human
+    intervention. A set of articles I wrote about static code review for the Free
+    Software Magazine is available at [http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1](http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: And there's always more
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'There are always more points to consider. Here are a few of the cherry-picked
+    ones:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Blurring the team boundary**: Tools such as FitNesse and Selenium IDE make
+    it easier for non-Java programmers to write tests. The easier it is to write tests,
+    the more likely it is that the relevant tests capture the quintessential details
+    of user expectations. Look for new Jenkins plugins that support tools that lower
+    the learning curve. For more information, refer to the *Running Selenium IDE tests*
+    recipe in [Chapter 6](ch06.html "Chapter 6. Testing Remotely"), *Testing Remotely*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Deliberately adding defects**: By rotating through Jenkins builds and then
+    deliberately adding code that fails, you can test the alertness and response time
+    of the team.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: '**Warning**'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: Before adding defects, make sure that the team has agreed to the process or
+    you might be getting angry e-mails late at night.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '**Increasing code coverage with link crawlers and security scanners**: A fuzzer
+    discovers the inputs of the application it is attacking and then fires off unexpected
+    input. Not only is this good for security testing, but also for boundary testing.
+    If your server returns an unexpected error, then use a fuzzer to trigger a more
+    thorough review. Fuzzers and link crawlers are a cheap way to increase the code
+    coverage of your tests. For more information, refer to the *Finding 500 errors
+    and XSS attacks in Jenkins through fuzzing* recipe in [Chapter 2](ch02.html "Chapter 2. Enhancing
+    Security"), *Enhancing Security*.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: In your development environment, periodically review for new Jenkin plugins.
+    The number of plugins is increasing rapidly and there may be new ways for Jenkins
+    to connect different parts of your organization's infrastructure to Continuous
+    Integration.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Final comments
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The combination of Jenkins with aggressive automated testing acts as a solid
+    safety net around coding projects. The recipes in this book support best practices.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Producing quality requires great attention to detail. Jenkins can pay attention
+    to many of the details and then shout loudly when violations occur.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Each project is different and there are many ways to structure the workflow.
+    Luckily, with over 1,000 plugins and the number rising rapidly, Jenkins is flexible
+    enough to adapt to even the most obscure infrastructures.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you do not have the exact plugin that you want, then it is straightforward
+    for Java programmers to adapt or create their own plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Without a thriving open source Jenkins community, none of this would be possible.
+    Jenkins is yet another positive example of the open source mentality working in
+    practice. If you agree, consider participating.
+  prefs: []
+  type: TYPE_NORMAL

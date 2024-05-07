@@ -1,0 +1,2227 @@
+- en: Chapter 7. Exploring Plugins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this chapter, we will cover the following recipes:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Personalizing Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Testing and then promoting builds
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Having fun with pinning JSGames
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Looking at the GUI samples plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Changing the help of the FileSystem SCM plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Adding a banner to job descriptions
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a RootAction plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exporting data
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Triggering events on startup
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Using Groovy hook scripts and triggering events on startup
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Triggering events when web content changes
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reviewing three ListView plugins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating my first ListView plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Introduction
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'This chapter has two purposes: the first is to show a number of interesting
+    plugins, the second is to briefly review how plugins work. If you are not a programmer,
+    feel free to skip the "how plugins work" discussion.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: When I started writing this book, there were over 300 Jenkins plugins available,
+    at the time of writing this page, there are more than 1,000\. It is likely that
+    there are plugins already available that meet your needs. Jenkins is not only
+    a Continuous Integration server, it is also a platform to create extra functionality.
+    Once a few concepts are learned, a programmer can adapt available plugins to an
+    organization's needs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you see a feature that is missing, it is normally easier to adapt an existing
+    one than to write one from scratch. If you are thinking of adapting then the plugin
+    tutorial ([https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial](https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial))
+    is a good starting point. The tutorial has relevant background information on
+    the infrastructure you use daily.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'There is a large amount of information available on plugins. Here are some
+    key points:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: There are many plugins already, and more will be developed. To keep up with
+    these changes, you will need to regularly review the available section of the
+    Jenkins plugin manager.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Work with the community**: If you centrally commit your improvements then
+    they become visible to a wider audience. Under the careful watch of the community,
+    the code is more likely to be reviewed and further improved.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Don''t reinvent the wheel**: With so many plugins, in the majority of situations,
+    it is easier to adapt an already existing plugin than to write from scratch.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Pinning a plugin** occurs when you cannot update the plugin to a new version
+    through the Jenkins plugin manager. Pinning helps to maintain a stable Jenkins
+    environment.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Most plugin workflows are easy to understand. However, as the number of plugins
+    you use expands, the likelihood of an inadvertent configuration error increases.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Jenkins Maven Plugin allows you to run a test Jenkins server from within
+    a Maven build without risk.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Conventions save effort**: The location of files in plugins matters. For
+    example, you can find the description of a plugin displayed in Jenkins at the
+    file location `/src/main/resources/index.jelly`. By keeping to Jenkins conventions,
+    the amount of source code you write is minimized and the readability improved.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The three frameworks that are regularly used in Jenkins are:'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Jelly** for the creation of the GUI'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Stapler** to bind of the Java classes to the URL space'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**XStream** for the persistence of configurations into XML'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Source code for a number of plugins mentioned in this chapter is in subversion.
+    After the time of writing, if any of the code is moved, it is likely to have moved
+    to the Jenkins GitHub repository ([https://github.com/jenkinsci](https://github.com/jenkinsci)).
+    The convention for plugin developers is to leave a `README` file in the old subversion
+    repository listing the new Git location.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: Personalizing Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'This recipe highlights two plugins that improve the user experience: the Green
+    Balls plugin and the Favorite plugin.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins has a wide international audience. At times, there can be subtle cultural
+    differences expressed in the way Jenkins looks. One example is that when a build
+    succeeds, a blue ball is shown as the icon. However, many naturally associate
+    the green from traffic lights with the signal to carry on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Favorite plugin allows you to select your favorite projects and display
+    an icon in a view to highlight your picks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the Green Balls and Favorite plugins ([https://wiki.jenkins-ci.org/display/JENKINS/Green+Balls](https://wiki.jenkins-ci.org/display/JENKINS/Green+Balls),
+    [https://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create an empty new free-style job `named ch7.plugin.favourite`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Build the job a number of times, reviewing the build history. You will now see
+    green balls instead of the usual blue, as shown in the following screenshot:![How
+    to do it...](img/0082OS_07_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Return to the main page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To create a new view, click on the **+** icon.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Fill in **FAV** for the name.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Check **List View**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Job Filters** section, check **Use a regular expression to include
+    jobs into the view**. Add `.*` for the **Regular expression**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Columns** section, make sure you have three columns **Name**, **Status**,
+    and **Favorite**, as shown in the following screenshot:![How to do it...](img/0082OS_07_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **OK**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will find yourself in the **FAV** view. By clicking on the star icon, you
+    can select/deselect your favorite projects, as shown in the following screenshot:![How
+    to do it...](img/0082OS_07_04.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The Green Balls plugin works as advertised. The Favorite plugin allows you to
+    select which project interests you the most and display that as a favorites icon.
+    This reminds you that the project needs some immediate action.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'If you are interested in working with the community, then these plugins are
+    examples that you could add extra features to. You can find the official guide
+    to contributing here: [https://wiki.jenkins-ci.org/display/JENKINS/Beginners+Guide+to+Contributing](https://wiki.jenkins-ci.org/display/JENKINS/Beginners+Guide+to+Contributing)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The opposite of a favorite project, at least temporarily, is a project whose
+    build has failed. The Claim plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin))
+    allows individual developers to claim a failed build. This enables the mapping
+    of workflow to individual responsibility.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once the Claims plugin is installed, you will be able to find in the **Post-Build
+    Actions** section of a job a tick box for **Allow broken build claiming**. Once
+    enabled, if a build fails you can claim a specific build, adding a note about
+    your motivation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_05.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'On the Jenkins home page, there is now a link to a log that keeps a summary
+    of all the claimed builds. A project manager can now read a quick overview of
+    issues. The log is a direct link to the team members that are dealing with current
+    issues, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_05a.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Favorite plugin is elegant in its simplicity. In the next recipe, testing
+    and then promoting will signal that further incorporation of complex workflows
+    is allowed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Testing and then promoting builds* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Fun with pinning JSGames* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Testing and then promoting builds
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: You do not want the QA team to review an application until it has been automatically
+    tested. To achieve this, you can use the promotion plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Promotion is a visual signal in Jenkins. An icon is set next to a specific build
+    to remind the team to perform an action.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The difference between promotion and the Favorite plugin mentioned in the preceding
+    recipe is that promotion can be triggered automatically, based on a variety of
+    automated actions. These actions include the running of scripts or the verification
+    of the status of other up or downstream jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this recipe, you will be writing two simple jobs. The first job will trigger
+    the second job; if the second job is successful, then the first job will be promoted.
+    This is the core of a realistic QA process, the testing job promoting the packaging
+    job.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the Promoted Builds plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a free-style job named `ch7.plugin.promote_action`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run this job and verify that it succeeds.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a free-style job named `ch7.plugin.to_be_promoted`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Near the top of the configuration page, check **Promote builds when...**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Fill in the following details:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Name**: Verified by automatic functional testing'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Select **Green star** for the **Icon**
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Check **When the following downstream projects build successfully**
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Job names**: `ch7.plugin.promote_action`'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '![How to do it...](img/0082OS_07_07.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: In the **Post-build Action** section check **Build other projects**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Fill in for **projects to build** `ch7.plugin.promote_action`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Tick **Trigger only if build is stable**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Build the job.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Promotion Status** link, as shown in the following screenshot:![How
+    to do it...](img/0082OS_07_08.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the build report.![How to do it...](img/0082OS_07_09.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Promoted Builds is similar to the Favorite plugin, but with automation of workflow.
+    You can promote depending on job(s) triggered by the creation of artifacts. This
+    is typical workflow when you want a job tested for baseline quality before being
+    picked up and reviewed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The plugin has enough configuration options to make it malleable to most workflows.
+    Another example, for a typical development, acceptance, and production infrastructure,
+    is that you do not want an artifact to be deployed to production before development
+    and acceptance have also been promoted. The way to configure this is to have a
+    series of jobs, with the last promotion to production depending on the promotion
+    of upstream development and acceptance jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: If you want to add human intervention, then check **Only when manually approved**
+    in the jobs configuration and add a list of approvers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: If you are relying on human intervention and have no automatic tests, consider
+    using the simplified promoted Builds plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Simple+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Simple+Plugin)).
+    As its name suggests, the plugin simplifies the configuration and works well with
+    a large subset of QA workflows. Simplifying the configuration makes it easier
+    to explain, allowing use by a wider audience.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can configure the different types of promotion within the main Jenkins
+    configuration page, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_10.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Use the **Automatically Keep** feature wisely. The option tells Jenkins to keep
+    the artifacts from the build for all time. If used as part of an incremental build
+    process, you will end up consuming a lot of disk space.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The plugin allows you to elevate promotions. There is a simple choice available
+    through a link on the left-hand side of the build. This feature allows you to
+    add a series of players into the promotion process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: When the final promotion occurs, for example to **GA** (**Generally Available**),
+    the promotion is locked and can no longer be demoted.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_11.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The ability of a user to promote depends on their permissions. For example,
+    if you are using Matrix-based security, then you will need to update its table
+    before you can see an extra option in the configuration page of the job, as shown
+    in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_12.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Personalizing Jenkins* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Fun with pinning JSGames
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe shows you how to pin a Jenkins plugin. Pinning a plugin stops you
+    from being able to update its version within the Jenkins plugin manager.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Now that the boss has gone, life is not always about code quality. To reduce
+    pressure, consider allowing your team access to relaxation with the JSGames plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the JSGames plugin ([https://wiki.jenkins-ci.org/display/JENKINS/JSGames+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JSGames+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Check out and review the tag **jsgames-0.2** under a directory of your choice
+    with the commands:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Review the front page of Jenkins; you will see a link to JS Games, as shown:![How
+    to do it...](img/0082OS_07_13.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the link and you will have the choice of two games, **Mario Kart**
+    and **Tetris**:![How to do it...](img/0082OS_07_14.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: As a Jenkins administrator, visit the **Manage Plugins** section and then click
+    on the installed tab (`http://localhost:8080/pluginManager/installed`). Notice
+    that the JSGames plugin is not pinned.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'From the command line, list the contents of the plugin directory (`JENKINS_HOME/plugin`),
+    for example:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'The output will be similar to:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the plugins directory, create a file named `jsgames.jpi.pinned`, for example:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: In your web browser, refresh the installed plugin page. You will now see that
+    the `jsgames` plugin is pinned:![How to do it...](img/0082OS_07_15.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Pinning a plugin stops a Jenkins administrator from updating to a new version
+    of a plugin. To pin a plugin, you need to create a file in the plugins directory
+    with the same name as the plugin, ending with the extension pinned. See [https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins](https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins).
+  prefs: []
+  type: TYPE_NORMAL
+- en: A new version of Jenkins is released roughly every week with bug fixes and feature
+    updates. This leads to delivering improvements quickly to market, but at times
+    it also leads to failures. Pinning a plugin prevents a plugin from being accidentally
+    updated until you have had time to access the stability and value of the newer
+    version. Pinning is a tool to maintain production server stability.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'The source code includes a top-level `pom.xml` file to control the Maven build
+    process. By convention, the four main source code areas are:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`src/test`: This contains the code that tests during the build. For JSGames
+    there are a bunch of JUnit tests.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`src/main/java`: This is the location of the Java code. Jenkins uses Stapler
+    ([https://wiki.jenkins-ci.org/display/JENKINS/Architecture](https://wiki.jenkins-ci.org/display/JENKINS/Architecture))
+    to map data between the Java objects in this directory and the views Jenkins finds
+    in the directories under `src/main/resources`.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`src/main/resources`: This is the location of the view for the plugin. You
+    use the GUI associated with the plugin when you interact in Jenkins, for example
+    the link to JS Games. The view is defined using Jelly tags.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`src/main/webapp`: This is the location of resources such as images, style
+    sheets, and JavaScript. The location maps to URL space. `/src/main/webapp` maps
+    to the URL `/plugin/name_of_plugin`. For example, the location `/src/main/webapp/tetris/resources/tetris.js`
+    maps to the URL `/plugin/jsgames/tetris/resources/tetris.js`.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Creating a RootAction plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Looking at the GUI samples plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe describes how to run a Jenkins test server through Maven. In the
+    test server, you will get to see the example GUI plugin. The GUI plugin demonstrates
+    a number of tag elements that you can use later in your own plugins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a directory to keep the results of this recipe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'In the recipe directory, add the following content in the `pom.xml` file:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'From the command line, run `mvn hpi:run`. If you have a default Jenkins running
+    on port `8080`, then you will see an error message similar to:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: If the server is still running, press *Ctrl* + *C*.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'To run on port `8090` type the command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'The server will now run and generates a **SEVERE** error from the console:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Visit `localhost:8090/jenkins`. At the bottom of the page, review the version
+    number of Jenkins, as shown in the following screenshot:![How to do it...](img/0082OS_07_16.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Install the UI Samples plugin through the plugin manager (`http://localhost:8090/pluginManager/available`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the front page, click on the **UI Samples** link:![How to do it...](img/0082OS_07_17.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the various types of examples mentioned such as AutoCompleteTextBox (`http://localhost:8090/ui-samples/AutoCompleteTextBox/`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: For development purposes, the ability to run a test server from Maven is great.
+    You can change your code, compile, package, and then view on a local instance
+    of Jenkins without worrying about configuring or damaging a real server. You do
+    not have to worry too much about security because the test server only runs as
+    long as you are testing.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The goal `hpi:run` tries to package and then deploy a plugin called Startup.
+    However, the package is not available so it logs a complaint and then faithfully
+    runs a Jenkins server. The version number of the Jenkins server is the same as
+    the version number defined in the `pom.xml` `<version>` tag within the `<parent>`
+    tag.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To avoid hitting the same port as your local instance of Jenkins, you set the
+    `jetty.port` `option.`
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once running, visiting the GUI example plugin shows examples of creating various
+    GUI elements in Jelly. These elements will come in handy later for programming
+    your own plugins. The Jelly files used in plugins sit under the `/src/main/resources`
+    directory. Jenkins uses Stapler to bind any relevant classes found in `src/main/java`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can find the Jenkins workspace in the `work` folder. Any configuration changes
+    you make on the test server are persisted here. To have a fresh start, you will
+    need to delete the directory by hand.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'For all the recipes in this chapter, we will pin Jenkins Version 1.584\. The
+    reason for this is twofold:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The dependencies take a lot of space. The Jenkins war file and test war file
+    take about up 120 MB of your local Maven repository. Multiply this number by the
+    number of versions of Jenkins used and you can quickly fill up gigabytes of storage
+    space.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Holding at a specific Jenkins version stabilizes the recipes.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Feel free to update to the newest and greatest Jenkins version, as the examples
+    in this chapter should still work. In case of difficulties, you can always return
+    to the known safe number.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Behind the scenes, Maven does a lot of heavy lifting. The `pom.xml` file defines
+    the repository [http://repo.jenkins-ci.org/public/](http://repo.jenkins-ci.org/public/)
+    to pull in the dependencies. It calls Version 1.584 of `org.jenkins-ci.plugins.plugin`.
+    The version number is in sync with the version number of Jenkins that Maven runs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To discover which version numbers are acceptable, visit [http://repo.jenkins-ci.org/public/org/jenkins-ci/plugins/plugin/](http://repo.jenkins-ci.org/public/org/jenkins-ci/plugins/plugin/).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The details of the Jenkins server and any extra plugins included can be found
+    relative to the preceding URL in `1.584/plugin-1.584.pom`. The UI Samples plugin
+    version is also pegged at Version 1.584
+  prefs: []
+  type: TYPE_NORMAL
+- en: The official page and the most up-to-date information on plugin building can
+    be found at [https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial](https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial).
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Changing the help of the FileSystem SCM plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Changing the help of the FileSystem SCM plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This recipe reviews the inner workings of the FileSystem SCM plugin. The plugin
+    allows you to place code in a local directory and have it picked up in a build.
+    As an example, you will change the text in the plugins help file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Create a directory ready for the code in this recipe. In the newly created
+    directory, download the source of the plugin:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Review the tag information and then check out the newest stable tag:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the top-level directory, edit the `pom.xml` file, changing the version under
+    `<parent>` to `1.584`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Replace the repositories and `pluginRepositories` stanza with the following
+    code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Replace the content of `src/main/webapp/help-clearWorkspace.html` with the
+    following code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Run `mvn clean install`. The unit tests fail with the output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Skip the failing tests by running `mvn clean package -Dmaven.test.skip=true`
+    The plugin is now packaged.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Upload the plugin to `./target/filesystem_scm.hpi` in the **Advanced** section
+    of your plugin manager (`http://localhost:8080/pluginManager/advanced`):'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![How to do it...](img/0082OS_07_18.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Restart the Jenkins server.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in to Jenkins and visit the list of installed plugins (`http://localhost:8080/pluginManager/installed`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a Maven job named `ch7.plugins.filesystem_scm`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Source Code Management** section you now have a section called **File
+    System**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Help** icon for **Clear Workspace**. You will see your custom
+    message, as shown in the following screenshot:![How to do it...](img/0082OS_07_19.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To delete the plugin, remove the `jpi` file and the expanded directory from
+    under `JENKINS_HOME/plugins`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Congratulations, you have updated the SCM plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: First, you modified the plugin's `pom.xml` file, updating the version of the
+    test Jenkins server and pointing at the right repository for Maven to download
+    artifacts. Next, you modified its help file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For each Java class, you can configure its GUI representation through an associated
+    `config.jelly` file. The mapping is from `src/main/java/package_path/classname.java`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: to `src/main/resources/package_path/classname/config.jelly`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For example, `src/main/resources/hudson/plugins/filestem_scm/FSSCM/config.jelly`
+    configures the Jenkins GUI for `src/main/java/hudson/plugins/filesystem_scm/FSSCM.java`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The location of the help files is defined in `config.jelly` with the attribute
+    `help` in the `entry` Jelly tag:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: The `src/main/webapps` directory provides a stable Jenkins URL `/plugin/name_of_plugin`
+    for static content such as images, style sheets, and JavaScript files. This is
+    why the help files are stored here. Modifying `help-clearWorkspace.html` updates
+    the help pointed to by the `entry` tab.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The variable `${scm.clearworkspace}` is a reference to the value of the `clearWorkspace`
+    member in the `FSSCM` instance.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Plugins generally ship with two types of Jelly file, `global.jelly` and `config.jelly`.
+    The `config.jelly` files generate the configuration elements seen when configuring
+    jobs. The `global.jelly` files are rendered in the main Jenkins configuration
+    page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Data is persisted in XML files using the XStream framework. You can find the
+    data for job configuration under the working area of Jenkins within `/jobs/job_name/plugin_name.xml`
+    and for the global plugin configuration under `./work/name_of_plugin.xml`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Looking at the GUI samples plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Adding a banner to job descriptions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Consider a scenario. Your company has a public-facing Jenkins instance. The
+    owner does not want project owners to write un-escaped tagging in the descriptions
+    of projects. This poses too much of a security issue. However, the owner does
+    want to put a company banner at the bottom of each description. You have 15 minutes
+    to sort out the problem before management starts buying in unnecessary advice.
+    Within the first five minutes, you ascertain that the escape markup plugin (see
+    the *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe in
+    [Chapter 2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*)
+    performs the escaping of the description.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This recipe shows you how to modify the Markup plugin to add a banner to all
+    descriptions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Assuming you are testing locally, create a directory for your project. In your
+    newly created directory, check out the `escape-markup-plugin-0.1` tag of the escaped-markup-plugin:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Visit the local copy of the plugin source code, list the possible tags, and
+    check out a stable version of the plugin:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: In the top-level directory of the project, try to create the plugin by using
+    the command `mvn install`. The build fails.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Change the Jenkins plugin version in the `pom.xml` file from `1.408` to `1.58`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Replace the `repositories` and `pluginRepositories` stanza with the following
+    code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Build the plugin with `mvn install`. The build will succeed. You can now find
+    the plugin at `target/escaped-markup-plugin.hpi`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Install the plugin by visiting the **Advanced** tab under the plugin manager
+    (`http://localhost:8080/pluginManager/advanced`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Upload Plugin** section, upload the `escaped-markup-plugin.hpi` file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Restart the server, for example:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Visit the Jenkins security configuration page (`http://localhost:8080/configureSecurity`)
+    and review the **Markup Formatters**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Replace `src/main/resources/index.jelly` with the following code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Replace the class definition of `src/main/java/org/jenkinsci/plugins/escapedmarkup/EscapedMarkupFormatter.java`
+    with the following code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Build with `mvn install`. The build fails due to failed tests (which is a good
+    thing).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Build again using the following command, this time skipping the tests:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Stop Jenkins, as shown:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Delete the escaped markup plugin from the Jenkins plugin directory and the
+    expanded version in the same directory, for example:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Copy the plugin `target/escaped-markup-plugin.hpi` to the Jenkins plugin directory.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Visit the installed plugins page: `http://localhost:8080/pluginManager/installed`.
+    You will now see an updated description of the plugin, as shown in the following
+    screenshot:![How to do it...](img/0082OS_07_20.jpg)'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In Jenkins, as an administrator, visit the configure page: `http://localhost:8080/configureSecurity`.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For **Markup Formatter** choose **Escaped HTML with BANNER**, as shown in the
+    following screenshot:![How to do it...](img/0082OS_07_21.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a new job named `ch7.plugin.escape`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Within the job's main page, you will now see the banner:![How to do it...](img/0082OS_07_22.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The markup plugin escapes tags in descriptions so that arbitrary scripting actions
+    cannot be injected. The use of the plugin was explained in the *Finding 500 errors
+    and XSS attacks in Jenkins through fuzzing* recipe in [Chapter 2](ch02.html "Chapter 2. Enhancing
+    Security"), *Enhancing Security*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this recipe, we adapted the plugin to escape a projects description and then
+    add a banner. The banner contains arbitrary HTML.
+  prefs: []
+  type: TYPE_NORMAL
+- en: First, you compiled and uploaded the markup plugin. Then you modified the source
+    to include a banner at the end of a jobs description. The plugin was redeployed
+    to a sacrificial test instance ready for review. You could have also used the
+    `mvn hpi:run` goal to run Jenkins through Maven. There are multiple ways to deploy,
+    including dumping the plugin directly into the Jenkins plugin directory. Whichever
+    of the deployment methods you decide to use is a matter of taste.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The description of the plugin rendered is defined in `src/main/resources/index.jelly`.
+    You updated the file to accurately describe the new banner feature.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In Jenkins, extension points are Java interfaces or abstract classes that model
+    part of the functionality of Jenkins. Jenkins has a wealth of extension points
+    ([https://wiki.jenkins-ci.org/display/JENKINS/Extension+points](https://wiki.jenkins-ci.org/display/JENKINS/Extension+points)).
+    You can even make your own ([https://wiki.jenkins-ci.org/display/JENKINS/Defining+a+new+extension+point](https://wiki.jenkins-ci.org/display/JENKINS/Defining+a+new+extension+point)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The markup plugin had minimal changes made to it to suit our purposes. We extended
+    the `MarkupFormatter` extension point.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins uses annotations. The `@Override` annotation tells the compiler to override
+    the method. In this case we overrode the `translate` method and used a utility
+    class to filter the `markup` string using a Jenkins utility method. At the end
+    the resulting string plus the banner string was added and passed to the Java writer.
+    The writer was then passed back to the calling method.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The text inside the `selectbox` (see step 19) of the plugin is defined in the
+    `getDisplayName()` method of the `DescriptorImpl` class.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Writing a new plugin and understanding the Jenkins object model takes more effort
+    than copying a plugin that works and then tweaking it. The amount of code changes
+    needed to add the banner feature to an already existing plugin was minimal.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'There is a lot of documentation available for Jenkins. However, for the hardcore
+    programmer, the best source of details is reviewing the code, the JavaDoc that
+    you can find starting at: [http://javadoc.jenkins-ci.org/](http://javadoc.jenkins-ci.org/),
+    and the code completion facilities in IDEs such as Eclipse. If you import the
+    Jenkins plugin project into Eclipse as a Maven project, then the newest versions
+    of Eclipse will sort out the dependencies for you, enabling code completion during
+    the editing of files. In a rapidly moving project such as Jenkins, sometimes there
+    is lag between when a feature is added and when it is documented. In this situation,
+    the code needs to be self-documenting. Code completion in combination with a well-written
+    JavaDoc eases a developer''s learning curve.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The next screenshot shows code completion at work for Jenkins within the Eclipse
+    IDE:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_23.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe in
+    [Chapter 2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Changing the help of the FileSystem SCM plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Creating a RootAction plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a RootAction plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before building your own plugin, it is worth seeing if you can adapt another.
+    In the *Fun with pinning JSGames* recipe, the plugin created a link on the front
+    page, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating a RootAction plugin](img/0082OS_07_13.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: In this recipe, we will use elements of the plugin to create a link on the Jenkins
+    home page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a directory locally to store your source code.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Create a copy of the `pom.xml` file from the *Looking at the GUI samples plugin*
+    recipe, replacing:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'with the following:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create the directories `src/main/java/jenkins/plugins/rootaction`, `src/main/resources`,
+    and `src/main/webapp`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In `src/main/java/jenkins/plugins/rootaction` add the file `MyRootAction.java`
+    with the contents:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the `src/main/webapp` directory, add a `png` file named `myicon.png`. For
+    an example image see: [http://www.iconfinder.com/icondetails/46509/32/youtube_icon](http://www.iconfinder.com/icondetails/46509/32/youtube_icon).'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the file `src/main/resources/index.jelly` with the following content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the top-level directory, run the command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Visit the main page: `http://localhost:8090/jenkins`:![How to do it...](img/0082OS_07_25.jpg)'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Root Action Example** link. Your browser is now sent to the main
+    website of the University of Amsterdam ([http://www.uva.nl](http://www.uva.nl)).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the Jenkins installed plugin page (`http://localhost:8090/pluginManager/installed`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You implemented the `RootAction` extension point. It is used to add links to
+    the main menu in Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The extension point is easy to extend. The link name is defined in the `getDisplayName`
+    method, the location of an icon in the `getIconFileName` method, and the URL to
+    link to in `getUrlName`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Conventions save programming effort. By convention, the description of the
+    plugin is defined in `src/main/resources/index.jelly` and the link name in the
+    `pom.xml` file under the `<name>` tag next to the `<packaging>` tag, for example:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs: []
+  type: TYPE_PRE
+- en: The location of the details in the Jenkins wiki is calculated as a fixed URL
+    ([http://wiki.jenkins-ci.org/display/JENKINS/](http://wiki.jenkins-ci.org/display/JENKINS/))
+    with the plugin name after that URL, and the spaces in the name replaced with
+    **+** symbols. This is true for this plugin as well, which has the link generated
+    `http://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Root+Action+Plugin`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_26.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Fun with pinning JSGames* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exporting data
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Job Exporter plugin creates a property file with a list of project-related
+    properties. This is handy glue for when you want Jenkins to pass information from
+    one job to another.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the Job Exporter plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Job+Exporter+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Job+Exporter+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Download the source code of a known version number:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE31]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a free-style job named `ch7.plugins.job_export`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Build** section, add a build step **Export Runtime Parameters**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the job.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the build history for the job within the console output you will see output
+    similar to:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE32]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Reviewing the newly created properties file, you will see text similar to:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE33]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The Job Exporter plugin gives Jenkins the ability to export job-related information
+    into a properties file that can be picked up later for reuse by other jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reviewing the code in `src/main/java/com/meyling/hudson/plugin/job_exporter/ExporterBuilder.java`
+    extends `hudson.tasks.Builder` whose `perform` method is invoked when a build
+    is run. The `perform` method receives the `hudson.model.Build` object when it
+    is called. The `Build` instance contains information about the build itself. Calling
+    the `build.getBuiltOnStr()` method returns a string that contains the name of
+    the node that the build is running on. The plugin uses a number of these methods
+    to discover information that is later outputted to a properties file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'While reviewing plugin code, you can find interesting tricks ready for reuse
+    in your own plugin. The plugin discovered the environment variables by using the
+    method:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE34]'
+  prefs: []
+  type: TYPE_PRE
+- en: In this method, `EnvVars` is of the class `hudson.EnvVars` ([http://javadoc.jenkins-ci.org/hudson/EnvVars.html](http://javadoc.jenkins-ci.org/hudson/EnvVars.html)).
+    `EnvVars` even has a method to get environment variables from remote Jenkins nodes.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can also find a list of all environment variables defined for Jenkins in
+    the **Jenkins Management** area under **System Info** (`http://localhost:8080/systemInfo`).
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *My first ListView plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Triggering events on startup
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Often when a server starts up, you will want to have clean up actions performed,
+    for example, running a job that sends an e-mail to all of the Jenkins admins warning
+    them of the start-up event. You can achieve this with the Startup Trigger plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the Startup Trigger plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger](https://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Download the source code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE35]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create a free-style job named `ch7.plugin.startup`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the section **Build Triggers**, check **Build when job nodes start**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Return to the project page, where you will notice that a job has been triggered.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Review the build history console output. You will see output similar to:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE36]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The Startup Trigger plugin runs a job at startup. This is useful for administrative
+    tasks such as reviewing the file system. It is also concise in its design.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Startup Trigger plugin extends `hudson.triggers.Trigger` in the Java class
+    `/src/main/java/org/jvnet/hudson/plugins/triggers/startup/HudsonStartupTrigger`
+    and overrides the method `start`, which is later called on during Jenkins startup.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `start` method calls the parent start method, and if it is not a new instance,
+    it will call the method `project.scheduleBuild` that then starts the build.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE37]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The cause of the startup is defined in `HudsonStartupCause` that itself extends
+    `hudson.model.Cause`. The plugin overrides the method `getShortDescription()`,
+    returning the string `Started due to Hudson startup`. The string is output to
+    the console as part of the logging:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE38]'
+  prefs: []
+  type: TYPE_PRE
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Triggering events when web content changes* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Groovy hook scripts and triggering events on startup* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Groovy hook scripts and triggering events on startup
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the preceding recipe, you saw that you could use a plugin to run arbitrary
+    startup code. An alternative approach is to place the Groovy script `init.groovy`
+    in the Jenkins home directory. Your Jenkins instance then runs the Groovy script
+    on startup.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Visit the **Scriptler** website [http://scriptlerweb.appspot.com/catalog/list](http://scriptlerweb.appspot.com/catalog/list)
+    and review the currently available Groovy scripts.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Visit [http://scriptlerweb.appspot.com/script/show/256001](http://scriptlerweb.appspot.com/script/show/256001)
+    and review the installed plugin list script.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In your Jenkins home directory create the following `init.groovy` script, as
+    shown in the following code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE39]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Restart your Jenkins instance:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE40]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Review the log file found at `/var/log/jenkins/jenkins.log`. The output will
+    be similar to the following (note that for the sake of brevity, every second line
+    of timestamps has been removed):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE41]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Visit `http://localhost:8080/systemInfo` and compare the log file with the system
+    info displayed in Jenkins, as shown in the following screenshot:![How to do it...](img/0082OS_07_01.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Jenkins looks for Groovy scripts to run on startup. Acceptable locations are
+    mentioned here ([https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Hook+Script](https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Hook+Script))
+    and include:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`$JENKINS_HOME/init.groovy`'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`$JENKINS_HOME/init.groovy.d/*.groovy` (files run in their lexical order)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins runs the code from `init.groovy`. It uses the standard `java.util.logging`
+    framework that we initialized with the line `def logger = LogManager.getLogManager().getLogger("")`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: It is advisable to use a logging framework rather than plain old `println` statements.
+    In a logging framework, the configuration is separated out from the reporting.
+    With little effort, this allows you to change the location of the output (file
+    system, syslog server, and so on.), format, filter, rotate, and so on. For more
+    details of the logger framework, review [http://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html](http://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The logger can report at various levels; you can then filter the results. In
+    this example, you used the `info` level as we are not shouting about problems.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'First, the script iterated through the environment variables:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE42]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, you used a slightly altered version of the Scriptler example to list
+    all the active plugins in Jenkins, as shown in the following code:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE43]'
+  prefs: []
+  type: TYPE_PRE
+- en: Finally, we visually compared with the **System Info** page, which also displays
+    the same environmental details.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: If you wish to analyze system information to support debugging, install the
+    Support Core plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Support+Core+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Support+Core+Plugin)).
+    Once installed, you will be able to configure it at the URL `http://localhost:8080/support/`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Clicking on the **Generate bundle** button will download the support data archive
+    to your browser. Jenkins will also generate a similar archive once an hour and
+    place the ZIP file under the directory `$JENKINS_HOME/support`. The information
+    is stored in multiple text files. For example, the file `support/plugins/active`
+    lists the current version of all active plugins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE44]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshots shows the **Support** page:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_27.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Triggering events on startup* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Triggering events when web content changes* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Triggering events when web content changes
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this recipe, the URL trigger plugin will trigger a build if a web page changes
+    its content.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins is deployed to varied infrastructures. There will be times when standard
+    plugins cannot be triggered by your system of choice. Web servers are well-understood
+    technologies. In most situations, the system to which you want to connect has
+    its own web interface. If the application does not, then you can still set up
+    a web page that changes when the application needs a reaction from Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the XTrigger plugin ([https://wiki.jenkins-ci.org/display/JENKINS/XTrigger+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/XTrigger+Plugin)).
+    This will automatically install the URLTrigger plugin and a number of other plugins
+    that monitor the changes between two checks, for example by running a local script,
+    Groovy code, or monitoring a file or folder change.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a new free-style job named `ch7.plugin.url`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Build Triggers** section, check the **[URLTrigger] - Poll with a URL**
+    tick box.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Add URL to monitor**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For **URL** add `http://localhost:8080`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Check **Inspect URL content**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select from **Add a content nature** the value **Monitor a change of the content**,
+    as shown in the following screenshot:![How to do it...](img/0082OS_07_28.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a **schedule** for once a minute.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the right-hand side, click on the link **URLTrigger Log**:![How to do it...](img/0082OS_07_29.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will now see the log information update once a minute, with content similar
+    to the following e-mail:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '[PRE45]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Delete the job as we don't want to poll `http://localhost:8080` every minute.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You have configured the plugin to visit our local Jenkins `http://localhost:8080`
+    once a minute, download, and compare for changes. A schedule of once a minute
+    is aggressive; consider using time intervals that are similar to those on your
+    SCM repositories, such as once every 5 minutes.
+  prefs: []
+  type: TYPE_NORMAL
+- en: As there were subtle differences in each page returned, the trigger was activated.
+    This was verified by looking in the **URLTrigger Log**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The URLTrigger plugin can also be used for JSON and text or XML responses.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Part of the URI schema points to your local file system ([http://en.wikipedia.org/wiki/File_URI_scheme](http://en.wikipedia.org/wiki/File_URI_scheme)).
+    You get to see examples of this when you load a local file into your web browser,
+    as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![There''s more...](img/0082OS_07_29a.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Changes in the local file system cannot be monitored by this plugin. If you
+    reconfigure the job to point at the location `file:///`, you will get the following
+    error message:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE46]'
+  prefs: []
+  type: TYPE_PRE
+- en: You will have to use the File System SCM plugin instead.
+  prefs: []
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Triggering events on startup* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reviewing three ListView plugins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The information radiated out by the front page of Jenkins is important. The
+    initial perception of the quality of your projects is likely to be judged by this
+    initial encounter.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In this recipe, we will review the **Last Success**, **Last Failure**, and
+    **Last Duration** columns that you can add to the list view, as shown in the following
+    screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Reviewing three ListView plugins](img/0082OS_07_30.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: In the next recipe, you will be shown how to write a plugin for your own column
+    in the list view.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Install the List View Columns plugins; Last Failure Version Column plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Last+Failure+Version+Column+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Last+Failure+Version+Column+Plugin));
+    Last Success Description Column plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Description+Column+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Description+Column+Plugin));
+    and the Last Success Version Column plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Version+Column+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Version+Column+Plugin)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Install the source code locally in a directory of choice:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE47]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: In Jenkins, create a new free-style job named `ch7.plugin.lastview`. No further
+    configuration is necessary.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the main page, click on the **+** tab next to the **All** tab, as shown in
+    the following screenshot:![How to do it...](img/0082OS_07_31.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a **List View** named `LAST`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under **Job Filters** | **Jobs** check the **ch7.plugin.lastview** tick box:![How
+    to do it...](img/0082OS_07_32.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **OK**. You are returned to the main page with the **LAST** list view
+    shown:![How to do it...](img/0082OS_07_33.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press the **Build** icon to run the `ch7.plugin.lastview` job:![How to do it...](img/0082OS_07_34.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Refresh your page. The **Last Success Version** column now has data with a link
+    to the builds history.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the **Last Success Description** column, click on the **N/A** link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the right-hand side, click on **Add description**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the description for the build: **This is my great description**.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Submit**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Return to the **LAST** list view by clicking on **LAST** in the breadcrumb displayed
+    at the top of the page, as shown in the following screenshot:![How to do it...](img/0082OS_07_35.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The **Last Success Description** column is now populated:![How to do it...](img/0082OS_07_36.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'The three plugins perform similar functions; the only difference is a slight
+    variation in the details of the columns. Details are useful for making quick decisions
+    about projects, for example, when a build succeeds, adding a description to the
+    build such as **Updated core libraries to work with modern browsers** gives a
+    casual viewer an overview of the last significant action in the project without
+    delving down into the source code. This saves a significant amount of clicking
+    about:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![How it works...](img/0082OS_07_37.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'There is a healthy supply of ListView plugins, these include:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**The Extra Columns plugin**: This adds options for counting the number of
+    successful and failed builds, a shortcut to the configure page of the project,
+    an **enable/disable project** button, and a project description button. Each one
+    of these new columns allows you to better understand the state of the project
+    or perform actions more efficiently.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The Cron Column plugin**: This displays the scheduled triggers in the project
+    and whether they are enabled or disabled. This is useful if you want to compare
+    system monitoring information from the Melody plugin.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The Emma Coverage** plugin: This displays code coverage results reported
+    by the Emma plugin. This is especially useful if your organization has an in-house
+    style guide, where the code needs to reach a specific level of code coverage.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The Progress Bar plugin**: This displays a progress bar for running jobs.
+    This adds a feeling of activity to the front page.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Creating my first ListView plugin* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Efficient use of views* recipe in [Chapter 4](ch04.html "Chapter 4. Communicating
+    Through Jenkins"), *Communicating Through Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Saving screen space with the Dashboard View plugin* recipe in [Chapter
+    4](ch04.html "Chapter 4. Communicating Through Jenkins"), *Communicating Through
+    Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The *Monitoring via JavaMelody* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
+    Jenkins"), *Maintaining Jenkins*
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating my first ListView plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this final recipe, you will create your first custom ListView plugin. This
+    allows you to add an extra column to the standard list view with comments. The
+    code for the content of the column is a placeholder, just waiting for you to replace
+    it with your own brilliant experiments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting ready
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Create a directory ready for the code.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to do it...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Create a top-level `pom.xml` file with the content as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE48]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create the directory `src/main/java/jenkins/plugins/comments`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the comments directory, add `CommentsColumn.java` with the following content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE49]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Create the directory `src/main/resources/jenkins/plugins/comments/CommentsColumn`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the `CommentsColumn` directory, add `column.jelly` with the following content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE50]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the `CommentsColumn` directory, add `columnHeader.jelly` with the following
+    content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE51]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the `CommentsColumn` directory, add `columnHeader.properties` with the following
+    content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE52]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the `CommentsColumn` directory, add `columnHeader_an.properties` with the
+    following content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE53]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the `src/main/resources` directory, add the plugin description file `index.jelly`
+    with the following content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE54]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'In the top-level directory, run the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE55]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Visit the Jenkins job creation page: `http://localhost:8090/jenkins/view/All/newJob`.
+    Create a new free-style job named `ch7.plugin.l`.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the main Jenkins page, `http://localhost:8090/jenkins`, you will now have
+    a view with the column called **My Fake Column [Default]**. If you change the
+    preferred language of your web browser to **Aragonese [an]**, then the column
+    will now be called **My Fake Column [an]**, as shown in the following screenshot:![How
+    to do it...](img/0082OS_07_38.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the default Firefox browser for Ubuntu, you can change the preferred language
+    under the **Edit/Preferences** content tab, in the **Languages** section, as shown
+    in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![How to do it...](img/0082OS_07_39.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: How it works...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'In this recipe, a basic ListView plugin was created with the following structure:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE56]'
+  prefs: []
+  type: TYPE_PRE
+- en: The one Java file included in the plugin is `CommentsColumn.java` under `/src/main/java/jenkins/plugins/comments`.
+    The class extends the `ListViewColumn` extension point.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The method `getFakeComment` expects an input of the type `Job` and returns a
+    string. This method is used to populate the entries in the column.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The GUI in the ListView is defined under `/src/main/resources/packagename/Classname/`.
+    You can find the GUI for `/src/main/java/jenkins/plugins/comments/CommentsColumn.java`
+    mapped to the `/src/main/resources/Jenkins/plugins/comments/CommentsColumn` directory.
+    In this directory, there are two Jelly files `columnHeader.jelly` and `column.jelly`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'As the name suggests, `columnHeader.jelly` renders the header of the column
+    in ListView. Its contents are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE57]'
+  prefs: []
+  type: TYPE_PRE
+- en: '`FAKE Comment` is defined in `columnHeader.properties`. The `%` sign tells
+    Jelly to look in different property files, depending on the value of the language
+    settings returned by the web browser. In this recipe, we set the web browser''s
+    language value to `an`, and this translates to looking for the `columnHeader_an.properties`
+    file first. If the web browser returns a language that does not have its own property
+    file, then Jelly defaults to `columnHeader.properties`.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`columns.jelly` has the following content:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE58]'
+  prefs: []
+  type: TYPE_PRE
+- en: '`it.getFakeComment` calls the method `getFakeComment` on an instance of the
+    `CommentsColumn` class. It is the default name for the instance of the object.
+    The type of object returned is defined by convention, the file structure /`src/main/resources/Jenkins/plugins/comments/CommentsColumn`.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The returned string is placed in the variable `comment` and then displayed inside
+    a `<td>` tag.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: If you are curious about the Jelly tags available in Jenkins, then review [https://wiki.jenkins-ci.org/display/JENKINS/Understanding+Jelly+Tags](https://wiki.jenkins-ci.org/display/JENKINS/Understanding+Jelly+Tags).
+  prefs: []
+  type: TYPE_NORMAL
+- en: There's more...
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'If you want to participate in the community, then the Governance page is a
+    necessary read ([https://wiki.jenkins-ci.org/display/JENKINS/Governance+Document](https://wiki.jenkins-ci.org/display/JENKINS/Governance+Document)).
+    On the subject of licensing, the page states:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '*The core is entirely in the MIT license, so is the most infrastructure code
+    (that runs the project itself), and many plugins. We encourage hosted plugins
+    to use the same MIT license, to simplify the story for users, but plugins are
+    free to choose their own licenses, so long as it''s a OSI-approved open source
+    license.*'
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can find the list of approved OSI licenses at [http://opensource.org/licenses/alphabetical](http://opensource.org/licenses/alphabetical).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The majority of plugins have a `LICENSE.txt` file in their top-level directory
+    with an MIT license ([http://en.wikipedia.org/wiki/MIT_License](http://en.wikipedia.org/wiki/MIT_License)).
+    As an example, review [https://github.com/jenkinsci/lastfailureversioncolumn-plugin/blob/master/LICENSE.txt](https://github.com/jenkinsci/lastfailureversioncolumn-plugin/blob/master/LICENSE.txt).
+    Its structure is similar to the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE59]'
+  prefs: []
+  type: TYPE_PRE
+- en: See also
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The *Reviewing three ListView plugins* recipe
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
