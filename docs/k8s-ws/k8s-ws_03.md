@@ -1,4 +1,4 @@
-# 第三章：3. kubectl - Kubernetes 命令中心
+# 第三章： kubectl - Kubernetes 命令中心
 
 概述
 

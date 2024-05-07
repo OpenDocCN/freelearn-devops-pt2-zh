@@ -1,4 +1,4 @@
-# 第三章。高级 playbooks
+# 第三章：高级 playbooks
 
 到目前为止，我们看到的 playbooks 都很简单，只是按顺序运行了一些模块。Ansible 允许更多地控制 playbook 的执行。使用以下技术，你应该能够执行甚至最复杂的部署：
 

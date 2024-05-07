@@ -1,4 +1,4 @@
-# 第十章：10. ConfigMaps 和 Secrets
+# 第十章： ConfigMaps 和 Secrets
 
 概述
 

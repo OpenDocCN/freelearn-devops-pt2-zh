@@ -1,4 +1,4 @@
-# 第一章：1. Kubernetes 和容器简介
+# 第一章： Kubernetes 和容器简介
 
 概述
 

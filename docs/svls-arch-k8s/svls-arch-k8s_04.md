@@ -1,4 +1,4 @@
-# 第四章：4\. Kubernetes 深入探讨
+# 第四章： Kubernetes 深入探讨
 
 ## 学习目标
 

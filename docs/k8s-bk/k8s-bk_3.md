@@ -1,4 +1,4 @@
-## 第四章：3：安装 Kubernetes
+# 第四章：安装 Kubernetes
 
 在本章中，我们将看一下安装 Kubernetes 的几种不同方法。
 

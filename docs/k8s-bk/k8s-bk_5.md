@@ -1,4 +1,4 @@
-## 第六章：5：Kubernetes 部署
+# 第六章：Kubernetes 部署
 
 在本章中，我们将看到*部署*如何为 Kubernetes 带来自愈、可伸缩、滚动更新和回滚。
 

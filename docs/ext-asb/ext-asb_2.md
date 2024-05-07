@@ -1,4 +1,4 @@
-# 第二章 了解 Ansible 模块
+# 第二章：了解 Ansible 模块
 
 Ansible 模块是可以使用 Ansible API 或通过 Ansible Playbook 调用的可重用代码片段。模块是 Ansible 的支柱。这些都是可以用任何语言编写的简单代码片段。
 

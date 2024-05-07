@@ -1,4 +1,4 @@
-# 第四章：4\. 如何与 Kubernetes（API 服务器）通信
+# 第四章： 如何与 Kubernetes（API 服务器）通信
 
 概述
 

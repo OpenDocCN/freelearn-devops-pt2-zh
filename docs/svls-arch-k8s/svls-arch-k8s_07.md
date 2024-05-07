@@ -1,4 +1,4 @@
-# 第七章：7\. 使用 Kubeless 的 Kubernetes 无服务器
+# 第七章： 使用 Kubeless 的 Kubernetes 无服务器
 
 ## 学习目标
 

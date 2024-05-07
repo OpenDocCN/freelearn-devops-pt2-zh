@@ -1,4 +1,4 @@
-# 第二章：2. Kubernetes 概述
+# 第二章： Kubernetes 概述
 
 概述
 

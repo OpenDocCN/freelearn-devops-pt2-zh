@@ -1,4 +1,4 @@
-# 第四章。探索 API
+# 第四章：探索 API
 
 Ansible 插件是一个高级话题。有各种插件可用于 Ansible。本章将简要介绍不同的 Python API 和查找插件，并探讨它们如何适应通用的 Ansible 架构。
 

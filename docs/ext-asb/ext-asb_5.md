@@ -1,4 +1,4 @@
-# 第五章。深入了解 Ansible 插件
+# 第五章：深入了解 Ansible 插件
 
 前一章向您介绍了 Python API 以及 Ansible 提供的各种扩展点。当您到达本章时，您应该已经知道 Ansible 如何加载插件。前一章列出了不同类型的 Ansible 插件。
 

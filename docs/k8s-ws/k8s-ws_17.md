@@ -1,4 +1,4 @@
-# 第十七章：17. Kubernetes 中的高级调度
+# 第十七章： Kubernetes 中的高级调度
 
 概述
 

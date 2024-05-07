@@ -1,4 +1,4 @@
-# 第七章：7. Kubernetes 控制器
+# 第七章： Kubernetes 控制器
 
 概述
 
