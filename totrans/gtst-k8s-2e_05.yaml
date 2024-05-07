@@ -1,0 +1,714 @@
+- en: Deployments, Jobs, and DaemonSets
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This chapter will cover the various types of workloads that Kubernetes supports.
+    We will cover **Deployments** for applications that are regularly updated and
+    long running. We will also revisit the topics of application updates and gradual
+    rollouts using Deployments. In addition, we will look at **Jobs** used for short-running
+    tasks. Finally, we will look at **DaemonSets**, which allow programs to be run
+    on every node in our Kubernetes cluster.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This chapter will discuss the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Deployments
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Application scaling with deployments
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Application updates with deployments
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jobs
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: DaemonSets
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Deployments
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the previous chapter, we explored some of the core concepts for application
+    updates using the old rolling-update method. Starting with version 1.2, Kubernetes
+    added the Deployment construct, which improves on the basic mechanisms of rolling-update
+    and Replication Controllers. As the name suggests, it gives us a finer control
+    of the code deployment itself. Deployments allow us to pause and resume application
+    rollouts. Additionally, it keeps a history of past deployments and allows the
+    user to easily rollback to previous versions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the following, *listing 5-1*, we can see that the definition is very similar
+    to a Replication Controller. The main difference is that we now have an ability
+    to make changes and updates to the deployment objects and let Kubernetes manage
+    updating the underlying pods and replicas for us:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-1*: `node-js-deploy.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can run the familiar `create` command with the optional `--record` flag
+    so that the creation of the deployment is recorded in the rollout history. Otherwise,
+    we will only see subsequent changes in the rollout history:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: You may need to add `--validate=false` if this beta type is not enabled on your
+    cluster.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We should see a message about the deployment being successfully created. After
+    a few moments, it will finish creating our pod, which we can check for ourselves
+    with a `get pods` command. We add the `-l` flag to only see the pods relevant
+    to this deployment:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We create a service just as we did with Replication Controllers. The following
+    is a `Service` definition for the deployment we just created. We''ll notice that
+    it is almost identical to the Services we created in the past:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-2. *`node-js-deploy-service.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once this service is created using `kubectl`, you'll be able to access the deployment
+    pods through the service IP or the service name if you are inside a pod on this
+    namespace.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scaling
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The `scale` command works the same way as it did in our Replication Controller.
+    To scale up, we simply use the deployment name and specify the new number of replicas,
+    as shown here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: If all goes well, we'll simply see a message about the deployment being scaled
+    on the output of our terminal window. We can check the number of running pods
+    using the `get pods` command from earlier, once more.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Updates and rollouts
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Deployments allow for updating in a few different ways. First, there is the `kubectl
+    set` command, which allows us to change the deployment configuration without redeploying
+    manually. Currently, it only allows for updating the image, but as new versions
+    of our application or container image are processed, we will need to do this quite
+    often.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s take a look using our deployment from the previous section. We should
+    have three replicas running right now. Verify this by running the `get pods` command
+    with a filter for our deployment:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We should see three pods similar to those listed in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_01-1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Deployment Pod Listing
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Take one of the pods listed on our setup, replace it in the following command
+    where it says `{POD_NAME_FROM_YOUR_LISTING}`, and run the command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We should see an output like the following image with the current image version
+    of `0.1`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_02-1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Current Pod Image
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now that we know what our current deployment is running, let''s try to update
+    to the next version. This can be achieved easily using the `kubectl set` command
+    and specifying the new version, as shown here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: If all goes well, we should see the text that says `deployment "node-js-deploy"
+    image updated` displayed on the screen.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can double–check the status using the following `rollout status` command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: We should see some text about the deployment successfully rolled out. If you
+    see any text about waiting for the rollout to finish, you may need to wait a moment
+    for it to finish or alternatively check the logs for issues.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once it''s finished, run the `get pods` command as earlier, once more. This
+    time we will see new pods listed:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_03-1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Deployment Pod Listing After Update
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once again plug one of your pod names into the `describe` command we ran earlier.
+    This time we should see the image has been updated to 0.2.
+  prefs: []
+  type: TYPE_NORMAL
+- en: What happened behind the scenes is that Kubernetes has *rolled out* a new version
+    for us. It basically creates a new replica set with the new version. Once this
+    pod is online and healthy it kills one of the older versions. It continues this
+    behavior, scaling out the new version and scaling down the old versions, until
+    only the new pods are left.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following figure describes the workflow for your reference:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_04.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Deployment Lifecycle
+  prefs: []
+  type: TYPE_NORMAL
+- en: It's worth noting that the rollback definition allows us to control the pod
+    replace method in our deployment definition. There is a `strategy.type` field
+    that defaults to `RollingUpdate` and the preceding behavior. Optionally, we can
+    also specify `Recreate` as the replacement strategy and it will kill all the old
+    pods first before creating the new versions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: History and rollbacks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'One of the useful features of the rollout api is the ability to track the deployment
+    history. Let''s do one more update before we check the history. Run the `kubectl
+    set` command once more and specify version `0.3`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Once again we''ll see text that says `deployment "node-js-deploy" image updated` displayed
+    on the screen. Now run the `get pods` command once more:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Let''s also take a look at our deployment history. Run the `rollout history` command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We should see an output similar to the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_05.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Rollout History
+  prefs: []
+  type: TYPE_NORMAL
+- en: As we can see, the history shows us the initial deployment creation, our first
+    update to `0.2`, and then our final update to `0.3`. In addition to status and
+    history, the `rollout` command also supports the `pause`, `resume`, and `undo`
+    sub-commands. The `rollout pause` command allows us to pause a command while the
+    rollout is still in progress. This can be useful for troubleshooting and also
+    helpful for canary type launches, where we wish to do final testing of the new
+    version before rolling out to the entire user base. When we are ready to continue
+    the rollout, we can simply use the `rollout resume` command.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'But what if something goes wrong? That is where the `rollout undo` command
+    and the rollout history itself is really handy. Let''s simulate this by trying
+    to update to a version of our pod that is not yet available. We will set the image
+    to version `42.0`, which does not exist:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We should still see the text that says `deployment "node-js-deploy" image updated`
+    displayed on the screen. But if we check the status, we will see that it is still
+    waiting:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We can press *Ctrl* + *C* to kill the `status` command and then run the `get
+    pods` command once more:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We should now see an `ErrImagePull`, as in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_06.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Image Pull Error
+  prefs: []
+  type: TYPE_NORMAL
+- en: As we expected, it can't pull the 42.0 version of the image because it doesn't
+    exist. We may also have issues with deployments if we run out of resources on
+    the cluster or hit limits that are set for our namespace. Additionally, the deployment
+    can fail for a number of application-related causes, such as health check failure,
+    permission issues, and application bugs, of course.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Whenever a failure to rollout happens, we can easily rollback to a previous
+    version using the `rollout undo` command. This command will take our deployment
+    back to the previous version:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'After that, we can run a `rollout status` command once more and we should see
+    everything rolled out successfully. Run the `rollout history` command again and
+    we''ll see both our attempt to rollout version `42.0` and the revert to `0.3`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_07.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Rollout History After Rollback
+  prefs: []
+  type: TYPE_NORMAL
+- en: We can also specify the `--to-revision` flag when running an undo to rollback
+    to a specific version. This can be handy for times when our rollout succeeds,
+    but we discover logical errors down the road.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Autoscaling
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: As you can see, Deployments are a great improvement over Replication Controllers
+    allowing us to seamlessly update our applications, while integrating with the
+    other resources of Kubernetes in much the same way.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Another area that we saw in the previous chapter, and also supported for Deployments,
+    is **Horizontal Pod Autoscalers** (**HPAs**). As you may have guessed, this also
+    integrates perfectly with Deployments. We will walk through a quick remake of
+    the HPAs from the previous chapter, this time using the Deployments we have created
+    so far:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-3.* `node-js-deploy-hpa.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We have lowered the CPU threshold to 10% and changed our minimum and maximum
+    pods to `3` and `6`, respectively. Create the preceding HPA with our trusty `kubectl
+    create -f` command. After this is completed, we can check that it''s available
+    with the `kubectl get hpa` command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_08.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Horizontal Pod Autoscaler
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can also check that we have only `3` pods running with the `kubectl get
+    deploy` command. Now let''s add some load to trigger the autoscaler:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-4.* `boomload-deploy.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Create *listing 5-4* as usual. Now monitor the HPA with the alternating `kubectl
+    get hpa` and `kubectl get deploy` commands. After a few moments, we should see
+    the load jump above `10%`. After a few more moments, we should also see the number
+    of pods increase all the way up to `6` replicas:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_09.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: HPA Increase and Pod Scale Up
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Again, we can clean this up by removing our load generation pod and waiting
+    a few moments:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: Again, if we watch the HPA, we'll start to see the CPU usage drop. After a few
+    minutes, we will go back down to `0%` CPU load and then the Deployment will scale
+    back to `3` replicas.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jobs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Deployments and Replication Controllers are a great way to ensure long running
+    applications are always up and able to tolerate a wide array of infrastructure
+    failures. However, there are some use cases this does not address—specifically
+    short running, *run once*, tasks as well as regularly scheduled tasks. In both
+    cases, we need the tasks to run until completion, but then terminate and start
+    again at the next scheduled interval.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To address this type of workload, Kubernetes has added a **Batch API**, which
+    includes the **Job** type. This type will create 1 to n pods and ensure that they
+    all run to completion with a successful exit. Based on `restartPolicy`, we can
+    either allow pods to simply fail without retry (`restartPolicy: Never`) or retry
+    when a pods exits without successful completion (`restartPolicy: OnFailure`).
+    In this example, we will use the latter technique:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-5*: `longtask.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s go ahead and run this with the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: If all goes well, you'll see `job "long-task" created` printed on the screen.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This tells us the job was created, but doesn''t tell us if it completed successfully.
+    To check that, we need to query the job status with the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_05_10.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Job Status
+  prefs: []
+  type: TYPE_NORMAL
+- en: You should see that we had `1` task that succeeded and in the `Events` logs,
+    a SuccessfulCreate message. If we use `kubectl get pods` command, we won't see
+    our **long-task** pods in the list, but we may notice the message at the bottom
+    if the listing states that there are completed jobs that are not shown. We will
+    need to run the command again with the `-a` or `--show-all` flag to see the **long-task**
+    pod and the completed Job status.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let's dig a little deeper to prove to ourselves the work was completed successfully.
+    We could use the `logs` command to look at the pods logs. However, we can also
+    use the UI for this task. Open a browser and go to the following UI URL: `https://**<your
+    master ip>**/ui/`
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Click on Jobs and then long-task from the list, so we can see the details.
+    Then, in the Pods section, click on the pod listed there. This will give us the
+    Pod details page. At the bottom of the details, click on View Logs and we will
+    see the log output:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_05_11.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Job Log
+  prefs: []
+  type: TYPE_NORMAL
+- en: As you can see in the preceding image, the whalesay container is complete with
+    the ASCII art and our custom message from the runtime parameters in the example.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Other types of jobs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: While this example provides a basic introduction to short running jobs, it only
+    addresses the use case of once and done tasks. In reality, batch work is often
+    done in **Parallel** or as part of a regularly occurring task.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Parallel jobs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Using **Parallel** jobs, we may be grabbing tasks from an ongoing queue or simply
+    running a set number of tasks that are not dependent on each other. In the case
+    of jobs pulling from a queue, our application must be aware of the dependencies
+    and have the logic to decide how tasks are processed and what to work on next.
+    Kubernetes is simply scheduling the jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can learn more about parallel jobs from the Kubernetes documentation and
+    batch API reference (you can refer to more details about this in point 1 in the
+    *References* section at the end of the chapter).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scheduled jobs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'For tasks that need to run periodically, Kubernetes has also released a `CronJob`
+    type in alpha. As we might expect, this type of job uses the underlying cron formatting
+    to specify a schedule for the task we wish to run. By default, our cluster will
+    not have the alpha batch features enabled, but we can look at an example `CronJob`
+    listing to learn how these types of workloads will work going forward:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-6. *`longtask-cron.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'As you can see, the schedule portion reflects a crontab with the following
+    format:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**minute hour day-of-month month day-of-week**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this example, `15 10 * * 6` creates a task that will run every `Saturday`
+    at 10:15 am.
+  prefs: []
+  type: TYPE_NORMAL
+- en: DaemonSets
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: While Replication Controllers and Deployments are great at making sure that
+    a specific number of application instances are running, they do so in the context
+    of the best fit. This means that the scheduler looks for nodes that meet resource
+    requirements (available CPU, particular storage volumes, and so on) and tries
+    to spread across the nodes and zones.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This works well for creating highly available and fault tolerant applications,
+    but what about cases where we need an agent to run on every single node in the
+    cluster? While the default spread does attempt to use different nodes, it does
+    not guarantee that every node will have a replica and, indeed, will only fill a
+    number of nodes equivalent to the quantity specified in the RC or Deployment specification.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To ease this burden, Kubernetes introduced `DaemonSet`, which simply defines
+    a pod to run on every single node in the cluster or a defined subset of those
+    nodes. This can be very useful for a number of production–related activities,
+    such as monitoring and logging agents, security agents, and file system daemons.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In fact, Kubernetes already uses this capability for some of its core system
+    components. If we recall from [Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml),
+    *Introduction to Kubernetes*, we saw a `node-problem-detector` running on the
+    nodes. This pod is actually running on every node in the cluster as `DaemonSet`.
+    We can see this by querying DaemonSets in the `kube-system` namespace:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_05_12.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: kube-system DaemonSets
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can find more information about `node-problem-detector` as well as `yaml`
+    in the following listing at: [http://kubernetes.io/docs/admin/node-problem/#node-problem-detector](http://kubernetes.io/docs/admin/node-problem/#node-problem-detector):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-7\. node-problem-detector definition*'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Node selection
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: As mentioned previously, we can schedule DaemonSets to run on a subset of nodes
+    as well. This can be achieved using something called **nodeSelectors**. Theseallow
+    us to constrain the nodes a pods runs on, by looking for specific labels and metadata.
+    They simply match key-value pairs on the labels for each node. We can add our
+    own labels or use those that are assigned by default.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The default labels are listed in the following table:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Default Node Labels** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `kubernetes.io/hostname` | This shows the hostname of the underlying instance
+    or machine |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `beta.kubernetes.io/os` | This shows the underlying operating system as a
+    report through the Go Language |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `beta.kubernetes.io/arch` | This shows the underlying processor architecture
+    as a report through the Go Language |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `beta.kubernetes.io/instance-type` | (**Cloud-Only**) This is the instance
+    type of the underlying cloud provider |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `failure-domain.beta.kubernetes.io/region` | (**Cloud-Only**) This is the
+    region of the underlying cloud provider |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `failure-domain.beta.kubernetes.io/zone` | (**Cloud-Only**) This is the fault-tolerance
+    zone of the underlying cloud provider |'
+  prefs: []
+  type: TYPE_TB
+- en: '*Table 5.1 - Kubernetes Default Node Labels*'
+  prefs: []
+  type: TYPE_NORMAL
+- en: We are not limited to DaemonSets, as nodeSelectors actually work with Pod definitions
+    as well and are not limited to DaemonSets. Let's take a closer look at a job example
+    (a slight modification of our preceding long-task example).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'First, we can see these on the nodes themselves. Let''s get the names of our
+    nodes:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Use a name from the output of the previous command and plug it into this one:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_05_13.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Excerpt from node describe
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s now add a nickname label to this node:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'If we run the `kubectl describe node` command again, we will see this label
+    listed next to the defaults. Now we can schedule workloads and specify this specific
+    node. Here is a modification of our earlier long-running task with `nodeSelector`
+    added:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 5-8.* `longtask-nodeselector.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Create the job from this listing with `kubectl create -f`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once that succeeds, it will create a pod based on the preceding specification.
+    Since we have defined `nodeSelector`, it will try to run the pod on nodes that
+    have matching labels and fail if it finds no candidates. We can find the pod by
+    specifying the job name in our query, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We use the `-a` flag to show all pods. Jobs are short lived and once they enter
+    the completed state, they will not show up in a basic `kubectl get pods` query.
+    We also use the `-l` flag to specify pods with the `job-name=long-task-ns` label.
+    This will give us the pod name which we can push into the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs: []
+  type: TYPE_PRE
+- en: The result should show the name of the node this pod was run on. If all has
+    gone well, it should match the node we labeled a few steps earlier with the `trusty-steve`
+    label.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now you should have a good foundation of the core constructs in Kubernetes.
+    We explored the new Deployment abstraction and how it improves on the basic Replication
+    Controller, allowing for smooth updates and solid integration with services and
+    autoscaling. We also looked at other types of workload in jobs and DaemonSets.
+    You learned how to run short-running or batch tasks as well as how to run agents
+    on every node in our cluster. Finally, we took a brief look at node selection
+    and how that can be used to filter the nodes in the cluster used for our workloads.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will build on what you learned in this chapter and look at the **Stateful**
+    applications in the next chapter, exploring both critical application components
+    and the data itself.
+  prefs: []
+  type: TYPE_NORMAL
+- en: References
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '[https://kubernetes.io/docs/user-guide/jobs/#parallel-jobs](https://kubernetes.io/docs/user-guide/jobs/#parallel-jobs)'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL

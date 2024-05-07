@@ -1,0 +1,765 @@
+- en: Container Security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This chapter will discuss the basics of container security from the container
+    runtime level to the host itself. We will discuss how to apply these concepts
+    to workloads running in a Kubernetes cluster and some of the security concerns
+    and practices that relate specifically to running your Kubernetes cluster.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This chapter will discuss the following topics:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Basic container security
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Container image security and continuous vulnerability scanning
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Kubernetes cluster security
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Kubernetes secrets
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Basics of container security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Container security is a deep subject area and in itself can fill its own book.
+    Having said this, we will cover some of the high-level concerns and give a starting
+    point to think about this area.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the *A brief overview of containers* section of [Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)*,
+    Introduction to Kubernetes*, we looked at some of the core isolation features
+    in the Linux kernel that enable container technology. Understanding the details
+    of how containers work is the key to grasping the various security concerns in
+    managing them.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A good paper to dive deeper is *NCC's Whitepaper*, *Understanding and Hardening
+    Linux Containers *(you can refer to more details about this in point 1 in the
+    *References* section at the end of the chapter). In *section 7*, the paper explores
+    the various attack vectors of concern for container deployments, which I will
+    summarize (you can refer to more details about this in point 1 in the *References*
+    section at the end of the chapter).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Keeping containers contained
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: One of the most obvious features discussed in the paper is that of escaping
+    the isolation/virtualization of the container construct. Modern container implementations
+    guard against this using namespaces to isolate processes as well as allowing control
+    of the Linux capabilities available to a container. Additionally, there is an
+    increased move towards secure default configurations of the out-of-the-box container
+    environment. For example, Docker by default only enables a small set of capabilities
+    (you can refer to more details about this in point 2 in the *References* section
+    at the end of the chapter). Networking is another avenue of escape and it can
+    be challenging since there are a variety of network options that plug in to most
+    modern container setups.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The next area discussed in the paper is that of attacks between two containers.
+    The *User* namespace model gives us added protection here by mapping the root
+    user within the container to a lower level user on the host machine. Networking
+    is of course still an issue and something that requires proper diligence and attention
+    when selecting and implementing your container networking solution.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Attacks within the container itself are another vector and as with previous
+    concerns, namespaces and networking are key to protection here. Another aspect
+    that is vital in this scenario is the application security itself. The code still
+    needs to follow secure coding practices and the software should be kept up-to-date
+    and patched regularly. Finally, the efficiency of container images has an added
+    benefit of shrinking the attack surface. The images should be built with only
+    the packages and software necessary.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Resource exhaustion and orchestration security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Similar to the Denial of Service attacks, we've seen in various other areas
+    of computing that resource exhaustion is very much a pertinent concern in the
+    container world. While cgroups provide some limitations on resource usage for
+    things such as CPU, memory, and disk usage, there are still valid attack avenues
+    for resource exhaustion. Tools such as Docker offer some starting defaults to
+    the cgroups limitations, and Kubernetes also offers additional limits that can
+    be placed on groups of containers running in the cluster. It's important to understand
+    these defaults and adjust for your deployments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: While the Linux kernel and the features that enable containers give us some
+    form of isolation, they are fairly new to the Linux operating system. As such,
+    they still contain their own bugs and vulnerabilities. The built-in mechanisms
+    for capabilities and namespaces can and do have issues and it is important to
+    track these as part of your secure container operations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The final area covered in the NCC paper is the attack of the container management
+    layer itself. The Docker engine, image repositories, and orchestration tools are
+    all significant vectors of attack and should be considered when developing your
+    strategy. We'll look more in depth at how we can address the repositories and
+    Kubernetes as an orchestration layer in the next sections.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If you''re interested in knowing more about the specific security features
+    of Docker''s implementation, take a look here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://docs.docker.com/engine/security/security/](https://docs.docker.com/engine/security/security/).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Image repositories
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Vulnerability management is a critical component of any modern day IT operation.
+    Zero-day vulnerabilities are on the rise and even those vulnerabilities with patches
+    can be cumbersome to remediate. First, application owners must be made aware of
+    their vulnerabilities and potential patches. Then these patches must be integrated
+    into systems and code and often this requires additional deployments or maintenance
+    windows. Even when there is visibility to vulnerabilities, there is often a lag
+    in remediation, often taking large organizations several months to patch.
+  prefs: []
+  type: TYPE_NORMAL
+- en: While containers greatly improve the process of updating applications and minimizing
+    downtime, there still remains a challenge inherent in vulnerability management.
+    Especially since an attacker only needs to expose one such vulnerability; making
+    anything less than 100% of systems patched is a risk for compromise.
+  prefs: []
+  type: TYPE_NORMAL
+- en: What's needed is a faster feedback loop in addressing vulnerabilities. Continuous
+    scanning and tying into the software deployment life cycle is key to speeding
+    the information and remediation of vulnerabilities. Luckily, this is exactly the
+    approach being built into the latest container management and security tooling.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous vulnerability scanning
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'One such open-source project that has emerged in this space is **Clair**. We
+    get to know this from the *Clair* GitHub page: <q>Clair is an open source project
+    for the static analysis of vulnerabilities in [appc](https://github.com/appc/spec)
+    and [docker](https://github.com/docker/docker/blob/master/image/spec/v1.md) containers</q>.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can visit Clair at the following link:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://github.com/coreos/clair](https://github.com/coreos/clair).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Clair scans your code against **Common Vulnerabilities and Exploits** (**CVEs**).
+    It can be integrated into your CI/CD pipeline and run as a response to new builds.
+    If vulnerabilities are found, they can be taken as feedback into the pipeline,
+    even stop deployment, and fail the build. This forces developers to be aware of
+    and remediate vulnerabilities during their normal release process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Clair can be integrated with a number of container image repositories and CI/CD
+    pipelines.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Clair can even be deployed on Kubernetes: [https://github.com/coreos/clair#kubernetes](https://github.com/coreos/clair#kubernetes).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Clair is also used as the scanning mechanism in CoreOS''s Quay image repository.
+    Quay offers a number of enterprise features including continuous vulnerability
+    scanning:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://quay.io/](https://quay.io/)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Both Docker Hub and Docker Cloud support security scanning. Again, containers
+    that are pushed to the repository are automatically scanned against CVEs and notifications
+    of vulnerabilities are sent as a result of any findings. Additionally, binary
+    analysis of the code is performed to match the signature of the components with
+    that of known versions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There are a variety of other scanning tools that can be used as well for scanning
+    your image repositories including **OpenSCAP** as well as **Twistlock** and **AquaSec**,
+    which we will cover in [Chapter 12](0ebbb579-01ba-4e51-b801-b1656d0558d7.xhtml),* Towards
+    Production Ready*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Image signing and verification
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Whether you are using a private image repository in-house or a public repo such
+    as Docker Hub, it's important to know that you are running only the code that
+    your developers have written. The potential for malicious code or man-in-the-middle
+    attacks on downloads is an important factor in protecting your container images.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'As such, both rkt and Docker support the ability to sign images and verify
+    that the contents have not changed. Publishers can use keys to sign the images
+    when they are pushed to the repositories and users can verify the signature on
+    the client-side when downloading for use:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'From the rkt documentation:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: <q>"Before executing a remotely fetched ACI, rkt will verify it based on attached
+    signatures generated by the ACI creator."</q>
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://coreos.com/rkt/docs/latest/subcommands/trust.html](https://coreos.com/rkt/docs/latest/subcommands/trust.html)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[https://coreos.com/rkt/docs/latest/signing-and-verification-guide.html](https://coreos.com/rkt/docs/latest/signing-and-verification-guide.html)
+    From the Docker documentation:'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '<q>"Content trust gives you the ability to verify both the integrity and the
+    publisher of all the data received from a registry over any channel."</q> [https://docs.docker.com/engine/security/trust/content_trust/](https://docs.docker.com/engine/security/trust/content_trust/)
+    From the Docker Notary GitHub page:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: <q>"The Notary project comprises a server and a client for running and interacting
+    with trusted collections."</q> [https://github.com/docker/notary](https://github.com/docker/notary)
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: Kubernetes cluster security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Kubernetes has continued to add a number of security features in their latest
+    releases and has a well-rounded set of control points that can be used in your
+    cluster; everything from secure node communication to pod security and even storage
+    of sensitive configuration data.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Secure API calls
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'During every API call, Kubernetes applies a number of security controls. This
+    security life cycle is depicted here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_10_01.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: API call life cycle
+  prefs: []
+  type: TYPE_NORMAL
+- en: After secure TLS communication is established, the API server runs through **Authorization**
+    and **Authentication**. Finally, an **Admission Controller** loop is applied to
+    the request before it reaches the API server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Secure node communication
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Kubernetes supports the use of secure communication channels between the API
+    server and any client including the nodes themselves. Whether it's a GUI or command-line
+    utility such as `kubectl`, we can use certificates to communicate with the API
+    server. Hence, the API server is the central interaction point for any changes
+    to the cluster and is a critical component to secure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In deployments such as GCE, the `kubelet` on each node is deployed for secure
+    communication by default. This setup uses the TLS bootstrapping and the new certificates'
+    API to establish a secure connection with the API server using TLS client certificates
+    and a **Certificate Authority** (**CA**) cluster.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Authorization and authentication plugins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The plugin mechanisms for authentication and authorization in Kubernetes are
+    in their infancy. However, these features also continue to develop in the next
+    few releases. There are also third-party providers that integrate with the features
+    here.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Authentication is currently supported in the form of tokens, passwords, and
+    certificates with plans to add the plugin capability at a later stage. OpenID
+    Connect tokens are supported and several third-party implementations, such as
+    Dex from CoreOS and aser account and authentication from Cloud Foundry, are available.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Authorization already supports three modes. The full **RBAC** (short for **Role-Based
+    Access Control**)mode is still a work in progress and will eventually bring a
+    mature role-based authentication from Kubernetes itself. **Attribute-Based Access
+    Control** (**ABAC**) is already supported and lets a user define privileges via
+    attributes in a file. Finally, a webhook mechanism is supported, which allows
+    for integration with third-party authorization via REST web service calls.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Learn more about each area here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[http://kubernetes.io/docs/admin/authorization/](http://kubernetes.io/docs/admin/authorization/)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[http://kubernetes.io/docs/admin/authentication/](http://kubernetes.io/docs/admin/authentication/)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Admission controllers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Kubernetes also provides a mechanism for integrating with additional verification
+    as a final step. This could be in the form of image scanning, signature checks,
+    or anything that is able to respond in the specified fashion. When an API call
+    is made, the hook is called and that server can run its verification. Admission
+    controllers can also be used to transform requests and add or alter the original
+    request. Once the operations are run, a response is then sent back with a status
+    that instructs Kubernetes to allow or deny the call.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This can be especially helpful for verifying or testing images as we mentioned
+    in the last section. The `ImagePolicyWebhook` plugin provides an admission controller
+    that allows for integration with additional image inspection.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'For more information, visit the Using Admission Controller page in the following
+    documentation:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://kubernetes.io/docs/admin/admission-controllers/](https://kubernetes.io/docs/admin/admission-controllers/).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Pod security policies and context
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: One of the latest additions to the Kubernetes' security arsenal is that of **Pod
+    security policies and contexts**. These allow users to control users and groups
+    for container processes and attached volumes, limit the use of host networks or
+    namespaces, and even set the root filesystem to read-only. Additionally, we can
+    limit the capabilities available and also set SELinux options for the labels that
+    are applied to the containers in each pod.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In addition to SELinux, Kubernetes also added support for using AppArmor with
+    your pods using annotations. For more information, refer to the following documentation
+    page:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://kubernetes.io/docs/admin/apparmor/](https://kubernetes.io/docs/admin/apparmor/).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: We'll walk through an example of using a pod security context to add some constraints
+    to our pods. Since the functionality is still in beta, we'll need to enable the
+    beta extensions API and also add `PodSecurityPolicy` to the list of admission
+    controllers in use.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Enabling beta APIs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: First, you'll need to SSH into your master node, switch to a **root** user,
+    and then edit the `/etc/kubernetes/manifests/kube-apiserver.manifest` file in
+    your preferred editor. Again, we can SSH via the Google Cloud CLI or use the Google
+    Cloud Console, which has a built-in SSH client on the VM instances page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The best practice is not to SSH onto the nodes themselves. However, we have
+    done so at several points in this book for illustrative purposes. It's important
+    to understand how things are running on the nodes themselves and can sometimes
+    be necessary both for learning and troubleshooting. Having said this, use the
+    tools such as `kubectl exec` when you simply need to run a command from within
+    the cluster or a pod.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Scroll down to the command section and we should see something like the following
+    listing:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Your listing may vary, so just add the parameters highlighted in bold as follows.
+    Also, copy the original listing as a backup so you can restore it if needed later
+    on:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Save the file and exit `sudo` if you have a root shell. If all goes well, Kubernetes
+    should notice the manifest changes and restart the API Server. This may take a
+    few minutes and during reboot, `kubectl` may become unresponsive. I usually watch
+    this with the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: Watch the `STATUS` and `AGE` columns. Once the restart is successful, we'll
+    have a `STATUS of Running` and an AGE on the order of a few minutes or less.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If we had any typos with the manifest, we may see errors in `STATUS` or even
+    get a permanently unresponsive `kubectl`. If this happens, we'll need to restore
+    our earlier parameters. If all else fails, you can reboot the instance. The default
+    for GCE setups has a boot script that will replace the manifest with the default
+    settings.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once your API server is updated and running, we can add a security policy and
+    run a pod with a pod security context defined. The policy runs at the cluster
+    level and enforces the policy for all pods. The pod security context is set in
+    the pod definition and applies only to that pod.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a PodSecurityPolicy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that we''ve added the `PodSecurityPolicy` admission controller, we''ll
+    need to add a pod security policy before we can create our example in *listing
+    10-2* further down. If we try to create that pod now, we will see an error similar
+    to this:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_10_02.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pod error without PodSecurityPolicy
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Again, the pod security policy applies cluster wide:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 10-1*: `default-security-policy.json`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Create this with the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: The preceding default policy does not allow containers to run in privileged
+    mode. It allows any seLinux labels, any supplemental group IDs, any user to run
+    the first process, and any group ID for the filesytems. It also supports all types
+    of volumes.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can find all possible parameters in the source code, but I''ve created
+    the following table for convenience. You can find more handy lookups like this
+    on my new site:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://www.kubesheets.com](https://www.kubesheets.com)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Parameter** | **Type** | **Description** | **Required** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `Privileged` | `bool` | Allows or disallows running pod as privileged. |
+    No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `DefaultAddCapabilities` | `[]v1.Capaility` | This defines a default set
+    of capabilities added to the container. If the pod specifies a capability drop
+    that will override then add it here.Values are strings of POSIX capabilities minus
+    the leading `CAP_`. For example, `CAP_SETUID` would be `SETUID`.[http://man7.org/linux/man-pages/man7/capabilities.7.html](http://man7.org/linux/man-pages/man7/capabilities.7.html)
+    | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `RequiredDropCapabilities` | `[]v1.Capaility` | This defines a set of capabilities
+    that must be dropped from a container. The pod cannot specify any of these capabilities.Values
+    are strings of POSIX capabilities minus the leading `CAP_`. For example, `CAP_SETUID`
+    would be `SETUID`.[http://man7.org/linux/man-pages/man7/capabilities.7.html](http://man7.org/linux/man-pages/man7/capabilities.7.html)
+    | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `AllowedCapabilities` | `[]v1.Capaility` | This defines a set of capabilities
+    that are allowed and can be added to a container. The pod can specify any of these
+    capabilities.Values are strings of POSIX capabilities minus the leading `CAP_`.
+    For example, `CAP_SETUID` would be `SETUID`.[http://man7.org/linux/man-pages/man7/capabilities.7.html](http://man7.org/linux/man-pages/man7/capabilities.7.html)
+    | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `Volumes` | `[]FSType` | This list defines which volumes can be used. Leave
+    empty for all types.[https://github.com/kubernetes/kubernetes/blob/release-1.5/pkg/apis/extensions/v1beta1/types.go#L1127](https://github.com/kubernetes/kubernetes/blob/release-1.5/pkg/apis/extensions/v1beta1/types.go#L1127)
+    | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `HostNetwork` | `bool` | This allows or disallows the Pod to use the host
+    network. | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `HostPorts` | `[]HostPortRange` | This lets us restrict allowable host ports
+    that can be exposed. | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `HostPID` | `bool` | This allows or disallows the pod to use the host PID.
+    | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `HostIPC` | `bool` | This allows or disallows the pod to use the host IPC.
+    | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `SELinux` | `SELinuxStrategyOptions` | Set it to one of the strategy options
+    as defined here:[https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies](https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies)
+    | Yes |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `RunAsUser` | `RunAsUserStrategyOptions` | Set it to one of the strategy
+    options as defined here:[https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies](https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies)
+    | Yes |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `SupplementalGroups` | `SupplementalGroupsStrategyOptions` | Set it to one
+    of the strategy options as defined here:[https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies](https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies)
+    | Yes |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `FSGroup` | `FSGroupStrategyOptions` | Set it to one of the strategy options
+    as defined here:[https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies](https://kubernetes.io/docs/user-guide/pod-security-policy/#strategies)
+    | Yes |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `ReadOnlyRootFilesystem` | `bool` | Setting this to `true` will either deny
+    the pod or force it to run with a read-only root filesystem. | No |'
+  prefs: []
+  type: TYPE_TB
+- en: '*Table 10-1\. Pod Security Policy Parameters *(you can refer to more details
+    about this in point 3 in the *References* section at the end of the chapter)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now that we have a basic policy for the cluster, let''s create a `Pod`. First,
+    we will create a `Pod` with our `node-express-info` container:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 10-2*: `nodejs-pod-nopsc.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Create the pod with the preceding listing. Then use the `kubectl exec` command
+    to get a shell inside the pod. Next, we will attempt to create a file using the
+    `touch` command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We should get an `error similar to touch: cannot touch ''file.txt'': Read-only
+    file system`. This is because we set the `ReadOnlyFileSystem` property to true,
+    so all containers (pod security context defined or not) are now run with read-only root
+    filesystems. Type `exit` to leave this pod.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a pod with a PodSecurityContext
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that we have seen the effects of the pod security policy, let's explore
+    the pod security context. Here we can define `seLinuxOptions` that let us define
+    the label context for the containers in the pod. We can also define `runAsUser`
+    to specify the UID with which each container will run and the `runAsNonRoot` flag
+    that will simply prevent starting containers that run as `UID 0` or `root`. We
+    can also specify the Group (GID) for the first process in each container with `supplementalGroup`.
+    Finally, we can specify the Group (GID) for filesystem ownership and new files
+    with `fsGroup`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '*Listing 10-4* is a version of our previous `node-express-info` pod with the
+    `runAsNonRoot` set to `true`. It''s important to understand that root (`UID 0`)
+    is the default user if none is defined in the `Dockerfile`. *Listing 10-3* shows
+    the `Dockerfile` for our `node-express-info` container. We have not defined the
+    `USER` directive and therefore it will run as root:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 10-3*: `node-express-info Dockerfile`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 10-4*: `nodejs-pod-psc.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Understanding the relationship between the security context and how the containers
+    are built is important. If we try to create the preceding *Listing 10-4* with
+    `kubectl create -f nodejs-pod-psc.yaml`, we will see that it never starts and
+    gives us `VerifyNonRootError`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_10_03.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: VerifyNonRootError
+  prefs: []
+  type: TYPE_NORMAL
+- en: Understanding that running containers securely is not a merely a task of administrators
+    adding constraints is important. The work must be done in collaboration with developers
+    who will properly create the images.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Clean up
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The policy we have put in place may be too restrictive for learning and development,
+    so you may wish to remove it. You can do so with the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: You'll also need to undo the changes to `/etc/kubernetes/manifests/kube-apiserver.manifest` that
+    we did on the Kubernetes master at the beginning of this section. Specifically,
+    you should remove the `PodSecurityPolicy` from the list of the `admission-control` section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Additional considerations
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In addition to the features we just reviewed, Kubernetes has a number of other
+    constructs that should be considered in your overall cluster hardening process.
+    Earlier in the book, we looked at namespaces that provide a logical separation
+    for multi-tenancy. While the namespaces themselves do not isolate the actual network
+    traffic, some of the network plugins, such as Calico and Canal, provide additional
+    capability for network policies. We also looked at quotas and limits that can
+    be set for each namespace and should be used to prevent a single tenant or project
+    from consuming too many resources within the cluster.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Securing sensitive application data (secrets)
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Sometimes, our application needs to hold sensitive information. This can be
+    credentials or tokens to log in to a database or service. Storing this sensitive
+    information in the image itself is something to be avoided. Here, Kubernetes provides
+    us a solution in the construct of secrets.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Secrets** give us a way to store sensitive information without including
+    plaintext versions in our resource definition files. Secrets can be mounted to
+    the pods that need them and then accessed within the pod as files with the secret
+    values as content. Alternatively, you can also expose the secrets via environment
+    variables.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: We can easily create a secret either with YAML or on the command line. Secrets
+    do need to be base-64 encoded, but if we use the `kubectl` command line, this
+    encoding is done for us.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s start with the following Secret:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We can then check for the Secret with this command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now that we have successfully created the Secret, let''s make a pod that can
+    use the secret. Secrets are consumed in pods by way of attached volumes. In the
+    following *Listing 10-5*, you''ll notice that we use `volumeMount` to mount the
+    secret to a folder in our container:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 10-5*: `secret-pod.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Create this pod with `kubectl create -f secret-pod.yaml`. Once created, we
+    can get a bash shell in the pod with `kubectl exec` and then change directories
+    to the `/etc/secret-phrases` folder that we set up in the pod definition. Listing
+    this directory reveals a single file with the name of the secret that we created
+    earlier:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'If we then display those contents, we should see the phrase we encoded previously,
+    `Shh! Dont'' tell`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: Typically, this would be used for a username and password to a database or service, or
+    any sensitive credentials and configuration data.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Bear in mind that secrets are still in their early stages, but they are a vital
+    component for production operations. There are several improvements planned here
+    for future releases. At the moment, secrets are still stored in plaintext in the
+    etcd server. However, the secrets construct does allow us to control which pods
+    can access it and it stores the information on the tmpfs, but does not store it
+    at rest for each pod. You'll likely want more protection in place for a production-ready
+    system.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We took a look at basic container security and some essential areas of consideration.
+    We also touched on basic image security and continuous vulnerability scanning.
+    Later in this chapter, we looked at the overall security features of Kubernetes
+    including secrets for storing sensitive configuration data, secure API calls,
+    and even setting up security policies and contexts for pods running on our cluster.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You should now have a solid starting point for securing your cluster and moving
+    towards production. To that end, the next chapter will cover an overall strategy
+    for moving towards production and will also look at some third-party vendors that
+    offer tools to fill in the gaps and assist you on the way.
+  prefs: []
+  type: TYPE_NORMAL
+- en: References
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '[https://www.nccgroup.trust/globalassets/our-research/us/whitepapers/2016/april/ncc_group_understanding_hardening_linux_containers-10pdf/](https://www.nccgroup.trust/us/our-research/understanding-and-hardening-linux-containers/)'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[https://github.com/docker/docker/blob/master/oci/defaults_linux.go#L62-L77](https://github.com/docker/docker/blob/master/oci/defaults_linux.go#L62-L77)'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[https://github.com/kubernetes/kubernetes/blob/release-1.5/pkg/apis/extensions/v1beta1/types.go#L1075](https://github.com/kubernetes/kubernetes/blob/release-1.5/pkg/apis/extensions/v1beta1/types.go#L1075)'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL

@@ -1,0 +1,334 @@
+- en: Preface
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book is a guide to getting started with Kubernetes and overall container
+    management. We will walk you through the features and functions of Kubernetes
+    and show how it fits into an overall operations strategy. You’ll learn what hurdles
+    lurk in moving a container off the developer's laptop and managing them at a larger
+    scale. You’ll also see how Kubernetes is the perfect tool to help you face these
+    challenges with confidence.
+  prefs: []
+  type: TYPE_NORMAL
+- en: What this book covers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '[Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml), *Introduction to Kubernetes*,
+    is a brief overview of containers and the how, what, and why of Kubernetes orchestration,
+    exploring how it impacts your business goals and everyday operations.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 2](281f1b00-8685-4614-895f-df5ae1518373.xhtml), *Pods, Services, Replication
+    Controllers, and Labels*, uses a few simple examples to explore core Kubernetes
+    constructs, namely pods, services, replication controllers, replica sets, and
+    labels. Basic operations including health checks and scheduling will also be covered.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 3](112f7a80-e9ed-43e9-a165-ea41fa523250.xhtml), *Networking, Load
+    Balancers, and Ingress*, covers cluster networking for Kubernetes and the Kubernetes
+    proxy. It also takes a deeper dive into services, finishing up, it shows a brief
+    overview of some higher level isolation features for mutli-tenancy.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 4](2888632c-f8c3-4919-8a94-da591fb637b2.xhtml), *Updates, Gradual
+    Rollouts, and Autoscaling*, is a quick look at how to roll out updates and new
+    features with minimal disruption to uptime. We will also look at scaling for applications
+    and the Kubernetes cluster.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 5](2b01951a-9eae-41b1-9c7a-d35ba8efa565.xhtml), *Deployments, Jobs,
+    and DaemonSets*, covers both long-running application deployments as well as short-lived
+    jobs. We will also look at using DaemonSets to run containers on all or subsets
+    of nodes in the cluster.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 6](6fe5bf81-87e4-441f-964b-380da7a8d6a0.xhtml), *Storage and Running
+    Stateful Applications*, covers storage concerns and persistent data across pods
+    and the container life cycle. We will also look at new constructs for working
+    with stateful application in Kubernetes.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 7](95d0ce8f-a5cf-4fe1-bef8-ca120e3d4284.xhtml), *Continuous Delivery*,
+    explains how to integrate Kubernetes into your continuous delivery pipeline. We
+    will see how to use a k8s cluster with Gulp.js and Jenkins as well.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 8](1809040d-4981-427d-8de7-600c4354a872.xhtml), *Monitoring and Logging*,
+    teaches how to use and customize built-in and third-party monitoring tools on
+    your Kubernetes cluster. We will look at built-in logging and monitoring, the
+    Google Cloud Monitoring/Logging service, and Sysdig.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 9](94a98b1d-202e-43ba-a517-3be079d3a20c.xhtml), *Cluster Federation*,
+    enables you to try out the new federation capabilities and explains how to use
+    them to manage multiple clusters across cloud providers. We will also cover the
+    federated version of the core constructs from previous chapters.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 10](3e204a07-a7dd-41d2-806d-f9995a1a9e7f.xhtml), *Container Security*,
+    teaches the basics of container security from the container runtime level to the
+    host itself. It also explains how to apply these concepts to running containers
+    and some of the security concerns and practices that relate specifically to running
+    Kubernetes.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 11](2c73e607-6421-466f-b327-9c3e207674e3.xhtml), *Extending Kubernetes
+    with OCP, CoreOS, and Tectonic*, discovers how open standards benefit the entire
+    container ecosystem. We’ll look at a few of the prominent standards organizations
+    and cover CoreOS and Tectonic, exploring their advantages as a host OS and enterprise
+    platform.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 12](0ebbb579-01ba-4e51-b801-b1656d0558d7.xhtml), *Towards Production
+    Ready*, the final chapter, shows some of the helpful tools and third-party projects
+    that are available and where you can go to get more help.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: What you need for this book
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book will cover downloading and running the Kubernetes project. You’ll
+    need access to a Linux system (VirtualBox will work if you are on Windows) and
+    some familiarity with the command shell.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Additionally, you should have a Google Cloud Platform account. You can sign
+    up for a free trial here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://cloud.google.com/](https://cloud.google.com/)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Also, an AWS account is necessary for a few sections of the book. You can sign
+    up for a free trial here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://aws.amazon.com/](https://aws.amazon.com/)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Who this book is for
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Whether you’re heads down in development, neck deep in operations, or looking
+    forward as an executive, Kubernetes and this book are for you. *Getting Started
+    with Kubernetes* will help you understand how to move your container applications
+    into production with best practices and step by step walk-throughs tied to a real-world
+    operational strategy. You’ll learn how Kubernetes fits into your everyday operations,
+    which can help you prepare for production-ready container application stacks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Having some familiarity with Docker containers, general software developments,
+    and operations at a high-level will be helpful.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Conventions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this book, you will find a number of text styles that distinguish between
+    different kinds of information. Here are some examples of these styles and an
+    explanation of their meaning.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Code words in text, folder names, filenames, file extensions, and pathnames
+    are shown as follows: "Do a simple `curl` command to the pod IP."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'URLs are shown as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[http://swagger.io/](http://swagger.io/)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If we wish you to replace a portion of the URL with your own values it will
+    be shown like this:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`https://**<your master ip>**/swagger-ui/`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Resource definition files and other code blocks are set as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'When we wish you to replace a portion of the listing with your own value, the
+    relevant lines or items are set in bold between less than and greater than symbols:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Any command-line input or output is written as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'New terms and important words are shown in bold. Words that you see on the
+    screen, for example, in menus or dialog boxes, appear in the text like this: "Clicking
+    the Add New button moves you to the next screen."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'There are several areas where the text refers to key-value pairs or to input
+    dialogs on the screen. In these case the **key** or **input label** will be shown
+    in bold and the ***value*** will be shown in bold italics. For example: "In the
+    box labelled **Timeout** enter ***5s***."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Warnings or important notes appear in a box like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tips and tricks appear like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reader feedback
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Feedback from our readers is always welcome. Let us know what you think about
+    this book-what you liked or disliked. Reader feedback is important for us as it
+    helps us develop titles that you will really get the most out of.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To send us general feedback, simply e-mail `feedback@packtpub.com`, and mention
+    the book's title in the subject of your message.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If there is a topic that you have expertise in and you are interested in either
+    writing or contributing to a book, see our author guide at [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Customer support
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that you are the proud owner of a Packt book, we have a number of things
+    to help you to get the most from your purchase.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Downloading the example code
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: You can download the example code files for this book from your account at [http://www.packtpub.com](http://www.packtpub.com).
+    If you purchased this book elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
+    and register to have the files e-mailed directly to you.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can download the code files by following these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in or register to our website using your e-mail address and password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Hover the mouse pointer on the SUPPORT tab at the top.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on Code Downloads & Errata.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter the name of the book in the Search box.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the book for which you're looking to download the code files.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose from the drop-down menu where you purchased this book from.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on Code Download.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once the file is downloaded, please make sure that you unzip or extract the
+    folder using the latest version of:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: WinRAR / 7-Zip for Windows
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Zipeg / iZip / UnRarX for Mac
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 7-Zip / PeaZip for Linux
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The code bundle for the book is also hosted on GitHub at [https://github.com/PacktPublishing/Getting-Started-with-Kubernetes-Second-Edition](https://github.com/PacktPublishing/Getting-Started-with-Kubernetes-Second-Edition).
+    We also have other code bundles from our rich catalog of books and videos available
+    at [https://github.com/PacktPublishing/](https://github.com/PacktPublishing/).
+    Check them out!
+  prefs: []
+  type: TYPE_NORMAL
+- en: Downloading the color images of this book
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We also provide you with a PDF file that has color images of the screenshots/diagrams
+    used in this book. The color images will help you better understand the changes
+    in the output. You can download this file from
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://www.packtpub.com/sites/default/files/downloads/GettingStartedwithKubernetesSecondEdition_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/GettingStartedwithKubernetesSecondEdition_ColorImages.pdf).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Errata
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Although we have taken every care to ensure the accuracy of our content, mistakes
+    do happen. If you find a mistake in one of our books-maybe a mistake in the text
+    or the code-we would be grateful if you could report this to us. By doing so,
+    you can save other readers from frustration and help us improve subsequent versions
+    of this book. If you find any errata, please report them by visiting [http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata),
+    selecting your book, clicking on the Errata Submission Form link, and entering
+    the details of your errata. Once your errata are verified, your submission will
+    be accepted and the errata will be uploaded to our website or added to any list
+    of existing errata under the Errata section of that title.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To view the previously submitted errata, go to [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
+    and enter the name of the book in the search field. The required information will
+    appear under the Errata section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Piracy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Piracy of copyrighted material on the Internet is an ongoing problem across
+    all media. At Packt, we take the protection of our copyright and licenses very
+    seriously. If you come across any illegal copies of our works in any form on the
+    Internet, please provide us with the location address or website name immediately
+    so that we can pursue a remedy.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Please contact us at `copyright@packtpub.com` with a link to the suspected pirated
+    material.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We appreciate your help in protecting our authors and our ability to bring you
+    valuable content.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: If you have a problem with any aspect of this book, you can contact us at `questions@packtpub.com`,
+    and we will do our best to address the problem.
+  prefs: []
+  type: TYPE_NORMAL

@@ -1,0 +1,501 @@
+- en: Cluster Federation
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This chapter will discuss the new federation capabilities and how to use them
+    to manage multiple clusters across cloud providers. We will also cover the federated
+    version of the core constructs. We will walk you through federated Deployments,
+    ReplicaSets, ConfigMaps, and Events.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This chapter will discuss the following topics:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Federating clusters
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Federating multiple clusters
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Inspecting and controlling resources across multiple clusters
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Launching resources across multiple clusters
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Introduction to federation
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: While **federation** is still very new in Kubernetes, it lays the ground work
+    for the highly sought cross-cloud provider solution. Using federation, we can
+    run multiple Kubernetes clusters on-premise and in one or more public cloud providers
+    and manage applications utilizing the entire set of all our organizational resources.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This begins to create a path for avoiding cloud provider lock-in and highly
+    available deployment that can place application servers in multiple clusters and
+    allow for communication to other services located in single points among our federated
+    clusters. We can improve isolation on outages at a particular provider or geographic
+    location while providing greater flexibility for scaling and utilizing total infrastructure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Currently, the federation plane supports these resources (ConfigMap, DaemonSets,
+    Deployment, Events, Ingress, Namespaces, ReplicaSets, Secrets, and Services).
+    Note that federation and its components are in alpha and beta phases of release,
+    so functionality may still be a bit temperamental.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up federation
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: While we can use the cluster we had running for the rest of the examples, I
+    would highly recommend that you start fresh. The default naming of the clusters
+    and contexts can be problematic for the federation system. Note that the `--cluster-context`
+    and `--secret-name` flags are there to help you work around the default naming,
+    but for first-time federation, it can still be confusing and less than straightforward.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Hence, starting fresh is how we will walk through the examples in this chapter.
+    Either use new and separate cloud provider (AWS and/or GCE) accounts or tear down
+    the current cluster and reset your Kubernetes control environment by running the
+    following commands:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Double-check that nothing is listed using the following commands:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, we will want to get the `kubefed` command on our path and make it executable.
+    Navigate back to the folder where you have the Kubernetes download extracted. The
+    `kubefed` command is located in the `/kubernetes/client/bin` folder. Run the following
+    commands to get in the bin folder and change the execution permissions:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: Contexts
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Contexts** are used by the Kubernetes control plane to keep authentication
+    and cluster configuration stored for multiple clusters. This allow us to access
+    and manage multiple clusters accessible from the same `kubectl`. You can always
+    see the contexts available with the `get-contexts` command that we used earlier.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: New clusters for federation
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Again, make sure you navigate to wherever Kubernetes was downloaded and move
+    into the `cluster` sub-folder:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: Before we proceed, make sure you have the GCE command line and the AWS command
+    line installed, authenticated, and configured. Refer to [Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml),
+    *Introduction to Kubernetes*, if you need assistance doing so on a new box.
+  prefs: []
+  type: TYPE_NORMAL
+- en: First, we will create the AWS cluster. Note that we are adding an environment
+    variable named `OVERRIDE_CONTEXT` that will allow us to set the context name to
+    something that complies with the DNS naming standards. DNS is a critical component
+    for federation as it allows us to do cross-cluster discovery and service communication.
+    This is important in a federated world where clusters may be in different data
+    centers and even providers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Run these commands to create your AWS cluster:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, we will create a GCE cluster, once again using the `OVERRIDE_CONTEXT` environment
+    variable:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'If we take a look at our contexts now, we will notice both the `awsk8s` and
+    the `gcek8s` that we just created. The star in front of `gcek8s` denotes that
+    it''s where `kubectl` is currently pointing and executing against:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The preceding command should produce something like the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_09_01.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Context Listing
+  prefs: []
+  type: TYPE_NORMAL
+- en: Initializing the federation control plane
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that we have two clusters, let''s set up the federation control plane in
+    the GCE cluster. First, we''ll need to make sure that we are in the GCE context,
+    and then we will initialize the federation control plane:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: The preceding command creates a new context just for federation called `master-control`.
+    It uses the `gcek8s` cluster/context to host the federation components (such as
+    API server and controller). It assumes GCE DNS as the federations DNS service.
+    You'll need to update `dns-zone-name` with a domain suffix you manage.
+  prefs: []
+  type: TYPE_NORMAL
+- en: By default, the DNS provider is GCE. You can use `--dns-provider="aws-route53"`
+    to set it to AWS `route53`; however, out of the box implementation still has issues
+    for many users.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If we check our contexts once again we will now see three contexts:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The preceding command should produce something like the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_09_02.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Context Listing #2'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s make sure we have all the federation components running before we proceed.
+    The federation control plane uses the `federation-system` namespace. Use the `kubectl
+    get pods` command with the namespace specified to monitor the progress. Once you
+    see two API server pods and one controller pod you should be set:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_09_03-1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Federation pod listing #'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now that we have the federation components set up and running, let''s switch
+    to that context for the next steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: Adding clusters to the federation system
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that we have our federation control plane we can add the clusters to the
+    federation system. First, we will join the GCE cluster and then the AWS cluster:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: Federated resources
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Federated resources allow us to deploy across multiple clusters and/or regions.
+    Currently, version 1.5 of Kubernetes support a number of core resource types in
+    the federation API, including ConfigMap, DaemonSets, Deployment, Events, Ingress,
+    Namespaces, ReplicaSets, Secrets, and Services.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s take a look at a **Federated Deployment** that will allow us to schedule
+    pods across both AWS and GCE:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 9-1. *`node-js-deploy-fed.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Create this deployment with the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now let''s try listing the pods from this deployment:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_09_04.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: No pods in federation context
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We should see a message like the preceding one depicted. This is because we
+    are still using the `master-control` or federation context, which does not itself
+    run pods. We will, however, see the deployment in the federation plane and if
+    we inspect the events we will see that the deployment was in fact created on both
+    our federated clusters:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We should see something like the following. Notice that the `Events:` section
+    shows deployments in both our GCE and AWS contexts:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/B06302_09_05-1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Federated pod Deployment
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can also see the federated events using the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_09_06-1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Federated events
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'It may take a moment for all three pods to run. Once that happens, we can switch
+    to each cluster context and see some of the pods on each. Note that we can now
+    use `get pods` since we are on the individual clusters and not on the control
+    plane:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_09_07-1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pods on the AWS cluster
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_09_08.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pods on the GCE cluster
+  prefs: []
+  type: TYPE_NORMAL
+- en: We should see the three pods spread across the clusters with two on one and
+    a third on the other. Kubernetes has spread it across the cluster without any
+    manual intervention. Any pods that fail will be restarted, but now we have the
+    added redundancy of two cloud providers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Federated configurations
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In modern software development, it is common to separate configuration variables
+    from the application code itself. In this way it is easier to make updates to
+    service URLs, credentials, common paths, and so on. Having these values in external
+    configuration files means we can easily update configuration without rebuilding
+    the entire application.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This separation solves the initial problem, but true portability comes when
+    you can remove the dependency from the application completely. Kubernetes offers
+    a configuration store for exactly this purpose. **ConfigMaps** are simple constructs
+    that store key-value pairs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Kubernetes also supports **Secrets** for more sensitive configuration data.
+    This will be covered in more detail in [Chapter 10](3e204a07-a7dd-41d2-806d-f9995a1a9e7f.xhtml),
+    *Container Security*. You can use the example there in both single clusters or
+    on the federation control plane as we are demonstrating with ConfigMaps here.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s take a look at an example that will allow us to store some configuration
+    and then consume it in various pods. The following listings will work for both
+    federated and single clusters, but we will continue using a federated setup for
+    this example. The `ConfigMap` kind can be created using literal values, flat files
+    and directories, and finally YAML definition files. The following listing is a
+    YAML definition file:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 9-2*: `configmap-fed.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s first switch back to our federation plane:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, create this listing with the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Let''s display the `configmap` object that we just created. The `-o yaml` flag
+    helps us display the full information:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_09_09.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Federated ConfigMap description
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now that we have a `ConfigMap` object, let''s start up a federated `ReplicaSet` that
+    can use the `ConfigMap`. This will create replicas of pods across our cluster
+    that can access the `ConfigMap` object. ConfigMapscan be accessed via environment
+    variables or mount volumes. This example will use a mount volume that provides
+    a folder hierarchy and the files for each key with the contents representing the
+    values:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: '*Listing 9-3*: `configmap-rs-fed.yaml`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Create this pod with `kubectl create -f configmap-rs-fed.yaml`. After creation,
+    we will need to switch contexts to one of the clusters where the pods are running.
+    You can choose either, but we will use the GCE context here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now that we are on the GCE cluster specifically, let''s check the `configmaps` here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'As you can see, the `ConfigMap` is propagated locally to each cluster. Next,
+    let''s find a pod from our federated `ReplicaSet`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/B06302_09_10.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pods on the GCE cluster
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s take one of the `node-js-rs` pod names from the listing and run a bash
+    shell with `kubectl exec`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then change directories to the `/etc/config` folder that we set up in the pod
+    definition. Listing this directory reveals a single file with the name of the
+    `ConfigMap` we defined earlier:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'If we then display the contents of the files with the following command, we
+    should see the value we entered earlier: `my-backend-service`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: If we were to look in any of the pods across our federated cluster we would
+    see the same values. This is a great way to decouple configuration from an application
+    and distribute it across our fleet of clusters.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Other federated resources
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: So far we saw federated Deployments, ReplicaSets, Events, and ConfigMaps in
+    action. DaemonSets, Ingress, Namespaces, Secrets, and Services are also supported. Your
+    specific setup will vary and you may have a set of clusters that differ from our
+    example here. As mentioned earlier, these resources are still in beta, so it's
+    worth spending some time to experiment with the various resource types and understand
+    how well the federation constructs are supported for your particular mix of infrastructure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: True multi-cloud
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This is an exciting space to watch. As it grows it gives us a really good start
+    to doing multi-cloud implementations and providing redundancy across regions,
+    data centers, and even cloud providers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: While Kubernetes does provide an easy and exciting path to multi-cloud infrastructure,
+    it's important to note that production multi-cloud requires much more than distributed
+    deployments. A full set of capabilities from logging and monitoring to compliance
+    and host-hardening, there is much to manage in a multi-provider setup.
+  prefs: []
+  type: TYPE_NORMAL
+- en: True multi-cloud adoption will require a well-planned architecture, and Kubernetes
+    takes a big step forward in pursuing this goal.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we looked at the new federation capabilities in Kubernetes.
+    We saw how we can deploy clusters to multiple cloud providers and manage them
+    from a single control plane. We also deployed an application across clusters in
+    both AWS and GCE. While these features are new and still mainly in alpha and beta,
+    we should now have the skills to utilize them as they evolve and become part of
+    the standard Kubernetes operating model.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will take a look at another advanced topic, security.
+    We will cover the basics for secure containers and also how to secure your Kubernetes
+    cluster. We will also look at the Secrets construct, which gives us the capability
+    to store sensitive configuration data similar to our preceding `ConfigMap` example.
+  prefs: []
+  type: TYPE_NORMAL
