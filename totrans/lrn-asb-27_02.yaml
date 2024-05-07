@@ -1,4 +1,5 @@
 - en: Getting Started with Ansible
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -7,6 +8,7 @@
     is not related to its ability to grow at a super-high speed, but is related to
     its ability to revolutionize itself, and the rest of the world, at an astonishing
     pace.'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
 - en: Every 10 to 15 years there are major shifts in how this industry works, and
@@ -18,61 +20,76 @@
     will occur and when they will take place, but looking at companies with a large
     number of servers and many lines of code usually reveals what the next steps will
     be.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
 - en: The current shift has already happened in big companies such as Amazon Web Services
     (AWS), Facebook, and Google. It is the implementation of IT automation systems
     to create and manage servers.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
 - en: 'In this chapter we will cover the following topics:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
 - en: IT automation
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: What is Ansible?
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The secure shell
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Installing Ansible
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Creating a test environment with Vagrant
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Version control systems
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Using Ansible with Git
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Technical requirements
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: To support the learning of Ansible, I suggest having a machine where you can
     install Vagrant. Using Vagrant will allow you to try many operations, even destructive
     ones, without fear.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
 - en: Additionally, AWS and Azure accounts are suggested, since some examples will
     be on those platforms.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
 - en: All examples in this book are available in the GitHub repository at [https://github.com/PacktPublishing/-Learning-Ansible-2.X-Third-Edition/](https://github.com/PacktPublishing/-Learning-Ansible-2.X-Third-Edition/).
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
 - en: IT automation
+  id: totrans-16
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -80,6 +97,7 @@
     help with the management of the IT infrastructure (servers, networking, and storage).
     In the current shift, we are supporting for a huge implementation of such processes
     and software.'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
 - en: At the beginning of IT history, there were very few servers, and a lot of people
@@ -91,6 +109,7 @@
     a very labor-intensive and error-prone process, so many administrators started
     to implement scripts and other means to make their lives easier. Those scripts
     were (usually) pretty complex, and they did not scale very well.
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
 - en: 'In the early years of this century, data centers started to grow a lot due
@@ -98,86 +117,121 @@
     that many of these services were web services meant that many servers were very
     similar to each other. At this point, new tools were needed to substitute the
     scripts that were used before: the configuration management tools.'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本世纪初，由于公司的需求，数据中心开始快速增长。虚拟化有助于降低成本，而且许多这些服务都是 Web 服务，这意味着许多服务器彼此非常相似。此时，需要新的工具来替代以前使用的脚本：配置管理工具。
 - en: '**CFEngine** was one of the first tools to demonstrate configuration management
     capabilities way back in the 1990s; more recently, there has been Puppet, Chef,
     and Salt, besides Ansible.'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: '**CFEngine** 是在上世纪九十年代展示配置管理功能的第一个工具；最近，除了 Ansible 还有 Puppet、Chef 和 Salt。'
 - en: Advantages of IT automation
+  id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: IT 自动化的优点
 - en: 'People often wonder if IT automation really brings enough advantages, considering
     that implementing it has some direct and indirect costs. The main benefits of
     IT automation are the following:'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 人们常常疑惑 IT 自动化是否真的带来足够的优势，考虑到实施它存在一些直接和间接的成本。IT 自动化的主要好处包括：
 - en: The ability to provision machines quickly
+  id: totrans-23
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 快速提供机器的能力
 - en: The ability to recreate a machine from scratch in minutes
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 能够在几分钟内从头开始重建一台机器的能力
 - en: The ability to track any change performed on the infrastructure
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 能够追踪对基础设施进行的任何更改
 - en: For these reasons, it's possible to reduce the cost of managing the IT infrastructure
     by reducing the repetitive operations often performed by system administrators.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 凭借这些优点，通过减少系统管理员经常执行的重复操作，可以降低管理 IT 基础设施的成本。
 - en: Disadvantages of IT automation
+  id: totrans-27
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: IT 自动化的缺点
 - en: 'As with any other technology, IT automation does come with some disadvantages.
     From my point of view, these are the biggest disadvantages:'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 与任何其他技术一样，IT 自动化也存在一些缺点。从我的角度来看，这些是最大的缺点：
 - en: Automating all of the small tasks that were once used to train new system administrators.
+  id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 自动化曾经用于培训新的系统管理员的所有小任务。
 - en: If an error is performed, it will be propagated everywhere.
+  id: totrans-30
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果发生错误，它将在所有地方传播。
 - en: The consequence of the first is that new ways to train junior system administrators
     will need to be implemented.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 第一个的结果是需要采取新的方法来培训初级系统管理员。
 - en: 'The second one is trickier. There are a lot of ways to limit this kind of damage,
     but none of those will prevent it completely. The following mitigation options
     are available:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 第二个问题更棘手。有很多方法来限制这种损害，但没有一种方法能完全防止。以下是可用的缓解选项：
 - en: '**Always have backups**: Backups will not prevent you from nuking your machine
     – they will only make the restore process possible.'
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**始终备份**：备份无法防止你毁掉你的机器 - 它们只能使恢复过程成为可能。'
 - en: '**Always test your infrastructure code (playbooks/roles) in a non-production
     environment**: Companies have developed different pipelines to deploy code, and
     those usually include environments such as dev, test, staging, and production.
     Use the same pipeline to test your infrastructure code. If a buggy application
     reaches the production environment it could be a problem. If a buggy playbook
     reaches the production environment, it can be catastrophic.'
+  id: totrans-34
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**始终在非生产环境中测试你的基础设施代码（playbooks/roles）**：公司已经开发了不同的流程来部署代码，通常包括开发、测试、暂存和生产等环境。使用相同的流程来测试您的基础设施代码。如果有一个有错误的应用程序到达生产环境，可能会有问题。如果有一个有错误的
+    playbook 到达生产环境，情况就可能变得灾难性。'
 - en: '**Always peer-review your infrastructure code**: Some companies have already
     introduced peer-reviews for the application code, but very few have introduced
     it for the infrastructure code. As I was saying in the previous point, I think
     that infrastructure code is way more critical than application code, so you should
     always peer-review your infrastructure code, whether you do it for your application
     code or not.'
+  id: totrans-35
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**始终对基础设施代码进行同行评审**：一些公司已经引入了对应用代码的同行评审，但很少有公司对基础设施代码进行同行评审。如我之前所说，在我看来，基础设施代码比应用代码更加关键，所以你应该始终对基础设施代码进行同行评审，无论你是否对应用代码进行同行评审。'
 - en: '**Enable SELinux**: SELinux is a security kernel module that is available on
     all Linux distributions (it is installed by default on Fedora, Red Hat Enterprise
     Linux, CentOS, Scientific Linux, and Unbreakable Linux). It allows you to limit
@@ -185,6 +239,7 @@
     of other similar modules (such as AppArmor) because it is able to handle more
     situations and permissions. SELinux will prevent a huge amount of damage because,
     if correctly configured, it will prevent many dangerous commands from being executed.'
+  id: totrans-36
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -194,6 +249,7 @@
     escalating privileges only for commands that need higher privileges, will help
     prevent you from nuking a machine while trying to clean an application temporary
     folder.'
+  id: totrans-37
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -203,6 +259,7 @@
     If you have to change a file that is owned by another user, please do not escalate
     to `root` to do so, just escalate to that user. In Ansible, you can use the `become_user`
     parameter to achieve this.'
+  id: totrans-38
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -215,6 +272,7 @@
     view, but disastrous for your specific application under your production load.
     A staged deployment will allow you to test your new configuration on your actual
     load without risking downtime in case something was wrong.'
+  id: totrans-39
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -226,6 +284,7 @@
     Guessing modifiers is dangerous because you could be fooled by a non-standard
     modifier (that is, `-v` is not a verbose mode for `grep`, and `-h` is not a `help`
     command for the MySQL CLI).'
+  id: totrans-40
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -236,6 +295,7 @@
     `dd` in scripts to transform DOS files to Unix (instead of `dos2unix`) and many
     other, very dangerous, examples. Please, avoid such commands, because they could
     result in a huge disaster if something goes wrong.'
+  id: totrans-41
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -244,6 +304,7 @@
     learned *to be sure, always use* `rm -rf`, because at some time in their past,
     they have had to delete a folder. This will prevent you from deleting an entire
     folder if the `${file}` variable is set wrongly.'
+  id: totrans-42
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -260,6 +321,7 @@
     variables in dangerous places, at least check them to see whether they are empty
     or not before using them. This will not save you from every problem, but may catch
     some of the most common ones.'
+  id: totrans-43
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -268,6 +330,7 @@
     /dev/rand > /dev/sda` can destroy a disk even if a `cat`-based command is usually
     overlooked because it''s not usually dangerous. Always double-check all commands
     that include a redirection.'
+  id: totrans-44
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -275,41 +338,50 @@
     commands because many people will try to use Ansible as if it''s just a way to
     distribute them: it''s not. Ansible provides a lot of modules and we''ll see them
     in this book. They will help you create more readable, portable, and safe playbooks.'
+  id: totrans-45
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Types of IT automation
+  id: totrans-46
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: There are a lot of ways to classify IT automation systems, but by far the most
     important is related to how the configurations are propagated. Based on this,
     we can distinguish between agent-based systems and agent-less systems.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
 - en: Agent-based systems
+  id: totrans-48
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'Agent-based systems have two different components: a **server**, and a client
     called **agent**.'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
 - en: There is only one server, and it contains all of the configuration for your
     whole environment, while the agents are as many as the machines in the environment.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
 - en: In some cases, more than one server could be present to ensure high availability,
     but treat it as if it's a single server, since they will all be configured in
     the same way.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
 - en: Periodically, the client will contact the server to see if a new configuration
     for its machine is present. If a new configuration is present, the client will
     download it and apply it.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
 - en: Agent-less systems
+  id: totrans-53
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -318,20 +390,24 @@
     servers and even the same number of servers and clients. Communications are initialized
     by the server, which will contact the client(s) using standard protocols (usually
     via SSH and PowerShell).
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
 - en: Agent-based versus agent-less systems
+  id: totrans-55
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: Aside from the differences previously outlined, there are other contrasting
     factors that arise because of those differences.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
 - en: From a security standpoint, an agent-based system can be less secure. Since
     all machines have to be able to initiate a connection to the server machine, this
     machine could be attacked more easily than in an agent-less case, where the machine
     is usually behind a firewall that will not accept any incoming connections.
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
 - en: From a performance point of view, agent-based systems run the risk of having
@@ -342,14 +418,17 @@
     ways to implement such features. Tools such as Chef and Puppet are agent-based,
     but can also run without a centralized server to scale a large number of machines,
     commonly called **Serverless Chef** and **Masterless Puppet** respectively.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
 - en: An agent-less system is easier to integrate in an infrastructure that is already
     present (brownfield) since it will be seen by the clients as a normal SSH connection,
     therefore no additional configuration is needed.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
 - en: What is Ansible?
+  id: totrans-60
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -357,6 +436,7 @@
     DeHaan, a former Red Hat associate. The Ansible design goals are for it to be
     minimal, consistent, secure, highly reliable, and easy to learn. The Ansible company
     was bought by Red Hat in October 2015, and now operates as part of Red Hat, Inc.'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
 - en: Ansible primarily runs in push mode using SSH, but you can also run Ansible
@@ -366,13 +446,16 @@
     than 500), and you plan to deploy updates to the machines in parallel, this might
     be the right way to go about it. As we discussed before, either agent-full and
     agent-less systems have their pros and cons.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
 - en: In the next section, we will discuss Secure Shell (SSH), which is a core part
     of Ansible and the Ansible philosophy.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
 - en: Secure Shell
+  id: totrans-64
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -381,28 +464,34 @@
     daemon is today the standard for UNIX system administration, after having replaced
     the unencrypted telnet. The most frequently used implementation of the SSH protocol
     is OpenSSH.'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
 - en: In the last few years, Microsoft has implemented OpenSSH for Windows. I think
     that this proves the *de facto* standard situation that SSH lives into.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
 - en: Since Ansible performs SSH connections and commands in the same way any other
     SSH client would do, no specific configuration has been applied to the OpenSSH
     server.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
 - en: To speed up default SSH connections, you can always enable `ControlPersist`
     and the pipeline mode, which makes Ansible faster and more secure.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
 - en: Why Ansible?
+  id: totrans-69
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: We will try and compare Ansible with Puppet and Chef during the course of this
     book, since many people have good experience those tools. We will also point out
     specifically how Ansible would solve a problem compared to Chef or Puppet.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
 - en: Ansible, as well as Puppet and Chef, are declarative in nature, and are expected
@@ -411,6 +500,7 @@
     it automatically on restart, you would need to write a declarative block or module;
     every time the tool runs on the machine, it will aspire to obtain the state defined
     in your **playbook** (Ansible), **cookbook** (Chef), or **manifest** (Puppet).
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
 - en: The difference in the toolset is minimal at a simple level, but as more situations
@@ -421,6 +511,7 @@
     the power of Chef, you will need a good Ruby team. Your team needs to be good
     at the Ruby language to customize both Puppet and Chef, and there will be a bigger
     learning curve with both of the tools.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
 - en: With Ansible, the case is different. It uses the simplicity of Chef when it
@@ -431,9 +522,11 @@
     playbook manuals to execute instructions from whenever they face issues. Ansible
     mimics that behavior. Do not be surprised if you end up having your project manager
     change the code in Ansible and check it into Git because of its simplicity!
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
 - en: Installing Ansible
+  id: totrans-74
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -444,13 +537,16 @@
     macOS and Linux. Ansible doesn't require any databases, and doesn't need to have
     any daemons running. This makes it easier to maintain Ansible versions and upgrade
     without any breaks.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
 - en: We'd like to call the machine where we will install Ansible our Ansible workstation.
     Some people also refer to it as the command center.
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
 - en: Installing Ansible using the system's package manager
+  id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -458,86 +554,117 @@
     my opinion, this is the preferred option if your system's package manager ships
     at least Ansible 2.0\. We will look into installing Ansible via **Yum**, **Apt**,
     **Homebrew**, and **pip**.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
 - en: Installing via Yum
+  id: totrans-79
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'If you are running a Fedora system, you can install Ansible directly, since
     from Fedora 22, Ansible 2.0+ is available in the official repositories. You can
     install it as follows:'
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE0]'
+  id: totrans-81
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'For RHEL and RHEL-based (CentOS, Scientific Linux, and Unbreakable Linux) systems,
     versions 6 and 7 have Ansible 2.0+ available in the EPEL repository, so you should
     ensure that you have the EPEL repository enabled before installing Ansible as
     follows:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE1]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: On RHEL 6, you have to run the `$ sudo rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm` command
     to install EPEL, while on RHEL 7, `$ sudo yum install epel-release` is enough.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
 - en: Installing via Apt
+  id: totrans-85
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'Ansible is available for Ubuntu and Debian. To install Ansible on those operating
     systems, use the following command:'
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE2]'
+  id: totrans-87
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: Installing via Homebrew
+  id: totrans-88
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'You can install Ansible on Mac OS X using Homebrew, as follows:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE3]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Installing via pip
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'You can install Ansible via pip. If you don''t have pip installed on your system,
     install it. You can use pip to install Ansible on Windows too, using the following
     command line:'
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE4]'
+  id: totrans-93
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'You can now install Ansible using `pip`, as follows:'
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE5]'
+  id: totrans-95
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'Once you''re done installing Ansible, run `ansible --version` to verify that
     it has been installed:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE6]'
+  id: totrans-97
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'You will get many lines as output from the preceding command line, as follows:'
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE7]'
+  id: totrans-99
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: Installing Ansible from source
+  id: totrans-100
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -547,57 +674,75 @@
     in Python where you can install packages without interfering with the system''s
     Python packages. The command and the resulting output for the repository are as
     follows:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE8]'
+  id: totrans-102
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Ansible needs a couple of Python packages, which you can install using `pip`.
     If you don''t have pip installed on your system, install it using the following
     command. If you don''t have `easy_install` installed, you can install it using
     Python''s `setuptools` package on Red Hat systems, or by using Brew on the macOS:'
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE9]'
+  id: totrans-104
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'Once you have installed `pip`, install the `paramiko`, `PyYAML`, `jinja2`,
     and `httplib2` packages using the following command lines:'
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE10]'
+  id: totrans-106
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: By default, Ansible will be running against the development branch. You might
     want to check out the latest stable branch. Check what the latest stable version
     is using the following `$ git branch -a` command.
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
 - en: Copy the latest version you want to use.
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
 - en: 'Version 2.0.2 was the latest version available at the time of writing. Check
     the latest version using the following command lines:'
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE11]'
+  id: totrans-110
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: You now have a working setup of Ansible ready. One of the benefits of running
     Ansible from source is that you can enjoy the new features immediately, without
     waiting for your package manager to make them available for you.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
 - en: Creating a test environment with Vagrant
+  id: totrans-112
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: To be able to learn Ansible, we will need to make quite a few playbooks and
     run them.
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
 - en: Doing this directly on your computer will be very risky. For this reason, I
     would suggest using virtual machines.
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
 - en: It's possible to create a test environment with cloud providers in a few seconds,
@@ -608,69 +753,92 @@
     ecosystem these are known as *Providers*) such as Hyper-V, VirtualBox, Docker,
     VMWare, and libvirt. This allows you to use the same syntax no matter what operating
     system or environment you are in.
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
 - en: 'First we will install `vagrant`. On Fedora, it will be enough to run the following
     code:'
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE12]'
+  id: totrans-117
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'On Red Hat/CentOS/Scientific Linux/Unbreakable Linux, we will need to install
     `libvirt` first, enable it, and then install `vagrant` from the Hashicorp website:'
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE13]'
+  id: totrans-119
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'If you use Ubuntu or Debian, you can install it using the following code:'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE14]'
+  id: totrans-121
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'For the following examples, I''ll be virtualizing CentOS 7 machines. This is
     for multiple reasons; the main ones are as follows:'
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
 - en: CentOS is free and 100% compatible with Red Hat, Scientific Linux, and Unbreakable
     Linux.
+  id: totrans-123
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Many companies use Red Hat/CentOS/Scientific Linux/Unbreakable Linux for their
     servers.
+  id: totrans-124
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: These distributions are the only ones with SELinux support built in, and, as
     we have seen earlier, SELinux can help you make your environment much more secure.
+  id: totrans-125
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'To test that everything went well, we can run the following commands:'
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE15]'
+  id: totrans-127
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'If everything went well, you should expect an output ending with something
     like this:'
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE16]'
+  id: totrans-129
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: So, you can now execute `vagrant ssh`, and you will find yourself in the machine
     we just created.
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
 - en: There will be a `Vagrant` file in the current folder. In this file, you can
     create the directives with `vagrant init` to create the virtual environment.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
 - en: Version control systems
+  id: totrans-132
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -680,48 +848,59 @@
     code, which is the code that composes your applications, websites, and so on.
     This distinction is needed for clarity, but in the end, both types are a bunch
     of text files that the software will be able to read and interpret.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
 - en: 'For this reason, a version control system will help you a lot. Its main advantages
     are as follows:'
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
 - en: The ability to have multiple people working simultaneously on the same project.
+  id: totrans-135
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The ability to perform code-reviews in a simple way.
+  id: totrans-136
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The ability to have multiple branches for multiple environments (that is, dev,
     test, QA, staging, and production).
+  id: totrans-137
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The ability to track a change so that we know when it was introduced, and who
     introduced it. This makes it easier to understand why that piece of code is there,
     months or years later.
+  id: totrans-138
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: These advantages are provided to you by the majority of version control systems
     out there.
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
 - en: 'Version control systems can be divided into three major groups, based on the
     three different models that they can implement:'
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
 - en: Local data model
+  id: totrans-141
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Client-server model
+  id: totrans-142
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Distributed model
+  id: totrans-143
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -729,6 +908,7 @@
     and is used for very specific use cases. This model requires all users to share
     the same filesystem. Famous examples of it are the **Revision Control System**
     (**RCS**) and **Source Code Control System** (**SCCS**).
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
 - en: The second category, the client-server model, arrived later (circa 1990) and
@@ -738,6 +918,7 @@
     developers to use local files and synchronize them with a centralized server.
     Famous examples of this approach are Apache **Subversion** (**SVN**), and **Concurrent
     Versions System** (**CVS**).
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
 - en: The third category, the distributed model, arrived at the beginning of the twenty-first
@@ -750,18 +931,22 @@
     benefits of being able to work completely offline as well as the ability to merge
     changes between peers without passing by the centralized server. Examples of this
     model are BitKeeper (proprietary software), Git, GNU Bazaar, and Mercurial.
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
 - en: 'There are some additional advantages that will be provided by only the distributed
     model, such as the following:'
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
 - en: The possibility of making commits, browsing history, and performing any other
     action even if the server is not available.
+  id: totrans-148
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Easier management of multiple branches for different environments.
+  id: totrans-149
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -769,23 +954,28 @@
     that retains and manages your infrastructure code is frequently kept in the infrastructure
     code itself. This is a recursive situation that can create problems. A distributed
     version control system will prevent this problem.
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
 - en: As for the simplicity of managing multiple branches, even if this is not a hard
     rule, often distributed version control systems have much better merge handling
     than the other kinds of version control systems.
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
 - en: Using Ansible with Git
+  id: totrans-152
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: For the reasons that we have just seen, and because of its huge popularity,
     I suggest always using Git for your Ansible repositories.
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
 - en: 'There are a few suggestions that I always provide to the people I talk to,
     so that Ansible gets the best out of Git:'
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
 - en: '**Create environment branches**: Creating environment branches, such as dev,
@@ -795,6 +985,7 @@
     new changes directly to the master. If you use a master for a production environment,
     people can inadvertently push changes in the production environment when they
     wanted to push them in a development environment.'
+  id: totrans-155
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -802,6 +993,7 @@
     environment branches is the possibility of destroying and recreating any environment
     from scratch at any given moment. This is only possible if your environment branches
     are in a stable (not broken) state.'
+  id: totrans-156
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -809,6 +1001,7 @@
     features (such as a refactor or some other big changes) will allow you to keep
     your day-to-day operations while your new feature is in the Git repository (so
     you''ll not lose track of who did what and when they did it).'
+  id: totrans-157
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -818,6 +1011,7 @@
     on them far too often. Don''t waste your time – push often. Also, by pushing often,
     you''ll detect merge conflicts sooner, and conflicts are always easier to handle
     when they are detected early, instead of waiting for multiple changes.'
+  id: totrans-158
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -830,6 +1024,7 @@
     deployment. The production infrastructure broke and they lost a lot of time figuring
     out how it was possible that such a small change (the one the person who made
     the deployment was aware of) created such a big mess.'
+  id: totrans-159
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -840,6 +1035,7 @@
     and the tools for finding something that is broken are not always as good as you
     would imagine. The infrastructure as a code paradigm is new, and tools are not
     yet as good as the ones for the application code.'
+  id: totrans-160
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -851,10 +1047,12 @@
     code example, it is vital because you''ll be tempted to put a huge number of binary
     blobs in it, since very often it is easier to put a binary blob in the repository
     than to find a cleaner (and better) solution.'
+  id: totrans-161
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Summary
+  id: totrans-162
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -863,11 +1061,13 @@
     have also seen how to install Ansible and how to create a Vagrant virtual machine.
     In the end, we analyzed the version control systems and spoke about the advantages
     Git brings to Ansible, if used properly.
+  id: totrans-163
   prefs: []
   type: TYPE_NORMAL
 - en: In the next chapter, we will start looking at the infrastructure code that we
     mentioned in this chapter, without explaining exactly what it is and how to write
     it. We'll also see how to automate simple operations that you probably perform
     every single day, such as managing users, managing files, and file content.
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL

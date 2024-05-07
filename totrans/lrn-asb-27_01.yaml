@@ -1,21 +1,31 @@
 - en: 'Section 1: Creating a Web Server Using Ansible'
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第一节：使用 Ansible 创建 Web 服务器
 - en: This section will help you create simple playbooks that will allow you to automate
     some simple tasks that you already perform on a daily basis.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节将帮助您创建简单的 Playbooks，使您能够自动化一些您每天已经执行的简单任务。
 - en: 'This section contains the following chapters:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节包括以下章节：
 - en: '[Chapter 1](e86ebe8b-5935-4297-b86a-4394704a144b.xhtml), *Getting Started with
     Ansible*'
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第一章](e86ebe8b-5935-4297-b86a-4394704a144b.xhtml)，*开始使用 Ansible*'
 - en: '[Chapter 2](05b28bdf-0c30-48a7-a385-cfe1361de545.xhtml), *Automating Simple
     Tasks*'
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第二章](05b28bdf-0c30-48a7-a385-cfe1361de545.xhtml)，*自动化简单任务*'
