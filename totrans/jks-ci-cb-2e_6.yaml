@@ -4312,32 +4312,41 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **Latest Test Result** 链接。您将看到一个失败和一个成功的作业，如下图所示：![如何操作...](img/0082OS_06_24.jpg)
 - en: You will find the full details of the failure at `http://localhost:8080/job/ch6.remote.soapui/ws/target/surefire-reports/PingTestSoapBinding_TestSuite-ping_TestCase-ping-0-FAILED.txt`.
   id: totrans-652
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将在 `http://localhost:8080/job/ch6.remote.soapui/ws/target/surefire-reports/PingTestSoapBinding_TestSuite-ping_TestCase-ping-0-FAILED.txt`
+    找到失败的完整细节。
 - en: How it works...
   id: totrans-653
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The Maven project uses the maven-soapui `plugin` ([http://www.soapui.org/Test-Automation/maven-2x.html](http://www.soapui.org/Test-Automation/maven-2x.html)).
     As the plugin is not available in one of the main Maven repositories, you had
     to configure it to use the `eviwarePluginRepository` repository.
   id: totrans-654
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 项目使用了 maven-soapui `plugin` ([http://www.soapui.org/Test-Automation/maven-2x.html](http://www.soapui.org/Test-Automation/maven-2x.html))。由于插件在主要的
+    Maven 仓库之一中不可用，您必须配置它以使用 `eviwarePluginRepository` 仓库。
 - en: The SoapUI plugin was configured to pick up its plan from the project file `src/test/soapui/SakaiSoapTests-soapui-project.xml`
     and save the results relative to the `project.build.directory`, which is the root
     of the workspace.
   id: totrans-655
   prefs: []
   type: TYPE_NORMAL
+  zh: SoapUI 插件被配置为从项目文件 `src/test/soapui/SakaiSoapTests-soapui-project.xml` 中获取其计划，并将结果保存到
+    `project.build.directory` 相对于工作空间的根目录。
 - en: 'The options set were:'
   id: totrans-656
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置的选项是：
 - en: '[PRE47]'
   id: totrans-657
   prefs: []
@@ -4351,42 +4360,53 @@
   id: totrans-658
   prefs: []
   type: TYPE_NORMAL
+  zh: '`junitReport` 设置为 `true` 告诉插件创建一个 JUnit 报告。`exportwAll` 设置为 `true` 意味着所有测试的结果都会被导出，而不仅仅是错误。这个选项在调试阶段很有用，除非您有严重的磁盘空间限制，否则应该设置为
+    `on`。`printReport` 设置为 `true` 确保 Maven 发送一个小的测试报告到控制台，输出类似于：'
 - en: '**SoapUI 4.0.1 TestCaseRunner Summary**'
   id: totrans-659
   prefs: []
   type: TYPE_NORMAL
+  zh: '**SoapUI 4.0.1 TestCaseRunner 概要**'
 - en: '**-----------------------------**'
   id: totrans-660
   prefs: []
   type: TYPE_NORMAL
+  zh: '**-----------------------------**'
 - en: '**Total TestSuites: 1**'
   id: totrans-661
   prefs: []
   type: TYPE_NORMAL
+  zh: '**总测试套件数：1**'
 - en: '**Total TestCases: 2 (1 failed)**'
   id: totrans-662
   prefs: []
   type: TYPE_NORMAL
+  zh: '**总测试用例数：2（1 个失败）**'
 - en: '**Total Request Assertions: 1**'
   id: totrans-663
   prefs: []
   type: TYPE_NORMAL
+  zh: '**总请求断言数：1**'
 - en: '**Total Failed Assertions: 1**'
   id: totrans-664
   prefs: []
   type: TYPE_NORMAL
+  zh: '**总失败断言数：1**'
 - en: '**Total Exported Results: 1**'
   id: totrans-665
   prefs: []
   type: TYPE_NORMAL
+  zh: '**总导出结果数：1**'
 - en: '**[ERROR] java.lang.Exception: Not Contains in [ping] failed;**'
   id: totrans-666
   prefs: []
   type: TYPE_NORMAL
+  zh: '**[ERROR] java.lang.Exception: Not Contains in [ping] failed;**'
 - en: '**[Response contains token [Insecure answer =>?]]**'
   id: totrans-667
   prefs: []
   type: TYPE_NORMAL
+  zh: '**[响应包含令牌 [不安全的答案 =>？]]**'
 - en: The ping test case failed as the assertion failed. The pong test case succeeded
     as the service existed. Therefore, even without assertions, using the auto generation
     feature of SoapUI allows you to quickly generate a scaffold that ensures that
@@ -4394,17 +4414,21 @@
   id: totrans-668
   prefs: []
   type: TYPE_NORMAL
+  zh: ping 测试用例失败，因为断言失败。pong 测试用例成功，因为服务存在。因此，即使没有断言，使用 SoapUI 的自动生成功能也可以快速生成一个框架，确保所有服务都在运行。随着项目的发展，您始终可以稍后添加断言。
 - en: Creation of the Jenkins job is straightforward. The xUnit plugin allows you
     to pull in many types of unit test including the JUnit ones created from the Maven
     project. The location is set in step 10 as `**/target/surefire-reports/TEST-PingTestSoapBinding_TestSuite.xml`.
   id: totrans-669
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建 Jenkins 任务很简单。xUnit 插件允许您导入许多类型的单元测试，包括从 Maven 项目创建的 JUnit 测试。在第 10 步中设置位置为
+    `**/target/surefire-reports/TEST-PingTestSoapBinding_TestSuite.xml`。
 - en: Tip
   id: totrans-670
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: The custom reports option is yet another way of pulling in your own custom data
     and displaying its historic trends within Jenkins. It works by parsing the XML
     results found by the plugin with a custom style sheet. This gives you a great
@@ -4412,16 +4436,19 @@
   id: totrans-671
   prefs: []
   type: TYPE_NORMAL
+  zh: 自定义报告选项是另一种将自定义数据引入并显示其在 Jenkins 中的历史趋势的方法。它通过使用自定义样式表解析插件找到的 XML 结果来实现。这使您可以灵活地添加自己的定制结果。
 - en: There's more...
   id: totrans-672
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The ping service is dangerous as it does not filter input, and the input is
     reflected back through the output.
   id: totrans-673
   prefs: []
   type: TYPE_NORMAL
+  zh: ping 服务很危险，因为它不过滤输入，输入通过输出反射回来。
 - en: Many web applications use web services to load content into a page, to avoid
     reloading the full page. A typical example is when you type in a search term and
     alternative suggestions are shown on the fly. With a little social engineering
