@@ -1459,6 +1459,7 @@
   id: totrans-232
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们用以下命令运行这个脚本：
 - en: '[PRE69]'
   id: totrans-233
   prefs: []
@@ -1468,6 +1469,7 @@
   id: totrans-234
   prefs: []
   type: TYPE_NORMAL
+  zh: 这导致以下结果：
 - en: '[PRE70]'
   id: totrans-235
   prefs: []
@@ -1477,11 +1479,13 @@
   id: totrans-236
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们有了一个网页服务器，让我们发布一个小型的、单页的、静态的网站。
 - en: Publishing a website
   id: totrans-237
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 发布网站
 - en: 'Since our website will be a simple, single-page website, we can easily create
     it and publish it using a single Ansible task. To make this page a little bit
     more interesting, we will create it from a template that will be populated by
@@ -1490,6 +1494,8 @@
   id: totrans-238
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于我们的网站将是一个简单的单页网站，我们可以很容易地创建它，并使用一个 Ansible 任务发布它。为了使这个页面稍微有趣些，我们将使用一个模板创建它，这个模板将由
+    Ansible 填充一些关于机器的数据。发布它的脚本将被称为 `deploy_website.yaml`，并且将具有以下内容：
 - en: '[PRE71]'
   id: totrans-239
   prefs: []
@@ -1499,6 +1505,7 @@
   id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从一个简单的模板开始，我们将其称为 `index.html.j2`：
 - en: '[PRE72]'
   id: totrans-241
   prefs: []
@@ -1508,6 +1515,7 @@
   id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们可以通过运行以下命令来测试我们的网站部署：
 - en: '[PRE73]'
   id: totrans-243
   prefs: []
@@ -1517,6 +1525,7 @@
   id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该收到以下输出：
 - en: '[PRE74]'
   id: totrans-245
   prefs: []
@@ -1527,11 +1536,13 @@
   id: totrans-246
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您现在在浏览器中打开 IP/FQDN 测试机，您会找到 **Hello World!** 页面。
 - en: Jinja2 templates
   id: totrans-247
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jinja2 模板
 - en: '**Jinja2** is a widely-used and fully-featured template engine for Python.
     Let''s look at some syntax that will help us with Ansible. This paragraph is not
     a replacement for the official documentation, but its goal is to teach you some
@@ -1539,11 +1550,14 @@
   id: totrans-248
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Jinja2** 是一个广泛使用的、功能齐全的 Python 模板引擎。让我们看一些语法，这些语法将帮助我们使用 Ansible。本段不是官方文档的替代品，但其目标是教会您在使用
+    Ansible 时会非常有用的一些组件。'
 - en: Variables
   id: totrans-249
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 变量
 - en: As we have seen, we can print variable content simply by using the `{{ VARIABLE_NAME
     }}` syntax. If we want to print just an element of an array, we can use `{{ ARRAY_NAME['KEY']
     }}`, and if we want to print a property of an object, we can use `{{ OBJECT_NAME.PROPERTY_NAME
@@ -1551,10 +1565,13 @@
   id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们所见，我们可以通过使用 `{{ VARIABLE_NAME }}` 语法简单地打印变量内容。如果我们想要打印数组的一个元素，我们可以使用 `{{
+    ARRAY_NAME['KEY'] }}`，如果我们想要打印对象的一个属性，我们可以使用 `{{ OBJECT_NAME.PROPERTY_NAME }}`。
 - en: 'So, we can improve our previous static page in the following way:'
   id: totrans-251
   prefs: []
   type: TYPE_NORMAL
+  zh: 因此，我们可以通过以下方式改进我们之前的静态页面：
 - en: '[PRE75]'
   id: totrans-252
   prefs: []
@@ -1565,6 +1582,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 过滤器
 - en: From time to time, we may want to change the style of a string a little bit,
     without writing specific code for it; for example, we may want to capitalize some
     text. To do so, we can use one of Jinja2's filters, such as `{{ VARIABLE_NAME
@@ -1573,17 +1591,22 @@
   id: totrans-254
   prefs: []
   type: TYPE_NORMAL
+  zh: 有时，我们可能想稍微改变字符串的样式，而不需要为此编写特定的代码；例如，我们可能想要将一些文本大写。为此，我们可以使用 Jinja2 的一个过滤器，比如
+    `{{ VARIABLE_NAME | capitalize }}`。Jinja2 有许多可用的过滤器，您可以在 [http://jinja.pocoo.org/docs/dev/templates/#builtin-filters](http://jinja.pocoo.org/docs/dev/templates/#builtin-filters)
+    找到完整的列表。
 - en: Conditionals
   id: totrans-255
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 条件语句
 - en: 'One thing you may often find useful in a template engine is the possibility
     of printing different strings depending on the content (or existence) of a string.
     So, we can improve our static web page in the following way:'
   id: totrans-256
   prefs: []
   type: TYPE_NORMAL
+  zh: 在模板引擎中，您可能经常发现有条件地打印不同的字符串的可能性是有用的，这取决于字符串的内容（或存在）。因此，我们可以通过以下方式改进我们的静态网页：
 - en: '[PRE76]'
   id: totrans-257
   prefs: []
@@ -1595,14 +1618,17 @@
   id: totrans-258
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如您所看到的，我们已经添加了打印 `eth0` 连接的主 IPv4 地址的能力，如果连接是 `active` 的话。通过条件语句，我们还可以使用测试。
 - en: For a full list of builtin tests, please refer to [http://jinja.pocoo.org/docs/dev/templates/#builtin-tests](http://jinja.pocoo.org/docs/dev/templates/#builtin-tests).
   id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关内置测试的完整列表，请参阅 [http://jinja.pocoo.org/docs/dev/templates/#builtin-tests](http://jinja.pocoo.org/docs/dev/templates/#builtin-tests)。
 - en: 'So, to obtain the same result, we could also have written the following:'
   id: totrans-260
   prefs: []
   type: TYPE_NORMAL
+  zh: 因此，为了获得相同的结果，我们也可以写成以下形式：
 - en: '[PRE77]'
   id: totrans-261
   prefs: []
@@ -1613,17 +1639,20 @@
   id: totrans-262
   prefs: []
   type: TYPE_NORMAL
+  zh: 有很多不同的测试可以帮助您创建易于阅读、有效的模板。
 - en: Cycles
   id: totrans-263
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 循环
 - en: 'The `jinja2` template system also offers the capability to create cycles. Let''s
     add a feature to our page that will print the main IPv4 network address for each
     device, instead of only `eth0`. We will then have the following code:'
   id: totrans-264
   prefs: []
   type: TYPE_NORMAL
+  zh: '`jinja2` 模板系统还提供了创建循环的功能。让我们为我们的页面添加一个功能，它将打印每个设备的主 IPv4 网络地址，而不仅仅是 `eth0`。然后我们将有以下代码：'
 - en: '[PRE78]'
   id: totrans-265
   prefs: []
