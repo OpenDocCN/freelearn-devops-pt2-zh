@@ -1159,6 +1159,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**使用功能分支**：为特定的长期开发功能（如重构或其他大的更改）使用不同的分支，这样您就可以在Git存储库中保持日常运营，而您的新功能正在进行中（这样您就不会失去对谁做了什么以及何时做了什么的追踪）。'
 - en: '**Push often**: I always suggest that people *push commits* as often as possible.
     This will make Git work as both a version control system and a backup system.
     I have seen laptops broken, lost, or stolen with days or weeks of un-pushed work
@@ -1169,6 +1170,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**经常推送**：我总是建议人们尽可能经常*推送提交*。这将使Git成为版本控制系统和备份系统。我经常看到笔记本电脑损坏、丢失或被盗，其中有数天或数周的未推送工作。不要浪费你的时间——经常推送。而且，经常推送还会更早地检测到合并冲突，合并冲突总是在早期检测到时更容易处理，而不是等待多个更改。'
 - en: '**Always deploy after you have made a change**: I have seen times when a developer
     has created a change in the infrastructure code, tested in the dev and test environments,
     pushed to the production branch, and then went to have lunch before deploying
@@ -1182,6 +1184,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**在进行更改后始终部署**：我见过开发人员在基础架构代码中进行更改后，在开发和测试环境中进行了测试，推送到生产分支，然后去吃午饭的情况。他的午餐并不愉快。他的一位同事无意中将代码部署到生产环境（他当时试图部署他所做的小改动），而且没有准备好处理其他开发人员的部署。生产基础架构崩溃了，他们花了很多时间弄清楚一个小小的改动（部署者知道的那个）怎么可能造成如此大的混乱。'
 - en: '**Choose multiple small changes rather than a few huge changes**: Making small
     changes, whenever possible, will make debugging easier. Debugging an infrastructure
     is not very easy. There is no compiler that will allow you to see "obvious problems"
@@ -1193,6 +1196,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**选择多个小的更改而不是几个大的更改**：尽可能进行小的更改将使调试更容易。调试基础架构并不容易。没有编译器可以让您看到“明显的问题”（即使Ansible执行您的代码的语法检查，也不会执行其他测试），而且查找故障的工具并不总是像您想象的那样好。基础架构即代码范例是新的，工具还不像应用程序代码的工具那样好。'
 - en: '**Avoid binary files as much as possible**: I always suggest keeping your binaries
     outside your Git repository, whether it is an application code repository or an
     infrastructure code repository. In the application code example, I think it is
@@ -1205,11 +1209,13 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**尽量避免二进制文件**：我总是建议将二进制文件保存在Git存储库之外，无论是应用程序代码存储库还是基础架构代码存储库。在应用程序代码示例中，我认为保持存储库轻量化很重要（Git以及大多数版本控制系统对二进制大对象的性能表现不佳），而在基础架构代码示例中，这是至关重要的，因为你会受到诱惑，想要在其中放入大量二进制对象，因为往往将二进制对象放入存储库比找到更干净（和更好）的解决方案更容易。'
 - en: Summary
   id: totrans-162
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: In this chapter, we have seen what IT automation is, its advantages and disadvantages,
     what kind of tools you can find, and how Ansible fits into this big picture. We
     have also seen how to install Ansible and how to create a Vagrant virtual machine.
