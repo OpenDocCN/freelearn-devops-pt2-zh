@@ -1,1 +1,0 @@
-["```\nexample(plot)\nexample(hist)\n\nx <- rchisq(100, df = 4)\nhist(x, freq = FALSE, ylim = c(0, 0.2))\ncurve(dchisq(x, df = 4), col = 2, lty = 2, lwd = 2, add = TRUE)\n\n```", "```\nsudo apt-get install r-cran-rgl\n\n```", "```\nlibrary(rgl)\nexample(plot3d)\nexample(ellipse3d)\nexample(surface3d)\nexample(persp3d)\n\n```"]
