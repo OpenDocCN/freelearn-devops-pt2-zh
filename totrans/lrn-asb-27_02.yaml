@@ -3,6 +3,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible 入门
 - en: '**Information and communications technology** (**ICT**) is often described
     as a fast-growing industry. I think that the best quality of the ICT industry
     is not related to its ability to grow at a super-high speed, but is related to
@@ -11,6 +12,7 @@
   id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: '**信息和通信技术**（**ICT**）通常被描述为一个快速增长的行业。我认为ICT行业最好的特质与其能够以超高速度增长无关，而是与其能够以惊人的速度革新自身和世界其他部分的能力有关。'
 - en: Every 10 to 15 years there are major shifts in how this industry works, and
     every shift solves problems that were very hard to manage up to that point, creating
     new challenges. Also, at every major shift, many of the best practices of the
@@ -23,76 +25,91 @@
   id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 每隔 10 到 15 年，该行业都会发生重大转变，每次转变都会解决之前非常难以管理的问题，从而带来新的挑战。此外，在每次重大转变中，许多先前迭代的最佳实践被归类为反模式，并创建了新的最佳实践。虽然这些变化可能看起来无法预测，但这并不总是正确的。显然，不可能准确地知道将发生什么变化以及何时会发生，但通常观察拥有大量服务器和许多代码行的公司可以揭示下一步的走向。
 - en: The current shift has already happened in big companies such as Amazon Web Services
     (AWS), Facebook, and Google. It is the implementation of IT automation systems
     to create and manage servers.
   id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 当前的转变已经在亚马逊网络服务(Amazon Web Services, AWS)、Facebook 和谷歌等大公司中发生。这是实施IT自动化系统来创建和管理服务器。
 - en: 'In this chapter we will cover the following topics:'
   id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下主题：
 - en: IT automation
   id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: IT自动化
 - en: What is Ansible?
   id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 什么是 Ansible？
 - en: The secure shell
   id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安全外壳
 - en: Installing Ansible
   id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 Ansible
 - en: Creating a test environment with Vagrant
   id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Vagrant 创建测试环境
 - en: Version control systems
   id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 版本控制系统
 - en: Using Ansible with Git
   id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Ansible 与 Git
 - en: Technical requirements
   id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 技术要求
 - en: To support the learning of Ansible, I suggest having a machine where you can
     install Vagrant. Using Vagrant will allow you to try many operations, even destructive
     ones, without fear.
   id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了支持学习 Ansible，建议拥有一台可以安装 Vagrant 的机器。使用 Vagrant 将允许您尝试许多操作，甚至是破坏性操作，而不必担心。
 - en: Additionally, AWS and Azure accounts are suggested, since some examples will
     be on those platforms.
   id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，建议拥有 AWS 和 Azure 帐户，因为其中一些示例将在这些平台上展示。
 - en: All examples in this book are available in the GitHub repository at [https://github.com/PacktPublishing/-Learning-Ansible-2.X-Third-Edition/](https://github.com/PacktPublishing/-Learning-Ansible-2.X-Third-Edition/).
   id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书中的所有示例都可以在 GitHub 仓库中找到：[https://github.com/PacktPublishing/-Learning-Ansible-2.X-Third-Edition/](https://github.com/PacktPublishing/-Learning-Ansible-2.X-Third-Edition/)。
 - en: IT automation
   id: totrans-16
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: IT自动化
 - en: '**IT automation** is – in its broader sense – the processes and software that
     help with the management of the IT infrastructure (servers, networking, and storage).
     In the current shift, we are supporting for a huge implementation of such processes
@@ -100,6 +117,7 @@
   id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: '**IT自动化**在更广泛的意义上是指帮助管理IT基础设施（服务器、网络和存储）的过程和软件。在当前的转变中，我们正在支持大规模实施这些过程和软件。'
 - en: At the beginning of IT history, there were very few servers, and a lot of people
     were needed to make them work properly, usually more than one person for each
     machine. Over the years, servers became more reliable and easier to manage, so
@@ -112,6 +130,7 @@
   id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 在IT历史的早期阶段，服务器数量很少，需要很多人来确保它们正常工作，通常每台机器需要多于一个人。随着时间的推移，服务器变得更可靠、更容易管理，因此可以有一个系统管理员管理多个服务器。在那个时期，管理员手动安装软件，手动升级软件，并手动更改配置文件。这显然是一个非常耗时且容易出错的过程，因此许多管理员开始实施脚本和其他手段来简化他们的生活。这些脚本通常非常复杂，而且不太容易扩展。
 - en: 'In the early years of this century, data centers started to grow a lot due
     to companies'' needs. Virtualization helped in keeping prices low, and the fact
     that many of these services were web services meant that many servers were very
@@ -243,6 +262,9 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**启用 SELinux**：SELinux 是一个安全内核模块，在所有 Linux 发行版上都可用（默认情况下安装在 Fedora、Red Hat
+    Enterprise Linux、CentOS、Scientific Linux 和 Unbreakable Linux 上）。它允许您以非常细粒度的方式限制用户和进程权限。我建议使用
+    SELinux 而不是其他类似模块（如 AppArmor），因为它能够处理更多情况和权限。SELinux 将防止大量损坏，因为如果配置正确，它将阻止执行许多危险命令。'
 - en: '**Run the playbooks from a limited account**: Even though user and privilege
     escalation schemes have been in Unix code for more than 40 years, it seems as
     if not many companies use them. Using a limited user for all your playbooks, and
@@ -253,6 +275,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**以有限权限账户运行 playbook**：尽管用户和特权升级方案在 Unix 代码中已经存在了 40 多年，但似乎并不多有公司使用它们。对于所有你的
+    playbook 使用有限用户，并仅在需要更高权限的命令时提升权限，这样做将有助于防止在尝试清理应用程序临时文件时意外清除机器。'
 - en: '**Use horizontal privilege escalation**: The `sudo` command is a well known,
     but is often used in its more dangerous form. The `sudo` command supports the
     `-u` parameter that will allow you to specify a user that you want to impersonate.
@@ -263,6 +287,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**使用水平特权升级**：`sudo` 命令是众所周知的，但通常以更危险的形式使用。`sudo` 命令支持 `-u` 参数，允许您指定要模拟的用户。如果您必须更改属于另一个用户的文件，请不要升级到
+    `root`，而是升级到该用户。在 Ansible 中，您可以使用 `become_user` 参数来实现这一点。'
 - en: '**When possible, don''t run a playbook on all your machines at the same time**:
     Staged deployments can help you detect a problem before it''s too late. There
     are many problems that are not detectable in dev, test, staging, and QA environments.
@@ -276,6 +302,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**尽可能不要同时在所有机器上运行 playbook**：分阶段的部署可以帮助您在为时已晚之前检测到问题。许多问题在开发、测试、暂存和 QA 环境中无法检测到。其中大多数与在这些非生产环境中无法正确模拟的负载相关。您刚刚添加到
+    Apache HTTPd 或 MySQL 服务器的新配置可能从语法上来说是完全正确的，但对您的生产负载下的特定应用程序来说可能是灾难性的。分阶段的部署将允许您在实际负载下测试您的新配置，而不会在出现问题时造成停机。'
 - en: '**Avoid guessing commands and modifiers**: A lot of system administrators will
     try to remember the right parameter, and try to guess if they don''t remember
     it exactly. I''ve done it too, a lot of times, but this is very risky. Checking
@@ -288,6 +316,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**避免猜测命令和修改器**：许多系统管理员会尝试记住正确的参数，并在记不清楚时尝试猜测。我也经常这样做，但这是非常危险的。查看手册页或在线文档通常不会花费您两分钟，而且通常通过阅读手册，您会发现您不知道的有趣笔记。猜测修改器是危险的，因为您可能会被非标准的修改器所愚弄（即
+    `-v` 不是 `grep` 的详细模式，而 `-h` 不是 MySQL CLI 的 `help` 命令）。'
 - en: '**Avoid error-prone commands**: Not all commands have been created equally.
     Some commands are (way) more dangerous than others. If you can assume a `cat`-based
     command safe, you have to assume that a `dd`-based command is dangerous, since
@@ -299,6 +329,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**避免容易出错的命令**：并非所有命令都是平等创建的。一些命令（远远）比其他命令更危险。如果你可以假设一个基于 `cat` 的命令是安全的，那么你必须假设一个基于
+    `dd` 的命令是危险的，因为它执行文件和卷的复制和转换。我见过有人在脚本中使用 `dd` 来将DOS文件转换为Unix（而不是 `dos2unix`）等许多其他非常危险的例子。请避免这样的命令，因为如果出了问题，可能会导致巨大的灾难。'
 - en: '**Avoid unnecessary modifiers**: If you need to delete a simple file, use `rm
     ${file}`, not `rm -rf ${file}`. The latter is often performed by users that have
     learned *to be sure, always use* `rm -rf`, because at some time in their past,
@@ -308,6 +340,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**避免不必要的修改器**：如果你需要删除一个简单的文件，使用 `rm ${file}`，而不是 `rm -rf ${file}`。后者经常被那些已经学会*确保安全，总是使用*
+    `rm -rf` 的用户执行，因为在他们过去的某个时候，他们曾经需要删除一个文件夹。如果 `${file}` 变量设置错误，这将防止你删除整个文件夹。'
 - en: '**Always check what could happen if a variable is not set**: If you want to
     delete the contents of a folder and you use the `rm -rf ${folder}/*` command,
     you are looking for trouble. In case the `${folder}` variable is not set for some
@@ -325,6 +359,9 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**始终检查变量未设置时可能发生的情况**：如果你想删除文件夹的内容，并且你使用 `rm -rf ${folder}/*` 命令，那你就是在找麻烦。如果某种原因导致
+    `${folder}` 变量未设置，shell 将读取一个 `rm -rf /*` 命令，这是致命的（考虑到 `rm -rf /` 命令在大多数当前操作系统上不起作用，因为它需要一个
+    `--no-preserve-root` 选项，而 `rm -rf /*` 将按预期工作）。我使用这个特定的命令作为示例，因为我见过这样的情况：变量是从一个由于一些维护工作而关闭的数据库中提取出来的，然后给该变量赋了一个空字符串。接下来会发生什么，可能很容易猜到。如果你不能阻止在危险的地方使用变量，至少检查它们是否为空，然后再使用。这不会挽救你免受每一个问题的困扰，但可能会避免一些最常见的问题。'
 - en: '**Double-check your redirections**: Redirections (along with pipes) are the
     most powerful elements of Unix shells. They could also be very dangerous: a `cat
     /dev/rand > /dev/sda` can destroy a disk even if a `cat`-based command is usually
@@ -334,6 +371,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**仔细检查你的重定向**：重定向（连同管道）是Unix shell中最强大的元素。它们也可能非常危险：一个 `cat /dev/rand > /dev/sda`
+    可以摧毁一个磁盘，即使一个基于 `cat` 的命令通常被忽视，因为它通常不危险。始终仔细检查包含重定向的所有命令。'
 - en: '**Use specific modules wherever possible**: In this list, I''ve used shell
     commands because many people will try to use Ansible as if it''s just a way to
     distribute them: it''s not. Ansible provides a lot of modules and we''ll see them
@@ -342,49 +381,58 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**尽可能使用特定的模块**：在这个列表中，我使用了shell命令，因为很多人会试图将Ansible当作一种分发它们的方式：这不是。Ansible提供了很多模块，我们将在本书中看到它们。它们将帮助你创建更可读、可移植和安全的playbooks。'
 - en: Types of IT automation
   id: totrans-46
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: IT自动化的类型
 - en: There are a lot of ways to classify IT automation systems, but by far the most
     important is related to how the configurations are propagated. Based on this,
     we can distinguish between agent-based systems and agent-less systems.
   id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 有很多方法可以对IT自动化系统进行分类，但迄今为止最重要的是与配置如何传播有关。基于此，我们可以区分基于代理的系统和无代理的系统。
 - en: Agent-based systems
   id: totrans-48
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 基于代理的系统
 - en: 'Agent-based systems have two different components: a **server**, and a client
     called **agent**.'
   id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 基于代理的系统有两个不同的组件：一个**服务器**，和一个称为**代理**的客户端。
 - en: There is only one server, and it contains all of the configuration for your
     whole environment, while the agents are as many as the machines in the environment.
   id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 只有一个服务器，它包含了整个环境的所有配置，而代理与环境中的机器数量一样多。
 - en: In some cases, more than one server could be present to ensure high availability,
     but treat it as if it's a single server, since they will all be configured in
     the same way.
   id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 在某些情况下，可能会出现多个服务器以确保高可用性，但要将其视为单个服务器，因为它们将以相同的方式配置。
 - en: Periodically, the client will contact the server to see if a new configuration
     for its machine is present. If a new configuration is present, the client will
     download it and apply it.
   id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 客户端定期会联系服务器，以查看是否存在其机器的新配置。如果有新配置存在，客户端将下载并应用它。
 - en: Agent-less systems
   id: totrans-53
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 无代理系统
 - en: In agent-less systems, no specific agent is present. Agent-less systems do not
     always respect the server/client paradigm, since it's possible to have multiple
     servers and even the same number of servers and clients. Communications are initialized
@@ -393,16 +441,19 @@
   id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 在无代理系统中，不存在特定的代理。无代理系统并不总是遵循服务器/客户端范式，因为可能存在多个服务器，甚至可能有与服务器数量相同的服务器和客户端。通信是由服务器初始化的，它将使用标准协议（通常是通过SSH和PowerShell）联系客户端。
 - en: Agent-based versus agent-less systems
   id: totrans-55
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 基于代理与无代理系统
 - en: Aside from the differences previously outlined, there are other contrasting
     factors that arise because of those differences.
   id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 除了先前概述的差异之外，还有其他由于这些差异而产生的对比因素。
 - en: From a security standpoint, an agent-based system can be less secure. Since
     all machines have to be able to initiate a connection to the server machine, this
     machine could be attacked more easily than in an agent-less case, where the machine
@@ -410,6 +461,7 @@
   id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 从安全性的角度来看，基于代理的系统可能不太安全。由于所有机器都必须能够启动与服务器机器的连接，因此这台机器可能比无代理情况下更容易受到攻击，而后者通常位于不会接受任何传入连接的防火墙后面
 - en: From a performance point of view, agent-based systems run the risk of having
     the server saturated, therefore the roll-out could be slower. It also needs to
     be considered that, in a pure agent-based system, it is not possible to force-push
@@ -421,17 +473,20 @@
   id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 从性能的角度来看，基于代理的系统存在使服务器饱和的风险，因此部署可能较慢。还需要考虑到，在纯代理系统中，不可能立即向一组机器推送更新。它将不得不等待这些机器进行检查。因此，多个基于代理的系统已经实现了超出带外方式来实现这些功能。诸如Chef和Puppet之类的工具是基于代理的，但也可以在没有集中式服务器的情况下运行，以扩展大量的机器，分别称为**无服务器Chef**和**无主Puppet**。
 - en: An agent-less system is easier to integrate in an infrastructure that is already
     present (brownfield) since it will be seen by the clients as a normal SSH connection,
     therefore no additional configuration is needed.
   id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 无代理系统更容易集成到已有的基础设施（褐地）中，因为客户端会将其视为普通的SSH连接，因此不需要额外的配置。
 - en: What is Ansible?
   id: totrans-60
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 什么是Ansible？
 - en: '**Ansible** is an agent-less IT automation tool developed in 2012 by Michael
     DeHaan, a former Red Hat associate. The Ansible design goals are for it to be
     minimal, consistent, secure, highly reliable, and easy to learn. The Ansible company
@@ -439,6 +494,7 @@
   id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Ansible**是一种无代理IT自动化工具，由前红帽公司的员工Michael DeHaan于2012年开发。Ansible的设计目标是尽可能精简、一致、安全、高度可靠和易于学习。Ansible公司于2015年10月被红帽公司收购，现在作为红帽公司的一部分运营。'
 - en: Ansible primarily runs in push mode using SSH, but you can also run Ansible
     using `ansible-pull`, where you can install Ansible on each agent, download the
     playbooks locally, and run them on individual machines. If there are a large number
@@ -449,16 +505,20 @@
   id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 主要使用 SSH 以推送模式运行，但您也可以使用 `ansible-pull` 运行 Ansible，在每个代理上安装 Ansible，本地下载
+    playbooks，并在各个机器上运行它们。如果有大量的机器（大量是一个相对的术语；但在这种情况下，将其视为大于 500 台），并且您计划并行部署更新到机器上，则可能是正确的方法。正如我们之前讨论过的，无论是代理模式还是无代理系统都有其优缺点。
 - en: In the next section, we will discuss Secure Shell (SSH), which is a core part
     of Ansible and the Ansible philosophy.
   id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一节中，我们将讨论安全外壳（SSH），这是 Ansible 和 Ansible 理念的核心部分。
 - en: Secure Shell
   id: totrans-64
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安全外壳
 - en: '**Secure Shell** (also known as **SSH**) is a network service that allows you
     to log in and access a shell remotely over a fully encrypted connection. The SSH
     daemon is today the standard for UNIX system administration, after having replaced
@@ -467,33 +527,41 @@
   id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: '**安全外壳**（也称为 **SSH**）是一种网络服务，允许您通过完全加密的连接远程登录并访问外壳。今天，SSH 守护程序已成为 UNIX 系统管理的标准，取代了未加密的
+    telnet。SSH 协议的最常用实现是 OpenSSH。'
 - en: In the last few years, Microsoft has implemented OpenSSH for Windows. I think
     that this proves the *de facto* standard situation that SSH lives into.
   id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 在过去几年中，微软已为 Windows 实现了 OpenSSH。我认为这证明了 SSH 所处的事实标准情况。
 - en: Since Ansible performs SSH connections and commands in the same way any other
     SSH client would do, no specific configuration has been applied to the OpenSSH
     server.
   id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于 Ansible 以与任何其他 SSH 客户端相同的方式执行 SSH 连接和命令，因此未对 OpenSSH 服务器应用特定配置。
 - en: To speed up default SSH connections, you can always enable `ControlPersist`
     and the pipeline mode, which makes Ansible faster and more secure.
   id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 要加快默认的 SSH 连接，您可以始终启用 `ControlPersist` 和管道模式，这使得 Ansible 更快速、更安全。
 - en: Why Ansible?
   id: totrans-69
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为什么选择 Ansible？
 - en: We will try and compare Ansible with Puppet and Chef during the course of this
     book, since many people have good experience those tools. We will also point out
     specifically how Ansible would solve a problem compared to Chef or Puppet.
   id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将在本书的过程中尝试比较 Ansible 与 Puppet 和 Chef，因为许多人对这些工具有很好的经验。我们还将具体指出 Ansible 如何解决与
+    Chef 或 Puppet 相比的问题。
 - en: Ansible, as well as Puppet and Chef, are declarative in nature, and are expected
     to move a machine to the desired state specified in the configuration. For example,
     in each of these tools, in order to start a service at a point in time and start
@@ -503,6 +571,8 @@
   id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible、Puppet 和 Chef 都是声明性的，期望将一台机器移动到配置中指定的期望状态。例如，在这些工具中的每一个中，为了在某个时间点启动服务并在重新启动时自动启动，您需要编写一个声明性的块或模块；每次工具在机器上运行时，它都会努力获得您的
+    **playbook**（Ansible）、**cookbook**（Chef）或 **manifest**（Puppet）中定义的状态。
 - en: The difference in the toolset is minimal at a simple level, but as more situations
     arise and the complexity increases, you will start finding differences between
     the different toolsets. In Puppet, you do not set the order in which the tasks
@@ -514,6 +584,9 @@
   id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 在简单水平上，工具集之间的差异很小，但随着情况的增多和复杂性的增加，您会开始发现不同工具集之间的差异。在 Puppet 中，您不设置任务执行的顺序，Puppet
+    服务器会在运行时决定序列和并行执行，这使得最终可能出现难以调试的错误变得更加容易。要利用 Chef 的功能，您需要一个优秀的 Ruby 团队。您的团队需要擅长
+    Ruby 语言，以定制 Puppet 和 Chef，而且使用这两种工具会有更大的学习曲线。
 - en: With Ansible, the case is different. It uses the simplicity of Chef when it
     comes to the order of execution – the top-to-bottom approach – and allows you
     to define the end state in YAML format, which makes the code extremely readable
@@ -525,11 +598,15 @@
   id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 与 Ansible 不同的是。它在执行顺序上使用了 Chef 的简单性 - 自上而下的方法 - 并允许你以 YAML 格式定义最终状态，这使得代码极易阅读和易于理解，无论是从开发团队到运维团队，都能轻松掌握并进行更改。在许多情况下，即使没有
+    Ansible，运维团队也会被给予 playbook 手册，以便在遇到问题时执行指令。Ansible 模仿了那种行为。如果由于其简单性而最终使你的项目经理更改
+    Ansible 代码并将其提交到 Git，也不要感到惊讶！
 - en: Installing Ansible
   id: totrans-74
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Ansible
 - en: Installing Ansible is rather quick and simple. You can use the source code directly,
     by cloning it from the GitHub project ([https://github.com/ansible/ansible](https://github.com/ansible/ansible));
     install it using your system's package manager; or use Python's package management
@@ -540,16 +617,21 @@
   id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Ansible 相当快速简单。你可以直接使用源代码，从 GitHub 项目 ([https://github.com/ansible/ansible](https://github.com/ansible/ansible))
+    克隆；使用系统的软件包管理器进行安装；或者使用 Python 的软件包管理工具 (**pip**)。你可以在任何 Windows 或类 Unix 系统上使用
+    Ansible，比如 macOS 和 Linux。Ansible 不需要任何数据库，也不需要运行任何守护程序。这使得维护 Ansible 版本和升级变得更容易，而且没有任何中断。
 - en: We'd like to call the machine where we will install Ansible our Ansible workstation.
     Some people also refer to it as the command center.
   id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们想要称呼我们将要安装 Ansible 的机器为 Ansible 工作站。有些人也将其称为指挥中心。
 - en: Installing Ansible using the system's package manager
   id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用系统的软件包管理器安装 Ansible
 - en: It is possible to install Ansible using the system's package manager, and, in
     my opinion, this is the preferred option if your system's package manager ships
     at least Ansible 2.0\. We will look into installing Ansible via **Yum**, **Apt**,
@@ -557,17 +639,21 @@
   id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以使用系统的软件包管理器安装 Ansible，就我个人而言，如果你的系统软件包管理器至少提供了 Ansible 2.0，这是首选选项。我们将研究通过
+    **Yum**、**Apt**、**Homebrew** 和 **pip** 安装 Ansible。
 - en: Installing via Yum
   id: totrans-79
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 Yum 安装
 - en: 'If you are running a Fedora system, you can install Ansible directly, since
     from Fedora 22, Ansible 2.0+ is available in the official repositories. You can
     install it as follows:'
   id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你正在运行 Fedora 系统，你可以直接安装 Ansible，因为从 Fedora 22 开始，Ansible 2.0+ 可以在官方仓库中找到。你可以按照以下步骤安装它：
 - en: '[PRE0]'
   id: totrans-81
   prefs: []
@@ -580,6 +666,8 @@
   id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于 RHEL 和基于 RHEL 的系统（CentOS、Scientific Linux 和 Unbreakable Linux），版本 6 和 7 在
+    EPEL 仓库中有 Ansible 2.0+，因此在安装 Ansible 之前，你应该确保已启用 EPEL 仓库，步骤如下：
 - en: '[PRE1]'
   id: totrans-83
   prefs: []
@@ -590,16 +678,20 @@
   id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 RHEL 6 上，你必须运行 `$ sudo rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm`
+    命令来安装 EPEL，而在 RHEL 7 上，`$ sudo yum install epel-release` 就足够了。
 - en: Installing via Apt
   id: totrans-85
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 Apt 安装
 - en: 'Ansible is available for Ubuntu and Debian. To install Ansible on those operating
     systems, use the following command:'
   id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 可用于 Ubuntu 和 Debian。要在这些操作系统上安装 Ansible，请使用以下命令：
 - en: '[PRE2]'
   id: totrans-87
   prefs: []
@@ -610,10 +702,12 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 Homebrew 安装
 - en: 'You can install Ansible on Mac OS X using Homebrew, as follows:'
   id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以使用 Homebrew 在 Mac OS X 上安装 Ansible，步骤如下：
 - en: '[PRE3]'
   id: totrans-90
   prefs: []
@@ -624,12 +718,14 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 pip 安装
 - en: 'You can install Ansible via pip. If you don''t have pip installed on your system,
     install it. You can use pip to install Ansible on Windows too, using the following
     command line:'
   id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以通过 pip 安装 Ansible。如果你的系统上没有安装 pip，先安装它。你也可以在 Windows 上使用以下命令行使用 pip 安装 Ansible：
 - en: '[PRE4]'
   id: totrans-93
   prefs: []
@@ -639,6 +735,7 @@
   id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在你可以使用 `pip` 安装 Ansible，步骤如下：
 - en: '[PRE5]'
   id: totrans-95
   prefs: []
@@ -649,6 +746,7 @@
   id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装完 Ansible 后，运行 `ansible --version` 来验证是否已经安装：
 - en: '[PRE6]'
   id: totrans-97
   prefs: []
@@ -658,6 +756,7 @@
   id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 从上述命令行输出中，你将得到许多行，如下所示：
 - en: '[PRE7]'
   id: totrans-99
   prefs: []
@@ -668,6 +767,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从源代码安装 Ansible
 - en: 'In case the previous methods do not fit your use case, you can install Ansible
     directly from source. Installing from source does not require any root permissions.
     Let''s clone a repository and activate `virtualenv`, which is an isolated environment
@@ -677,6 +777,8 @@
   id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果前面的方法不适合您的用例，您可以直接从源代码安装 Ansible。从源代码安装不需要任何 root 权限。让我们克隆一个存储库并激活 `virtualenv`，它是
+    Python 中的一个隔离环境，您可以在其中安装包而不会干扰系统的 Python 包。存储库的命令和结果输出如下：
 - en: '[PRE8]'
   id: totrans-102
   prefs: []
@@ -689,6 +791,8 @@
   id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 需要安装一些 Python 包，您可以使用 `pip` 安装。如果您的系统没有安装 pip，请使用以下命令进行安装。如果您没有安装 `easy_install`，您可以在
+    Red Hat 系统上使用 Python 的 `setuptools` 包安装它，或者在 macOS 上使用 Brew 安装：
 - en: '[PRE9]'
   id: totrans-104
   prefs: []
@@ -699,6 +803,7 @@
   id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装了 `pip` 后，使用以下命令行安装 `paramiko`、`PyYAML`、`jinja2` 和 `httplib2` 包：
 - en: '[PRE10]'
   id: totrans-106
   prefs: []
@@ -710,15 +815,18 @@
   id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，Ansible 将运行在开发分支上。您可能想要切换到最新的稳定分支。使用以下 `$ git branch -a` 命令来检查最新的稳定版本。
 - en: Copy the latest version you want to use.
   id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 复制您想要使用的最新版本。
 - en: 'Version 2.0.2 was the latest version available at the time of writing. Check
     the latest version using the following command lines:'
   id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写时，版本 2.0.2 是最新版本。使用以下命令行检查最新版本：
 - en: '[PRE11]'
   id: totrans-110
   prefs: []
@@ -730,21 +838,25 @@
   id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 您现在已经准备好了 Ansible 的工作设置。从源代码运行 Ansible 的一个好处是您可以立即享受到新功能，而不必等待软件包管理器为您提供它们。
 - en: Creating a test environment with Vagrant
   id: totrans-112
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Vagrant 创建测试环境
 - en: To be able to learn Ansible, we will need to make quite a few playbooks and
     run them.
   id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了学习 Ansible，我们需要制作相当多的 playbooks 并运行它们。
 - en: Doing this directly on your computer will be very risky. For this reason, I
     would suggest using virtual machines.
   id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 直接在您的计算机上执行此操作将非常危险。因此，我建议使用虚拟机。
 - en: It's possible to create a test environment with cloud providers in a few seconds,
     but it is often more useful to have those machines locally. To do so, we will
     use Vagrant, which is a piece of software by Hashicorp that allows users to quickly
@@ -756,11 +868,14 @@
   id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以在几秒钟内使用云提供商创建测试环境，但通常更有用的是在本地拥有这些机器。为此，我们将使用 Vagrant，这是 Hashicorp 公司提供的一款软件，允许用户独立快速地设置虚拟环境，与本地系统上使用的虚拟化后端无关。它支持许多虚拟化后端（在
+    Vagrant 生态系统中被称为 *Providers*），例如 Hyper-V、VirtualBox、Docker、VMWare 和 libvirt。这使您可以在任何操作系统或环境中使用相同的语法。
 - en: 'First we will install `vagrant`. On Fedora, it will be enough to run the following
     code:'
   id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，我们将安装 `vagrant`。在 Fedora 上，运行以下代码就足够了：
 - en: '[PRE12]'
   id: totrans-117
   prefs: []
@@ -771,6 +886,8 @@
   id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Red Hat/CentOS/Scientific Linux/Unbreakable Linux 上，我们需要先安装 `libvirt`，然后启用它，然后从
+    Hashicorp 网站安装 `vagrant`：
 - en: '[PRE13]'
   id: totrans-119
   prefs: []
@@ -780,6 +897,7 @@
   id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您使用的是 Ubuntu 或 Debian，您可以使用以下代码进行安装：
 - en: '[PRE14]'
   id: totrans-121
   prefs: []
@@ -790,28 +908,33 @@
   id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于以下示例，我将虚拟化 CentOS 7 机器。这是出于多种原因；主要原因如下：
 - en: CentOS is free and 100% compatible with Red Hat, Scientific Linux, and Unbreakable
     Linux.
   id: totrans-123
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: CentOS 是免费的，与 Red Hat、Scientific Linux 和 Unbreakable Linux 完全兼容。
 - en: Many companies use Red Hat/CentOS/Scientific Linux/Unbreakable Linux for their
     servers.
   id: totrans-124
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 许多公司将 Red Hat/CentOS/Scientific Linux/Unbreakable Linux 用于其服务器。
 - en: These distributions are the only ones with SELinux support built in, and, as
     we have seen earlier, SELinux can help you make your environment much more secure.
   id: totrans-125
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 这些发行版是唯一内置SELinux支持的发行版，正如我们之前所见，SELinux可以帮助你使环境更加安全。
 - en: 'To test that everything went well, we can run the following commands:'
   id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了测试一切是否顺利，我们可以运行以下命令：
 - en: '[PRE15]'
   id: totrans-127
   prefs: []
@@ -822,6 +945,7 @@
   id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一切顺利，你应该期待一个以这样结尾的输出：
 - en: '[PRE16]'
   id: totrans-129
   prefs: []
@@ -832,16 +956,19 @@
   id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 所以，你现在可以执行`vagrant ssh`，你会发现自己在刚刚创建的机器中。
 - en: There will be a `Vagrant` file in the current folder. In this file, you can
     create the directives with `vagrant init` to create the virtual environment.
   id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 当前文件夹中将有一个`Vagrant`文件。在这个文件中，你可以使用`vagrant init`创建指令来创建虚拟环境。
 - en: Version control systems
   id: totrans-132
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 版本控制系统
 - en: In this chapter, we have already encountered the expression **infrastructure
     code** to describe the Ansible code that will create and maintain your infrastructure.
     We use the expression infrastructure code to distinguish it from the application
@@ -851,27 +978,32 @@
   id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们已经遇到了表达式**基础设施代码**来描述将创建和维护您的基础设施的Ansible代码。我们使用基础设施代码这个表达式来区分它与应用代码，后者是组成您的应用程序、网站等的代码。这种区别是为了清晰起见，但最终，这两种类型都是软件能够读取和解释的一堆文本文件。
 - en: 'For this reason, a version control system will help you a lot. Its main advantages
     are as follows:'
   id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 因此，版本控制系统将会给你带来很多帮助。它的主要优点如下：
 - en: The ability to have multiple people working simultaneously on the same project.
   id: totrans-135
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 多人同时在同一项目上工作的能力。
 - en: The ability to perform code-reviews in a simple way.
   id: totrans-136
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 进行简单方式的代码审查的能力。
 - en: The ability to have multiple branches for multiple environments (that is, dev,
     test, QA, staging, and production).
   id: totrans-137
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 拥有多个分支用于多个环境（即开发、测试、QA、暂存和生产）的能力。
 - en: The ability to track a change so that we know when it was introduced, and who
     introduced it. This makes it easier to understand why that piece of code is there,
     months or years later.
@@ -879,31 +1011,37 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 能够追踪更改，以便我们知道更改是何时引入的，以及是谁引入的。这样一来，几个月或几年后，就更容易理解为什么那段代码存在。
 - en: These advantages are provided to you by the majority of version control systems
     out there.
   id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些优点是由现有的大多数版本控制系统提供给你的。
 - en: 'Version control systems can be divided into three major groups, based on the
     three different models that they can implement:'
   id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 版本控制系统可以根据它们实现的三种不同模型分为三大类：
 - en: Local data model
   id: totrans-141
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 本地数据模型
 - en: Client-server model
   id: totrans-142
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 客户端-服务器模型
 - en: Distributed model
   id: totrans-143
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 分布式模型
 - en: The first category, the local data model, is the oldest (circa 1972) approach
     and is used for very specific use cases. This model requires all users to share
     the same filesystem. Famous examples of it are the **Revision Control System**
@@ -911,6 +1049,8 @@
   id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: 第一类别，即本地数据模型，是最古老的（大约在1972年左右）方法，用于非常特定的用例。这种模型要求所有用户共享相同的文件系统。它的著名示例有**Revision
+    Control System**（**RCS**）和**Source Code Control System**（**SCCS**）。
 - en: The second category, the client-server model, arrived later (circa 1990) and
     tried to solve the limitations of the local data model, creating a server that
     respected the local data model and a set of clients that dealt with the server
@@ -921,6 +1061,8 @@
   id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 第二类别，客户端-服务器模型，后来（大约在1990年左右）出现，并试图解决本地数据模型的限制，创建了一个遵循本地数据模型的服务器和一组客户端，这些客户端与服务器而不是与存储库本身打交道。这个额外的层允许多个开发人员使用本地文件并将它们与一个集中式服务器同步。这种方法的著名示例是Apache
+    **Subversion**（**SVN**）和**Concurrent Versions System**（**CVS**）。
 - en: The third category, the distributed model, arrived at the beginning of the twenty-first
     century, and tried to solve the limitations of the client-server model. In fact,
     in the client-server model, you could work on the code offline, but you needed
@@ -934,22 +1076,27 @@
   id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 第三类别，即分布式模型，于二十一世纪初出现，并试图解决客户端-服务器模型的限制。事实上，在客户端-服务器模型中，您可以脱机工作，但需要在 *在线* 提交更改。分布式模型允许您在本地存储库上处理所有事务（如本地数据模型），并以轻松的方式合并不同机器上的不同存储库。在这种新模型中，可以执行与客户端-服务器模型中的所有操作相同的操作，而且还能够完全脱机工作，以及在同行之间合并更改而不必通过集中式服务器。这种模型的示例包括
+    BitKeeper（专有软件）、Git、GNU Bazaar 和 Mercurial。
 - en: 'There are some additional advantages that will be provided by only the distributed
     model, such as the following:'
   id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 只有分布式模型才能提供的一些额外优势，例如以下内容：
 - en: The possibility of making commits, browsing history, and performing any other
     action even if the server is not available.
   id: totrans-148
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 即使服务器不可用也可以进行提交、浏览历史记录以及执行任何其他操作的可能性。
 - en: Easier management of multiple branches for different environments.
   id: totrans-149
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 更容易管理不同环境的多个分支。
 - en: When it comes to infrastructure code, we have to consider that the infrastructure
     that retains and manages your infrastructure code is frequently kept in the infrastructure
     code itself. This is a recursive situation that can create problems. A distributed
@@ -957,27 +1104,32 @@
   id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 当涉及基础设施代码时，我们必须考虑到管理您的基础设施代码的基础设施本身经常保存在基础设施代码中。这是一个递归的情况，可能会引发问题。分布式版本控制系统将防止此问题发生。
 - en: As for the simplicity of managing multiple branches, even if this is not a hard
     rule, often distributed version control systems have much better merge handling
     than the other kinds of version control systems.
   id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 关于管理多个分支的简易性，虽然这不是一个硬性规则，但通常分布式版本控制系统比其他类型的版本控制系统具有更好的合并处理能力。
 - en: Using Ansible with Git
   id: totrans-152
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible 与 Git
 - en: For the reasons that we have just seen, and because of its huge popularity,
     I suggest always using Git for your Ansible repositories.
   id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: 出于我们刚刚看到的原因，以及由于其巨大的流行度，我建议始终使用 Git 作为您的 Ansible 存储库。
 - en: 'There are a few suggestions that I always provide to the people I talk to,
     so that Ansible gets the best out of Git:'
   id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 我总是向我交谈的人提供一些建议，以便 Ansible 充分利用 Git：
 - en: '**Create environment branches**: Creating environment branches, such as dev,
     prod, test, and stg, will allow you to easily keep track of the different environments
     and their respective update statuses. I often suggest keeping the master branch
@@ -989,6 +1141,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**创建环境分支**：创建环境分支，例如开发、生产、测试和预发布，将使您能够轻松跟踪不同环境及其各自的更新状态。我经常建议将主分支保留给开发环境，因为我发现很多人习惯直接向主分支推送新更改。如果您将主分支用于生产环境，人们可能会无意中将更改推送到生产环境，而他们本想将其推送到开发环境。'
 - en: '**Always keep environment branches stable**: One of the big advantages of having
     environment branches is the possibility of destroying and recreating any environment
     from scratch at any given moment. This is only possible if your environment branches
@@ -997,6 +1150,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**始终保持环境分支稳定**：拥有环境分支的一个重要优势是可以在任何时刻从头开始销毁和重建任何环境。只有在环境分支处于稳定（非破损）状态时才能实现这一点。'
 - en: '**Use feature branches**: Using different branches for specific long-development
     features (such as a refactor or some other big changes) will allow you to keep
     your day-to-day operations while your new feature is in the Git repository (so
@@ -1064,6 +1218,7 @@
   id: totrans-163
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这一章中，我们已经了解了什么是IT自动化，它的优缺点，你可以找到什么样的工具，以及Ansible如何融入这个大局。我们还看到了如何安装Ansible以及如何创建一个Vagrant虚拟机。最后，我们分析了版本控制系统，并谈到了Git如何在正确使用时为Ansible带来的优势。
 - en: In the next chapter, we will start looking at the infrastructure code that we
     mentioned in this chapter, without explaining exactly what it is and how to write
     it. We'll also see how to automate simple operations that you probably perform
@@ -1071,3 +1226,4 @@
   id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将开始看到我们在本章中提到的基础架构代码，而不是详细解释它是什么以及如何编写它。我们还将看到如何自动化那些你可能每天都要进行的简单操作，比如管理用户，管理文件和文件内容。
