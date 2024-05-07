@@ -1,41 +1,59 @@
 - en: Storage and Running Stateful Applications
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 存储和运行有状态应用程序
 - en: In this chapter, we will discuss how to attach persistent volumes and create
     storage for stateful applications and data. We will walk through storage concerns
     and how we can persist data across pods and the container life cycle. We will
     explore the **PersistentVolumes** types as well as **PersistentVolumeClaim**.
     Finally, we will take a look at the new **StatefulSets** release in version 1.5.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将讨论如何附加持久卷并为有状态应用程序和数据创建存储。我们将详细介绍存储方面的问题以及如何在容器的生命周期内跨 pod 持久化数据。我们将探索**PersistentVolumes**类型以及**PersistentVolumeClaim**。最后，我们将看一下版本1.5中新发布的**StatefulSets**。
 - en: 'This chapter will discuss the following topics:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将讨论以下主题：
 - en: Persistent storage
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 持久存储
 - en: PersistentVolumes
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: PersistentVolumes
 - en: PersistentVolumeClaims
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: PersistentVolumeClaims
 - en: StorageClasses
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: StorageClasses
 - en: StatefulSets
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: StatefulSets
 - en: Persistent storage
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 持久存储
 - en: So far, we only worked with workloads that we could start and stop at will,
     with no issue. However, real-world applications often carry state and record data
     that we prefer (even insist) not to lose. The transient nature of containers themselves
@@ -44,290 +62,439 @@
     the top layer is writable. (It's also frosting, which is delicious.) However,
     when the container dies, the data goes with it. The same is true for crashed containers
     that Kubernetes restarts.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们只处理了可以随意启动和停止的工作负载，没有任何问题。然而，现实世界的应用程序通常具有状态，并记录我们希望（甚至坚持）不要丢失的数据。容器本身的瞬时性质可能是一个很大的挑战。如果您还记得我们在[第1章](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)
+    *Kubernetes简介*中对分层文件系统的讨论，顶层是可写的。（它也是糖霜，非常美味。）但是，当容器死亡时，数据也会随之而去。 Kubernetes重新启动的已崩溃容器也是如此。
 - en: This is where** volumes** or disks come into play. A volume that exists outside
     the container allows us to save our important data across containers outages.
     Further, if we have a volume at the pod level, data can be shared between containers
     in the same application stack and within the same pod.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 这就是**卷**或磁盘发挥作用的地方。一个存在于容器之外的卷使我们能够在容器中断期间保存重要数据。此外，如果我们在 pod 级别有一个卷，数据可以在同一应用程序堆栈中的多个容器之间以及同一
+    pod 内部共享。
 - en: Docker itself has some support for volumes, but Kubernetes gives us persistent
     storage that lasts beyond the lifetime of a single container. The volumes are
     tied to pods and live and die with those pods. Additionally, a pod can have multiple
     volumes from a variety of sources. Let's take a look at some of these sources.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker 本身对卷有一些支持，但 Kubernetes 为我们提供了持久存储，可以持续存在于单个容器的生命周期之外。这些卷与 pod 相关联，并与这些
+    pod 一起生存和死亡。此外，一个 pod 可以有多个来自各种来源的卷。让我们看一下其中一些来源。
 - en: Temporary disks
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 临时磁盘
 - en: One of the easiest ways to achieve improved persistence amid container crashes
     and data sharing within a pod is to use the `emptydir` volume. This volume type
     can be used with either the storage volumes of the node machine itself or an optional
     RAM disk for higher performance.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 在容器崩溃和 pod 内数据共享之间实现改进的持久性的最简单方法之一是使用`emptydir`卷。此卷类型可与节点机器本身的存储卷或可选的 RAM 磁盘一起使用，以实现更高的性能。
 - en: Again, we improve our persistence beyond a single container, but when a pod
     is removed, the data will be lost. Machine reboot will also clear any data from
     RAM-type disks. There may be times when we just need some shared temporary space
     or have containers that process data and hand it off to another container before
     they die. Whatever the case, here is a quick example of using this temporary disk
     with the RAM-backed option.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次改进我们的持久性超出一个单独的容器，但是当一个 pod 被移除时，数据将会丢失。机器重启也会清除 RAM 类型磁盘中的任何数据。有时我们只需要一些共享的临时空间或者有处理数据并在死亡之前将其传递给另一个容器的容器。无论情况如何，以下是使用这个临时磁盘和
+    RAM 支持选项的快速示例。
 - en: 'Open your favorite editor and create a file like the one in the following *Listing
     6-1*:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 打开您喜欢的编辑器，并创建一个类似以下*Listing 6-1*的文件：
 - en: '[PRE0]'
+  id: totrans-16
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: '*Listing 6-1*: `storage-memory.yaml`'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Listing 6-1*: `storage-memory.yaml`'
 - en: 'The preceding example is probably of second nature by now, but we will once
     again issue a `create` command followed by an `exec` command to see the folders
     in the container:'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面的例子现在可能已经是家常便饭了，但我们将再次发出一个`create`命令，然后是一个`exec`命令，以查看容器中的文件夹：
 - en: '[PRE1]'
+  id: totrans-19
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'This will give us a bash shell in the container itself. The `ls` command shows
     us a `memory-pd` folder at the top level. We use `grep` to filter the output,
     but you can run the command without `| grep memory-pd` to see all folders:'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将为我们在容器本身中提供一个 bash shell。`ls` 命令显示我们在顶级看到一个 `memory-pd` 文件夹。我们使用 `grep` 来过滤输出，但是你可以不用
+    `| grep memory-pd` 来运行命令以查看所有文件夹：
 - en: '![](img/B06302_06_01.png)'
+  id: totrans-21
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/B06302_06_01.png)'
 - en: Temporary storage inside a container
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 容器内的临时存储
 - en: Again, this folder is quite temporary as everything is stored in the node's
     (minion's) RAM. When the node gets restarted, all the files will be erased. We
     will look at a more permanent example next.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次说明，这个文件夹是非常临时的，因为所有内容都存储在节点（minion）的 RAM 中。当节点重新启动时，所有文件都将被删除。接下来我们将看一个更加永久的例子。
 - en: Cloud volumes
+  id: totrans-24
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 云存储卷
 - en: Many companies will already have significant infrastructure running in the public
     cloud. Luckily, Kubernetes has native support for the durable storage provided
     by two of the most popular providers.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 许多公司已经在公共云中运行了大量基础架构。幸运的是，Kubernetes 原生支持两个最受欢迎提供者提供的持久存储。
 - en: GCE persistent disks
+  id: totrans-26
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: GCE 持久磁盘
 - en: 'We have the following from the GCE website:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们从 GCE 网站中获得了以下内容：
 - en: <q>Google Persistent Disk is durable and high performance block storage for
     the Google Cloud Platform. Persistent Disk provide SSD and HDD storage which can
     be attached to instances running in either Google Compute Engine or Google Container
     Engine. Storage volumes can be transparently resized, quickly backed up, and offer
     the ability to support simultaneous readers. </q>(you can refer to more details
     about this in point 1 in the *References* section at the end of the chapter)
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: <q>Google Persistent Disk 是 Google 云平台的持久且高性能的块存储。持久磁盘提供 SSD 和 HDD 存储，可附加到运行在
+    Google Compute Engine 或 Google Container Engine 中的实例。存储卷可以透明地调整大小，快速备份，并具有支持同时读取的能力。</q>（你可以在本章末尾的*参考*部分中查看关于此的更多详细信息）
 - en: Let's create a new **GCE persistent disk**.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们创建一个新的 **GCE 持久磁盘**。
 - en: From the console, in Compute Engine, go to Disks. On this new screen, click
     on the Create Disk button. We'll be presented with a screen similar to the following GCE
     new persistent disk image.
+  id: totrans-30
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从控制台中，在 Compute Engine 中，转到“磁盘”。在这个新屏幕上，点击“创建磁盘”按钮。我们将看到一个类似于下图的屏幕。
 - en: Choose a name for this volume and give it a brief description. Make sure that
     Zone is the same as the nodes in your cluster. GCE PDs can only be attached to
     machines in the same zone.
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为此卷选择一个名称并简要描述它。确保区域与集群中的节点相同。GCE PD 只能附加到相同区域中的机器上。
 - en: 'Enter `mysite-volume-1` in the Name field. Choose the zone matching at least
     one node in your cluster. Choose None (blank disk) for Source type and give `10`
     (10 GB) as value in Size (GB). Finally, click on Create:'
+  id: totrans-32
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“名称”字段中输入 `mysite-volume-1`。选择与集群中至少一个节点匹配的区域。选择“无”（空白磁盘）作为“源类型”，并在“大小（GB）”中输入
+    `10`（10 GB）作为值。最后，点击“创建”：
 - en: '![](img/B06302_06_02.png)'
+  id: totrans-33
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/B06302_06_02.png)'
 - en: GCE new persistent disk
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: GCE 新持久磁盘
 - en: 'The nice thing about PDs on GCE is that they allow for mounting to multiple
     machines (nodes in our case). However, when mounting to multiple machines, the
     volume must be in read-only mode. So, let''s first mount this to a single pod,
     so we can create some files. Use *Listing 6-2*: `storage-gce.yaml` as follows
     to create a pod that will mount the disk in read/write mode:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GCE 上，持久磁盘的好处是它们允许挂载到多台机器（在我们的情况下是节点）。然而，当挂载到多台机器时，卷必须处于只读模式。因此，让我们首先将其挂载到单个
+    Pod 上，以便我们可以创建一些文件。使用 *列表 6-2*：`storage-gce.yaml` 如下创建一个将以读/写模式挂载磁盘的 Pod：
 - en: '[PRE2]'
+  id: totrans-36
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: '*Listing 6-2*: `storage-gce.yaml`'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 6-2*：`storage-gce.yaml`'
 - en: 'First, let''s issue a `create` command followed by a `describe` command to
     find out which node it is running on:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，让我们发出一个 `create` 命令，然后是一个 `describe` 命令，以找出它正在哪个节点上运行：
 - en: '[PRE3]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Note the node and save the pod IP address for later. Then, open an SSH session
     into that node:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 注意节点并保存该 Pod 的 IP 地址以备后用。然后，打开一个 SSH 会话到该节点：
 - en: '![](img/B06302_06_03-1.png)'
+  id: totrans-41
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/B06302_06_03-1.png)'
 - en: Pod describe with persistent disk
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 具有持久磁盘的 Pod 描述
 - en: 'Type the following command:'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 输入以下命令：
 - en: '[PRE4]'
+  id: totrans-44
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Since we''ve already looked at the volume from inside the running container,
     let''s access it directly from the node (minion) itself this time. We will run
     a `df` command to see where it is mounted, but we will need to switch to root
     first:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于我们已经从正在运行的容器内部查看了卷，所以这次让我们直接从节点（minion）本身访问它。我们将运行一个 `df` 命令来查看它被挂载在哪里，但我们需要先切换到
+    root 用户：
 - en: '[PRE5]'
+  id: totrans-46
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'As you can see, the GCE volume is mounted directly to the node itself. We can
     use the mount path listed in the output of the earlier `df` command. Use `cd`
     to change to the folder now. Then, create a new file named `index.html` with your
     favorite editor:'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所见，GCE 卷直接挂载到节点本身。我们可以使用前面`df`命令的输出中列出的挂载路径。现在使用`cd`切换到该文件夹。然后，使用你喜欢的编辑器创建一个名为`index.html`的新文件：
 - en: '[PRE6]'
+  id: totrans-48
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Enter a quaint message such as `Hello from my GCE PD!`. Now save the file and
     exit the editor. If you recall from *Listing 6-2*, the PD is mounted directly
     to the Nginx HTML directory. So, let''s test this out while we still have the
     SSH session open on the node. Do a simple `curl` command to the pod IP we wrote
     down earlier:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 输入一条简短的消息，比如`Hello from my GCE PD!`。现在保存文件并退出编辑器。如果你还记得 *列表 6-2* 中提到的，PD 是直接挂载到
+    Nginx HTML 目录的。所以，让我们在节点上仍然保持 SSH 会话的情况下测试一下。对我们之前记下的 pod IP 执行一个简单的`curl`命令：
 - en: '[PRE7]'
+  id: totrans-50
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: You should see Hello from my GCE PD! or whatever message you saved in the `index.html`
     file. In a real-world scenario, we can use the volume for an entire website or
     any other central storage. Let's take a look at running a set of load balanced
     web servers all pointing to the same volume.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该能看到来自我的 GCE PD 的消息，或者你在`index.html`文件中保存的任何消息。在真实的场景中，我们可以为整个网站或任何其他中央存储使用这个卷。让我们来看看运行一组负载均衡的
+    Web 服务器，它们都指向同一个卷。
 - en: 'First, leave the SSH session with two `exit` commands. Before we proceed, we
     will need to remove our `test-gce` pod so that the volume can be mounted read-only
     across a number of nodes:'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，使用两个`exit`命令离开 SSH 会话。在继续之前，我们需要删除`test-gce` pod，这样卷就可以被挂载为只读在多个节点上：
 - en: '[PRE8]'
+  id: totrans-53
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Now we can create a RC that will run three web servers all mounting the same
     persistent disk, as follows:'
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以创建一个 RC，它将运行三个 Web 服务器，所有服务器都挂载相同的持久磁盘，如下所示：
 - en: '[PRE9]'
+  id: totrans-55
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: '*Listing 6-3*: `http-pd-controller.yaml`'
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 6-3*：`http-pd-controller.yaml`'
 - en: 'Let''s also create an external service, so we can see it from outside the cluster:'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还要创建一个外部服务，这样我们就可以从集群外部看到它：
 - en: '[PRE10]'
+  id: totrans-58
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: '*Listing 6-4*: `http-pd-service.yaml`'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 6-4*：`http-pd-service.yaml`'
 - en: 'Go ahead and create these two resources now. Wait a few moments for the external
     IP to get assigned. After this, a `describe` command will give us the IP we can
     use in a browser:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在创建这两个资源。等待一段时间以分配外部 IP。之后，`describe`命令将给我们一个可以在浏览器中使用的 IP：
 - en: '[PRE11]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下屏幕截图是上述命令的结果：
 - en: '![](img/B06302_06_04.png)'
+  id: totrans-63
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_06_04.png)'
 - en: K8s service with GCE PD shared across three pods
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: K8s 服务与 GCE PD 跨三个 pod 共享
 - en: If you don't see the LoadBalancer Ingress field yet, it probably needs more
     time to get assigned. Type the IP address from LoadBalancer Ingress into a browser,
     and you should see your familiar `index.html` file show up with the text we entered
     previously!
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你还没有看到`LoadBalancer Ingress`字段，那可能需要更多时间来分配。将`LoadBalancer Ingress`中的 IP 地址键入到浏览器中，你应该能看到我们之前输入的熟悉的`index.html`文件显示出来的文本！
 - en: AWS Elastic Block Store
+  id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: AWS 弹性块存储
 - en: K8s also supports AWS **Elastic Block Store** (**EBS**) volumes. Like the GCE
     PDs, EBS volumes are required to be attached to an instance running in the same
     availability zone. A further limitation is that EBS can only be mounted to a single
     instance at one time.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: K8s 还支持 AWS **弹性块存储**（**EBS**）卷。与 GCE PD 相同，EBS 卷需要附加到在相同可用性区域运行的实例上。进一步的限制是，EBS
+    只能一次挂载到单个实例上。
 - en: 'For brevity, we will not walk through an AWS example, but a sample YAML file
     is included to get you started. Again, remember to create the EBS volume before
     your pod:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了简洁起见，我们不会演示 AWS 示例，但包含了一个示例 YAML 文件以帮助你开始。同样，记得在 pod 之前创建 EBS 卷：
 - en: '[PRE12]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: '*Listing 6-5*: `storage-aws.yaml`'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 6-5*：`storage-aws.yaml`'
 - en: Other storage options
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 其他存储选项
 - en: Kubernetes supports a variety of other types of storage volumes. A full list
     can be found here: [http://kubernetes.io/v1.0/docs/user-guide/volumes.html#types-of-volumes](http://kubernetes.io/v1.0/docs/user-guide/volumes.html#types-of-volumes).
     [](http://kubernetes.io/v1.0/docs/user-guide/volumes.html#types-of-volumes)
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 支持各种其他类型的存储卷。完整列表可以在这里找到：[http://kubernetes.io/v1.0/docs/user-guide/volumes.html#types-of-volumes](http://kubernetes.io/v1.0/docs/user-guide/volumes.html#types-of-volumes)。
+    [](http://kubernetes.io/v1.0/docs/user-guide/volumes.html#types-of-volumes)
 - en: 'Here are a few that may be of particular interest:'
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有一些可能特别感兴趣的：
 - en: '`nfs`: This type allows us to mount a **Network File Share** (**NFS**), which
     can be very useful for both persisting the data and sharing it across the infrastructure'
+  id: totrans-74
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`nfs`：这种类型允许我们挂载**网络文件共享**（**NFS**），对于持久化数据并在基础设施中共享它非常有用'
 - en: '`gitrepo`: As you might have guessed, this option clones a Git repo into a
     new and empty folder'
+  id: totrans-75
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`gitrepo`：你可能已经猜到了，这个选项将一个Git仓库克隆到一个新的空文件夹中。'
 - en: PersistentVolumes and StorageClasses
+  id: totrans-76
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 持久卷和存储类
 - en: Thus far, we've seen examples of directly provisioning the storage within our
     pod definitions. This works quite well if you have full control over your cluster
     and infrastructure, but at larger scales, application owners will want to use
@@ -335,48 +502,65 @@
     provider itself will take care of the details behind provisioning storage and
     leave the application owners to worry about their primary concern, the application
     itself.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们已经看到了在我们的Pod定义中直接供应存储的例子。如果您完全控制您的集群和基础设施，这种方法运行得很好，但在更大规模上，应用程序所有者将希望使用单独管理的存储。通常，一个中央IT团队或云提供商本身将负责管理存储的细节，并让应用程序所有者担心他们的主要关注点，即应用程序本身。
 - en: In order to accommodate this, we need some way for the application to specify
     and request storage without being concerned with how that storage is provided.
     This is where `PersistentVolumes` and `PersistentVolumeClaims` come into play. `PersistentVolumes`
     are similar to `volumes` we created earlier, but they are provided by the cluster
     administer and are not dependent on a particular pod. This volume can then be
     claimed by pods using `PersistentVolumeClaims`.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了适应这一点，我们需要一种方法，让应用程序指定和请求存储而不用担心如何提供存储。这就是`PersistentVolumes`和`PersistentVolumeClaims`发挥作用的地方。`PersistentVolumes`类似于我们之前创建的`volumes`，但是它们由集群管理员提供，并且不依赖于特定的Pod。然后，Pod可以使用`PersistentVolumeClaims`声明来声明此卷。
 - en: '`PersistentVolumeClaims` allows us to specify the details of the storage needed.
     We can defined the amount of storage as well as the access type such as `ReadWriteOnce`
     (read and write by one node), `ReadOnlyMany` (read-only by multiple nodes), and `ReadWriteMany` (read
     and write by many nodes). Of course, which modes are supported is dependent on
     the backing storage provider. For example, we saw in the AWS EBS example that
     mounting to multiple nodes was not an option.'
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: '`PersistentVolumeClaims`允许我们指定所需存储的细节。我们可以定义存储量以及访问类型，如`ReadWriteOnce`（一个节点读写）、`ReadOnlyMany`（多个节点只读）和`ReadWriteMany`（多个节点读写）。当然，支持哪些模式取决于支持的后端存储提供者。例如，我们在AWS
+    EBS示例中看到，挂载到多个节点不是一个选项。'
 - en: Additionally, Kubernetes provides two other methods for specifying certain groupings
     or types of storage volumes. The first is the use of selectors as we have seen
     previously for pod selection. Here, labels can be applied to storage volumes and
     then claims can reference these labels to further filter the volume they are provided.
     Second, Kubernetes has a concept of StorageClass which allows us specify a storage
     provisioner and parameters for the type of volumes it provisions.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，Kubernetes提供了另外两种指定特定分组或存储卷类型的方法。第一种是使用选择器，就像我们之前为Pod选择所见的那样。在这里，标签可以应用于存储卷，然后声明可以引用这些标签以进一步过滤它们所提供的卷。其次，Kubernetes具有StorageClass的概念，允许我们指定一个存储提供程序和用于其提供的卷类型的参数。
 - en: We will dive into StorageClasses in the next section, but here is a quick example
     of a `PersistentVolumeClaims` for illustration purposes. You can see in the annotations
     that we request `1Gi` of storage in `ReadWriteOnce` mode with a StorageClass of
     `solidstate` and label of `aws-storage`.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将在下一节深入研究StorageClasses，但这里有一个`PersistentVolumeClaims`的快速示例，以便说明目的。您可以在注释中看到我们请求以`ReadWriteOnce`模式和`solidstate`存储类的`1Gi`存储，并带有`aws-storage`标签。
 - en: '[PRE13]'
+  id: totrans-82
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: '*Listing 6-6:* `pvc-example.yaml`'
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 6-6：* `pvc-example.yaml`'
 - en: StatefulSets
+  id: totrans-84
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 有状态副本集
 - en: The purpose of **StatefulSets** is to provide some consistency and predictability
     to application deployments with stateful data. Thus far, we have deployed applications
     to the cluster defining loose requirements around needed resources such as computer
@@ -384,38 +568,57 @@
     these requirements. While we can use some of these constraints to deploy in a
     more predictable manner, it will be helpful if we had a construct built to help
     us provide this consistency.
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: '**StatefulSets**的目的是为具有状态数据的应用程序部署提供一些一致性和可预测性。到目前为止，我们已经将应用程序部署到集群中，定义了对所需资源（如计算和存储）的松散要求。集群已经在满足这些要求的任何节点上安排了我们的工作负载。虽然我们可以使用其中一些约束以更可预测的方式部署，但如果我们有一个构造来帮助我们提供这种一致性将会很有帮助。'
 - en: StatefulSets were set to GA in 1.6 as we went to press. There were previously
     beta in version 1.5 and were known as PetSets prior to that (alpha in 1.3 and
     1.4).
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们完成此书稿时，StatefulSets 已经设置为 GA 版本 1.6。它们之前是 beta 版本 1.5，之前称为 PetSets（1.3 和
+    1.4 中的 alpha 版本）。
 - en: 'This is where StatefulSets come in. StatefulSets provide us first with numbered
     and reliable naming for both network access and storage claims. The pods themselves
     are names with the following convention, where `N` is from 0 to the number of
     replicas:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 这就是 StatefulSets 的用武之地。StatefulSets 首先为我们提供了有序和可靠的命名，用于网络访问和存储索赔。这些 pod 本身的命名采用以下约定，其中
+    `N` 从 0 到副本数：
 - en: '[PRE14]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'This means that a Statefulset called `db` with 3 replicas will create the following
     pods:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 这意味着名为 `db` 的 Statefulset 有 3 个副本将创建以下 pod：
 - en: '[PRE15]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: This gives Kubernetes a way to associate network names and `PersistentVolumes`
     with specific pods. Additionally, it also serves to order creation and termination
     of pods. Pod will be started from `0` to `N` and terminated from `N` to `0`.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 这使得 Kubernetes 能够将网络名称和 `PersistentVolumes` 与特定的 pod 关联起来。此外，它还用于对 pod 的创建和终止进行排序。Pod
+    将从 `0` 开始启动，并从 `N` 开始终止。
 - en: A stateful example
+  id: totrans-92
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 一个有状态的示例
 - en: 'Let''s take a look at an example of a stateful application. First, we will
     want to create and use a StorageClass as we discussed earlier. This will allow
     us to hook into the Google Cloud Persistent Disk provisioner. The Kubernetes community
@@ -426,207 +629,328 @@
     allows you to specify encryption parameters as well as IOPs for Provisioned IOPs
     volumes. There are a number of other provisioners in the works including Azure
     and a variety of non-cloud options:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看一个有状态应用程序的示例。首先，我们将想要创建和使用一个 `StorageClass`，正如我们之前讨论的一样。这将允许我们连接到 Google
+    Cloud Persistent Disk provisioner。Kubernetes 社区正在为各种 `StorageClasses` 构建 provisioners，包括
+    GCP 和 AWS。每个 provisioner 都有一组可用的参数。GCP 和 AWS 提供商都可以让您选择磁盘类型（固态、标准等）以及故障域，这是需要与其附加的
+    pod 匹配的。AWS 还允许您指定加密参数以及针对 Provisioned IOPs 卷的 IOPs。还有一些其他 provisioner 正在进行中，包括
+    Azure 和各种非云选项：
 - en: '[PRE16]'
+  id: totrans-94
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: '*Listing 6-7:* `solidstate-sc.yaml`'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: '*图示 6-7：* `solidstate-sc.yaml`'
 - en: 'Use the following command with the preceding listing to create a `StorageClass`
     kind of SSD drives in `us-central1-b`:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用以下命令与前面的列表一起创建 `StorageClass` 类型的 SSD 驱动器在 `us-central1-b` 中：
 - en: '[PRE17]'
+  id: totrans-97
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'Next, we will create a `StatefulSet` kind with our trusty `httpwhalesay` demo
     (you can refer to more details about this in point 2 in the *References* section
     at the end of the chapter). While this application does include any real state,
     we can see the storage claims and explore the communication path:'
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们将使用我们信任的 `httpwhalesay` 演示创建一个 `StatefulSet` 类型（您可以在本章末尾的 *参考资料* 中参考更多详细信息）。虽然该应用程序确实包含任何真实状态，但我们可以看到存储索赔并探索通信路径：
 - en: '[PRE18]'
+  id: totrans-99
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: '*Listing 6-8:* `sayhey-statefulset.yaml`'
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: '*图示 6-8：* `sayhey-statefulset.yaml`'
 - en: 'Use the following command to get to start the creation of this StatefulSet.
     If you observe pod creation closely, you will see it create whaleset-0, whaleset-1,
     and whaleset-2 in succession:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用以下命令开始创建此 StatefulSet。如果您仔细观察 pod 的创建，您将看到它连续创建 whaleset-0、whaleset-1 和 whaleset-2：
 - en: '[PRE19]'
+  id: totrans-102
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'Immediately after this, we can see our StatefulSet and the corresponding pods
     using the familiar `get` subcommand:'
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 紧接着，我们可以使用熟悉的 `get` 子命令看到我们的 StatefulSet 和相应的 pod：
 - en: '[PRE20]'
+  id: totrans-104
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'These pods should create an output similar to the following images:'
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些 pod 应该会创建类似于以下图像的输出：
 - en: '![](img/B06302_06_05.png)'
+  id: totrans-106
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_06_05.png)'
 - en: StatefulSet listing
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: StatefulSet 列表
 - en: 'The `get pods` output will show the following:'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: '`get pods` 输出将显示以下内容：'
 - en: '![](img/B06302_06_06.png)'
+  id: totrans-109
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_06_06.png)'
 - en: Pods created by StatefulSet
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 由 StatefulSet 创建的 pod
 - en: Depending on your timing, the pods may still be creating. As you can see in
     the preceding image, the third container is still being spun up.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据您的时间安排，可能仍在创建 pod。如前面的图像所示，第三个容器仍在启动。
 - en: 'We can also see the volumes the set has created and claim for each pod. First
     PersistentVolumes themselves:'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以看到集合为每个 pod 创建的卷和索赔。首先是 PersistentVolumes 本身：
 - en: '[PRE21]'
+  id: totrans-113
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'The preceding command should show the three PersistentVolumes named `www-whaleset-N`.
     We notice the size is `1Gi` and the access mode is set to **ReadWriteOnce** (`RWO`)
     just as we defined in our StorageClass:'
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 上述命令应显示三个名为`www-whaleset-N`的 PersistentVolumes。我们注意到大小为`1Gi`，访问模式设置为**ReadWriteOnce**（`RWO`），就像我们在
+    StorageClass 中定义的一样：
 - en: '![](img/B06302_06_07.png)'
+  id: totrans-115
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_06_07.png)'
 - en: The PersistentVolumes listing
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 持久卷清单
 - en: 'Next we can look at the PersistentVolumeClaims that reserve the volumes for
     each pod:'
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们可以查看为每个 pod 保留卷的 PersistentVolumeClaims：
 - en: '[PRE22]'
+  id: totrans-118
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'Following is the output of the preceding command:'
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是前述命令的输出：
 - en: '![](img/B06302_06_08.png)'
+  id: totrans-120
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_06_08.png)'
 - en: The PersistentVolumeClaims listing
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 持久卷索赔清单
 - en: You'll notice much of the same settings here as with the PVs themselves. You
     might also notice the end of the claim name (or PV name in the previous listing)
     looks like `www-whaleset-N`. `www` is the mount name we specified in the preceding
     YAML definition. This is then appended to the pod name to create the actual PV
     and PVC name. One more area we can ensure that the proper disk is linked with
     it is matching pod.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，您会注意到与 PV 自身相同的设置很多。您可能还会注意到声明名称的结尾（或上一个列表中的 PV 名称）看起来像`www-whaleset-N`。`www`是我们在之前的
+    YAML 定义中指定的挂载名称。然后将其附加到 pod 名称以创建实际的 PV 和 PVC 名称。我们还可以确保与之关联的适当磁盘与匹配的 pod 相关联。
 - en: 'Another area where this alignment is important is in the network communication.
     StatefulSets also provide consistent naming here. Before we can do this, let''s
     create a service endpoint so we have a common entry point for incoming requests:'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个这种对齐很重要的领域是网络通信。StatefulSets 在这里也提供一致的命名。在我们这样做之前，让我们创建一个服务端点，这样我们就有了一个常见的入口点用于传入的请求：
 - en: '[PRE23]'
+  id: totrans-124
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: '*Listing 6-9:* `sayhey-svc.yaml`'
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 6-9：*`sayhey-svc.yaml`'
 - en: '[PRE24]'
+  id: totrans-126
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'Now let''s open a shell in one of the pods and see if we can communicate with
     another in the set:'
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们在其中一个 pod 中打开一个 shell，并查看是否可以与集合中的另一个 pod 通信：
 - en: '[PRE25]'
+  id: totrans-128
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'The preceding command gives us a bash shell in the first whaleset pod. We can
     now use the `Service` name to make a simple HTTP request. We can use both the
     short name, `sayhey-svc`, and the fully qualified name, `sayhey-svc.default.svc.cluster.local`:'
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行上述命令会在第一个鲸鱼集群（whaleset）的 pod 中给我们提供一个 bash shell。现在我们可以使用`Service`名称来发出一个简单的
+    HTTP 请求。我们可以同时使用简称`sayhey-svc`和完全限定名称`sayhey-svc.default.svc.cluster.local`：
 - en: '[PRE26]'
+  id: totrans-130
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: 'You''ll see an output similar to the following image. The service endpoint
     acts as a common communication point for all three pods:'
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 您将看到与以下图像类似的输出。服务端点充当所有三个 pod 的共同通信点：
 - en: '![](img/B06302_06_09-1.png)'
+  id: totrans-132
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_06_09-1.png)'
 - en: HTTP Whalesay curl output (whalesay-0 Pod)
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: HTTP Whalesay curl 输出（whalesay-0 Pod）
 - en: 'Now let''s see if we can communicate with a specific pod in the StatefulSet.
     As we noticed earlier, the StatefulSet named the pod in an orderly manner. It
     also gives them hostnames in a similar fashion so that there is a specific DNS
     entry for each pod in the set. Again, we will see the convention of `"Name of
     Set"-N` and then add the fully qualified service URL. The following example shows
     this for `whaleset-1`, which is the second Pod in our set:'
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们看看是否可以与 StatefulSet 中的特定 pod 进行通信。正如我们之前注意到的，StatefulSet 以有序的方式命名 pod。它还以类似的方式为它们提供主机名，以便为集合中的每个
+    pod 创建一个特定的 DNS 条目。同样，我们将看到`"集合名称"-N`的约定，然后添加完全限定的服务 URL。下面的示例展示了这一点，对于我们集合中的第二个
+    pod`whaleset-1`：
 - en: '[PRE27]'
+  id: totrans-135
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'Running this command from our existing Bash shell in whaleset-0 will show us
     the output from `whaleset-1`:'
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 在鲸鱼集群（whaleset）的 Bash shell 中运行此命令将显示来自`whaleset-1`的输出：
 - en: '![](img/B06302_06_10-1.png)'
+  id: totrans-137
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_06_10-1.png)'
 - en: HTTP Whalesay curl output (whalesay-1 Pod)
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: HTTP Whalesay curl 输出（whalesay-1 Pod）
 - en: You can exit out of this shell now with `exit`.
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 您现在可以使用`exit`退出此 shell。
 - en: For learning purposes, it can also be instructive to describe some of the items
     from this section in more detail. For example, `kubectl describe svc sayhey-svc`
     will show us all three pod IP address in the service endpoints.
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 出于学习目的，更详细地描述此部分的某些项目也很有益。例如，`kubectl describe svc sayhey-svc`将显示服务端点中的所有三个
+    pod IP 地址。
 - en: Summary
+  id: totrans-141
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概要
 - en: In this chapter, we explored a variety of persistent storage options and how
     to implement them with our pods. We looked at PersistentVolumes and also PersistentVolumeClaims,
     which allow us to separate storage provisioning and application storage requests.
     Additionally, we looked at StorageClasses for provisioning groups of storage according
     to a specification.
+  id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们探讨了各种持久存储选项以及如何在我们的 pod 中实现它们。我们查看了 PersistentVolumes 以及允许我们将存储分配和应用程序存储请求分开的
+    PersistentVolumeClaims。此外，我们还查看了 StorageClasses，以根据规范为存储组提供存储。
 - en: We also explored the new StatefulSets abstraction and learned how we can deploy
     stateful applications in a consistent and ordered manner. In the next chapter,
     we will look at how to integrate Kubernetes with Continuous Integration and Delivery
     pipelines.
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还探讨了新的 StatefulSets 抽象，并学习了如何以一致和有序的方式部署有状态的应用程序。在下一章中，我们将看看如何将 Kubernetes
+    与持续集成和交付流水线集成起来。
 - en: References
+  id: totrans-144
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 参考资料
 - en: '[https://cloud.google.com/persistent-disk/](https://cloud.google.com/persistent-disk/)'
+  id: totrans-145
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[https://cloud.google.com/persistent-disk/](https://cloud.google.com/persistent-disk/)'
 - en: HTTP Whalesay is an adaptation of Docker whalesaym which is in-turn an adaptation
     of Linux cowsay (circa 1999, Tony Monroe) - [https://hub.docker.com/r/docker/whalesay/](https://hub.docker.com/r/docker/whalesay/)
+  id: totrans-146
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: HTTP Whalesay 是 Docker whalesaym 的一种适应，而 Docker whalesaym 又是 Linux cowsay（大约在
+    1999 年，Tony Monroe）的一种适应 - [https://hub.docker.com/r/docker/whalesay/](https://hub.docker.com/r/docker/whalesay/)

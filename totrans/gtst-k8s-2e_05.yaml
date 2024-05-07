@@ -1,42 +1,61 @@
 - en: Deployments, Jobs, and DaemonSets
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 部署、作业和 DaemonSets
 - en: This chapter will cover the various types of workloads that Kubernetes supports.
     We will cover **Deployments** for applications that are regularly updated and
     long running. We will also revisit the topics of application updates and gradual
     rollouts using Deployments. In addition, we will look at **Jobs** used for short-running
     tasks. Finally, we will look at **DaemonSets**, which allow programs to be run
     on every node in our Kubernetes cluster.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将介绍 Kubernetes 支持的各种工作负载类型。我们将介绍用于经常更新和长时间运行的应用程序的**部署**。我们还将重新审视使用部署进行应用程序更新和渐进式部署的主题。此外，我们还将查看用于短暂任务的**作业**。最后，我们将查看**DaemonSets**，它允许程序在
+    Kubernetes 集群中的每个节点上运行。
 - en: 'This chapter will discuss the following:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将讨论以下内容：
 - en: Deployments
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 部署
 - en: Application scaling with deployments
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用部署进行应用程序扩展
 - en: Application updates with deployments
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用部署进行应用程序更新
 - en: Jobs
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 作业
 - en: DaemonSets
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: DaemonSets
 - en: Deployments
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 部署
 - en: In the previous chapter, we explored some of the core concepts for application
     updates using the old rolling-update method. Starting with version 1.2, Kubernetes
     added the Deployment construct, which improves on the basic mechanisms of rolling-update
@@ -44,213 +63,326 @@
     of the code deployment itself. Deployments allow us to pause and resume application
     rollouts. Additionally, it keeps a history of past deployments and allows the
     user to easily rollback to previous versions.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上一章中，我们探讨了使用旧的滚动更新方法进行应用程序更新的一些核心概念。从版本1.2开始，Kubernetes 添加了 Deployment 构造，它改进了滚动更新和
+    Replication Controllers 的基本机制。顾名思义，它使我们可以更精细地控制代码部署本身。部署允许我们暂停和恢复应用程序的部署。此外，它保留了过去部署的历史，并允许用户轻松回滚到以前的版本。
 - en: 'In the following, *listing 5-1*, we can see that the definition is very similar
     to a Replication Controller. The main difference is that we now have an ability
     to make changes and updates to the deployment objects and let Kubernetes manage
     updating the underlying pods and replicas for us:'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的*列表 5-1*中，我们可以看到该定义与 Replication Controller 非常相似。主要区别在于，现在我们可以对部署对象进行更改和更新，并让
+    Kubernetes 管理更新底层的 pod 和副本：
 - en: '[PRE0]'
+  id: totrans-11
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: '*Listing 5-1*: `node-js-deploy.yaml`'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 5-1*：`node-js-deploy.yaml`'
 - en: 'We can run the familiar `create` command with the optional `--record` flag
     so that the creation of the deployment is recorded in the rollout history. Otherwise,
     we will only see subsequent changes in the rollout history:'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以运行熟悉的`create`命令，带上可选的`--record`标志，以便将部署的创建记录在发布历史中。否则，我们将只看到发布历史中的后续更改：
 - en: '[PRE1]'
+  id: totrans-14
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: You may need to add `--validate=false` if this beta type is not enabled on your
     cluster.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果在您的集群上未启用此 beta 类型，您可能需要添加`--validate=false`。
 - en: 'We should see a message about the deployment being successfully created. After
     a few moments, it will finish creating our pod, which we can check for ourselves
     with a `get pods` command. We add the `-l` flag to only see the pods relevant
     to this deployment:'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该会看到部署成功创建的消息。几分钟后，它将完成创建我们的 pod，我们可以用`get pods`命令自行检查。我们添加了`-l`标志，只看到与此部署相关的
+    pod：
 - en: '[PRE2]'
+  id: totrans-17
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'We create a service just as we did with Replication Controllers. The following
     is a `Service` definition for the deployment we just created. We''ll notice that
     it is almost identical to the Services we created in the past:'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们创建了一个服务，就像我们之前使用 Replication Controllers 那样。下面是我们刚刚创建的部署的`Service`定义。我们会注意到，它几乎与我们以前创建的服务完全相同：
 - en: '[PRE3]'
+  id: totrans-19
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: '*Listing 5-2. *`node-js-deploy-service.yaml`'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 5-2.* `node-js-deploy-service.yaml`'
 - en: Once this service is created using `kubectl`, you'll be able to access the deployment
     pods through the service IP or the service name if you are inside a pod on this
     namespace.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 `kubectl` 创建此服务后，您将能够通过服务 IP 或者如果您在此命名空间的 pod 内部，则通过服务名称访问部署的 pod。
 - en: Scaling
+  id: totrans-22
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 扩展
 - en: 'The `scale` command works the same way as it did in our Replication Controller.
     To scale up, we simply use the deployment name and specify the new number of replicas,
     as shown here:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: '`scale` 命令的使用方式与我们的 Replication Controller 中的一样。要扩展，我们只需使用部署名称并指定新的副本数量，如下所示：'
 - en: '[PRE4]'
+  id: totrans-24
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: If all goes well, we'll simply see a message about the deployment being scaled
     on the output of our terminal window. We can check the number of running pods
     using the `get pods` command from earlier, once more.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一切顺利，我们将只会在终端窗口的输出中看到关于部署扩展的消息。我们可以再次使用先前的`get pods`命令来检查正在运行的 pod 数量。
 - en: Updates and rollouts
+  id: totrans-26
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更新和部署
 - en: Deployments allow for updating in a few different ways. First, there is the `kubectl
     set` command, which allows us to change the deployment configuration without redeploying
     manually. Currently, it only allows for updating the image, but as new versions
     of our application or container image are processed, we will need to do this quite
     often.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 部署允许以几种不同的方式进行更新。首先，有`kubectl set`命令，它允许我们在不手动重新部署的情况下更改部署配置。目前，它只允许更新镜像，但随着我们的应用程序或容器镜像的新版本被处理，我们将经常需要这样做。
 - en: 'Let''s take a look using our deployment from the previous section. We should
     have three replicas running right now. Verify this by running the `get pods` command
     with a filter for our deployment:'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从前一节的部署中进行查看。我们现在应该有三个副本正在运行。通过运行带有我们部署筛选器的`get pods`命令来验证这一点：
 - en: '[PRE5]'
+  id: totrans-29
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'We should see three pods similar to those listed in the following screenshot:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该看到三个与以下屏幕截图中列出的类似的 pod：
 - en: '![](img/B06302_05_01-1.png)'
+  id: totrans-31
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_01-1.png)'
 - en: Deployment Pod Listing
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 部署 Pod 列表
 - en: 'Take one of the pods listed on our setup, replace it in the following command
     where it says `{POD_NAME_FROM_YOUR_LISTING}`, and run the command:'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 从我们的设置中选择一个 pod，将其替换到以下命令中的位置，其中写着`{POD_NAME_FROM_YOUR_LISTING}`，然后运行该命令：
 - en: '[PRE6]'
+  id: totrans-34
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'We should see an output like the following image with the current image version
     of `0.1`:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该看到一个如下图所示的输出，其中包含当前镜像版本`0.1`：
 - en: '![](img/B06302_05_02-1.png)'
+  id: totrans-36
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_02-1.png)'
 - en: Current Pod Image
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 当前 Pod 图像
 - en: 'Now that we know what our current deployment is running, let''s try to update
     to the next version. This can be achieved easily using the `kubectl set` command
     and specifying the new version, as shown here:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们知道了我们当前的部署正在运行什么，让我们尝试更新到下一个版本。这可以通过使用`kubectl set`命令并指定新版本轻松实现，如下所示：
 - en: '[PRE7]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: If all goes well, we should see the text that says `deployment "node-js-deploy"
     image updated` displayed on the screen.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一切顺利，我们应该在屏幕上看到显示`deployment "node-js-deploy" image updated`的文本。
 - en: 'We can double–check the status using the following `rollout status` command:'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用以下`rollout status`命令再次检查状态：
 - en: '[PRE8]'
+  id: totrans-42
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: We should see some text about the deployment successfully rolled out. If you
     see any text about waiting for the rollout to finish, you may need to wait a moment
     for it to finish or alternatively check the logs for issues.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该看到一些关于成功部署的文本。如果您看到任何关于等待部署完成的文本，您可能需要等待片刻，或者可以检查日志以查看问题。
 - en: 'Once it''s finished, run the `get pods` command as earlier, once more. This
     time we will see new pods listed:'
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 完成后，再次运行`get pods`命令，就像之前一样。这次我们将看到新列出的 pods：
 - en: '![](img/B06302_05_03-1.png)'
+  id: totrans-45
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_03-1.png)'
 - en: Deployment Pod Listing After Update
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 更新后的部署 Pod 列表
 - en: Once again plug one of your pod names into the `describe` command we ran earlier.
     This time we should see the image has been updated to 0.2.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次将您的一个 pod 名称插入我们之前运行的`describe`命令中。这次我们应该看到镜像已经更新为`0.2`。
 - en: What happened behind the scenes is that Kubernetes has *rolled out* a new version
     for us. It basically creates a new replica set with the new version. Once this
     pod is online and healthy it kills one of the older versions. It continues this
     behavior, scaling out the new version and scaling down the old versions, until
     only the new pods are left.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 在幕后发生的事情是 Kubernetes 为我们*部署*了一个新版本。它基本上创建了一个具有新版本的新副本集。一旦这个 pod 在线并且健康，它就会杀死一个旧版本。它继续这个行为，扩展新版本并缩减旧版本，直到只剩下新的
+    pods。
 - en: 'The following figure describes the workflow for your reference:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下图示描述了您的工作流程供参考：
 - en: '![](img/B06302_05_04.png)'
+  id: totrans-50
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_04.png)'
 - en: Deployment Lifecycle
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 部署生命周期
 - en: It's worth noting that the rollback definition allows us to control the pod
     replace method in our deployment definition. There is a `strategy.type` field
     that defaults to `RollingUpdate` and the preceding behavior. Optionally, we can
     also specify `Recreate` as the replacement strategy and it will kill all the old
     pods first before creating the new versions.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 值得注意的是，回滚定义允许我们在部署定义中控制 pod 替换方法。有一个`strategy.type`字段，默认为`RollingUpdate`和前面的行为。可选地，我们也可以指定`Recreate`作为替换策略，它将首先杀死所有旧的
+    pods，然后创建新版本。
 - en: History and rollbacks
+  id: totrans-53
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 历史和回滚
 - en: 'One of the useful features of the rollout api is the ability to track the deployment
     history. Let''s do one more update before we check the history. Run the `kubectl
     set` command once more and specify version `0.3`:'
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: rollout api 的一个有用功能是跟踪部署历史。在检查历史之前，让我们再次更新一次。再次运行`kubectl set`命令，并指定版本`0.3`：
 - en: '[PRE9]'
+  id: totrans-55
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'Once again we''ll see text that says `deployment "node-js-deploy" image updated` displayed
     on the screen. Now run the `get pods` command once more:'
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将再次看到屏幕上显示`deployment "node-js-deploy" image updated`的文本。现在再次运行`get pods`命令：
 - en: '[PRE10]'
+  id: totrans-57
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Let''s also take a look at our deployment history. Run the `rollout history` command:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们也查看一下我们的部署历史记录。运行`rollout history`命令：
 - en: '[PRE11]'
+  id: totrans-59
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'We should see an output similar to the following:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该看到类似下面的输出：
 - en: '![](img/B06302_05_05.png)'
+  id: totrans-61
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_05.png)'
 - en: Rollout History
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 滚动历史
 - en: As we can see, the history shows us the initial deployment creation, our first
     update to `0.2`, and then our final update to `0.3`. In addition to status and
     history, the `rollout` command also supports the `pause`, `resume`, and `undo`
@@ -259,437 +391,665 @@
     helpful for canary type launches, where we wish to do final testing of the new
     version before rolling out to the entire user base. When we are ready to continue
     the rollout, we can simply use the `rollout resume` command.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 如我们所见，历史记录显示了初始部署创建、我们第一次更新到`0.2`，然后最终更新到`0.3`。除了状态和历史记录外，`rollout`命令还支持`pause`、`resume`和`undo`子命令。`rollout
+    pause`命令允许我们在滚动仍在进行时暂停命令。这对故障排除很有用，也对金丝雀式启动很有帮助，我们希望在向整个用户群推出新版本之前对新版本进行最终测试。当我们准备继续滚动时，我们只需使用`rollout
+    resume`命令。
 - en: 'But what if something goes wrong? That is where the `rollout undo` command
     and the rollout history itself is really handy. Let''s simulate this by trying
     to update to a version of our pod that is not yet available. We will set the image
     to version `42.0`, which does not exist:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 但是如果出现问题怎么办？这就是`rollout undo`命令和滚动历史本身真正方便的地方。让我们模拟这种情况，尝试更新到尚未可用的版本的pod。我们将图像设置为版本`42.0`，该版本不存在：
 - en: '[PRE12]'
+  id: totrans-65
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'We should still see the text that says `deployment "node-js-deploy" image updated`
     displayed on the screen. But if we check the status, we will see that it is still
     waiting:'
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该仍然看到屏幕上显示`deployment "node-js-deploy" image updated`的文本。但是如果我们检查状态，会发现它仍在等待：
 - en: '[PRE13]'
+  id: totrans-67
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'We can press *Ctrl* + *C* to kill the `status` command and then run the `get
     pods` command once more:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以按下*Ctrl* + *C*来终止`status`命令，然后再次运行`get pods`命令：
 - en: '[PRE14]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'We should now see an `ErrImagePull`, as in the following screenshot:'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在应该看到一个`ErrImagePull`，如下面的截图：
 - en: '![](img/B06302_05_06.png)'
+  id: totrans-71
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_06.png)'
 - en: Image Pull Error
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 图像拉取错误
 - en: As we expected, it can't pull the 42.0 version of the image because it doesn't
     exist. We may also have issues with deployments if we run out of resources on
     the cluster or hit limits that are set for our namespace. Additionally, the deployment
     can fail for a number of application-related causes, such as health check failure,
     permission issues, and application bugs, of course.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们预期的那样，它不能拉取图像的42.0版本，因为该版本不存在。此外，如果我们在集群上资源不足或者达到了为我们命名空间设置的限制，我们可能还会在部署方面遇到问题。此外，部署可能因许多应用程序相关原因而失败，例如健康检查失败、权限问题和应用程序错误等。
 - en: 'Whenever a failure to rollout happens, we can easily rollback to a previous
     version using the `rollout undo` command. This command will take our deployment
     back to the previous version:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 每当发生无法滚动部署的失败时，我们可以通过使用`rollout undo`命令轻松回滚到先前的版本。此命令将把我们的部署退回到之前的版本：
 - en: '[PRE15]'
+  id: totrans-75
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'After that, we can run a `rollout status` command once more and we should see
     everything rolled out successfully. Run the `rollout history` command again and
     we''ll see both our attempt to rollout version `42.0` and the revert to `0.3`:'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 之后，我们可以再次运行`rollout status`命令，应该会看到一切都成功滚动了。再次运行`rollout history`命令，我们会看到我们尝试滚动到版本`42.0`，以及回滚到`0.3`的情况：
 - en: '![](img/B06302_05_07.png)'
+  id: totrans-77
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_07.png)'
 - en: Rollout History After Rollback
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 回滚后的滚动历史
 - en: We can also specify the `--to-revision` flag when running an undo to rollback
     to a specific version. This can be handy for times when our rollout succeeds,
     but we discover logical errors down the road.
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 在运行撤消时，我们还可以指定`--to-revision`标志以回滚到特定版本。在我们的滚动成功后，但我们后来发现有逻辑错误时，这可能很方便。
 - en: Autoscaling
+  id: totrans-80
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自动缩放
 - en: As you can see, Deployments are a great improvement over Replication Controllers
     allowing us to seamlessly update our applications, while integrating with the
     other resources of Kubernetes in much the same way.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所看到的，部署是对复制控制器的重大改进，使我们能够无缝更新我们的应用程序，同时与Kubernetes的其他资源以类似的方式集成。
 - en: 'Another area that we saw in the previous chapter, and also supported for Deployments,
     is **Horizontal Pod Autoscalers** (**HPAs**). As you may have guessed, this also
     integrates perfectly with Deployments. We will walk through a quick remake of
     the HPAs from the previous chapter, this time using the Deployments we have created
     so far:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 在前一章中我们看到的另一个领域，也支持部署，就是**水平 Pod 自动缩放器**（**HPAs**）。正如你可能猜到的那样，这也与部署完美集成。我们将快速重制前一章的
+    HPAs，这次使用我们到目前为止创建的部署：
 - en: '[PRE16]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: '*Listing 5-3.* `node-js-deploy-hpa.yaml`'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Listing 5-3.* `node-js-deploy-hpa.yaml`'
 - en: 'We have lowered the CPU threshold to 10% and changed our minimum and maximum
     pods to `3` and `6`, respectively. Create the preceding HPA with our trusty `kubectl
     create -f` command. After this is completed, we can check that it''s available
     with the `kubectl get hpa` command:'
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经将 CPU 阈值降低到 `10%` 并将我们的最小和最大 pod 更改为分别是 `3` 和 `6`。使用我们信赖的 `kubectl create
+    -f` 命令创建前述 HPA。完成后，我们可以使用 `kubectl get hpa` 命令检查其是否可用：
 - en: '![](img/B06302_05_08.png)'
+  id: totrans-86
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_08.png)'
 - en: Horizontal Pod Autoscaler
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 水平 Pod 自动缩放器
 - en: 'We can also check that we have only `3` pods running with the `kubectl get
     deploy` command. Now let''s add some load to trigger the autoscaler:'
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以通过 `kubectl get deploy` 命令检查我们只运行了 `3` 个 pod。现在让我们添加一些负载以触发自动扩展器：
 - en: '[PRE17]'
+  id: totrans-89
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: '*Listing 5-4.* `boomload-deploy.yaml`'
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Listing 5-4.* `boomload-deploy.yaml`'
 - en: 'Create *listing 5-4* as usual. Now monitor the HPA with the alternating `kubectl
     get hpa` and `kubectl get deploy` commands. After a few moments, we should see
     the load jump above `10%`. After a few more moments, we should also see the number
     of pods increase all the way up to `6` replicas:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 像往常一样创建 *listing 5-4*。现在使用交替的 `kubectl get hpa` 和 `kubectl get deploy` 命令监视
+    HPA。几分钟后，我们应该看到负载跳到 `10%` 以上。再过一会儿，我们还应该看到 pod 数量增加到 `6` 个副本：
 - en: '![](img/B06302_05_09.png)'
+  id: totrans-92
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_09.png)'
 - en: HPA Increase and Pod Scale Up
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: HPA 增加和 Pod 扩容
 - en: 'Again, we can clean this up by removing our load generation pod and waiting
     a few moments:'
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 同样，我们可以通过删除我们的负载生成 pod 并等待片刻来清理这一点：
 - en: '[PRE18]'
+  id: totrans-95
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Again, if we watch the HPA, we'll start to see the CPU usage drop. After a few
     minutes, we will go back down to `0%` CPU load and then the Deployment will scale
     back to `3` replicas.
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 同样，如果我们观察 HPA，我们将开始看到 CPU 使用率下降。几分钟后，我们的 CPU 负载将降至 `0%`，然后 Deployment 将缩减到 `3`
+    个副本。
 - en: Jobs
+  id: totrans-97
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 工作
 - en: Deployments and Replication Controllers are a great way to ensure long running
     applications are always up and able to tolerate a wide array of infrastructure
     failures. However, there are some use cases this does not address—specifically
     short running, *run once*, tasks as well as regularly scheduled tasks. In both
     cases, we need the tasks to run until completion, but then terminate and start
     again at the next scheduled interval.
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 部署和复制控制器是确保长时间运行的应用程序始终处于运行状态并能够容忍各种基础设施故障的好方法。然而，有一些情况下这并不能解决 —— 特别是短期运行的、*仅运行一次*的任务以及定期计划的任务。在这两种情况下，我们需要任务运行直到完成，然后在下一个计划的时间间隔开始终止并重新启动。
 - en: 'To address this type of workload, Kubernetes has added a **Batch API**, which
     includes the **Job** type. This type will create 1 to n pods and ensure that they
     all run to completion with a successful exit. Based on `restartPolicy`, we can
     either allow pods to simply fail without retry (`restartPolicy: Never`) or retry
     when a pods exits without successful completion (`restartPolicy: OnFailure`).
     In this example, we will use the latter technique:'
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: '为了解决这种类型的工作负载，Kubernetes 添加了一个 **批处理 API**，其中包括 **Job** 类型。此类型将创建 1 到 n 个 pod，并确保它们全部成功完成退出。根据
+    `restartPolicy`，我们可以允许 pod 简单地失败而不进行重试（`restartPolicy: Never`），或者在 pod 退出而没有成功完成时进行重试（`restartPolicy:
+    OnFailure`）。在这个例子中，我们将使用后者的技术：'
 - en: '[PRE19]'
+  id: totrans-100
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: '*Listing 5-5*: `longtask.yaml`'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Listing 5-5*: `longtask.yaml`'
 - en: 'Let''s go ahead and run this with the following command:'
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们用以下命令运行：
 - en: '[PRE20]'
+  id: totrans-103
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: If all goes well, you'll see `job "long-task" created` printed on the screen.
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一切顺利，您将在屏幕上看到打印出 `job "long-task" created`。
 - en: 'This tells us the job was created, but doesn''t tell us if it completed successfully.
     To check that, we need to query the job status with the following command:'
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 这告诉我们该任务已创建，但并不告诉我们是否成功完成了。要检查这一点，我们需要使用以下命令查询任务状态：
 - en: '[PRE21]'
+  id: totrans-106
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: '![](img/B06302_05_10.png)'
+  id: totrans-107
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_10.png)'
 - en: Job Status
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 任务状态
 - en: You should see that we had `1` task that succeeded and in the `Events` logs,
     a SuccessfulCreate message. If we use `kubectl get pods` command, we won't see
     our **long-task** pods in the list, but we may notice the message at the bottom
     if the listing states that there are completed jobs that are not shown. We will
     need to run the command again with the `-a` or `--show-all` flag to see the **long-task**
     pod and the completed Job status.
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 您应该看到我们有`1`个成功完成的任务，在`Events`日志中，有一个SuccessfulCreate消息。如果我们使用`kubectl get pods`命令，我们将看不到我们的**long-task**
+    pods在列表中，但是如果列表底部指出有未显示的已完成作业，则可能会注意到该消息。我们需要再次使用`-a`或`--show-all`标志运行命令，以查看**long-task**
+    pod和已完成的作业状态。
 - en: Let's dig a little deeper to prove to ourselves the work was completed successfully.
     We could use the `logs` command to look at the pods logs. However, we can also
     use the UI for this task. Open a browser and go to the following UI URL: `https://**<your
     master ip>**/ui/`
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们深入一点，以证明工作已成功完成。我们可以使用`logs`命令查看pod的日志。但是，我们也可以使用UI来完成这个任务。打开浏览器，转到以下UI网址：`https://**<your
+    master ip>**/ui/`
 - en: 'Click on Jobs and then long-task from the list, so we can see the details.
     Then, in the Pods section, click on the pod listed there. This will give us the
     Pod details page. At the bottom of the details, click on View Logs and we will
     see the log output:'
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击*Jobs*，然后从列表中选择*long-task*，以便我们可以查看详细信息。然后，在Pods部分，单击那里列出的pod。这将给我们提供Pod详细信息页面。在详细信息底部，单击*查看日志*，我们将看到日志输出：
 - en: '![](img/B06302_05_11.png)'
+  id: totrans-112
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_11.png)'
 - en: Job Log
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 作业日志
 - en: As you can see in the preceding image, the whalesay container is complete with
     the ASCII art and our custom message from the runtime parameters in the example.
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 如您在上图中所见，whalesay容器已经完成了ASCII艺术，并且我们自定义的消息来自示例中的运行时参数。
 - en: Other types of jobs
+  id: totrans-115
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 其他类型的作业
 - en: While this example provides a basic introduction to short running jobs, it only
     addresses the use case of once and done tasks. In reality, batch work is often
     done in **Parallel** or as part of a regularly occurring task.
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然此示例提供了关于短期运行作业的基本介绍，但它仅涉及一次性任务的用例。实际上，批处理工作通常是**并行**进行的，或者作为定期发生的任务的一部分。
 - en: Parallel jobs
+  id: totrans-117
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 并行作业
 - en: Using **Parallel** jobs, we may be grabbing tasks from an ongoing queue or simply
     running a set number of tasks that are not dependent on each other. In the case
     of jobs pulling from a queue, our application must be aware of the dependencies
     and have the logic to decide how tasks are processed and what to work on next.
     Kubernetes is simply scheduling the jobs.
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用**并行**作业，我们可能正在从正在进行的队列中获取任务，或者仅运行一组不相互依赖的任务。在从队列中获取作业的情况下，我们的应用程序必须了解依赖关系，并具有逻辑来决定如何处理任务以及下一步要处理的内容。Kubernetes只是在调度这些作业。
 - en: You can learn more about parallel jobs from the Kubernetes documentation and
     batch API reference (you can refer to more details about this in point 1 in the
     *References* section at the end of the chapter).
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从Kubernetes文档和批处理API参考中了解有关并行作业的更多信息（您可以在本章末尾的*参考*部分中查看有关此的更多详细信息）。
 - en: Scheduled jobs
+  id: totrans-120
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 计划任务
 - en: 'For tasks that need to run periodically, Kubernetes has also released a `CronJob`
     type in alpha. As we might expect, this type of job uses the underlying cron formatting
     to specify a schedule for the task we wish to run. By default, our cluster will
     not have the alpha batch features enabled, but we can look at an example `CronJob`
     listing to learn how these types of workloads will work going forward:'
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于需要定期运行的任务，Kubernetes还发布了alpha版的`CronJob`类型。正如我们所期望的，此类作业使用底层的cron格式来指定我们希望运行的任务的时间表。默认情况下，我们的集群不会启用alpha批处理功能，但是我们可以查看一个示例`CronJob`列表，以了解这些类型的工作负载将如何继续工作：
 - en: '[PRE22]'
+  id: totrans-122
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: '*Listing 5-6. *`longtask-cron.yaml`'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单5-6.*`longtask-cron.yaml`'
 - en: 'As you can see, the schedule portion reflects a crontab with the following
     format:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 如您所见，计划部分反映了具有以下格式的crontab：
 - en: '**minute hour day-of-month month day-of-week**'
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: '**分钟 小时 月中日 月份 周中的日**'
 - en: In this example, `15 10 * * 6` creates a task that will run every `Saturday`
     at 10:15 am.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本示例中，`15 10 * * 6`创建了一个任务，将在每个`星期六`的上午10:15运行。
 - en: DaemonSets
+  id: totrans-127
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 守护进程集
 - en: While Replication Controllers and Deployments are great at making sure that
     a specific number of application instances are running, they do so in the context
     of the best fit. This means that the scheduler looks for nodes that meet resource
     requirements (available CPU, particular storage volumes, and so on) and tries
     to spread across the nodes and zones.
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然 Replication Controllers 和 Deployments 在确保特定数量的应用程序实例正在运行方面表现出色，但它们是在最佳适合的情况下进行的。这意味着调度器会寻找满足资源需求（可用
+    CPU、特定存储卷等）的节点，并尝试在节点和区域之间分配。
 - en: This works well for creating highly available and fault tolerant applications,
     but what about cases where we need an agent to run on every single node in the
     cluster? While the default spread does attempt to use different nodes, it does
     not guarantee that every node will have a replica and, indeed, will only fill a
     number of nodes equivalent to the quantity specified in the RC or Deployment specification.
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 这对于创建高可用和容错应用程序非常有效，但是对于我们需要在集群的每个节点上运行代理的情况怎么办？虽然默认的分布确实尝试使用不同的节点，但它不保证每个节点都有副本，实际上只会填充与
+    RC 或 Deployment 规范中指定的数量相当的节点。
 - en: To ease this burden, Kubernetes introduced `DaemonSet`, which simply defines
     a pod to run on every single node in the cluster or a defined subset of those
     nodes. This can be very useful for a number of production–related activities,
     such as monitoring and logging agents, security agents, and file system daemons.
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了减轻这一负担，Kubernetes 引入了`DaemonSet`，它简单地定义了一个 pod 在集群的每个节点或定义的一部分节点上运行。这对于许多生产相关的活动非常有用，例如监控和日志代理、安全代理和文件系统守护程序。
 - en: 'In fact, Kubernetes already uses this capability for some of its core system
     components. If we recall from [Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml),
     *Introduction to Kubernetes*, we saw a `node-problem-detector` running on the
     nodes. This pod is actually running on every node in the cluster as `DaemonSet`.
     We can see this by querying DaemonSets in the `kube-system` namespace:'
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 实际上，Kubernetes 已经在一些核心系统组件中使用了这种能力。如果我们回顾一下[第一章](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)，*Kubernetes
+    简介*，我们会看到一个`node-problem-detector`在节点上运行。这个 pod 实际上是作为`DaemonSet`在集群的每个节点上运行的。我们可以通过在`kube-system`命名空间中查询
+    DaemonSets 来看到这一点：
 - en: '[PRE23]'
+  id: totrans-132
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: '![](img/B06302_05_12.png)'
+  id: totrans-133
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_12.png)'
 - en: kube-system DaemonSets
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: kube-system DaemonSets
 - en: 'You can find more information about `node-problem-detector` as well as `yaml`
     in the following listing at: [http://kubernetes.io/docs/admin/node-problem/#node-problem-detector](http://kubernetes.io/docs/admin/node-problem/#node-problem-detector):'
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在以下清单中找到关于`node-problem-detector`以及`yaml`的更多信息：[http://kubernetes.io/docs/admin/node-problem/#node-problem-detector](http://kubernetes.io/docs/admin/node-problem/#node-problem-detector)：
 - en: '[PRE24]'
+  id: totrans-136
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: '*Listing 5-7\. node-problem-detector definition*'
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 5-7\. node-problem-detector 定义*'
 - en: Node selection
+  id: totrans-138
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 节点选择
 - en: As mentioned previously, we can schedule DaemonSets to run on a subset of nodes
     as well. This can be achieved using something called **nodeSelectors**. Theseallow
     us to constrain the nodes a pods runs on, by looking for specific labels and metadata.
     They simply match key-value pairs on the labels for each node. We can add our
     own labels or use those that are assigned by default.
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如前面提到的，我们也可以将 DaemonSets 安排在节点的子集上运行。这可以通过称为**nodeSelectors**的东西来实现。它们允许我们通过查找特定的标签和元数据来限制
+    pod 运行的节点。它们只是在每个节点的标签上匹配键值对。我们可以添加自己的标签或使用默认分配的标签。
 - en: 'The default labels are listed in the following table:'
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认标签列在以下表中：
 - en: '| **Default Node Labels** | **Description** |'
+  id: totrans-141
   prefs: []
   type: TYPE_TB
+  zh: '| **默认节点标签** | **描述** |'
 - en: '| `kubernetes.io/hostname` | This shows the hostname of the underlying instance
     or machine |'
+  id: totrans-142
   prefs: []
   type: TYPE_TB
+  zh: '| `kubernetes.io/hostname` | 这显示了底层实例或机器的主机名 |'
 - en: '| `beta.kubernetes.io/os` | This shows the underlying operating system as a
     report through the Go Language |'
+  id: totrans-143
   prefs: []
   type: TYPE_TB
+  zh: '| `beta.kubernetes.io/os` | 这显示了通过 Go 语言报告的底层操作系统。'
 - en: '| `beta.kubernetes.io/arch` | This shows the underlying processor architecture
     as a report through the Go Language |'
+  id: totrans-144
   prefs: []
   type: TYPE_TB
+  zh: '| `beta.kubernetes.io/arch` | 这显示了通过 Go 语言报告的底层处理器架构。'
 - en: '| `beta.kubernetes.io/instance-type` | (**Cloud-Only**) This is the instance
     type of the underlying cloud provider |'
+  id: totrans-145
   prefs: []
   type: TYPE_TB
+  zh: '| `beta.kubernetes.io/instance-type` | (**仅限云**) 底层云提供商的实例类型 |'
 - en: '| `failure-domain.beta.kubernetes.io/region` | (**Cloud-Only**) This is the
     region of the underlying cloud provider |'
+  id: totrans-146
   prefs: []
   type: TYPE_TB
+  zh: '| `failure-domain.beta.kubernetes.io/region` | (**仅限云**) 底层云提供商的区域 |'
 - en: '| `failure-domain.beta.kubernetes.io/zone` | (**Cloud-Only**) This is the fault-tolerance
     zone of the underlying cloud provider |'
+  id: totrans-147
   prefs: []
   type: TYPE_TB
+  zh: '| `failure-domain.beta.kubernetes.io/zone` | (**仅限云**) 底层云提供商的容错区域 |'
 - en: '*Table 5.1 - Kubernetes Default Node Labels*'
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: '*表 5.1 - Kubernetes 默认节点标签*'
 - en: We are not limited to DaemonSets, as nodeSelectors actually work with Pod definitions
     as well and are not limited to DaemonSets. Let's take a closer look at a job example
     (a slight modification of our preceding long-task example).
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们不仅限于 DaemonSets，因为 nodeSelectors 实际上也适用于 Pod 定义，并且不限于 DaemonSets。让我们仔细看看作业示例（对我们之前的长任务示例进行了轻微修改）。
 - en: 'First, we can see these on the nodes themselves. Let''s get the names of our
     nodes:'
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，我们可以在节点上看到这些。让我们获取我们节点的名称：
 - en: '[PRE25]'
+  id: totrans-151
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'Use a name from the output of the previous command and plug it into this one:'
+  id: totrans-152
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用前一个命令的输出中的名称并将其插入到这个命令中：
 - en: '[PRE26]'
+  id: totrans-153
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: '![](img/B06302_05_13.png)'
+  id: totrans-154
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_05_13.png)'
 - en: Excerpt from node describe
+  id: totrans-155
   prefs: []
   type: TYPE_NORMAL
+  zh: 来自节点描述的摘录
 - en: 'Let''s now add a nickname label to this node:'
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们给这个节点添加一个昵称标签：
 - en: '[PRE27]'
+  id: totrans-157
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'If we run the `kubectl describe node` command again, we will see this label
     listed next to the defaults. Now we can schedule workloads and specify this specific
     node. Here is a modification of our earlier long-running task with `nodeSelector`
     added:'
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们再次运行`kubectl describe node`命令，我们将看到此标签列在默认值旁边。现在我们可以调度工作负载并指定这个特定的节点。以下是我们早期的长时间运行任务的修改版本，添加了`nodeSelector`：
 - en: '[PRE28]'
+  id: totrans-159
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: '*Listing 5-8.* `longtask-nodeselector.yaml`'
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: '*图 5-8.* `longtask-nodeselector.yaml`'
 - en: Create the job from this listing with `kubectl create -f`.
+  id: totrans-161
   prefs: []
   type: TYPE_NORMAL
+  zh: 用 `kubectl create -f` 从此列表创建作业。
 - en: 'Once that succeeds, it will create a pod based on the preceding specification.
     Since we have defined `nodeSelector`, it will try to run the pod on nodes that
     have matching labels and fail if it finds no candidates. We can find the pod by
     specifying the job name in our query, as follows:'
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦成功，它将根据前述规范创建一个 pod。由于我们已经定义了`nodeSelector`，它将尝试在具有匹配标签的节点上运行 pod，并在找不到候选节点时失败。我们可以通过在查询中指定作业名称来找到该
+    pod，如下所示：
 - en: '[PRE29]'
+  id: totrans-163
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'We use the `-a` flag to show all pods. Jobs are short lived and once they enter
     the completed state, they will not show up in a basic `kubectl get pods` query.
     We also use the `-l` flag to specify pods with the `job-name=long-task-ns` label.
     This will give us the pod name which we can push into the following command:'
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们使用`-a`标志来显示所有 pod。作业的生命周期很短，一旦进入完成状态，它们就不会出现在基本的`kubectl get pods`查询中。我们还使用`-l`标志来指定具有`job-name=long-task-ns`标签的
+    pod。这将给我们提供 pod 名称，我们可以将其推入以下命令：
 - en: '[PRE30]'
+  id: totrans-165
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: The result should show the name of the node this pod was run on. If all has
     gone well, it should match the node we labeled a few steps earlier with the `trusty-steve`
     label.
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: 结果应该显示此 pod 所在节点的名称。如果一切顺利，它应该与我们之前用`trusty-steve`标签标记的节点匹配。
 - en: Summary
+  id: totrans-167
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概要
 - en: Now you should have a good foundation of the core constructs in Kubernetes.
     We explored the new Deployment abstraction and how it improves on the basic Replication
     Controller, allowing for smooth updates and solid integration with services and
@@ -697,18 +1057,27 @@
     You learned how to run short-running or batch tasks as well as how to run agents
     on every node in our cluster. Finally, we took a brief look at node selection
     and how that can be used to filter the nodes in the cluster used for our workloads.
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在你应该对 Kubernetes 中的核心构造有一个良好的基础。我们探讨了新的 Deployment 抽象及其如何改进基本的 Replication
+    Controller，从而实现了平滑的更新和与服务及自动缩放的坚实集成。我们还查看了作业和 DaemonSets 中的其他类型的工作负载。你学会了如何运行短期或批处理任务，以及如何在我们的集群中的每个节点上运行代理。最后，我们简要地看了一下节点选择以及如何用它来过滤集群中用于我们工作负载的节点。
 - en: We will build on what you learned in this chapter and look at the **Stateful**
     applications in the next chapter, exploring both critical application components
     and the data itself.
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将在本章学到的内容的基础上继续，然后在下一章中查看**有状态**应用程序，探索关键的应用程序组件和数据本身。
 - en: References
+  id: totrans-170
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 参考资料
 - en: '[https://kubernetes.io/docs/user-guide/jobs/#parallel-jobs](https://kubernetes.io/docs/user-guide/jobs/#parallel-jobs)'
+  id: totrans-171
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[https://kubernetes.io/docs/user-guide/jobs/#parallel-jobs](https://kubernetes.io/docs/user-guide/jobs/#parallel-jobs)'

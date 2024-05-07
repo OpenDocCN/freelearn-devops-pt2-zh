@@ -1,98 +1,140 @@
 - en: Pods, Services, Replication Controllers, and Labels
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Pod、Service、Replication Controller 和 Label
 - en: This chapter will cover the core Kubernetes constructs, namely **pods**, **services**,
     **replication controllers**, **replica sets**, and **labels**. A few simple application
     examples will be included to demonstrate each construct. The chapter will also
     cover basic operations for your cluster. Finally, **health checks** and **scheduling**
     will be introduced with a few examples.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将介绍核心 Kubernetes 构件，即**pod**、**service**、**replication controller**、**replica
+    set**和**label**。将包括几个简单的应用示例，以演示每个构件。本章还将介绍集群的基本操作。最后，将通过几个示例介绍**健康检查**和**调度**。
 - en: 'This chapter will discuss the following topics:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将讨论以下主题：
 - en: Kubernetes overall architecture
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Kubernetes 的整体架构
 - en: Introduction to core Kubernetes constructs, namely pods, services, replication
     controllers, replica sets, and labels
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 介绍核心 Kubernetes 构件，即 pod、service、replication controller、replica set 和 label。
 - en: Understanding how labels can ease management of a Kubernetes cluster
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 了解标签如何简化 Kubernetes 集群的管理
 - en: Understanding how to monitor services and container health
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 了解如何监视服务和容器的健康状况
 - en: Understanding how to set up scheduling constraints based on available cluster
     resources
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 了解如何根据可用集群资源设置调度约束
 - en: The architecture
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 架构
 - en: Although, **Docker** brings a helpful layer of abstraction and tooling around
     container management, Kubernetes brings similar assistance to orchestrating containers
     at scale and managing full application stacks.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管**Docker**在容器管理方面带来了有用的抽象层和工具，但 Kubernetes 也为规模化编排容器和管理完整应用程序堆栈提供了类似的帮助。
 - en: '**K8s** moves up the stack giving us constructs to deal with management at
     the application or service level. This gives us automation and tooling to ensure
     high availability, application stack, and service-wide portability. K8s also allows
     finer control of resource usage, such as CPU, memory, and disk space across our
     infrastructure.'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: '**K8s**在堆栈上升，为我们提供处理应用程序或服务级别管理的构件。这为我们提供了自动化和工具，以确保高可用性、应用程序堆栈和服务的整体可移植性。K8s
+    还允许我们对资源使用进行更精细的控制，例如 CPU、内存和磁盘空间。'
 - en: 'Kubernetes provides this higher level of orchestration management by giving
     us key constructs to combine multiple containers, endpoints, and data into full
     application stacks and services. K8s also provides the tooling to manage the when,
     where, and how many of the stack and its components:'
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 通过给我们关键构件来组合多个容器、端点和数据成为完整的应用程序堆栈和服务，提供了这种更高级别的编排管理。K8s 还提供了管理堆栈及其组件的何时、何地和多少的工具：
 - en: '![](img/image_02_001.png)'
+  id: totrans-12
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/image_02_001.png)'
 - en: Kubernetes core architecture
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 核心架构
 - en: In the preceding figure, we see the core architecture of Kubernetes. Most administrative
     interactions are done via the `kubectl` script and/or RESTful service calls to
     the API.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上图中，我们看到了 Kubernetes 的核心架构。大多数管理交互是通过`kubectl`脚本和/或对 API 的 RESTful 服务调用完成的。
 - en: Note the ideas of the desired state and actual state carefully. This is the
     key to how Kubernetes manages the cluster and its workloads. All the pieces of
     K8s are constantly working to monitor the current actual state and synchronize
     it with the desired state defined by the administrators via the API server or
     `kubectl` script. There will be times when these states do not match up, but the
     system is always working to reconcile the two.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 注意仔细理解期望状态和实际状态的概念。这是 Kubernetes 管理集群及其工作负载的关键。K8s 的所有部件都在不断工作，监视当前的实际状态，并将其与管理员通过
+    API 服务器或`kubectl`脚本定义的期望状态同步。有时这些状态不会匹配，但系统始终在努力协调这两者。
 - en: Master
+  id: totrans-16
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 主节点
 - en: Essentially, **master** is the brain of our cluster. Here, we have the core
     API server, which maintains RESTful web services for querying and defining our
     desired cluster and workload state. It's important to note that the control pane
     only accesses the master to initiate changes and not the nodes directly.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 实际上，**master**是我们集群的大脑。在这里，我们有核心 API 服务器，它维护 RESTful Web 服务，用于查询和定义我们期望的集群和工作负载状态。重要的是要注意，控制平面只通过主节点发起更改，而不是直接访问节点。
 - en: Additionally, the master includes the **scheduler**, which works with the API
     server to schedule workloads in the form of pods on the actual minion nodes. These
     pods include the various containers that make up our application stacks. By default,
     the basic Kubernetes scheduler spreads pods across the cluster and uses different
     nodes for matching pod replicas. Kubernetes also allows specifying necessary resources
     for each container, so scheduling can be altered by these additional factors.
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 另外，主节点包括 **调度器**，它与 API 服务器一起工作，以在实际的从节点上调度 pod 形式的工作负载。这些 pod 包含组成我们应用程序堆栈的各种容器。默认情况下，基本的
+    Kubernetes 调度器将 pod 分布在整个集群中，并使用不同的节点来匹配 pod 的副本。Kubernetes 还允许为每个容器指定必要的资源，因此可以通过这些额外因素来改变调度。
 - en: The replication controller/replica set works with the API server to ensure that
     the correct number of pod replicas are running at any given time. This is exemplary
     of the desired state concept. If our replication controller/replica set is defining
@@ -100,301 +142,438 @@
     scheduler will be invoked to add a third pod somewhere on our cluster. The same
     is true if there are too many pods running in the cluster at any given time. In
     this way, K8s is always pushing toward that desired state.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 复制控制器/副本集与 API 服务器一起工作，确保任何时候运行正确数量的 pod 副本。这是理想状态概念的典范。如果我们的复制控制器/副本集定义了三个副本，而我们的实际状态是两个
+    pod 副本正在运行，那么调度器将被调用，在集群的某个地方添加第三个 pod。如果在任何给定时间集群中运行的 pod 过多，也是如此。通过这种方式，K8s
+    总是朝着理想状态的方向努力。
 - en: Finally, we have **etcd** running as a distributed configuration store. The
     Kubernetes state is stored here and etcd allows values to be watched for changes.
     Think of this as the brain's shared memory.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们有 **etcd** 作为分布式配置存储运行。Kubernetes 状态存储在这里，etcd 允许监视值的变化。将其视为大脑的共享内存。
 - en: Node (formerly minions)
+  id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 节点（以前称为 minions）
 - en: In each node, we have a couple of components. The **kubelet** interacts with
     the API server to update the state and to start new workloads that have been invoked
     by the scheduler.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 在每个节点中，我们有一些组件组成。**kubelet** 与 API 服务器交互，以更新状态并启动调度器调用的新工作负载。
 - en: '**Kube-proxy** provides basic load balancing and directs the traffic destined
     for specific services to the proper pod on the backend. Refer to the *Services*
     section later in this chapter.'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Kube-proxy** 提供基本负载均衡，并将特定服务的流量引导到后端合适的 pod。请参考本章后面的 *服务* 部分。'
 - en: Finally, we have some default pods, which run various infrastructure services
     for the node. As we explored briefly in the previous chapter, the pods include
     services for **Domain Name System** (**DNS**), logging, and pod health checks.
     The default pod will run alongside our scheduled pods on every node.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们有一些默认的 pod，运行节点的各种基础设施服务。正如我们在上一章节中简要探讨的那样，这些 pod 包括用于 **域名系统（DNS）**、日志记录和
+    pod 健康检查的服务。默认的 pod 将与我们在每个节点上调度的 pod 一起运行。
 - en: In v1.0, **minion** was renamed to **node**, but there are still remnants of
     the term minion in some of the machine naming scripts and documentation that exists
     on the Web. For clarity, I've added the term minion in addition to node in a few
     places throughout the book.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 v1.0 中，**minion** 更名为 **node**，但在一些网络命名脚本和文档中仍然保留了 minion 一词的痕迹。为了清晰起见，在整本书中，我在一些地方同时添加了
+    minion 和 node 这两个术语。
 - en: Core constructs
+  id: totrans-26
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 核心构造
 - en: Now, let's dive a little deeper and explore some of the core abstractions Kubernetes
     provides. These abstractions will make it easier to think about our applications
     and ease the burden of life cycle management, high availability, and scheduling.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们深入了解 Kubernetes 提供的一些核心抽象。这些抽象将使我们更容易思考我们的应用程序，减轻生命周期管理、高可用性和调度的负担。
 - en: Pods
+  id: totrans-28
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Pods
 - en: Pods allow you to keep related containers close in terms of the network and
     hardware infrastructure. Data can live near the application, so processing can
     be done without incurring a high latency from network traversal. Similarly, common
     data can be stored on volumes that are shared between a number of containers.
     Pods essentially allow you to logically group containers and pieces of our application
     stacks together.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: Pods 允许你将相关容器在网络和硬件基础设施方面保持密切联系。数据可以靠近应用程序，因此可以在不经历网络遍历的高延迟情况下进行处理。同样，常见的数据可以存储在多个容器之间共享的卷上。Pods
+    本质上允许你逻辑地将容器和应用程序堆栈的各部分组合在一起。
 - en: While pods may run one or more containers inside, the pod itself may be one
     of many that is running on a Kubernetes node (minion). As we'll see, pods give
     us a logical group of containers that we can then replicate, schedule, and balance
     service endpoints across.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然Pod内部可能运行一个或多个容器，但Pod本身可能是在Kubernetes节点（从属节点）上运行的众多Pod之一。正如我们将看到的，Pod为我们提供了一个逻辑容器组，我们可以在其中复制、调度并通过负载均衡服务端点。
 - en: Pod example
+  id: totrans-31
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Pod示例
 - en: Let's take a quick look at a pod in action. We will spin up a **Node.js** application
     on the cluster. You'll need a GCE cluster running for this; if you don't already
     have one started, refer to the *Our first cluster* section in [Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)*, Introduction to
     Kubernetes*.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们快速看一下Pod的操作。我们将在群集上启动一个**Node.js**应用程序。您需要为此运行一个GCE群集；如果您尚未启动群集，请参考*我们的第一个集群*部分，在[第1章](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)的*，
+    Kubernetes简介*中。
 - en: 'Now, let''s make a directory for our definitions. In this example, I will create
     a folder in the `/book-examples` subfolder under our home directory:'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们为我们的定义创建一个目录。在本例中，我将在我们的主目录下的`/book-examples`子文件夹中创建一个文件夹：
 - en: '[PRE0]'
+  id: totrans-34
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Downloading the example code
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载示例代码
 - en: You can download the example code files from your account at [http://www.packtpub.com](http://www.packtpub.com)
     for all the Packt Publishing books you have purchased. If you purchased this book
     elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
     and register to have the files e-mailed directly to you.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从您在[http://www.packtpub.com](http://www.packtpub.com)上的帐户中下载所有您购买的Packt Publishing图书的示例代码文件。如果您在其他地方购买了本书，您可以访问[http://www.packtpub.com/support](http://www.packtpub.com/support)并注册，将文件直接通过电子邮件发送给您。
 - en: 'Use your favorite editor to create the following file:'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用您喜欢的编辑器创建以下文件：
 - en: '[PRE1]'
+  id: totrans-38
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: '*Listing 2-1*: `nodejs-pod.yaml`'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单2-1*：`nodejs-pod.yaml`'
 - en: 'This file creates a pod named `node-js-pod` with the latest `bitnami/apache`
     container running on port `80`. We can check this using the following command:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 此文件创建一个名为`node-js-pod`的Pod，其中运行着最新的`bitnami/apache`容器，运行在端口`80`上。我们可以使用以下命令来检查：
 - en: '[PRE2]'
+  id: totrans-41
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'The output is as follows:'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下：
 - en: '[PRE3]'
+  id: totrans-43
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'This gives us a pod running the specified container. We can see more information
     on the pod by running the following command:'
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 这样我们就可以运行指定容器的Pod。我们可以通过运行以下命令查看有关Pod的更多信息：
 - en: '[PRE4]'
+  id: totrans-45
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'You''ll see a good deal of information, such as the pod''s status, IP address,
     and even relevant log events. You''ll note the pod IP address is a private IP
     address, so we cannot access it directly from our local machine. Not to worry,
     as the `kubectl exec` command mirrors Docker''s `exec` functionality. Once the
     pod shows to be in a running state, we can use this feature to run a command inside
     a pod:'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 您将看到大量信息，如Pod的状态、IP地址，甚至相关的日志事件。您会注意到Pod的IP地址是私有IP地址，因此我们无法直接从本地计算机访问它。不用担心，因为`kubectl
+    exec`命令反映出Docker的`exec`功能。一旦Pod显示为运行状态，我们就可以使用此功能在Pod内运行命令：
 - en: '[PRE5]'
+  id: totrans-47
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: By default, this runs a command in the first container it finds, but you can
     select a specific one using the `-c` argument.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，这将在找到的第一个容器中运行命令，但您可以使用`-c`参数选择特定的容器。
 - en: After running the command, you should see some HTML code. We'll have a prettier
     view later in the chapter, but for now, we can see that our pod is indeed running
     as expected.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行命令后，您将看到一些HTML代码。在本章后面我们将有一个更漂亮的视图，但现在，我们可以看到我们的Pod确实按预期运行。
 - en: Labels
+  id: totrans-50
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 标签
 - en: Labels give us another level of categorization, which becomes very helpful in
     terms of everyday operations and management. Similar to tags, labels can be used
     as the basis of service discovery as well as a useful grouping tool for day-to-day
     operations and management tasks.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 标签为我们提供了另一种分类级别，在日常运维和管理方面非常有帮助。类似于标记，标签可以用作服务发现的基础，同时也是日常运维和管理任务的有用分组工具。
 - en: Labels are just simple key-value pairs. You will see them on pods, replication
     controllers, replica sets, services, and so on. The label acts as a selector and
     tells Kubernetes which resources to work with for a variety of operations. Think
     of it as a filtering option.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 标签只是简单的键值对。您会在Pod、复制控制器、副本集、服务等资源上看到它们。该标签充当选择器，告诉Kubernetes为各种操作使用哪些资源。可以将其视为过滤选项。
 - en: We will take a look at labels more in depth later in this chapter, but first,
     we will explore the remaining three constructs—services, replication controllers,
     and replica sets.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将在本章稍后更深入地看一下标签，但首先，我们将探索剩余的三个构造——服务、复制控制器和副本集。
 - en: The container's afterlife
+  id: totrans-54
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 容器的余生
 - en: As Werner Vogels, CTO of AWS, famously said *everything fails all the time;* containers
     and pods can and will crash, become corrupted, or maybe even just get accidentally
     shut off by a clumsy admin poking around on one of the nodes. Strong policy and
     security practices like enforcing least privilege curtail some of these incidents,
     but involuntary workload slaughter happens and is simply a fact of operations.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如AWS的首席技术官Werner Vogels所说的那样*一切都会遇到故障*：容器和 Pod 可能会崩溃、损坏，甚至可能会被手忙脚乱的管理员误关闭一个节点上的操作。强大的策略和安全实践如最低权限原则会遏制部分这类事件，但不可抗拒的工作量屠杀发生是运维的现实。
 - en: Luckily, Kubernetes provides two very valuable constructs to keep this somber
     affair all tidied up behind the curtains. Services and replication controllers/replica
     sets give us the ability to keep our applications running with little interruption
     and graceful recovery.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 幸运的是，Kubernetes提供了两个非常有价值的构建，以将这个庄严的事务都整洁地隐藏在幕后。服务和复制控制器/副本集使我们能够在几乎没有干扰和优雅恢复的情况下保持我们的应用程序运行。
 - en: Services
+  id: totrans-57
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 服务
 - en: Services allow us to abstract access away from the consumers of our applications.
     Using a reliable endpoint, users and other programs can access pods running on
     your cluster seamlessly.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 服务允许我们将访问方式与我们应用程序的消费者进行分离。使用可靠的端点，用户和其他程序能够无缝访问运行在您的集群上的 Pod。
 - en: K8s achieves this by making sure that every node in the cluster runs a proxy
     named **kube-proxy**. As the name suggests, the job of **kube-proxy** is to proxy
     communication from a service endpoint back to the corresponding pod that is running
     the actual application.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: K8s通过确保集群中的每个节点运行一个名为**kube-proxy**的代理来实现这一点。正如其名称所示，**kube-proxy**的工作是将服务端点的通信代理回到运行实际应用程序的相应
+    Pod。
 - en: '![](img/image_02_002.png)'
+  id: totrans-60
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/image_02_002.png)'
 - en: The kube-proxy architecture
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: kube-proxy架构
 - en: Membership of the service load balancing pool is determined by the use of selectors
     and labels. Pods with matching labels are added to the list of candidates where
     the service forwards traffic. A virtual IP address and port are used as the entry
     points for the service, and the traffic is then forwarded to a random pod on a
     target port defined by either K8s or your definition file.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 服务负载均衡池的成员资格由选择器和标签的使用确定。具有匹配标签的 Pod 被添加到候选列表中，服务将将流量转发给这些 Pod 中的一个。虚拟 IP 地址和端口被用作服务的入口点，然后流量被转发到由
+    K8s 或您的定义文件定义的目标端口上的随机 Pod。
 - en: Updates to service definitions are monitored and coordinated from the K8s cluster
     master and propagated to the **kube-proxy daemons** running on each node.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 服务定义的更新是从 K8s 集群主节点监视和协调，并传播到运行在每个节点上的**kube-proxy守护程序**。
 - en: At the moment, kube-proxy is running on the node host itself. There are plans
     to containerize this and the kubelet by default in the future.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前，kube-proxy正在节点主机上运行。未来计划将其和 kubelet 默认容器化。
 - en: Replication controllers and replica sets
+  id: totrans-65
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 复制控制器和副本集
 - en: '**Replication controllers** (**RCs**), as the name suggests, manage the number
     of nodes that a pod and included container images run on. They ensure that an
     instance of an image is being run with the specific number of copies.'
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: '**复制控制器**（**RCs**）正如其名称所示，管理着 Pod 和包含的容器镜像运行的节点数。它们确保特定数量的此镜像的实例正在被运行。'
 - en: As you start to operationalize your containers and pods, you'll need a way to
     roll out updates, scale the number of copies running (both up and down), or simply
     ensure that at least one instance of your stack is always running. RCs create
     a high-level mechanism to make sure that things are operating correctly across
     the entire application and cluster.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着您开始将容器和 Pod 运营化，您需要一种方式来滚动更新、扩展正在运行的副本数量（上下扩展），或者只需确保您的堆栈至少运行一个实例。RCs提供了一个高级机制，以确保整个应用程序和集群的运行正常。
 - en: RCs are simply charged with ensuring that you have the desired scale for your
     application. You define the number of pod replicas you want running and give it
     a template for how to create new pods. Just like services, we will use selectors
     and labels to define a pod's membership in a replication controller.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: RC（Replication Controllers）的任务很简单，即确保您的应用程序具有所需的规模。您定义要运行的 Pod 副本的数量，并为其提供如何创建新
+    Pod 的模板。与服务一样，我们将使用选择器和标签来定义 Pod 在复制控制器中的成员资格。
 - en: Kubernetes doesn't require the strict behavior of the replication controller,
     which is ideal for long-running processes. In fact, **job controllers** can be
     used for short lived workloads which allow jobs to be run to a completion state
     and are well suited for batch work.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 不要求复制控制器的严格行为，这对长时间运行的进程非常理想。事实上，**作业控制器**可以用于短期工作负载，允许作业运行到完成状态，并且非常适合批处理工作。
 - en: '**Replica sets**, are a new type, currently in Beta, that represent an improved
     version of replication controllers. Currently, the main difference consists of
     being able to use the new set-based label selectors as we will see in the following
     examples.'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: '**副本集**，是一种新型类型，目前处于 Beta 版，代表了复制控制器的改进版本。目前的主要区别在于能够使用新的基于集合的标签选择器，正如我们将在下面的示例中看到的。'
 - en: Our first Kubernetes application
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 我们的第一个 Kubernetes 应用程序
 - en: Before we move on, let's take a look at these three concepts in action. Kubernetes
     ships with a number of examples installed, but we will create a new example from
     scratch to illustrate some of the concepts.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们继续之前，让我们看看这三个概念是如何运作的。Kubernetes 预装了许多示例，但我们将从零开始创建一个新示例来说明一些概念。
 - en: We already created a pod definition file, but as you learned, there are many
     advantages to running our pods via replication controllers. Again, using the `book-examples/02_example`
     folder we made earlier, we will create some definition files and start a cluster
     of Node.js servers using a replication controller approach. Additionally, we'll
     add a public face to it with a load-balanced service.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经创建了一个 pod 定义文件，但是正如你所学到的，通过复制控制器运行我们的 pod 有许多优势。再次使用我们之前创建的 `book-examples/02_example`
+    文件夹，我们将创建一些定义文件，并使用复制控制器方法启动一个 Node.js 服务器集群。此外，我们还将使用负载均衡服务为其添加一个公共面孔。
 - en: 'Use your favorite editor to create the following file:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用您喜欢的编辑器创建以下文件：
 - en: '[PRE6]'
+  id: totrans-75
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: '*Listing 2-2*: `nodejs-controller.yaml`'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 2-2*：`nodejs-controller.yaml`'
 - en: 'This is the first resource definition file for our cluster, so let''s take
     a closer look. You''ll note that it has four first-level elements (`kind`, `apiVersion`,
     `metadata`, and `spec`). These are common among all top-level Kubernetes resource
     definitions:'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是我们集群的第一个资源定义文件，让我们仔细看一看。您会注意到它有四个一级元素（`kind`、`apiVersion`、`metadata` 和 `spec`）。这些在所有顶级
+    Kubernetes 资源定义中都很常见：
 - en: '`Kind`: This tells K8s the type of resource we are creating. In this case,
     the type is `ReplicationController`. The `kubectl` script uses a single `create`
     command for all types of resources. The benefit here is that you can easily create
     a number of resources of various types without the need for specifying individual
     parameters for each type. However, it requires that the definition files can identify
     what it is they are specifying.'
+  id: totrans-78
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`类型`：这告诉 K8s 我们正在创建的资源类型。在这种情况下，类型是 `ReplicationController`。`kubectl` 脚本使用单个
+    `create` 命令来处理所有类型的资源。这里的好处是您可以轻松创建各种类型的资源，而无需为每种类型指定单独的参数。但是，这要求定义文件能够识别它们所指定的内容。'
 - en: '`apiVersion`: This simply tells Kubernetes which version of the schema we are
     using.'
+  id: totrans-79
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`apiVersion`：这只是告诉 Kubernetes 我们正在使用的模式的版本。'
 - en: '`Metadata`: This is where we will give the resource a name and also specify
     labels that will be used to search and select resources for a given operation.
     The metadata element also allows you to create annotations, which are for the
     non-identifying information that might be useful for client tools and libraries.'
+  id: totrans-80
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`元数据`：在这里，我们将为资源指定一个名称，并指定将用于搜索和选择给定操作的资源的标签。元数据元素还允许您创建注释，这些注释用于非标识信息，可能对客户端工具和库有用。'
 - en: Finally, we have `spec`, which will vary based on the `kind` or type of resource
     we are creating. In this case, it's `ReplicationController`, which ensures the
     desired number of pods are running. The `replicas` element defines the desired
@@ -404,435 +583,679 @@
     An important thing to note is that the `selector` values need to match the `labels`
     values specified in the pod template. Remember that this matching is used to select
     the pods being managed.
+  id: totrans-81
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 最后，我们有 `spec`，它将根据我们正在创建的资源的 `kind` 或类型而变化。在这种情况下，它是 `ReplicationController`，它确保所需数量的
+    pod 正在运行。`replicas` 元素定义了所需的 pod 数量，`selector` 元素告诉控制器要监视哪些 pod，最后，`template`
+    元素定义了启动新 pod 的模板。`template` 部分包含我们之前在 pod 定义中看到的相同部分。需要注意的一点是，`selector` 值需要与
+    pod 模板中指定的 `labels` 值匹配。请记住，这种匹配用于选择正在管理的 pod。
 - en: 'Now, let''s take a look at the service definition:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们来看一下服务定义：
 - en: '[PRE7]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: '*Listing 2-3*: `nodejs-rc-service.yaml`'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 2-3*: `nodejs-rc-service.yaml`'
 - en: The YAML here is similar to `ReplicationController`. The main difference is
     seen in the service `spec` element. Here, we define the `Service` type, listening
     `port`, and `selector`, which tell the `Service` proxy which pods can answer the
     service.
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里的 YAML 与 `ReplicationController` 类似。主要区别在于服务的 `spec` 元素中。在这里，我们定义了 `Service`
+    类型，监听 `port` 和 `selector`，告诉 `Service` 代理哪些 pod 可以回答该服务。
 - en: Kubernetes supports both YAML and JSON formats for definition files.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 支持 YAML 和 JSON 两种格式的定义文件。
 - en: 'Create the Node.js express replication controller:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建 Node.js express 复制控制器：
 - en: '[PRE8]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'The output is as follows:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下：
 - en: '[PRE9]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'This gives us a replication controller that ensures that three copies of the
     container are always running:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 这给了我们一个复制控制器，确保容器始终运行三个副本：
 - en: '[PRE10]'
+  id: totrans-92
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'The output is as follows:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下：
 - en: '[PRE11]'
+  id: totrans-94
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: On GCE, this will create an external load balancer and forwarding rules, but
     you may need to add additional firewall rules. In my case, the firewall was already
     open for port `80`. However, you may need to open this port, especially if you
     deploy a service with ports other than `80` and `443`.
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GCE 上，这将创建一个外部负载均衡器和转发规则，但您可能需要添加额外的防火墙规则。在我的情况下，防火墙已经为端口 `80` 打开。但是，您可能需要打开此端口，特别是如果您部署了具有端口不是
+    `80` 和 `443` 的服务。
 - en: 'Alright, now we have a running service, which means that we can access the
     Node.js servers from a reliable URL. Let''s take a look at our running services:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 好了，现在我们有了一个运行中的服务，这意味着我们可以从可靠的 URL 访问 Node.js 服务器。让我们来看看我们正在运行的服务：
 - en: '[PRE12]'
+  id: totrans-97
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是前面命令的结果：
 - en: '![](img/6302_02_03.png)'
+  id: totrans-99
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6302_02_03.png)'
 - en: Services listing
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 服务列表
 - en: 'In the preceding image (*Services listing*), we should note that the `node-js`
     service is running, and in the IP(S) column, we should have both a private and
     a public (`130.211.186.84` in the screenshot) IP address. If you don''t see the
     external IP, you may need to wait a minute for the IP to be allocated from GCE.
     Let''s see if we can connect by opening up the public address in a browser:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 在前面的图像（*服务列表*）中，我们应该注意到 `node-js` 服务正在运行，并且在 IP(S) 列中，我们应该有一个私有和一个公共的（截图中为 `130.211.186.84`）IP
+    地址。如果您看不到外部 IP，请等待一分钟以从 GCE 中分配 IP。让我们尝试在浏览器中打开公共地址来连接：
 - en: '![](img/image_02_004.png)'
+  id: totrans-102
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/image_02_004.png)'
 - en: Container info application
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 容器信息应用程序
 - en: You should see something like the figure *Container info application* . If we
     visit multiple times, you should note that the container name changes. Essentially,
     the service load balancer is rotating between available pods on the backend.
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 您应该看到类似 *容器信息应用程序* 的图形。如果我们多次访问，您应该注意到容器名称的变化。基本上，服务负载均衡器在后端可用的 pod 之间轮转。
 - en: 'Browsers usually cache web pages, so to really see the container name change,
     you may need to clear your cache or use a proxy like this one:'
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 浏览器通常会缓存网页，所以要真正看到容器名称的变化，您可能需要清除缓存或使用像这样的代理：
 - en: '[https://hide.me/en/proxy](https://hide.me/en/proxy)'
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://hide.me/en/proxy](https://hide.me/en/proxy)'
 - en: 'Let''s try playing chaos monkey a bit and kill off a few containers to see
     what Kubernetes does. In order to do this, we need to see where the pods are actually
     running. First, let''s list our pods:'
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们试着玩一下混沌猴，关闭一些容器，看看 Kubernetes 会做什么。为了做到这一点，我们需要查看 pod 实际运行的位置。首先，让我们列出我们的
+    pod：
 - en: '[PRE13]'
+  id: totrans-108
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是前面命令的结果：
 - en: '![](img/image_02_005.png)'
+  id: totrans-110
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/image_02_005.png)'
 - en: Currently running pods
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 当前正在运行的 Pod
 - en: 'Now, let''s get some more details on one of the pods running a `node-js` container.
     You can do this with the `describe` command with one of the pod names listed in
     the last command:'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们对运行`node-js`容器的一个 Pod 获取更多详细信息。你可以使用上一个命令中列出的一个 Pod 名称执行此操作：
 - en: '[PRE14]'
+  id: totrans-113
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是前述命令的结果：
 - en: '![](img/image_02_006.png)'
+  id: totrans-115
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/image_02_006.png)'
 - en: Pod description
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: Pod 描述
 - en: 'You should see the preceding output. The information we need is the `Node:`
     section. Let''s use the node name to **SSH** (short for **Secure Shell**) into
     the (minion) node running this workload:'
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该看到前面的输出。我们需要的信息是`Node:`部分。让我们使用节点名称**SSH**（缩写为**安全外壳**）进入运行此工作负载的（从属）节点：
 - en: '[PRE15]'
+  id: totrans-118
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Once SSHed into the node, if we run a `sudo docker ps` command, we should see
     at least two containers: one running the `pause` image and one running the actual
     `node-express-info` image. You may see more if the K8s scheduled more than one
     replica on this node. Let''s grab the container ID of the `jonbaier/node-express-info`
     image (not `gcr.io/google_containers/pause`) and kill it off to see what happens.
     Save this container ID somewhere for later:'
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦 SSH 进入节点，如果我们运行`sudo docker ps`命令，我们应该会看到至少两个容器：一个运行`pause`镜像，另一个运行实际的`node-express-info`镜像。如果
+    K8s 在此节点上调度了多个副本，则可能会看到更多。让我们获取`jonbaier/node-express-info`镜像（而不是`gcr.io/google_containers/pause`）的容器
+    ID 并将其杀死以查看发生了什么。稍后记下此容器 ID：
 - en: '[PRE16]'
+  id: totrans-120
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: Unless you are really quick you'll probably note that there is still a `node-express-info`
     container running, but look closely and you'll note that the `container id` is
     different and the creation time stamp shows only a few seconds ago. If you go
     back to the service URL, it is functioning as normal. Go ahead and exit the SSH
     session for now.
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 除非你非常迅速，否则你可能会注意到仍然有一个`node-express-info`容器在运行，但仔细观察你会发现`容器 id`不同，并且创建时间戳显示只是几秒钟前。如果你返回到服务的
+    URL，它正常运行。现在可以退出 SSH 会话了。
 - en: Here, we are already seeing Kubernetes playing the role of on-call operations
     ensuring that our application is always running.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，我们已经看到 Kubernetes 扮演着随时待命的运维角色，确保我们的应用程序始终运行。
 - en: Let's see if we can find any evidence of the outage. Go to the Events page in
     the Kubernetes UI. You can find it by navigating to the Nodes page on the main
     K8s dashboard. Select a node from the list (the same one that we SSHed into) and
     scroll down to Events on the node details page.
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看是否能找到任何中断的证据。进入 Kubernetes UI 中的事件页面。你可以通过导航到 K8s 主仪表板上的 Nodes 页面找到它。从列表中选择一个节点（我们
+    SSH 进入的相同节点）并滚动到节点详细信息页面的 Events 下。
 - en: 'You will see a screen similar to the following screenshot:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 你将看到一个类似于以下截图的屏幕：
 - en: '![](img/B06302_02_07.png)'
+  id: totrans-125
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_07.png)'
 - en: Kubernetes UI event page
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes UI 事件页面
 - en: You should see three recent events. First, Kubernetes pulls the image. Second,
     it creates a new container with the pulled image. Finally, it starts that container
     again. You'll note that, from the time stamps, this all happens in less than a
     second. Time taken may vary based on the cluster size and image pulls, but the
     recovery is very quick.
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该看到三个最近的事件。首先，Kubernetes 拉取镜像。其次，它使用拉取的镜像创建一个新的容器。最后，它再次启动该容器。你会注意到，从时间戳来看，所有这些都发生在不到一秒的时间内。所花费的时间可能会根据集群大小和镜像拉取而有所不同，但恢复非常快。
 - en: More on labels
+  id: totrans-128
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更多关于标签的信息
 - en: 'As mentioned previously, labels are just simple key-value pairs. They are available
     on pods, replication controllers, replica sets, services, and more. If you recall
     our service YAML, in *Listing 2-3*: `nodejs-rc-service.yaml`, there was a `selector`
     attribute. The `selector` attribute tells Kubernetes which labels to use in finding
     pods to forward traffic for that service.'
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 如前所述，标签只是简单的键值对。它们可用于 Pod、复制控制器、副本集、服务等。如果你回忆一下我们的服务 YAML，在 *清单 2-3*：`nodejs-rc-service.yaml`中，有一个`selector`属性。`selector`属性告诉
+    Kubernetes 在查找要转发流量的 Pod 时使用哪些标签。
 - en: 'K8s allows users to work with labels directly on replication controllers, replica
     sets, and services. Let''s modify our replicas and services to include a few more
     labels. Once again, use your favorite editor and create these two files, as follows:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: K8s 允许用户直接在复制控制器、副本集和服务上使用标签。让我们修改我们的副本和服务，以包含更多标签。再次使用你喜欢的编辑器创建这两个文件，如下所示：
 - en: '[PRE17]'
+  id: totrans-131
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: '*Listing 2-4*: `nodejs-labels-controller.yaml`'
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 2-4*：`nodejs-labels-controller.yaml`'
 - en: '[PRE18]'
+  id: totrans-133
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: '*Listing 2-5*: `nodejs-labels-service.yaml`'
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 2-5*：`nodejs-labels-service.yaml`'
 - en: 'Create the replication controller and service as follows:'
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建复制控制器和服务如下：
 - en: '[PRE19]'
+  id: totrans-136
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'Let''s take a look at how we can use labels in everyday management. The following
     table shows us the options to select labels:'
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看如何在日常管理中使用标签。以下表格向我们展示了选择标签的选项：
 - en: '| **Operators** | **Description** | **Example** |'
+  id: totrans-138
   prefs: []
   type: TYPE_TB
+  zh: '| **运算符** | **描述** | **示例** |'
 - en: '| `=` or `==` | You can use either style to select keys with values equal to
     the string on the right | `name = apache` |'
+  id: totrans-139
   prefs: []
   type: TYPE_TB
+  zh: '| `=` 或 `==` | 您可以使用任一样式选择值等于右侧字符串的键 | `name = apache` |'
 - en: '| `!=` | Select keys with values that do not equal the string on the right
     | `Environment != test` |'
+  id: totrans-140
   prefs: []
   type: TYPE_TB
+  zh: '| `!=` | 选择值不等于右侧字符串的键 | `Environment != test` |'
 - en: '| `in` | Select resources whose labels have keys with values in this set |
     `tier in (web, app)` |'
+  id: totrans-141
   prefs: []
   type: TYPE_TB
+  zh: '| `in` | 选择标签具有在此集合中的键值对的资源 | `tier in (web, app)` |'
 - en: '| `notin` | Select resources whose labels have keys with values not in this
     set | `tier notin (lb, app)` |'
+  id: totrans-142
   prefs: []
   type: TYPE_TB
+  zh: '| `notin` | 选择标签具有不在此集合中的键值对的资源 | `tier notin (lb, app)` |'
 - en: '| `<Key name>` | Use a key name only to select resources whose labels contain
     this key | `tier` |'
+  id: totrans-143
   prefs: []
   type: TYPE_TB
+  zh: '| `<键名>` | 仅使用键名选择包含此键的标签资源 | `tier` |'
 - en: Label selectors
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: 标签选择器
 - en: 'Let''s try looking for replicas with `test` deployments:'
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们尝试查找具有`test`部署的副本：
 - en: '[PRE20]'
+  id: totrans-146
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是上述命令的结果：
 - en: '![](img/B06302_02_08-updated.png)'
+  id: totrans-148
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_08-updated.png)'
 - en: Replication controller listing
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: 复制控制器列表
 - en: 'You''ll notice that it only returns the replication controller we just started.
     How about services with a label named `component`? Use the following command:'
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 您会注意到它只返回我们刚刚启动的复制控制器。带有名为`component`的标签的服务呢？请使用以下命令：
 - en: '[PRE21]'
+  id: totrans-151
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-152
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是上述命令的结果：
 - en: '![](img/B06302_02_09.png)'
+  id: totrans-153
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_09.png)'
 - en: Listing of services with a label named component
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 带有名为 component 的标签的服务列表
 - en: 'Here, we see the core Kubernetes service only. Finally, let''s just get the
     `node-js` servers we started in this chapter. See the following command:'
+  id: totrans-155
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，我们仅看到了核心 Kubernetes 服务。最后，让我们只获取本章中启动的 `node-js` 服务器。请参阅以下命令：
 - en: '[PRE22]'
+  id: totrans-156
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是上述命令的结果：
 - en: '![](img/B06302_02_10-updated.png)'
+  id: totrans-158
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_10-updated.png)'
 - en: Listing of services with a label name and a value of node-js or node-js-labels
+  id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: 带有名称为 node-js 或 node-js-labels 的标签名和值的服务列表
 - en: 'Additionally, we can perform management tasks across a number of pods and services.
     For example, we can kill all replication controllers that are part of the `demo`
     deployment (if we had any running), as follows:'
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，我们可以跨多个 pod 和服务执行管理任务。例如，我们可以终止所有属于`demo`部署的复制控制器（如果有运行中的话），如下所示：
 - en: '[PRE23]'
+  id: totrans-161
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'Otherwise, kill all services that are part of a `production` or `test` deployment
     (again, if we had any running), as follows:'
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 否则，终止所有属于`production`或`test`部署的服务（再次，如果有正在运行的话），如下所示：
 - en: '[PRE24]'
+  id: totrans-163
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: It's important to note that, while label selection is quite helpful in day-to-day
     management tasks, it does require proper deployment hygiene on our part. We need
     to make sure that we have a tagging standard and that it is actively followed
     in the resource definition files for everything we run on Kubernetes.
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 值得注意的是，虽然标签选择在日常管理任务中非常有用，但这确实需要我们保持良好的部署卫生习惯。我们需要确保我们有一个标记标准，并且在我们在 Kubernetes
+    上运行的所有内容的资源定义文件中积极遵循。
 - en: 'While we used service definition YAML files to create our services thus far,
     you can actually create them using a `kubectl` command only. To try this out,
     first run the `get pods` command and get one of the `node-js` pod names. Next,
     use the following `expose` command to create a service endpoint for just that
     pod:'
+  id: totrans-165
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们一直使用服务定义 YAML 文件来创建我们的服务，但实际上，您可以仅使用一个 `kubectl` 命令创建它们。要尝试这样做，请首先运行
+    `get pods` 命令并获取一个 `node-js` pod 名称。接下来，使用以下`expose` 命令仅为该 pod 创建服务端点：
 - en: '`**$ kubectl expose pods node-js-gxkix --port=80 --name=testing-vip --create-external-load-balancer=true**`
     This will create a service named `testing-vip` and also a public `vip` (load balancer
     IP) that can be used to access this pod over port `80`. There are number of other
     optional parameters that can be used. These can be found with the following command:'
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: '`**$ kubectl expose pods node-js-gxkix --port=80 --name=testing-vip --create-external-load-balancer=true**`
+    这将创建一个名为`testing-vip`的服务，以及一个可以用于通过端口`80` 访问此 pod 的公共 `VIP`（负载均衡器 IP）。还有许多其他可选参数可用。可以使用以下命令查找这些参数：'
 - en: '**`kubectl expose --help`**'
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: '**`kubectl expose --help`**'
 - en: Replica sets
+  id: totrans-168
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 副本集
 - en: As discussed earlier, replica sets are the new and improved version of replication
     controllers. They take advantage of set-based label selection, but they are still
     considered beta at time of this writing.
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如之前讨论的，复制集是复制控制器的新版本和改进版。它们利用基于集合的标签选择，但在撰写本文时仍被视为 beta 版本。
 - en: 'Here is an example of a `ReplicaSet` based on and similar to the `ReplicationController`
     in *listing 2-4*:'
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是一个基于`ReplicaSet`的示例，与*列表2-4*中的`ReplicationController`类似：
 - en: '[PRE25]'
+  id: totrans-171
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: '*Listing 2-6*: `nodejs-labels-replicaset.yaml`'
+  id: totrans-172
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表2-6*：`nodejs-labels-replicaset.yaml`'
 - en: Health checks
+  id: totrans-173
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 健康检查
 - en: Kubernetes provides two layers of health checking. First, in the form of HTTP
     or TCP checks, K8s can attempt to connect to a particular endpoint and give a
     status of healthy on a successful connection. Second, application-specific health
     checks can be performed using command-line scripts.
+  id: totrans-174
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 提供两层健康检查。首先，以 HTTP 或 TCP 检查的形式，K8s 可以尝试连接到特定端点，并在成功连接时给出健康状态。其次，可以使用命令行脚本执行特定于应用程序的健康检查。
 - en: 'Let''s take a look at a few health checks in action. First, we''ll create a
     new controller with a health check:'
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看一些健康检查的实际操作。首先，我们将创建一个带有健康检查的新控制器：
 - en: '[PRE26]'
+  id: totrans-176
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: '*Listing 2-7*: `nodejs-health-controller.yaml`'
+  id: totrans-177
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表2-7*：`nodejs-health-controller.yaml`'
 - en: Note the addition of the `livenessprobe` element. This is our core health check
     element. From here, we can specify `httpGet`, `tcpScoket`, or `exec`. In this
     example, we use `httpGet` to perform a simple check for a URI on our container.
     The probe will check the path and port specified and restart the pod if it doesn't
     successfully return.
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 注意`livenessprobe`元素的添加。这是我们的核心健康检查元素。从这里，我们可以指定`httpGet`、`tcpScoket`或`exec`。在这个例子中，我们使用`httpGet`来对容器上的
+    URI 执行一个简单的检查。探针将检查指定的路径和端口，并在没有成功返回时重新启动 Pod。
 - en: Status codes between `200` and `399` are all considered healthy by the probe.
+  id: totrans-179
   prefs: []
   type: TYPE_NORMAL
+  zh: 探针认为状态码在`200`到`399`之间均为健康状态。
 - en: Finally, `initialDelaySeconds` gives us the flexibility to delay health checks
     until the pod has finished initializing. The `timeoutSeconds` value is simply
     the timeout value for the probe.
+  id: totrans-180
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，`initialDelaySeconds`给了我们灵活性，延迟健康检查直到 Pod 完成初始化。`timeoutSeconds`的值只是探针的超时值。
 - en: 'Let''s use our new health check-enabled controller to replace the old `node-js`
     RC. We can do this using the `replace` command, which will replace the replication
     controller definition:'
+  id: totrans-181
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们使用我们新的启用健康检查的控制器来替换旧的`node-js` RC。我们可以使用`replace`命令来完成这个操作，该命令将替换复制控制器的定义：
 - en: '[PRE27]'
+  id: totrans-182
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'Replacing the RC on its own won''t replace our containers because it still
     has three healthy pods from our first run. Let''s kill off those pods and let
     the updated `ReplicationController` replace them with containers that have health
     checks:'
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: 仅仅替换 RC 本身并不会替换我们的容器，因为它仍然有三个来自第一次运行的健康 Pod。让我们杀死那些 Pod，并让更新的`ReplicationController`替换它们，这些容器具有健康检查：
 - en: '[PRE28]'
+  id: totrans-184
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'Now, after waiting a minute or two, we can list the pods in an RC and grab
     one of the pod IDs to inspect a bit deeper with the `describe` command:'
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，等待一两分钟后，我们可以列出 RC 中的 Pod，并获取一个 Pod ID，然后用`describe`命令更深入地检查：
 - en: '[PRE29]'
+  id: totrans-186
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下屏幕截图是前述命令的结果：
 - en: '![](img/B06302_02_11.png)'
+  id: totrans-188
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_11.png)'
 - en: Description of node-js replication controller
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: node-js 复制控制器的描述
 - en: 'Now, use the following command for one of the pods:'
+  id: totrans-190
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，对其中一个 Pod 使用以下命令：
 - en: '[PRE30]'
+  id: totrans-191
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-192
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下屏幕截图是前述命令的结果：
 - en: '![](img/B06302_02_12.png)'
+  id: totrans-193
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_12.png)'
 - en: Description of node-js-1m3cs pod
+  id: totrans-194
   prefs: []
   type: TYPE_NORMAL
+  zh: node-js-1m3cs Pod 的描述
 - en: At the top, we will see the overall pod details. Depending on your timing, under
     `State`, it will either show `Running` or `Waiting` with a `CrashLoopBackOff`
     reason and some error information. A bit below that we can see information on
@@ -842,40 +1265,59 @@
     of killing, started, and created events repeating over and over again. You should
     also see a note in the `Killing` entry that the container is unhealthy. This is
     our health check failing because we don't have a page responding at `/status`.
+  id: totrans-195
   prefs: []
   type: TYPE_NORMAL
+  zh: 在顶部，我们将看到整体的 pod 信息。根据你的时间点，在`State`下，它可能会显示`Running`或`Waiting`与一个`CrashLoopBackOff`原因以及一些错误信息。稍微下面我们可以看到有关我们的`Liveness`探针的信息，而且很可能会看到失败计数大于`0`。在更深处，我们有
+    pod 事件。同样，根据你的时间点，你很可能会有一系列与 pod 相关的事件。在一两分钟内，你会注意到一个不断重复的杀死、启动和创建事件的模式。您还应该在`Killing`条目中看到一个注释，指出容器不健康。这是我们的健康检查失败，因为我们没有在`/status`上响应页面。
 - en: You may note that if you open a browser to the service load balancer address,
     it still responds with a page. You can find the load balancer IP with a `kubectl
     get services` command.
+  id: totrans-196
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可能注意到，如果您打开浏览器访问服务负载均衡器地址，它仍然会有响应页面。您可以使用`kubectl get services`命令找到负载均衡器 IP。
 - en: This is happening for a number of reasons. First, the health check is simply
     failing because `/status` doesn't exist, but the page where the service is pointed
     is still functioning normally in between restarts. Second, the `livenessProbe`
     is only charged with restarting the container on a health check fail. There is
     a separate `readinessProbe` that will remove a container from the pool of pods
     answering service endpoints.
+  id: totrans-197
   prefs: []
   type: TYPE_NORMAL
+  zh: 这种情况发生的原因有很多。首先，健康检查简单地失败，因为`/status`不存在，但服务指向的页面在重新启动之间仍然正常运行。其次，`livenessProbe`只负责在健康检查失败时重新启动容器。还有一个单独的`readinessProbe`，它将从回答服务端点的
+    pods 池中删除一个容器。
 - en: 'Let''s modify the health check for a page that does exist in our container,
     so we have a proper health check. We''ll also add a readiness check and point
     it to the nonexistent status page. Open the `nodejs-health-controller.yaml` file
     and modify the `spec` section to match *Listing 2-8* and save it as `nodejs-health-controller-2.yaml`:'
+  id: totrans-198
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们修改健康检查，指向我们容器中存在的页面，这样我们就有了一个正确的健康检查。我们还将添加一个 readiness 检查，并指向不存在的状态页面。打开`nodejs-health-controller.yaml`文件，并修改`spec`部分以匹配*Listing
+    2-8*，然后保存为`nodejs-health-controller-2.yaml`：
 - en: '[PRE31]'
+  id: totrans-199
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: '*Listing 2-8*: `nodejs-health-controller-2.yaml`'
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Listing 2-8*：`nodejs-health-controller-2.yaml`'
 - en: 'This time, we will delete the old RC, which will kill the pods with it, and
     create a new RC with our updated YAML file:'
+  id: totrans-201
   prefs: []
   type: TYPE_NORMAL
+  zh: 这一次，我们将删除旧的 RC，这将导致其中的 pods 被终止，并使用我们更新的 YAML 文件创建一个新的 RC：
 - en: '[PRE32]'
+  id: totrans-202
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: 'Now, when we describe one of the pods, we only see the creation of the pod
     and the container. However, you''ll note that the service load balancer IP no
     longer works. If we run the `describe` command on one of the new nodes we''ll
@@ -884,199 +1326,302 @@
     requests from the main service. Open up `nodejs-health-controller-2.yaml` in an
     editor and make that update now. Then, once again remove and recreate the replication
     controller:'
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: '现在，当我们描述其中一个 pods 时，我们只会看到 pod 和容器的创建。然而，您会注意到服务负载均衡器 IP 不再起作用。如果我们在新节点上运行`describe`命令，我们将注意到一个`Readiness
+    probe failed`错误消息，但 pod 本身仍在运行。如果我们将 readiness 探针路径更改为`path: /`，我们将再次能够满足主服务的请求。现在在编辑器中打开`nodejs-health-controller-2.yaml`，并进行更新。然后，再次删除并重新创建复制控制器：'
 - en: '[PRE33]'
+  id: totrans-204
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: Now the load balancer IP should work once again. Keep these pods around as we
     will use them again in [Chapter 3](112f7a80-e9ed-43e9-a165-ea41fa523250.xhtml),
     *Networking, Load Balancers, and Ingress*.
+  id: totrans-205
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在负载均衡器 IP 应该可以再次工作了。保留这些 pods，因为我们将在[Chapter 3](112f7a80-e9ed-43e9-a165-ea41fa523250.xhtml)，*网络、负载均衡器和入口*中再次使用它们。
 - en: TCP checks
+  id: totrans-206
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: TCP 检查
 - en: 'Kubernetes also supports health checks via simple TCP socket checks and also
     with custom command-line scripts. The following snippets are examples of what
     both use cases look like in the YAML file:'
+  id: totrans-207
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 还支持通过简单的 TCP 套接字检查和自定义命令行脚本进行健康检查。以下片段是这两种用例在 YAML 文件中的示例：
 - en: '[PRE34]'
+  id: totrans-208
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: '*Listing 2-9*: *Health check using command-line script*'
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Listing 2-9*： *使用命令行脚本进行健康检查*'
 - en: '[PRE35]'
+  id: totrans-210
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: '*Listing 2-10*: *Health check using simple TCP Socket connection*'
+  id: totrans-211
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Listing 2-10*：*使用简单的 TCP 套接字连接进行健康检查*'
 - en: Life cycle hooks or graceful shutdown
+  id: totrans-212
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 生命周期钩子或优雅关闭
 - en: As you run into failures in real-life scenarios, you may find that you want
     to take additional action before containers are shutdown or right after they are
     started. Kubernetes actually provides life cycle hooks for just this kind of use
     case.
+  id: totrans-213
   prefs: []
   type: TYPE_NORMAL
+  zh: '在实际场景中遇到故障时，您可能会发现希望在容器关闭之前或刚启动之后采取额外的操作。Kubernetes 实际上为这种情况提供了生命周期钩子。 '
 - en: 'The following example controller definition defines both a `postStart` action
     and a `preStop` action to take place before Kubernetes moves the container into
     the next stage of its life cycle (you can refer to more details about this in
     point 1 in the *References* section at the end of the chapter):'
+  id: totrans-214
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的示例控制器定义了一个 `postStart` 动作和一个 `preStop` 动作，在 Kubernetes 将容器移入其生命周期的下一阶段之前执行（你可以在本章末尾的
+    *参考文献* 中的第 1 点中查看更多详情）：
 - en: '[PRE36]'
+  id: totrans-215
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: '*Listing 2-11*: `apache-hooks-controller.yaml`'
+  id: totrans-216
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 2-11*：`apache-hooks-controller.yaml`'
 - en: You'll note for the `postStart` hook, we define an `httpGet` action, but for
     the `preStop` hook, I define an `exec` action. Just as with our health checks,
     the `httpGet` action attempts to make an HTTP call to the specific endpoint and
     port combination, while the `exec` action runs a local command in the container.
+  id: totrans-217
   prefs: []
   type: TYPE_NORMAL
+  zh: 你会注意到对于 `postStart` 钩子，我们定义了一个 `httpGet` 操作，但是对于 `preStop` 钩子，我定义了一个 `exec`
+    操作。与我们的健康检查一样，`httpGet` 操作尝试对特定端点和端口组合进行 HTTP 调用，而 `exec` 操作在容器中运行本地命令。
 - en: 'The `httpGet` and `exec` actions are both supported for the `postStart` and
     `preStop` hooks. In the case of `preStop`, a parameter named `reason` will be
     sent to the handler as a parameter. See the following table for valid values:'
+  id: totrans-218
   prefs: []
   type: TYPE_NORMAL
+  zh: '`postStart` 和 `preStop` 钩子都支持 `httpGet` 和 `exec` 操作。对于 `preStop`，将会将一个名为 `reason`
+    的参数发送给处理程序作为参数。参见以下表格获取有效值：'
 - en: '| **Reason parameter** | **Failure Description** |'
+  id: totrans-219
   prefs: []
   type: TYPE_TB
+  zh: '| **原因参数** | **故障描述** |'
 - en: '| Delete | Delete command issued via `kubectl` or the API |'
+  id: totrans-220
   prefs: []
   type: TYPE_TB
+  zh: '| 删除 | 通过 `kubectl` 或 API 发出的删除命令 |'
 - en: '| Health | Health check fails |'
+  id: totrans-221
   prefs: []
   type: TYPE_TB
+  zh: '| 健康 | 健康检查失败 |'
 - en: '| Dependency | Dependency failure such as a disk mount failure or a default
     infrastructure pod crash |'
+  id: totrans-222
   prefs: []
   type: TYPE_TB
+  zh: '| 依赖 | 依赖故障，比如磁盘挂载失败或默认基础设施 pod 崩溃 |'
 - en: Valid preStop reasons (refer to point 1 in *References* section)
+  id: totrans-223
   prefs: []
   type: TYPE_NORMAL
+  zh: 有效的 `preStop` 原因（请参阅 *参考文献* 中的第 1 点）
 - en: It's important to note that hook calls are delivered at least once. Therefore,
     any logic in the action should gracefully handle multiple calls. Another important
     note is that `postStart` runs before a pod enters its ready state. If the hook
     itself fails, the pod will be considered unhealthy.
+  id: totrans-224
   prefs: []
   type: TYPE_NORMAL
+  zh: 需要注意的是 hook 调用至少会传递一次。因此，操作中的任何逻辑都应该优雅地处理多次调用。另一个重要的注意事项是 `postStart` 在 pod
+    进入就绪状态之前运行。如果钩子本身失败，pod 将被视为不健康。
 - en: Application scheduling
+  id: totrans-225
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 应用程序调度
 - en: Now that we understand how to run containers in pods and even recover from failure,
     it may be useful to understand how new containers are scheduled on our cluster
     nodes.
+  id: totrans-226
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们了解了如何在 pod 中运行容器，甚至从失败中恢复，了解如何在我们的集群节点上调度新容器可能会很有用。
 - en: As mentioned earlier, the default behavior for the Kubernetes scheduler is to
     spread container replicas across the nodes in our cluster. In the absence of all
     other constraints, the scheduler will place new pods on nodes with the least number
     of other pods belonging to matching services or replication controllers.
+  id: totrans-227
   prefs: []
   type: TYPE_NORMAL
+  zh: 如前所述，Kubernetes 调度程序的默认行为是在集群的节点之间分布容器副本。在所有其他约束条件都不存在的情况下，调度程序会将新的 pod 放置在具有最少匹配服务或复制控制器的其他
+    pod 数量的节点上。
 - en: Additionally, the scheduler provides the ability to add constraints based on
     resources available to the node. Today, this includes minimum CPU and memory allocations.
     In terms of Docker, these use the **CPU-shares** and **memory limit flags** under
     the covers.
+  id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，调度程序提供根据节点上可用资源添加约束的能力。目前，这包括最低 CPU 和内存分配。就 Docker 而言，这些在底层使用 **CPU-shares**
+    和 **内存限制标志**。
 - en: When additional constraints are defined, Kubernetes will check a node for available
     resources. If a node does not meet all the constraints, it will move to the next.
     If no nodes can be found that meet the criteria, then we will see a scheduling
     error in the logs.
+  id: totrans-229
   prefs: []
   type: TYPE_NORMAL
+  zh: 当定义了额外的约束时，Kubernetes 将检查节点上的可用资源。如果节点不满足所有约束条件，它将移到下一个节点。如果找不到满足条件的节点，则在日志中会看到调度错误。
 - en: The Kubernetes roadmap also has plans to support networking and storage. Because
     scheduling is such an important piece of overall operations and management for
     containers, we should expect to see many additions in this area as the project
     grows.
+  id: totrans-230
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes路线图还计划支持网络和存储。由于调度对于容器的整体运营和管理非常重要，所以随着项目的发展，我们应该期望在这个领域看到许多增加。
 - en: Scheduling example
+  id: totrans-231
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 调度示例
 - en: Let's take a look at a quick example of setting some resource limits. If we
     look at our K8s dashboard, we can get a quick snapshot of the current state of
     resource usage on our cluster using `https://<your master ip>/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard` and
     clicking on Nodes on the left-hand side menu.
+  id: totrans-232
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们快速看一下设置一些资源限制的快速示例。如果我们查看我们的K8s仪表板，我们可以使用`https://<your master ip>/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard`并点击左侧菜单中的Nodes，快速查看我们集群当前资源使用状态的快照。
 - en: 'We will see a dashboard as shown in the following screenshot:'
+  id: totrans-233
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将看到一个仪表板，如下面的截图所示：
 - en: '![](img/B06302_02_13.png)'
+  id: totrans-234
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_13.png)'
 - en: Kube Node dashboard
+  id: totrans-235
   prefs: []
   type: TYPE_NORMAL
+  zh: Kube节点仪表板
 - en: This  view shows the aggregate CPU and memory across the whole cluster, nodes,
     and master. In this case, we have fairly low CPU utilization, but a decent chunk
     of memory in use.
+  id: totrans-236
   prefs: []
   type: TYPE_NORMAL
+  zh: 此视图显示整个集群、节点和主节点的聚合CPU和内存。在这种情况下，我们的CPU利用率相当低，但内存使用率相当高。
 - en: 'Let''s see what happens when I try to spin up a few more pods, but this time,
     we will request `512 Mi` for memory and `1500 m` for the CPU. We''ll use `1500
     m` to specify 1.5 CPUs; since each node only has 1 CPU, this should result in
     failure. Here''s an example of RC definition:'
+  id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看当我尝试启动几个额外的pod时会发生什么，但这次，我们将请求`512 Mi`的内存和`1500 m`的CPU。我们将使用`1500 m`来指定1.5个CPU；由于每个节点只有1个CPU，这应该会导致失败。下面是一个RC定义的示例：
 - en: '[PRE37]'
+  id: totrans-238
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: '*Listing 2-12*: `nodejs-constraints-controller.yaml`'
+  id: totrans-239
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表2-12*：`nodejs-constraints-controller.yaml`'
 - en: 'To open the preceding file, use the following command:'
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 要打开上述文件，请使用以下命令：
 - en: '[PRE38]'
+  id: totrans-241
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: 'The replication controller completes successfully, but if we run a `get pods`
     command, we''ll note the `node-js-constraints` pods are stuck in a pending state.
     If we look a little closer with the `describe pods/<pod-id>` command, we''ll note
     a scheduling error (for `pod-id` use one of the pod names from the first command):'
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: 复制控制器成功完成，但如果我们运行`get pods`命令，我们会注意到`node-js-constraints` pods陷入了等待状态。如果我们用`describe
+    pods/<pod-id>`命令仔细观察（对于`pod-id`，使用第一个命令中的一个pod名称），我们会注意到一个调度错误：
 - en: '[PRE39]'
+  id: totrans-243
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE39]'
 - en: 'The following screenshot is the result of the preceding command:'
+  id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是上述命令的结果：
 - en: '![](img/B06302_02_14.png)'
+  id: totrans-245
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_02_14.png)'
 - en: Pod description
+  id: totrans-246
   prefs: []
   type: TYPE_NORMAL
+  zh: Pod描述
 - en: Note, in the bottom events section, that the `WarningFailedScheduling pod` error
     listed in `Events` is accompanied by `fit failure on node....Insufficient cpu` after
     the error. As you can see, Kubernetes could not find a fit in the cluster that
     met all the constraints we defined.
+  id: totrans-247
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，在底部的事件部分，`Events`中列出的`WarningFailedScheduling pod`错误后面跟着一个`fit failure on
+    node....Insufficient cpu`。如您所见，Kubernetes无法在满足我们定义的所有约束的集群中找到适合的位置。
 - en: If we now modify our CPU constraint down to `500 m`, and then recreate our replication
     controller, we should have all three pods running within a few moments.
+  id: totrans-248
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们现在将CPU约束修改为`500 m`，然后重新创建我们的复制控制器，我们应该在几分钟内将所有三个pod都运行起来。
 - en: Summary
+  id: totrans-249
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: We took a look at the overall architecture for Kubernetes, as well as the core
     constructs, provided to build your services and application stacks. You should
     have a better understanding of how these abstractions make it easier to manage
@@ -1086,19 +1631,27 @@
     at how to use Kubernetes to automatically respond to outages via health checks.
     Finally, we explored the Kubernetes scheduler and some of the constraints users
     can specify to influence scheduling placement.
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们查看了Kubernetes的整体架构，以及提供的核心构造，用于构建您的服务和应用程序堆栈。您应该对这些抽象有一个更好的理解，因为它们使得管理堆栈和/或服务的生命周期更容易，而不仅仅是个别组件。此外，我们首次了解了如何使用pod、服务和复制控制器来管理一些简单的日常任务。我们还探讨了如何使用Kubernetes通过健康检查自动响应故障。最后，我们探讨了Kubernetes调度器以及用户可以指定的一些约束，以影响调度位置。
 - en: In the next chapter, we will dive into the networking layer of Kubernetes. We'll
     see how networking is done and also look at the core Kubernetes proxy that is
     used for traffic routing. We will also look at service discovery and the logical
     namespace groupings.
+  id: totrans-251
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将深入探讨 Kubernetes 的网络层。我们将了解网络是如何进行配置的，还将研究核心的 Kubernetes 代理用于流量路由。我们还将研究服务发现和逻辑命名空间分组。
 - en: References
+  id: totrans-252
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 参考资料
 - en: '[https://github.com/GoogleCloudPlatform/kubernetes/blob/release-1.0/docs/user-guide/container-environment.md#container-hooks](https://github.com/GoogleCloudPlatform/kubernetes/blob/release-1.0/docs/user-guide/container-environment.md#container-hooks)'
+  id: totrans-253
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[https://github.com/GoogleCloudPlatform/kubernetes/blob/release-1.0/docs/user-guide/container-environment.md#container-hooks](https://github.com/GoogleCloudPlatform/kubernetes/blob/release-1.0/docs/user-guide/container-environment.md#container-hooks)'

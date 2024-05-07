@@ -1,58 +1,83 @@
 - en: Introduction to Kubernetes
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Kubernetes 简介
 - en: In this book, we will help you learn to build and manage Kubernetes clusters.
     You will be given some of the basic container concepts and the operational context,
     wherever possible. Throughout the book, you'll be given examples that you can
     apply as you progress through the book. By the end of the book, you should have
     a solid foundation and even dabble in some of the more advance topics such as
     federation and security.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，我们将帮助您学习构建和管理 Kubernetes 集群。我们将尽可能地介绍一些基本的容器概念和操作上下文。在整本书中，您将得到一些您可以在学习过程中应用的示例。到本书结束时，您应该具有坚实的基础，甚至可以涉足一些更高级的主题，如联邦和安全性。
 - en: This chapter will give a brief overview of containers and how they work as well
     as why management and orchestration is important to your business and/or project
     team. The chapter will also give a brief overview of how Kubernetes orchestration
     can enhance our container management strategy and how we can get a basic Kubernetes
     cluster up, running, and ready for container deployments.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将简要概述容器及其工作原理，以及为何管理和编排对您的业务和/或项目团队至关重要。本章还将简要介绍 Kubernetes 编排如何增强我们的容器管理策略以及如何启动、运行和准备容器部署的基本
+    Kubernetes 集群。
 - en: 'This chapter will include the following topics:'
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将包括以下主题：
 - en: Introducing container operations and management
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 介绍容器的操作和管理
 - en: Why container management is important?
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为什么容器管理很重要？
 - en: The advantages of Kubernetes
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Kubernetes 的优势
 - en: Downloading the latest Kubernetes
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 下载最新的 Kubernetes
 - en: Installing and starting up a new Kubernetes cluster
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装和启动一个新的 Kubernetes 集群
 - en: The components of a Kubernetes cluster
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Kubernetes 集群的组件
 - en: A brief overview of containers
+  id: totrans-10
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 容器的简要概述
 - en: Over the past three years, **containers** have grown in popularity like wildfire.
     You would be hard-pressed to attend an IT conference without finding popular sessions
     on Docker or containers in general.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 在过去的三年里，**容器**像野火般风靡。你很难参加一个 IT 会议而不找到关于 Docker 或容器的热门议题。
 - en: Docker lies at the heart of the mass adoption and the excitement in the container
     space. As Malcom McLean revolutionized the physical shipping world in the 1950s
     by creating a standardized shipping container, which is used today for everything
@@ -62,24 +87,34 @@
     portable and consistent across the infrastructure landscape. As an organization,
     Docker has taken the existing container technology to a new level by making it
     easy to implement and replicate across environments and providers.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker 是大规模采用和容器领域的激情的核心。正如 Malcom McLean 在 1950 年代通过创建标准化的运输集装箱彻底改变了物理运输世界一样，Linux
+    容器正在通过使应用程序环境在基础设施景观中可移植和一致来改变软件开发世界。作为一个组织，Docker 将现有的容器技术提升到一个新的水平，使其易于在各种环境和提供者中实施和复制。
 - en: What is a container?
+  id: totrans-13
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 什么是容器？
 - en: At the core of container technology are **control groups** (**cgroups**) and
     namespaces. Additionally, Docker uses union filesystems for added benefits to
     the container development process.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 容器技术的核心是**控制组**（**cgroups**）和命名空间。此外，Docker 使用联合文件系统来增强容器开发过程的优势。
 - en: Cgroups work by allowing the host to share and also limit the resources each
     process or container can consume. This is important for both, resource utilization
     and security, as it prevents **denial-of-service attacks** on the host's hardware
     resources. Several containers can share CPU and memory while staying within the
     predefined constraints.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: Cgroups 的工作原理是允许主机共享并限制每个进程或容器可以消耗的资源。这对资源利用和安全都很重要，因为它可以防止对主机硬件资源的**拒绝服务攻击**。多个容器可以共享
+    CPU 和内存，同时保持在预定义约束内。
 - en: '**Namespaces** offer another form of isolation for process interaction within
     operating systems. Namespaces limit the visibility a process has on other processes,
     networking, filesystems, and user ID components. Container processes are limited
@@ -87,14 +122,21 @@
     processes are not directly accessible from within this container process. Additionally,
     Docker gives each container its own networking stack that protects the sockets
     and interfaces in a similar fashion.'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: '**命名空间**为操作系统内的进程交互提供了另一种隔离形式。命名空间限制了一个进程对其他进程、网络、文件系统和用户 ID 组件的可见性。容器进程只能看到相同命名空间中的内容。来自容器或主机的进程无法直接从容器进程内部访问。此外，Docker
+    为每个容器提供了自己的网络堆栈，以类似的方式保护套接字和接口。'
 - en: '![](img/B06302_01_01.png)'
+  id: totrans-17
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_01.png)'
 - en: Composition of a container
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 容器的组成
 - en: '**Union filesystems** are also a key advantage of using Docker containers.
     Containers run from an image. Much like an image in the VM or Cloud world, it
     represents state at a particular point in time. Container images snapshot the
@@ -103,22 +145,31 @@
     boot strap period tend to be much smaller. Though those constraints are not strictly
     enforced. Second, the union filesystem allows for efficient storage, download,
     and execution of these images.'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: '**联合文件系统**也是使用 Docker 容器的一个关键优势。容器是从镜像运行的。与虚拟机或云世界中的镜像类似，它代表了特定时间点的状态。容器镜像快照文件系统，但通常比虚拟机小得多。容器共享主机内核，并且通常运行一组更小的进程，因此文件系统和引导期间
+    tend to be much smaller。尽管这些约束条件并不严格执行。其次，联合文件系统允许高效存储、下载和执行这些镜像。'
 - en: The easiest way to understand union filesystems is to think of them like a layer
     cake with each layer baked independently. The Linux kernel is our base layer;
     then, we might add an OS such as **Red Hat Linux** or **Ubuntu**. Next, we might
     add an application such as **Nginx** or **Apache**. Every change creates a new
     layer. Finally, as you make changes and new layers are added, you'll always have
     a top layer (think frosting) that is a writable layer.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 理解联合文件系统最简单的方法是将其想象成一个独立烘焙的层层蛋糕。Linux 内核是我们的基础层；然后，我们可能会添加一个操作系统，如**红帽 Linux**或**Ubuntu**。接下来，我们可能会添加一个应用程序，如**Nginx**或**Apache**。每个更改都会创建一个新层。最后，随着您进行更改并添加新层，您始终会有一个顶层（考虑一下糖霜），它是一个可写的层。
 - en: '![](img/B06302_01_02.png)'
+  id: totrans-21
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_02.png)'
 - en: Layered filesystem
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 分层文件系统
 - en: What makes this truly efficient is that Docker caches the layers the first time
     we build them. So, let's say that we have an image with Ubuntu and then add Apache
     and build the image. Next, we build MySQL with Ubuntu as the base. The second
@@ -126,36 +177,49 @@
     our chocolate and vanilla layers, from the preceding *Layered filesystem* figure,
     are already baked. We simply need to bake the pistachio (MySQL) layer, assemble,
     and add the icing (the writable layer).
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 使这真正高效的是 Docker 在第一次构建时缓存了这些层。所以，假设我们有一个包含 Ubuntu 的镜像，然后添加 Apache 并构建镜像。接下来，我们使用
+    Ubuntu 作为基础构建 MySQL。第二次构建将会更快，因为 Ubuntu 层已经被缓存了。本质上，我们的巧克力和香草层，来自前面的*分层文件系统*图，已经烘焙完成。我们只需要烘焙开心果（MySQL）层，组装并添加糖衣（可写层）。
 - en: Why are containers so cool?
+  id: totrans-24
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为什么容器如此酷？
 - en: Containers on their own are not a new technology and have in fact been around
     for many years. What truly sets Docker apart is the tooling and ease of use they
     have brought to the community. Modern development practices promote the use of
     Continuous Integration and Continuous Deployment. These techniques, when done
     right, can have a profound impact on your software product quality.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 单独的容器并不是一种新技术，事实上它们已经存在多年了。真正使 Docker 脱颖而出的是他们为社区带来的工具和易用性。现代开发实践推广了持续集成和持续部署的使用。当这些技术正确使用时，可以对您的软件产品质量产生深远的影响。
 - en: The advantages of Continuous Integration/Continuous Deployment
+  id: totrans-26
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 持续集成/持续部署的优势
 - en: ThoughtWorks defines **Continuous Integration** as a development practice that
     requires developers to integrate code into a shared repository several times a
     day. By having a continuous process of building and deploying code, organizations
     are able to instill quality control and testing as part of the everyday work cycle.
     The result is that updates and bug fixes happen much faster and the overall quality
     improves.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: ThoughtWorks将**持续集成**定义为一种开发实践，要求开发人员每天将代码集成到一个共享的代码库中多次。通过持续构建和部署代码的过程，组织能够将质量控制和测试作为日常工作周期的一部分。结果是更新和错误修复发生得更快，整体质量得到提高。
 - en: However, there has always been a challenge in creating development environments
     that match that of testing and production. Often inconsistencies in these environments
     make it difficult to gain the full advantage of continuous delivery.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 然而，一直以来在创建与测试和生产环境匹配的开发环境方面存在挑战。通常，这些环境中的不一致性使得很难充分利用持续交付的全部优势。
 - en: Using Docker, developers are now able to have truly portable deployments. Containers
     that are deployed on a developer's laptop are easily deployed on an in-house staging
     server. They are then easily transferred to the production server running in the
@@ -163,43 +227,57 @@
     parent layers. One advantage of this is that it becomes very easy to ensure OS,
     package, and application versions are the same across development, staging, and
     production environments.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用Docker，开发人员现在能够拥有真正可移植的部署。在开发人员的笔记本电脑上部署的容器很容易部署到内部的暂存服务器上。然后，它们很容易转移到在云中运行的生产服务器上。这是因为Docker使用构建文件来构建容器，这些构建文件指定了父层。这样做的一个优点是，可以非常轻松地确保在开发、暂存和生产环境中操作系统、软件包和应用程序版本相同。
 - en: Because all the dependencies are packaged into the layer, the same host server
     can have multiple containers running a variety of OS or package versions. Further,
     we can have various languages and frameworks on the same host server without the
     typical dependency clashes we would get in a **virtual machine** (**VM**) with
     a single operating system.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 因为所有的依赖关系都打包到了层中，所以同一个主机服务器可以运行多个容器，运行各种操作系统或软件包版本。此外，我们可以在同一台主机服务器上使用各种语言和框架，而不会像在带有单个操作系统的**虚拟机**（**VM**）中那样出现典型的依赖冲突。
 - en: Resource utilization
+  id: totrans-31
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 资源利用
 - en: The well-defined isolation and layer filesystem also make containers ideal for
     running systems with a very small footprint and domain-specific purposes. A streamlined
     deployment and release process means we can deploy quickly and often. As such,
     many companies have reduced their deployment time from weeks or months to days
     and hours in some cases. This development life cycle lends itself extremely well
     to small, targeted teams working on small chunks of a larger application.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 明确定义的隔离和分层文件系统也使得容器非常适合运行具有非常小的占地面积和特定领域用途的系统。简化的部署和发布流程意味着我们可以快速而频繁地部署。因此，许多公司将他们的部署时间从几周甚至几个月缩短到了几天甚至几小时。这种开发生命周期非常适合于小型、有针对性的团队致力于一个更大的应用程序的小块。
 - en: Microservices and orchestration
+  id: totrans-33
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 微服务与编排
 - en: As we break down an application into very specific domains, we need a uniform
     way to communicate between all the various pieces and domains. Web services have
     served this purpose for years, but the added isolation and granular focus that
     containers bring have paved a way for **microservices**.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们将一个应用程序分解为非常具体的领域时，我们需要一种统一的方式在所有不同的部分和领域之间进行通信。多年来，Web服务一直在发挥这种作用，但容器带来的额外隔离和粒度聚焦为**微服务**铺平了道路。
 - en: 'The definition for microservices can be a bit nebulous, but a definition from
     Martin Fowler, a respected author and speaker on software development, says this
     (you can refer to more details about this in point 2 in the *References* section
     at the end of the chapter):'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于微服务的定义可能有点模糊，但是马丁·福勒（Martin Fowler）提出了一个定义，他是一位备受尊敬的软件开发作家和演讲者（你可以在本章末尾的*参考资料*中参考更多详细信息）：
 - en: In short, the microservice architectural style is an approach to developing
     a single application as a suite of small services, each running in its own process
     and communicating with lightweight mechanisms, often an HTTP resource API. These
@@ -207,64 +285,84 @@
     fully automated deployment machinery. There is a bare minimum of centralized management
     of these services, which may be written in different programming languages and
     use different data storage technologies.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 简而言之，微服务架构风格是将单个应用程序开发为一套小服务的方法，每个服务在自己的进程中运行，并使用轻量级机制进行通信，通常是HTTP资源API。这些服务围绕业务功能构建，并通过完全自动化的部署机制独立部署。这些服务的集中管理是最小的，它们可以使用不同的编程语言编写，并使用不同的数据存储技术。
 - en: As the pivot to containerization and as microservices evolve in an organization,
     they will soon need a strategy to maintain many containers and microservices.
     Some organizations will have hundreds or even thousands of containers running
     in the years ahead.
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着组织转向容器化，并且微服务在组织中发展，他们很快就会需要一种策略来维护许多容器和微服务。未来几年，一些组织将拥有数百甚至数千个正在运行的容器。
 - en: Future challenges
+  id: totrans-38
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 未来的挑战
 - en: Life cycle processes alone are an important piece of operations and management.
     How will we automatically recover when a container fails? Which upstream services
     are affected by such an outage? How will we patch our applications with minimal
     downtime? How will we scale up our containers and services as our traffic grows?
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 生命周期进程本身就是运营和管理的重要组成部分。当容器失败时，我们如何自动恢复？哪些上游服务受到这种中断的影响？我们如何在最小停机时间内打补丁我们的应用？随着流量增长，我们如何扩展容器和服务的规模？
 - en: Networking and processing are also important concerns. Some processes are part
     of the same service and may benefit from the proximity to the network. Databases,
     for example, may send large amounts of data to a particular microservice for processing.
     How will we place containers near each other in our cluster? Is there common data
     that needs to be accessed? How will new services be discovered and made available
     to other systems?
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 网络和处理也是重要的考虑因素。有些进程是同一服务的一部分，可能会受益于靠近网络。例如，数据库可能会向特定的微服务发送大量数据进行处理。我们如何在集群中将容器放置在彼此附近？是否有需要访问的共同数据？如何发现新服务并使其对其他系统可用？
 - en: Resource utilization is also a key. The small footprint of containers means
     that we can optimize our infrastructure for greater utilization. Extending the
     savings started in the elastic cloud will take us even further toward minimizing
     wasted hardware. How will we schedule workloads most efficiently? How will we
     ensure that our important applications always have the right resources? How can
     we run less important workloads on spare capacity?
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 资源利用率也是关键。容器的小占用空间意味着我们可以优化基础架构以实现更大的利用率。扩展弹性云中开始的节省将使我们更进一步地减少浪费的硬件。我们如何最有效地安排工作负载？如何确保我们的重要应用程序始终具有正确的资源？我们如何在备用容量上运行不太重要的工作负载？
 - en: Finally, portability is a key factor in moving many organizations to containerization.
     Docker makes it very easy to deploy a standard container across various operating
     systems, cloud providers, and on-premise hardware or even developer laptops. However,
     we still need tooling to move containers around. How will we move containers between
     different nodes on our cluster? How will we roll out updates with minimal disruption?
     What process do we use to perform blue-green deployments or canary releases?
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: '最后，可移植性是许多组织转向容器化的关键因素。Docker使在各种操作系统、云提供商和本地硬件甚至开发人员笔记本电脑上部署标准容器变得非常容易。然而，我们仍然需要工具来移动容器。我们如何在集群的不同节点之间移动容器？我们如何以最小的中断滚动更新？我们使用什么流程执行蓝绿部署或金丝雀发布？ '
 - en: Whether you are starting to build out individual microservices and separating
     concerns into isolated containers or if you simply want to take full advantage
     of the portability and immutability in your application development, the need
     for management and orchestration becomes clear. This is where orchestration tools
     such as Kubernetes offer the biggest value.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 无论您是开始构建单个微服务并将关注点分离到隔离的容器中，还是只是想充分利用应用程序开发中的可移植性和不变性，对管理和编排的需求变得明确起来。这就是编排工具如Kubernetes提供最大价值的地方。
 - en: The birth of Kubernetes
+  id: totrans-44
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Kubernetes的诞生
 - en: '**Kubernetes** (**K8s**) is an open source project that was released by Google
     in June, 2014\. Google released the project as part of an effort to share their
     own infrastructure and technology advantage with the community at large.'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Kubernetes**（**K8s**）是谷歌于2014年6月发布的一个开源项目。谷歌发布该项目是为了与社区分享他们自己的基础设施和技术优势。'
 - en: Google launches 2 billion containers a week in their infrastructure and has
     been using container technology for over a decade. Originally, they were building
     a system named **Borg**, now called **Omega**, to schedule their vast quantities
@@ -273,8 +371,10 @@
     management tool for wide adoption by the rest of the world. The result was the
     Kubernetes open-source project (you can refer to more details about this in point
     3 in the *References* section at the end of the chapter).
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: Google每周在他们的基础设施中启动20亿个容器，并已经使用容器技术超过十年。最初，他们正在构建一个名为**Borg**，现在称为**Omega**的系统，用于在扩展中的数据中心中调度大量工作负载。多年来，他们吸取了许多经验教训，并重写了他们现有的数据中心管理工具，以便广泛被世界其他地方采纳。其结果便是开源项目Kubernetes（您可以在本章末尾的*参考资料*部分中的第3点中了解更多详情）。
 - en: Since its initial release in 2014, K8s has undergone rapid development with
     contributions all across the open-source community, including Red Hat, VMware,
     and Canonical. The 1.0 release of Kubernetes went live in July, 2015\. Since then,
@@ -284,357 +384,545 @@
     major operations and management concerns. We will explore how Kubernetes helps
     deal with resource utilization, high availability, updates, patching, networking,
     service discovery, monitoring, and logging.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 自2014年首次发布以来，K8s在开源社区的贡献下经历了快速发展，包括Red Hat、VMware和Canonical等。Kubernetes的1.0版本于2015年7月正式发布。从那时起，该项目得到了开源社区的广泛支持，目前是GitHub上最大的开源社区之一。我们将在整本书中涵盖版本1.5。K8s提供了一个工具，用于解决一些主要操作和管理问题。我们将探讨Kubernetes如何帮助处理资源利用、高可用性、更新、打补丁、网络、服务发现、监控和日志记录等问题。
 - en: Our first cluster
+  id: totrans-48
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 我们的第一个集群
 - en: Kubernetes is supported on a variety of platforms and OSes. For the examples
     in this book, I used an Ubuntu 16.04 Linux VirtualBox for my client and **Google
     Compute Engine** (**GCE**) with Debian for the cluster itself. We will also take
     a brief look at a cluster running on **Amazon Web Services** (**AWS**) with Ubuntu.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes支持各种平台和操作系统。在本书的示例中，我在客户端使用Ubuntu 16.04 Linux VirtualBox，而在集群本身则使用Debian的**Google
+    Compute Engine**（**GCE**）。我们还将简要介绍在使用Ubuntu的**Amazon Web Services**（**AWS**）上运行的集群。
 - en: To save some money, both GCP and AWS offer free tiers and trial offers for their
     cloud infrastructure. It's worth using these free trials for your Kubernetes learning,
     if possible.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 为节省一些资金，GCP和AWS都为他们的云基础设施提供了免费层和试用优惠。如果可能的话，值得使用这些免费试用来学习Kubernetes。
 - en: 'Most of the concepts and examples in this book should work on any installation
     of a Kubernetes cluster. To get more information on other platform setups, refer
     to the Kubernetes getting started page on the following GitHub link:'
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书中的大部分概念和示例应该适用于任何Kubernetes集群的安装。要获取有关其他平台设置的更多信息，请参考以下GitHub链接中的Kubernetes入门页面：
 - en: '[http://kubernetes.io/docs/getting-started-guides/](http://kubernetes.io/docs/getting-started-guides/)'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: '[http://kubernetes.io/docs/getting-started-guides/](http://kubernetes.io/docs/getting-started-guides/)'
 - en: 'First, let''s make sure that our environment is properly set up before we install
     Kubernetes. Start by updating packages:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，在安装Kubernetes之前，让我们确保我们的环境已经正确设置。从更新软件包开始：
 - en: '[PRE0]'
+  id: totrans-54
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Install Python and curl if they are not present:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果没有安装Python和curl，请先安装：
 - en: '[PRE1]'
+  id: totrans-56
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Install the **gcloud** SDK:'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装**gcloud** SDK：
 - en: '[PRE2]'
+  id: totrans-58
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: We will need to start a new shell before `gcloud` is on our path.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 在`gcloud`出现在我们的路径之前，我们需要启动一个新的shell。
 - en: 'Configure your **Google Cloud Platform** (**GCP**) account information. This
     should automatically open a browser from where we can log in to our Google Cloud
     account and authorize the SDK:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置您的**Google Cloud Platform**（**GCP**）帐户信息。这应该会自动打开一个浏览器，我们可以从中登录到我们的Google
+    Cloud帐户并授权SDK：
 - en: '[PRE3]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: If you have problems with login or want to use another browser, you can optionally
     use the `--no-launch-browser` command. Copy and paste the URL to the machine and/or
     browser of your choice. Log in with your Google Cloud credentials and click Allow
     on the permissions page. Finally, you should receive an authorization code that
     you can copy and paste back into the shell where the prompt is waiting.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您登录遇到问题或想要使用其他浏览器，可以选择使用`--no-launch-browser`命令。将 URL 复制并粘贴到您选择的计算机和/或浏览器上。使用您的
+    Google Cloud 凭据登录，并在权限页面上单击**允许**。最后，您应该收到一个授权码，可以将其复制并粘贴回等待提示的 shell 中。
 - en: 'A default project should be set, but we can verify this with the following
     command:'
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认项目应该已设置，但我们可以通过以下命令进行验证：
 - en: '[PRE4]'
+  id: totrans-64
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'We can modify this and set a new default project with this command. Make sure
     to use **project ID** and not **project name**, as follows:'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用以下命令修改并设置新的默认项目。确保使用**项目 ID**而不是**项目名称**，如下所示：
 - en: '[PRE5]'
+  id: totrans-66
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'We can find our project ID in the console at the following URL:'
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以在以下 URL 中的控制台中找到我们的项目 ID：
 - en: '[https://console.developers.google.com/project](https://console.developers.google.com/project)
     Alternatively, we can list active projects:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://console.developers.google.com/project](https://console.developers.google.com/project)
+    或者，我们可以列出活动项目：'
 - en: '`$ gcloud alpha projects list`'
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: '`$ gcloud alpha projects list`'
 - en: 'Now that we have our environment set up, installing the latest Kubernetes version
     is done in a single step, as follows:'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经设置好了环境，安装最新的 Kubernetes 版本只需一步，如下所示：
 - en: '[PRE6]'
+  id: totrans-71
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'It may take a minute or two to download Kubernetes depending on your connection
     speed. Earlier versions would automatically call the `kube-up.sh` script and start
     building our cluster. In version 1.5, we will need to call the `kube-up.sh` script
     ourselves to launch the cluster. By default, it will use the Google Cloud and
     GCE:'
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据您的连接速度下载 Kubernetes 可能需要一两分钟的时间。较早的版本会自动调用`kube-up.sh`脚本并开始构建我们的集群。在版本 1.5
+    中，我们需要自己调用`kube-up.sh`脚本来启动集群。默认情况下，它将使用 Google Cloud 和 GCE：
 - en: '[PRE7]'
+  id: totrans-73
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'After you run the `kube-up.sh` script, we will see quite a few lines roll past.
     Let''s take a look at them one section at a time:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 在运行`kube-up.sh`脚本后，我们将看到许多行通过。让我们逐个部分查看它们：
 - en: '![](img/B06302_01_03.png)'
+  id: totrans-75
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_03.png)'
 - en: GCE prerequisite check
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: GCE 先决条件检查
 - en: If your `gcloud` components are not up to date, you may be prompted to update
     them.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您的`gcloud`组件不是最新版本，则可能会提示您更新它们。
 - en: 'The preceding image, *GCE prerequisite check*, shows the checks for prerequisites
     as well as making sure that all components are up to date. This is specific to
     each provider. In the case of GCE, it will verify that the SDK is installed and
     that all components are up to date. If not, you will see a prompt at this point
     to install or update:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面的图像*GCE 先决条件检查*显示了先决条件的检查，以及确保所有组件都是最新版本的情况。这是针对每个提供程序的。在GCE 的情况下，它将验证 SDK
+    是否已安装以及所有组件是否是最新版本。如果不是，则会在此时看到提示进行安装或更新：
 - en: '![](img/B06302_01_04.png)'
+  id: totrans-79
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_04.png)'
 - en: Upload cluster packages
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 上传集群软件包
 - en: Now the script is turning up the cluster. Again, this is specific to the provider.
     For GCE, it first checks to make sure that the SDK is configured for a default
     **project** and **zone**. If they are set, you'll see those in the output.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在脚本正在启动集群。同样，这是针对提供程序的。对于 GCE，它首先检查 SDK 是否配置为默认的**项目**和**区域**。如果设置了，您将在输出中看到它们。
 - en: 'Next, it uploads the server binaries to Google Cloud storage, as seen in the
     Creating gs:... lines:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，它将服务器二进制文件上传到 Google Cloud 存储中，如在创建 gs:... 行中所示：
 - en: '![](img/B06302_01_05.png)'
+  id: totrans-83
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_05.png)'
 - en: Master creation
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: Master 创建
 - en: 'It then checks for any pieces of a cluster already running. Then, we finally
     start creating the cluster. In the output in the preceding figure *Master creation*,
     we see it creating the **master** server, IP address, and appropriate firewall
     configurations for the cluster:'
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，它会检查是否已经运行了集群的任何部分。然后，我们最终开始创建集群。在上述图中的输出中 *Master 创建* 中，我们看到它创建了**主**服务器、IP
+    地址以及集群的适当防火墙配置：
 - en: '![](img/B06302_01_06.png)'
+  id: totrans-86
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_06.png)'
 - en: Minion creation
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: Minion 创建
 - en: Finally, it creates the **minions** or **nodes** for our cluster. This is where
     our container workloads will actually run. It will continually loop and wait while
     all the minions start up. By default, the cluster will have four nodes (minions),
     but K8s supports having more than 1000 (and soon beyond). We will come back to
     scaling the nodes later on in the book.
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，它创建了我们集群的**minions**或**nodes**。这是我们的容器工作负载实际运行的地方。它将不断循环并等待所有 minions 启动。默认情况下，集群将有四个节点（minions），但
+    K8s 支持超过 1000 个（很快会更多）。我们将在书中稍后回来扩展节点。
 - en: '![](img/B06302_01_07.png)'
+  id: totrans-89
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_07.png)'
 - en: Cluster completion
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 集群完成
 - en: 'Now that everything is created, the cluster is initialized and started. Assuming
     that everything goes well, we will get an IP address for the master. Also, note
     that configuration along with the cluster management credentials are stored in
     `home/<Username>/.kube/config`:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在一切都创建好了，集群已初始化并启动。假设一切顺利，我们将获得主服务器的 IP 地址。此外，请注意，配置以及集群管理凭据都存储在`home/<用户名>/.kube/config`中：
 - en: '![](img/B06302_01_08.png)'
+  id: totrans-92
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_08.png)'
 - en: Cluster validation
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 集群验证
 - en: Then, the script will validate the cluster. At this point, we are no longer
     running provider-specific code. The validation script will query the cluster via
     the `kubectl.sh` script. This is the central script for managing our cluster.
     In this case, it checks the number of minions found, registered, and in a ready
     state. It loops through giving the cluster up to 10 minutes to finish initialization.
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，脚本将验证集群。此时，我们不再运行特定于提供程序的代码。验证脚本将通过`kubectl.sh`脚本查询集群。这是管理我们集群的中央脚本。在这种情况下，它检查找到的、注册的和处于就绪状态的
+    minion 数量。它循环执行，给集群最多 10 分钟的时间完成初始化。
 - en: 'After a successful startup, a summary of the minions and the cluster component
     health is printed on the screen:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 成功启动后，在屏幕上打印出 minion 的摘要和集群组件的健康状况：
 - en: '![](img/B06302_01_09.png)'
+  id: totrans-96
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_09.png)'
 - en: Cluster summary
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: 集群摘要
 - en: Finally, a `kubectl cluster-info` command is run, which outputs the URL for
     the master services including DNS, UI, and monitoring. Let's take a look at some
     of these components.
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，运行`kubectl cluster-info`命令，该命令会输出主服务的 URL，包括 DNS、UI 和监视。让我们来看看其中一些组件。
 - en: Kubernetes UI
+  id: totrans-99
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Kubernetes UI
 - en: 'Open a browser and run the following code:'
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 在浏览器中打开并运行以下代码：
 - en: '`https://<your master ip>/ui/`'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: '`https://<你的主服务器IP>/ui/`'
 - en: 'The certificate is self-signed by default, so you''ll need to ignore the warnings
     in your browser before proceeding. After this, we will see a login dialog. This
     is where we use the credentials listed during the K8s installation. We can find
     them at any time by simply using the `config` command:'
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，证书是自签名的，因此您需要忽略浏览器中的警告，然后继续。之后，我们将看到一个登录对话框。这是我们在 K8s 安装期间列出的凭据的使用位置。我们可以随时通过简单地使用`config`命令来查找它们：
 - en: '[PRE8]'
+  id: totrans-103
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Now that we have credentials for login, use those, and we should see a dashboard
     like the following image:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们有了登录凭据，请使用它们，我们应该会看到一个类似以下图像的仪表板：
 - en: '![](img/B06302_01_10.png)'
+  id: totrans-105
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_10.png)'
 - en: Kubernetes UI dashboard
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes UI 仪表板
 - en: The main dashboard takes us to a page with not much display at first. There
     is a link to deploy a containerized app that will take you to a GUI for deployment.
     This GUI can be a very easy way to get started deploying apps without worrying
     about the YAML syntax for Kubernetes. However, as your use of containers matures,
     it's good practice to use the YAML definitions that are checked in to source control.
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 主仪表板首先将我们带到一个显示不多的页面。有一个链接可以部署一个容器化应用程序，这将带您到一个用于部署的 GUI。这个 GUI 可以是一个非常简单的方式开始部署应用程序，而不必担心
+    Kubernetes 的 YAML 语法。然而，随着您对容器的使用逐渐成熟，最好使用检入源代码控制的 YAML 定义。
 - en: 'If you click on the **Nodes** link on the left-hand side menu, you will see
     some metrics on the current cluster nodes:'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您点击左侧菜单中的**Nodes**链接，您将看到有关当前集群节点的一些指标：
 - en: '![](img/B06302_01_11.png)'
+  id: totrans-109
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_11.png)'
 - en: Kubernetes Node Dashboard
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 节点仪表板
 - en: At the top, we see an aggregate of the CPU and memory usages followed by a listing
     of our cluster nodes. Clicking on one of the nodes will take us to a page with
     detailed information about that node, its health, and various metrics.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 在顶部，我们看到 CPU 和内存使用情况的汇总，然后是我们集群节点的列表。单击其中一个节点将带我们到一个页面，显示有关该节点、其健康状况和各种指标的详细信息。
 - en: The Kubernetes UI has a lot of other views that will become more useful as we
     start launching real applications and adding configurations to the cluster.
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着我们开始启动真实应用程序并向集群添加配置，Kubernetes UI 将具有许多其他视图，这些视图将变得更加有用。
 - en: Grafana
+  id: totrans-113
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Grafana
 - en: Another service installed by default is **Grafana**. This tool will give us
     a dashboard to view metrics on the cluster nodes. We can access it using the following
     syntax in a browser: `https://<your master ip>/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana`
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认安装的另一个服务是**Grafana**。这个工具将为我们提供一个仪表板，用于查看集群节点上的指标。我们可以使用以下语法在浏览器中访问它：`https://<your
+    master ip>/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana`
 - en: '![](img/B06302_01_12.png)'
+  id: totrans-115
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_12.png)'
 - en: Kubernetes Grafana dashboard
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes Grafana 仪表板
 - en: From the main page, click on the Home dropdown and select Cluster. Here, Kubernetes
     is actually running a number of services. **Heapster** is used to collect the
     resource usage on the **pods** and **nodes** and stores the information in **InfluxDB**.
     The results, such as CPU and memory usage, are what we see in the Grafana UI.
     We will explore this in depth in [Chapter 8](1809040d-4981-427d-8de7-600c4354a872.xhtml),
     *Monitoring and Logging*.
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 从主页，点击首页下拉菜单并选择 Cluster。在这里，Kubernetes 实际上正在运行许多服务。**Heapster** 用于收集**pods**和**nodes**上的资源使用情况，并将信息存储在**InfluxDB**中。结果，如
+    CPU 和内存使用情况，是我们在 Grafana UI 中看到的。我们将在[第 8 章](1809040d-4981-427d-8de7-600c4354a872.xhtml)，*监控和日志记录*中深入探讨此问题。
 - en: Command line
+  id: totrans-118
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 命令行
 - en: 'The `kubectl` script has commands to explore our cluster and the workloads
     running on it. You can find it in the `/kubernetes/client/bin` folder. We will
     be using this command throughout the book, so let''s take a second to set up our
     environment. We can do so by putting the binaries folder on our `PATH`, in the
     following manner:'
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: '`kubectl`脚本有命令来探索我们的集群以及在其中运行的工作负载。您可以在`/kubernetes/client/bin`文件夹中找到它。我们将在整本书中使用此命令，因此让我们花一点时间设置我们的环境。我们可以通过以下方式将二进制文件夹放在我们的`PATH`中来执行此操作：'
 - en: '[PRE9]'
+  id: totrans-120
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: You may choose to download the `kubernetes` folder outside your home folder,
     so modify the preceding command as appropriate.
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以选择将`kubernetes`文件夹下载到主目录之外，因此根据需要修改上述命令。
 - en: It is also a good idea to make the changes permanent by adding the `export`
     command to the end of your `.bashrc` file in your home directory.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过将`export`命令添加到您主目录中的`.bashrc`文件的末尾，也是一个不错的主意。
 - en: Now that we have `kubectl` on our path, we can start working with it. It has
     quite a few commands. Since we have not spun up any applications yet, most of
     these commands will not be very interesting. However, we can explore with two
     commands right away.
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们的路径上有了`kubectl`，我们可以开始使用它了。它有相当多的命令。由于我们尚未启动任何应用程序，因此这些命令中的大多数将不会很有趣。但是，我们可以立即使用两个命令进行探索。
 - en: 'First, we have already seen the `cluster-info` command during initialization,
     but we can run it again at any time with the following command:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，我们已经在初始化期间看到了`cluster-info`命令，但是我们随时可以使用以下命令再次运行它：
 - en: '[PRE10]'
+  id: totrans-125
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Another useful command is `get`. It can be used to see currently running **services**,
     **pods**, **replication controllers**, and a lot more. Here are the three examples
     that are useful right out of the gate:'
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个有用的命令是`get`。它可用于查看当前正在运行的**服务**、**pods**、**副本控制器**等等。以下是立即使用的三个示例：
 - en: 'List the nodes in our cluster:'
+  id: totrans-127
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 列出我们集群中的节点：
 - en: '[PRE11]'
+  id: totrans-128
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'List cluster events:'
+  id: totrans-129
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 列出集群事件：
 - en: '[PRE12]'
+  id: totrans-130
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'Finally, we can see any services that are running in the cluster, as follows:'
+  id: totrans-131
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 最后，我们可以查看集群中运行的任何服务，如下所示：
 - en: '[PRE13]'
+  id: totrans-132
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: To start with, we will only see one service, named `kubernetes`. This service
     is the core API server for the cluster.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 起初，我们只会看到一个名为`kubernetes`的服务。此服务是集群的核心 API 服务器。
 - en: Services running on the master
+  id: totrans-134
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行在主节点上的服务
 - en: 'Let''s dig a little bit deeper into our new cluster and its core services.
     By default, machines are named with the `kubernetes-` prefix. We can modify this
     using `$KUBE_GCE_INSTANCE_PREFIX` before a cluster is spun up. For the cluster
@@ -643,136 +931,203 @@
     start an SSH session with the master node. Be sure to substitute your project
     ID and zone to match your environment. Also, note that you can launch SSH from
     the Google Cloud console using the following syntax:'
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们进一步了解我们的新集群及其核心服务。默认情况下，机器以`kubernetes-`前缀命名。我们可以在启动集群之前使用`$KUBE_GCE_INSTANCE_PREFIX`修改这个前缀。对于我们刚刚启动的集群，主节点应该被命名为`kubernetes-master`。我们可以使用`gcloud`命令行实用程序
+    SSH 进入机器。以下命令将启动与主节点的 SSH 会话。确保替换您的项目 ID 和区域以匹配您的环境。还要注意，您可以使用以下语法从 Google Cloud
+    控制台启动 SSH：
 - en: '[PRE14]'
+  id: totrans-136
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: If you have trouble with SSH via the Google Cloud CLI, you can use the Console
     which has a built-in SSH client. Simply go to the VM instances page and you'll
     see an SSH option as a column in the kubernetes-master listing. Alternatively,
     the VM instance details page has the SSH option at the top.
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您在使用 Google Cloud CLI 时遇到 SSH 问题，您可以使用内置的 SSH 客户端的控制台。只需转到 VM 实例页面，您将在 kubernetes-master
+    列表中的一列中看到一个 SSH 选项。或者，VM 实例详细信息页面顶部有 SSH 选项。
 - en: 'Once we are logged in, we should get a standard shell prompt. Let''s run the
     `docker` command that filters for `Image` and `Status`:'
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦我们登录，我们应该会得到一个标准的 shell 提示符。让我们运行过滤 `Image` 和 `Status` 的 `docker` 命令：
 - en: '[PRE15]'
+  id: totrans-139
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: '![](img/B06302_01_13.png)'
+  id: totrans-140
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_13.png)'
 - en: Master container listing
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 主容器列表
 - en: 'Even though we have not deployed any applications on Kubernetes yet, we note
     that there are several containers already running. The following is a brief description
     of each container:'
+  id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管我们尚未在 Kubernetes 上部署任何应用程序，但我们注意到已经有几个容器正在运行。以下是对每个容器的简要描述：
 - en: '`fluentd-gcp`: This container collects and sends the cluster logs file to the
     Google Cloud Logging service.'
+  id: totrans-143
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`fluentd-gcp`：这个容器收集并发送集群日志文件到 Google Cloud Logging 服务。'
 - en: '`node-problem-detector`: This container is a daemon that runs on every node
     and currently detects issues at the hardware and kernel layer.'
+  id: totrans-144
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`node-problem-detector`：这个容器是一个守护程序，在每个节点上运行，并当前在硬件和内核层检测问题。'
 - en: '`rescheduler`: This is another add-on container that makes sure critical components
     are always running. In cases of low resources availability, it may even remove
     less critical pods to make room.'
+  id: totrans-145
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`rescheduler`：这是另一个附加容器，确保关键组件始终运行。在资源可用性低的情况下，它甚至可能删除较不重要的 pod 以腾出空间。'
 - en: '`glbc`: This is another Kubernetes add-on container that provides Google Cloud
     Layer 7 load balancing using the new *Ingress* capability.'
+  id: totrans-146
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`glbc`：这是另一个 Kubernetes 附加容器，使用新的 *Ingress* 功能提供 Google Cloud 第 7 层负载均衡。'
 - en: '`kube-addon-manager`: This component is core to the extension of Kubernetes
     through various add-ons. It also periodically applies any changes to  the `/etc/kubernetes/addons`
     directory.'
+  id: totrans-147
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kube-addon-manager`：这个组件是通过各种附加组件扩展 Kubernetes 的核心。它还定期应用对 `/etc/kubernetes/addons`
+    目录的任何更改。'
 - en: '`etcd-empty-dir-cleanup`: A utility to cleanup empty keys in etcd.'
+  id: totrans-148
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`etcd-empty-dir-cleanup`：一个用于清理 etcd 中空键的实用程序。'
 - en: '`kube-controller-manager`: This is a controller manager that controls a variety
     of cluster functions, ensuring accurate and up-to-date replication is one of its
     vital roles. Additionally, it monitors, manages, and discovers new nodes. Finally,
     it manages and updates service endpoints.'
+  id: totrans-149
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kube-controller-manager`：这是一个控制器管理器，控制各种集群功能，确保准确和最新的复制是其重要角色之一。此外，它监视、管理和发现新节点。最后，它管理和更新服务端点。'
 - en: '`kube-apiserver`: This container runs the API server. As we explored in the
     Swagger interface, this RESTful API allows us to create, query, update, and remove
     various components of our Kubernetes cluster.'
+  id: totrans-150
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kube-apiserver`：这个容器运行 API 服务器。正如我们在 Swagger 界面中探索的那样，这个 RESTful API 允许我们创建、查询、更新和删除
+    Kubernetes 集群的各种组件。'
 - en: '`kube-scheduler`: This scheduler takes unscheduled pods and binds them to nodes
     based on the current scheduling algorithm.'
+  id: totrans-151
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kube-scheduler`：这个调度程序将未调度的 pod 绑定到节点，基于当前的调度算法。'
 - en: '`etcd`: This runs the **etcd** software built by CoreOS, and it is a distributed
     and consistent key-value store. This is where the Kubernetes cluster state is
     stored, updated, and retrieved by various components of K8s.'
+  id: totrans-152
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`etcd`：这个容器运行由 CoreOS 构建的 **etcd** 软件，它是一个分布式和一致的键值存储。这是 Kubernetes 集群状态被存储、更新和检索的地方，被
+    K8s 的各种组件使用。'
 - en: '`pause`: This container is often referred to as the pod infrastructure container
     and is used to set up and hold the networking namespace and resource limits for
     each pod.'
+  id: totrans-153
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`pause`：这个容器通常被称为 pod 基础设施容器，用于设置和保存每个 pod 的网络命名空间和资源限制。'
 - en: I omitted the amd64 for many of these names to make this more generic. The purpose
     of the pods remains the same.
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 我省略了许多名称的 amd64，以使其更通用。pod 的目的保持不变。
 - en: To exit the SSH session, simply type `exit` at the prompt.
+  id: totrans-155
   prefs: []
   type: TYPE_NORMAL
+  zh: 要退出 SSH 会话，只需在提示符处键入 `exit`。
 - en: In the next chapter, we will also show how a few of these services work together
     in the first image, *Kubernetes core architecture*.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们还将展示一些这些服务如何在第一张图片中共同工作，*Kubernetes 核心架构*。
 - en: Services running on the minions
+  id: totrans-157
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 服务运行在 minions 上
 - en: 'We could SSH to one of the minions, but since Kubernetes schedules workloads
     across the cluster, we would not see all the containers on a single minion. However,
     we can look at the pods running on all the minions using the `kubectl` command:'
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以 SSH 到其中一个 minion，但由于 Kubernetes 在整个集群上调度工作负载，因此我们不会在单个 minion 上看到所有容器。但是，我们可以使用
+    `kubectl` 命令查看所有 minion 上运行的 Pod：
 - en: '[PRE16]'
+  id: totrans-159
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'Since we have not started any applications on the cluster yet, we don''t see
     any pods. However, there are actually several system pods running pieces of the
     Kubernetes infrastructure. We can see these pods by specifying the `kube-system`
     namespace. We will explore namespaces and their significance later, but for now,
     the `--namespace=kube-system` command can be used to look at these K8s system
     resources, as follows:'
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于我们尚未在集群上启动任何应用程序，因此我们看不到任何 Pod。但实际上，有几个系统 Pod 运行着 Kubernetes 基础架构的各个部分。我们可以通过指定
+    `kube-system` 命名空间来查看这些 Pod。稍后我们将探讨命名空间及其重要性，但目前可以使用 `--namespace=kube-system`
+    命令来查看这些 K8s 系统资源，如下所示：
 - en: '[PRE17]'
+  id: totrans-161
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'We should see something similar to the following:'
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该看到类似以下的内容：
 - en: '[PRE18]'
+  id: totrans-163
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: The first six lines should look familiar. Some of these are the services we
     saw running on the master and will see pieces of these on the nodes. There are
     a few additional services we have not seen yet. The `kube-dns` option provides
@@ -783,191 +1138,293 @@
     across the cluster. Finally, `kube-proxy-kubernetes-minion-group-xxxx`  is the
     proxy which directs traffic to the proper backing services and pods running on
     our cluster.
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 前六行应该看起来很熟悉。其中一些是我们看到在主节点上运行的服务，而在节点上也会看到其中的部分。还有一些其他服务我们还没有看到。`kube-dns` 选项提供了
+    DNS 和服务发现的基本结构，`kubernetes-dashboard-xxxx` 是 Kubernetes 的用户界面，`l7-default-backend-xxxx`
+    提供了新的第 7 层负载均衡功能的默认负载均衡后端，`heapster-v1.2.0-xxxx` 和 `monitoring-influx-grafana`
+    提供了 **Heapster** 数据库和用于监视集群资源使用情况的用户界面。最后，`kube-proxy-kubernetes-minion-group-xxxx`
+    是将流量定向到集群上正确后备服务和 Pod 的代理。
 - en: 'If we did SSH into a random minion, we would see several containers that run
     across a few of these pods. A sample might look like this image:'
+  id: totrans-165
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们 SSH 到一个随机的 minion，我们会看到几个容器跨越其中一些 Pod 运行。示例可能看起来像这样的图片：
 - en: '![](img/B06302_01_14.png)'
+  id: totrans-166
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/B06302_01_14.png)'
 - en: Minion container listing
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: Minion 容器列表
 - en: 'Again, we saw a similar line up of services on the master. The services we
     did not see on the master include the following:'
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: 同样，我们在主节点上看到了类似的服务排列。我们在主节点上没有看到的服务包括以下内容：
 - en: '`kubedns`: This container monitors the service and endpoint resources in Kubernetes
     and synchronizes any changes to DNS lookups.'
+  id: totrans-169
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kubedns`：此容器监视 Kubernetes 中的服务和端点资源，并同步 DNS 查询的任何更改。'
 - en: '`kube-dnsmasq`: This is another container that provides DNS caching.'
+  id: totrans-170
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kube-dnsmasq`：这是另一个提供 DNS 缓存的容器。'
 - en: '`dnsmasq-metrics`: This provides metric reporting for DNS services in cluster.'
+  id: totrans-171
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`dnsmasq-metrics`：这为集群中的 DNS 服务提供度量报告。'
 - en: '`l7-defaultbackend`: This is the default backend for handling the GCE L7 load
     balancer and *Ingress*.'
+  id: totrans-172
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`l7-defaultbackend`：这是用于处理 GCE L7 负载均衡器和 *Ingress* 的默认后端。'
 - en: '`kube-proxy`: This is the network and service proxy for your cluster. This
     component makes sure service traffic is directed to wherever your workloads are
     running on the cluster. We will explore this in more depth later in the book.'
+  id: totrans-173
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kube-proxy`：这是集群的网络和服务代理。此组件确保服务流量被定向到集群上运行工作负载的位置。我们将在本书后面更深入地探讨这一点。'
 - en: '`heapster`: This container is for monitoring and analytics.'
+  id: totrans-174
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`heapster`：此容器用于监视和分析。'
 - en: '`addon-resizer`: This cluster utility is for scaling containers.'
+  id: totrans-175
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`addon-resizer`：这个集群实用工具用于调整容器的规模。'
 - en: '`heapster_grafana`: This does resource usage and monitoring.'
+  id: totrans-176
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`heapster_grafana`：此操作用于资源使用情况和监控。'
 - en: '`heapster_influxdb`: This time-series database is for Heapster data.'
+  id: totrans-177
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`heapster_influxdb`：这个时序数据库用于 Heapster 数据。'
 - en: '`cluster-proportional-autoscaler`: This cluster utility is for scaling containers
     in proportion to the cluster size.'
+  id: totrans-178
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`cluster-proportional-autoscaler`：这个集群实用工具用于根据集群大小按比例调整容器的规模。'
 - en: '`exechealthz`: This performs health checks on the pods.'
+  id: totrans-179
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`exechealthz`：此操作对 Pod 执行健康检查。'
 - en: Again, I have omitted the amd64 for many of these names to make this more generic.
     The purpose of the pods remains the same.
+  id: totrans-180
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次，我省略了许多名称中的 amd64，以使其更通用。Pod 的用途保持不变。
 - en: Tear down cluster
+  id: totrans-181
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 拆除集群
 - en: 'Alright, this is our first cluster on GCE, but let''s explore some other providers.
     To keep things simple, we need to remove the one we just created on GCE. We can
     tear down the cluster with one simple command:'
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 好的，这是我们在 GCE 上的第一个集群，但让我们探索一些其他提供商。为了保持简单，我们需要删除我们刚刚在 GCE 上创建的那个。我们可以用一个简单的命令拆除集群：
 - en: '[PRE19]'
+  id: totrans-183
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: Working with other providers
+  id: totrans-184
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 与其他提供商合作
 - en: 'By default, Kubernetes uses the GCE provider for Google Cloud. We can override
     this default by setting the `KUBERNETES_PROVIDER` environment variable. The following
     providers are supported with values listed in this table:'
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，Kubernetes 使用 GCE 提供商进行 Google Cloud。我们可以通过设置`KUBERNETES_PROVIDER`环境变量来覆盖此默认值。此表中列出的值支持以下提供商：
 - en: '| **Provider** | **KUBERNETES_PROVIDER value** | **Type** |'
+  id: totrans-186
   prefs: []
   type: TYPE_TB
+  zh: '| **提供商** | **KUBERNETES_PROVIDER 值** | **类型** |'
 - en: '| **Google Compute Engine** | `gce` | Public cloud |'
+  id: totrans-187
   prefs: []
   type: TYPE_TB
+  zh: '| **谷歌计算引擎** | `gce` | 公有云 |'
 - en: '| **Google Container Engine** | `gke` | Public cloud |'
+  id: totrans-188
   prefs: []
   type: TYPE_TB
+  zh: '| **谷歌容器引擎** | `gke` | 公有云 |'
 - en: '| **Amazon Web Services** | `aws` | Public cloud |'
+  id: totrans-189
   prefs: []
   type: TYPE_TB
+  zh: '| **亚马逊网络服务** | `aws` | 公有云 |'
 - en: '| **Microsoft Azure** | `azure` | Public cloud |'
+  id: totrans-190
   prefs: []
   type: TYPE_TB
+  zh: '| **微软 Azure** | `azure` | 公有云 |'
 - en: '| **Hashicorp Vagrant** | `vagrant` | Virtual development environment |'
+  id: totrans-191
   prefs: []
   type: TYPE_TB
+  zh: '| **Hashicorp Vagrant** | `vagrant` | 虚拟开发环境 |'
 - en: '| **VMware vSphere** | `vsphere` | Private cloud/on-premise virtualization
     |'
+  id: totrans-192
   prefs: []
   type: TYPE_TB
+  zh: '| **VMware vSphere** | `vsphere` | 私有云/本地虚拟化 |'
 - en: '| **Libvirt running CoreOS** | `libvirt-coreos` | Virtualization management
     tool |'
+  id: totrans-193
   prefs: []
   type: TYPE_TB
+  zh: '| **运行 CoreOS 的 Libvirt** | `libvirt-coreos` | 虚拟化管理工具 |'
 - en: '| **Canonical Juju (folks behind Ubuntu)** | `juju` | OS service orchestration
     tool |'
+  id: totrans-194
   prefs: []
   type: TYPE_TB
+  zh: '| **Canonical Juju（Ubuntu 背后的人）** | `juju` | 操作系统服务编排工具 |'
 - en: Kubernetes providers
+  id: totrans-195
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 提供商
 - en: 'Let''s try setting up the cluster on AWS. As a prerequisite, we need to have
     AWS **Command Line Interface** (**CLI**) installed and configured for our account.
     The AWS CLI installation and configuration documentation can be found at the following
     links:'
+  id: totrans-196
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们尝试在 AWS 上设置集群。作为先决条件，我们需要安装并为我们的帐户配置 AWS **命令行界面**（**CLI**）。AWS CLI 的安装和配置文档可以在以下链接找到：
 - en: 'Installation documentation: [http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os](http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os)'
+  id: totrans-197
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装文档：[http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os](http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os)
 - en: 'Configuration documentation: [http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)'
+  id: totrans-198
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置文档：[http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
 - en: 'Then, it is a simple environment variable setting, as follows:'
+  id: totrans-199
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，这是一个简单的环境变量设置，如下所示：
 - en: '[PRE20]'
+  id: totrans-200
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'Again, we can use the `kube-up.sh` command to spin up the cluster, as follows:'
+  id: totrans-201
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次，我们可以使用`kube-up.sh`命令来启动集群，如下所示：
 - en: '[PRE21]'
+  id: totrans-202
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'As with GCE, the setup activity will take a few minutes. It will stage files
     in **S3** and create the appropriate instances, **Virtual Private Cloud** (**VPC**),
     security groups, and so on in our AWS account. Then, the Kubernetes cluster will
     be set up and started. Once everything is finished and started, we should see
     the cluster validation at the end of the output:'
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 与 GCE 一样，设置活动将需要几分钟。它将在我们的 AWS 帐户中的**S3**中分阶段文件，并创建适当的实例、**虚拟专用云**（**VPC**）、安全组等等。然后，将设置并启动
+    Kubernetes 集群。一旦一切都完成并启动，我们应该在输出的末尾看到集群验证：
 - en: '![](img/B06302_01_15.png)'
+  id: totrans-204
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_15.png)'
 - en: AWS cluster validation
+  id: totrans-205
   prefs: []
   type: TYPE_NORMAL
+  zh: AWS 集群验证
 - en: Note that the region where the cluster is spun up is determined by the `KUBE_AWS_ZONE` environment
     variable. By default, this is set to `us-west-2a` (the region is derived from
     this Availability Zone). Even if you have a region set in your AWS CLI, it will
     use the region defined in `KUBE_AWS_ZONE`.
+  id: totrans-206
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，集群启动的区域由`KUBE_AWS_ZONE`环境变量确定。默认情况下，此值设置为`us-west-2a`（该区域是从此可用区派生的）。即使您在
+    AWS CLI 中设置了区域，它也将使用`KUBE_AWS_ZONE`中定义的区域。
 - en: 'Once again, we will SSH into master. This time, we can use the native SSH client.
     We''ll find the key files in `/home/<username>/.ssh`:'
+  id: totrans-207
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次，我们将 SSH 进入 master。这次，我们可以使用本机 SSH 客户端。我们会在`/home/<username>/.ssh`中找到密钥文件：
 - en: '[PRE22]'
+  id: totrans-208
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'We''ll use `sudo docker ps --format ''table {{.Image}}t{{.Status}}''` to explore
     the running containers. We should see something like the following:'
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用`sudo docker ps --format 'table {{.Image}}t{{.Status}}'`来探索正在运行的容器。我们应该看到类似下面的东西：
 - en: '![](img/B06302_01_16.png)'
+  id: totrans-210
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_16.png)'
 - en: Master container listing (AWS)
+  id: totrans-211
   prefs: []
   type: TYPE_NORMAL
+  zh: Master 容器列表（AWS）
 - en: We see some of the same containers as our GCE cluster had. However, there are
     several missing. We see the core Kubernetes components, but the `fluentd-gcp`
     service is missing as well as some of the newer utilities such as `node-problem-detector` , `rescheduler` , `glbc` , `kube-addon-manager` ,
@@ -975,356 +1432,553 @@
     the `kube-up` script between various Public Cloud providers. This is ultimately
     decided by the efforts of the large Kubernetes open-source community, but GCP
     often has many of the latest features first.
+  id: totrans-212
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们看到与我们的 GCE 集群相同的一些容器。但也有一些缺失的。我们看到了核心 Kubernetes 组件，但缺少了 `fluentd-gcp` 服务以及一些新的实用程序，如
+    `node-problem-detector` 、`rescheduler` 、`glbc` 、`kube-addon-manager` 和 `etcd-empty-dir-cleanup`。这反映了各个公共云提供商之间在
+    `kube-up` 脚本中的一些微妙差异。这最终由庞大的 Kubernetes 开源社区的努力决定，但 GCP 通常最先拥有许多最新功能。
 - en: 'On the AWS provider, **Elasticsearch** and **Kibana** are set up for us. We
     can find the Kibana UI using the following syntax as URL:'
+  id: totrans-213
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 AWS 提供程序上，**Elasticsearch** 和 **Kibana** 已经为我们设置好。我们可以使用以下语法找到 Kibana UI 的
+    URL：
 - en: '`https://<your master ip>/api/v1/proxy/namespaces/kube-system/services/kibana-logging`'
+  id: totrans-214
   prefs: []
   type: TYPE_NORMAL
+  zh: '`https://<your master ip>/api/v1/proxy/namespaces/kube-system/services/kibana-logging`'
 - en: 'As in the case of the UI, you will be prompted for admin credentials, which
     can be obtained using the `config` command, as shown here:'
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
+  zh: 就像 UI 的情况一样，您将被提示输入管理员凭据，可以使用 `config` 命令获取，如下所示：
 - en: '[PRE23]'
+  id: totrans-216
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'On the first visit, you''ll need to set up your index. You can leave the defaults
     and choose @timestamp for the Time-field name. Then, click on Create and you''ll
     be taken to the index settings page. From there, click on the Discover tab at
     the top and you can explore the log dashboards:'
+  id: totrans-217
   prefs: []
   type: TYPE_NORMAL
+  zh: 初次访问时，你需要设置你的索引。你可以保留默认值，并选择 @timestamp 作为时间字段名称。然后，单击创建，你将进入索引设置页面。从那里，点击顶部的
+    Discover 标签页，你可以探索日志仪表板：
 - en: '![](img/B06302_01_17.png)'
+  id: totrans-218
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_17.png)'
 - en: Kubernetes Kibana dashboard
+  id: totrans-219
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes Kibana 仪表板
 - en: Resetting the cluster
+  id: totrans-220
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 重置集群
 - en: You just had a little taste of running the cluster on AWS. For the remainder
     of the book, I will be basing my examples on a GCE cluster. For the best experience
     following along, you can get back to a GCE cluster easily.
+  id: totrans-221
   prefs: []
   type: TYPE_NORMAL
+  zh: 你刚刚对在 AWS 上运行集群有了一点体验。在本书的剩余部分，我将以 GCE 集群为例。为了更好地跟随示例，你可以轻松地回到 GCE 集群。
 - en: 'Simply tear down the AWS cluster, as follows:'
+  id: totrans-222
   prefs: []
   type: TYPE_NORMAL
+  zh: 简单地拆除 AWS 集群，如下所示：
 - en: '[PRE24]'
+  id: totrans-223
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'Then, create a GCE cluster again using the following:'
+  id: totrans-224
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，再次使用以下方式创建 GCE 集群：
 - en: '[PRE25]'
+  id: totrans-225
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: Modifying kube-up parameters
+  id: totrans-226
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 修改 kube-up 参数
 - en: It's worth getting to know the parameters used for the `kube-up.sh` script.
     Each provider under the `kubernetes/cluster/` folder has its own `su`  folder
     which containers a `config-default.sh`  script.
+  id: totrans-227
   prefs: []
   type: TYPE_NORMAL
+  zh: 值得了解 `kube-up.sh` 脚本使用的参数。`kubernetes/cluster/` 文件夹下的每个提供程序都有自己的 `su` 文件夹，其中包含一个
+    `config-default.sh` 脚本。
 - en: For example, `kubernetes/cluster/aws/config-default.sh` has the default settings
     for using `kube-up.sh` with AWS. At the start of this script, you will see many
     of these values defined as well as environment variables that can be used to overrides
     the defaults.
+  id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，`kubernetes/cluster/aws/config-default.sh` 中有使用 AWS 运行 `kube-up.sh` 的默认设置。在该脚本的开头，你将看到许多这些值被定义以及可以用于覆盖默认值的环境变量。
 - en: 'In the following example, the `ZONE` variable is set for the script and it
     uses the value from the environment variable named `KUBE_AWS_ZONE`. If this variable
     is not set, it will use the default `us-west-2a`:'
+  id: totrans-229
   prefs: []
   type: TYPE_NORMAL
+  zh: 在以下示例中，`ZONE` 变量被设置用于脚本，并且使用名为 `KUBE_AWS_ZONE` 的环境变量的值。如果此变量未设置，将使用默认值 `us-west-2a`：
 - en: '[PRE26]'
+  id: totrans-230
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: Understanding these parameters will help you get a lot more mileage out of your
     `kube-up.sh` script.
+  id: totrans-231
   prefs: []
   type: TYPE_NORMAL
+  zh: 了解这些参数将帮助你更好地使用 `kube-up.sh` 脚本。
 - en: Alternatives to kube-up.sh
+  id: totrans-232
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: kube-up.sh 的替代方法
 - en: The `kube-up.sh` script is still a pretty handy way to get started using Kubernetes
     on your platform of choice. However, it's not without flaws and can sometimes
     run aground when conditions are not just so.
+  id: totrans-233
   prefs: []
   type: TYPE_NORMAL
+  zh: '`kube-up.sh` 脚本仍然是在你所选择的平台上开始使用 Kubernetes 的一种相当方便的方式。然而，它并非没有缺陷，有时在条件不尽如人意时可能会出现问题。'
 - en: 'Luckily, since K8''s inception, a number of alternative methods for creating
     clusters have emerged. Two such GitHub projects are *KOPs* and *kube-aws*. While
     the later is tied to AWS, they both provide an alternative method to easily spinning
     up your new cluster:'
+  id: totrans-234
   prefs: []
   type: TYPE_NORMAL
+  zh: 幸运的是，自 K8 成立以来，已经出现了许多创建集群的替代方法。其中两个 GitHub 项目是 *KOPs* 和 *kube-aws*。尽管后者与 AWS
+    绑定，但它们都提供了一种轻松启动新集群的替代方法：
 - en: '**[https://github.com/kubernetes/kops](https://github.com/kubernetes/kops)**'
+  id: totrans-235
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**[https://github.com/kubernetes/kops](https://github.com/kubernetes/kops)**'
 - en: '**[https://github.com/coreos/kube-aws](https://github.com/coreos/kube-aws)**'
+  id: totrans-236
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**[https://github.com/coreos/kube-aws](https://github.com/coreos/kube-aws)**'
 - en: Additionally, a number of managed services have arisen including **Google Container
     Engine** (**GKE**) and Microsoft **Azure Container Service** (**ACS**), which
     provide an automated install and some managed cluster operations. We will look
     at a brief demo of these in [Chapter 12](0ebbb579-01ba-4e51-b801-b1656d0558d7.xhtml),
     *Towards Production Ready*.
+  id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: 另外，出现了许多受管服务，包括**Google Container Engine**（**GKE**）和微软**Azure Container Service**（**ACS**），它们提供了自动安装和一些受管的集群操作。我们将在[第12章](0ebbb579-01ba-4e51-b801-b1656d0558d7.xhtml)中简要演示这些内容，*走向生产就绪*。
 - en: Starting from scratch
+  id: totrans-238
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从零开始
 - en: Finally, there is the option to start from scratch. Luckily, starting in 1.4,
     the Kubernetes team has put a major focus in easing the cluster setup process.
     To that end they have introduced kubeadm for Ubuntu 16.04, CentOS 7, and HypriotOS
     v1.0.1+.
+  id: totrans-239
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，还有从零开始的选项。幸运的是，在 1.4 版本中，Kubernetes 团队在简化集群设置过程方面投入了重大精力。为此，他们引入了用于 Ubuntu
+    16.04、CentOS 7 和 HypriotOS v1.0.1+ 的 kubeadm。
 - en: Let's take a quick look at spinning up a cluster on AWS from scratch using the
     kubeadm tool.
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们快速了解如何使用 kubeadm 工具从头开始在 AWS 上搭建集群。
 - en: Cluster setup
+  id: totrans-241
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 集群设置
 - en: We will need to provision our cluster master and nodes beforehand. For the moment,
     we are limited to the operating systems and version listed earlier. Additionally,
     it is recommended that you have at least 1 GB of RAM and all the nodes must have
     network connectivity to one another.
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们需要提前为集群主节点和节点进行部署。目前，我们受到先前列出的操作系统和版本的限制。此外，建议您至少有 1GB 的 RAM 并且所有节点之间必须具有网络连接。
 - en: For this walk through, we will need one t2.medium (master node) and three t2.mirco
     (nodes) sized instances on AWS. These instance have burstable CPU and come with
     the minimum 1 GB of RAM needed. We will need to create one master and three worker
     nodes.
+  id: totrans-243
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本次演示中，我们将在 AWS 上使用一个 t2.medium（主节点）和三个 t2.micro（工作节点）大小的实例。这些实例具有可突发的 CPU，并且配备了所需的最低
+    1GB RAM。我们需要创建一个主节点和三个工作节点。
 - en: 'We will also need to create some security groups for the cluster. The following
     ports are needed for the master:'
+  id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还需要为集群创建一些安全组。对于主节点，需要以下端口：
 - en: '| **Type** | **Protocol** | **Port range** | **Source** |'
+  id: totrans-245
   prefs: []
   type: TYPE_TB
+  zh: '| **类型** | **协议** | **端口范围** | **来源** |'
 - en: '| All Traffic | All | All | {This SG ID (Master SG)} |'
+  id: totrans-246
   prefs: []
   type: TYPE_TB
+  zh: '| 所有流量 | 所有 | 所有 | {此 SG ID（主 SG）} |'
 - en: '| All Traffic | All | All | {Node SG ID} |'
+  id: totrans-247
   prefs: []
   type: TYPE_TB
+  zh: '| 所有流量 | 所有 | 所有 | {节点SG ID} |'
 - en: '| SSH | TCP | 22 | {Your Local Machine''s IP} |'
+  id: totrans-248
   prefs: []
   type: TYPE_TB
+  zh: '| SSH | TCP | 22 | {您的本地机器IP} |'
 - en: '| HTTTPS | TCP | 443 | {Range allowed to access K8s API and UI} |'
+  id: totrans-249
   prefs: []
   type: TYPE_TB
+  zh: '| HTTTPS | TCP | 443 | {允许访问 K8s API 和 UI 的范围} |'
 - en: Master Security Group Rules
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 主节点安全组规则
 - en: 'The next table shows the ports node security groups:'
+  id: totrans-251
   prefs: []
   type: TYPE_NORMAL
+  zh: 下表显示了节点安全组的端口：
 - en: '| **Type** | **Protocol** | **Port range** | **Source** |'
+  id: totrans-252
   prefs: []
   type: TYPE_TB
+  zh: '| **类型** | **协议** | **端口范围** | **来源** |'
 - en: '| All Traffic | All | All | {Master SG ID} |'
+  id: totrans-253
   prefs: []
   type: TYPE_TB
+  zh: '| 所有流量 | 所有 | 所有 | {主 SG ID} |'
 - en: '| All Traffic | All | All | {This SG ID (Node SG)} |'
+  id: totrans-254
   prefs: []
   type: TYPE_TB
+  zh: '| 所有流量 | 所有 | 所有 | {此 SG ID（节点 SG）} |'
 - en: '| SSH | TCP | 22 | {Your Local Machine''s IP} |'
+  id: totrans-255
   prefs: []
   type: TYPE_TB
+  zh: '| SSH | TCP | 22 | {您的本地机器IP} |'
 - en: Node Security Group Rules
+  id: totrans-256
   prefs: []
   type: TYPE_NORMAL
+  zh: 节点安全组规则
 - en: 'Once you have these SGs, go ahead and spin up four instances (one t2.medium
     and three t2.mircos) using Ubuntu 16.04\. If you are new to AWS, refer to the
     documentation on spinning up EC2 instances at the following URL:'
+  id: totrans-257
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦您拥有这些 SG，继续在 AWS 上启动四个实例（一个 t2.medium 和三个 t2.micros），使用 Ubuntu 16.04。如果您对
+    AWS 不熟悉，请参考以下网址中关于启动 EC2 实例的文档：
 - en: '**[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/LaunchingAndUsingInstances.html](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/LaunchingAndUsingInstances.html)**'
+  id: totrans-258
   prefs: []
   type: TYPE_NORMAL
+  zh: '**[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/LaunchingAndUsingInstances.html](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/LaunchingAndUsingInstances.html)**'
 - en: Be sure to identify the t2.medium instance as the master and associate the master
     security group. Name the other three as nodes and associate the node security
     group with those.
+  id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: 请确保将 t2.medium 实例标识为主节点，并关联主安全组。将其他三个命名为节点，并将节点安全组与它们关联。
 - en: These steps are adapted from the walk-through in the manual. For more information
     or to work with an alternative to Ubuntu refer to [https://kubernetes.io/docs/getting-started-guides/kubeadm/](https://kubernetes.io/docs/getting-started-guides/kubeadm/).
+  id: totrans-260
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些步骤是根据手册中的演示进行调整的。要获取更多信息，或使用 Ubuntu 以外的替代方案，请参考 [https://kubernetes.io/docs/getting-started-guides/kubeadm/](https://kubernetes.io/docs/getting-started-guides/kubeadm/)。
 - en: Installing Kubernetes components (kubelet and kubeadm)
+  id: totrans-261
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Kubernetes 组件（kubelet 和 kubeadm）
 - en: Next we will need to SSH into all four of the instances and install the Kubernetes
     components.
+  id: totrans-262
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们需要 SSH 进入所有四个实例并安装 Kubernetes 组件。
 - en: 'As root, perform the following steps on all four instances:'
+  id: totrans-263
   prefs: []
   type: TYPE_NORMAL
+  zh: 以 root 身份，在所有四个实例上执行以下步骤：
 - en: '1\. Update packages and install the `apt-transport-https` package so we can
     download from sources   that use HTTPS:'
+  id: totrans-264
   prefs: []
   type: TYPE_NORMAL
+  zh: 1\. 更新软件包并安装 `apt-transport-https` 软件包，以便我们可以从使用 HTTPS 的源下载：
 - en: '[PRE27]'
+  id: totrans-265
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: '2\. Install the Google Cloud public key:'
+  id: totrans-266
   prefs: []
   type: TYPE_NORMAL
+  zh: 2\. 安装 Google Cloud 的公共密钥：
 - en: '[PRE28]'
+  id: totrans-267
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: '3\. Next, create a source list for the Kubernetes package downloads with your
     favorite editor:'
+  id: totrans-268
   prefs: []
   type: TYPE_NORMAL
+  zh: 3\. 接下来，使用您喜欢的编辑器为 Kubernetes 包下载创建源列表：
 - en: '[PRE29]'
+  id: totrans-269
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: '4\. Use the following as contents for this file and save:'
+  id: totrans-270
   prefs: []
   type: TYPE_NORMAL
+  zh: 4\. 使用以下内容作为此文件的内容并保存：
 - en: '[PRE30]'
+  id: totrans-271
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: '*Listing 1-1.* `/etc/apt/sources.list.d/kubernetes.list`'
+  id: totrans-272
   prefs: []
   type: TYPE_NORMAL
+  zh: '*图示 1-1.* `/etc/apt/sources.list.d/kubernetes.list`'
 - en: '5\. Update your sources once more:'
+  id: totrans-273
   prefs: []
   type: TYPE_NORMAL
+  zh: 5\. 再次更新您的源：
 - en: '[PRE31]'
+  id: totrans-274
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: '6\. Install Docker and the core Kubernetes components:'
+  id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 6\. 安装 Docker 和核心 Kubernetes 组件：
 - en: '[PRE32]'
+  id: totrans-276
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: Setting up a Master
+  id: totrans-277
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置主节点
 - en: 'On the instance you have previously chosen as *master*, we will run master
     initialization. Again, as root run the following command:'
+  id: totrans-278
   prefs: []
   type: TYPE_NORMAL
+  zh: 在您之前选择为 *master* 的实例上，我们将运行主初始化。再次以 root 身份运行以下命令：
 - en: '[PRE33]'
+  id: totrans-279
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: Note that initialization can only be run once, so if you run into problems you'll
     `kubeadm reset`.
+  id: totrans-280
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，初始化只能运行一次，所以如果遇到问题，您将 `kubeadm reset`。
 - en: Joining nodes
+  id: totrans-281
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 加入节点
 - en: 'After a successful initialization, you will get a join command that can be
     used by the nodes. Copy this down for the join process later on. It should look
     similar to this:'
+  id: totrans-282
   prefs: []
   type: TYPE_NORMAL
+  zh: 成功初始化后，您将获得一个可以被节点使用的加入命令。将其复制下来以供稍后的加入过程使用。它应该类似于这样：
 - en: '[PRE34]'
+  id: totrans-283
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: The token is used to authenticate cluster nodes, so make sure to store it somewhere
     securely for future use.
+  id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 令牌用于验证集群节点，因此请确保将其安全地存储在某个地方以供将来使用。
 - en: Networking
+  id: totrans-285
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 网络设置
 - en: 'Our cluster will need a networking layer for the pods to communicate on. Note
     that kubeadm requires a CNI compatible network fabric. The list of plugins currently
     available can be found here:'
+  id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们的集群将需要一个网络层来使 pod 进行通信。请注意，kubeadm 需要一个 CNI 兼容的网络结构。当前可用插件的列表可以在此处找到：
 - en: '**[http://kubernetes.io/docs/admin/addons/](http://kubernetes.io/docs/admin/addons/)**'
+  id: totrans-287
   prefs: []
   type: TYPE_NORMAL
+  zh: '**[http://kubernetes.io/docs/admin/addons/](http://kubernetes.io/docs/admin/addons/)**'
 - en: 'For our example, we will use calico. We will need to create the calico components
     on our cluster using the following `yaml`. For convenience you can download it
     here:'
+  id: totrans-288
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于我们的示例，我们将使用 calico。我们需要使用以下 `yaml` 在我们的集群上创建 calico 组件。为了方便起见，您可以在此处下载它：
 - en: '**[http://docs.projectcalico.org/v1.6/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml](http://docs.projectcalico.org/v1.6/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml)**'
+  id: totrans-289
   prefs: []
   type: TYPE_NORMAL
+  zh: '**[http://docs.projectcalico.org/v1.6/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml](http://docs.projectcalico.org/v1.6/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml)**'
 - en: 'Once you have this file on your *master*, create the components with the following
     command:'
+  id: totrans-290
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦您在 *master* 上有了这个文件，请使用以下命令创建组件：
 - en: '[PRE35]'
+  id: totrans-291
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: 'Give this a minute to run setup and then list the `kube-system` nodes to check:'
+  id: totrans-292
   prefs: []
   type: TYPE_NORMAL
+  zh: 给这个运行设置一分钟，然后列出 `kube-system` 节点以检查：
 - en: '[PRE36]'
+  id: totrans-293
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: 'You should get a listing similar to the following one with three new calico
     pods and one completed job that is not shown:'
+  id: totrans-294
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该会得到类似下面的列表，其中有三个新的 calico pods 和一个未显示的已完成的作业：
 - en: '![](img/B06302_01_18.png)'
+  id: totrans-295
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_18.png)'
 - en: Calico setup
+  id: totrans-296
   prefs: []
   type: TYPE_NORMAL
+  zh: Calico 设置
 - en: Joining the cluster
+  id: totrans-297
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 加入集群
 - en: 'Now we need to run the `join` command we copied earlier, on each of our node
     instances:'
+  id: totrans-298
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们需要在每个节点实例上运行之前复制的 `join` 命令：
 - en: '[PRE37]'
+  id: totrans-299
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: 'Once you''ve finished that, you should be able to see all nodes from the master
     by running this command:'
+  id: totrans-300
   prefs: []
   type: TYPE_NORMAL
+  zh: 完成后，您应该能够通过运行以下命令从主节点看到所有节点：
 - en: '[PRE38]'
+  id: totrans-301
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: 'If all went well, this will show three nodes and one master, as shown here:'
+  id: totrans-302
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一切顺利，这将显示三个节点和一个主节点，如下所示：
 - en: '![](img/B06302_01_19.png)'
+  id: totrans-303
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_01_19.png)'
 - en: Calico setup
+  id: totrans-304
   prefs: []
   type: TYPE_NORMAL
+  zh: Calico 设置
 - en: Summary
+  id: totrans-305
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概要
 - en: We took a very brief look at how containers work and how they lend themselves
     to the new architecture patterns in microservices. You should now have a better
     understanding of how these two forces will require a variety of operations and
@@ -1333,38 +1987,58 @@
     script as well as some of the built-in features of Kubernetes. Finally, we looked
     at the alternatives to the `kube-up` script and tried the new kubeadm tool on
     AWS with Ubuntu 16.04.
+  id: totrans-306
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们简要了解了容器的工作原理以及它们如何适合微服务中的新架构模式。现在，您应该更好地理解这两种力量将需要各种运维和管理任务，以及 Kubernetes
+    提供强大功能来解决这些挑战。我们在 GCE 和 AWS 上创建了两个不同的集群，并探索了启动脚本以及 Kubernetes 的一些内置功能。最后，我们看了`kube-up`脚本的替代方案，并尝试在
+    AWS 上使用 Ubuntu 16.04 使用新的 kubeadm 工具。
 - en: In the next chapter, we will explore the core concept and abstractions K8s provides
     to manage containers and full application stacks. We will also look at basic scheduling,
     service discovery, and health checking.
+  id: totrans-307
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将探讨 K8s 提供的核心概念和抽象，用于管理容器和完整应用程序堆栈。我们还将介绍基本的调度、服务发现和健康检查。
 - en: References
+  id: totrans-308
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 参考资料
 - en: 'Malcom McLean entry on PBS website: [https://www.pbs.org/wgbh/theymadeamerica/whomade/mclean_hi.html](https://www.pbs.org/wgbh/theymadeamerica/whomade/mclean_hi.html)'
+  id: totrans-309
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Malcom McLean 在 PBS 网站上的条目：[https://www.pbs.org/wgbh/theymadeamerica/whomade/mclean_hi.html](https://www.pbs.org/wgbh/theymadeamerica/whomade/mclean_hi.html)
 - en: 'Martin Fowler on microservices: [http://martinfowler.com/articles/microservices.html](http://martinfowler.com/articles/microservices.html)'
+  id: totrans-310
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Martin Fowler 关于微服务的观点：[http://martinfowler.com/articles/microservices.html](http://martinfowler.com/articles/microservices.html)
 - en: 'Kubernetes GitHub project page: [https://github.com/kubernetes/kubernetes](https://github.com/kubernetes/kubernetes)'
+  id: totrans-311
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Kubernetes GitHub 项目页面：[https://github.com/kubernetes/kubernetes](https://github.com/kubernetes/kubernetes)
 - en: '[https://www.thoughtworks.com/continuous-integration](https://www.thoughtworks.com/continuous-integration)'
+  id: totrans-312
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[https://www.thoughtworks.com/continuous-integration](https://www.thoughtworks.com/continuous-integration)'
 - en: '[https://docs.docker.com/](https://en.wikipedia.org/wiki/Continuous_integration%20https:/docs.docker.com/)'
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[https://docs.docker.com/](https://en.wikipedia.org/wiki/Continuous_integration%20https:/docs.docker.com/)'
 - en: '[http://kubernetes.io/docs/getting-started-guides/kubeadm/](http://kubernetes.io/docs/getting-started-guides/kubeadm/)'
+  id: totrans-314
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[http://kubernetes.io/docs/getting-started-guides/kubeadm/](http://kubernetes.io/docs/getting-started-guides/kubeadm/)'

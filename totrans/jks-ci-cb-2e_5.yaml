@@ -1,105 +1,152 @@
 - en: Chapter 5. Using Metrics to Improve Quality
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第 5 章。使用指标提高质量
 - en: 'In this chapter, we will cover the following recipes:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下内容：
 - en: Estimating the value of your project through Sloccount
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 Sloccount 估算你的项目价值
 - en: Looking for "smelly" code through code coverage
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过代码覆盖率查找“臭味”代码
 - en: Activating more PMD rulesets
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 激活更多的 PMD 规则集
 - en: Creating custom PMD rules
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建自定义 PMD 规则
 - en: Finding bugs with FindBugs
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 FindBugs 查找错误
 - en: Enabling extra FindBug rules
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 启用额外的 FindBug 规则
 - en: Finding security defects with FindBugs
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 FindBugs 查找安全缺陷
 - en: Verifying HTML validity
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 验证 HTML 的有效性
 - en: Reporting with JavaNCSS
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 JavaNCSS 进行报告
 - en: Checking style using an external pom.xml file
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用外部 pom.xml 文件检查样式
 - en: Faking Checkstyle results
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 伪造 Checkstyle 结果
 - en: Integrating Jenkins with SonarQube
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将 Jenkins 与 SonarQube 集成
 - en: Analyzing project data with the R plugin
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 R 插件分析项目数据
 - en: Note
+  id: totrans-15
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Some of the build files and code have deliberate mistakes, such as bad naming
     conventions, poor coding structures, or platform-specific encoding.
+  id: totrans-16
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 一些构建文件和代码有故意的错误，比如糟糕的命名约定、糟糕的编码结构或平台特定的编码。
 - en: These defects exist to give Jenkins a target to fire tests against.
+  id: totrans-17
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 这些缺陷存在是为了让 Jenkins 有一个测试的目标。
 - en: Introduction
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍
 - en: This chapter explores the use of Jenkins plugins to display code metrics and
     fail builds. Automation lowers costs and improves consistency. The process does
     not get tired. If you decide the success and failure criteria before a project
     starts, then this will remove a degree of subjective debate from release meetings.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章探讨了使用 Jenkins 插件显示代码指标和失败构建。自动化降低成本并提高一致性。这个过程不会感到疲倦。如果你在项目开始之前确定了成功和失败的标准，那么这将减少发布会议中的主观辩论。
 - en: In 2002, NIST estimated that software defects were costing America around 60
     billion dollars per year ([http://www.abeacha.com/NIST_press_release_bugs_cost.htm](http://www.abeacha.com/NIST_press_release_bugs_cost.htm)).
     Expect the cost to have increased considerably since.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 2002 年，NIST 估计软件缺陷每年给美国造成了大约 600 亿美元的损失 ([http://www.abeacha.com/NIST_press_release_bugs_cost.htm](http://www.abeacha.com/NIST_press_release_bugs_cost.htm))。预计这个成本已经大大增加。
 - en: To save money and improve quality, you need to remove defects as early in the
     software lifecycle as possible. The Jenkins test automation creates a safety net
     of measurements. Another key benefit is that, once you have added tests, it is
     easy to develop similar tests for other projects.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了节省成本并提高质量，你需要尽早在软件生命周期中消除缺陷。Jenkins 测试自动化创建了一张测量的安全网。另一个关键的好处是，一旦你添加了测试，就很容易为其他项目开发类似的测试。
 - en: Jenkins works well with best practices such as **Test Driven Development** (**TDD**)
     or **Behavior Driven Development** (**BDD**). Using TDD, you write tests that
     fail first and then build the functionality needed to pass the tests. With BDD,
     the project team writes the description of tests in terms of behavior. This makes
     the description understandable to a wider audience. The wider audience has more
     influence over the details of the implementation.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 与最佳实践（如**测试驱动开发**（**TDD**）或**行为驱动开发**（**BDD**））配合得很好。使用 TDD，你首先编写失败的测试，然后构建通过测试所需的功能。使用
+    BDD，项目团队以行为的形式编写测试描述。这使得描述对更广泛的受众可理解。更广泛的受众对实施细节具有更多的影响。
 - en: Regression tests increase confidence that you have not broken code while refactoring
     software. The more coverage of code by tests, the more confidence. The recipe
     *Looking for "smelly" code through code coverage* shows you how to measure coverage
@@ -112,8 +159,14 @@
     you can review the application `.jar` files directly. FindBugs rules are accurate,
     mostly pointing at real defects. In this chapter, you will use FindBugs to search
     for security defects and PMD to search for design rule violations.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 回归测试增加了重构软件时没有破坏代码的信心。代码测试覆盖率越高，信心越足。*通过代码覆盖率查找“有异味”的代码*的方法向您展示了如何使用 Cobertura（[https://cobertura.github.io/cobertura/](https://cobertura.github.io/cobertura/)）来测量覆盖率。类似的框架还有
+    Emma（[http://emma.sourceforge.net/](http://emma.sourceforge.net/)）。您还会在静态代码审查方面找到
+    PMD 和 FindBugs 的相关方法。静态意味着您可以查看代码而无需运行它。PMD 检查`.java`文件是否存在特定的错误模式。使用 PMD 规则设计器编写新的错误检测规则相对较容易。FindBugs
+    扫描编译后的`.class`文件；您可以直接查看应用的`.jar`文件。FindBugs 规则准确，大多数指向实际缺陷。在本章中，您将使用 FindBugs
+    搜索安全缺陷，并使用 PMD 搜索设计规则违例。
 - en: Also mentioned in this chapter is the use of Java classes with known defects.
     We will use the classes to check the value of the testing tools. This is a similar
     approach to benchmarks for virus checkers, where virus checkers parse files with
@@ -121,14 +174,20 @@
     to understand the rules that are violated. This is a great way to collect real
     defects found in your projects, and to characterize and reuse real defects. Consider
     adding your own classes to projects to see if the QA process picks up the defects.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章还提到了使用已知缺陷的 Java 类。我们将使用这些类来检查测试工具的价值。这与病毒检查器的基准类似，病毒检查器会解析具有已知病毒签名的文件。注入已知缺陷的优势在于您可以了解到违反的规则。这是收集项目中发现的实际缺陷并对其进行特征化和重复利用的好方法。考虑将自己的类添加到项目中，以查看
+    QA 过程是否能够捕捉到缺陷。
 - en: Good documentation and source code structure aid the maintainability and readability
     of your code. Sun coding conventions enforce a consistent standard across projects.
     In this chapter, you will use Checkstyle and JavaNCSS to measure your source code
     against Sun coding conventions ([http://www.oracle.com/technetwork/java/codeconventions-150003.pdf](http://www.oracle.com/technetwork/java/codeconventions-150003.pdf)).
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 良好的文档和源代码结构有助于代码的可维护性和可读性。Sun 编码规范强制执行跨项目的一致标准。在本章中，您将使用 Checkstyle 和 JavaNCSS
+    来将您的源代码与 Sun 编码规范进行比较（[http://www.oracle.com/technetwork/java/codeconventions-150003.pdf](http://www.oracle.com/technetwork/java/codeconventions-150003.pdf)）。
 - en: The results generated by the Jenkins plugins can be aggregated into one report
     through the violations plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Violations](https://wiki.jenkins-ci.org/display/JENKINS/Violations)).
     There are other plugins specific to a given tool, for example for PMD or FindBugs
@@ -138,32 +197,48 @@
     in the *Saving screen space with the Dashboard View plugin* recipe in [Chapter
     4](ch04.html "Chapter 4. Communicating Through Jenkins"), *Communicating Through
     Jenkins*.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 插件生成的结果可以通过违例插件（[https://wiki.jenkins-ci.org/display/JENKINS/Violations](https://wiki.jenkins-ci.org/display/JENKINS/Violations)）聚合为一个报告。还有其他针对特定工具的插件，例如
+    PMD 或 FindBugs 插件。这些插件由分析收集器插件支持（[https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin)），该插件将其他报告聚合为一个统一的整体。可以通过
+    Portlets 仪表板插件显示单个插件报告，该插件在[第 4 章](ch04.html "第 4 章. 通过 Jenkins 进行通信") *通过 Jenkins
+    进行通信*中讨论过 *使用仪表板视图插件节约屏幕空间*。
 - en: Jenkins is not limited to testing Java; a number of plugins such as SLOCCount
     or the DRY plugin (it spots duplication of code) are language-agnostic. There
     is even specific support for NUnit testing in .NET or compilation to other languages.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins不仅限于测试Java；许多插件如SLOCCount或DRY插件（它可以发现代码的重复）是与语言无关的。甚至还有针对.NET中的NUnit测试或其他语言的编译的特定支持。
 - en: Note
+  id: totrans-28
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'NUnit, JUnit, RUnit, and several other unit testing frameworks follow the xUnit
     standard. For a detailed overview review the Wikipedia entry: [http://en.wikipedia.org/wiki/XUnit](http://en.wikipedia.org/wiki/XUnit)'
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: NUnit、JUnit、RUnit和几个其他单元测试框架都遵循xUnit标准。详细信息请参阅维基百科条目：[http://en.wikipedia.org/wiki/XUnit](http://en.wikipedia.org/wiki/XUnit)
 - en: If you are missing specific functionality, you can always build your own Jenkins
     plugin as detailed in [Chapter 7](ch07.html "Chapter 7. Exploring Plugins"), *Exploring
     Plugins*.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你缺少特定功能，你总是可以按照[第7章](ch07.html "Chapter 7. Exploring Plugins") *插件探索*中的详细说明构建自己的Jenkins插件。
 - en: 'There are a number of good introductions to software metrics. These include
     a wikibook on the details of the metrics ([http://en.wikibooks.org/wiki/Introduction_to_Software_Engineering/Quality/Metrics](http://en.wikibooks.org/wiki/Introduction_to_Software_Engineering/Quality/Metrics))
     and a well written book by Diomidis Spinellis, *Code Quality: The Open Source
     Perspective*.'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: '有许多关于软件度量的好介绍。这些包括关于指标细节的维基书籍（[http://en.wikibooks.org/wiki/Introduction_to_Software_Engineering/Quality/Metrics](http://en.wikibooks.org/wiki/Introduction_to_Software_Engineering/Quality/Metrics)）和Diomidis
+    Spinellis撰写的一本写得很好的书籍*Code Quality: The Open Source Perspective*。'
 - en: In the *Integrating Jenkins with SonarQube* recipe of this chapter, you will
     link Jenkins projects to Sonar reports. Sonar is a specialized tool that collects
     software metrics and breaks them down into an understandable report. Sonar details
@@ -171,176 +246,259 @@
     of tools such as FindBugs and PMD mentioned in this chapter. The project itself
     is evolving rapidly. Consider using Jenkins for early warnings and to spot obvious
     defects such as a bad commit. You can then use Sonar for a deeper review.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章的*将Jenkins与SonarQube集成*中，你将把Jenkins项目链接到Sonar报告上。Sonar是一个专业工具，用于收集软件指标并将其分解为可理解的报告。Sonar详细说明了项目的质量。它使用了一系列指标，包括本章中提到的FindBugs和PMD等工具的结果。项目本身正在快速发展。考虑使用Jenkins进行早期警告并发现明显的缺陷，比如糟糕的提交。然后你可以使用Sonar进行更深入的审查。
 - en: Finally, you will run R code that parses all the files in a project and reports
     simple metrics. This custom process is easily adapted for complex analyses based
     on the wealth of statistical packages included in the R language.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，你将运行解析项目中所有文件并报告简单指标的R代码。这个自定义过程很容易根据R语言中包含的丰富的统计包进行复杂的分析。
 - en: Note
+  id: totrans-34
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: At the time of writing, both the FindBugs and PMD Jenkins plugins require a
     specific version of Maven. As an administrator, you can install the Maven version
     automatically through the main configuration screen (`http://hostname/configure`)
     under the **Maven** section by pressing the **Add Maven** button. Later when you
     create a job, Jenkins will give you a choice of Maven versions.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写本文时，FindBugs和PMD Jenkins插件都需要特定版本的Maven。作为管理员，你可以通过主配置屏幕（`http://hostname/configure`）下的**Maven**部分，通过按下**添加Maven**按钮来自动安装Maven版本。稍后当你创建一个任务时，Jenkins会给你选择Maven版本的选项。
 - en: When dealing with multimodule Maven projects, the Maven plugins generate a series
     of results. The Maven project type rigidly assumes the results are stored in conventional
     locations, but this does not always happen consistently. With free-style projects,
     you can explicitly tell Jenkins plugins where to find the results using regular
     expressions that are consistent with Ant filesets ([http://ant.apache.org/manual/Types/fileset.html](http://ant.apache.org/manual/Types/fileset.html)).
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 当处理多模块的Maven项目时，Maven插件会生成一系列结果。Maven项目类型严格假设结果存储在常规位置，但这并不总是一致的。对于自由样式项目，你可以明确告诉Jenkins插件在哪里找到结果，使用与Ant文件集一致的正则表达式（[http://ant.apache.org/manual/Types/fileset.html](http://ant.apache.org/manual/Types/fileset.html)）。
 - en: Estimating the value of your project through sloccount
+  id: totrans-37
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过sloccount估算你项目的价值
 - en: One way to gain insight into the value of a project is to count the number of
     lines of code in the project and divide the count between code languages. SLOCCount
     pronounced "sloc-count" written by Dr. David Wheeler ([http://www.dwheeler.com/sloccount/](http://www.dwheeler.com/sloccount/))
     is a command-line tool suite for counting physical source lines of code (SLOC)
     in potentially large software systems. From these metrics, you can estimate how
     many hours it would take to write the code and the estimated development costs.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 了解项目价值的一种方法是计算项目中的代码行数并在代码语言之间进行计数。 由 Dr. David Wheeler（[http://www.dwheeler.com/sloccount/](http://www.dwheeler.com/sloccount/)）编写的
+    SLOCCount，发音为“sloc-count”，是一个用于计算潜在大型软件系统中物理源代码行（SLOC）的命令行工具套件。 通过这些指标，您可以估算编写代码和估算开发成本需要多少小时。
 - en: Getting ready
+  id: totrans-39
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: 'Install the SLOCCount plugin ([https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin)).
     Create a new directory for this recipe''s code. Install SLOCCount on the Jenkins
     instance as mentioned at [http://www.dwheeler.com/sloccount](http://www.dwheeler.com/sloccount).
     If you are running a Debian OS, the following installation command will work:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 SLOCCount 插件（[https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin)）。
+    为此配方代码创建一个新目录。 如 [http://www.dwheeler.com/sloccount](http://www.dwheeler.com/sloccount)
+    所述，在 Jenkins 实例上安装 SLOCCount。 如果您正在运行 Debian 操作系统，则以下安装命令将起作用：
 - en: '[PRE0]'
+  id: totrans-41
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'For details on how to install SLOCCount on other systems, please review: [http://www.dwheeler.com/sloccount/sloccount.html](http://www.dwheeler.com/sloccount/sloccount.html)'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关如何在其他系统上安装 SLOCCount 的详细信息，请查看：[http://www.dwheeler.com/sloccount/sloccount.html](http://www.dwheeler.com/sloccount/sloccount.html)
 - en: How to do it...
+  id: totrans-43
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Create a free-style project and name it `ch5.quality.sloccount`. Add `SLOCCOUNT
     REPORT Project` as the description.
+  id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个自由风格的项目并将其命名为`ch5.quality.sloccount`。 将`SLOCCOUNT REPORT Project`添加为描述。
 - en: 'Under the **Source Code Management** section, check **Subversion**, adding
     for the **Repository URL**: [https://source.sakaiproject.org/svn/shortenedurl/trunk](https://source.sakaiproject.org/svn/shortenedurl/trunk).'
+  id: totrans-45
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，勾选**Subversion**，添加**存储库 URL**：[https://source.sakaiproject.org/svn/shortenedurl/trunk](https://source.sakaiproject.org/svn/shortenedurl/trunk)。
 - en: Within the **Build** section, select **Execute shell** from the **Add build**
     step. Add the `/usr/bin/sloccount --duplicates --wide --details . >./sloccount.sc
     command`.
+  id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分中，从**添加构建**步骤中选择**执行 shell**。 添加`/usr/bin/sloccount --duplicates --wide
+    --details . >./sloccount.sc命令`。
 - en: In the **Post-build Actions** section, check the **Publish SLOCCount analysis
     results** adding to the text input **SLOCCount reports**, `sloccount.sc`.
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分，检查**发布 SLOCCount 分析结果**，添加到文本输入**SLOCCount 报告**，`sloccount.sc`。
 - en: Click on **Save**.
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**保存**。
 - en: 'Run the job and review the details. You will now see an overview in the relevant
     language, as shown in the following screenshot:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行任务并查看详情。 您现在将看到相关语言的概述，如下图所示：
 - en: '![How to do it...](img/0082OS_05_01.jpg)'
+  id: totrans-50
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_05_01.jpg)'
 - en: 'At the top level, you will also see a time series of how the lines of code
     per language evolve over time. It is useful for managers that need to estimate
     the resources needed to complete projects:'
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 在顶级，您还将看到随时间推移代码每种语言的代码行数的时间序列。 这对需要估算完成项目所需资源的经理非常有用：
 - en: '![How to do it...](img/0082OS_05_02.jpg)'
+  id: totrans-52
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_05_02.jpg)'
 - en: 'The report also allows you to drill down into specific files. The larger the
     file, the easier it is for a developer to lose track of the meaning of the code.
     If you see a particularly large file then it might be worth reviewing, as shown
     in the following screenshot:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 报告还允许您深入研究特定文件。 文件越大，开发人员就越容易迷失代码的含义。 如果您看到一个特别大的文件，那么值得审查，如下图所示：
 - en: '![How to do it...](img/0082OS_05_03.jpg)'
+  id: totrans-54
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_05_03.jpg)'
 - en: Note
+  id: totrans-55
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: To compare the report you generated with the wider Sakai project, visit [https://www.openhub.net/p/sakai#](https://www.openhub.net/p/sakai#).
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 要将您生成的报告与更广泛的 Sakai 项目进行比较，请访问[https://www.openhub.net/p/sakai#](https://www.openhub.net/p/sakai#)。
 - en: How it works...
+  id: totrans-57
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The recipe pulls in realistic code, a Java-based service that makes shortened
     URLs ([https://confluence.sakaiproject.org/display/SHRTURL](https://confluence.sakaiproject.org/display/SHRTURL)).
     The Jenkins plugin converts the results generated by SLOCCount into detailed information.
     The report is divided into a four-tabbed table summed and sorted by files, modules,
     folders, and languages. From this information, you can estimate the degree of
     effort it would take to recreate the project from scratch.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 该秘籍引入了实际代码，这是一个基于 Java 的服务，用于生成缩短的 URL（[https://confluence.sakaiproject.org/display/SHRTURL](https://confluence.sakaiproject.org/display/SHRTURL)）。Jenkins
+    插件将 SLOCCount 生成的结果转换为详细信息。报告分为四个标签页的表格，按文件、模块、文件夹和语言进行汇总和排序。通过这些信息，您可以估计从头开始重建项目所需的工作程度。
 - en: The description of the job includes a URL pointing to open hub ([http://blog.openhub.net/2014/07/black-duck-open-hub/](http://blog.openhub.net/2014/07/black-duck-open-hub/)),
     a trusted third-person service. Open hub is a well-known service with well-described
     privacy rules ([http://blog.openhub.net/privacy/](http://blog.openhub.net/privacy/)).
     However, if you do not have complete trust in the reputation of a third-party
     service, then don't link in through a Jenkins description.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 工作描述包含指向 open hub ([http://blog.openhub.net/2014/07/black-duck-open-hub/](http://blog.openhub.net/2014/07/black-duck-open-hub/))
+    的 URL，这是一个值得信赖的第三方服务。Open hub 是一个众所周知的服务，其隐私规则有着良好的描述（[http://blog.openhub.net/privacy/](http://blog.openhub.net/privacy/)）。然而，如果您不完全信任第三方服务的声誉，那么就不要通过
+    Jenkins 描述进行链接。
 - en: 'Information about the Sakai Learning Management System can be found by visiting
     [https://www.openhub.net/p/sakai#](https://www.openhub.net/p/sakai#). The shortened
     URL service is one small part of this whole. The combined statistics allow visitors
     to gain a better understanding of the wider context, as shown in the following
     screenshot:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过访问[https://www.openhub.net/p/sakai#](https://www.openhub.net/p/sakai#)了解有关
+    Sakai 学习管理系统的信息。缩短的 URL 服务只是其中的一小部分。综合统计数据可以让访问者更好地了解更广泛的背景，如下面的屏幕截图所示：
 - en: '![How it works...](img/0082OS_05_04.jpg)'
+  id: totrans-61
   prefs: []
   type: TYPE_IMG
+  zh: '![它是如何工作的...](img/0082OS_05_04.jpg)'
 - en: There's more...
+  id: totrans-62
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few more details to consider.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 还有一些细节需要考虑。
 - en: Software cost estimation
+  id: totrans-64
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 软件成本估算
 - en: SLOCCount uses the COCOMO model ([http://en.wikipedia.org/wiki/COCOMO](http://en.wikipedia.org/wiki/COCOMO))
     to estimate the cost of projects. You will not see this in the Jenkins report,
     but you can generate the estimated costs if you run SLOCCount from the command
     line.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: SLOCCount 使用 COCOMO 模型 ([http://en.wikipedia.org/wiki/COCOMO](http://en.wikipedia.org/wiki/COCOMO))
+    来估算项目成本。您不会在 Jenkins 报告中看到此内容，但如果您从命令行运行 SLOCCount，您可以生成估算成本。
 - en: Cost is estimated as `effort * personcost * overhead`.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 成本估计为 `effort * personcost * overhead`。
 - en: The element that changes most over time is person cost (in dollars). You can
     change the value with the command-line argument `–personcost`.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着时间推移，变化最大的元素是人力成本（以美元计）。您可以使用命令行参数`–personcost`来更改该值。
 - en: Goodbye Google code search; hello code.ohoh.net
+  id: totrans-68
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 再见 Google 代码搜索；你好 code.ohoh.net
 - en: Google has announced that it has closed its source code search engine. Luckily,
     [code.ohloh.net](http://code.ohloh.net) (formerly [koders.com](http://koders.com)),
     another viable search engine, announced that it will provide coverage of the code
@@ -348,215 +506,318 @@
     will be able to review a significant selection of open source projects. The search
     engine complements the code you can search for within your favorite online repositories
     such as GitHub and Bitbucket.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 谷歌宣布已关闭其源代码搜索引擎。幸运的是，[code.ohloh.net](http://code.ohloh.net)（之前是[koders.com](http://koders.com)）另一个可行的搜索引擎，宣布将提供对[ohloh.net](http://ohloh.net)中描述的代码库的覆盖。使用这个搜索引擎，您将能够审查大量的开源项目。该搜索引擎补充了您可以在您喜爱的在线存储库（如
+    GitHub 和 Bitbucket）中搜索的代码。
 - en: See also
+  id: totrans-70
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Knowing your audience with Google Analytics* recipe in [Chapter 4](ch04.html
     "Chapter 4. Communicating Through Jenkins"), *Communicating Through Jenkins*
+  id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过 Jenkins 进行通信* 的[第 4 章](ch04.html "第 4 章. 通过 Jenkins 进行通信")中的 *使用 Google
+    Analytics 了解您的受众* 秘籍'
 - en: The *Analyzing project data with the R plugin* recipe
+  id: totrans-72
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 R 插件分析项目数据* 秘籍'
 - en: Looking for "smelly" code through code coverage
+  id: totrans-73
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过代码覆盖寻找“臭味”代码
 - en: This recipe uses **Cobertura** ([http://cobertura.sourceforge.net/](http://cobertura.sourceforge.net/))
     to find code that is not covered by unit tests.
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 本秘籍使用 **Cobertura** ([http://cobertura.sourceforge.net/](http://cobertura.sourceforge.net/))
+    来查找未被单元测试覆盖的代码。
 - en: Without consistent practice, writing unit tests will become as difficult as
     writing debugging information to `stdout`. Most popular Java-specific IDEs have
     inbuilt support for running unit tests. Maven runs them as part of the test goal.
     If your code does not have regression tests, the code is more likely to break
     during refactoring. Measuring code coverage can be used to search for hotspots
     of non-tested code.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 没有持续的实践，编写单元测试将变得像向`stdout`写入调试信息一样困难。大多数流行的 Java 特定 IDE 都内置支持运行单元测试。Maven 将它们作为测试目标的一部分运行。如果您的代码没有回归测试，那么在重构过程中代码更容易中断。测量代码覆盖率可用于搜索未测试代码的热点。
 - en: Note
+  id: totrans-76
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: 'For more information you can review: [http://onjava.com/onjava/2007/03/02/statement-branch-and-path-coverage-testing-in-java.html](http://onjava.com/onjava/2007/03/02/statement-branch-and-path-coverage-testing-in-java.html).'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，您可以查看：[http://onjava.com/onjava/2007/03/02/statement-branch-and-path-coverage-testing-in-java.html](http://onjava.com/onjava/2007/03/02/statement-branch-and-path-coverage-testing-in-java.html)。
 - en: Getting ready
+  id: totrans-78
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Cobertura code coverage plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Cobertura+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Cobertura+Plugin)).
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Cobertura 代码覆盖插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Cobertura+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Cobertura+Plugin))。
 - en: How to do it...
+  id: totrans-80
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 怎么做...
 - en: 'Generate a template project by using the following command:'
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令生成模板项目：
 - en: '[PRE1]'
+  id: totrans-82
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Test the code coverage of the unmodified project with the following command:'
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令测试未修改项目的代码覆盖率：
 - en: '[PRE2]'
+  id: totrans-84
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'Review the output from Maven. It will look similar to the following output:'
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 审查 Maven 的输出。它看起来类似于以下输出：
 - en: '[PRE3]'
+  id: totrans-86
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: In a web browser, view `/target/site/cobertura/index.html`. Notice there is
     no code coverage, as shown in the following screenshot:![How to do it...](img/0082OS_05_05.jpg)
+  id: totrans-87
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在网络浏览器中，查看`/target/site/cobertura/index.html`。请注意，如下屏幕截图所示，没有代码覆盖率：![怎么做...](img/0082OS_05_05.jpg)
 - en: 'Add the following content to `src/main/java/nl/berg/packt/coverage/Dicey.java`:'
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下内容添加到`src/main/java/nl/berg/packt/coverage/Dicey.java`：
 - en: '[PRE4]'
+  id: totrans-89
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Modify `src/test/java/nl/berg/packt/coverage/AppTest.java` to instantiate a
     new `Dicey` object by changing the `testApp()` method to:'
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改`src/test/java/nl/berg/packt/coverage/AppTest.java`以通过更改`testApp()`方法来实例化一个新的
+    `Dicey` 对象：
 - en: '[PRE5]'
+  id: totrans-91
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'Test the code coverage of the JUnit tests with the command:'
+  id: totrans-92
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令测试 JUnit 测试的代码覆盖率：
 - en: '[PRE6]'
+  id: totrans-93
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Review the Maven output, noticing that `println` from within the `Dicey` constructor
     is also included:'
+  id: totrans-94
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 Maven 输出，注意 `Dicey` 构造函数内部的 `println` 也已包含在内：
 - en: '[PRE7]'
+  id: totrans-95
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: In a web browser, open `view /target/site/cobertura/index.html`. Your project
     now has code coverage and you can see which lines of code have not yet been called,
     as shown in the following screenshot:![How to do it...](img/0082OS_05_06.jpg)
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在网络浏览器中打开`view /target/site/cobertura/index.html`。您的项目现在具有代码覆盖率，并且您可以看到尚未调用的代码行，如下屏幕截图所示：![怎么做...](img/0082OS_05_06.jpg)
 - en: 'Add the following **build** section to your `pom.xml`:'
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下**构建**部分添加到您的`pom.xml`中：
 - en: '[PRE8]'
+  id: totrans-98
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Test the code coverage of the JUnit tests with the command:'
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令测试 JUnit 测试的代码覆盖率：
 - en: '[PRE9]'
+  id: totrans-100
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Visit the location `target/site/cobertura,` noting that results are now also
     being stored in `coverage.xml`.
+  id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问位置`target/site/cobertura`，注意现在结果也存储在`coverage.xml`中。
 - en: Run `mvn clean` to remove the target directory.
+  id: totrans-102
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行`mvn clean`以删除目标目录。
 - en: Add the Maven project to your subversion repository.
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 Maven 项目添加到您的 Subversion 仓库中。
 - en: Create a new **Maven** job named `ch5.quality.coverage`.
+  id: totrans-104
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`ch5.quality.coverage`的新 **Maven** 项目。
 - en: In the **Source Code Management** section, check **Subversion** and add your
     repository location.
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分中，勾选**Subversion**并添加您的存储库位置。
 - en: In the **Build** section under **Goals and options** add `clean cobertura:cobertura`.
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分下的**目标和选项**中添加`clean cobertura:cobertura`。
 - en: Within the **Post-Build actions** section check **Publish Cobertura Coverage
     Report**. For the Cobertura xml report pattern input add `**/target/site/cobertura/coverage.xml`.
+  id: totrans-107
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后期构建操作**部分中勾选**发布 Cobertura 覆盖率报告**。对于 Cobertura xml 报告模式输入，添加`**/target/site/cobertura/coverage.xml`。
 - en: Click on **Save**.
+  id: totrans-108
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Click on **Build Now** twice for the job, to generate a trend and then review
     the results.
+  id: totrans-109
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击两次**立即构建**以生成工作的趋势，然后审查结果。
 - en: 'The trend graph is a line plot of the percentage of classes, conditions (such
     as branches of `if` statements), files, lines of code, methods, and packages covered.
     Jenkins displays each type with a different colored line, as shown in the following
     screenshot:'
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 趋势图是类，条件（例如 `if` 语句的分支），文件，代码行，方法和包的百分比的线性图。Jenkins 使用不同颜色的线显示每种类型，如下屏幕截图所示：
 - en: '![How to do it...](img/0082OS_05_24.jpg)'
+  id: totrans-111
   prefs: []
   type: TYPE_IMG
+  zh: '![怎么做...](img/0082OS_05_24.jpg)'
 - en: How it works...
+  id: totrans-112
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: Cobertura instruments Java bytecode during compilation. The Maven plugin generates
     both an HTML and XML report. The HTML report allows you to quickly review the
     code status from the command line. The XML report is needed for parsing by the
     Jenkins plugin.
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: Cobertura 在编译期间对 Java 字节码进行仪器化。Maven 插件会生成 HTML 和 XML 报告。HTML 报告允许你从命令行快速查看代码状态。XML
+    报告需要 Jenkins 插件解析。
 - en: You placed the plugin configuration in the **build** section rather than the
     reporting section to avoid having to run the **site** goal with its extra phases.
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 你将插件配置放在了**build**部分而不是报告部分，以避免运行带有额外阶段的**site**目标。
 - en: The free-style project was used so that the Cobertura plugin picks up multiple
     XML reports. This was defined by the fileset `**/target/site/cobertura/coverage.xml`,
     which states that any report is called `coverage.xml` under any `target/site/cobertura`
     directory underneath the workspace.
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 自由样式项目被用来使 Cobertura 插件捡起多个 XML 报告。这是由文件集 `**/target/site/cobertura/coverage.xml`
+    定义的，该文件集表示工作空间下任何 `target/site/cobertura` 目录下的任何报告都称为 `coverage.xml`。
 - en: Maven ran `clean cobertura:cobertura`. The `clean` goal removes all target directories,
     including any previously compiled and instrumented code. The `cobertura:cobertura`
     goal compiles and instruments the code, runs unit tests, and then generates a
     report.
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 运行了 `clean cobertura:cobertura`。`clean` 目标会删除所有的 target 目录，包括以前编译和仪器化的代码。`cobertura:cobertura`
+    目标编译和仪器化代码，运行单元测试，然后生成报告。
 - en: The `testApp` unit test called the constructor for the `Dicey` class. The constructor
     randomly generates a number from 1 to 6, which mimics a dice, and then chooses
     between two branches of an `if` statement. The cobertura report allows you to
@@ -566,493 +827,732 @@
     report is also good at spotting code of greater complexity than its surroundings.
     The more complex the code, the harder it is to understand and the easier it is
     to introduce mistakes.
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: '`testApp` 单元测试调用了 `Dicey` 类的构造函数。构造函数随机生成从 1 到 6 的数字，模拟骰子，并在一个 `if` 语句的两个分支中进行选择。cobertura
+    报告允许你放大到源代码并发现做出的选择。该报告非常适用于识别遗漏的测试。如果你重构代码，那么在这些区域将没有单元测试，以便在代码意外更改行为时发现。该报告还擅长发现比周围环境更复杂的代码。代码越复杂，越难理解，也越容易引入错误。'
 - en: 'The following article is a great example of how to use cobertura and the meaning
     behind the generated metrics: [http://www.ibm.com/developerworks/java/library/j-cq01316/index.html?ca=drs](http://www.ibm.com/developerworks/java/library/j-cq01316/index.html?ca=drs).'
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下文章是如何使用 cobertura 以及生成的指标背后含义的绝佳示例：[http://www.ibm.com/developerworks/java/library/j-cq01316/index.html?ca=drs](http://www.ibm.com/developerworks/java/library/j-cq01316/index.html?ca=drs)。
 - en: There's more...
+  id: totrans-119
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容...
 - en: An alternative open source tool to Cobertura is Emma ([http://emma.sourceforge.net](http://emma.sourceforge.net)).
     Emma also has an associated Jenkins plugin [https://wiki.jenkins-ci.org/display/JENKINS/Emma+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Emma+Plugin).
     In Maven, you do not have to add any configuration to the `pom.xml` file. You
     simply need to run the goals `clean emma:emma package` and point the Jenkins plugin
     at the results.
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个开源工具替代品是Emma ([http://emma.sourceforge.net](http://emma.sourceforge.net))。Emma
+    还有一个相关的 Jenkins 插件 [https://wiki.jenkins-ci.org/display/JENKINS/Emma+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Emma+Plugin)。在
+    Maven 中，你不需要在 `pom.xml` 文件中添加任何配置。你只需运行目标 `clean emma:emma package` 并将 Jenkins
+    插件指向结果。
 - en: Note
+  id: totrans-121
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'Another alternative framework is Jacoco ([http://www.eclemma.org/index.html](http://www.eclemma.org/index.html)).
     Jacoco is designed as a descendant of Emma. You can find a full description of
     its Jenkins plugin at: [https://wiki.jenkins-ci.org/display/JENKINS/JaCoCo+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JaCoCo+Plugin).'
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个替代框架是Jacoco ([http://www.eclemma.org/index.html](http://www.eclemma.org/index.html))。Jacoco
+    被设计为Emma的一个后代。你可以在这里找到其 Jenkins 插件的完整描述：[https://wiki.jenkins-ci.org/display/JENKINS/JaCoCo+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JaCoCo+Plugin)。
 - en: Activating more PMD rulesets
+  id: totrans-123
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 激活更多的 PMD 规则集
 - en: 'PMD has rules for capturing particular bugs. It bundles those rules into rulesets.
     For example, there is a ruleset with a theme about Android programming and another
     for code size or design. By default, three non-controversial PMD rulesets are
     measured:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: PMD 有规则来捕获特定的错误。它将这些规则捆绑到规则集中。例如，有一个主题是关于 Android 编程的规则集，另一个是关于代码大小或设计的规则集。默认情况下，测量了三个非有争议的
+    PMD 规则集：
 - en: '**Basic**: This ruleset has obvious practices that every developer should follow,
     such as don''t ignore the exceptions that are caught'
+  id: totrans-125
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**基础**：此规则集包含每个开发人员都应遵循的明显实践，例如不要忽略已捕获的异常。'
 - en: '**Unused code**: This ruleset finds code that is never used, and lines that
     can be eliminated, avoiding waste and aiding readability'
+  id: totrans-126
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**未使用的代码**：此规则集可查找从未使用过的代码以及可消除的行，避免浪费并增加可读性。'
 - en: '**Imports**: This ruleset spots unnecessary imports'
+  id: totrans-127
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**导入**：此规则集可发现不必要的导入。'
 - en: This recipe shows you how to enable more rules. The main risk is that the extra
     rules generate a lot of false positives, making it difficult to see real defects.
     The benefit is that you will capture a wider range of defects, some of which are
     costly if they get to production.
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 此示例向您展示如何启用更多规则。主要风险是额外规则会生成大量误报，使真正的缺陷难以辨别。好处是您将捕获更广泛的缺陷，其中一些在进入生产环境后会造成严重后果。
 - en: Getting ready
+  id: totrans-129
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Jenkins PMD plugin ([https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin)).
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Jenkins PMD 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin))。
 - en: Tip
+  id: totrans-131
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Jenkins bug [Jenkins-22252]**'
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Jenkins bug [Jenkins-22252]**'
 - en: '[https://issues.jenkins-ci.org/browse/JENKINS-22252](https://issues.jenkins-ci.org/browse/JENKINS-22252)'
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://issues.jenkins-ci.org/browse/JENKINS-22252](https://issues.jenkins-ci.org/browse/JENKINS-22252)'
 - en: At the time of writing, Maven 3.2.1 in combination with Jenkins does not work
     with the PMD plugin. The short-term solution is to use Maven 3.0.5 in your build.
     However, by the time you read this warning, I expect the issue to have been resolved.
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写本文时，Jenkins 中的 Maven 3.2.1 与 PMD 插件不兼容。短期解决方案是在构建中使用 Maven 3.0.5。但是，到您阅读此警告时，我期望该问题已得到解决。
 - en: You can automatically install different versions of Java, Maven, or Ant from
     Jenkins' main configuration screen (`http://localhost:8080/configure`)
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从 Jenkins 的主配置屏幕 (`http://localhost:8080/configure`) 自动安装不同版本的 Java、Maven
+    或 Ant。
 - en: How to do it...
+  id: totrans-136
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Generate a template project by using the following command:'
+  id: totrans-137
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令生成模板项目：
 - en: '[PRE10]'
+  id: totrans-138
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Add the Java class `src/main/java/nl/berg/packt/pmd/PMDCandle.java` with the
     content:'
+  id: totrans-139
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下内容将 Java 类 `src/main/java/nl/berg/packt/pmd/PMDCandle.java` 添加到项目中：
 - en: '[PRE11]'
+  id: totrans-140
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Test your unmodified project with the command:'
+  id: totrans-141
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令测试您的未修改项目：
 - en: '[PRE12]'
+  id: totrans-142
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Review the directory target, and you will notice the results `java-basic.xml`,
     `java-imports.xml`, `java-unusedcode.xml`, and the aggregated results `pmd.xml`.
+  id: totrans-143
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看目录 `target`，您会注意到结果 `java-basic.xml`、`java-imports.xml`、`java-unusedcode.xml`，以及聚合结果
+    `pmd.xml`。
 - en: View the `target/site/pmd.html` file in a web browser.
+  id: totrans-144
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 web 浏览器中查看文件 `target/site/pmd.html`。
 - en: 'Add the following reporting section to your `pom.xml file`:'
+  id: totrans-145
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下报告部分添加到您的 `pom.xml` 文件中：
 - en: '[PRE13]'
+  id: totrans-146
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'Test your project with the command:'
+  id: totrans-147
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令测试您的项目：
 - en: '[PRE14]'
+  id: totrans-148
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: View in a web browser the file `target/site/pmd.html`, noticing that extra violations
     have now been found. This is due to the extra rules added to the `pom.xml` file.
+  id: totrans-149
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 web 浏览器中查看文件 `target/site/pmd.html`，注意到现在发现了额外的违规行为。这是由于在 `pom.xml` 文件中添加了额外规则造成的。
 - en: Run `mvn clean` to remove the `target` directory.
+  id: totrans-150
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 `mvn clean` 来删除 `target` 目录。
 - en: Add the source code to your subversion repository.
+  id: totrans-151
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将源代码添加到您的 Subversion 仓库。
 - en: 'Create a new **Maven** Jenkins job named `ch5.quality.pmd` with the following
     details:'
+  id: totrans-152
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch5.quality.pmd` 的新 **Maven** Jenkins 作业，包含以下详细信息：
 - en: '**Source Code Management** | **Subversion**: your repository'
+  id: totrans-153
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**源代码管理** | **Subversion**：您的仓库'
 - en: '**Build** | **Goals and options**: `clean pmd:pmd`'
+  id: totrans-154
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**构建** | **目标和选项**：`clean pmd:pmd`'
 - en: '**Build Settings**: **Publish PMD analysis results**'
+  id: totrans-155
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**构建设置**：**发布 PMD 分析结果**'
 - en: Click on **Save**.
+  id: totrans-156
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **保存**。
 - en: Click on **Build Now** twice for the job to generate a trend. Review the results.
+  id: totrans-157
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **立即构建** 两次以生成趋势。查看结果。
 - en: 'The top level report summarizes the number of defects and their priorities.
     It also mentions some of the details underneath, as shown in the following screenshot:'
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 顶层报告汇总了缺陷数量及其优先级。它还提到了一些详细信息，如下图所示：
 - en: '![How to do it...](img/0082OS_05_07.jpg)'
+  id: totrans-159
   prefs: []
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_05_07.jpg)'
 - en: 'You can then zoom into the code and look at the highlighted areas for defects:'
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以放大代码并查看高亮显示的区域以查找缺陷：
 - en: '![How to do it...](img/0082OS_05_08.jpg)'
+  id: totrans-161
   prefs: []
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_05_08.jpg)'
 - en: How it works...
+  id: totrans-162
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'The Maven PMD plugin tests a wide range of rulesets. When you download the
     binary package from the PMD website ([http://pmd.sourceforge.net/](http://pmd.sourceforge.net/)),
     you can find the paths of the rulesets by listing the content of the `pmd.jar`
     file. Under a *NIX system the command to do this is:'
+  id: totrans-163
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven PMD 插件测试了一系列规则集。当你从 PMD 网站下载二进制包（[http://pmd.sourceforge.net/](http://pmd.sourceforge.net/)）时，你可以通过列出
+    `pmd.jar` 文件的内容找到规则集的路径。在 *NIX 系统下执行此操作的命令是：
 - en: '[PRE15]'
+  id: totrans-164
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'You added a standard candle, a Java class with known defects that trigger PMD
     warnings. For example, there are multiple defects in the following two lines of
     code:'
+  id: totrans-165
   prefs: []
   type: TYPE_NORMAL
+  zh: 你添加了一个标准的基准，一个具有已知缺陷的 Java 类，触发 PMD 警告。例如，以下两行代码中有多个缺陷：
 - en: '[PRE16]'
+  id: totrans-166
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'The most significant defect is that a Java programmer needs to place the literal
     first to avoid a `NullPointerException`, for example:'
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: 最重要的缺陷是 Java 程序员需要首先放置文本来避免 `NullPointerException`，例如：
 - en: '[PRE17]'
+  id: totrans-168
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: Placing the literal first returns false when `myString` is `null`. There is
     an issue with the lack of braces around the `if` statement. The same holds true
     for the lack of a command to run when the `if` statement is triggered.
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 当 `myString` 为 `null` 时，首先返回 false。`if` 语句周围缺少大括号是一个问题。当触发 `if` 语句时，同样适用于缺少要运行的命令。
 - en: 'Another trivial example is hard-coding infrastructural details into your source.
     For example, passwords, IP addresses, and usernames. It is far better to move
     the details out into property files that reside only on the deployment server.
     The following line tests PMD for its ability to find this type of defect:'
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个微不足道的例子是将基础设施细节硬编码到你的源代码中。例如，密码、IP 地址和用户名。最好将细节移到仅驻留在部署服务器上的属性文件中。以下一行测试
+    PMD 是否能够发现这种类型的缺陷：
 - en: '[PRE18]'
+  id: totrans-171
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Both FindBugs and PMD have their own set of bug pattern detectors. Neither will
     capture the full range of defects. It is therefore worth running both tools to
     capture the widest range of defects. For a review of both products, visit [http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1](http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1).
+  id: totrans-172
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs 和 PMD 都有自己的一套 bug 模式检测器。两者都不会捕获所有类型的缺陷。因此，值得运行这两个工具来捕获最广泛范围的缺陷。有关这两款产品的评论，请访问[http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1](http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1)。
 - en: A couple of other static code review tools you may be interested in are QJPro
     ([http://qjpro.sourceforge.net/](http://qjpro.sourceforge.net/)) and Jlint ([http://jlint.sourceforge.net/](http://jlint.sourceforge.net/)).
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可能会对其他几个静态代码审查工具感兴趣，例如 QJPro ([http://qjpro.sourceforge.net/](http://qjpro.sourceforge.net/))
+    和 Jlint ([http://jlint.sourceforge.net/](http://jlint.sourceforge.net/))。
 - en: There's more...
+  id: totrans-174
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Out-of-the-box, PMD tests for a sensible set of bug defects; however, each project
     is different and you will need to tweak.
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: Out-of-the-box，PMD 测试了一组合理的 bug 缺陷；然而，每个项目都是不同的，你需要进行调整。
 - en: Throttling down PMD rulesets
+  id: totrans-176
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 减少 PMD 规则集的速率
 - en: It is important to understand the importance of the rulesets and shape the Maven
     configuration to include only the useful ones. If you do not do this for a medium
     size project, the report will include thousands of violations hiding the real
     defects. The report will then take time to render in your web browser. Consider
     enabling a long list of rules only if you want to use the volume as an indicator
     of project maturity.
+  id: totrans-177
   prefs: []
   type: TYPE_NORMAL
+  zh: 重要的是要理解规则集的重要性，并塑造 Maven 配置，仅包括有用的规则。如果你不为一个中等规模的项目做这个，报告将包含数千个违规行为，隐藏了真正的缺陷。然后报告将需要时间在你的网络浏览器中渲染。考虑启用一个长列表的规则，只有当你想要使用体积作为项目成熟度的指标时。
 - en: To throttle down, exclude parts of your code and systematically clean up the
     areas reported.
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 要减少，排除代码的部分并系统地清理报告的区域。
 - en: Note
+  id: totrans-179
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'You can find the current PMD rulesets at: [http://pmd.sourceforge.net/rules/index.html](http://pmd.sourceforge.net/rules/index.html)'
+  id: totrans-180
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在这里找到当前的 PMD 规则集：[http://pmd.sourceforge.net/rules/index.html](http://pmd.sourceforge.net/rules/index.html)
 - en: The Don't Repeat Yourself principle
+  id: totrans-181
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 不要重复自己的原则
 - en: Cut and paste programming, cloning, and then modifying code makes for a refactoring
     nightmare. If code is not properly encapsulated it is easy to have slightly different
     pieces scattered across your code base. If you then want to remove known defects,
     it will require extra effort.
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 剪切和粘贴编程，克隆，然后修改代码会导致重构的噩梦。如果代码没有正确封装，很容易在代码库中散落着略有不同的代码片段。如果你想要删除已知的缺陷，那将需要额外的工作。
 - en: PMD supports the Don't Repeat Yourself (DRY) principle by finding duplicate
     code. The trigger point is configured through the `minimumTokens` tag. However,
     the PMD plugin does not pick up the results (stored in `cpd.xml`). You will either
     need to install and configure the DRY plugin ([https://wiki.jenkins-ci.org/display/JENKINS/DRY+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/DRY+Plugin))
     or the Jenkins violations plugin.
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: PMD 通过查找重复代码来支持不要重复自己（DRY）原则。触发点通过 `minimumTokens` 标签进行配置。然而，PMD 插件不会拾取结果（存储在
+    `cpd.xml` 中）。您需要安装和配置 DRY 插件（[https://wiki.jenkins-ci.org/display/JENKINS/DRY+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/DRY+Plugin)）或
+    Jenkins 违规插件。
 - en: Note
+  id: totrans-184
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If you have downloaded the PMD binary from its website ([http://sourceforge.net/projects/pmd/files/pmd/](http://sourceforge.net/projects/pmd/files/pmd/)),
     then in the bin directory you'll find `cpdgui`. It is a Java swing application
     that allows you to explore your source code for duplications.
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您从其网站下载了 PMD 二进制文件（[http://sourceforge.net/projects/pmd/files/pmd/](http://sourceforge.net/projects/pmd/files/pmd/)），那么在
+    bin 目录中，您会找到 `cpdgui`。这是一个允许您在源代码中探索重复的 Java swing 应用程序。
 - en: See also
+  id: totrans-186
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 参见
 - en: The *Creating custom PMD rules* recipe
+  id: totrans-187
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*创建自定义 PMD 规则* 配方'
 - en: The *Analyzing project data with the R plugin* recipe
+  id: totrans-188
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 R 插件分析项目数据* 配方'
 - en: Creating custom PMD rules
+  id: totrans-189
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建自定义 PMD 规则
 - en: PMD has two extra features when compared to other static code review tools.
     The first is the `cpdgui` tool that allows you to look for code that has been
     cut and pasted from one part of the code base to another. The second, and the
     one we will explore in this recipe, is the ability to design custom bug discovery
     rules for Java source code using Xpath.
+  id: totrans-190
   prefs: []
   type: TYPE_NORMAL
+  zh: 与其他静态代码审查工具相比，PMD 有两个额外的功能。第一个是 `cpdgui` 工具，允许您查找从代码库的一个部分复制粘贴到另一个部分的代码。第二个，也是我们将在这个配方中探索的，是使用
+    Xpath 为 Java 源代码设计自定义 bug 发现规则的能力。
 - en: Getting ready
+  id: totrans-191
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Make sure that you have installed the Jenkins PMD plugin ([https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin)).
     Download and unpack the PMD distribution from [http://pmd.sourceforge.net](http://pmd.sourceforge.net).
     Visit the PMD bin directory and verify that you have the start-up scripts `run.sh
     designer` and `designer.bat`.
+  id: totrans-192
   prefs: []
   type: TYPE_NORMAL
+  zh: 确保您已安装了 Jenkins PMD 插件（[https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin)）。从
+    [http://pmd.sourceforge.net](http://pmd.sourceforge.net) 下载并解压 PMD 发行版。访问 PMD
+    bin 目录，并验证您是否具有启动脚本 `run.sh designer` 和 `designer.bat`。
 - en: How to do it...
+  id: totrans-193
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Create a Maven project from the command line using:'
+  id: totrans-194
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令从命令行创建一个 Maven 项目：
 - en: '[PRE19]'
+  id: totrans-195
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'In the `pom.xml` file just before the `</project>` tag add a `reporting` section
     with the following content:'
+  id: totrans-196
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `pom.xml` 文件中，`</project>` 标记之前添加一个 `reporting` 部分，内容如下：
 - en: '[PRE20]'
+  id: totrans-197
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: Note
+  id: totrans-198
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: This recipe will only work for version 2.6.
+  id: totrans-199
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 此配方仅适用于版本 2.6。
 - en: 'In the top level directory, create the file `password_ruleset.xml` with the
     following content:'
+  id: totrans-200
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在顶层目录下，创建名为 `password_ruleset.xml` 的文件，内容如下：
 - en: '[PRE21]'
+  id: totrans-201
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Edit `src/main/java/nl/berg/packt/pmdrule/App.java` so that the main method
     is:'
+  id: totrans-202
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 编辑 `src/main/java/nl/berg/packt/pmdrule/App.java`，使得主方法为：
 - en: '[PRE22]'
+  id: totrans-203
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: Depending on your operating system, run the pmd designer using either the startup
     script `bin/run.sh designer` or `bin/designer.bat`.
+  id: totrans-204
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据您的操作系统，使用启动脚本 `bin/run.sh designer` 或 `bin/designer.bat` 运行 pmd designer。
 - en: Click on the **JDK** option at the top-left of the screen, selecting **JDK 1.6**
     as the Java version.
+  id: totrans-205
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击屏幕左上角的 **JDK** 选项，选择 **JDK 1.6** 作为 Java 版本。
 - en: 'In the **Source Code** text area, add the example code you want to test against.
     In this example:'
+  id: totrans-206
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **源代码** 文本区域中，添加要针对测试的示例代码。在本例中：
 - en: '[PRE23]'
+  id: totrans-207
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'For the **Query (if any**) text area, add:'
+  id: totrans-208
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于 **查询（如果有的话）** 文本区域，添加：
 - en: '[PRE24]'
+  id: totrans-209
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: Click on **Go**. You will now see the result **ASTVariableDeclarorID at line
     2 column 20**, as shown in the following screenshot:![How to do it...](img/0082OS_05_09.jpg)
+  id: totrans-210
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **Go**。你现在会看到结果 **第2行第20列的ASTVariableDeclarorID**，如下截图所示：![如何做...](img/0082OS_05_09.jpg)
 - en: 'Under the **Actions** menu option at the top of the screen, select **Create
     rule XML**. Add the following values:'
+  id: totrans-211
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在屏幕顶部的 **操作** 菜单选项下，选择 **创建规则 XML**。添加以下值：
 - en: '**Rule name**: No password'
+  id: totrans-212
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**规则名称**：无密码'
 - en: '**Rule msg**: If we see a password we should flag'
+  id: totrans-213
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**规则消息**：如果我们看到密码，我们应该标记'
 - en: '**Rule desc**: Let''s find stupid password examples'
+  id: totrans-214
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**规则描述**：让我们找到愚蠢的密码示例'
 - en: 'Click on **Create rule XML**. The generated XML should have a fragment similar
     to:'
+  id: totrans-215
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **创建规则 XML**。生成的 XML 应该有一个类似于的片段：
 - en: '[PRE25]'
+  id: totrans-216
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: '![How to do it...](img/0082OS_05_18.jpg)'
+  id: totrans-217
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_05_18.jpg)'
 - en: Copy and-paste the generated code into `password_ruleset.xml` just before `</ruleset>`.
+  id: totrans-218
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将生成的代码复制并粘贴到`password_ruleset.xml`中的`</ruleset>`之前。
 - en: Commit the project to your subversion repository.
+  id: totrans-219
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将项目提交到您的Subversion存储库。
 - en: In Jenkins, create a **Maven** job named `ch5.quality.pmdrule`.
+  id: totrans-220
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins中，创建一个名为`ch5.quality.pmdrule`的**Maven**作业。
 - en: Under the **Source Code Management** section, check **Subversion,** adding for
     the **Repository URL** your subversion repository location.
+  id: totrans-221
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，勾选**Subversion**，并为**存储库URL**添加您的Subversion存储库位置。
 - en: Within the **build** section for **Goals and Options** set the value to `clean
     site`.
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分的**目标和选项**中，将值设置为`clean site`。
 - en: In the **Build Settings** section, check **Publish PMD analysis results**.
+  id: totrans-223
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建设置**部分，勾选**发布PMD分析结果**。
 - en: Click on **Save**.
+  id: totrans-224
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job.
+  id: totrans-225
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。
 - en: Review the **PMD Warnings** link, as shown in the following screenshot:![How
     to do it...](img/0082OS_05_25.jpg)
+  id: totrans-226
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看**PMD警告**链接，如下截图所示：![操作步骤...](img/0082OS_05_25.jpg)
 - en: How it works...
+  id: totrans-227
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理是什么...
 - en: PMD analyzes source code and breaks it down into meta data known as an Abstract
     Syntax Tree (AST) ([http://onjava.com/pub/a/onjava/2003/02/12/static_analysis.html](http://onjava.com/pub/a/onjava/2003/02/12/static_analysis.html)).
     PMD has the ability to use Xpath rules to search for patterns in the AST. W3Schools
@@ -1061,587 +1561,870 @@
     a source code example. For readability, it is important that the source code you
     test against contains only the essential details. The rules are then stored in
     XML.
+  id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: PMD分析源代码并将其分解为称为抽象语法树（AST）的元数据（[http://onjava.com/pub/a/onjava/2003/02/12/static_analysis.html](http://onjava.com/pub/a/onjava/2003/02/12/static_analysis.html)）。PMD能够使用Xpath规则在AST中搜索模式。W3Schools提供了Xpath的简明介绍（[http://www.w3schools.com/xpath/](http://www.w3schools.com/xpath/)）。设计工具使您能够编写Xpath规则，然后针对源代码示例测试您的规则。为了可读性，测试代码中应该只包含必要的细节。然后将规则存储在XML中。
 - en: To bundle the XML rules together you have to add the rules as part of a `<ruleset>`
     tag.
+  id: totrans-229
   prefs: []
   type: TYPE_NORMAL
+  zh: 要将XML规则打包在一起，你必须将规则添加为`<ruleset>`标记的一部分。
 - en: 'The Maven PMD plugin has the ability to read the rulesets from within its classpath,
     on the local filesystem, or through the HTTP protocol from a remote server. You
     added your ruleset by adding the configuration option:'
+  id: totrans-230
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven PMD插件有能力从其类路径、本地文件系统或通过HTTP协议从远程服务器读取规则集。您通过添加配置选项添加了您的规则集：
 - en: '[PRE26]'
+  id: totrans-231
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: If you build up a set of rules, you should pull all the rules into one project
     for ease of management.
+  id: totrans-232
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你建立了一套规则集，应该将所有规则都放入一个项目中以便管理。
 - en: 'You can also create your own custom ruleset based on already existing rules,
     pulling out your favorite bug detection patterns. This is achieved by the `<rule>`
     tag with a ref pointing to the known rule, for example, the following pulls out
     the `DuplicateImports` rule from the `imports.xml` ruleset:'
+  id: totrans-233
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还可以根据已有规则创建自己的自定义规则集，提取您喜欢的错误检测模式。这可以通过带有指向已知规则的`<rule>`标记来实现，例如，以下从`imports.xml`规则集中提取了`DuplicateImports`规则：
 - en: '[PRE27]'
+  id: totrans-234
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: The rule generated in this recipe tested for variables with the name `PASSWORD`.
     We have seen the rule triggered a number of times in real projects.
+  id: totrans-235
   prefs: []
   type: TYPE_NORMAL
+  zh: 本示例生成的规则测试了名称为`PASSWORD`的变量。我们在真实项目中多次触发了该规则。
 - en: We pegged the version of the Maven PMD plugin to version 2.6, so that we are
     sure the recipe still works after future releases of the plugin.
+  id: totrans-236
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将Maven PMD插件的版本锁定为2.6，以确保在插件的将来发布版本后仍然可以使用本示例。
 - en: Note
+  id: totrans-237
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The PMD homepage is a great place to learn about what is possible with the Xpath
     rules. It contains descriptions and details of the rulesets, for example, for
     the logging rules; review [http://pmd.sourceforge.net/pmd-4.3.0/rules/logging-java.html](http://pmd.sourceforge.net/pmd-4.3.0/rules/logging-java.html).
+  id: totrans-238
   prefs: []
   type: TYPE_NORMAL
+  zh: PMD主页是了解Xpath规则可能性的好地方。它包含了规则集的描述和详细信息，例如，日志规则；请参阅[http://pmd.sourceforge.net/pmd-4.3.0/rules/logging-java.html](http://pmd.sourceforge.net/pmd-4.3.0/rules/logging-java.html)。
 - en: There's more...
+  id: totrans-239
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'It would be efficient if static code review tools could make recommendations
     on how to fix the code. However, that is a little dangerous as the detectors are
     not always accurate. As an experiment I have written a small Perl script to repair
     literals first and also remove some wastage of resources. The code is a proof
     of concept and thus is not guaranteed to work correctly. It has the benefit of
     being succinct, see:'
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果静态代码审查工具能够就如何修复代码提出建议将是非常有效的。然而，这有点危险，因为检测器并不总是准确的。作为一个实验，我编写了一个小型的 Perl 脚本，首先修复字面量，然后删除一些资源的浪费。这段代码是一个概念验证，因此不能保证正确运行。它的好处在于简洁，参见：
 - en: '[https://source.sakaiproject.org/contrib/qa/trunk/static/cleanup/easy_wins_find_java.pl](https://source.sakaiproject.org/contrib/qa/trunk/static/cleanup/easy_wins_find_java.pl)'
+  id: totrans-241
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://source.sakaiproject.org/contrib/qa/trunk/static/cleanup/easy_wins_find_java.pl](https://source.sakaiproject.org/contrib/qa/trunk/static/cleanup/easy_wins_find_java.pl)'
 - en: See also
+  id: totrans-242
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Activating more PMD rulesets* recipe
+  id: totrans-243
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*激活更多的 PMD 规则集* 示例'
 - en: Finding bugs with FindBugs
+  id: totrans-244
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 FindBugs 查找错误
 - en: It is easy to get lost in the volume of defects found by static code review
     tools. Another quality assurance attack pattern is to clean up defects package
     by package, concentrating developer time on the most used features.
+  id: totrans-245
   prefs: []
   type: TYPE_NORMAL
+  zh: 在静态代码审查工具发现的缺陷数量中很容易迷失方向。另一个质量保证攻击模式是逐个清理缺陷包，集中开发者的时间在最常用的功能上。
 - en: This recipe will show you how to generate and report defects found by FindBugs
     for specific packages.
+  id: totrans-246
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个示例将向您展示如何为特定包生成和报告 FindBugs 发现的缺陷。
 - en: Getting ready
+  id: totrans-247
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Jenkins FindBugs plugin ([https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin)).
+  id: totrans-248
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Jenkins FindBugs 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin))。
 - en: Tip
+  id: totrans-249
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Java version**'
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Java 版本**'
 - en: The FindBugs plugin version 3 requires Java 7 or above.
+  id: totrans-251
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs 插件版本 3 需要 Java 7 或更高版本。
 - en: How to do it...
+  id: totrans-252
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'From the command line, create a Maven project:'
+  id: totrans-253
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行创建一个 Maven 项目：
 - en: '[PRE28]'
+  id: totrans-254
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'In the `pom.xml` file, add a **build** section just before the `</project>`
     tag with the following content:'
+  id: totrans-255
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `pom.xml` 文件中，在`</project>`标签之前添加一个**构建**部分，内容如下：
 - en: '[PRE29]'
+  id: totrans-256
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: Create the directories `src/main/java/nl/berg/packt/FindBugs_all/candles`.
+  id: totrans-257
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录 `src/main/java/nl/berg/packt/FindBugs_all/candles`。
 - en: 'In the `candles` directory include the `FindBugsCandle.java` file with the
     following content:'
+  id: totrans-258
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `candles` 目录中包括名为 `FindBugsCandle.java` 的文件，内容如下：
 - en: '[PRE30]'
+  id: totrans-259
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: Create a **Maven** project with the name `ch5.quality.FindBugs`.
+  id: totrans-260
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch5.quality.FindBugs` 的**Maven**项目。
 - en: Under the **Source Code Management** section, check the **Subversion** radio
     box, adding to **Repository URL** your repository URL.
+  id: totrans-261
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，选中**Subversion**单选框，添加到**Repository URL**中您的存储库 URL。
 - en: Within the **build** section add `clean compile findBugs:findBugs` for **Goals
     and options**.
+  id: totrans-262
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分中添加 `clean compile findBugs:findBugs` 作为**目标和选项**。
 - en: In the **post-build action** option, select **Publish FindBugs analysis results**.
+  id: totrans-263
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建后操作**选项中，选择**发布 FindBugs 分析结果**。
 - en: Click on **Save**.
+  id: totrans-264
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job.
+  id: totrans-265
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。
 - en: Review the results.
+  id: totrans-266
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看结果。
 - en: 'The first page is a summary page that allows you to efficiently zoom in on
     the details, as shown in the following screenshot:'
+  id: totrans-267
   prefs: []
   type: TYPE_NORMAL
+  zh: 第一页是一个摘要页面，可以让您有效地放大细节，如下图所示：
 - en: '![How to do it...](img/0082OS_05_10.jpg)'
+  id: totrans-268
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_05_10.jpg)'
 - en: 'Looking at a category such as **BAD_PRACTICE** allows you to review the descriptions
     of each error type triggered:'
+  id: totrans-269
   prefs: []
   type: TYPE_NORMAL
+  zh: 查看诸如**BAD_PRACTICE**之类的类别，可以查看触发的每种错误类型的描述：
 - en: '![How to do it...](img/0082OS_05_11.jpg)'
+  id: totrans-270
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_05_11.jpg)'
 - en: 'You can then review the associated code. The highlighted code is useful for
     focusing your attention, as shown in the following screenshot:'
+  id: totrans-271
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以随后查看相关的代码。突出显示的代码有助于集中注意力，如下图所示：
 - en: '![How to do it...](img/0082OS_05_12.jpg)'
+  id: totrans-272
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_05_12.jpg)'
 - en: How it works...
+  id: totrans-273
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: In this recipe, you have created a standard Maven project and added a Java file
     with known defects.
+  id: totrans-274
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个示例中，您已经创建了一个标准的 Maven 项目，并添加了一个带有已知缺陷的 Java 文件。
 - en: The `pom.xml` configuration forces FindBugs to report defects from classes in
     the `nl.berg.packt.FindBugs_all.candles` package only.
+  id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: '`pom.xml` 配置强制 FindBugs 仅报告 `nl.berg.packt.FindBugs_all.candles` 包中类的缺陷。'
 - en: The line in the standard candle with `guess==answer` is a typical programming
     defect. Two references to objects are being compared rather than the values of
     their strings. As the `guess` object was created on the previous line, the result
     will always be `false`. These sorts of defects can appear as subtle problems in
     programs. The JVM caches strings and occasionally two apparently different objects
     are actually the same object.
+  id: totrans-276
   prefs: []
   type: TYPE_NORMAL
+  zh: 在标准蜡烛中，`guess==answer` 这一行是一个典型的程序错误。两个对象的引用被比较，而不是它们字符串的值。由于 `guess` 对象是在上一行创建的，结果将始终为
+    `false`。这类缺陷可能会出现在程序中作为微妙的问题。JVM 缓存字符串，有时两个表面上不同的对象实际上是同一个对象。
 - en: There's more...
+  id: totrans-277
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容...
 - en: FindBugs is popular among developers and has plugins for a number of popular
     IDEs. Its results are often used as part of wider reporting by other tools.
+  id: totrans-278
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs 在开发者中很受欢迎，并为多个流行的 IDE 提供插件。其结果通常作为其他工具的更广泛报告的一部分。
 - en: The FindBugs Eclipse plugin
+  id: totrans-279
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: FindBugs Eclipse 插件
 - en: The automatic install location for the Eclipse plugin is [http://findbugs.cs.umd.edu/eclipse](http://findbugs.cs.umd.edu/eclipse).
+  id: totrans-280
   prefs: []
   type: TYPE_NORMAL
+  zh: Eclipse 插件的自动安装位置为 [http://findbugs.cs.umd.edu/eclipse](http://findbugs.cs.umd.edu/eclipse)。
 - en: 'By default, the FindBugs Eclipse plugin has a limited number of rules enabled.
     To increase the set tested you will need to go to the **Preferences** menu option
     under **Window,** selecting **FindBugs** from the left-hand side menu. On the
     right-hand side you will see the **Reported (Visible) bug categories** option
     under the **Reporter Configuration**. You can now tweak the visible categories,
     as shown in the following screenshot:'
+  id: totrans-281
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，FindBugs Eclipse 插件只启用了有限数量的规则。要增加测试集，您需要转到 **窗口** 下的 **首选项** 菜单选项，在左侧菜单中选择
+    **FindBugs**。在右侧，您将看到 **报告的 (可见的) 缺陷类别** 选项在 **报告者配置** 下。您现在可以调整可见的类别，如下图所示：
 - en: '![The FindBugs Eclipse plugin](img/0082OS_05_19.jpg)'
+  id: totrans-282
   prefs: []
   type: TYPE_IMG
+  zh: '![FindBugs Eclipse 插件](img/0082OS_05_19.jpg)'
 - en: The Xradar and Maven dashboards
+  id: totrans-283
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Xradar 和 Maven 仪表板
 - en: There are alternatives though to aging Maven plugin dashboards for the accumulation
     of generated software metrics. The Maven dashboard is one example ([http://mojo.codehaus.org/dashboard-maven-plugin/](http://mojo.codehaus.org/dashboard-maven-plugin/)).
     You will need to connect it to its own database. There is a recipe named *Setting
     up the Maven dashboard* in [Chapter 4](ch04.html "Chapter 4. Communicating Through
     Jenkins"), *Reporting and Documentation*, for this in the book *Apache Maven 3
     Cookbook, Srirangan, Packt Publishing* ([https://www.packtpub.com/application-development/apache-maven-3-cookbook](https://www.packtpub.com/application-development/apache-maven-3-cookbook)).
+  id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 但是，对于生成的软件度量的累积，还有其他替代方案。Maven 仪表板就是一个例子 ([http://mojo.codehaus.org/dashboard-maven-plugin/](http://mojo.codehaus.org/dashboard-maven-plugin/))。您将需要将其连接到自己的数据库。在书籍
+    *Apache Maven 3 Cookbook, Srirangan, Packt Publishing* ([https://www.packtpub.com/application-development/apache-maven-3-cookbook](https://www.packtpub.com/application-development/apache-maven-3-cookbook))
+    中的 [第 4 章](ch04.html "Chapter 4. Communicating Through Jenkins")，*报告和文档* 中有一个名为
+    *设置 Maven 仪表板* 的配方。
 - en: Xradar is another example of a dashboard ([http://xradar.sourceforge.net/usage/maven-plugin/howto.html](http://xradar.sourceforge.net/usage/maven-plugin/howto.html))
     and QALab is a third ([http://qalab.sourceforge.net/multiproject/maven2-qalab-plugin/index.html](http://qalab.sourceforge.net/multiproject/maven2-qalab-plugin/index.html)).
+  id: totrans-285
   prefs: []
   type: TYPE_NORMAL
+  zh: Xradar 是仪表板的另一个例子 ([http://xradar.sourceforge.net/usage/maven-plugin/howto.html](http://xradar.sourceforge.net/usage/maven-plugin/howto.html))，而
+    QALab 是第三个 ([http://qalab.sourceforge.net/multiproject/maven2-qalab-plugin/index.html](http://qalab.sourceforge.net/multiproject/maven2-qalab-plugin/index.html))。
 - en: See also
+  id: totrans-286
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Enabling extra FindBug rules* recipe
+  id: totrans-287
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*启用额外的 FindBug 规则* 配方'
 - en: The *Finding security defects with FindBugs* recipe
+  id: totrans-288
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 FindBugs 查找安全缺陷* 配方'
 - en: The *Activating more PMD rulesets* recipe
+  id: totrans-289
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*激活更多 PMD 规则集* 配方'
 - en: Enabling extra FindBug rules
+  id: totrans-290
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 启用额外的 FindBug 规则
 - en: FindBugs has a wide range of auxiliary bug pattern detectors. These detectors
     are bundled into one contributor project hosted at SourceForge ([http://sourceforge.net/projects/fb-contrib/](http://sourceforge.net/projects/fb-contrib/)).
+  id: totrans-291
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs 拥有广泛的辅助缺陷模式检测器。这些检测器被捆绑到一个贡献者项目中，托管在 SourceForge ([http://sourceforge.net/projects/fb-contrib/](http://sourceforge.net/projects/fb-contrib/))。
 - en: This recipe details how to add the extra bug detectors to FindBugs from the
     `fb-contrib` project and then use the detectors to capture known defects.
+  id: totrans-292
   prefs: []
   type: TYPE_NORMAL
+  zh: 本配方详细介绍了如何从 `fb-contrib` 项目中添加额外的缺陷检测器到 FindBugs，并使用这些检测器捕获已知缺陷。
 - en: Getting ready
+  id: totrans-293
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: It is assumed that you have followed the previous recipe *Finding bugs with
     FindBugs*. You will be using the recipe's Maven project as a starting point.
+  id: totrans-294
   prefs: []
   type: TYPE_NORMAL
+  zh: 假设您已经按照之前的配方*使用FindBugs查找错误*。您将使用该配方的Maven项目作为起点。
 - en: Tip
+  id: totrans-295
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**fb-contrib version change**'
+  id: totrans-296
   prefs: []
   type: TYPE_NORMAL
+  zh: '**fb-contrib版本更改**'
 - en: In the following recipe, Maven automatically downloads a library file (`.jar`).
     The build might fail because the developers have incremented the version number.
     In this case, to find the correct filename browse [http://downloads.sourceforge.net/project/fb-contrib/Current/](http://downloads.sourceforge.net/project/fb-contrib/Current/).
+  id: totrans-297
   prefs: []
   type: TYPE_NORMAL
+  zh: 在以下配方中，Maven会自动下载一个库文件（`.jar`）。构建可能会失败，因为开发人员已经增加了版本号。在这种情况下，要找到正确的文件名，请浏览[http://downloads.sourceforge.net/project/fb-contrib/Current/](http://downloads.sourceforge.net/project/fb-contrib/Current/)。
 - en: How to do it...
+  id: totrans-298
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Copy the top-level `pom.xml` file to `pom_fb.xml`.
+  id: totrans-299
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将顶层的`pom.xml`文件复制到`pom_fb.xml`。
 - en: 'Replace the FindBugs `<plugin>` section of `pom_fb.xml` with the following
     content:'
+  id: totrans-300
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 用以下内容替换`pom_fb.xml`的FindBugs `<plugin>`部分：
 - en: '[PRE31]'
+  id: totrans-301
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: 'In the `src/main/java/nl/berg/packt/fingbugs_all/candles` directory add the
     following code snippet to the `FindBugsFBCandle.java` Java class:'
+  id: totrans-302
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`src/main/java/nl/berg/packt/fingbugs_all/candles`目录中，向`FindBugsFBCandle.java`
+    Java类添加以下代码片段：
 - en: '[PRE32]'
+  id: totrans-303
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: Commit the updates to your subversion repository.
+  id: totrans-304
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将更新提交到您的Subversion仓库。
 - en: Create a Jenkins **Maven** job with the name `ch5.quality.FindBugs.fb`.
+  id: totrans-305
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`ch5.quality.FindBugs.fb`的Jenkins **Maven**作业。
 - en: Under the **Source Code Management** section, check the **Subversion** radio
     box adding for the **Repository URL** the URL to your code.
+  id: totrans-306
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，选中**Subversion**单选框，并为**仓库URL**添加代码的URL。
 - en: 'In the **build** section set:'
+  id: totrans-307
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**build**部分设置：
 - en: '**Root POM** to `pom_fb.xml`'
+  id: totrans-308
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Root POM**设置为`pom_fb.xml`'
 - en: '**Goals and options** to `clean compile Findbugs:Findbugs`'
+  id: totrans-309
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标和选项**设置为`clean compile Findbugs:Findbugs`'
 - en: Under the **Build Settings** section, check **Publish FindBugs analysis results**.
+  id: totrans-310
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建设置**部分，检查**发布FindBugs分析结果**。
 - en: Click on **Save**.
+  id: totrans-311
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job.
+  id: totrans-312
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。
 - en: When the job is finished building, review the **FindBugs Warnings** link. You
     will now see a new warning **USBR_UNNECESSARY_STORE_BEFORE_RETURN**.
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 当作业构建完成后，查看**FindBugs警告**链接。您现在将看到一个新的警告**USBR_UNNECESSARY_STORE_BEFORE_RETURN**。
 - en: How it works...
+  id: totrans-314
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: 'To include external detectors, you added an extra line to the FindBugs Maven
     configuration, as shown:'
+  id: totrans-315
   prefs: []
   type: TYPE_NORMAL
+  zh: 要包含外部检测器，您添加了一行额外的内容到FindBugs Maven配置中，如下所示：
 - en: '[PRE33]'
+  id: totrans-316
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: It is worth visiting SourceForge to check for the most up-to-date version of
     the detectors.
+  id: totrans-317
   prefs: []
   type: TYPE_NORMAL
+  zh: 值得访问SourceForge检查检测器的最新版本。
 - en: Currently it is not possible to use Maven's dependency management to pull in
     the detectors from a repository, though this might change.
+  id: totrans-318
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前，使用Maven的依赖管理无法从存储库中拉取检测器，尽管这可能会改变。
 - en: 'In this recipe, you have added a Java class to trigger the new bug detection
     rules. The anti-pattern is the unnecessary line with the creation of the answer
     object before the return. It is more succinct to return the object anonymously,
     for example:'
+  id: totrans-319
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个配方中，您已经添加了一个Java类来触发新的错误检测规则。反模式是在返回之前创建答案对象的不必要行。匿名返回对象更加简洁，例如：
 - en: '[PRE34]'
+  id: totrans-320
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: The anti-pattern triggers the **USBR_UNNECESSARY_STORE_BEFORE_RETURN** pattern
     that is described on the homepage of the `fb-contrib` project.
+  id: totrans-321
   prefs: []
   type: TYPE_NORMAL
+  zh: 反模式触发了**USBR_UNNECESSARY_STORE_BEFORE_RETURN**模式，该模式在`fb-contrib`项目的主页上有描述。
 - en: There's more...
+  id: totrans-322
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The Java language has a number of subtle boundary cases that are difficult to
     understand until explained by real examples. An excellent way to capture knowledge
     is to write examples yourself when you see issues in your code. Injecting standard
     candles is a natural way of testing your team's knowledge and makes for target
     practice during the QA process.
+  id: totrans-323
   prefs: []
   type: TYPE_NORMAL
+  zh: Java语言有许多难以理解的微妙边界情况，直到通过真实示例解释。捕捉知识的一种极好方式是在您的代码中遇到问题时自己编写示例。注入标准蜡烛是测试团队知识的一种自然方式，并在QA过程中进行目标练习。
 - en: The FindBugs project generated some of their detectors based on the content
     of the book Java puzzlers by Joshua Bloch and Neal Gafter ([http://www.javapuzzlers.com/](http://www.javapuzzlers.com/)).
+  id: totrans-324
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs项目根据Joshua Bloch和Neal Gafter的书《Java Puzzlers》（[http://www.javapuzzlers.com/](http://www.javapuzzlers.com/)）的内容生成了一些他们的检测器。
 - en: See also
+  id: totrans-325
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Finding bugs with FindBugs* recipe
+  id: totrans-326
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用FindBugs查找错误*配方'
 - en: The *Finding security defects with FindBugs* recipe
+  id: totrans-327
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用FindBugs查找安全缺陷*配方'
 - en: The *Activating more PMD rulesets* recipe
+  id: totrans-328
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*激活更多PMD规则集*配方'
 - en: Finding security defects with FindBugs
+  id: totrans-329
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用FindBugs查找安全缺陷
 - en: In this recipe, you will use FindBugs to discover a security flaw in a Java
     server page and some more security defects in a defective Java class.
+  id: totrans-330
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本示例中，你将使用 FindBugs 发现 Java 服务器页面中的安全漏洞以及有缺陷的 Java 类中的一些安全缺陷。
 - en: Getting ready
+  id: totrans-331
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Either follow the *Failing Jenkins jobs based on JSP syntax errors* recipe in
     [Chapter 3](ch03.html "Chapter 3. Building Software"), *Building Software*, or
     use the provided project downloadable from the Packt Publishing website.
+  id: totrans-332
   prefs: []
   type: TYPE_NORMAL
+  zh: 要么按照[第三章](ch03.html "Chapter 3. Building Software") *构建软件* 中的 *基于 JSP 语法错误失败的
+    Jenkins 任务* 配方，要么使用 Packt Publishing 网站提供的项目下载。
 - en: How to do it...
+  id: totrans-333
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Edit the `pom.xml` file just under `<plugins>` within `<build>` to include
     the FindBugs plugin and add the following content:'
+  id: totrans-334
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `<build>` 下的 `<plugins>` 中编辑 `pom.xml` 文件，添加 FindBugs 插件并添加以下内容：
 - en: '[PRE35]'
+  id: totrans-335
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: Create the directory structure `src/main/java/nl/berg/packt/finbugs_all/candles`.
+  id: totrans-336
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录结构 `src/main/java/nl/berg/packt/finbugs_all/candles`。
 - en: 'Add the Java file `FindBugsSecurity.java` with the content:'
+  id: totrans-337
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加 Java 文件 `FindBugsSecurity.java`，内容如下：
 - en: '[PRE36]'
+  id: totrans-338
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: Commit the updates to your subversion repository.
+  id: totrans-339
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将更新提交到你的 Subversion 仓库。
 - en: Create a **Maven** Jenkins job with the name `ch5.quality.FindBugs.security`.
+  id: totrans-340
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch5.quality.FindBugs.security` 的 **Maven** Jenkins 任务。
 - en: Under the **Source Code Management** section, check the **Subversion** radio
     box adding your subversion repository location in the **Repository URL** text
     input**.**
+  id: totrans-341
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **源代码管理** 部分，选中 **Subversion** 单选框，并在 **Repository URL** 文本框中添加你的 Subversion
+    仓库位置**。**
 - en: Beneath the **build** section for **Goals and options,** set the value to `clean
     package findBugs:findBugs`.
+  id: totrans-342
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **目标和选项** 的 **build** 部分下，将值设置为 `clean package findBugs:findBugs`。
 - en: Under the **Build Settings** section, check **Publish FindBugs analysis results**.
+  id: totrans-343
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建设置** 部分，选中 **发布 FindBugs 分析结果**。
 - en: Click on **Save**.
+  id: totrans-344
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。
 - en: Run the job.
+  id: totrans-345
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行该任务。
 - en: When the job has completed, review the link **FindBugs Warning**. Notice that
     the JSP package exists with one warning for **XSS_REQUEST_PARAMETER_TO_JSP_WRITER**.
     However, the link fails to find the location of the source code.
+  id: totrans-346
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 当任务完成后，查看 **FindBugs Warning** 链接。注意，JSP 包存在一个关于 **XSS_REQUEST_PARAMETER_TO_JSP_WRITER**
+    的警告。然而，该链接无法找到源代码的位置。
 - en: Copy `src/main/webapp/index.jsp` to `jsp/jsp.index_jsp`.
+  id: totrans-347
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 `src/main/webapp/index.jsp` 复制到 `jsp/jsp.index_jsp`。
 - en: Commit to your subversion repository.
+  id: totrans-348
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提交到你的 Subversion 仓库。
 - en: Run the job again.
+  id: totrans-349
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 再次运行任务。
 - en: View the results under the **FindBugs Warning** link. You will now be able to
     view the JSP source code.
+  id: totrans-350
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **FindBugs Warning** 链接下查看结果。你现在可以查看 JSP 源代码了。
 - en: How it works...
+  id: totrans-351
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: JSPs are first translated from text into Java source code and then compiled.
     FindBugs works by parsing compiled Java bytecode.
+  id: totrans-352
   prefs: []
   type: TYPE_NORMAL
+  zh: JSP 首先从文本转换为 Java 源代码，然后编译。FindBugs 通过解析编译后的 Java 字节码来工作。
 - en: 'The original JSP project has a massive security flaw. It trusts input from
     the Internet. This led a number of attack vectors including XSS attacks ([http://en.wikipedia.org/wiki/Cross-site_scripting](http://en.wikipedia.org/wiki/Cross-site_scripting)).
     Parsing the input with white lists of allowed tokens is one approach to reducing
     the risk. FindBugs discovers the defect and warns with `XSS_REQUEST_PARAMETER_TO_JSP_WRITER`.
     The Jenkins FindBugs plugin details the bug type, as you had turned messages on
     in configuration with:'
+  id: totrans-353
   prefs: []
   type: TYPE_NORMAL
+  zh: 原始的 JSP 项目存在严重的安全漏洞。它信任来自互联网的输入。这导致了许多攻击向量，包括 XSS 攻击 ([http://en.wikipedia.org/wiki/Cross-site_scripting](http://en.wikipedia.org/wiki/Cross-site_scripting))。使用允许标记的白名单来解析输入是减少风险的一种方法。FindBugs
+    发现了这个缺陷并以 `XSS_REQUEST_PARAMETER_TO_JSP_WRITER` 进行警告。Jenkins FindBugs 插件详细说明了错误类型，因为你在配置中打开了消息：
 - en: '[PRE37]'
+  id: totrans-354
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: The FindBugs plugin has not been implemented to understand the location of JSP
     files. When clicking on a link to the source code, the plugin will look in the
     wrong place. A temporary solution is to copy the JSP file to the location the
     Jenkins plugin expects.
+  id: totrans-355
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs 插件尚未实现对 JSP 文件位置的理解。当单击链接到源代码时，插件会在错误的位置查找。一个临时解决方案是将 JSP 文件复制到 Jenkins
+    插件期望的位置。
 - en: The line number location reported by FindBugs also does not make sense. It is
     pointing to the line in the `.java` file that is generated from the `.jsp` file,
     and not directly to the JSP file. Despite these limitations, FindBugs discovers
     useful information about JSP defects.
+  id: totrans-356
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs 报告的行号位置也毫无意义。它指向了生成自 `.jsp` 文件的 `.java` 文件中的行，而不是直接指向 JSP 文件。尽管存在这些限制，FindBugs
+    仍然能够发现有关 JSP 缺陷的有用信息。
 - en: Note
+  id: totrans-357
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'An alternative to JSP bug detection is PMD. From the command line, you can
     configure it to scan JSP files only with the option `–jsp`, see: [http://pmd.sourceforge.net/jspsupport.html](http://pmd.sourceforge.net/jspsupport.html)'
+  id: totrans-358
   prefs: []
   type: TYPE_NORMAL
+  zh: JSP Bug 检测的替代方案是 PMD。你可以从命令行配置它仅扫描 JSP 文件，使用选项 `–jsp`，参见：[http://pmd.sourceforge.net/jspsupport.html](http://pmd.sourceforge.net/jspsupport.html)
 - en: There's more...
+  id: totrans-359
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'Although FindBugs has rules that sit under the category of security, there
     are other bug detectors that find security-related defects. The standard candle
     class includes two such defects. The first is a recursive loop that will keep
     calling the same method from within itself, as shown in the following code:'
+  id: totrans-360
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然 FindBugs 有一些属于安全类别的规则，但还有其他发现安全相关缺陷的 bug 检测器。标准烛台类包括两种此类缺陷。第一个是一个递归循环，将不断从其内部调用相同的方法，如下面的代码所示：
 - en: '[PRE38]'
+  id: totrans-361
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: Perhaps the programmer intended to use a counter to force an exit after 99 loops,
     but the code to do this does not exist. The end result, if this method is called,
     is that it will keep calling itself until the memory reserved for the stack is
     consumed and the application fails. This is also a security issue; if an attacker
     knows how to reach this code they can bring down the related application in a
     **Denial Of Service** (**DOS**) attack.
+  id: totrans-362
   prefs: []
   type: TYPE_NORMAL
+  zh: 也许程序员打算使用计数器来在 99 个循环后强制退出，但是并不存在执行此操作的代码。如果调用此方法，最终结果是它将不断调用自身，直到堆栈保留的内存被消耗完并且应用程序失败。这也是一个安全问题；如果攻击者知道如何到达此代码，他们可以通过**拒绝服务**（**DOS**）攻击使相关应用程序崩溃。
 - en: The other attack captured in the standard candle is the ability to change content
     within an array that appears to be immutable. It is true that the reference to
     the array cannot be changed, but the internal references to the array elements
@@ -1649,159 +2432,233 @@
     is able to change the READ permissions to READ/WRITE permissions. To prevent this
     situation, consider making a defensive copy of the original array and pass the
     copy to the calling method.
+  id: totrans-363
   prefs: []
   type: TYPE_NORMAL
+  zh: 标准烛台中捕获的另一个攻击是能够更改看起来不可变的数组中的内容。确实，数组的引用不能更改，但是数组元素的内部引用可以。在示例中，一个有动机的黑客可以访问内部对象，并将
+    READ 权限更改为 READ/WRITE 权限。为了防止这种情况发生，考虑制作原始数组的防御性副本，并将副本传递给调用方法。
 - en: Note
+  id: totrans-364
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'The OWASP project provides a wealth of information on the subject of testing
     security, find the following link:'
+  id: totrans-365
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP 项目提供了大量关于测试安全性的信息，请查看以下链接：
 - en: '[https://www.owasp.org/index.php/Category:OWASP_Java_Project](https://www.owasp.org/index.php/Category:OWASP_Java_Project)'
+  id: totrans-366
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://www.owasp.org/index.php/Category:OWASP_Java_Project](https://www.owasp.org/index.php/Category:OWASP_Java_Project)'
 - en: See also
+  id: totrans-367
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Finding bugs with FindBugs* recipe
+  id: totrans-368
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 FindBugs 查找 bug 的方法*'
 - en: The *Enabling extra FindBug rules* recipe
+  id: totrans-369
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*启用额外的 FindBug 规则* 配方'
 - en: The *Activating more PMD rulesets* recipe
+  id: totrans-370
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*激活更多 PMD 规则集* 配方'
 - en: The *Configuring Jetty for integration tests* recipe in [Chapter 3](ch03.html
     "Chapter 3. Building Software"), *Building Software*
+  id: totrans-371
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第 3 章](ch03.html "Chapter 3. Building Software") 中的 *为集成测试配置 Jetty* 配方，*构建软件*'
 - en: Verifying HTML validity
+  id: totrans-372
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 验证 HTML 的有效性
 - en: This recipe tells you how to use Jenkins to test HTML pages for validity against
     HTML and CSS standards.
+  id: totrans-373
   prefs: []
   type: TYPE_NORMAL
+  zh: 该配方告诉你如何使用 Jenkins 对 HTML 页面进行验证，以符合 HTML 和 CSS 标准。
 - en: Web browsers are not fussy. You can have broken templates in your applications
     that generate HTML that works on one browser, but are ugly on another. Validation
     improves consistency and captures non-trivial but difficult-to-find issues early.
+  id: totrans-374
   prefs: []
   type: TYPE_NORMAL
+  zh: Web 浏览器并不挑剔。您可以在应用程序中拥有损坏的模板，生成的 HTML 在一个浏览器上可以正常工作，但在另一个浏览器上却很难看。验证可以提高一致性，并及早发现非平凡但难以发现的问题。
 - en: You can upload and verify your HTML files against the W3C's unified validator
     ([http://code.w3.org/unicorn](http://code.w3.org/unicorn)). The unified validator
     will check your web pages for correctness against a number of aggregated services.
     The Jenkins plugin does this for you automatically.
+  id: totrans-375
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以上传并验证您的 HTML 文件是否符合 W3C 的统一验证器 ([http://code.w3.org/unicorn](http://code.w3.org/unicorn))。统一验证器将根据多个聚合服务检查您的网页的正确性。Jenkins
+    插件会自动为您执行此操作。
 - en: Getting ready
+  id: totrans-376
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Unicon Validation plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Unicorn+Validation+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Unicorn+Validation+Plugin)).
     If you have not already done so, also install the Plot plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin)).
+  id: totrans-377
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Unicon 验证插件（[https://wiki.jenkins-ci.org/display/JENKINS/Unicorn+Validation+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Unicorn+Validation+Plugin)）。如果还没有安装，请同时安装
+    Plot 插件（[https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin)）。
 - en: How to do it...
+  id: totrans-378
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Create a free-style job with the name `ch5.quality.html`.
+  id: totrans-379
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch5.quality.html` 的自由风格作业。
 - en: Within the **build** section, **Add build step,** selecting **Unicorn Validator**.
+  id: totrans-380
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建** 部分内，**添加构建步骤**，选择 **Unicorn 验证器**。
 - en: For the **Site to validate** input, add a URL to a site that you are allowed
     to test.
+  id: totrans-381
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于要验证的站点 **Site to validate** 输入，请添加允许测试的站点的 URL。
 - en: Click on **Save**.
+  id: totrans-382
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **保存**。
 - en: Run the job.
+  id: totrans-383
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。
 - en: Review the **Workspace**, clicking on the `unicorn_output.html` link and then
     `markup-validator_errors.properties`. For the property's file content, you will
     see content similar to `YVALUE=2`.
+  id: totrans-384
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 **工作区**，单击 `unicorn_output.html` 链接，然后单击 `markup-validator_errors.properties`。对于属性文件的内容，您将看到类似
+    `YVALUE=2` 的内容。
 - en: '**Configure** the project. In the **Post-build Actions** section, check **Plot
     build data**, adding the following details:'
+  id: totrans-385
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**配置** 项目。在 **后构建操作** 部分，勾选 **绘制构建数据**，添加以下细节：'
 - en: '**Plot group**: Validation errors'
+  id: totrans-386
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图组**：验证错误'
 - en: '**Plot title**: Markup validation errors'
+  id: totrans-387
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图标题**：标记验证错误'
 - en: '**Number of builds to Include**: 40'
+  id: totrans-388
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**要包含的构建数**：40'
 - en: '**Plot y-axis label**: Errors'
+  id: totrans-389
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图 y 轴标签**：错误'
 - en: '**Plot style**: Area'
+  id: totrans-390
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图样式**：区域'
 - en: '**Data series file**: `markup-validator_errors.properties`'
+  id: totrans-391
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**数据系列文件**：`markup-validator_errors.properties`'
 - en: Verify that the **Load data from properties file** radio box is checked
+  id: totrans-392
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 验证 **从属性文件加载数据** 单选框是否被选中
 - en: '**Data series legend label**: Feed errors'
+  id: totrans-393
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**数据系列图例标签**：反馈错误'
 - en: Click on **Save**.
+  id: totrans-394
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **保存**。
 - en: Run the job.
+  id: totrans-395
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。
 - en: Review the **Plot** link.![How to do it...](img/0082OS_05_20.jpg)
+  id: totrans-396
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 **绘图** 链接。![如何操作...](img/0082OS_05_20.jpg)
 - en: How it works...
+  id: totrans-397
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The Unicon validation plugin uses the validation service at W3C to generate
     a report on the URL you configure. The returned report is processed by the plugin
     and absolute counts of the defects are taken. The summation is then placed in
@@ -1809,12 +2666,18 @@
     to the *Plotting alternative code metrics in Jenkins* recipe in [Chapter 3](ch03.html
     "Chapter 3. Building Software"), *Building Software*). If you see a sudden surge
     in warnings, then review the HTML pages for repetitive defects.
+  id: totrans-398
   prefs: []
   type: TYPE_NORMAL
+  zh: Unicon 验证插件使用 W3C 的验证服务生成配置的 URL 的报告。插件处理返回的报告并获取缺陷的绝对计数。然后，总计值被放置在属性文件中，然后绘图插件会获取这些值（请参阅
+    [第 3 章](ch03.html "Chapter 3. Building Software") 中的 *在 Jenkins 中绘制替代代码度量* 配方，*构建软件*）。如果看到警告突然激增，请查看
+    HTML 页面以查找重复缺陷。
 - en: There's more...
+  id: totrans-399
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: It is quite difficult to obtain decent code coverage from unit testing. This
     is especially true for larger projects where there are a number of teams with
     varying practices. You can increase your automatic testing coverage of web applications
@@ -1824,338 +2687,501 @@
     testing, remembering to parse the log files for unexpected errors. You can automate
     log parsing using the *Deliberately failing builds through log parsing* recipe
     in [Chapter 1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*.
+  id: totrans-400
   prefs: []
   type: TYPE_NORMAL
+  zh: 从单元测试中获得良好的代码覆盖率相当困难。这在项目较大且有多个团队采用不同实践的情况下尤为明显。通过使用尽可能访问应用程序中尽可能多的链接的工具，可以显著提高对
+    Web 应用程序的自动化测试覆盖率。这包括 HTML 验证器、链接检查器、搜索引擎爬虫和安全工具。考虑在集成测试期间设置一系列工具来访问您的应用程序，并记住解析日志文件以查找意外错误。您可以使用
+    [第 1 章](ch01.html "Chapter 1. Maintaining Jenkins") 中的 *通过日志解析故意失败的构建* 配方自动化日志解析，*维护
+    Jenkins*。
 - en: Note
+  id: totrans-401
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For details on incrementally validating your online content, visit [http://www.w3.org/QA/2002/09/Step-by-step](http://www.w3.org/QA/2002/09/Step-by-step).
+  id: totrans-402
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关逐步验证在线内容的详细信息，请访问 [http://www.w3.org/QA/2002/09/Step-by-step](http://www.w3.org/QA/2002/09/Step-by-step)。
 - en: Reporting with JavaNCSS
+  id: totrans-403
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 JavaNCSS 进行报告
 - en: 'JavaNCSS ([http://javancss.codehaus.org/](http://javancss.codehaus.org/)) is
     a software metrics tool that calculates two types of information: the first is
     the total number of source code lines in a package that are active, commented,
     or JavaDoc-related. The second type calculates the complexity of code based on
     how many different decision branches exist.'
+  id: totrans-404
   prefs: []
   type: TYPE_NORMAL
+  zh: JavaNCSS ([http://javancss.codehaus.org/](http://javancss.codehaus.org/)) 是一个软件度量工具，它计算两种类型的信息：第一种是包中活动的、注释的或与
+    JavaDoc 相关的源代码行数的总数。第二种类型基于存在多少不同的决策分支来计算代码的复杂性。
 - en: The Jenkins JavaNCSS plugin ignores the complexity calculation and focuses on
     the more understandable line counts.
+  id: totrans-405
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins JavaNCSS 插件忽略了复杂性计算，而是专注于更容易理解的行数统计。
 - en: Note
+  id: totrans-406
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: '**NCSS** stands for **Non Commenting Source Statements** and is the number
     of lines of code minus the comments and extra new lines.'
+  id: totrans-407
   prefs: []
   type: TYPE_NORMAL
+  zh: '**NCSS** 代表**非注释源语句**，即代码行数减去注释和额外的换行符。'
 - en: Getting ready
+  id: totrans-408
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Install the JavaNCSS plugin ([https://wiki.jenkins-ci.org/display/JENKINS/JavaNCSS+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JavaNCSS+Plugin)).
+  id: totrans-409
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 JavaNCSS 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/JavaNCSS+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JavaNCSS+Plugin))。
 - en: How to do it...
+  id: totrans-410
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Create a **Maven** project named `ch5.quality.ncss`.
+  id: totrans-411
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch5.quality.ncss` 的**Maven**项目。
 - en: Under the **Source Code Management** section, check the **Subversion** radio
     box.
+  id: totrans-412
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，选择**Subversion**单选框。
 - en: Add the **Repository URL** [https://source.sakaiproject.org/contrib/learninglog/tags/1.0](https://source.sakaiproject.org/contrib/learninglog/tags/1.0).
+  id: totrans-413
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加**仓库 URL** [https://source.sakaiproject.org/contrib/learninglog/tags/1.0](https://source.sakaiproject.org/contrib/learninglog/tags/1.0)。
 - en: Review the **Build Triggers,** making sure none are activated.
+  id: totrans-414
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看**构建触发器**，确保没有激活。
 - en: Under the **build** section for **Goals and options,** type `clean javancss:report`.
+  id: totrans-415
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分的**目标和选项**下，键入`clean javancss:report`。
 - en: Under the **Build Settings** section, check **Publish Java NCSS Report**.
+  id: totrans-416
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建设置**部分，勾选**发布 Java NCSS 报告**。
 - en: Click on **Save**.
+  id: totrans-417
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job.
+  id: totrans-418
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行该作业。
 - en: Review the **Java NCSS Report** link.
+  id: totrans-419
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看**Java NCSS 报告**链接。
 - en: Review the top level `pom.xml` file in the workspace, for example, `http://localhost:8080job/ch5.quality.ncss/ws/pom.xml`.![How
     to do it...](img/0082OS_05_21.jpg)
+  id: totrans-420
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看工作区中的顶级 `pom.xml` 文件，例如，`http://localhost:8080job/ch5.quality.ncss/ws/pom.xml`。![怎么做...](img/0082OS_05_21.jpg)
 - en: How it works...
+  id: totrans-421
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The job pulled in source code from the Sakai project's learning log tool subversion
     repository. The project is a multimodule with the API separated from the implementation.
+  id: totrans-422
   prefs: []
   type: TYPE_NORMAL
+  zh: 该作业从 Sakai 项目的学习日志工具子版本库中提取了源代码。该项目是一个多模块项目，API 与实现分离。
 - en: JavaNCSS needs no compiled classes or modifications to the Maven `pom.xml` file;
     this makes for a simple cycle. The job ran a Maven goal, publishing the report
     through the JavaNCSS Jenkins plugin.
+  id: totrans-423
   prefs: []
   type: TYPE_NORMAL
+  zh: JavaNCSS 不需要编译的类或对 Maven `pom.xml` 文件的修改；这使得循环简单。该作业运行了一个 Maven 目标，通过 JavaNCSS
+    Jenkins 插件发布了报告。
 - en: Reviewing the report, the implementation has a much great number of lines of
     active code relative to other packages. Documentation of APIs is vital for reuse
     of code by other developers. Significantly, there are no JavaDoc lines in the
     API.
+  id: totrans-424
   prefs: []
   type: TYPE_NORMAL
+  zh: 回顾报告，实现相对于其他包具有更多的活动代码行数。API 的文档对其他开发人员重用代码至关重要。值得注意的是，API 中没有 JavaDoc 行。
 - en: 'The abbreviations in the summary table have the following meanings:'
+  id: totrans-425
   prefs: []
   type: TYPE_NORMAL
+  zh: 摘要表中的缩写具有以下含义：
 - en: '**Classes**: This is the number of classes in the package.'
+  id: totrans-426
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**类**：这是包中类的数量。'
 - en: '**Functions**: This is the number of functions in the package.'
+  id: totrans-427
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**函数**：这是包中函数的数量。'
 - en: '**JavaDocs**: This is the number of different JavaDoc blocks in the package.
     This is not fully indicative as most modern IDEs generate classes using boilerplate
     templates. Therefore, you can have a lot of JavaDoc generated of poor quality,
     creating misleading results.'
+  id: totrans-428
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**JavaDocs**：这是包中不同 JavaDoc 块的数量。这并不完全准确，因为大多数现代 IDE 使用样板模板生成类。因此，您可能会生成大量质量低劣的
+    JavaDoc，从而产生误导性结果。'
 - en: '**NCSS**: This is the number of non-commented lines of source code.'
+  id: totrans-429
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**NCSS**：这是源代码中非注释行的数量。'
 - en: '**JLC**: This is the number of lines of JavaDoc.'
+  id: totrans-430
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**JLC**：这是 JavaDoc 的行数。'
 - en: '**SLCLC**: This is the number of lines that include only a single comment.'
+  id: totrans-431
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**SLCLC**：这是仅包含单个注释的行数。'
 - en: '**MLCLC**: This is the number of lines of source code that are part of multiline
     comments.'
+  id: totrans-432
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**MLCLC**：这是多行注释中包含的源代码行数。'
 - en: 'The build summary displays information about changes (deltas) between the current
     job and the previous one, for example:'
+  id: totrans-433
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建摘要显示了当前任务与上一任务之间的变更（增量）信息，例如：
 - en: '[PRE39]'
+  id: totrans-434
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE39]'
 - en: The `+` symbol signals that the code is added, `-` signals deleted. If you see
     a large influx of code, but a lower than usual influx of JavaDoc, then either
     the code is autogenerated or more likely is being rushed to market.
+  id: totrans-435
   prefs: []
   type: TYPE_NORMAL
+  zh: '`+` 符号表示代码已添加，`-` 表示已删除。如果你看到大量代码涌入，但 JavaDoc 的涌入量低于平常，那么要么代码是自动生成的，要么更可能是为了赶上市场而匆忙开发。'
 - en: There's more...
+  id: totrans-436
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 这还不是全部...
 - en: When you have gotten used to the implications of the relatively simple summary
     of JavaNCSS, consider adding JDepend to your safety net of code metrics. JDepend
     generates a wider range of quality related metrics ([http://clarkware.com/software/JDepend.html](http://clarkware.com/software/JDepend.html),
     [http://mojo.codehaus.org/jdepend-maven-plugin/plugin-info.html](http://mojo.codehaus.org/jdepend-maven-plugin/plugin-info.html),
     and [https://wiki.jenkins-ci.org/display/JENKINS/JDepend+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JDepend+Plugin)).
+  id: totrans-437
   prefs: []
   type: TYPE_NORMAL
+  zh: 当你已经习惯于相对简单的 JavaNCSS 摘要的含义后，考虑将 JDepend 添加到您的代码度量安全网中。JDepend 生成了更广泛的与质量相关的指标（[http://clarkware.com/software/JDepend.html](http://clarkware.com/software/JDepend.html)，[http://mojo.codehaus.org/jdepend-maven-plugin/plugin-info.html](http://mojo.codehaus.org/jdepend-maven-plugin/plugin-info.html)，以及
+    [https://wiki.jenkins-ci.org/display/JENKINS/JDepend+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JDepend+Plugin)）。
 - en: One of the most important metrics JDepend generates is **cyclic dependency**.
     If class A is dependent on class B, and in turn class B is dependent on class
     A, then that is a cyclic dependency. When there is such a dependency it indicates
     that there is an increased risk of something going wrong, such as a fight for
     a resource, an infinite loop, or synchronization issues. Refactoring may be needed
     to eliminate the lack of clear responsibilities.
+  id: totrans-438
   prefs: []
   type: TYPE_NORMAL
+  zh: JDepend 生成的最重要的指标之一是**循环依赖**。如果类 A 依赖于类 B，而类 B 又依赖于类 A，那么这就是一个循环依赖。当存在这样的依赖关系时，表明存在某种事情可能出错的风险，例如资源竞争、无限循环或同步问题。可能需要重构以消除责任不清晰性。
 - en: Checking code style using an external pom.xml file
+  id: totrans-439
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用外部 pom.xml 文件检查代码样式
 - en: If you just want to check code style for the quality of its documentation, without
     changing its source, then inject your own `pom.xml` file. This recipe shows you
     how to do this for Checkstyle. Checkstyle is a tool that checks most documentation
     against well-defined standards, such as the Sun coding conventions.
+  id: totrans-440
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你只想检查代码的文档质量而不更改其源代码，则注入自己的 `pom.xml` 文件。这个配方向你展示了如何为 Checkstyle 进行此操作。Checkstyle
+    是一个工具，根据明确定义的标准（例如 Sun 编码规范）检查大多数文档。
 - en: Getting ready
+  id: totrans-441
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Install the Checkstyle plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin)).
+  id: totrans-442
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Checkstyle 插件（[https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin)）。
 - en: Tip
+  id: totrans-443
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 小贴士
 - en: If you have issues with this recipe due to an **illegalAccessError on AbstractMapBasedMultimap**
     error, then this probably is due to the bug reported in **Jenkins-22252** ([https://issues.jenkins-ci.org/browse/JENKINS-22252](https://issues.jenkins-ci.org/browse/JENKINS-22252)).
     The current solution is to run with version 3.0.5 of Maven.
+  id: totrans-444
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您因为 **AbstractMapBasedMultimap** 上的 **illegalAccessError** 错误而遇到问题，那么这可能是由于
+    **Jenkins-22252** 报告的错误所致（[https://issues.jenkins-ci.org/browse/JENKINS-22252](https://issues.jenkins-ci.org/browse/JENKINS-22252)）。当前解决方案是使用
+    Maven 的版本 3.0.5 运行。
 - en: How to do it...
+  id: totrans-445
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何执行...
 - en: Create a directory named `/var/lib/jenkins/OVERRIDE`.
+  id: totrans-446
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建名为 `/var/lib/jenkins/OVERRIDE` 的目录。
 - en: Make sure that the directory is owned by the Jenkins user and group `sudo chown
     jenkins:jenkins /var/lib/jenkins/OVERRIDE`.
+  id: totrans-447
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保目录的所有者是 Jenkins 用户和组 `sudo chown jenkins:jenkins /var/lib/jenkins/OVERRIDE`。
 - en: 'Create the file `/var/lib/Jenkins/OVERRIDE/pom_checkstyle.xml` with the following
     content:'
+  id: totrans-448
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建文件 `/var/lib/Jenkins/OVERRIDE/pom_checkstyle.xml`，内容如下：
 - en: '[PRE40]'
+  id: totrans-449
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE40]'
 - en: Make sure the file is owned by the Jenkins user and group `sudo chown jenkins:jenkins
     /var/lib/jenkins/OVERRIDE/pom_checkstyle.xml.`
+  id: totrans-450
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保文件的所有者是 Jenkins 用户和组 `sudo chown jenkins:jenkins /var/lib/jenkins/OVERRIDE/pom_checkstyle.xml`。
 - en: Create a **Maven** job with the name `ch5.quality.checkstyle.override`.
+  id: totrans-451
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch5.quality.checkstyle.override` 的 **Maven** 任务。
 - en: Under the **Source Code Management** section, check **Subversion** and add the
     subversion repository [https://source.sakaiproject.org/svn/profile2/tags/profile2-1.4.5](https://source.sakaiproject.org/svn/profile2/tags/profile2-1.4.5).
+  id: totrans-452
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **源码管理** 部分，选中 **Subversion** 并添加 Subversion 存储库 [https://source.sakaiproject.org/svn/profile2/tags/profile2-1.4.5](https://source.sakaiproject.org/svn/profile2/tags/profile2-1.4.5)。
 - en: In the **Pre-steps** section for the **Add pre-build** step, select **Execute
     shell**.
+  id: totrans-453
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**添加预构建**步骤的**预步骤**部分中，选择**执行 shell**。
 - en: In the command text area, add `cp /var/lib/Jenkins/OVERRIDE/pom_checkstyle.xml`.
+  id: totrans-454
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在命令文本区域中添加 `cp /var/lib/Jenkins/OVERRIDE/pom_checkstyle.xml`。
 - en: 'Under the **build** section add:'
+  id: totrans-455
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**build**部分下添加：
 - en: '**Root POM**: `pom_checkstyle.xml`'
+  id: totrans-456
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**根 POM**：`pom_checkstyle.xml`'
 - en: '**Goals and options**: `clean checkstyle:checkstyle`'
+  id: totrans-457
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标和选项**：`clean checkstyle:checkstyle`'
 - en: Under the **Build Settings** section, check **Publish Checkstyle analysis results**.
+  id: totrans-458
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建设置**部分，勾选**发布 Checkstyle 分析结果**。
 - en: Click on **Save**.
+  id: totrans-459
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**保存**。
 - en: Run the job a number of times, reviewing the output.![How to do it...](img/0082OS_05_13.jpg)
+  id: totrans-460
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业多次，查看输出。![如何操作...](img/0082OS_05_13.jpg)
 - en: How it works...
+  id: totrans-461
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The **profile2** tool is used by millions of users around the world within the
     Sakai Learning Management System ([http://sakaiproject.org](http://sakaiproject.org)).
     It's a realistic piece of industrial-quality coding. It is a social hub for managing
     what others can see of your account details. The project divides the code between
     implementation, API, and model.
+  id: totrans-462
   prefs: []
   type: TYPE_NORMAL
+  zh: '**profile2** 工具在全球范围内由数百万用户在Sakai学习管理系统([http://sakaiproject.org](http://sakaiproject.org))中使用。这是一个真实的工业级编码。它是一个社交中心，用于管理其他人可以看到你帐户详细信息的内容。该项目将代码分为实现、API和模型。'
 - en: In this recipe, you created a replacement `pom.xml` file. You did not need to
     copy any of the dependencies from the original `pom.xml` as Checkstyle does not
     need compiled code to do its calculations.
+  id: totrans-463
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个案例中，您创建了一个替换的`pom.xml`文件。您不需要复制原始`pom.xml`中的任何依赖项，因为Checkstyle不需要编译代码来进行计算。
 - en: The job then copies the `pom_checkstyle.xml` file to the main workspace. Checkstyle
     was not configured in detail in the `pom_checkstyle.xml` file because we were
     only interested in the overall trend. However, if you want to zoom into the details,
     Checkstyle can be configured to generate results based on specific metrics such
     as the complexity of Boolean expressions or the Non Commenting Source Statements
     (NCSS) [http://checkstyle.sourceforge.net/config_metrics.html](http://checkstyle.sourceforge.net/config_metrics.html).
+  id: totrans-464
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后作业将`pom_checkstyle.xml`文件复制到主工作区。`pom_checkstyle.xml`文件中未详细配置Checkstyle，因为我们只对总体趋势感兴趣。但是，如果您想要放大细节，可以配置Checkstyle以基于特定指标生成结果，例如布尔表达式的复杂性或非注释源语句（NCSS）[http://checkstyle.sourceforge.net/config_metrics.html](http://checkstyle.sourceforge.net/config_metrics.html)。
 - en: There's more...
+  id: totrans-465
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'You can view the statistics from most quality measuring tools remotely using
     the Jenkins XML API. The syntax for Checkstyle, PMD, FindBugs , and so on. is:'
+  id: totrans-466
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以使用Jenkins XML API远程查看大多数质量测量工具的统计信息。Checkstyle、PMD、FindBugs等的语法是：
 - en: '[PRE41]'
+  id: totrans-467
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE41]'
 - en: 'For example, a URL similar to the following will work in the case of this recipe:'
+  id: totrans-468
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，在这个案例中，类似下面的URL将起作用：
 - en: '[PRE42]'
+  id: totrans-469
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE42]'
 - en: 'The returned results for this recipe look similar to the following:'
+  id: totrans-470
   prefs: []
   type: TYPE_NORMAL
+  zh: 此食谱的返回结果类似于以下内容：
 - en: '[PRE43]'
+  id: totrans-471
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE43]'
 - en: To obtain the data remotely you will need to authenticate. For information on
     how to perform remote authentication, refer to the *Remotely triggering jobs through
     the Jenkins API* recipe in [Chapter 3](ch03.html "Chapter 3. Building Software"),
     *Building Software*.
+  id: totrans-472
   prefs: []
   type: TYPE_NORMAL
+  zh: 要远程获取数据，您需要进行身份验证。有关如何执行远程身份验证的信息，请参阅[第三章](ch03.html "Chapter 3. Building Software")中的*通过Jenkins
+    API远程触发作业*食谱，*构建软件*。
 - en: See also
+  id: totrans-473
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Faking Checkstyle results* recipe
+  id: totrans-474
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*伪造 Checkstyle 结果* 食谱'
 - en: Faking Checkstyle results
+  id: totrans-475
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 伪造 Checkstyle 结果
 - en: This recipe details how you can forge Checkstyle reports. This will allow you
     to hook in your custom data to the Checkstyle Jenkins plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin)),
     exposing your custom test results without writing a new Jenkins plugin. The benefit
@@ -2163,486 +3189,721 @@
     in [Chapter 3](ch03.html "Chapter 3. Building Software"), *Building Software*,
     is the location that the results are displayed. You can then aggregate the fake
     results with other metrics summaries using the Analysis Collector plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin)).
+  id: totrans-476
   prefs: []
   type: TYPE_NORMAL
+  zh: 本食谱详细介绍了如何伪造Checkstyle报告。 这将允许您将自定义数据挂接到Checkstyle Jenkins插件（[https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin)），公开您的自定义测试结果而无需编写新的Jenkins插件。
+    与在[第3章](ch03.html "第3章。构建软件") *构建软件*中使用*在Jenkins中绘制替代代码指标*的食谱相比，它显示结果的位置。 您可以使用Analysis
+    Collector插件（[https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin)）将虚假结果与其他指标摘要汇总。
 - en: Getting ready
+  id: totrans-477
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: If you have not already done so, install Checkstyle and create a new directory
     in your subversion repository for the code.
+  id: totrans-478
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果尚未安装Checkstyle，请安装并在您的Subversion存储库中为代码创建一个新目录。
 - en: How to do it...
+  id: totrans-479
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Create a Perl script file named `generate_data.pl` with the following content:'
+  id: totrans-480
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`generate_data.pl`的Perl脚本文件，内容如下：
 - en: '[PRE44]'
+  id: totrans-481
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE44]'
 - en: Make the directories `src/main/java.`
+  id: totrans-482
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录`src/main/java.`
 - en: 'Add the Java file `src/main/java/MAIN.java` with the following content:'
+  id: totrans-483
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加Java文件`src/main/java/MAIN.java`，内容如下：
 - en: '[PRE45]'
+  id: totrans-484
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE45]'
 - en: Commit the files to your subversion repository.
+  id: totrans-485
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将文件提交到您的Subversion存储库。
 - en: Create a Jenkins free-style job `ch5.quality.checkstyle.generation`.
+  id: totrans-486
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个Jenkins自由风格作业`ch5.quality.checkstyle.generation`。
 - en: 'Within the **Source Code Management** section, check **Subversion** and add
     the **Repository URL**: your repo URL.'
+  id: totrans-487
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，选中**Subversion**并添加**存储库URL**：您的存储库URL。
 - en: Within the **build** section, select the **Build step** as **Execute Shell**.
     In the command input add the command `perl generate_data.pl > my-results.xml`.
+  id: totrans-488
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分，选择**构建步骤**为**执行Shell**。 在命令输入中添加命令`perl generate_data.pl > my-results.xml`。
 - en: In the **Post-build Actions** section, check **Publish Checkstyle analysis results**.
     In the **Checkstyle results** text input, add `my-results.xml`.
+  id: totrans-489
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分，选中**发布Checkstyle分析结果**。 在**Checkstyle结果**文本输入中，添加`my-results.xml`。
 - en: Click on **Save**.
+  id: totrans-490
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job a number of times, reviewing the results and trend.
+  id: totrans-491
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业多次，审查结果和趋势。
 - en: 'The top level report mentions your new rule:'
+  id: totrans-492
   prefs: []
   type: TYPE_NORMAL
+  zh: 顶层报告提到了您的新规则：
 - en: '![How to do it...](img/0082OS_05_22.jpg)'
+  id: totrans-493
   prefs: []
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_05_22.jpg)'
 - en: 'Clicking on the code link **MAIN.java** takes you to the code page and highlights
     the error line randomly selected by the Perl code, as shown in the following screenshot:'
+  id: totrans-494
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击代码链接**MAIN.java**会带您到代码页面，并随机选择由Perl代码突出显示的错误行，如下截图所示：
 - en: '![How to do it...](img/0082OS_05_23.jpg)'
+  id: totrans-495
   prefs: []
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_05_23.jpg)'
 - en: How it works...
+  id: totrans-496
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The plugins used in this chapter store their information in XML files. The Checkstyle
     XML structure is the simplest of all the tools and hence the XML format chosen
     for our generated fake results.
+  id: totrans-497
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章中使用的插件将其信息存储在XML文件中。 Checkstyle XML结构是所有工具中最简单的，因此是我们生成的虚假结果所选择的XML格式。
 - en: 'The Perl code creates a simple XML results file that chooses a line between
     1...9 to fail. The format outputted is similar to the following code:'
+  id: totrans-498
   prefs: []
   type: TYPE_NORMAL
+  zh: Perl代码创建一个简单的XML结果文件，选择1...9之间的一行失败。 输出格式与以下代码类似：
 - en: '[PRE46]'
+  id: totrans-499
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE46]'
 - en: The file location is relative to the Jenkins workspace. The Jenkins plugin opens
     the file found at this location so that it can display it as a source code.
+  id: totrans-500
   prefs: []
   type: TYPE_NORMAL
+  zh: 文件位置是相对于Jenkins工作空间的。 Jenkins插件打开此位置找到的文件，以便它可以将其显示为源代码。
 - en: For each error found, an `<error>` tag is created. The plugin maps the severity
     level `error` to `high`.
+  id: totrans-501
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于找到的每个错误，创建一个`<error>`标签。 该插件将严重级别`错误`映射到`高`。
 - en: There's more...
+  id: totrans-502
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'You may not have to force your results into a fake format. First, consider
     the xUnit plugin ([https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin)).
     It is a utility plugin that supports the conversion of the results from different
     regression test frameworks. The plugin translates the different result types into
     a standardized JUnit format. You can find the JUnit results schema at: [http://windyroad.org/dl/Open%20Source/JUnit.xsd](http://windyroad.org/dl/Open%20Source/JUnit.xsd).'
+  id: totrans-503
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可能不必将结果强制转换为虚假格式。首先考虑使用 xUnit 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin))。这是一个实用插件，支持从不同的回归测试框架转换结果。该插件将不同的结果类型转换为标准化的
+    JUnit 格式。您可以在以下位置找到 JUnit 结果模式：[http://windyroad.org/dl/Open%20Source/JUnit.xsd](http://windyroad.org/dl/Open%20Source/JUnit.xsd)。
 - en: See also
+  id: totrans-504
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Checking style using an external pom.xml* recipe
+  id: totrans-505
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用外部 pom.xml 检查样式* 配方'
 - en: Integrating Jenkins with SonarQube
+  id: totrans-506
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 将 Jenkins 与 SonarQube 集成
 - en: SonarQube, previously known as Sonar, is a rapidly evolving application for
     reporting quality metrics and finding code hot spots. This recipe details how
     to generate code metrics through a Jenkins plugin, and then push them directly
     to a Sonar database.
+  id: totrans-507
   prefs: []
   type: TYPE_NORMAL
+  zh: SonarQube，以前称为 Sonar，是一个快速发展的应用程序，用于报告质量指标和查找代码热点。本篇详细介绍了如何通过 Jenkins 插件生成代码指标，然后直接将其推送到
+    Sonar 数据库。
 - en: Getting ready
+  id: totrans-508
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Sonar plugin ([http://docs.codehaus.org/display/SONAR/Jenkins+Plugin](http://docs.codehaus.org/display/SONAR/Jenkins+Plugin)).
+  id: totrans-509
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Sonar 插件 ([http://docs.codehaus.org/display/SONAR/Jenkins+Plugin](http://docs.codehaus.org/display/SONAR/Jenkins+Plugin))。
 - en: 'Download and unpack SonarQube. You can run it directly from within the bin
     directory, selecting the OS directory underneath. For example, the Desktop Ubuntu
     start-up script is `bin/linux-x86-32/sonar.sh console`. You now have an insecure
     default instance running on port `9000`. For more complete installation instructions,
     review:'
+  id: totrans-510
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载并解压 SonarQube。您可以直接从 bin 目录中运行它，选择其中的 OS 目录。例如，Desktop Ubuntu 的启动脚本是 `bin/linux-x86-32/sonar.sh
+    console`。现在您有一个不安全的默认实例运行在端口 `9000` 上。要获取更完整的安装说明，请查看：
 - en: '[http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade](http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade)
     and [http://docs.sonarqube.org/display/SONAR/Installing](http://docs.sonarqube.org/display/SONAR/Installing)'
+  id: totrans-511
   prefs: []
   type: TYPE_NORMAL
+  zh: '[http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade](http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade)
+    和 [http://docs.sonarqube.org/display/SONAR/Installing](http://docs.sonarqube.org/display/SONAR/Installing)'
 - en: How to do it...
+  id: totrans-512
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Within the main Jenkins configuration (`/configure`), in the **Sonar** section
     add `localhost` for **Name**.
+  id: totrans-513
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在主要的 Jenkins 配置 (`/configure`) 中，在 **Sonar** 部分为 **Name** 添加 `localhost`。
 - en: Click on **Save**.
+  id: totrans-514
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。
 - en: Create a **Maven** job named `ch5.quality.sonar`.
+  id: totrans-515
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch5.quality.sonar` 的 **Maven** 作业。
 - en: Under the **Source Code Management** section for the **Repository URL**, add
     [https://source.sakaiproject.org/svn/announcement/tags/announcement-2.9.3](https://source.sakaiproject.org/svn/announcement/tags/announcement-2.9.3).
+  id: totrans-516
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **源代码管理** 部分的 **Repository URL** 下添加 [https://source.sakaiproject.org/svn/announcement/tags/announcement-2.9.3](https://source.sakaiproject.org/svn/announcement/tags/announcement-2.9.3)。
 - en: Within the **Build Triggers** section, verify that no build triggers are selected.
+  id: totrans-517
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建触发器** 部分，验证未选择任何构建触发器。
 - en: Under the **build** section for **Goals and options,** add `clean install`.
+  id: totrans-518
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建** 部分的 **Goals and options** 下添加 `clean install`。
 - en: For the **Post-build Actions** section, check **Sonar**.
+  id: totrans-519
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于 **后构建操作** 部分，勾选 **Sonar**。
 - en: Click on **Save**.
+  id: totrans-520
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。
 - en: Run the job.
+  id: totrans-521
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行该作业。
 - en: Click on the **Sonar** link and review the newly generated reports.
+  id: totrans-522
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **Sonar** 链接并查看新生成的报告。
 - en: 'The top level of the report delivers a quick summary of the key quality metrics,
     as shown in the following screenshot:'
+  id: totrans-523
   prefs: []
   type: TYPE_NORMAL
+  zh: 报告的顶层提供了关键质量指标的快速摘要，如下图所示：
 - en: '![How to do it...](img/0082OS_05_14.jpg)'
+  id: totrans-524
   prefs: []
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_05_14.jpg)'
 - en: 'From the left-hand side menu, you can drill down into the details:'
+  id: totrans-525
   prefs: []
   type: TYPE_NORMAL
+  zh: 从左侧菜单中，您可以深入了解详细信息：
 - en: '![How to do it...](img/0082OS_05_15.jpg)'
+  id: totrans-526
   prefs: []
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_05_15.jpg)'
 - en: How it works...
+  id: totrans-527
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它的工作原理...
 - en: The source code is that of an announcement tool used within Sakai. The project
     is a multimodule project with some relatively complex details.
+  id: totrans-528
   prefs: []
   type: TYPE_NORMAL
+  zh: 源代码是 Sakai 中使用的公告工具。该项目是一个带有一些相对复杂细节的多模块项目。
 - en: The default SonarQube instance is preconfigured with an in-memory database.
     The Jenkins plugin already knows the default configuration and requires little
     extra configuration. The Jenkins Sonar plugin does not need you to reconfigure
     your `pom.xml`. The Jenkins plugin handles all the details for generating results
     itself.
+  id: totrans-529
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认的 SonarQube 实例预配置了内存数据库。Jenkins 插件已经知道默认配置，并且需要很少的额外配置。Jenkins Sonar 插件不需要你重新配置
+    `pom.xml`。Jenkins 插件处理生成结果的所有细节。
 - en: The job ran Maven first to clean out the old compiled code from the workspace,
     and then ran the `install` goal that compiles the code as part of one of its phases.
+  id: totrans-530
   prefs: []
   type: TYPE_NORMAL
+  zh: 该作业首先运行 Maven 清理工具来清除工作空间中的旧编译代码，然后运行 `install` 目标，将代码编译为其一个阶段的一部分。
 - en: The Jenkins Sonar plugin then makes direct contact with the Sonar database and
     adds the previously generated results. You can now see the results in the Sonar
     application.
+  id: totrans-531
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins Sonar 插件然后直接与 Sonar 数据库联系，并添加先前生成的结果。现在你可以在 Sonar 应用程序中看到结果了。
 - en: There's more...
+  id: totrans-532
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多……
 - en: Sonar is a dedicated application for measuring software-quality metrics. Like
     Jenkins, it has a dedicated and active community. You can expect an aggressive
     roadmap of improvements. Features such as its ability to point out hotspots of
     suspicious code, a visually appealing report dashboard, ease of configuration,
     and detailed control of inspection rules to view, all currently differentiate
     it from Jenkins.
+  id: totrans-533
   prefs: []
   type: TYPE_NORMAL
+  zh: Sonar 是一个专门用于测量软件质量指标的应用程序。像 Jenkins 一样，它拥有一个专门的、活跃的社区。你可以期待一个积极进取的改进路线图。例如，它具有指出可疑代码热点的能力、视觉上吸引人的报告仪表板、易于配置和详细控制检查规则以查看等功能，目前都使它与
+    Jenkins 有所区别。
 - en: SonarQube plugins
+  id: totrans-534
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: SonarQube 插件
 - en: 'It is easy to expand the features of Sonar by adding extra plugins. You can
     find the official set mentioned at the following URL:'
+  id: totrans-535
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过添加额外的插件很容易扩展 Sonar 的功能。你可以在以下 URL 中找到官方提到的插件集：
 - en: '[http://docs.codehaus.org/display/SONAR/Plugin+Library](http://docs.codehaus.org/display/SONAR/Plugin+Library)'
+  id: totrans-536
   prefs: []
   type: TYPE_NORMAL
+  zh: '[http://docs.codehaus.org/display/SONAR/Plugin+Library](http://docs.codehaus.org/display/SONAR/Plugin+Library)'
 - en: The plugins include a number of features that are equivalent to the ones you
     can find in Jenkins. Where Sonar is noticeably different is the governance plugins,
     where code coverage moves to center stage in defending the quality of a project.
+  id: totrans-537
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些插件包括一些与 Jenkins 中找到的功能相当的功能。Sonar 明显不同的地方在于治理插件，代码覆盖率成为捍卫项目质量的核心。
 - en: Alternative aggregator – the violations plugin
+  id: totrans-538
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 备选的聚合器 - 违规插件
 - en: The Jenkins violations plugin accepts the results from a range of quality metrics
     tools and combines them into a unified report. This plugin is the nearest equivalent
     to Sonar within Jenkins. Before deciding if you need an extra application in your
     infrastructure, it is worth reviewing it to see if it fulfills your quality metric
     needs.
+  id: totrans-539
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 违规插件接受来自一系列质量度量工具的结果，并将它们合并成一个统一的报告。这个插件是 Jenkins 中最接近 Sonar 的功能。在决定是否需要在基础架构中添加额外应用程序之前，值得对其进行审查，以查看它是否满足你的质量度量需求。
 - en: See also
+  id: totrans-540
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Looking for "smelly" code through code coverage* recipe
+  id: totrans-541
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过代码覆盖率寻找“有味道”的代码* 配方'
 - en: The *Activating more PMD rulesets* recipe
+  id: totrans-542
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*激活更多的 PMD 规则集* 配方'
 - en: The *Reporting with JavaNCSS* recipe
+  id: totrans-543
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 JavaNCSS 进行报告* 配方'
 - en: Analyzing project data with the R plugin
+  id: totrans-544
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 R 插件分析项目数据
 - en: This recipe describes how to use R to process metrics on each file in your project
     workspace. The recipe does this by traversing the workspace and collecting a list
     of files of a particular extension such as Java. The R script then analyzes each
     file individually and finally plots the results in a graphical format to a PDF
     file. The workflow is common to almost all quality-related analysis of software
     projects. This recipe is easily customized for tasks that are more complex.
+  id: totrans-545
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个配方描述了如何使用 R 来处理项目工作空间中每个文件的度量标准。该配方通过遍历工作空间并收集特定扩展名（如Java）的文件列表来实现此目的。然后，R
+    脚本分析每个文件，最终将结果以图形格式绘制到 PDF 文件中。这种工作流程几乎适用于所有与软件项目质量相关的分析。该配方很容易定制，以适应更复杂的任务。
 - en: In this example, we are looking at the size in words of the text files, printing
     to the console the names of large files and plotting the sizes of all files. From
     the visual representation, you can easily see which files are particularly large.
     If your property file is much larger than the other property files, it is probably
     corrupt. If a Java file is too large, it is difficult to read and understand.
+  id: totrans-546
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个例子中，我们正在查看文本文件的字数大小，将大文件的名称打印到控制台，并绘制所有文件的大小。通过可视化表示，你可以很容易地看出哪些文件特别大。如果你的属性文件比其他属性文件大得多，那么它可能是损坏的。如果Java文件太大，那么它就难以阅读和理解。
 - en: Getting ready
+  id: totrans-547
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: It is assumed that you have followed the *Simplifying powerful visualizations
     using the R plugin* recipe in [Chapter 4](ch04.html "Chapter 4. Communicating
     Through Jenkins"), *Communicating Through Jenkins*, and have already installed
     the R plugin ([https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin)).
+  id: totrans-548
   prefs: []
   type: TYPE_NORMAL
+  zh: 假设你已经按照[第四章](ch04.html "第四章. 通过Jenkins进行通信")中*Simplifying powerful visualizations
+    using the R plugin*一节的方法，并且已经安装了R插件([https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin))。
 - en: How to do it...
+  id: totrans-549
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作步骤...
 - en: Create a free-style job with the name `ch5.R.project.data`.
+  id: totrans-550
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`ch5.R.project.data`的自由样式作业。
 - en: In the **Source Code Management** section, select **Subversion**.
+  id: totrans-551
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，选择**Subversion**。
 - en: Add the **Repository URL** as [https://source.sakaiproject.org/svn/profile2/trunk](https://source.sakaiproject.org/svn/profile2/trunk).
+  id: totrans-552
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加**仓库URL**为[https://source.sakaiproject.org/svn/profile2/trunk](https://source.sakaiproject.org/svn/profile2/trunk)。
 - en: In the **build** section, under **Add build step**, select **Execute R script**.
+  id: totrans-553
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分，选择**添加构建步骤**，然后选择**执行R脚本**。
 - en: 'In the **Script text** area add the following code:'
+  id: totrans-554
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**脚本文本**区域添加以下代码：
 - en: '[PRE47]'
+  id: totrans-555
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE47]'
 - en: Click on the **Save** button.
+  id: totrans-556
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**按钮。
 - en: Click on the **Build Now** icon.
+  id: totrans-557
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**立即构建**图标。
 - en: 'Review the console output from the build. It should appear similar to the following:'
+  id: totrans-558
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看构建的控制台输出。它应该类似于以下内容：
 - en: '[PRE48]'
+  id: totrans-559
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE48]'
 - en: Visit the workspace and review the files `Lengths_Properties_1.pdf`, `Lengths_JAVA_1.pdf`.![How
     to do it...](img/0082OS_05_16.jpg)
+  id: totrans-560
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问工作空间，查看文件`Lengths_Properties_1.pdf`，`Lengths_JAVA_1.pdf`。![操作步骤...](img/0082OS_05_16.jpg)
 - en: Notice the straggler files with a large number of lines. Property files should
     be of roughly similar length, as they contain, in this case, the international
     translations for the GUI.
+  id: totrans-561
   prefs: []
   type: TYPE_NORMAL
+  zh: 注意具有大量行的落单文件。属性文件的长度应该大致相同，因为它们包含了GUI的国际翻译。
 - en: '![How to do it...](img/0082OS_05_17.jpg)'
+  id: totrans-562
   prefs: []
   type: TYPE_IMG
+  zh: '![操作步骤...](img/0082OS_05_17.jpg)'
 - en: This feels like a well-balanced project, as there are only a few files that
     have a large number of lines of code.
+  id: totrans-563
   prefs: []
   type: TYPE_NORMAL
+  zh: 这感觉像是一个平衡良好的项目，因为只有少数文件有大量的代码行。
 - en: How it works...
+  id: totrans-564
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: You loaded in the profile2 tool from subversion [https://source.sakaiproject.org/svn/profile2/trunk](https://source.sakaiproject.org/svn/profile2/trunk).
     This code is used by millions of students around the world and represents mature,
     realistic production code.
+  id: totrans-565
   prefs: []
   type: TYPE_NORMAL
+  zh: 你从子版本加载了[profile2工具](https://source.sakaiproject.org/svn/profile2/trunk)。这个代码被全球数百万学生使用，代表了成熟、现实的生产代码。
 - en: Within your R script, you defined a function that takes a filename as input
     and then reads the file into a text object. The function then checks to see whether
     the number of lines is greater than 500\. If it is greater than 500 lines then
     the filename is printed to the console output. Finally, the function returns the
     number of lines in the text file.
+  id: totrans-566
   prefs: []
   type: TYPE_NORMAL
+  zh: 在你的R脚本中，你定义了一个函数，它以文件名作为输入，然后将文件读入文本对象。然后函数检查行数是否大于500。如果行数大于500，则文件名会打印到控制台输出。最后，函数返回文本文件的行数。
 - en: '[PRE49]'
+  id: totrans-567
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE49]'
 - en: 'Next, the script discovers the property and Java files under the workspace.
     The file search is filtered by the value defined in the `pattern` argument. In
     this case, `.java`:'
+  id: totrans-568
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，脚本会在工作空间下查找属性和Java文件。文件搜索由`pattern`参数定义的值进行过滤。在这种情况下，`.java`：
 - en: '[PRE50]'
+  id: totrans-569
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE50]'
 - en: 'The list of filenames is passed one name at a time to the `processFile` function
     you have previously defined. The results are a list of file lengths that are stored
     in the `resultJava` and `resultProperties` objects:'
+  id: totrans-570
   prefs: []
   type: TYPE_NORMAL
+  zh: 文件名列表逐个传递给之前定义的`processFile`函数。结果是一系列文件长度，存储在`resultJava`和`resultProperties`对象中：
 - en: '[PRE51]'
+  id: totrans-571
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE51]'
 - en: 'The `warnings()` function produces a list of issues generated while running
     the `sapply` command:'
+  id: totrans-572
   prefs: []
   type: TYPE_NORMAL
+  zh: '`warnings()`函数生成了在运行`sapply`命令时生成的问题列表：'
 - en: '[PRE52]'
+  id: totrans-573
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE52]'
 - en: This is stating that a new line was expected at the end of the file. It is not
     a critical issue. Showing the warnings is a helpful approach to discovering corrupted
     files.
+  id: totrans-574
   prefs: []
   type: TYPE_NORMAL
+  zh: 这表明期望文件末尾有一个新行。这不是一个关键问题。显示警告是发现损坏文件的有益方法。
 - en: 'Finally, we generate two histograms of the results, one for the Java file and
     the other for the properties files. The filename is created from a constant string
     followed by the `BUILD_NUMBER` environment variable that is set uniquely for each
     build. The `pdf` function tells R that the output is to be stored in a PDF file
     and the `hist` function draws a histogram of the results:'
+  id: totrans-575
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们生成了两个结果的直方图，一个用于 Java 文件，另一个用于属性文件。文件名由一个常量字符串和一个唯一设置为每次构建的`BUILD_NUMBER`环境变量组成。`pdf`函数告诉
+    R 输出要存储在 PDF 文件中，而`hist`函数则绘制结果的直方图：
 - en: '[PRE53]'
+  id: totrans-576
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE53]'
 - en: There's more...
+  id: totrans-577
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'When writing R code for processing your files, don''t reinvent the wheel. R
     has many libraries for manipulating text. The stringi library is one example ([http://cran.r-project.org/web/packages/stringi/stringi.pdf](http://cran.r-project.org/web/packages/stringi/stringi.pdf)).
     Here is some example code that counts the number of words in a text file:'
+  id: totrans-578
   prefs: []
   type: TYPE_NORMAL
+  zh: 当编写用于处理文件的 R 代码时，不要重复造轮子。R 有许多用于操作文本的库。`stringi`库就是一个例子（[http://cran.r-project.org/web/packages/stringi/stringi.pdf](http://cran.r-project.org/web/packages/stringi/stringi.pdf)）。这是一些计算文本文件中单词数量的示例代码：
 - en: '[PRE54]'
+  id: totrans-579
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE54]'
 - en: The script defines the function `processFile`. The function requires a filename.
     The file is read into the `stri_stats_latex` function. This function is included
     in the `stringi` library. It returns a summary of the file as a vector (a series
     of numbers).
+  id: totrans-580
   prefs: []
   type: TYPE_NORMAL
+  zh: 脚本定义了函数`processFile`。该函数需要一个文件名。文件被读入`stri_stats_latex`函数中。这个函数包含在`stringi`库中。它以矢量（一系列数字）的形式返回文件的摘要。
 - en: The `file.choose()` function pops up a dialog that allows you to browse your
     file system and choose a file. The call returns the fully qualified path to the
     file. It passes the value to the `processFile` function call. The results are
     stored in the results vector. The script then prints out the fourth number that
     is the number of words in the file.
+  id: totrans-581
   prefs: []
   type: TYPE_NORMAL
+  zh: '`file.choose()`函数弹出一个对话框，允许您浏览文件系统并选择文件。调用返回文件的完全限定路径。它将值传递给`processFile`函数调用。结果存储在结果矢量中。然后脚本打印出第四个数字，即文件中的单词数。'
 - en: Note
+  id: totrans-582
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: 'Another interesting R package for text mining is `tm`: ([http://cran.r-project.org/web/packages/tm/tm.pdf](http://cran.r-project.org/web/packages/tm/tm.pdf)).
     The `tm` package has the ability to load a set of text files and analyze them
     in many different ways.'
+  id: totrans-583
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个用于文本挖掘的有趣的 R 包是`tm`：([http://cran.r-project.org/web/packages/tm/tm.pdf](http://cran.r-project.org/web/packages/tm/tm.pdf))。`tm`包具有加载一组文本文件并以多种不同方式分析它们的能力。
 - en: See also
+  id: totrans-584
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Simplifying powerful visualizations using the R plugin* recipe in [Chapter
     4](ch04.html "Chapter 4. Communicating Through Jenkins"), *Communicating Through
     Jenkins*
+  id: totrans-585
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*利用 R 插件简化强大的可视化* 在 [第 4 章](ch04.html "Chapter 4. Communicating Through Jenkins")
+    中的配方，*通过 Jenkins 进行通信*'
 - en: The *Adding a job to warn of storage use violations through log parsing* recipe
     in [Chapter 1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*
+  id: totrans-586
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过日志解析添加一个警告存储使用违规的作业* 在 [第 1 章](ch01.html "Chapter 1. Maintaining Jenkins")
+    中的配方，*维护 Jenkins*'

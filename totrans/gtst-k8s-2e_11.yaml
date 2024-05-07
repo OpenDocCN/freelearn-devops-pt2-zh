@@ -1,42 +1,61 @@
 - en: Extending Kubernetes with OCP, CoreOS, and Tectonic
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 OCP、CoreOS 和 Tectonic 扩展 Kubernetes
 - en: The first half of this chapter will cover how open standards encourage a diverse
     ecosystem of container implementations. We'll look at the **Open Container Initiative**
     (**OCI**) and its mission to provide an open container specification as well.
     The second half of this chapter will cover CoreOS and its advantages as a host
     OS, including performance and support for various container implementations. Also,
     we'll take a brief look at the Tectonic enterprise offering from CoreOS.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章的前半部分将介绍开放标准如何鼓励多样化的容器实现生态系统。我们将查看**开放容器倡议**（**OCI**）及其提供开放容器规范的使命。本章的后半部分将介绍
+    CoreOS 及其作为主机操作系统的优势，包括性能和对各种容器实现的支持。此外，我们还将简要介绍 CoreOS 提供的 Tectonic 企业版。
 - en: 'This chapter will discuss the following topics:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将讨论以下主题：
 - en: Why standards matter?
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为什么标准很重要？
 - en: The Open Container Initiative and Cloud Native Computing Foundation
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 开放容器倡议和云原生计算基金会
 - en: Container specifications versus implementations
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 容器规范与实现
 - en: CoreOS and its advantages
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: CoreOS 及其优势
 - en: Tectonic
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Tectonic
 - en: The importance of standards
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 标准的重要性
 - en: Over the past two years, containerization technology has had a tremendous growth
     in popularity. While Docker has been at the center of this ecosystem, there is
     an increased number of players in the container space. There is already a number
@@ -45,14 +64,20 @@
     tools that enhance and compliment your container infrastructure. Kubernetes lands
     squarely on the orchestration side of this ecosystem, but the bottom line is that
     all these tools form the basis to build cloud-native applications.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 过去两年来，容器化技术的普及度有了巨大的增长。尽管 Docker 一直处于这一生态系统的中心位置，但容器领域的参与者数量正在增加。目前已经有许多替代方案用于容器化和
+    Docker 实现本身（**rkt**、**Garden** 等）。此外，还有丰富的第三方工具生态系统，可以增强和补充您的容器基础设施。Kubernetes
+    明确地位于该生态系统的编排方面，但底线是所有这些工具都构成了构建云原生应用程序的基础。
 - en: As we mentioned at the very beginning of the book, one of the most attractive
     things about containers is their ability to package our application for deployment
     across various environment tiers (that is, development, testing, and production)
     and various infrastructure providers (GCP, AWS, On-premise, and so on).
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们在书的开头提到的，容器最吸引人的一个特点是它们能够将我们的应用程序打包部署到各种环境层（即开发、测试和生产）和各种基础设施提供商（如 GCP、AWS、本地部署等）。
 - en: To truly support this type of deployment agility, we need not only the containers
     themselves to have a common platform, but also the underlying specifications to
     follow a common set of ground rules. This will allow for implementations that
@@ -61,49 +86,68 @@
     will have to make more intentional decisions about some aspects of implementation.
     In either case, we will have more agility and freedom if our containers are built
     on some common structures that all implementations agree on and support.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 要真正支持这种部署灵活性，我们不仅需要容器本身具有共同的平台，还需要底层规范遵循一套共同的基本规则。这将允许实现既灵活又高度专业化。例如，一些工作负载可能需要在高度安全的实现上运行。为了提供这一点，实现将不得不对一些实现的方面做出更多有意识的决定。无论哪种情况，如果我们的容器建立在所有实现都同意并支持的共同结构上，我们将拥有更多的灵活性和自由度。
 - en: The Open Container Initiative
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 开放容器倡议
 - en: 'One of the first initiatives to gain widespread industry engagement is the OCI.
     Among the 36 industry collaborators are Docker, Red Hat, VMware, IBM, Google,
     and AWS, and they are listed on the OCI website at:'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 首个获得广泛行业参与的倡议之一是 OCI。在 36 家行业合作伙伴中包括 Docker、Red Hat、VMware、IBM、Google 和 AWS，在
+    OCI 网站上列出了它们的名单：
 - en: '[https://www.opencontainers.org/](https://www.opencontainers.org/).'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://www.opencontainers.org/](https://www.opencontainers.org/)。'
 - en: 'The purpose of the OCI is to split implementations, such as Docker and rkt,
     from a standard specification for the format and runtime of containerized workloads.
     By their own terms, the goal of the OCI specification has three basic tenets(you
     can refer to more details about this in point 1 in the *References* section at
     the end of the chapter):'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: OCI 的目的是将实现（如 Docker 和 rkt）与容器化工作负载的格式和运行时的标准规范分开。根据它们自己的术语，OCI 规范的目标有三个基本原则（你可以在本章末尾的*参考资料*部分的第1点中找到更多详细信息）：
 - en: Creating a formal specification for container image formats and runtime, which
     will allow a compliant container to be portable across all major, compliant operating
     systems and platforms without artificial technical barriers.
+  id: totrans-16
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建容器镜像格式和运行时的正式规范，这将使符合规范的容器可以在所有主要的、符合规范的操作系统和平台上可移植，而不会受到人为的技术障碍的限制。
 - en: Accepting, maintaining, and advancing the projects associated with these standards
     (the **Projects**). It will look to agree on a standard set of container actions
     (start, exec, pause,....) as well as runtime environment associated with container
     runtime.
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 接受、维护和推进与这些标准相关的项目（**项目**）。它将寻求达成一致的一组容器操作（启动、执行、暂停等）以及与容器运行时相关的运行时环境的标准。
 - en: Harmonizing the previously-referenced standard with other proposed standards,
     including the appc specification.
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将之前提到的标准与其他提议的标准进行协调，包括 appc 规范。
 - en: Cloud Native Computing Foundation
+  id: totrans-19
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 云原生计算基金会
 - en: A second initiative that also has a widespread industry acceptance is the **Cloud
     Native Computing Foundation** (**CNCF**). While still focused on containerized
     workloads, the CNCF operates a bit higher up the stack at an application design
@@ -112,110 +156,151 @@
     to a variety of new technologies and practices that can improve and evolve our
     classic software designs. This is also particularly focused at the new paradigm
     of microservice-oriented development.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个也被广泛接受的倡议是**云原生计算基金会**（**CNCF**）。虽然仍然专注于容器化工作负载，但 CNCF 在堆栈中的应用设计层次上运作得更高。其目的是提供一套标准的工具和技术，用于构建、运行和编排云原生应用堆栈。云计算使我们可以访问各种新技术和实践，可以改进和演进我们的经典软件设计。这也特别关注于面向微服务的新范式开发。
 - en: As a founding participant in CNCF, Google has donated the Kubernetes open-source
     project as the first step. The goal will be to increase interoperability in the
     ecosystem and support better integration with projects. CNCF is already hosting
     a variety of projects in orchestration, logging, monitoring, tracing, and application
     resiliency.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 作为 CNCF 的创始成员，谷歌已将 Kubernetes 开源项目捐赠为第一步。目标是增加生态系统中的互操作性，并支持与其他项目更好地集成。CNCF
+    已经在编排、日志记录、监控、追踪和应用程序弹性方面托管了各种项目。
 - en: For more information on CNCF, refer to [https://cncf.io/.](https://cncf.io/)
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关 CNCF 的更多信息，请参阅[https://cncf.io/.](https://cncf.io/)
 - en: Standard container specification
+  id: totrans-23
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 标准容器规范
 - en: 'A core result of the OCI effort is the creation and development of the overarching
     container specification. The specification has five core principles for all containers
     to follow, which I will briefly paraphrase (you can refer to more details about
     this in point 2 in the *References* section at the end of the chapter):'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: OCI 努力的一个核心结果是创建和发展全面容器规范。该规范有五个所有容器都必须遵循的核心原则，我将简要概述一下（你可以在本章末尾的*参考资料*部分的第2点找到更多详细信息）：
 - en: The container must have **standard operations** to create, start, and stop containers
     across all implementations.
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 容器必须具有在所有实现中创建、启动和停止容器的**标准操作**。
 - en: The container must be **content-agnostic**, which means that type of application
     inside the container does not alter the standard operations or publishing of the
     container itself.
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 容器必须是**内容不可知**的，这意味着容器内部应用程序的类型不会改变容器本身的标准操作或发布。
 - en: The container must be **infrastructure-agnostic** as well. Portability is paramount;
     therefore, the containers must be able to operate just as easily in GCE as in
     your company's datacenter or on a developer's laptop.
+  id: totrans-27
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 容器也必须是**基础设施不可知**的。可移植性至关重要；因此，容器必须能够在 GCE 中与在公司数据中心或开发人员的笔记本电脑上同样轻松地运行。
 - en: A container must also be **designed for automation**, which allows us to automate
     across the build, updating, and deployment pipelines. While this rule is a bit
     vague, the container implementation should not require onerous manual steps for
     creation and release.
+  id: totrans-28
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个容器还必须**设计用于自动化**，这使我们能够在构建、更新和部署流水线之间自动化。虽然这条规则有点模糊，但容器实现不应要求繁琐的手动步骤来创建和发布。
 - en: Finally, the implementation must support **industrial-grade delivery**. Once
     again, speaking to the build and deployment pipelines and requiring a streamlined
     efficiency to the portability and transit of the containers between infrastructure
     and deployment tiers.
+  id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 最后，实现必须支持**工业级交付**。再次，这涉及到构建和部署流水线，要求对容器在基础设施和部署层之间的可移植性和传输的高效流程。
 - en: The specification also defines core principles for container formats and runtimes.
     You can read more about the specifications on the GitHub project at
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 规范还定义了容器格式和运行时的核心原则。你可以在GitHub项目上阅读更多有关规范的信息。
 - en: '[https://github.com/opencontainers/specs](https://github.com/opencontainers/specs).
     [](https://github.com/opencontainers/specs)'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://github.com/opencontainers/specs](https://github.com/opencontainers/specs)'
 - en: 'While the core specification can be a bit abstract, the **runC** implementation
     is a concrete example of the OCI specs in the form of a container runtime and
     image format. Again, you can read more of the technical details on the runC site
     and GitHub at the following URLs:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然核心规范可能有点抽象，但**runC**实现是OCI规范的具体示例，以容器运行时和镜像格式的形式呈现。你可以在以下网址的runC网站和GitHub上阅读更多技术细节：
 - en: '[https://github.com/opencontainers/runc](https://github.com/opencontainers/runc)'
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://github.com/opencontainers/runc](https://github.com/opencontainers/runc)'
 - en: '[https://runc.io/](https://runc.io/)'
+  id: totrans-34
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://runc.io/](https://runc.io/)'
 - en: The backing format and runtime for a variety of popular container tools is runC.
     It was donated to OCI by Docker and was created from the same plumbing work used
     in the Docker platform. Since its release, it has had a welcome uptake by numerous
     projects.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 一系列热门容器工具的支持格式和运行时基于**runC**。这是由Docker捐赠给OCI的，并且是从Docker平台中使用的相同基础工作创建的。自发布以来，它已被许多项目欢迎。
 - en: Even the popular open source PaaS, **Cloud Foundry** announced that it will
     use runC in Garden. Garden provides the containerization plumbing for Deigo, which
     acts as an orchestration layer similar to Kubernetes.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 即使是流行的开源PaaS，**Cloud Foundry**也宣布将在Garden中使用runC。 Garden为Deigo提供容器化基础设施，Deigo则充当类似Kubernetes的编排层。
 - en: The rkt implementation was originally based on the **appc** specification. The
     appc specification was actually an earlier attempt by the folks at CoreOS to form
     a common specification around containerization. Now that CoreOS is participating
     in OCI, they are working to help merge the appc specification into OCI; it should
     result in a higher level of compatibility across the container ecosystem.
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: rkt的实现最初基于**appc**规范。实际上，appc规范是CoreOS团队早期尝试形成关于容器化的共同规范。现在CoreOS正在参与OCI，并且正在努力将appc规范合并到OCI中；这应该会导致容器生态系统中更高水平的兼容性。
 - en: CoreOS
+  id: totrans-38
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: CoreOS
 - en: While the specifications provide us a common ground, there are also some trends
     evolving around the choice of OS for our containers. There are several tailor-fit
     OSes that are being developed specifically to run container workloads. Although
     implementations vary, they all have similar characteristics. Focus on a slim installation
     base, atomic OS updating, and signed applications for efficient and secure operations.
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然规范为我们提供了一个共同基础，但在我们容器的操作系统选择周围也有一些趋势正在演变。有几个特别为运行容器工作负载而开发的定制操作系统。尽管实现各不相同，但它们都具有类似的特征。专注于精简安装基础、原子操作系统更新和签名应用程序以实现高效和安全的运行。
 - en: One OS that is gaining popularity is **CoreOS**. CoreOS offers major benefits
     for both security and resource utilization. It provides resource utilization by
     removing package dependencies completely from the picture. Instead, CoreOS runs
@@ -224,53 +309,81 @@
     usage, CoreOS lets us use a larger portion of the resource pool to run our containerized
     applications. This allows users to gain a higher performance from their infrastructure
     and better container to node (server) usage ratios.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 正在受到欢迎的一个操作系统是**CoreOS**。CoreOS 在安全性和资源利用方面都提供了主要好处。它通过完全删除软件包依赖关系来提供资源利用。相反，CoreOS
+    将所有应用程序和服务都运行在容器中。通过仅提供支持运行容器所需的一小组服务，并且绕过使用虚拟化程序的需要，CoreOS 让我们能够使用更大比例的资源池来运行我们的容器化应用程序。这使得用户可以从他们的基础设施获得更高的性能和更好的容器与节点（服务器）使用比例。
 - en: '**More container OSes** There are several other container-optimized OSes that
     have emerged recently.'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: '**更多容器操作系统** 最近出现了几个其他容器优化的操作系统。'
 - en: '**Red Hat Enterprise Linux Atomic Host** focuses on security with **SELinux**
     enabled by default and *Atomic* updates to the OS similar to what we saw with
     CoreOS. Refer to the following link:'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Red Hat Enterprise Linux Atomic Host** 专注于安全性，默认启用 **SELinux** 并提供类似于 CoreOS
+    的 *Atomic* 更新操作系统。请参考以下链接：'
 - en: '[https://access.redhat.com/articles/rhel-atomic-getting-started](https://access.redhat.com/articles/rhel-atomic-getting-started)'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 网址为[https://access.redhat.com/articles/rhel-atomic-getting-started](https://access.redhat.com/articles/rhel-atomic-getting-started)
 - en: '**Ubuntu Snappy** also capitalizes on the efficiency and security gains of
     separating the OS components from the frameworks and applications. Using application
     images and verification signatures, we get an efficient Ubuntu-based OS for our
     container workloads at [http://www.ubuntu.com/cloud/tools/snappy](http://www.ubuntu.com/cloud/tools/snappy).'
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Ubuntu Snappy** 也利用了将操作系统组件与框架和应用程序分离的效率和安全性提升。使用应用程序镜像和验证签名，我们可以获得一个高效的基于
+    Ubuntu 的操作系统，用于我们的容器工作负载，网址为[http://www.ubuntu.com/cloud/tools/snappy](http://www.ubuntu.com/cloud/tools/snappy)。'
 - en: '**Ubuntu LXD** runs a container hypervisor and provides a path for migrating
     Linux-based VMs to containers with ease:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Ubuntu LXD** 运行一个容器虚拟化程序，并提供了一个轻松迁移 Linux-based VMs 到容器的路径：'
 - en: '[https://www.ubuntu.com/cloud/lxd](https://www.ubuntu.com/cloud/lxd).'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 网址为[https://www.ubuntu.com/cloud/lxd](https://www.ubuntu.com/cloud/lxd)。
 - en: '**VMware Photon** is another lightweight container OS that is optimized specifically
     for **vSphere** and the VMware platform. It runs Docker, rkt, and Garden and also
     has some images that you can run on the popular public cloud providers. Refer
     to the following link:'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: '**VMware Photon** 是另一个针对 **vSphere** 和 VMware 平台进行优化的轻量级容器操作系统。它运行 Docker、rkt
+    和 Garden，并且还有一些可以在热门公共云提供商上运行的镜像。请参考以下链接：'
 - en: '[https://vmware.github.io/photon/](https://vmware.github.io/photon/).'
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 网址为[https://vmware.github.io/photon/](https://vmware.github.io/photon/)。
 - en: 'Using the isolated nature of containers, we increase reliability and decrease
     the complexity of updates for each application. Now applications can be updated
     along with supporting libraries whenever a new container release is ready:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 利用容器的隔离性，我们增加了可靠性并降低了每个应用程序更新的复杂性。现在应用程序可以在每个新的容器发布准备就绪时与支持的库一起进行更新：
 - en: '![](img/B06302_11_01.png)'
+  id: totrans-50
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_11_01.png)'
 - en: CoreOS updates
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: CoreOS 更新
 - en: Finally, CoreOS has some added advantages in the realm of security. For starters,
     the OS can be updated as one whole unit instead of via individual packages (refer
     to the preceding figure). This avoids many issues that arise from partial updates.
@@ -278,137 +391,198 @@
     a secondary one to receive a full update. Once updates are completed successfully,
     a reboot promotes the secondary partition. If anything goes wrong, the original
     partition is available for failback.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，CoreOS 在安全领域还有一些额外的优势。首先，该操作系统可以作为一个整体单位进行更新，而不是通过单个软件包进行更新（参见上图）。这避免了许多由部分更新引起的问题。为了实现这一点，CoreOS
+    使用两个分区——一个作为活动的操作系统分区，另一个用于接收完整的更新。一旦更新成功完成，系统将重新启动并提升辅助分区。如果出现任何问题，原始分区可用于回退。
 - en: The system owners can also control when those updates are applied. This gives
     us the flexibility to prioritize critical updates while working with real-world
     scheduling for the more common updates. In addition, the entire update is signed
     and transmitted via SSL for added security across the entire process.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 系统所有者还可以控制何时应用这些更新。这使我们可以灵活地优先考虑关键更新，同时与更常见的更新的实际调度一起工作。此外，整个更新都经过签名并通过SSL进行传输，以增加整个过程的安全性。
 - en: rkt
+  id: totrans-54
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: rkt
 - en: A central piece of the CoreOS ecosystem is its own container runtime, named
     rkt. As we mentioned earlier, rkt is another implementation with a specific focus
     on security. The main advantage of rkt is in running the engine without a daemon
     as root, the way Docker does today. Initially, rkt also had an advantage in establishing
     a trust for container images. However, recent updates to Docker have made great
     strides with the new **Content Trust** feature.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: CoreOS生态系统的一个核心组成部分是它自己的容器运行时，名为rkt。正如我们之前提到的，rkt是另一种专注于安全性的实现。rkt的主要优势在于以无守护程序的根用户身份运行引擎，就像Docker今天所做的那样。最初，rkt在建立容器镜像的信任方面也有优势。然而，Docker的最新更新通过新的**内容信任**功能取得了长足的进步。
 - en: The bottom line is that rkt is still an implementation focused on security to
     run containers in production. rkt does use an image format named **ACI**, but
     it also supports running Docker-based images. Over the past year, rkt has undergone
     significant updates and is now at version 1.24.0\. It has gained much momentum
     as a way to run Docker images securely in production.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 简而言之，rkt仍然是一个专注于在生产环境中运行容器的实现。rkt使用一种名为**ACI**的图像格式，但它也支持运行基于Docker的图像。在过去的一年中，rkt经历了重大更新，现在已经到了1.24.0版本。它作为在生产环境中安全运行Docker图像的方法已经获得了很大的动力。
 - en: In addition, CoreOS is working with **Intel®** to integrate the new **Intel®
     Virtualization Technology**, which allows containers to run in higher levels of
     isolation. This hardware-enhanced security allows the containers to be run inside
     a **Kernel-based Virtual Machine** (**KVM**) process providing isolation from
     the kernel similar to what we see with hypervisors today.
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，CoreOS正在与**Intel®**合作，集成新的**Intel®虚拟化技术**，该技术允许容器在更高级别的隔离中运行。这种硬件增强的安全性允许容器在类似于当今我们看到的hypervisors的内核中运行，从而提供了与内核隔离相似的隔离。
 - en: etcd
+  id: totrans-58
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: etcd
 - en: Another central piece in the CoreOS ecosystem worth mentioning is their open-source
     etcd project. etcd is a distributed and consistent key-value store. A RESTful
     API is used to interface with etcd, so it's easy to integrate with your project.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: CoreOS生态系统中另一个值得一提的核心组件是他们的开源etcd项目。etcd是一个分布式且一致的键值存储。使用RESTful API与etcd进行接口交互，因此很容易与您的项目集成。
 - en: If it sounds familiar, it's because we saw this process running in [Chapter
     1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml), *Introduction to Kubernetes*,
     in the *Services running on the master* section. Kubernetes actually utilizes
     etcd to keep track of cluster configuration and current state. K8s uses it for
     the service discovery capabilities as well. For more details, refer to [https://github.com/coreos/etcd](https://github.com/coreos/etcd).
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果听起来很熟悉，那是因为我们在[第1章](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)中看到了这个过程，*Kubernetes入门*，在*运行在主节点上的服务*部分。Kubernetes实际上利用etcd来跟踪集群配置和当前状态。K8s也利用它来进行服务发现。更多详情，请参阅[https://github.com/coreos/etcd](https://github.com/coreos/etcd)。
 - en: Kubernetes with CoreOS
+  id: totrans-61
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 带有CoreOS的Kubernetes
 - en: Now that we understand the benefits, let's take a look at a Kubernetes cluster
     using CoreOS. The documentation supports a number of platforms, but one of the
     easiest to spin up is AWS with the CoreOS **CloudFormation** and CLI scripts.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们了解了这些好处，让我们来看一下使用CoreOS的Kubernetes集群。文档支持多个平台，但其中一个最容易启动的是使用CoreOS **CloudFormation**
+    和 CLI 脚本的AWS。
 - en: If you are interested in running Kubernetes with CoreOS on other platforms,
     you can find more details in the CoreOS documentation at
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您有兴趣在其他平台上运行带有CoreOS的Kubernetes，您可以在CoreOS文档中找到更多详情
 - en: '[https://coreos.com/kubernetes/docs/latest/](https://coreos.com/kubernetes/docs/latest/).
     [](https://coreos.com/kubernetes/docs/latest/) We can find the latest instructions for
     AWS at'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://coreos.com/kubernetes/docs/latest/](https://coreos.com/kubernetes/docs/latest/)。
+    [](https://coreos.com/kubernetes/docs/latest/) 我们可以在这里找到AWS的最新说明'
 - en: '[https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html](https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html).'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html](https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html)。'
 - en: You can follow the instructions mentioned earlier to spin-up Kubernetes on CoreOS.
     You'll need to create a key pair on AWS and also specify a region, cluster name,
     cluster size, and DNS to proceed.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以按照之前提到的说明在 CoreOS 上快速搭建 Kubernetes。您需要在 AWS 上创建一个密钥对，并指定一个区域、集群名称、集群大小和 DNS
+    以继续。
 - en: In addition, we will need to create a DNS entry and will require a service such
     as **Route53** or a production DNS service. When following the instructions, you'll
     want to set the DNS to a domain or sub-domain, where you have permission to set
     up a record. We will need to update the record after the cluster is up and running
     and has a dynamic endpoint defined.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 另外，我们需要创建一个 DNS 记录，并且需要一个像**Route53**这样的服务或者一个生产 DNS 服务。在按照说明操作时，您需要将 DNS 设置为您有权限设置记录的域或子域。在集群运行起来并且有定义动态端点后，我们需要更新记录。
 - en: 'There you have it! We now have a cluster running CoreOS. The script creates
     all the necessary AWS resources, such as **Virtual Private Clouds** (**VPCs**),
     security groups, and IAM role. Now that the cluster is up and running we can get
     the endpoint with the `status` command and update our DNS record:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 就这样！我们现在有一个运行 CoreOS 的集群。该脚本创建了所有必要的 AWS 资源，例如**虚拟私有云**（**VPCs**）、安全组和 IAM 角色。现在集群已经运行起来，我们可以使用
+    `status` 命令获取端点并更新我们的 DNS 记录：
 - en: '[PRE0]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Copy the entry listed next to `Controller DNS Name` and then edit your DNS records
     to point the domain or sub-domain you specified earlier to point to this load
     balancer.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 复制紧挨着`Controller DNS Name`列出的条目，然后编辑您的 DNS 记录，将之前指定的域名或子域指向该负载均衡器。
 - en: 'If you forget which domain you specified or need to check on the configuration
     you can look in the generated `kubeconifg` file with your favorite editor. It
     will look something like this:'
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您忘记了指定的域名，或者需要检查配置，可以使用您喜欢的编辑器查看生成的 `kubeconifg` 文件。它看起来会像这样：
 - en: '[PRE1]'
+  id: totrans-72
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: In this case, the `server` line will have your domain name.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这种情况下，`server` 行将有您的域名。
 - en: 'If this is a fresh box, you will need to download `kubectl` separately as it
     is not bundled with `kube-aws`:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果这是一个新的服务器，您需要单独下载 `kubectl`，因为它没有与 `kube-aws` 捆绑在一起：
 - en: '`**$ wget https://storage.googleapis.com/kubernetes-release/release/v1.0.6/bin/linux/amd64/kubectl**`'
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: '`**$ wget https://storage.googleapis.com/kubernetes-release/release/v1.0.6/bin/linux/amd64/kubectl**`'
 - en: 'We can now use `kubectl` to see our new cluster:'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在可以使用`kubectl`来查看我们的新集群：
 - en: '[PRE2]'
+  id: totrans-77
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: We should see a single node listed with the EC2 internal DNS as the name. Note
     `kubeconfig`, this tells Kubernetes the path to use the configuration file for
     the cluster that was just created instead. This is also useful if we want to manage
     multiple clusters from the same machine.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该会看到一个节点列在 EC2 内部 DNS 作为名称。注意 `kubeconfig`，这告诉 Kubernetes 使用刚刚创建的集群的配置文件的路径。如果我们想要从同一台机器管理多个集群，这也很有用。
 - en: Tectonic
+  id: totrans-79
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Tect
 - en: Running Kubernetes on CoreOS is a great start, but you may find that you want
     a higher level of support. Enter **Tectonic**, the CoreOS enterprise offering
     for running Kubernetes with CoreOS. Tectonic uses many of the components we already
@@ -417,80 +591,125 @@
     of cluster orchestration. We discussed flannel briefly in [Chapter 3](112f7a80-e9ed-43e9-a165-ea41fa523250.xhtml),
     *Networking, Load Balancers, and Ingress*. It is an overlay network that uses
     a model similar to the native Kubernetes model, and it uses etcd as a backend.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 CoreOS 上运行 Kubernetes 是一个很好的开始，但您可能会发现您需要更高级别的支持。来看看**Tectonic**，CoreOS 提供的用于在
+    CoreOS 上运行 Kubernetes 的企业级产品。Tectonic 使用了我们已经讨论过的许多组件。CoreOS 是操作系统，支持 Docker 和
+    rkt 运行时。此外，Kubernetes、etcd 和 flannel 被打包在一起，形成了一个完整的集群编排栈。我们在[第三章](112f7a80-e9ed-43e9-a165-ea41fa523250.xhtml)简要讨论了
+    flannel，*网络、负载均衡器和入口*。它是一个覆盖网络，使用了类似于原生 Kubernetes 模型的模型，并将 etcd 用作后端。
 - en: Offering a support package similar to Red Hat, CoreOS also provides 24x7 support
     for the open-source software that Tectonic is built on. Tectonic also provides
     regular cluster updates and a nice dashboard with views for all the components
     of Kubernetes. **CoreUpdate** allows users to have more control of the automatic
     updates. In addition, it ships with modules for monitoring, SSO, and other security
     features.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 类似于 Red Hat，CoreOS 还提供了类似的支持套餐，为构建在其上的开源软件 Tectonic 提供 24x7 支持。Tectonic 还提供定期的集群更新以及一个漂亮的仪表板，显示了
+    Kubernetes 的所有组件的视图。**CoreUpdate** 允许用户更多地控制自动更新。此外，它还提供了用于监控、SSO 和其他安全功能的模块。
 - en: 'You can find more information and the latest instructions to install here:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在此处找到更多信息以及最新的安装说明：
 - en: '[https://coreos.com/tectonic/docs/latest/install/aws/index.html](https://coreos.com/tectonic/docs/latest/install/aws/index.html).'
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://coreos.com/tectonic/docs/latest/install/aws/index.html](https://coreos.com/tectonic/docs/latest/install/aws/index.html).'
 - en: Dashboard highlights
+  id: totrans-84
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 仪表板亮点
 - en: 'Here are some highlights of the Tectonic dashboard:'
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里是 Tectonic 仪表板的一些亮点：
 - en: '![](img/B06302_11_02.png)'
+  id: totrans-86
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_11_02.png)'
 - en: The Tectonic main dashboard
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: Tectonic 主仪表板
 - en: 'Tectonic is now generally available and the dashboard already has some nice
     features. As you can see in the following screenshot, we can see a lot of detail
     about our replication controller and can even use the GUI to scale up and down
     with the click of a button:'
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: Tectonic 现在已经普遍可用，仪表板已经具有一些不错的功能。如下截图所示，我们可以看到关于我们的复制控制器的很多详细信息，甚至可以使用 GUI 通过点击按钮来进行上下缩放：
 - en: '![](img/B06302_11_03_Part1of2.png)'
+  id: totrans-89
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_11_03_Part1of2.png)'
 - en: Tectonic replication controller detail
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: Tectonic 复制控制器详细信息
 - en: 'This graphic is quite large, so it''s broken across two pages:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个图形相当大，所以它跨两页显示：
 - en: '![](img/B06302_11_03_Part2of2.png)'
+  id: totrans-92
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_11_03_Part2of2.png)'
 - en: 'Another nice feature is the Events page. Here, we can watch the events live,
     pause, and filter based on event severity and resource type:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个很好的功能是 Events 页面。在这里，我们可以观看事件直播，暂停，并根据事件严重程度和资源类型进行筛选：
 - en: '![](img/B06302_11_04.png)'
+  id: totrans-94
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_11_04.png)'
 - en: Events stream
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 事件流
 - en: 'A useful feature to browse anywhere in the dashboard system is the Namespace:
     filtering option. Simply click on the dropdown next to the word Namespace: at
     the top of any page that shows resources, and we can filter our views by namespace.
     This can be helpful if we want to filter out the Kubernetes system pods or just
     look at a particular collection of resources:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 浏览仪表板系统中任何位置的一个有用功能是命名空间：过滤选项。只需点击显示资源的任何页面顶部旁边的下拉菜单旁边的“Namespace:”，我们就可以按命名空间筛选我们的视图。如果我们想要过滤掉
+    Kubernetes 系统 pod 或只查看特定的一组资源，这可能会有所帮助：
 - en: '![](img/B06302_11_05.png)'
+  id: totrans-97
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_11_05.png)'
 - en: Namespace filtering
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 命名空间过滤
 - en: Summary
+  id: totrans-99
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: In this chapter, we looked at the emerging standards bodies in the container
     community and how they are shaping the technology for the better with open specifications.
     We also took a closer look at CoreOS, a key player in both the container and the
@@ -498,23 +717,36 @@
     and compliment container orchestration and saw first-hand how to use some of it
     with Kubernetes. Finally, we looked at the supported enterprise offering of Tectonic
     and some of the features that are available now.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们看到了容器社区中新兴的标准机构，以及它们如何通过开放的规范来塑造技术，使其变得更好。我们还仔细研究了 CoreOS，这是容器和 Kubernetes
+    社区中的关键参与者。我们探索了他们正在开发的技术，以增强和补充容器编排，并亲自看到了如何在 Kubernetes 中使用其中的一些。最后，我们看了一下 Tectonic
+    的企业支持套件以及目前可用的一些功能。
 - en: In the next chapter, which is the last one, we will explore the broader Kubernetes
     ecosystem and the tools available to move your cluster from development and testing
     into full blown production.
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章，也就是最后一章中，我们将探讨更广泛的 Kubernetes 生态系统以及可用于将您的集群从开发和测试转移到完全成熟的生产环境的工具。
 - en: References
+  id: totrans-102
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 参考资料
 - en: '[https://www.opencontainers.org/faq/](https://www.opencontainers.org/faq/)
     (Under How broad is the mission of the OCI?)'
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[https://www.opencontainers.org/faq/](https://www.opencontainers.org/faq/)（在
+    OCI 任务有多广泛? 下）'
 - en: '[https://github.com/opencontainers/specs/blob/master/principles.md](https://github.com/opencontainers/specs/blob/master/principles.md)'
+  id: totrans-104
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[https://github.com/opencontainers/specs/blob/master/principles.md](https://github.com/opencontainers/specs/blob/master/principles.md)'

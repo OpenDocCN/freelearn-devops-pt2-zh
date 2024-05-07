@@ -1,13 +1,17 @@
 - en: Preface
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 序言
 - en: Jenkins is a Java-based Continuous Integration (CI) server that supports the
     discovery of defects early in the software cycle. Thanks to a rapidly growing
     number of plugins (currently over 1,000), Jenkins communicates with many types
     of systems, building and triggering a wide variety of tests.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins是一个基于Java的持续集成（CI）服务器，支持在软件周期的早期发现缺陷。 由于插件数量迅速增长（目前超过1,000个），Jenkins与许多类型的系统通信，构建和触发各种测试。
 - en: CI involves making small changes to software and then building and applying
     quality assurance processes. Defects do not only occur in the code, but also appear
     in naming conventions, documentation, how the software is designed, build scripts,
@@ -21,79 +25,112 @@
     save the day. And as you can imagine, in my day job as a senior developer with
     aspirations for quality assurance, I like long boring days, at least for mission-critical
     production environments.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: CI涉及对软件进行小改动，然后构建和应用质量保证流程。 缺陷不仅出现在代码中，还出现在命名约定、文档、软件设计方式、构建脚本、将软件部署到服务器的过程等方面。
+    CI迫使缺陷早日显现，而不是等待软件完全生产出来。 如果在软件开发生命周期的后期阶段发现了缺陷，那么处理过程将会更加昂贵。 一旦错误逃逸到生产环境中，修复成本将急剧增加。
+    估计捕捉缺陷的成本早期是后期的100到1,000倍。 有效地使用CI服务器，如Jenkins，可能是享受假期和不得不加班英雄般拯救一天之间的区别。 而且你可以想象，在我作为一个有着对质量保证的渴望的高级开发人员的日常工作中，我喜欢漫长而乏味的日子，至少是对于关键的生产环境。
 - en: Jenkins can automate the building of software regularly and trigger tests pulling
     in the results and failing based on defined criteria. Failing early via build
     failure lowers the costs, increases confidence in the software produced, and has
     the potential to morph subjective processes into an aggressive metrics-based process
     that the development team feels is unbiased.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins可以定期自动构建软件，并根据定义的标准触发测试，拉取结果并基于定义的标准失败。 通过构建失败早期降低成本，增加对所生产软件的信心，并有可能将主观流程转变为开发团队认为是公正的基于指标的进攻性流程。
 - en: 'Jenkins is not just a CI server, it is also a vibrant and highly active community.
     Enlightened self-interest dictates participation. There are a number of ways to
     do this:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins不仅是一个CI服务器，它还是一个充满活力和高度活跃的社区。 开明的自我利益决定了参与。 有许多方法可以做到这一点：
 - en: Participate in the mailing lists and Twitter ([https://wiki.jenkins-ci.org/display/JENKINS/Mailing+Lists](https://wiki.jenkins-ci.org/display/JENKINS/Mailing+Lists)).
     First, read the postings and as you get to understand what is needed, then participate
     in the discussions. Consistently reading the lists will generate many opportunities
     to collaborate.
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 参与邮件列表和Twitter（[https://wiki.jenkins-ci.org/display/JENKINS/Mailing+Lists](https://wiki.jenkins-ci.org/display/JENKINS/Mailing+Lists)）。
+    首先，阅读帖子，随着你了解到需要什么，然后参与讨论。 持续阅读列表将带来许多合作机会。
 - en: Improve code and write plugins ([https://wiki.jenkins-ci.org/display/JENKINS/Help+Wanted](https://wiki.jenkins-ci.org/display/JENKINS/Help+Wanted)).
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 改善代码并编写插件（[https://wiki.jenkins-ci.org/display/JENKINS/Help+Wanted](https://wiki.jenkins-ci.org/display/JENKINS/Help+Wanted)）。
 - en: Test Jenkins and especially the plugins and write bug reports, donating your
     test plans.
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 测试Jenkins，尤其是插件，并撰写Bug报告，捐赠你的测试计划。
 - en: Improve documentation by writing tutorials and case studies.
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过编写教程和案例研究来改善文档。
 - en: What this book covers
+  id: totrans-9
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 这本书涵盖了什么内容
 - en: '[Chapter 1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*,
     describes common maintenance tasks such as backing up and monitoring. The recipes
     in this chapter outline methods for proper maintenance that in turn lowers the
     risk of failures.'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第1章](ch01.html "第1章. 维护Jenkins")，*维护Jenkins*，描述了常见的维护任务，如备份和监视。 本章中的配方概述了适当维护的方法，进而降低了故障的风险。'
 - en: '[Chapter 2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*,
     details how to secure Jenkins and the value of enabling single sign-on (SSO).
     This chapter covers many details, ranging from setting up basic security for Jenkins,
     deploying enterprise infrastructure such as a directory service, and a SSO solution
     to automatically test for the OWASP top 10 security.'
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第2章](ch02.html "第2章 增强安全性")，*增强安全性*，详细介绍如何保护 Jenkins 的安全性以及启用单点登录（SSO）的价值。本章涵盖了许多细节，从为
+    Jenkins 设置基本安全性，部署企业基础设施（如目录服务）到部署自动测试 OWASP 十大安全性。'
 - en: '[Chapter 3](ch03.html "Chapter 3. Building Software"), *Building Software*,
     reviews the relationship between Jenkins and Maven builds and a small amount of
     scripting with Groovy and Ant. The recipes include checking for license violations,
     controlling the creation of reports, running Groovy scripts, and plotting alternative
     metrics.'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第3章](ch03.html "第3章 构建软件")，*构建软件*，审查了 Jenkins 与 Maven 构建的关系以及使用 Groovy 和 Ant
+    进行少量脚本编写。配方包括检查许可证违规、控制报告创建、运行 Groovy 脚本以及绘制替代度量。'
 - en: '[Chapter 4](ch04.html "Chapter 4. Communicating Through Jenkins"), *Communicating
     Through Jenkins*, reviews effective communication strategies for different target
     audiences from developers and project managers to the wider public. Jenkins is
     a talented communicator, with its hordes of plugins notifying you by e-mail, dashboards,
     and Google services. It shouts at you through mobile devices, radiates information
     as you walk pass big screens, and fires at you with USB sponge missile launchers.'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第4章](ch04.html "第4章 通过 Jenkins 进行沟通")，*通过 Jenkins 进行沟通*，审查了针对不同目标受众（开发人员、项目经理以及更广泛的公众）的有效沟通策略。Jenkins
+    是一个有才华的沟通者，通过电子邮件、仪表板和谷歌服务的一大群插件通知您。它通过移动设备对您叫嚷，在您经过大屏幕时辐射信息，并通过 USB 海绵导弹发射器向您射击。'
 - en: '[Chapter 5](ch05.html "Chapter 5. Using Metrics to Improve Quality"), *Using
     Metrics to Improve Quality*, explores the use of source code metrics. To save
     money and improve quality, you need to remove defects in the software life cycle
     as early as possible. Jenkins test automation creates a safety net of measurements.
     The recipes in this chapter will help you build this safety net.'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第5章](ch05.html "第5章 利用度量改善质量")，*利用度量改善质量*，探讨了源代码度量的使用。为了节省成本和提高质量，您需要尽早在软件生命周期中消除缺陷。Jenkins
+    测试自动化创建了一张度量的安全网。本章的配方将帮助您构建这个安全网。'
 - en: '[Chapter 6](ch06.html "Chapter 6. Testing Remotely"), *Testing Remotely*, details
     approaches to set up and run remote stress and functional tests. By the end of
     this chapter, you will have run performance and functional tests against a web
@@ -101,268 +138,405 @@
     is the deployment of a WAR file through Jenkins to an application server. The
     second is the creation of multiple slave nodes, ready to move the hard work of
     testing away from the master node.'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第6章](ch06.html "第6章 远程测试")，*远程测试*，详细介绍了建立和运行远程压力测试和功能测试的方法。本章结束时，您将对 Web 应用程序和
+    Web 服务运行性能和功能测试。包括两种典型的设置方案。第一种是通过 Jenkins 将 WAR 文件部署到应用服务器。第二种是创建多个从节点，准备好将测试工作从主节点转移。'
 - en: '[Chapter 7](ch07.html "Chapter 7. Exploring Plugins"), *Exploring Plugins*,
     has two purposes. The first is to show a number of interesting plugins. The second
     is to review how plugins work.'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第7章](ch07.html "第7章 探索插件")，*探索插件*，有两个目的。第一个是展示一些有趣的插件。第二是审查插件的工作原理。'
 - en: '[Appendix](apa.html "Appendix A. Processes that Improve Quality"), *Processes
     that Improve Quality*, discusses how the recipes in this book support quality
     processes and points to other relevant resources. This will help you form a coherent
     picture of how the recipes can support your quality processes.'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: '[附录](apa.html "附录A 增进质量的流程")，*增进质量的流程*，讨论了本书中的配方如何支持质量流程，并指向其他相关资源。这将帮助您形成一个完整的图景，了解配方如何支持您的质量流程。'
 - en: What you need for this book
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书所需准备的内容
 - en: This book assumes you have a running an instance of Jenkins.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书假设您已经在运行 Jenkins 实例。
 - en: 'In order to run the recipes provided in the book, you need to have the following
     software:'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 要运行本书提供的配方，您需要以下软件：
 - en: '**Recommended:**'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: '**推荐：**'
 - en: Maven 3 ([http://maven.apache.org](http://maven.apache.org))
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Maven 3 ([http://maven.apache.org](http://maven.apache.org))
 - en: Jenkins ([http://jenkins-ci.org/](http://jenkins-ci.org/))
+  id: totrans-23
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins ([http://jenkins-ci.org/](http://jenkins-ci.org/))
 - en: Java Version 1.8 ([http://java.com/en/download/index.jsp](http://java.com/en/download/index.jsp))
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Java 版本 1.8 ([http://java.com/en/download/index.jsp](http://java.com/en/download/index.jsp))
 - en: '**Optional:**'
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: '**可选的:**'
 - en: VirtualBox ([https://www.virtualbox.org/](https://www.virtualbox.org/))
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: VirtualBox ([https://www.virtualbox.org/](https://www.virtualbox.org/))
 - en: SoapUI ([http://www.soapui.org](http://www.soapui.org))
+  id: totrans-27
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: SoapUI ([http://www.soapui.org](http://www.soapui.org))
 - en: JMeter ([http://jmeter.apache.org/](http://jmeter.apache.org/))
+  id: totrans-28
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: JMeter ([http://jmeter.apache.org/](http://jmeter.apache.org/))
 - en: '**Helpful:**'
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: '**有帮助的:**'
 - en: A local subversion or Git repository
+  id: totrans-30
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个本地的 subversion 或 Git 仓库
 - en: 'OS of preference: Linux (Ubuntu)'
+  id: totrans-31
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 首选的操作系统：Linux（Ubuntu）
 - en: Note
+  id: totrans-32
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Note that from the Jenkins GUI (`http://localhost:8080/configure`), you can
     install different versions of Maven, Ant, and Java. You do not need to install
     these as part of the OS.
+  id: totrans-33
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 请注意，您可以从 Jenkins GUI (`http://localhost:8080/configure`) 中安装不同版本的 Maven、Ant
+    和 Java。您不需要将这些作为操作系统的一部分安装。
 - en: 'There are numerous ways to install Jenkins: as a Windows service, using the
     repository management features of Linux such as `apt` and `yum`, using Java Web
     Start, or running it directly from a WAR file. It is up to you to choose the approach
     that you feel is most comfortable. However, you can run Jenkins from a WAR file,
     using HTTPS from the command line, pointing to a custom directory. If any experiments
     go astray, then you can simply point to another directory and start fresh.'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Jenkins 有许多方法：作为 Windows 服务安装，使用 Linux 的仓库管理功能（如`apt`和`yum`），使用 Java Web
+    Start，或直接从 WAR 文件运行。您可以选择您感觉最舒适的方法。但是，您可以从 WAR 文件运行 Jenkins，使用命令行中的 HTTPS，指向自定义目录。如果任何实验出现问题，则可以简单地指向另一个目录并重新开始。
 - en: 'To use this approach, first set the `JENKINS_HOME` environment variable to
     the directory you wish Jenkins to run under. Next, run a command similar to the
     following command:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使用此方法，首先将`JENKINS_HOME`环境变量设置为您希望 Jenkins 在其中运行的目录。接下来，运行类似以下命令的命令：
 - en: '[PRE0]'
+  id: totrans-36
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Jenkins will start to run over https on port `8443`. The HTTP port is turned
     off by setting `httpPort=-1` and the terminal will display logging information.
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 将开始在端口`8443`上通过 https 运行。通过设置`httpPort=-1`关闭 HTTP 端口，并且终端将显示日志信息。
 - en: 'You can ask for help by executing the following command:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过执行以下命令来请求帮助：
 - en: '[PRE1]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: A wider range of installation instructions can be found at [https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins](https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins).
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以在[https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins](https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins)找到更广泛的安装说明。
 - en: For a more advanced recipe describing how to set up a virtual image under VirtualBox
     with Jenkins, you can use the *Using a test Jenkins instance* recipe in [Chapter
     1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于在 VirtualBox 中使用 Jenkins 设置虚拟镜像的更高级菜谱描述，您可以使用[第 1 章](ch01.html "第 1 章。维护 Jenkins")
+    *维护 Jenkins* 中的 *使用测试 Jenkins 实例* 菜谱。
 - en: Who this book is for
+  id: totrans-42
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 这本书是为谁准备的
 - en: This book is for Java developers, software architects, technical project managers,
     build managers, and development or QA engineers. A basic understanding of the
     software development life cycle, some elementary web development knowledge, and
     a familiarity with basic application server concepts are expected. A basic understanding
     of Jenkins is also assumed.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书适用于 Java 开发人员、软件架构师、技术项目经理、构建管理器以及开发或 QA 工程师。预期具有对软件开发生命周期的基本理解，一些基本的 Web
+    开发知识以及对基本应用服务器概念的熟悉。还假定具有对 Jenkins 的基本理解。
 - en: Sections
+  id: totrans-44
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 节
 - en: In this book, you will find several headings that appear frequently (Getting
     ready, How to do it, How it works, There's more, and See also).
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，您会发现几个经常出现的标题（准备就绪，如何做，它是如何工作的，还有更多以及另请参见）。
 - en: To give clear instructions on how to complete a recipe, we use these sections
     as follows.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了清晰地说明如何完成一个菜谱，我们使用以下各节。
 - en: Getting ready
+  id: totrans-47
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: This section tells you what to expect in the recipe, and describes how to set
     up any software or any preliminary settings required for the recipe.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节告诉您可以在菜谱中期待什么，并描述了为菜谱设置任何软件或任何预备设置所需的步骤。
 - en: How to do it…
+  id: totrans-49
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做…
 - en: This section contains the steps required to follow the recipe.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节包含了遵循菜谱所需的步骤。
 - en: How it works…
+  id: totrans-51
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的…
 - en: This section usually consists of a detailed explanation of what happened in
     the previous section.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节通常包含了对前一节中发生的事情的详细解释。
 - en: There's more…
+  id: totrans-53
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有…
 - en: This section consists of additional information about the recipe in order to
     make the reader more knowledgeable about the recipe.
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节包含有关菜谱的其他信息，以使读者更加了解菜谱。
 - en: See also
+  id: totrans-55
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参见
 - en: This section provides helpful links to other useful information for the recipe.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节提供了其他有用信息的相关链接。
 - en: Conventions
+  id: totrans-57
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 约定
 - en: In this book, you will find a number of text styles that distinguish between
     different kinds of information. Here are some examples of these styles and an
     explanation of their meaning.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，您将找到一些区分不同类型信息的文本样式。 以下是这些样式的一些示例及其含义的解释。
 - en: 'Code words in text, database table names, folder names, filenames, file extensions,
     pathnames, dummy URLs, user input, and Twitter handles are shown as follows: "The
     job-specific configuration is then stored in `config.xml` within the subdirectory."'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 文本中的代码词、数据库表名、文件夹名、文件名、文件扩展名、路径名、虚拟网址、用户输入和 Twitter 用户名显示如下："然后，特定于工作的配置将存储在子目录中的`config.xml`中。"
 - en: 'A block of code is set as follows:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 代码块设置如下：
 - en: '[PRE2]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'When we wish to draw your attention to a particular part of a code block, the
     relevant lines or items are set in bold:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们希望引起您对代码块的特定部分的注意时，相关行或项目将以粗体显示：
 - en: '[PRE3]'
+  id: totrans-63
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Any command-line input or output is written as follows:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 任何命令行输入或输出都将显示如下：
 - en: '[PRE4]'
+  id: totrans-65
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: '**New terms** and **important words** are shown in bold. Words that you see
     on the screen, for example, in menus or dialog boxes, appear in the text like
     this: "Click on **Save**."'
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: '**新术语**和**重要词汇**以粗体显示。 您在屏幕上看到的单词，例如菜单或对话框中的单词，将以此类似的形式显示在文本中：“单击**保存**。”'
 - en: Note
+  id: totrans-67
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Warnings or important notes appear in a box like this.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 警告或重要提示将显示在此框中。
 - en: Tip
+  id: totrans-69
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: Tips and tricks appear like this.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 技巧和窍门会显示如此。
 - en: Reader feedback
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 读者反馈
 - en: Feedback from our readers is always welcome. Let us know what you think about
     this book—what you liked or disliked. Reader feedback is important for us as it
     helps us develop titles that you will really get the most out of.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们的读者反馈始终受欢迎。 请告诉我们您对本书的看法——您喜欢或不喜欢的方面。 读者反馈对我们非常重要，因为它帮助我们开发您真正会受益的标题。
 - en: To send us general feedback, simply e-mail `<[feedback@packtpub.com](mailto:feedback@packtpub.com)>`,
     and mention the book's title in the subject of your message.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 要发送给我们一般反馈，只需发送电子邮件至`<[feedback@packtpub.com](mailto:feedback@packtpub.com)>`，并在您的消息主题中提及书名。
 - en: If there is a topic that you have expertise in and you are interested in either
     writing or contributing to a book, see our author guide at [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您在某个主题上拥有专业知识，并且对编写或为书籍做贡献感兴趣，请参阅我们的作者指南，网址为 [www.packtpub.com/authors](http://www.packtpub.com/authors)。
 - en: Customer support
+  id: totrans-75
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 客户支持
 - en: Now that you are the proud owner of a Packt book, we have a number of things
     to help you to get the most from your purchase.
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在您是 Packt 书籍的自豪拥有者，我们有一些东西可以帮助您充分利用您的购买。
 - en: Downloading the example code
+  id: totrans-77
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 下载示例代码
 - en: You can download the example code files from your account at [http://www.packtpub.com](http://www.packtpub.com)
     for all the Packt Publishing books you have purchased. If you purchased this book
     elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
     and register to have the files e-mailed directly to you.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从 [http://www.packtpub.com](http://www.packtpub.com) 的帐户中下载您购买的所有 Packt Publishing
+    书籍的示例代码文件。 如果您在其他地方购买了此书，您可以访问 [http://www.packtpub.com/support](http://www.packtpub.com/support)
+    并注册以直接通过电子邮件接收文件。
 - en: Errata
+  id: totrans-79
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 勘误
 - en: Although we have taken every care to ensure the accuracy of our content, mistakes
     do happen. If you find a mistake in one of our books—maybe a mistake in the text
     or the code—we would be grateful if you could report this to us. By doing so,
@@ -372,37 +546,57 @@
     the details of your errata. Once your errata are verified, your submission will
     be accepted and the errata will be uploaded to our website or added to any list
     of existing errata under the Errata section of that title.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然我们已经尽了一切努力确保内容的准确性，但错误确实会发生。 如果您在我们的书中发现错误——可能是文本中的错误或代码中的错误——我们将不胜感激您向我们报告。
+    这样做可以帮助其他读者免受挫折，并帮助我们改进本书的后续版本。 如果您发现任何勘误，请访问 [http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata)，选择您的书籍，单击**勘误提交表**链接，并输入您的勘误详情。
+    一旦验证您的勘误，您的提交将被接受，并且勘误将被上传到我们的网站或添加到该标题的错误部分下的任何现有勘误列表中。
 - en: To view the previously submitted errata, go to [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
     and enter the name of the book in the search field. The required information will
     appear under the **Errata** section.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 要查看先前提交的勘误表，请访问 [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
+    并在搜索框中输入书名。所需信息将出现在**勘误表**部分下。
 - en: Piracy
+  id: totrans-82
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 盗版
 - en: Piracy of copyrighted material on the Internet is an ongoing problem across
     all media. At Packt, we take the protection of our copyright and licenses very
     seriously. If you come across any illegal copies of our works in any form on the
     Internet, please provide us with the location address or website name immediately
     so that we can pursue a remedy.
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 盗版互联网上的受版权保护的材料是各种媒体持续面临的问题。在 Packt，我们非常重视对我们的版权和许可的保护。如果你在互联网上发现我们作品的任何形式的非法副本，请立即提供给我们位置地址或网站名称，以便我们采取措施解决。
 - en: Please contact us at `<[copyright@packtpub.com](mailto:copyright@packtpub.com)>`
     with a link to the suspected pirated material.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 请通过 `<[copyright@packtpub.com](mailto:copyright@packtpub.com)>` 联系我们，并附上怀疑盗版材料的链接。
 - en: We appreciate your help in protecting our authors and our ability to bring you
     valuable content.
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们感谢您帮助保护我们的作者和我们为您提供有价值内容的能力。
 - en: Questions
+  id: totrans-86
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 问题
 - en: If you have a problem with any aspect of this book, you can contact us at `<[questions@packtpub.com](mailto:questions@packtpub.com)>`,
     and we will do our best to address the problem.
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你对本书的任何方面有问题，可以通过 `<[questions@packtpub.com](mailto:questions@packtpub.com)>`
+    联系我们，我们将尽力解决问题。

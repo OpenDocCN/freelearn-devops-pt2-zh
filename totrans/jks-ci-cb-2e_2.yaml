@@ -1,116 +1,169 @@
 - en: Chapter 2. Enhancing Security
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第二章. 增强安全性
 - en: 'In this chapter, we will cover the following recipes:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下内容：
 - en: Testing for OWASP's top 10 security issues
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 测试 OWASP 十大安全问题
 - en: Finding 500 errors and XSS attacks in Jenkins through fuzzing
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过模糊测试在 Jenkins 中查找 500 错误和 XSS 攻击
 - en: Improving security via small configuration changes
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过小型配置更改提高安全性
 - en: Avoiding sign-up bots with JCaptcha
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 JCaptcha 防止注册机器人
 - en: Looking at the Jenkins user through Groovy
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 Groovy 查看 Jenkins 用户
 - en: Working with the Audit Trail plugin
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用审计追踪插件
 - en: Installing OpenLDAP
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 OpenLDAP
 - en: Using Script Realm authentication for provisioning
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用脚本领域身份验证进行配置
 - en: Reviewing project-based matrix tactics via a custom group script
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过自定义组脚本查看基于项目的矩阵策略
 - en: Administering OpenLDAP
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 管理 OpenLDAP
 - en: Configuring the LDAP plugin
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置 LDAP 插件
 - en: Installing a CAS server
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 CAS 服务器
 - en: Enabling SSO in Jenkins
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中启用 SSO
 - en: Exploring the OWASP Dependency-Check plugin
+  id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 探索 OWASP Dependency-Check 插件
 - en: Introduction
+  id: totrans-16
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍
 - en: In this chapter, we'll discuss the security of Jenkins, taking into account
     that Jenkins can live in a rich variety of infrastructures. We will also look
     at how to scan for known security issues in the libraries used by Java code that
     Jenkins compiles.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将讨论 Jenkins 的安全性，考虑到 Jenkins 可以存在于多样的基础架构中。我们还将探讨如何扫描 Jenkins 编译时使用的
+    Java 代码库中已知安全问题。
 - en: 'The only perfectly secure system is the system that does not exist. For real
     services, you will need to pay attention to the different surfaces open to attack.
     Jenkins'' primary surfaces are its web-based graphical user interface and its
     trust relationships with its slave nodes and the native OS. Online services need
     vigorous attention to their security surface. For Jenkins, there are three main
     reasons why:'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 唯一完全安全的系统是不存在的系统。对于真实服务，你需要注意不同面向攻击的表面。Jenkins 的主要表面是其基于 Web 的图形用户界面及其与从节点和本机操作系统的信任关系。在线服务需要严密关注其安全表面。对于
+    Jenkins，主要有三个原因：
 - en: Jenkins has the ability to communicate to a wide range of infrastructure through
     either its plugins or the master-slave topology
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 有能力通过其插件或主从拓扑结构与各种基础架构通信
 - en: The rate of code change around the plugins is high and open to accidental inclusion
     of security-related defects
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 插件周围的代码更改速度很快，可能意外包含与安全相关的缺陷
 - en: You need to harden the default install that is open to the world
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 你需要加固默认安装，使其对外开放
 - en: A counter-balance is that developers using the Jenkins frameworks apply well-proven
     technologies such as XStream ([http://xstream.codehaus.org/](http://xstream.codehaus.org/))
     for configuration persistence and Jelly ([http://commons.apache.org/jelly/](http://commons.apache.org/jelly/))
     for rendering the GUI. This use of well-known frameworks minimizes the number
     of lines of supporting code and the code that is used is well tested, limiting
     the scope of vulnerabilities.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个平衡因素是，使用 Jenkins 框架的开发人员应用经过验证的技术，例如 XStream（[http://xstream.codehaus.org/](http://xstream.codehaus.org/)）用于配置持久性，Jelly（[http://commons.apache.org/jelly/](http://commons.apache.org/jelly/)）用于呈现
+    GUI。这种使用知名框架最小化了支持代码数量，而使用的代码经过了充分测试，限制了漏洞范围。
 - en: Another positive is that Jenkins code is freely available for review and the
     core community keeps a vigil eye. It is unlikely that anyone contributing code
     would deliberately add defects or unexpected license headers. However, you should
     trust but verify.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个积极的方面是 Jenkins 代码是免费供审查的，核心社区保持警惕。贡献代码的任何人不太可能故意添加缺陷或意外的许可证标头。然而，你应该信任但要核实。
 - en: The first half of the chapter is devoted to the Jenkins environment. In the
     second half, you will see how Jenkins fits into the wider infrastructure.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章前半部分致力于 Jenkins 环境。在后半部分，你将看到 Jenkins 如何融入更广泛的基础架构。
 - en: '**Lightweight Directory Access** (**LDAP**) is widely available and the de
     facto standard for Enterprise directory services. We will use LDAP for Jenkins
     authentication and authorization and later **single sign-on** (**SSO**) by JASIG''s
@@ -122,60 +175,82 @@
     such as LDAP, databases, text files, and an increasing number of other methods.
     This allows Jenkins indirectly to use many logon protocols on top of the ones
     its plugins already provide.'
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: '**轻量级目录访问**（**LDAP**）广泛可用，并且是企业目录服务的事实标准。我们将使用LDAP进行Jenkins的身份验证和授权，然后使用JASIG的**中央认证服务**（**CAS**）进行**单点登录**（**SSO**）。了解更多，请访问[http://www.jasig.org/cas](http://www.jasig.org/cas)。CAS允许您登录一次，然后转到其他服务而无需重新登录。当您希望从Jenkins链接到其他受密码保护的服务（例如组织的内部wiki或代码浏览器）时，这非常有用。同样重要的是，CAS可以在幕后连接到多种类型的身份验证提供者，例如LDAP、数据库、文本文件以及越来越多的其他方法。这使得Jenkins间接地可以使用许多登录协议，这些协议已经由其插件提供。'
 - en: Tip
+  id: totrans-26
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Security Advisories**'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: '**安全公告**'
 - en: There is an e-mail list and RSS feed for Jenkins-related security advisories.
     You can find the link to the advisory feed's at [https://wiki.jenkins-ci.org/display/JENKINS/Security+Advisories](https://wiki.jenkins-ci.org/display/JENKINS/Security+Advisories).
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins相关安全公告有电子邮件列表和RSS源。您可以在[https://wiki.jenkins-ci.org/display/JENKINS/Security+Advisories](https://wiki.jenkins-ci.org/display/JENKINS/Security+Advisories)找到公告源的链接。
 - en: Testing for OWASP's top 10 security issues
+  id: totrans-29
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 测试OWASP的十大安全问题
 - en: 'This recipe details the automatic testing of Jenkins for well-known security
     issues with w3af, a penetration testing tool from the **Open Web Application Security
     Project** (**OWASP**). For more information, visit [http://w3af.sourceforge.net](http://w3af.sourceforge.net).
     OWASP''s purpose is to make application security visible. The OWASP''s top 10
     lists of insecurities for 2010 include the following:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 本文介绍了使用OWASP的渗透测试工具w3af对Jenkins进行已知安全问题的自动测试。有关更多信息，请访问[http://w3af.sourceforge.net](http://w3af.sourceforge.net)。OWASP的目的是使应用程序安全可见。2010年OWASP的十大不安全性列表包括以下内容：
 - en: '**A2-Cross-site Scripting (XSS)**: An XSS attack can occur when an application
     returns an unescaped input to a client''s browser. The Jenkins administrator can
     do this by default through the job description.'
+  id: totrans-31
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**A2-跨站脚本（XSS）**：当应用程序将未经转义的输入返回给客户端的浏览器时，可能会发生XSS攻击。Jenkins管理员可以通过作业描述默认执行此操作。'
 - en: '**A6-Security Misconfiguration**: A Jenkins plugin gives you the power to write
     custom authentication scripts. It is easy to get the scripts wrong by misconfiguration.'
+  id: totrans-32
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**A6-安全配置错误**：Jenkins插件赋予您编写自定义身份验证脚本的能力。通过错误的配置很容易出错。'
 - en: '**A7-Insecure Cryptographic Storage**: There are over 600 plugins for Jenkins,
     each storing its configuration in separate XML files. It is quite possible that
     there is a rare mistake with the storage of passwords in plain text. You will
     need to double-check.'
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**A7-不安全的加密存储**：Jenkins有600多个插件，每个插件都将其配置存储在单独的XML文件中。密码以明文形式存储可能会有罕见的错误。您需要仔细检查。'
 - en: '**A9-Insufficient Transport Layer Protection**: Jenkins runs over HTTP by default.
     It can be a hassle and involve extra costs to obtain a trusted certificate. You
     might be tempted not to implement TLS, leaving your packets open.'
+  id: totrans-34
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**A9-传输层保护不足**：Jenkins默认运行在HTTP上。获取受信任的证书可能会很麻烦并涉及额外的成本。您可能会心生诱惑，不实施TLS，从而使您的数据包处于开放状态。'
 - en: You will find the OWASP's top 10 lists of insecurities for 2013 has some changes
     compared with the 2010 version. The most significant change is the inclusion of
     A9-Using Known Vulnerable Components. If your software depends on older libraries,
     then there is a window of opportunity for manipulation of known weaknesses.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 您会发现2013年的OWASP十大不安全性与2010年版本相比有些变化。最显著的变化是包含了A9-使用已知弱点组件。如果您的软件依赖于旧库，那么就有机会利用已知弱点进行操纵。
 - en: Jenkins has a large set of plugins written by a motivated, diffuse, and hardworking
     community. It is possible due to the large churn of code that security defects
     are inadvertently added. Examples include leaving passwords in plain text in configuration
@@ -186,239 +261,354 @@
     on the Internet ([http://ha.ckers.org/xss.html](http://ha.ckers.org/xss.html)).
     The effort is tedious; automated tests can cover more ground and be scheduled
     as part of a Jenkins job.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 拥有一个由积极、分散和勤奋的社区编写的大量插件。由于代码的大量更改，可能会无意中添加安全缺陷。例如，在配置文件中明文留下密码，或者使用不移除可疑
+    JavaScript 的不安全渲染。你可以通过手动审查配置文件来找到第一类缺陷。第二类缺陷对更广泛的受众可见，因此更容易被破解。你可以手动攻击新的插件。互联网上有很多有用的备忘单（[http://ha.ckers.org/xss.html](http://ha.ckers.org/xss.html)）。这种工作很乏味；自动化测试可以覆盖更多内容，并作为
+    Jenkins 作业的一部分定期安排。
 - en: In the recipe named *Exploring the OWASP Dependency-Check plugin*, you will
     configure Jenkins to give you warning of known attack vectors, based on automatically
     reviewing your code dependencies.
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 在名为*探索 OWASP Dependency-Check 插件*的配方中，你将配置 Jenkins，让它基于自动审查你的代码依赖关系来警告你已知的攻击向量。
 - en: Tip
+  id: totrans-38
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**OWASP storefront**'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: '**OWASP 商店**'
 - en: 'OWASP publish each year a list of the top 10 most common security attack vectors
     for web applications. They publish this document and a wide range of books through
     [http://lulu.com](http://lulu.com). At Lulu, you have free access to PDF versions
     of OWASP''s documents, or you can buy cheap-on-demand printed versions. You can
     find the official storefront at: [http://stores.lulu.com/owasp](http://stores.lulu.com/owasp).'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP 每年发布一份关于 Web 应用程序十大最常见安全攻击向量的列表。他们通过 [http://lulu.com](http://lulu.com)
+    发布此文档和各种书籍。在 Lulu，你可以免费获取 OWASP 文档的 PDF 版本，或者购买廉价的按需打印版本。你可以在官方商店找到它：[http://stores.lulu.com/owasp](http://stores.lulu.com/owasp)。
 - en: Getting ready
+  id: totrans-41
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: 'Penetration tests have the potential to damage the running application. Make
     sure that you have a backed-up copy of your Jenkins workspace. You might have
     to reinstall. Also turn off any enabled security within Jenkins: this allows w3af
     to freely roam the security surface.'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 渗透测试有可能损坏正在运行的应用程序。确保你备份了 Jenkins 工作空间的副本。你可能需要重新安装。同时关闭 Jenkins 中的任何已启用安全性：这样可以让
+    w3af 自由地漫游安全表面。
 - en: Download the newest version of w3af from SourceForge ([http://w3af.org/download/](http://w3af.org/download/))
     and also download and read the OWASP's top 10 list of well-known attacks from
     [https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project).
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 SourceForge 下载 w3af 的最新版本（[http://w3af.org/download/](http://w3af.org/download/)），并且也下载并阅读
+    OWASP 的十大已知攻击列表（[https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project)）。
 - en: w3af has both Windows and *NIX installation packages; use the OS install of
     your choice. However, the Windows installer is no longer supported and the installation
     process without the installer is complex. Therefore, it's better to use a *NIX
     version of the tool.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: w3af 同时具有 Windows 和 *NIX 安装包；使用您选择的操作系统安装。但是，Windows 安装程序不再受支持，没有安装程序的安装过程很复杂。因此，最好使用工具的
+    *NIX 版本。
 - en: Note
+  id: totrans-45
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The Debian package for w3af is older and more unstable than the SourceForge
     package for Linux. Therefore, do not use the `apt-get` and `yum` methods of installation,
     but rather use the downloaded package from SourceForge.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: w3af 的 Debian 包比 Linux 的 SourceForge 包老旧且不稳定。因此，不要使用 `apt-get` 和 `yum` 安装方法，而是使用从
+    SourceForge 下载的包。
 - en: How to do it...
+  id: totrans-47
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'To install w3af, follow the instructions given on the developer site ([http://w3af.org/download/](http://w3af.org/download/)).
     If there are any unsolvable dependency issues for Ubuntu, fall back to the `apt-get`
     installation approach and install an older version of the tool as follows:'
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要安装 w3af，请按照开发者网站上给出的说明进行操作（[http://w3af.org/download/](http://w3af.org/download/)）。如果
+    Ubuntu 存在任何无法解决的依赖问题，请退回到 `apt-get` 安装方法，并安装工具的旧版本，方法如下：
 - en: '[PRE0]'
+  id: totrans-49
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Run w3af.
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 w3af。
 - en: Under the **Profiles** tab, select **OWASP_TOP10**.
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**配置文件**选项卡下，选择**OWASP_TOP10**。
 - en: Under the **Target** address window, fill in `http://localhost:8080/`, changing
     the hostname to suit your environment.
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**目标**地址窗口下，填写 `http://localhost:8080/`，将主机名更改为适合您的环境。
 - en: Click on the **Start** button. The penetration tests will now take place and
     the **Start** button will change to **Stop**. At the end of the scan, the **Stop**
     button will change to **Clear**:![How to do it...](img/0082OS_02_01.jpg)
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **Start** 按钮。现在将进行渗透测试，而 **Start** 按钮将更改为 **Stop**。在扫描结束时，**Stop** 按钮将更改为
+    **Clear**：![操作方法...](img/0082OS_02_01.jpg)
 - en: View the attack history by selecting the **Log** tab.
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过选择 **Log** 标签查看攻击历史记录。
 - en: Review the results by clicking on the **Results** tab.
+  id: totrans-55
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过单击 **Results** 标签查看结果。
 - en: After the first scan, select **full_audit** under **Profiles**.
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在第一次扫描后，在 **Profiles** 下选择 **full_audit**。
 - en: Click on the **Clear** button.
+  id: totrans-57
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **Clear** 按钮。
 - en: Type `http://localhost:8080/` in the **Target** address window.
+  id: totrans-58
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Target** 地址窗口中键入 `http://localhost:8080/`。
 - en: Click on the **Start** button.
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **Start** 按
 - en: Wait until the scan has finished and review the **Results** tab.
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 等待扫描完成并查看 **Results** 标签。
 - en: How it works...
+  id: totrans-61
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: w3af is written by security professionals. It is a pluggable framework with
     extensions written for different types of attacks. The profiles define which plugins
     and their associated configuration you are going to use in the penetration test.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: w3af 由安全专业人员编写。它是一个可插拔的框架，具有为不同类型的攻击编写的扩展。配置文件定义了您将在渗透测试中使用的插件及其关联的配置。
 - en: You first attack using the **OWASP_TOP10** profile and then attack again with
     a fuller set of plugins.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 您首先使用 **OWASP_TOP10** 配置文件进行攻击，然后再次使用更全面的插件进行攻击。
 - en: The results will vary according to your setup. Depending on the plugin, security
     issues are occasionally flagged that do not exist. You will need to verify by
     hand any issues mentioned.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 结果会根据您的设置而变化。根据插件，偶尔会标记出不存在的安全问题。您需要手动验证所提到的任何问题。
 - en: At the time of writing, no significant defects were found using this approach.
     However, the tool pointed out slow links and generated server-side exceptions.
     This is the sort of information you would like to note in bug reports.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 在写作时，使用这种方法未发现重大缺陷。然而，该工具指出了缓慢的链接并生成了服务器端异常。这是你想在错误报告中记录的信息类型。
 - en: There's more...
+  id: totrans-66
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Consistently securing your applications requires experienced attention to detail.
     Here are a few more things for you to review.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 一致地保护您的应用程序需要经验丰富的细节关注。以下是您需要审查的更多内容。
 - en: Target practice with Webgoat
+  id: totrans-68
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 使用 Webgoat 进行目标练习
 - en: The top 10 list of security defects can at times seem difficult to understand.
     If you have some spare time and like to practice against a deliberately insecure
     application, you should try Webgoat ([https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project](https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project)).
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 安全缺陷的前十名列表有时会难以理解。如果你有一些空闲时间，喜欢针对一个故意不安全的应用程序进行实践，那么你应该尝试一下 Webgoat ([https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project](https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project))。
 - en: Webgoat is well documented with a hints system and links to video tutorials;
     it leaves little room for misunderstanding the attacks.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: Webgoat 配有提示系统和链接到视频教程的文档良好；它几乎没有误解攻击的余地。
 - en: More tools of the trade
+  id: totrans-71
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 更多工具
 - en: 'w3af is a powerful tool, but works better in conjunction with the following
     tools:'
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: w3af 是一个强大的工具，但与以下工具一起使用效果更好：
 - en: '**Nmap** ([http://nmap.org/](http://nmap.org/)): A simple to use, highly popular,
     award-winning network scanner.'
+  id: totrans-73
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Nmap** ([http://nmap.org/](http://nmap.org/))：一个易于使用、非常流行、屡获殊荣的网络扫描器。'
 - en: '**Nikto** ([http://cirt.net/nikto2](http://cirt.net/nikto2)): A Perl script
     that quickly summarizes system details and looks for the most obvious of defects.'
+  id: totrans-74
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Nikto** ([http://cirt.net/nikto2](http://cirt.net/nikto2))：一个 Perl 脚本，快速总结系统详细信息并查找最明显的缺陷。'
 - en: '**Skipfish** ([https://code.google.com/p/skipfish/downloads/list](https://code.google.com/p/skipfish/downloads/list)):
     A C program that bashes away with many requests over a prolonged period. You can
     choose from different dictionaries of attacks. This is an excellent poor man''s
     stress test; if your system stays up; you know that it has reached a minimal level
     of stability.'
+  id: totrans-75
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Skipfish** ([https://code.google.com/p/skipfish/downloads/list](https://code.google.com/p/skipfish/downloads/list))：一个利用大量请求长时间运行的
+    C 程序。您可以从不同的攻击字典中进行选择。这是一个极好的穷人压力测试；如果您的系统保持稳定，那么您就知道它已经达到了最低的稳定水平。'
 - en: '**Wapiti** ([http://wapiti.sourceforge.net/](http://wapiti.sourceforge.net/)):
     A Python-based script that discovers attackable URLs and then cycles through a
     list of evil parameters.'
+  id: totrans-76
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Wapiti** ([http://wapiti.sourceforge.net/](http://wapiti.sourceforge.net/))：一个基于
+    Python 的脚本，发现可攻击的 URL，然后循环遍历一个邪恶参数列表。'
 - en: Jenkins is flexible, so you can call a wide range of tools through scripts running
     in jobs, including the security tools mentioned.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 是灵活的，因此可以通过运行作业中的脚本调用各种工具，包括提到的安全工具。
 - en: Note
+  id: totrans-78
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: There are a number of great resources for securing native OSes including the
     Debian security how-to ([https://www.debian.org/doc/manuals/securing-debian-howto/](https://www.debian.org/doc/manuals/securing-debian-howto/));
     for Windows, articles found underneath the MSDN security center ([http://msdn.microsoft.com/en-us/security/](http://msdn.microsoft.com/en-us/security/));
     and for the Mac, Apple's official security guides ([https://www.apple.com/support/security/guides/](https://www.apple.com/support/security/guides/)).
     Online services need vigorous attention to their security surface.
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 有许多优秀的资源可用于保护本地操作系统，包括 Debian 安全指南（[https://www.debian.org/doc/manuals/securing-debian-howto/](https://www.debian.org/doc/manuals/securing-debian-howto/)）；对于
+    Windows，可以在 MSDN 安全中心下找到相关文章（[http://msdn.microsoft.com/en-us/security/](http://msdn.microsoft.com/en-us/security/)）；对于
+    Mac，可以参考苹果官方的安全指南（[https://www.apple.com/support/security/guides/](https://www.apple.com/support/security/guides/)）。在线服务需要高度关注其安全性。
 - en: See also
+  id: totrans-80
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe
+  id: totrans-81
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过模糊查找 Jenkins 中的 500 错误和 XSS 攻击* 配方'
 - en: The *Improving security via small configuration changes* recipe
+  id: totrans-82
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过小配置更改提高安全性* 配方'
 - en: The *Exploring the OWASP Dependency-Check plugin* recipe
+  id: totrans-83
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*探索 OWASP 依赖检查插件* 配方'
 - en: Finding 500 errors and XSS attacks in Jenkins through fuzzing
+  id: totrans-84
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过模糊查找 Jenkins 中的 500 错误和 XSS 攻击
 - en: This recipe describes using a fuzzer to find server-side errors and XSS attacks
     in your Jenkins servers.
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 该配方描述了如何使用模糊器在您的 Jenkins 服务器中查找服务器端错误和 XSS 攻击。
 - en: A fuzzer goes through a series of URLs, appends different parameters blindly,
     and checks the server's response. The inputted parameters are variations on scripting
     commands such as `<script>alert("random string");</script>`. An attack vector
     is found if the server's response includes the unescaped version of the script.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 模糊器会遍历一系列网址，盲目地附加不同的参数，并检查服务器的响应。输入的参数是关于脚本命令的变化，例如 `<script>alert("random string");</script>`。如果服务器的响应包含脚本的未转义版本，那么就发现了一种攻击向量。
 - en: Cross-site scripting attacks are currently one of the more popular forms of
     attack ([http://en.wikipedia.org/wiki/Cross-site_scripting](http://en.wikipedia.org/wiki/Cross-site_scripting)).
     The attack involves injecting script fragments into the client's browser so that
@@ -426,15 +616,20 @@
     logged in to an application, it is probable that your session ID is stored in
     a cookie. The injected script might read the value in the cookie and then send
     the information to another server ready for an attempt at reuse.
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 跨站脚本攻击目前是较流行的一种攻击形式（[http://en.wikipedia.org/wiki/Cross-site_scripting](http://en.wikipedia.org/wiki/Cross-site_scripting)）。该攻击涉及将脚本片段注入客户端浏览器，以便脚本以来自受信任网站的方式运行。例如，一旦您已登录应用程序，您的会话
+    ID 可能存储在 cookie 中。注入的脚本可能会读取 cookie 中的值，然后将信息发送到另一台服务器，以备重用尝试。
 - en: A fuzzer discovers the links on the site it is attacking and the form variables
     that exist within the site's web pages. For the web pages discovered, it repeatedly
     sends input based on historic attacks and lots of minor variations. If responses
     are returned with the same random strings sent, the fuzzer knows it has found
     an **evil URL**.
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个模糊器会发现攻击目标站点上的链接以及站点网页中存在的表单变量。对于发现的网页，它会基于历史攻击和大量微小变化重复发送输入。如果返回的响应与发送的相同的随机字符串，模糊器就知道它发现了一个**恶意网址**。
 - en: To fully integrate with the build process of a web-based application, you will
     need to build the application, deploy and run the application, run the fuzzer
     from a script, and finally use log parsing to fail the build if evil URLs are
@@ -442,266 +637,386 @@
     you wish to integrate. For more information about log parsing, refer to *Deliberately
     failing builds through log parsing* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
     Jenkins"), *Maintaining Jenkins*.
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 要完全与基于 Web 的应用程序的构建流程集成，您需要构建应用程序、部署和运行应用程序、从脚本运行模糊器，并最终使用日志解析来在输出中提到恶意网址时失败构建。对于您希望集成的其他命令行工具，该流程将类似。有关日志解析的更多信息，请参阅[第
+    1 章](ch01.html "Chapter 1. Maintaining Jenkins") 中的 *通过日志解析故意失败构建* 配方，*Maintaining
+    Jenkins*。
 - en: Getting ready
+  id: totrans-90
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Backup your sacrificial Jenkins server and turn off its security. Expect the
     application to be unstable by the end of the attack.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 备份你的牺牲 Jenkins 服务器并关闭其安全性。预计攻击结束时应用程序将不稳定。
 - en: You will need the Python programming language installed on your computer. To
     download and install Wapiti, you will need to follow the instructions found at
     [http://wapiti.sourceforge.net](http://wapiti.sourceforge.net).
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 你需要在你的计算机上安装 Python 编程语言。要下载和安装 Wapiti，你需要按照 [http://wapiti.sourceforge.net](http://wapiti.sourceforge.net)
+    上的说明进行操作。
 - en: Note
+  id: totrans-93
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If you're attacking your local machine from your local machine, then you can
     afford to turn off its networking. The attack will stay in the Loopback network
     driver and no packets should escape to the Internet.
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你从本地机器攻击本地机器，那么你可以关闭其网络。攻击将留在环回网络驱动程序中，不会有数据包逃逸到互联网。
 - en: In this recipe, the methodology and command-line options are correct. However,
     at the time of reading, the results mentioned may not exist. Jenkins goes through
     a rapid lifecycle where developers remove bugs rapidly.
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个教程中，方法和命令行选项都是正确的。但是，在阅读时，提到的结果可能不存在。Jenkins 经历了快速的生命周期，开发人员迅速清除错误。
 - en: How to do it...
+  id: totrans-96
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Within the `wapiti` bin directory, run the following command:'
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `wapiti` bin 目录中运行以下命令：
 - en: '[PRE1]'
+  id: totrans-98
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'When the command has finished running, you will see the location of the final
     report on the console output:'
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 当命令运行完成时，你将在控制台输出中看到最终报告的位置：
 - en: '[PRE2]'
+  id: totrans-100
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: Open the report in a web browser and review:![How to do it...](img/0082OS_02_12.jpg)
+  id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在网页浏览器中打开报告并进行审阅：![如何操作...](img/0082OS_02_12.jpg)
 - en: Click on the **Internal Server Error** link.
+  id: totrans-102
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**内部服务器错误**链接。
 - en: For one of the items named **Anomaly found in /iconSize**, copy the URL from
     the **cURL command line** tab:![How to do it...](img/0082OS_02_13.jpg)
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于其中一个名为**在 /iconSize 中发现的异常**的项目，从**cURL 命令行**选项卡中复制 URL：![如何操作...](img/0082OS_02_13.jpg)
 - en: Open the URL in a web browser. You will now see a newly generated Jenkins bug
     report page, as shown in the following screenshot:![How to do it...](img/0082OS_02_14.jpg)
+  id: totrans-104
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在网页浏览器中打开 URL。现在你会看到一个新生成的 Jenkins 错误报告页面，如下图所示：![如何操作...](img/0082OS_02_14.jpg)
 - en: 'Run the following command:'
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行以下命令：
 - en: '[PRE3]'
+  id: totrans-106
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'View the output to verify that the `permanentxss` module was run:'
+  id: totrans-107
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看输出以验证 `permanentxss` 模块是否已运行：
 - en: '[PRE4]'
+  id: totrans-108
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: How it works...
+  id: totrans-109
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Wapiti loads in different modules. By default, all modules are used. You will
     have to be selective; for Version 2.2.1 on Ubuntu Linux, this causes Wapiti to
     crash or timeout.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: Wapiti 载入不同的模块。默认情况下，会使用所有模块。你需要进行选择；对于 Ubuntu Linux 的 Version 2.2.1，这会导致 Wapiti
+    崩溃或超时。
 - en: To load in specific modules, use the `-m` option.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 要加载特定模块，请使用 `-m` 选项。
 - en: The `-m "-all,xss,exec"` statement tells Wapiti to ignore all modules except
     the `xss` and `exec` modules.
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: '`-m "-all,xss,exec"` 语句告诉 Wapiti 忽略所有模块，除了 `xss` 和 `exec` 模块。'
 - en: The `exec` module is very good at finding 500 errors in Jenkins. This is mostly
     due to unexpected input that Jenkins does not handle well. This is purely a cosmetic
     set of issues. However, if you start to see errors associated with resources such
     as files or database services, then you should give the issues higher priority
     and send in bug reports.
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: '`exec` 模块非常擅长在 Jenkins 中找到 500 错误。这主要是由于 Jenkins 无法很好地处理意外输入。这纯粹是一组外观问题。但是，如果开始出现与文件或数据库服务等资源相关的错误，则应提高问题的优先级并发送错误报告。'
 - en: The `-x` option specifies which URLs to ignore. In this case, we don't want
     to cause work for the plugin manager. If we do, it will then generate a lot of
     requests to an innocent external service.
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: '`-x` 选项指定要忽略的 URL。在这种情况下，我们不想给插件管理器带来麻烦。如果这样做，它将向一个无辜的外部服务生成大量请求。'
 - en: Wapiti crawls websites. If you are not careful, the tool might follow a link
     to locations that you do not want testing. To avoid embarrassment, carefully use
     the exclude URL's option `-x`.
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: Wapiti 爬取网站。如果你不小心，工具可能会跟踪到你不想测试的位置。为了避免尴尬，请小心使用排除 URL 的选项 `-x`。
 - en: The `-v2` option sets the verbosity of logging up to its highest so that you
     can see all the attacks.
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: '`-v2` 选项设置日志的详细程度最高，这样你就可以看到所有攻击。'
 - en: In the second run of Wapiti, you also used the `permanentxss` module, which
     at times finds bonafide XSS attacks, depending on the race between developers
     building features and cleaning bugs.
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Wapiti 的第二次运行中，你还使用了 `permanentxss` 模块，有时会发现真正的 XSS 攻击，这取决于开发人员构建功能和清理错误之间的竞争。
 - en: Note
+  id: totrans-118
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: '**Poor man''s quality assurance**'
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: '**穷人版的质量保证**'
 - en: Fuzzers are good at covering a large portion of an application's URL space,
     triggering errors that would be costly in time to search out. Consider automating
     through a Jenkins job as part of a project's QA process.
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 模糊测试器擅长覆盖应用程序的大部分URL空间，触发可能会耗费大量时间来查找的错误。考虑在项目的QA过程中通过Jenkins作业进行自动化。
 - en: There's more...
+  id: totrans-121
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The reports you generated in this recipe mention many more server errors than
     XSS attacks. This is because many of the errors generated are due to unexpected
     input causing failures that are only caught by the final layer of error handling,
     in this case the bug report page. If you consider the error worth reporting, then
     follow the instructions found on the bug report page.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 您在此方法中生成的报告提到的服务器错误比XSS攻击要多得多。这是因为许多生成的错误是由于意外的输入导致失败，这些失败只被最后一层错误处理捕获，本例中为错误报告页面。如果您认为错误值得报告，请按照bug报告页面上的说明操作。
 - en: 'Here are some guidelines for the meaning behind the output of the stack traces:'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有一些关于堆栈跟踪输出背后含义的指南：
 - en: '`java.lang.SecurityException`: If a Jenkins user is doing something that the
     programmer considers insecure, such as hitting a URL, this should only be reachable
     once you have logged in.'
+  id: totrans-124
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`java.lang.SecurityException`：如果Jenkins用户正在进行程序员认为不安全的操作，比如访问URL，则只有在您登录后才能到达此处。'
 - en: '`java.lang.IllegalArgumentException`: Jenkins checked for a valid range for
     your parameter and the parameter value was outside that range. This is a deliberately
     thrown exception.'
+  id: totrans-125
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`java.lang.IllegalArgumentException`：Jenkins检查了参数的有效范围，参数值超出了该范围。这是故意抛出的异常。'
 - en: '`java.lang.NumberFormatException`: Jenkins did not check for a valid string
     and then tried to parse a nonconformant string to a number.'
+  id: totrans-126
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`java.lang.NumberFormatException`：Jenkins没有检查有效的字符串，然后尝试将一个不符合规范的字符串解析为数字。'
 - en: '`java.lang.NullPointerException`: This normally happens when you hit a URL
     without all the parameters set that Jenkins expects. In programmer''s language:
     the code was expecting an object that does not exist and then tries to call a
     method of the nonexistent object without checking that the object exists. The
     programmer needs to add more error-checking. Write a bug report.'
+  id: totrans-127
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`java.lang.NullPointerException`：通常发生在您访问一个没有设置所有参数的URL时，Jenkins期望的参数值不存在。在程序员的语言中：代码期望存在一个不存在的对象，然后尝试调用不存在对象的方法，而不检查对象是否存在。程序员需要添加更多的错误检查。编写一个错误报告。'
 - en: See also
+  id: totrans-128
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Testing for OWASP's top 10 security issues* recipe
+  id: totrans-129
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 测试OWASP前10大安全问题的方法
 - en: The *Improving security via small configuration changes* recipe
+  id: totrans-130
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过小的配置更改提高安全性的方法
 - en: Improving security via small configuration changes
+  id: totrans-131
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过小的配置更改提高安全性
 - en: This recipe describes modest configuration changes that strengthen the default
     security settings of Jenkins. The reconfiguration includes masking passwords in
     console output and adding a one-time random number, which makes it more difficult
     for form input to be forged. The combination of tweaks strengthens the security
     of Jenkins considerably.
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: 此方法描述了修改后的配置，以加强Jenkins的默认安全设置。重新配置包括在控制台输出中掩码密码和添加一次性随机数，这使得很难伪造表单输入。这些调整的组合极大地加强了Jenkins的安全性。
 - en: Getting ready
+  id: totrans-133
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: You will need to install the Mask Passwords plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Mask+Passwords+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Mask+Passwords+Plugin)).
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 您将需要安装Mask Passwords插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Mask+Passwords+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Mask+Passwords+Plugin))。
 - en: How to do it...
+  id: totrans-135
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Create a job.
+  id: totrans-136
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个作业。
 - en: Click on the **Mask passwords** checkbox and add a variable.
+  id: totrans-137
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**掩码密码**复选框并添加一个变量。
 - en: Type `MyPassword` in the **Name** field and `changeme` in the **Password** field,
     as shown in the following screenshot:![How to do it...](img/0082OS_02_05.jpg)
+  id: totrans-138
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**名称**字段中键入`MyPassword`，在**密码**字段中键入`changeme`，如下面的屏幕截图所示：![操作步骤...](img/0082OS_02_05.jpg)
 - en: Type in `echo This is MyPassword $MyPassword` in **Execute shell**.
+  id: totrans-139
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**执行 shell**中键入`echo This is MyPassword $MyPassword`。
 - en: Run the job.
+  id: totrans-140
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。
 - en: Review **Console Output**:![How to do it...](img/0082OS_02_06.jpg)
+  id: totrans-141
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看**控制台输出**：![操作步骤...](img/0082OS_02_06.jpg)
 - en: Return to the **Configure Global Security** page and click on **Prevent Cross
     Site Request Forgery exploits**, making sure the **Default Crumb Issuer** option
     is selected:![How to do it...](img/0082OS_02_07.jpg)
+  id: totrans-142
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 返回**配置全局安全性**页面，单击**防止跨站点请求伪造攻击**，确保选择了**默认 Crumb 发行者**选项：![操作步骤...](img/0082OS_02_07.jpg)
 - en: How it works...
+  id: totrans-143
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The Mask Passwords plugin removes the password from the screen or the console,
     replacing it with **x**, thus avoiding accidental reading. You should also always
     keep this plugin turned on, unless you find undocumented side effects or need
     to debug a job.
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: 屏蔽密码插件将密码从屏幕或控制台中删除，并用 **x** 替换，从而避免意外阅读。 除非你发现未记录的副作用或需要调试一个任务，否则你应该始终保持该插件打开状态。
 - en: Note
+  id: totrans-145
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You can globally set parameters to mask within the **Configure System** under
     the **Mask passwords – Parameters to automatically mask** section.
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在 **配置系统** 的 **自动屏蔽密码参数** 部分全局设置参数。
 - en: Cross-site request forgery ([http://en.wikipedia.org/wiki/Cross-site_request_forgery](http://en.wikipedia.org/wiki/Cross-site_request_forgery))
     occurs, for example, if you accidentally visit a third party's location; a script
     at that location tries to make your browser perform an action (such as deleting
@@ -711,508 +1026,742 @@
     called a **nonce**, which is returned as part of the request. The number is not
     easily known and is also invalidated after a short period of time, limiting the
     risk of replay attacks.
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 跨站请求伪造（[http://en.wikipedia.org/wiki/Cross-site_request_forgery](http://en.wikipedia.org/wiki/Cross-site_request_forgery)）的例子，例如，如果你意外地访问了第三方位置；该位置上的脚本尝试使你的浏览器执行一个动作（如删除一个任务），方法是让你的网页浏览器访问
+    Jenkins 中已知的 URL。 Jenkins 会认为浏览器是在执行你的命令，然后遵循该请求。 一旦开启了 nonce 特性，Jenkins 通过生成一个称为**nonce**的随机一次性数字来避免
+    CSRF，在请求的一部分返回。 这个数字不容易被知晓，并且在短时间内失效，限制了重放攻击的风险。
 - en: There's more...
+  id: totrans-148
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Jenkins is a pleasure to use. This is because Jenkins makes it easy to get the
     work done and can talk through plugins with a multitude of infrastructure. This
     implies, that in many organizations, the number of administrators increases rapidly
     as the service organically grows. Think about turning on HTML escaping early before
     the group of administrators gets used to the flexibility of being able to add
     arbitrary tags.
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 使用起来非常愉快。 这是因为 Jenkins 使得完成工作变得容易，并且可以通过插件与多种基础架构进行通信。 这意味着，在许多组织中，随着服务的有机增长，管理员的数量迅速增加。
+    在管理员团队习惯于能够添加任意标记的灵活性之前，考虑及早开启 HTML 转义。
 - en: Consider occasionally replaying the *Finding 500 errors and XSS attacks in Jenkins
     through fuzzing* recipe to verify the removal of this source of potential XSS
     attacks.
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 考虑偶尔重播 *通过模糊测试查找 Jenkins 中的 500 错误和 XSS 攻击* 的方法，以验证消除此潜在 XSS 攻击源。
 - en: See also
+  id: totrans-151
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 请参阅
 - en: The *Testing for OWASP's top 10 security issues* recipe
+  id: totrans-152
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*测试 OWASP 前十大安全问题* 的方法'
 - en: The *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe
+  id: totrans-153
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过模糊测试查找 Jenkins 中的 500 错误和 XSS 攻击* 的方法'
 - en: Avoiding sign-up bots with JCaptcha
+  id: totrans-154
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 JCaptcha 避免注册机器人
 - en: '**CAPTCHA** stands for **Completely Automated Public Turing Test to tell Computers
     and Humans Apart**. The most commonly viewed CAPTCHAs are sequential letters and
     numbers displayed as graphics that you have to correctly feed into a text input.'
+  id: totrans-155
   prefs: []
   type: TYPE_NORMAL
+  zh: '**CAPTCHA** 代表 **Completely Automated Public Turing Test to tell Computers
+    and Humans Apart**。 最常见的 CAPTCHA 是显示为图形的连续字母和数字，你必须正确输入到文本输入框中。'
 - en: If you let anyone sign up for an account on your Jenkins server, then the last
     thing you want are bots (automated scripts) creating accounts and then using them
     for less-than-polite purposes. Bots have an economy of scale, being able to scan
     the Internet rapidly and never getting bored. CAPTCHAs are a necessary defense
     against these dumb attacks.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你允许任何人在你的 Jenkins 服务器上注册账号，那么你最不想要的就是机器人（自动化脚本）创建账号，然后将其用于不礼貌的用途。 机器人具有规模经济效应，能够快速扫描互联网而且永远不会感到无聊。
+    CAPTCHA 是对这些愚蠢攻击的必要防御手段。
 - en: 'The negative purposes of bots are as follows:'
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 机器人的负面目的如下：
 - en: Performing a **Denial Of Service** (**DOS**) attack on your server, for example,
     by automatically creating numerous heavyweight jobs
+  id: totrans-158
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对你的服务器执行 **拒绝服务** (**DOS**) 攻击，例如，通过自动创建大量的重型任务
 - en: '**Distributed Denial Of Service attack** (**DDOS**) on other servers by harvesting
     many Jenkins servers to fire off large numbers of requests'
+  id: totrans-159
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**分布式拒绝服务攻击** (**DDOS**)，通过利用多个 Jenkins 服务器发送大量请求来攻击其他服务器'
 - en: By injecting unwanted advertisements or content that then points to malicious
     sites
+  id: totrans-160
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过注入不需要的广告或指向恶意网站的内容
 - en: By adding scripts that are stored permanently and run when a user accidentally
     browses Jenkins site
+  id: totrans-161
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过添加永久存储并在用户意外浏览 Jenkins 站点时运行的脚本
 - en: Note
+  id: totrans-162
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: There are commercial motivations for criminals to circumvent CAPTCHAs that led
     to well documented law cases. You can find one such law case at [http://www.wired.com/2010/10/hacking-captcha/](http://www.wired.com/2010/10/hacking-captcha/).
+  id: totrans-163
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 商业动机导致犯罪分子绕过 CAPTCHA 的行为在法律案例中有着充分的记录。你可以在[http://www.wired.com/2010/10/hacking-captcha/](http://www.wired.com/2010/10/hacking-captcha/)找到其中一个案例。
 - en: Getting ready
+  id: totrans-164
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Make sure you have backed up your sacrificial Jenkins server. You are going
     to modify its security settings. It is easy to make a service changing mistake.
+  id: totrans-165
   prefs: []
   type: TYPE_NORMAL
+  zh: 确保已备份你的 Jenkins 服务器。你将修改其安全设置。很容易出现服务变更错误。
 - en: Tip
+  id: totrans-166
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: The JCaptcha plugin is based on Java implementation that you can find at [https://jcaptcha.atlassian.net/wiki/display/general/Home](https://jcaptcha.atlassian.net/wiki/display/general/Home).
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: JCaptcha 插件是基于 Java 实现的，你可以在[https://jcaptcha.atlassian.net/wiki/display/general/Home](https://jcaptcha.atlassian.net/wiki/display/general/Home)找到。
 - en: How to do it...
+  id: totrans-168
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Log in as an administrator.
+  id: totrans-169
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以管理员身份登录。
 - en: Click on the **Configure Global Security** link.
+  id: totrans-170
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**配置全局安全性**链接。
 - en: Select Jenkins' own user database under **Security Realm**.
+  id: totrans-171
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**安全领域**下选择 Jenkins 自己的用户数据库。
 - en: Select **Allow users to sign up**, as shown in the following screenshot:![How
     to do it...](img/0082OS_02_01a.jpg)
+  id: totrans-172
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如下截图所示，选择**允许用户注册**：![操作步骤...](img/0082OS_02_01a.jpg)
 - en: Press **Save**.
+  id: totrans-173
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Browse the signup location `http://localhost:8080/signup`. You will see something
     similar to the following screenshot:![How to do it...](img/0082OS_02_02.jpg)
+  id: totrans-174
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览注册位置`http://localhost:8080/signup`。你会看到类似以下截图的内容：![操作步骤...](img/0082OS_02_02.jpg)
 - en: Click on the **Manage Plugins** link in the **Manage Jenkins** page.
+  id: totrans-175
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**管理 Jenkins**页面点击**管理插件**链接。
 - en: Select the **Available** tab.
+  id: totrans-176
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**可用**选项卡。
 - en: Install the JCaptcha plugin.
+  id: totrans-177
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装 JCaptcha 插件。
 - en: Click on the **Configure Global Security** link under the **Manage Jenkins**
     page.
+  id: totrans-178
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**管理 Jenkins**页面下点击**配置全局安全性**链接。
 - en: Select Jenkins' own user database under **Security Realm**.
+  id: totrans-179
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**安全领域**下选择 Jenkins 自己的用户数据库。
 - en: Select **Enable captcha on sign up**, as shown in the following screenshot:![How
     to do it...](img/0082OS_02_03.jpg)
+  id: totrans-180
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如下截图所示，选择**在注册时启用验证码**：![操作步骤...](img/0082OS_02_03.jpg)
 - en: Press **Save** and then click on the **Log Out** link.
+  id: totrans-181
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**，然后点击**注销**链接。
 - en: Browse the signup location `http://localhost:8080/signup`. The page is now defended
     by a CAPTCHA, as shown in the following screenshot:![How to do it...](img/0082OS_02_04.jpg)
+  id: totrans-182
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览注册位置`http://localhost:8080/signup`。该页面现在通过 CAPTCHA 进行了防御，如下截图所示：![操作步骤...](img/0082OS_02_04.jpg)
 - en: How it works...
+  id: totrans-183
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Installing the plugin adds the CAPTCHA image to the sign-up process. The image
     needs pattern recognition to decipher. Humans are very good at this; automated
     processes are a lot worse, but improving.
+  id: totrans-184
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装该插件将在注册流程中添加 CAPTCHA 图像。图像需要模式识别才能解读。人类在这方面非常擅长；自动化流程则要差得多，但在不断改善。
 - en: There's more...
+  id: totrans-185
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a couple more points for you to think about.
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有几个你可以考虑的要点。
 - en: Defense in depth
+  id: totrans-187
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 深度防御
 - en: There is an arms race between defensive methods such as CAPTCHAs and offensive
     methods such as increasingly intelligent bots. No one solution will cut down the
     risk to zero. It is best practice to consider a layered approach. Depending on
     your requirements, consider adding authentication, keeping access down to known
     IP addresses, backing up your configuration, reviewing your logfiles, vulnerability
     testing, and working on the general security hygiene of your site.
+  id: totrans-188
   prefs: []
   type: TYPE_NORMAL
+  zh: 防御方法（如 CAPTCHA）与进攻方法（如越来越智能的机器人）之间存在一场竞赛。没有一种解决方案能将风险降至零。最佳实践是考虑采用分层方法。根据你的要求，考虑添加身份验证、限制访问到已知
+    IP 地址、备份配置、审查日志文件、漏洞测试以及改善站点的一般安全卫生情况。
 - en: Tip
+  id: totrans-189
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: The SANS institute has written a paper on the Defense in Depth strategy [http://www.sans.org/reading-room/whitepapers/basics/defense-in-depth-525](http://www.sans.org/reading-room/whitepapers/basics/defense-in-depth-525).
+  id: totrans-190
   prefs: []
   type: TYPE_NORMAL
+  zh: SANS 研究所撰写了一篇关于深度防御策略的论文[http://www.sans.org/reading-room/whitepapers/basics/defense-in-depth-525](http://www.sans.org/reading-room/whitepapers/basics/defense-in-depth-525)。
 - en: More information on bots
+  id: totrans-191
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 有关机器人的更多信息
 - en: 'The security arms race continues. Bots are getting cleverer and script kiddies
     more numerous. Here are a few background articles to this arms race:'
+  id: totrans-192
   prefs: []
   type: TYPE_NORMAL
+  zh: 安全竞赛仍在继续。机器人变得越来越聪明，脚本小子也更多。以下是关于这场竞赛的一些背景文章：
 - en: For more information about the script kiddie, visit [http://en.wikipedia.org/wiki/Script_kiddie](http://en.wikipedia.org/wiki/Script_kiddie)
+  id: totrans-193
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 要了解更多关于脚本小子的信息，请访问[http://en.wikipedia.org/wiki/Script_kiddie](http://en.wikipedia.org/wiki/Script_kiddie)。
 - en: A report by Imperva explaining why CAPTCHAs are getting easier to crack at [http://www.imperva.com/docs/HII_a_CAPTCHA_in_the_Rye.pdf](http://www.imperva.com/docs/HII_a_CAPTCHA_in_the_Rye.pdf)
+  id: totrans-194
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Imperva的一份报告解释了为什么CAPTCHA越来越容易破解，见[http://www.imperva.com/docs/HII_a_CAPTCHA_in_the_Rye.pdf](http://www.imperva.com/docs/HII_a_CAPTCHA_in_the_Rye.pdf)。
 - en: Google are improving the difficulty of mimicking CAPTCHAs ([http://www.cnet.com/news/whats-up-bot-google-tries-new-captcha-method/](http://www.cnet.com/news/whats-up-bot-google-tries-new-captcha-method/))
+  id: totrans-195
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 谷歌正在改进模仿CAPTCHA的难度([http://www.cnet.com/news/whats-up-bot-google-tries-new-captcha-method/](http://www.cnet.com/news/whats-up-bot-google-tries-new-captcha-method/))。
 - en: See also
+  id: totrans-196
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Testing for OWASP's top 10 security issues* recipe
+  id: totrans-197
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*测试OWASP十大安全问题*配方'
 - en: Looking at the Jenkins user through Groovy
+  id: totrans-198
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过Groovy查看Jenkins用户
 - en: Groovy scripts run as the Jenkins user on the host server. This recipe highlights
     the power and danger to the Jenkins application and the host server.
+  id: totrans-199
   prefs: []
   type: TYPE_NORMAL
+  zh: Groovy脚本在主机服务器上作为Jenkins用户运行。此处介绍的配方突显了Jenkins应用程序和主机服务器的威力和危险性。
 - en: Getting ready
+  id: totrans-200
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Log in to your test Jenkins instance as an administrator.
+  id: totrans-201
   prefs: []
   type: TYPE_NORMAL
+  zh: 以管理员身份登录您的测试Jenkins实例。
 - en: How to do it...
+  id: totrans-202
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Run the following script from **Script Console** (`http://localhost:8080/script`):'
+  id: totrans-203
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从**脚本控制台**(`http://localhost:8080/script`)运行以下脚本：
 - en: '[PRE5]'
+  id: totrans-204
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Review the output.
+  id: totrans-205
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看输出。
 - en: 'For a typical *NIX system, it will be similar to the following screenshot:'
+  id: totrans-206
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 对于典型的*NIX系统，它将类似于以下截图：
 - en: '![How to do it...](img/0082OS_02_17.jpg)'
+  id: totrans-207
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_02_17.jpg)'
 - en: 'For a Windows system, it will be similar to the following screenshot:'
+  id: totrans-208
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 对于Windows系统，它将类似于以下截图：
 - en: '![How to do it...](img/0082OS_02_16.jpg)'
+  id: totrans-209
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_02_16.jpg)'
 - en: How it works...
+  id: totrans-210
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The script you have run is less benign than it first seems. Groovy scripts can
     do anything the Jenkins user has the power to do on the host server, as well as
     within the test Jenkins server. A method is defined that reads in a file whose
     location is passed as a string. The script then prints the content. If the file
     does not exist, then that is also mentioned. Three locations are tested. It is
     trivial for you to add a more detailed set of locations.
+  id: totrans-211
   prefs: []
   type: TYPE_NORMAL
+  zh: 您运行的脚本并不像看起来那么良性。Groovy脚本可以做任何Jenkins用户在主机服务器上以及测试Jenkins服务器内具有权限执行的操作。定义了一个方法，该方法读取作为字符串传递的文件的位置。然后脚本打印内容。如果文件不存在，则也会提到。测试了三个位置。您可以轻松添加更详细的位置集。
 - en: The existence of files clearly defines the type of OS being used and the structure
     of the disc partitioning.
+  id: totrans-212
   prefs: []
   type: TYPE_NORMAL
+  zh: 文件的存在清晰地定义了所使用的操作系统类型和磁盘分区的结构。
 - en: The `/etc/passwd` file typically does not contain passwords. The passwords are
     hidden in a shadow password file, safely out of reach. However, the username has
     a real login account (not `/bin/false`) and whether they have shell scripts suggest
     accounts to try and crack by focusing dictionary attacks.
+  id: totrans-213
   prefs: []
   type: TYPE_NORMAL
+  zh: '`/etc/passwd`文件通常不包含密码。密码隐藏在一个影子密码文件中，安全地不可见。但是，用户名具有真实的登录帐户（不是`/bin/false`），以及它们是否具有shell脚本，这提示了要尝试通过专注于字典攻击来尝试破解的帐户。'
 - en: You can save the configuration effort if you generate a private and public key
     for Jenkins. This allows a script to run with a user's permission, without needing
     a password logon. It is typically used by Jenkins to control its slave nodes.
     Retrieving the keys through a Groovy script represents further dangers to the
     wider infrastructure.
+  id: totrans-214
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果为Jenkins生成私钥和公钥，则可以节省配置工作量。这允许脚本在用户的许可下运行，而无需密码登录。Jenkins通常用于控制其从属节点。通过Groovy脚本检索密钥代表了更广泛基础架构的进一步危险。
 - en: If any plugin stores passwords in plain or decipherable text, then you can capture
     the plugin's XML configuration files and parse.
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果任何插件以明文或可解密文本存储密码，则可以捕获插件的XML配置文件并进行解析。
 - en: Not only can you read files, but you can also change permissions and write over
     binaries, making the attack harder to find and more aggressive.
+  id: totrans-216
   prefs: []
   type: TYPE_NORMAL
+  zh: 您不仅可以读取文件，还可以更改权限并覆盖二进制文件，使攻击更难发现并更具侵略性。
 - en: There's more...
+  id: totrans-217
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多信息...
 - en: The best approach to limiting risk is to limit the number of logon accounts
     that have the power to run Groovy scripts in **Script console** and to periodically
     review the audit log.
+  id: totrans-218
   prefs: []
   type: TYPE_NORMAL
+  zh: 限制风险的最佳方法是限制具有在**脚本控制台**中运行Groovy脚本权限的登录帐户数，并定期审查审计日志。
 - en: Limiting administrator accounts is made easier by using a matrix-based strategy,
     in which you can decide the rights of each user or group. A refinement of this
     is the project-based matrix strategy, in which you can choose per-job permissions.
     However, the project-based matrix strategy costs you considerably more in terms
     of administration.
+  id: totrans-219
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过使用基于矩阵的策略，限制管理员帐户变得更加容易，你可以决定每个用户或组的权限。这一策略的一个改进是基于项目的矩阵策略，其中可以选择每个作业的权限。然而，基于项目的矩阵策略在管理方面的成本要高得多。
 - en: Note
+  id: totrans-220
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Since Version 1.430 of Jenkins, there are extra permissions exposed to the matrix-based
     security strategy to decide which group or user can run Groovy scripts. Expect
     more permission additions over time.
+  id: totrans-221
   prefs: []
   type: TYPE_NORMAL
+  zh: 自Jenkins的版本1.430以来，矩阵式安全策略暴露了额外的权限，以决定哪个组或用户可以运行Groovy脚本。随着时间的推移，预计会增加更多的权限。
 - en: See also
+  id: totrans-222
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Working with the Audit Trail plugin* recipe
+  id: totrans-223
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用审计跟踪插件*配方'
 - en: The *Reviewing project-based matrix tactics via a custom group script* recipe
+  id: totrans-224
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过自定义组脚本审查项目矩阵策略*配方'
 - en: Working with the Audit Trail plugin
+  id: totrans-225
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用审计跟踪插件
 - en: Jobs can fail. It speeds up debugging if you can see who last ran the job and
     what their changes were. This recipe ensures that you have auditing enabled, and
     that a set of local audit logs are created that contain a substantial history
     of events rather than the small log size defined by default.
+  id: totrans-226
   prefs: []
   type: TYPE_NORMAL
+  zh: 任务可能会失败。如果你能看到最后运行任务的人以及他们做了什么改变，可以加快调试速度。这个配方确保你已经启用了审计，并创建了一组本地审计日志，其中包含大量事件的历史记录，而不是默认定义的小日志大小。
 - en: Getting ready
+  id: totrans-227
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Audit Trail plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin)).
+  id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装审计跟踪插件（[https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin)）。
 - en: How to do it...
+  id: totrans-229
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Visit the **Configure Jenkins** screen (`http://localhost:8080/configure`).
+  id: totrans-230
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问**配置 Jenkins**屏幕（`http://localhost:8080/configure`）。
 - en: Under the **Audit Trail** section, click the **Add Logger** button.
+  id: totrans-231
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**审计跟踪**部分，点击**添加记录器**按钮。
 - en: Modify the default settings for **Audit Trail** to allow for a long observation.
     Change **Log File Size MB** to `128` and **Log File Count** to `40`.
+  id: totrans-232
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改**审计跟踪**的默认设置以允许长时间的观察。将**日志文件大小MB**更改为`128`，**日志文件计数**更改为`40`。
 - en: Click on the **Advanced…** button to review all the settings.![How to do it...](img/0082OS_02_08a.jpg)
+  id: totrans-233
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**高级...**按钮以审查所有设置。![如何操作...](img/0082OS_02_08a.jpg)
 - en: How it works...
+  id: totrans-234
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The audit plugin creates a log recorder named **Audit Trail** ([https://wiki.jenkins-ci.org/display/JENKINS/Logger+Configuration](https://wiki.jenkins-ci.org/display/JENKINS/Logger+Configuration)).
     You can visit the log's **Recorders** page at `http://localhost:8080/log/?` to
     see which recorders are logging.
+  id: totrans-235
   prefs: []
   type: TYPE_NORMAL
+  zh: 审计插件创建了一个名为**审计跟踪**的日志记录器（[https://wiki.jenkins-ci.org/display/JENKINS/Logger+Configuration](https://wiki.jenkins-ci.org/display/JENKINS/Logger+Configuration)）。你可以访问日志的**记录器**页面，网址为`http://localhost:8080/log/?`来查看哪些记录器正在记录。
 - en: 'The output from the log recorder is filtered via **URL Patterns to log** as
     seen in Jenkins''s configure screen. You will find that the logfile format is
     more readable than most, with a date timestamp at the beginning, a description
     of what is happening in the middle of the log, and the user who acted at the end.
     Take a look at the following example:'
+  id: totrans-236
   prefs: []
   type: TYPE_NORMAL
+  zh: 日志记录器的输出通过Jenkins配置屏幕中看到的**URL模式来记录**进行过滤。你会发现日志文件格式比大多数日志更易读，以日期时间戳开始，日志中间描述正在发生的事情，并在最后指明操作的用户。看看以下示例：
 - en: '*Jul 18, 2011 3:18:51 PM job/Fulltests_1/ #3 Started by user Alan*'
+  id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: '*2011年7月18日下午3:18:51由用户Alan启动的job/Fulltests_1/ #3*'
 - en: '*Jul 18, 2011 3:19:22 PM /job/Fulltests_1/configSubmit by Alan*'
+  id: totrans-238
   prefs: []
   type: TYPE_NORMAL
+  zh: '*2011年7月18日下午3:19:22 /job/Fulltests_1/configSubmit by Alan*'
 - en: It is now clear who has done what and when.
+  id: totrans-239
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在清楚地知道谁什么时候做了什么。
 - en: Note
+  id: totrans-240
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Consider placing the `audit.log` file itself under a version control system.
     It is a good idea to do so for three main reasons. The first is in case of storage
     failure. The second is to make it more difficult to alter the audit logs without
     leaving evidence. Finally, this is a central location where you can gather small
     logfiles from your whole enterprise.
+  id: totrans-241
   prefs: []
   type: TYPE_NORMAL
+  zh: 考虑将`audit.log`文件本身放在版本控制系统下。这样做有三个主要原因。首先是在存储故障的情况下。第二个是为了使更难以修改审计日志而不留下证据。最后，这是一个集中收集整个企业的小日志文件的地方。
 - en: There's more...
+  id: totrans-242
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a couple more things you should consider.
+  id: totrans-243
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些你应该考虑的东西。
 - en: A complementary plugin – JobConfigHistory
+  id: totrans-244
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 一个补充插件 - JobConfigHistory
 - en: A complementary plugin that keeps track of configuration changes and displays
     the information within the job itself is called the JobConfigHistory plugin ([https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin)).
     The advantage of this plugin is that you get to see who has made those crucial
     changes. The disadvantage is that it adds an icon to a potentially full GUI, leaving
     less room for other features.
+  id: totrans-245
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个补充插件，用于跟踪配置更改并在作业内部显示信息，称为 JobConfigHistory 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin))。该插件的优点是您可以看到谁做了这些关键更改。缺点是它向潜在的完整
+    GUI 添加了一个图标，为其他功能留下了较少的空间。
 - en: Missing audit logs
+  id: totrans-246
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 缺少审计日志
 - en: For a security officer, it helps to be mildly paranoid. If your audit logs suddenly
     go missing, then this may well be a sign that a cracker wishes to cover their
     trail. This is also true if one file goes missing or there is a gap in time of
     the audit. Even if this is caused by issues with configuration or a damaged filesystem,
     you should investigate. Missing logs should trigger a wider review of the server
     in question. At the least, the audit plugin(s) is not behaving as expected.
+  id: totrans-247
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于安全官员来说，略微偏执有所帮助。如果您的审计日志突然丢失，那么这很可能是黑客希望掩盖其踪迹的迹象。如果一个文件丢失或审计时间出现间隙，这也是真实的。即使这是由于配置问题或损坏的文件系统引起的，您也应该调查。缺少日志应触发对相关服务器的更广泛审查。至少，审计插件的行为与预期不符。
 - en: Consider adding a small reporting script for these highly valued logs. For example,
     consider modifying the *Reporting alternative code metrics in Jenkins* recipe
     in [Chapter 3](ch03.html "Chapter 3. Building Software"), *Building Software*,
     to parse the logfile and make metrics that are then displayed graphically. This
     enables you to view the ebb and flow of your team's work over time. Of course,
     the data can be faked, but that would require a lot of extra effort.
+  id: totrans-248
   prefs: []
   type: TYPE_NORMAL
+  zh: 考虑为这些极具价值的日志添加一个小的报告脚本。例如，考虑修改 [第 3 章](ch03.html "Chapter 3. Building Software")中的*在
+    Jenkins 中报告替代代码度量*配方，*构建软件*，以解析日志文件并制作随后以图形显示的度量。这使您可以随着时间查看团队工作的起伏。当然，数据可以伪造，但这需要额外的努力。
 - en: Note
+  id: totrans-249
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: One method to minimize the risk of logfile tampering is also to send your log
     events to a central remote syslog server. You can configure the Audit Trail plugin
     to work with syslog within the **Configure System** page.
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 减少日志文件篡改风险的一种方法是将日志事件发送到中央远程 syslog 服务器。您可以配置审计追踪插件以与**配置系统**页面中的 syslog 配合使用。
 - en: Swatch
+  id: totrans-251
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Swatch
 - en: You can imagine a situation where you do not want Groovy scripts to be run by
     certain users and want to be e-mailed in the case of unwanted actions. If you
     want to react immediately to specific log patterns and do not already have infrastructure
     in place, consider using Swatch, an open source product that is freely available
     for most *NIX distributions.([http://sourceforge.net/projects/swatch/](http://sourceforge.net/projects/swatch/)
     and [http://www.jaxmag.com/itr/online_artikel/psecom,id,766,nodeid,147.html](http://www.jaxmag.com/itr/online_artikel/psecom,id,766,nodeid,147.html)).
+  id: totrans-252
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以想象一种情况，您不希望某些用户运行 Groovy 脚本，并且希望在发生意外操作时收到电子邮件。如果您想要立即对特定日志模式做出反应且尚未有基础设施，请考虑使用
+    Swatch，这是一个开源产品，可以在大多数 *NIX 发行版中免费使用。([http://sourceforge.net/projects/swatch/](http://sourceforge.net/projects/swatch/)
+    和 [http://www.jaxmag.com/itr/online_artikel/psecom,id,766,nodeid,147.html](http://www.jaxmag.com/itr/online_artikel/psecom,id,766,nodeid,147.html))。
 - en: Swatch is a Perl script that periodically reviews logs. If a pattern is found,
     it reacts with e-mail or by executing commands.
+  id: totrans-253
   prefs: []
   type: TYPE_NORMAL
+  zh: Swatch 是一个 Perl 脚本，定期审查日志。如果发现模式，则通过电子邮件或执行命令做出反应。
 - en: See also
+  id: totrans-254
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Improving security via small configuration changes* recipe
+  id: totrans-255
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过小的配置更改改善安全性*配方'
 - en: The *Looking at Jenkins user through Groovy* recipe
+  id: totrans-256
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过 Groovy 查看 Jenkins 用户*配方'
 - en: The *Reporting alternative code metrics in Jenkins* recipe in [Chapter 3](ch03.html
     "Chapter 3. Building Software"), *Building Software*
+  id: totrans-257
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第 3 章](ch03.html "Chapter 3. Building Software")中的*在 Jenkins 中报告替代代码度量*配方，*构建软件*'
 - en: Installing OpenLDAP
+  id: totrans-258
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 OpenLDAP
 - en: '**Lightweight Directory Access Protocol** (**LDAP**) provides a highly popular
     open standards directory service. It is used in many organizations to display
     user information to the world. LDAP is also used as a central service to hold
@@ -1223,524 +1772,765 @@
     which then uses LDAP as its password container. Jenkins also has an Email plugin
     ([https://wiki.jenkins-ci.org/display/JENKINS/LDAP+Email+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/LDAP+Email+Plugin))
     that pulls its routing information out of LDAP.'
+  id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: '**轻量级目录访问协议**（**LDAP**）提供了一个非常流行的开放标准目录服务。它在许多组织中用于向世界展示用户信息。LDAP 还用作保存用户密码进行身份验证的中央服务，并且可以包含外部系统可能需要的路由邮件、POSIX
+    帐户管理以及各种其他信息。Jenkins 可以直接连接到 LDAP 进行身份验证，或间接通过 CAS SSO 服务器（[http://www.jasig.org/cas](http://www.jasig.org/cas)），后者再使用
+    LDAP 作为其密码容器。Jenkins 还有一个电子邮件插件（[https://wiki.jenkins-ci.org/display/JENKINS/LDAP+Email+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/LDAP+Email+Plugin)），它从
+    LDAP 中提取其路由信息。'
 - en: Because LDAP is a common Enterprise service, Jenkins may also encounter LDAP
     while running integration tests as part of the build application's testing infrastructure.
+  id: totrans-260
   prefs: []
   type: TYPE_NORMAL
+  zh: 因为 LDAP 是一个常见的企业服务，Jenkins 在构建应用程序的测试基础设施时也可能会遇到 LDAP，作为集成测试的一部分。
 - en: This recipe shows you how to quickly install an OpenLDAP ([http://www.openldap.org/](http://www.openldap.org/))
     server named `slapd` and then add organizations, users, and groups via **LDAP
     Data Interchange Format** (**LDIF**), a simple text format for storing LDAP records
     ([http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format](http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format)).
+  id: totrans-261
   prefs: []
   type: TYPE_NORMAL
+  zh: 本教程向您展示如何快速安装一个名为 `slapd` 的 OpenLDAP 服务器（[http://www.openldap.org/](http://www.openldap.org/)），然后通过
+    **LDAP 数据交换格式**（**LDIF**）添加组织、用户和组，LDIF 是一种简单的文本格式，用于存储 LDAP 记录（[http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format](http://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format)）。
 - en: Note
+  id: totrans-262
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Active Directory is also popular in corporate environments. Jenkins has a plugin
     for Active Directory ([https://wiki.jenkins-ci.org/display/JENKINS/Active+Directory+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Active+Directory+plugin)).
+  id: totrans-263
   prefs: []
   type: TYPE_NORMAL
+  zh: Active Directory 在企业环境中也很流行。Jenkins 有一个用于 Active Directory 的插件（[https://wiki.jenkins-ci.org/display/JENKINS/Active+Directory+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Active+Directory+plugin)）。
 - en: Getting ready
+  id: totrans-264
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: This recipe assumes that you are running a modern Debian-based Linux such as
     Ubuntu.
+  id: totrans-265
   prefs: []
   type: TYPE_NORMAL
+  zh: 本教程假定你正在运行一个现代的基于 Debian 的 Linux，比如 Ubuntu。
 - en: Note
+  id: totrans-266
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For a detailed description of installing OpenLDAP on the Windows, refer to [http://www.userbooster.de/en/support/feature-articles/openldap-for-windows-installation.aspx](http://www.userbooster.de/en/support/feature-articles/openldap-for-windows-installation.aspx).
+  id: totrans-267
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关在 Windows 上安装 OpenLDAP 的详细说明，请参阅 [http://www.userbooster.de/en/support/feature-articles/openldap-for-windows-installation.aspx](http://www.userbooster.de/en/support/feature-articles/openldap-for-windows-installation.aspx)。
 - en: 'Save the following LDIF entries to the `basic_example.ldif` file and place
     it in your home directory:'
+  id: totrans-268
   prefs: []
   type: TYPE_NORMAL
+  zh: 将以下 LDIF 条目保存到 `basic_example.ldif` 文件中，并将其放在您的主目录中：
 - en: '[PRE6]'
+  id: totrans-269
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: How to do it...
+  id: totrans-270
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Install the LDAP server `slapd` by executing the following command:'
+  id: totrans-271
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过执行以下命令安装 LDAP 服务器 `slapd`：
 - en: '[PRE7]'
+  id: totrans-272
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: When asked, fill in the administration password.
+  id: totrans-273
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 当询问时，请填写管理员密码。
 - en: 'Add the LDIF records from the command line; you will then be asked for the
     administrator password you used in step 2\. Execute the following command:'
+  id: totrans-274
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行添加 LDIF 记录；然后会要求输入你在第 2 步中使用的管理员密码。执行以下命令：
 - en: '[PRE8]'
+  id: totrans-275
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: How it works...
+  id: totrans-276
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: LDIF is a textual expression of the records inside LDAP.
+  id: totrans-277
   prefs: []
   type: TYPE_NORMAL
+  zh: LDIF 是 LDAP 中记录的文本表达形式。
 - en: '**Distinguished name** (**dn**): This is a unique identifier per record and
     is structured so that objects reside in an organizational tree structure.'
+  id: totrans-278
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**区别名称**（**dn**）：这是每个记录的唯一标识符，结构化使对象驻留在组织树结构中。'
 - en: '`objectClass`: `objectClass`, such as `organizationalUnit`, defines a set of
     required and optional attributes. In the case of the `organizationalUnit`, the
     `ou` attribute is required. This is useful for bundling attributes that define
     a purpose, such as creating an organizational structure belonging to a group or
     having an e-mail account.'
+  id: totrans-279
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`objectClass`：`objectClass`，比如 `organizationalUnit`，定义了一组必需和可选属性。在 `organizationalUnit`
+    的情况下，`ou` 属性是必需的。这对于捆绑定义目的的属性很有用，比如创建属于一个组织结构的属性或拥有电子邮件帐户。'
 - en: In the recipe, after installing an LDAP server, we imported via the admin account
     (default `dn:cn=admin,dc=nodomain`) created during the package installation; if
     this is the case, you will need to change the value of the `–D` option in step
     2 of the recipe.
+  id: totrans-280
   prefs: []
   type: TYPE_NORMAL
+  zh: 在示例中，在安装LDAP服务器后，我们通过包安装期间创建的管理员帐户（默认`dn:cn=admin,dc=nodomain`）导入了数据；如果是这种情况，您将需要更改示例第2步中`-D`选项的值。
 - en: The default `dn` of the admin account may vary, depending on which version of
     slapd you have installed.
+  id: totrans-281
   prefs: []
   type: TYPE_NORMAL
+  zh: 管理员帐户的默认`dn`可能会有所不同，这取决于您安装了哪个版本的slapd。
 - en: 'The LDIF creates an organizational structure with three organizational units:'
+  id: totrans-282
   prefs: []
   type: TYPE_NORMAL
+  zh: LDIF创建了一个具有三个组织单位的组织结构：
 - en: '`dn`: ou=mycompany,dc=nodomain'
+  id: totrans-283
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`dn`：ou=mycompany,dc=nodomain'
 - en: '`dn`: ou=people,ou=mycompany,dc=nodomain : Location to search for people'
+  id: totrans-284
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`dn`：ou=people,ou=mycompany,dc=nodomain：搜索人员的位置'
 - en: '`dn`: ou=groups,ou=mycompany,dc=nodomain: Location to search for groups'
+  id: totrans-285
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`dn`：ou=groups,ou=mycompany,dc=nodomain：搜索组的位置'
 - en: 'A user (`dn: uid=tester1,ou=people,ou=mycompany,dc=nodomain`) is created for
     testing. The list of attributes the record must have is defined by the `inetOrgPerson`
     objectClass.'
+  id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: '为了测试，创建了一个用户（`dn: uid=tester1,ou=people,ou=mycompany,dc=nodomain`）。记录必须具有的属性列表由`inetOrgPerson`对象类定义。'
 - en: 'A group (`dn: cn=dev,ou=groups,ou=mycompany,dc=nodomain`) is created via the
     `groupOfNames` objectClass. The user is added to the group via adding the member
     attribute pointing to the `dn` of the user.'
+  id: totrans-287
   prefs: []
   type: TYPE_NORMAL
+  zh: '通过`groupOfNames`对象类创建了一个组（`dn: cn=dev,ou=groups,ou=mycompany,dc=nodomain`）。通过添加指向用户的`dn`的成员属性，将用户添加到组中。'
 - en: Jenkins looks for the username and which group the user belongs to. In Jenkins,
     you can define which projects a user can configure, based on their group information.
     Therefore, you should consider adding groups that match your Jenkins job structures,
     such as development, acceptance, and also a group for those needing global powers.
+  id: totrans-288
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins查找用户名以及用户所属的组。在Jenkins中，您可以根据他们的组信息定义用户可以配置哪些项目。因此，您应考虑添加与您的Jenkins作业结构匹配的组，例如开发、验收，以及为那些需要全局权限的人员添加一个组。
 - en: There's more...
+  id: totrans-289
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多信息...
 - en: 'What is not covered by this LDIF example is the adding of `objectClass` and
     **Access Control Lists** (**ACLs**):'
+  id: totrans-290
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个LDIF示例没有涵盖添加`objectClass`和**访问控制列表**（**ACLs**）：
 - en: '`objectClass`: LDAP uses `objectClass` as a sanity check on incoming record
     creation requests. If the required attributes do not exist in a record, or are
     of the wrong type, then LDAP will reject the data. Sometimes it''s necessary to
     add a new `objectClass`; you can do this with graphical tools. The *Administering
     OpenLDAP* recipe shows one such tool.'
+  id: totrans-291
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`objectClass`：LDAP使用`objectClass`对传入的记录创建请求进行检查。如果记录中不存在所需的属性，或者类型错误，则LDAP将拒绝数据。有时需要添加一个新的`objectClass`；您可以使用图形工具完成此操作。*管理OpenLDAP*示例展示了这样一个工具。'
 - en: '**Access Control Lists**: These define which user or which group can do what.
     For information on this complex subject area, visit [http://www.openldap.org/doc/admin24/access-control.html](http://www.openldap.org/doc/admin24/access-control.html).
     You can also review the main entry on your OpenLDAP server from the `man slapd.access`
     command line.'
+  id: totrans-292
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**访问控制列表**：这些定义了哪个用户或哪个组可以做什么。有关这个复杂主题的信息，请访问[http://www.openldap.org/doc/admin24/access-control.html](http://www.openldap.org/doc/admin24/access-control.html)。您还可以从`man
+    slapd.access`命令行中查看您的OpenLDAP服务器的主要入口。'
 - en: See also
+  id: totrans-293
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Administering OpenLDAP* recipe
+  id: totrans-294
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*管理OpenLDAP*示例'
 - en: The *Configuring the LDAP plugin* recipe
+  id: totrans-295
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*配置LDAP插件*示例'
 - en: Using Script Realm authentication for provisioning
+  id: totrans-296
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用脚本领域认证进行配置
 - en: For many enterprise applications, provisioning occurs during the user's first
     login. For example, a directory with content can be made, a user added to an e-mail
     distribution list, an access control list modified, or an e-mail sent to the marketing
     department.
+  id: totrans-297
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于许多企业应用程序，配置发生在用户首次登录时。例如，可以创建带有内容的目录，将用户添加到电子邮件分发列表，修改访问控制列表，或者向市场部门发送电子邮件。
 - en: 'This recipe will show you how to use two scripts: one to log in through LDAP
     and perform example provisioning and the other to return the list of groups a
     user belongs to. Both scripts use Perl, which makes for compact code.'
+  id: totrans-298
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个示例将向您展示如何使用两个脚本：一个用于通过LDAP登录并执行示例配置，另一个用于返回用户所属的组列表。这两个脚本都使用Perl，这使得代码紧凑。
 - en: Getting ready
+  id: totrans-299
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: 'You need to have the Perl and `Net::LDAP` modules installed. For a Debian distribution,
     you should install the `libnet-ldap-perl` package via the following command:'
+  id: totrans-300
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要安装Perl和`Net::LDAP`模块。对于Debian发行版，您应通过以下命令安装`libnet-ldap-perl`软件包：
 - en: '[PRE9]'
+  id: totrans-301
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: You also need to have the Script Realm plugin installed ([https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm](https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm)).
+  id: totrans-302
   prefs: []
   type: TYPE_NORMAL
+  zh: 你还需要安装 Script Realm 插件（[https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm](https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm)）。
 - en: How to do it...
+  id: totrans-303
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做到...
 - en: 'As the Jenkins user, place the following file under a directory that is controlled
     by Jenkins, with executable permissions. Name the file `login.pl`. Verify that
     the `$home` variable is pointing to the correct workspace:'
+  id: totrans-304
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 作为 Jenkins 用户，将以下文件放置在 Jenkins 控制的目录下，并赋予可执行权限。将文件命名为 `login.pl`。确保 `$home`
+    变量指向正确的工作空间：
 - en: '[PRE10]'
+  id: totrans-305
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'As the Jenkins user, place the following file under a directory that is controlled
     by Jenkins, with executable permissions. Name the file `group.pl`:'
+  id: totrans-306
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 作为 Jenkins 用户，将以下文件放置在 Jenkins 控制的目录下，并赋予可执行权限。将文件命名为 `group.pl`：
 - en: '[PRE11]'
+  id: totrans-307
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Configure the plugin via the **ConfigureGlobalSecurity** screen under the **Security
     Realm** subsection and then add the following details:'
+  id: totrans-308
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过 **全局安全配置** 屏幕下的 **安全领域** 子部分配置插件，然后添加以下详细信息：
 - en: Check **Authenticate** via custom script
+  id: totrans-309
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 检查 **通过自定义脚本进行身份验证**
 - en: '**Login Command**: `/var/lib/Jenkins/login.pl`'
+  id: totrans-310
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**登录命令**：`/var/lib/Jenkins/login.pl`'
 - en: '**Groups Command**: `/var/lib/Jenkins/group.pl`'
+  id: totrans-311
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**分组命令**：`/var/lib/Jenkins/group.pl`'
 - en: '**Groups Delimiter**'
+  id: totrans-312
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**分组分隔符**'
 - en: Press the **Save** button.
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存** 按钮。
 - en: Log in as `tester1` with the password `changeme`.
+  id: totrans-314
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用用户名 `tester1` 和密码 `changeme` 登录。
 - en: Visit the provisioned content at `http://localhost:8080/userContent/tester1.html`.
     You will see the following screenshot:![How to do it...](img/0082OS_02_09.jpg)
+  id: totrans-315
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 `http://localhost:8080/userContent/tester1.html` 中的配置内容。你会看到以下截图：![如何做到...](img/0082OS_02_09.jpg)
 - en: How it works...
+  id: totrans-316
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The `login.pl` script pulls in the username and password from the environment
     variables `U` and `P.` The script then tries to self-bind the user to a calculated
     unique LDAP record. For example, the distinguished name of the user `tester1`
     is `uid=tester1, ou=people,ou=mycompany,dc=nodomain`.
+  id: totrans-317
   prefs: []
   type: TYPE_NORMAL
+  zh: '`login.pl` 脚本从环境变量 `U` 和 `P` 中提取用户名和密码。然后脚本尝试将用户自绑定到计算出的唯一 LDAP 记录。例如，用户 `tester1`
+    的专有名称是 `uid=tester1, ou=people,ou=mycompany,dc=nodomain`。'
 - en: Note
+  id: totrans-318
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: Self-binding happens when you search for your own LDAP record and at the same
     time authenticate yourself. This approach has the advantage of allowing your application
     to test a passwords, authenticity without using a global administration account.
+  id: totrans-319
   prefs: []
   type: TYPE_NORMAL
+  zh: 自绑定发生在你搜索自己的 LDAP 记录并同时进行身份验证时。这种方法的优点是允许你的应用程序在不使用全局管理帐户的情况下测试密码的真实性。
 - en: If authentication fails, then an exit code of `1` is returned. If authentication
     succeeds, then the provisioning process takes place followed by an exit code of
     `0`.
+  id: totrans-320
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果身份验证失败，则返回退出码 `1`。如果身份验证成功，则进行配置过程，然后返回退出码 `0`。
 - en: If the file does not already exist, then it is created. A simple HTML file is
     created during the provisioning process. This is just an example; you can do a
     lot more, from sending e-mail reminders to full account provisioning across the
     breadth of your organization.
+  id: totrans-321
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果文件尚不存在，则会创建它。在配置过程中会创建一个简单的 HTML 文件。这只是一个示例；你可以做更多的事情，从发送电子邮件提醒到在整个组织范围内进行完整的帐户配置。
 - en: The `group.pl` script simply returns two groups that includes every user, guests
     and all. Guest is a group intended for guests only. All is a group that all users
     belong to, including the guests. Later, if you want to send e-mails out about
     the maintenance of services, then you can use an LDAP query to collect e-mail
     addresses via the all group.
+  id: totrans-322
   prefs: []
   type: TYPE_NORMAL
+  zh: '`group.pl` 脚本简单地返回包括每个用户的两个组，即 guests 和 all。Guest 是仅供访客使用的组。All 是所有用户（包括访客）都属于的组。稍后，如果你想发送关于服务维护的电子邮件，那么你可以使用
+    LDAP 查询通过 all 组收集电子邮件地址。'
 - en: There's more...
+  id: totrans-323
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: LDAP servers are used for many purposes depending on the schemas used. You can
     route mail, create login accounts, and so on. These accounts are enforced by common
     authentication platforms such as **Pluggable Authentication Modules** (**PAM**),
     in particular `PAM_LDAP` ([http://www.padl.com/OSS/pam_ldap.html](http://www.padl.com/OSS/pam_ldap.html)
     and [http://www.yolinux.com/TUTORIALS/LDAP_Authentication.html](http://www.yolinux.com/TUTORIALS/LDAP_Authentication.html)).
+  id: totrans-324
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据所使用的模式，LDAP 服务器用于多种目的。你可以路由邮件、创建登录帐户等。这些帐户由常见的认证平台强制执行，如**可插拔认证模块**（**PAM**），特别是
+    `PAM_LDAP`（[http://www.padl.com/OSS/pam_ldap.html](http://www.padl.com/OSS/pam_ldap.html)
+    和 [http://www.yolinux.com/TUTORIALS/LDAP_Authentication.html](http://www.yolinux.com/TUTORIALS/LDAP_Authentication.html)）。
 - en: At the University of Amsterdam, we use a custom schema so that user records
     have an attribute for counting down records. A scheduled task performs an LDAP
     search on the counter and then decrements the counter by one. The task notices
     when the counter reaches certain numbers and performs actions such as sending
     out e-mail warnings.
+  id: totrans-325
   prefs: []
   type: TYPE_NORMAL
+  zh: 在阿姆斯特丹大学，我们使用自定义架构，以便用户记录具有一个用于倒计时记录的属性。计划任务执行对计数器的 LDAP 搜索，然后将计数器递减一。任务注意到当计数器达到某些数字时，并执行诸如发送电子邮件警告之类的操作。
 - en: You can imagine using this method in conjunction with a custom login script.
     Once a consultant logs in to Jenkins for the first time, they are given a certain
     grace period before their LDAP record is moved to a "to be ignored" branch.
+  id: totrans-326
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以想象将此方法与自定义登录脚本结合使用。一旦顾问首次登录 Jenkins，他们将在将其 LDAP 记录移至“待忽略”分支之前获得一定的宽限期。
 - en: See also
+  id: totrans-327
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Reviewing project-based matrix tactics via a custom group script* recipe
+  id: totrans-328
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过自定义组脚本审查基于项目的矩阵策略*示例'
 - en: Reviewing project-based matrix tactics via a custom group script
+  id: totrans-329
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过自定义组脚本审查基于项目的矩阵策略
 - en: Security best practices dictate that you should limit the rights of individual
     users to the level that they require.
+  id: totrans-330
   prefs: []
   type: TYPE_NORMAL
+  zh: 安全最佳实践要求您应该将个别用户的权限限制到他们所需的级别。
 - en: This recipe explores the project-based matrix strategy. In this strategy, you
     can assign different permissions to individual users or groups on a job-by-job
     basis.
+  id: totrans-331
   prefs: []
   type: TYPE_NORMAL
+  zh: 本示例探讨了基于项目的矩阵策略。在此策略中，您可以逐个作业地为个别用户或组分配不同的权限。
 - en: The recipe uses custom realm scripts enabled through the Script Security plugin
     to allow you to log in with any name and password whose length is greater than
     five characters, and places the test users in their own unique group. This will
     allow you to test out the project-based matrix strategy.
+  id: totrans-332
   prefs: []
   type: TYPE_NORMAL
+  zh: 本示例使用启用了 Script Security 插件的自定义领域脚本，允许您使用任何长度大于五个字符的名称和密码登录，并将测试用户放置在其自己的独特组中。这将允许您测试基于项目的矩阵策略。
 - en: Using custom scripts to authenticate users and define groups allows your test
     Jenkins server to connect to a wide variety of nonstandard authentication services.
+  id: totrans-333
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用自定义脚本进行用户认证和定义组，使您的测试 Jenkins 服务器能够连接到各种非标准的身份验证服务。
 - en: Getting ready
+  id: totrans-334
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: You will need to install the Script Security Realm plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm](https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm))
     and also have Perl installed with the URI module ([http://search.cpan.org/dist/URI/URI/Escape.pm](http://search.cpan.org/dist/URI/URI/Escape.pm)).
     The URI module is included in modern Perl distributions, so in most situations
     the script will work out of the box.
+  id: totrans-335
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要安装 Script Security Realm 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm](https://wiki.jenkins-ci.org/display/JENKINS/Script+Security+Realm))
+    并且还要安装具有 URI 模块的 Perl ([http://search.cpan.org/dist/URI/URI/Escape.pm](http://search.cpan.org/dist/URI/URI/Escape.pm))。URI
+    模块包含在现代 Perl 发行版中，因此在大多数情况下，脚本将直接运行。
 - en: How to do it...
+  id: totrans-336
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作步骤...
 - en: 'Copy the following script to the `login2.pl` file in the Jenkins workspace:'
+  id: totrans-337
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下脚本复制到 Jenkins 工作区的`login2.pl`文件中：
 - en: '[PRE12]'
+  id: totrans-338
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'Change the owner and group of the script to `jenkins`, as follows:'
+  id: totrans-339
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将脚本的所有者和组更改为`jenkins`，如下所示：
 - en: '[PRE13]'
+  id: totrans-340
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'Copy the following script to the `group2.pl` file in the Jenkins workspace:'
+  id: totrans-341
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下脚本复制到 Jenkins 工作区的`group2.pl`文件中：
 - en: '[PRE14]'
+  id: totrans-342
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'Change the owner and group of the script to `jenkins`, as follows:'
+  id: totrans-343
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将脚本的所有者和组更改为`jenkins`，如下所示：
 - en: '[PRE15]'
+  id: totrans-344
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: Configure the plugin via the **Configure Global Security** screen under the
     **Security Realm** subsection.
+  id: totrans-345
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**全局安全性配置**屏幕下的**安全域**子部分配置插件。
 - en: Select the **Authenticate via custom script** radio button and add the following
     details:![How to do it...](img/0082OS_02_19.jpg)
+  id: totrans-346
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**通过自定义脚本进行身份验证**单选按钮，并添加以下详细信息：![操作步骤...](img/0082OS_02_19.jpg)
 - en: Check the **Project-based Matrix Authorization Strategy** checkbox.
+  id: totrans-347
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选中**基于项目的矩阵授权策略**复选框。
 - en: Add a user called `adm_alan` with full rights, as shown in the following screenshot:![How
     to do it...](img/0082OS_02_10.jpg)
+  id: totrans-348
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加名为`adm_alan`的用户并授予完整权限，如下截图所示：![操作步骤...](img/0082OS_02_10.jpg)
 - en: Press the **Save** button.
+  id: totrans-349
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**按钮。
 - en: Try to log in as `adm_alan` with a password less than five characters.
+  id: totrans-350
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 尝试以密码少于五个字符登录`adm_alan`。
 - en: Log in as `adm_alan` with any password greater than five characters.
+  id: totrans-351
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以`adm_alan`登录，密码大于五个字符即可。
 - en: Create a new job with the name `project_ matrix_test` and no configuration.
+  id: totrans-352
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`project_matrix_test`且无配置的新作业。
 - en: Check the **Enable project-based security** checkbox within the job.
+  id: totrans-353
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在作业中选中**启用基于项目的安全性**复选框。
 - en: Add the `grp_proj_tester` group with full rights (for example, check all the
     checkboxes):![How to do it...](img/0082OS_02_11.jpg)
+  id: totrans-354
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加`grp_proj_tester`组的完全权限（例如，选中所有复选框）：![如何做...](img/0082OS_02_11.jpg)
 - en: Log in as user `I_cant_see_you`. Notice that you cannot view the recently created
     job `project_matrix_test`.
+  id: totrans-355
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以用户`I_cant_see_you`身份登录。注意，您无法查看最近创建的作业`project_matrix_test`。
 - en: Login as `proj_tester`. Notice that you can now view and configure `project_matrix_test`.
+  id: totrans-356
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以`proj_tester`身份登录。注意，您现在可以查看和配置`project_matrix_test`。
 - en: How it works...
+  id: totrans-357
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The `login2.pl` script allows any username-password combination to succeed if
     it is at least the length defined in the `$min` variable.
+  id: totrans-358
   prefs: []
   type: TYPE_NORMAL
+  zh: '`login2.pl`脚本允许任何用户名-密码组合成功登录，只要它至少是`$min`变量定义的长度。'
 - en: The `group2.pl` script reads the username from the environment and then escapes
     the name to make sure that no evil scripting is accidentally run later. The `group2.pl`
     script places the user in the `grp_username` group. For example, if `proj_tester`
     logs in, they will belong to the `grp_proj_tester` group.
+  id: totrans-359
   prefs: []
   type: TYPE_NORMAL
+  zh: '`group2.pl`脚本从环境中读取用户名，然后转义名称，以确保以后不会意外运行任何恶意脚本。`group2.pl`脚本将用户放入`grp_username`组中。例如，如果`proj_tester`登录，则属于`grp_proj_tester`组。'
 - en: 'The group script allows us to log in as an arbitrary user and view the users''
     permissions. In the project-based matrix strategy, the permissions per user or
     group are defined at two levels:'
+  id: totrans-360
   prefs: []
   type: TYPE_NORMAL
+  zh: 组脚本允许我们以任意用户身份登录并查看用户的权限。在基于项目的矩阵策略中，用户或组的权限在两个级别上定义：
 - en: Globally via the Jenkins configuration page. This is where you should define
     your global accounts for system-wide administration.
+  id: totrans-361
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过Jenkins配置页面进行全局设置。这是您应该为系统范围管理定义全局账户的地方。
 - en: Per project via the job configuration screen. The global accounts can gain extra
     permissions per project, but cannot lose permissions.
+  id: totrans-362
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过作业配置屏幕的每个项目。全局账户可以获得额外的项目权限，但不能失去权限。
 - en: In this recipe, you logged in with a global account `adm_alan` that behaved
     as root admin. Then, you logged in as `I_cant_see_you`; this has no extra permissions
     at all and can't even see the job from the front page. Finally, you logged in
     as `proj_tester` who belonged to the `grp_proj_tester` group, which has full powers
     within the specific job.
+  id: totrans-363
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个示例中，您以一个行为类似根管理员的全局账户`adm_alan`登录。然后，您以`I_cant_see_you`登录；这根本没有额外权限，甚至看不到作业首页。最后，您以`proj_tester`登录，他属于`grp_proj_tester`组，具有特定作业的完全权限。
 - en: Using per-project permissions, you not only limit the powers of individual users
     but you can also shape which projects they can view. This feature is particularly
     useful for Jenkins masters that have a wealth of jobs.
+  id: totrans-364
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用每个项目的权限，不仅限制个人用户的权力，还可以确定他们可以查看哪些项目。这个功能对于拥有大量作业的Jenkins主服务器特别有用。
 - en: There's more...
+  id: totrans-365
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few more things you should consider.
+  id: totrans-366
   prefs: []
   type: TYPE_NORMAL
+  zh: 还有一些事情您应该考虑。
 - en: My own custom security flaw
+  id: totrans-367
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 我自己的自定义安全漏洞
 - en: 'I expect you have already spotted this. The login script has a significant
     security flaw. The username input as defined by the `U` variable has not been
     checked for malicious content. For example, the username can be as follows:'
+  id: totrans-368
   prefs: []
   type: TYPE_NORMAL
+  zh: 我希望您已经发现了这一点。登录脚本存在一个重大的安全缺陷。由`U`变量定义的用户名输入未经检查是否有恶意内容。例如，用户名可以如下：
 - en: '[PRE16]'
+  id: totrans-369
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: Later, if an arbitrary plugin displays the username as part of a custom view,
     then if the plugin does not safely escape, the username is run in the end user's
     browser. This example shows how easy it is to get security wrong. You are better
     off using well-known and trusted libraries when you can. For example, the OWASP's
     Java specific `AntiSamy` library ([https://www.owasp.org/index.php/Category:OWASP_AntiSamy_Project](https://www.owasp.org/index.php/Category:OWASP_AntiSamy_Project))
     does an excellent job of filtering input in the form of CSS or HTML fragments.
+  id: totrans-370
   prefs: []
   type: TYPE_NORMAL
+  zh: 稍后，如果任意插件将用户名显示为自定义视图的一部分，那么如果插件没有安全转义，用户名将在最终用户的浏览器中运行。这个例子展示了安全性出错有多容易。最好在可以的时候使用知名且受信任的库。例如，OWASP的Java特定`AntiSamy`库（[https://www.owasp.org/index.php/Category:OWASP_AntiSamy_Project](https://www.owasp.org/index.php/Category:OWASP_AntiSamy_Project)）在过滤CSS或HTML片段形式的输入方面表现出色。
 - en: For Perl, there are numerous excellent articles on this subject such as [http://www.perl.com/pub/2002/02/20/css.html](http://www.perl.com/pub/2002/02/20/css.html).
+  id: totrans-371
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于Perl，在这个主题上有很多优秀的文章，比如[http://www.perl.com/pub/2002/02/20/css.html](http://www.perl.com/pub/2002/02/20/css.html)。
 - en: Static code review, tainting, and untainting
+  id: totrans-372
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 静态代码审查、污点标记和去污点标记
 - en: Static code review is the name for tools that read code that is not running
     and review for known code defects. PMD and FindBugs are excellent examples ([http://fsmsh.com/2804.com](http://fsmsh.com/2804.com)).
     A number of these generic of tools can review your code for security defects.
@@ -1748,435 +2538,624 @@
     source, such as the Internet, or directly from input from files. To untaint it,
     the input has to be first passed through a regular expression and unwanted input
     safely escaped, removed, or reported.
+  id: totrans-373
   prefs: []
   type: TYPE_NORMAL
+  zh: 静态代码审查是指读取未运行的代码并查找已知代码缺陷的工具。PMD和FindBugs是很好的示例（[http://fsmsh.com/2804.com](http://fsmsh.com/2804.com)）。这些通用工具之一可以检查您的代码以查找安全缺陷。采取的一种方法是如果输入来自外部来源（例如Internet）或直接来自文件，则将其视为输入污染。要解除污染，必须首先将输入传递给正则表达式，并安全地转义、移除或报告不需要的输入。
 - en: See also
+  id: totrans-374
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Using Script Realm authentication for provisioning* recipe
+  id: totrans-375
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用脚本领域身份验证进行配置*教程'
 - en: Administering OpenLDAP
+  id: totrans-376
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: OpenLDAP管理
 - en: This recipe is a quick start to LDAP administration. It details how you can
     add or delete user records from the command line, and highlights the use of an
     example LDAP browser. These skills are useful for maintaining an LDAP server for
     use in integration tests or for Jenkins account administration.
+  id: totrans-377
   prefs: []
   type: TYPE_NORMAL
+  zh: 本教程是LDAP管理的快速入门。它详细介绍了如何通过命令行添加或删除用户记录，并强调了使用示例LDAP浏览器的方法。这些技能对于维护用于集成测试或Jenkins帐户管理的LDAP服务器非常有用。
 - en: Getting ready
+  id: totrans-378
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: To try this out, you will need Perl installed with the `Net::LDAP` modules.
     For example, for a Debian distribution, you should install the `libnet-ldap-perl`
     package ([http://ldap.perl.org](http://ldap.perl.org)).
+  id: totrans-379
   prefs: []
   type: TYPE_NORMAL
+  zh: 要尝试此操作，您需要安装带有`Net::LDAP`模块的Perl。例如，对于Debian发行版，您应该安装`libnet-ldap-perl`包（[http://ldap.perl.org](http://ldap.perl.org)）。
 - en: You will also need to install the LDAP browser JExplorer ([http://jxplorer.org/](http://jxplorer.org/)).
+  id: totrans-380
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还需要安装LDAP浏览器JExplorer（[http://jxplorer.org/](http://jxplorer.org/)）。
 - en: How to do it...
+  id: totrans-381
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'To add a user to LDAP, you will need to write the following LDIF record to
     a file named `basic_example.ldif`:'
+  id: totrans-382
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要将用户添加到LDAP，您需要将以下LDIF记录写入名为`basic_example.ldif`的文件中：
 - en: '[PRE17]'
+  id: totrans-383
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: Add a new line at the end of the record and copy the preceding record into the
     text file, replacing the number `121` with `122` wherever it occurs in the second
     record.
+  id: totrans-384
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在记录末尾添加一行，并将前一条记录复制到文本文件中，在第二条记录中将数字`121`替换为`122`。
 - en: Run the following `ldapadd` command, and when asked, input the LDAP administrator's
     password.
+  id: totrans-385
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行以下`ldapadd`命令，并在询问时输入LDAP管理员密码。
 - en: '[PRE18]'
+  id: totrans-386
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'Run Jxplorer connecting with the following values:'
+  id: totrans-387
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行Jxplorer，连接以下值：
 - en: '**HOST**: `localhost`'
+  id: totrans-388
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**主机**：`localhost`'
 - en: '**Level**: `Anonymous`'
+  id: totrans-389
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**级别**：`Anonymous`'
 - en: Select the **Schema** tab and then select **account** under **objectClasses**.
+  id: totrans-390
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 选择**Schema**选项卡，然后在**objectClasses**下选择**account**。
 - en: 'In **Table Editor**, you will see attributes mentioned with **MAY** or **MUST**:'
+  id: totrans-391
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在**Table Editor**中，您会看到以**MAY**或**MUST**提及的属性：
 - en: '![How to do it...](img/0082OS_02_12a.jpg)'
+  id: totrans-392
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_02_12a.jpg)'
 - en: Disconnect from the `Anonymous` account by selecting **File** and then **Disconnect**.
+  id: totrans-393
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过选择**文件**，然后选择**断开连接**来断开与`Anonymous`帐户的连接。
 - en: 'Reconnect as the `admin` account by selecting **File** and then **Connect**.
     Add the following details:'
+  id: totrans-394
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**文件**，然后选择**连接**，以`admin`帐户重新连接。添加以下细节：
 - en: '**Host**: **Localhost**'
+  id: totrans-395
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**主机**：**Localhost**'
 - en: '**Level**: User + Password'
+  id: totrans-396
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**级别**：用户+密码'
 - en: '**User DN**: `cn=admin,dc=nodomain`'
+  id: totrans-397
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用户DN**：`cn=admin,dc=nodomain`'
 - en: '**Password**: your password'
+  id: totrans-398
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**密码**：您的密码'
 - en: Under the **Explore** tab, select **tester1**.
+  id: totrans-399
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**Explore**选项卡下，选择**tester1**。
 - en: In **Table Editor**, add the **1021 XT** value to **postalCode** and click on
     **Submit**.
+  id: totrans-400
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**Table Editor**中，将**1021 XT**值添加到**postalCode**中，然后单击**提交**。
 - en: Select the **LDIF** menu option at the top of the screen and then click on **Export
     Subtree**.
+  id: totrans-401
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在屏幕顶部选择**LDIF**菜单选项，然后单击**Export Subtree**。
 - en: Click on the **OK** button and write the name of the file that you are going
     to export the LDIF to and then click on **Save**.
+  id: totrans-402
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**确定**按钮，然后编写要将LDIF导出到的文件的名称，然后单击**保存**。
 - en: 'Create an executable script with the following lines of code and run it:'
+  id: totrans-403
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建具有以下代码行的可执行脚本并运行它：
 - en: '[PRE19]'
+  id: totrans-404
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: How it works...
+  id: totrans-405
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: In the recipe, you have performed a range of tasks. First, you have used an
     LDIF file to add two users. This is a typical event for an LDAP administrator
     in a small organization. You can keep the LDIF file and then make minor modifications
     to add or delete users, groups, and so on.
+  id: totrans-406
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个示例中，你已经执行了一系列任务。 首先，你使用一个LDIF文件添加了两个用户。 这对于小组织中的LDAP管理员来说是一个典型的事件。 你可以保存LDIF文件，然后进行小的修改以添加或删除用户、组等。
 - en: Next, you have viewed the directory structure anonymously through an LDAP browser,
     in this case, Jxplorer. Jxplorer runs on a wide range of OS and is open source.
     Your actions highlight that LDAP is an Enterprise directory service where things
     are supposed to be found even by anonymous users. The fact that pages render fast
     in Jxplorer highlights that LDAP is a read-optimized database that returns search
     results efficiently.
+  id: totrans-407
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，通过LDAP浏览器（在本例中是Jxplorer）匿名查看了目录结构。 Jxplorer可以在各种操作系统上运行，并且是开源的。 你的操作突显出LDAP是一个企业目录服务，即使是匿名用户也能找到其中的内容。
+    在Jxplorer中页面快速渲染的事实突显出LDAP是一个读取优化的数据库，能够高效返回搜索结果。
 - en: Using an LDAP browser generally gets more frustrating as the number of objects
     to render increases. For example, at the University of Amsterdam, there are more
     than 60,000 student records under one branch. Under these circumstances, you are
     forced to use the command-line tools or be very careful with search filters.
+  id: totrans-408
   prefs: []
   type: TYPE_NORMAL
+  zh: 当要呈现的对象数量增加时，使用LDAP浏览器通常会更加令人沮丧。 例如，在阿姆斯特丹大学，有超过60,000个学生记录在一个分支下。 在这些情况下，你被迫使用命令行工具或者对搜索过滤器非常小心。
 - en: Being able to view `ObjectClass`, knowing which attributes you *may* use and
     which attributes are required and you *must* use helps you to optimize your records.
+  id: totrans-409
   prefs: []
   type: TYPE_NORMAL
+  zh: 能够查看`ObjectClass`，了解你*可能*使用的属性以及哪些属性是必须使用的，可以帮助你优化你的记录。
 - en: Next, you bind (perform some action) as an admin user and manipulate the tester1's
     record. For small organizations, this is an efficient means of administration.
     Exporting the record to LDIF allows you to use the record as a template for further
     importing of records.
+  id: totrans-410
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，你以管理员用户绑定（执行某些操作）并操作tester1的记录。 对于小组织来说，这是一种高效的管理方式。 将记录导出为LDIF文件允许你将该记录用作进一步导入记录的模板。
 - en: The deletion script is an example of programmatic control. This gives you a
     lot of flexibility for large-scale generation, modification, and deletion of records
     by changing just a few variables. Perl was chosen because of its lack of verbosity.
     The use of these types of scripts is typical for the provisioning of integration
     tests.
+  id: totrans-411
   prefs: []
   type: TYPE_NORMAL
+  zh: 删除脚本是程序控制的一个示例。 这给了你在通过改变几个变量而实现大规模生成、修改和删除记录时很大的灵活性。 Perl之所以被选择，是因为它的减少冗长性。
+    这种类型脚本的使用对于整合测试的配置是很典型的。
 - en: Within the deletion script, you will see that the number of users to delete
     is set to 2 and the starting value of the tester accounts is 100\. This implies
     that the two records you had previously generated are going to be deleted, for
     example, `tester101` and `tester102`.
+  id: totrans-412
   prefs: []
   type: TYPE_NORMAL
+  zh: 在删除脚本中，你会看到要删除的用户数量被设置为2，测试账号的起始值为100。 这意味着之前生成的两个记录将被删除，例如`tester101`和`tester102`。
 - en: The script binds once as the admin account and then loops through a number of
     records using `$counter` as part of the calculation of the distinguished name
     of each record. The delete method is called for each record and any errors generated
     will be printed out.
+  id: totrans-413
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个脚本首先以管理员账号绑定一次，然后通过使用`$counter`来计算每个记录的专有名称，循环处理一系列记录。 对每个记录调用删除方法，任何生成的错误都将被打印出来。
 - en: There's more...
+  id: totrans-414
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多内容...
 - en: 'You should consider deleting the user''s Perl script as an example of how to
     provision or cleanup an LDAP server that is needed for integration tests efficiently.
     To create an add script instead of a delete script, you can write a similar script
     replacing my `$result = $ldap->delete($dn)` with the following line of code:'
+  id: totrans-415
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该考虑删除用户的Perl脚本，作为整合测试中高效进行LDAP服务器配置或清理的示例。 要创建一个添加脚本而不是删除脚本，你可以编写类似的脚本，用以下行代码替换我的`$result
+    = $ldap->delete($dn)`：
 - en: '[PRE20]'
+  id: totrans-416
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: Here, `@$whatTOCreate` is a hash containing attributes and `objectClass`. For
     more examples, visit [http://search.cpan.org/~gbarr/perl-ldap/lib/Net/LDAP/Examples.pod#OPERATION_-_Adding_a_new_Record](http://search.cpan.org/~gbarr/perl-ldap/lib/Net/LDAP/Examples.pod#OPERATION_-_Adding_a_new_Record).
+  id: totrans-417
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里，`@$whatTOCreate`是一个包含属性和`objectClass`的哈希。 获取更多示例，请访问[http://search.cpan.org/~gbarr/perl-ldap/lib/Net/LDAP/Examples.pod#OPERATION_-_Adding_a_new_Record](http://search.cpan.org/~gbarr/perl-ldap/lib/Net/LDAP/Examples.pod#OPERATION_-_Adding_a_new_Record)。
 - en: See also
+  id: totrans-418
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 参见
 - en: The *Installing OpenLDAP* recipe
+  id: totrans-419
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*安装 OpenLDAP*配方'
 - en: The *Configuring the LDAP plugin* recipe
+  id: totrans-420
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*配置LDAP插件*配方'
 - en: Configuring the LDAP plugin
+  id: totrans-421
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置LDAP插件
 - en: LDAP is the standard for Enterprise directory services. This recipe explains
     how to attach Jenkins to your test LDAP server.
+  id: totrans-422
   prefs: []
   type: TYPE_NORMAL
+  zh: LDAP是企业目录服务的标准。 本配方解释了如何将Jenkins连接到您的测试LDAP服务器。
 - en: Getting ready
+  id: totrans-423
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: To try this recipe, you should first perform the steps mentioned in the *Installing
     OpenLDAP* recipe.
+  id: totrans-424
   prefs: []
   type: TYPE_NORMAL
+  zh: 若要尝试此方法，您应首先执行*安装 OpenLDAP*配方中提到的步骤。
 - en: How to do it...
+  id: totrans-425
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何实现...
 - en: Go to the **Configure Global Security** screen and select **Enable security**.
+  id: totrans-426
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到**配置全局安全性**屏幕并选择**启用安全性**。
 - en: Check the **LDAP** checkbox.
+  id: totrans-427
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 勾选**LDAP**复选框。
 - en: Add the **Server** value as `127.0.0.1`.
+  id: totrans-428
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将**服务器**值添加为`127.0.0.1`。
 - en: 'Click on the **Advance** button and add the following details:'
+  id: totrans-429
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**高级**按钮，然后添加以下详细信息：
 - en: '**User Search Base**: `ou=people,ou=mycompany,dc=nodomain`'
+  id: totrans-430
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用户搜索基础**：`ou=people,ou=mycompany,dc=nodomain`'
 - en: '**User Search filter**: `uid={0}`'
+  id: totrans-431
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用户搜索过滤器**：`uid={0}`'
 - en: '**Group Search base**: `ou=groups,ou=mycompany,dc=nodomain`'
+  id: totrans-432
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**组搜索基础**：`ou=groups,ou=mycompany,dc=nodomain`'
 - en: How it works...
+  id: totrans-433
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'The test LDAP server supports anonymous binding: you can search the server
     without authenticating. Most LDAP servers allow this approach. However, some servers
     are configured to enforce specific information security policies. For example,
     your policy might enforce being able to anonymously verify that a user''s record
     exists, but you may not be able to retrieve specific attributes such as their
     e-mail or postal address.'
+  id: totrans-434
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试LDAP服务器支持匿名绑定：您可以在未验证的情况下搜索服务器。 大多数LDAP服务器都允许这种方法。 但是，一些服务器配置为执行特定的信息安全策略。
+    例如，您的策略可能强制要求能够匿名验证用户记录是否存在，但您可能无法检索特定属性，例如他们的电子邮件或邮政地址。
 - en: Anonymous binding simplifies configuration; otherwise you will need to add account
     details for a user in LDAP that has the rights to perform the searches. This account
     has great LDAP powers, should never be shared, and can present a chink in your
     security armor.
+  id: totrans-435
   prefs: []
   type: TYPE_NORMAL
+  zh: 匿名绑定简化了配置；否则，您需要为LDAP中具有执行搜索权限的用户添加帐户详细信息。 这个账号拥有强大的LDAP权限，绝不能共享，并且可能会在您的安全防线中出现漏洞。
 - en: The user search filter, `uid={0}`, searches for users whose `uids` equals their
     username. Many organizations prefer to use `cn` instead of `uid`; the choice of
     attribute is a matter of taste. You can even imagine an e-mail attribute being
     used to uniquely identify a person as long as that attribute cannot be changed
     by the user.
+  id: totrans-436
   prefs: []
   type: TYPE_NORMAL
+  zh: 用户搜索过滤器`uid={0}`用于查找其`uid`等于用户名的用户。 许多组织更喜欢使用`cn`而不是`uid`； 属性的选择是一种品味问题。 您甚至可以想象使用电子邮件属性来唯一标识一个人，只要该属性不能被用户更改。
 - en: Tip
+  id: totrans-437
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**The Security Realm**'
+  id: totrans-438
   prefs: []
   type: TYPE_NORMAL
+  zh: '**安全领域**'
 - en: When you log in, an instance of the `hudson.security.LDAPSecurityRealm` class
     is called. The code is defined in a Groovy script that you can find under **WEB-INF/security/LDAPBindSecurityRealm.groovy**
     within the `Jenkins.war` file.
+  id: totrans-439
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您登录时，将调用`hudson.security.LDAPSecurityRealm`类的一个实例。 代码定义在Groovy脚本中，您可以在`Jenkins.war`文件内的**WEB-INF/security/LDAPBindSecurityRealm.groovy**中找到。
 - en: For further information, visit [http://wiki.hudson-ci.org/display/HUDSON/Standard+Security+Setup](http://wiki.hudson-ci.org/display/HUDSON/Standard+Security+Setup).
+  id: totrans-440
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[http://wiki.hudson-ci.org/display/HUDSON/Standard+Security+Setup](http://wiki.hudson-ci.org/display/HUDSON/Standard+Security+Setup)。
 - en: There's more...
+  id: totrans-441
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 有更多内容...
 - en: Here are a few more things for you to think about.
+  id: totrans-442
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是您需要考虑的一些事情。
 - en: The difference between misconfiguration and bad credentials
+  id: totrans-443
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 配置错误与坏凭据之间的区别
 - en: While configuring the LDAP plugin for the first time, your authentication process
     might fail due to misconfiguration. Luckily, Jenkins produces error messages.
     For the Debian Jenkins package, you can find the logfile at `/var/log/jenkins/jenkins.log`.
     For the Windows version running as a service, you can find the relevant logs through
     the Events Viewer by filtering on Jenkins source.
+  id: totrans-444
   prefs: []
   type: TYPE_NORMAL
+  zh: 首次配置LDAP插件时，您的身份验证过程可能由于配置错误而失败。幸运的是，Jenkins会生成错误消息。 对于Debian Jenkins软件包，您可以在`/var/log/jenkins/jenkins.log`中找到日志文件。
+    对于作为服务运行的Windows版本，您可以通过在Jenkins源上过滤来查找相关日志查看器中的事件。
 - en: 'The two main errors consistently made are as follows:'
+  id: totrans-445
   prefs: []
   type: TYPE_NORMAL
+  zh: 两个主要经常出现的错误如下：
 - en: '**A misconfigured DN for either userSearchBase or GroupSearch base**: The relevant
     log entry will look as follows:'
+  id: totrans-446
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用户搜索基础或组搜索基础的配置错误**：相关日志条目将如下所示：'
 - en: '[PRE21]'
+  id: totrans-447
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: '**Bad credentials**: If the user does not exist in LDAP, you have either typed
     in the wrong password or you have accidentally searched the wrong part of the
     LDAP tree. So the log error will start with the following text:'
+  id: totrans-448
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**凭证错误**：如果用户不存在于 LDAP 中，您可能要么输入了错误的密码，要么意外地搜索了 LDAP 树的错误部分。因此，日志错误将以以下文本开头：'
 - en: '[PRE22]'
+  id: totrans-449
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: Searching
+  id: totrans-450
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 搜索
 - en: 'Applications retrieve information from LDAP in a number of ways:'
+  id: totrans-451
   prefs: []
   type: TYPE_NORMAL
+  zh: 应用程序以多种方式从 LDAP 中检索信息：
 - en: '**Anonymously for generic information**: This approach works only for information
     that is exposed to the world. However, the LDAP server can limit the search queries
     to specific IP addresses as well. The application will then be dependent on the
     attributes that your organization is prepared to disclose. If the information
     security policy changes, the risk is that your application might break accidentally.'
+  id: totrans-452
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**匿名获取一般信息**：这种方法仅适用于向世界公开的信息。但是，LDAP 服务器也可以将搜索查询限制为特定的 IP 地址。应用程序将取决于您的组织准备披露的属性。如果信息安全政策发生变化，则可能导致应用程序意外中断。'
 - en: '**Self-bind**: The application binds as a user and then searches with that
     user''s rights. This approach is the cleanest. However, it is not always clear
     in the logging that the application is behind the actions.'
+  id: totrans-453
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**自绑定**：应用程序绑定为用户，然后使用该用户的权限进行搜索。这种方法最清晰。但是，在日志记录中并不总是清楚应用程序背后的操作。'
 - en: '**Using an application-specific admin account with many rights**: The account
     gets all the information that your application requires, but if disclosed to the
     wrong people it can cause significant issues quickly.'
+  id: totrans-454
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**使用具有许多权限的特定于应用程序的管理员帐户**：该帐户获取您的应用程序所需的所有信息，但如果泄露给错误的人，可能会迅速引起重大问题。'
 - en: Note
+  id: totrans-455
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If the LDAP server has an account locking policy, then it is trivial for a cracker
     to lock out the application.
+  id: totrans-456
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果 LDAP 服务器有账户锁定策略，那么黑客很容易锁定应用程序。
 - en: In reality, the approach chosen is defined by the predefined Access Control
     policy of your Enterprise directory service.
+  id: totrans-457
   prefs: []
   type: TYPE_NORMAL
+  zh: 实际上，所选择的方法由企业目录服务的预定义访问控制策略定义。
 - en: Tip
+  id: totrans-458
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 小贴士
 - en: '**Reviewing plugin configuration**'
+  id: totrans-459
   prefs: []
   type: TYPE_NORMAL
+  zh: '**审查插件配置**'
 - en: Currently, there are over 600 plugins for Jenkins. It is possible, though unlikely,
     that occasionally passwords are being stored in plaintext in the XML configuration
     files in the workspace directory or plugins directory. Every time you install
     a new plugin that requires a power user's account, you should double-check the
     related configuration file. If you see a plain text, you should write a bug report
     attaching a patch to the report.
+  id: totrans-460
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前，Jenkins 有超过 600 个插件。虽然偶尔可能会在工作区目录或插件目录中的 XML 配置文件中以纯文本存储密码，但这种情况可能性很小。每次安装需要超级用户账户的新插件时，都应仔细检查相关的配置文件。如果看到纯文本，应编写一个附带补丁的错误报告。
 - en: See also
+  id: totrans-461
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Installing OpenLDAP* recipe
+  id: totrans-462
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*安装 OpenLDAP* 配方'
 - en: The *Administering OpenLDAP* recipe
+  id: totrans-463
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*管理 OpenLDAP* 配方'
 - en: Installing a CAS server
+  id: totrans-464
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 CAS 服务器
 - en: Yale CAS ([http://www.jasig.org/cas](http://www.jasig.org/cas)) is a single
     sign-on server. It is designed as a campus-wide solution and as such is easy to
     install and relatively simple to configure to meet your specific infrastructural
@@ -2184,600 +3163,891 @@
     different applications without logging in again. This is made for much more pleasant
     user interaction across the range of applications used by a typical Jenkins user
     during their day.
+  id: totrans-465
   prefs: []
   type: TYPE_NORMAL
+  zh: Yale CAS ([http://www.jasig.org/cas](http://www.jasig.org/cas)) 是一个单点登录服务器。它被设计为校园范围的解决方案，因此易于安装并且相对简单地配置以满足您特定的基础设施需求。CAS
+    允许您登录一次，然后在不再登录的情况下自动使用许多不同的应用程序。这使得用户在一天中使用的典型 Jenkins 用户的应用程序范围内的互动更加愉快。
 - en: Yale CAS has helper libraries in Java and PHP that makes integration of third-party
     applications straight-forward.
+  id: totrans-466
   prefs: []
   type: TYPE_NORMAL
+  zh: Yale CAS 在 Java 和 PHP 中有辅助库，可简化第三方应用程序的集成。
 - en: Yale CAS has also the significant advantage of having a pluggable set of handlers
     that authenticate across a range of backend servers such as LDAP, openid ([http://openid.net/](http://openid.net/)),
     and radius ([http://en.wikipedia.org/wiki/RADIUS](http://en.wikipedia.org/wiki/RADIUS)).
+  id: totrans-467
   prefs: []
   type: TYPE_NORMAL
+  zh: Yale CAS 还具有一个可插拔的处理程序集合的显着优势，该处理程序集合通过一系列后端服务器进行身份验证，例如 LDAP、openid ([http://openid.net/](http://openid.net/))
+    和 radius ([http://en.wikipedia.org/wiki/RADIUS](http://en.wikipedia.org/wiki/RADIUS))。
 - en: In this recipe, you will install the complete version of a CAS server running
     from within a Tomcat 7 server. This recipe is more detailed than the rest in this
     chapter and it is quite easy to misconfigure. The modified configuration files
     mentioned in this recipe are downloadable from the book's website.
+  id: totrans-468
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此示例中，您将安装完整版本的 CAS 服务器，从 Tomcat 7 服务器内运行。这个示例比本章中的其他示例更详细，而且很容易配置错误。本示例中提到的修改后的配置文件可从书籍网站下载。
 - en: Getting ready
+  id: totrans-469
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Download Yale CAS ([https://www.apereo.org/cas/download](https://www.apereo.org/cas/download))
     from the 3.4 line and unpack. This recipe was written with version 3.4.12.1, but
     it should work with little modification with earlier or later versions of the
     3.4 line.
+  id: totrans-470
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 3.4 系列中下载 Yale CAS ([https://www.apereo.org/cas/download](https://www.apereo.org/cas/download))
+    并解压缩。本文档是使用版本 3.4.12.1 编写的，但应该可以在 3.4 系列的早期或晚期版本中进行少量修改后运行。
 - en: Install Tomcat 7 ([http://tomcat.apache.org/download-70.cgi](http://tomcat.apache.org/download-70.cgi)).
     The recipe assumes that the installed Tomcat server is initially turned off.
+  id: totrans-471
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Tomcat 7 ([http://tomcat.apache.org/download-70.cgi](http://tomcat.apache.org/download-70.cgi))。本文档假定已安装的
+    Tomcat 服务器最初处于关闭状态。
 - en: Note
+  id: totrans-472
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Since June 2014, the CAS 4 documentation has moved from the JASIG website to
     [http://jasig.github.io/cas/4.0.x/index.html](http://jasig.github.io/cas/4.0.x/index.html).
+  id: totrans-473
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 2014 年 6 月起，CAS 4 文档已从 JASIG 网站移至 [http://jasig.github.io/cas/4.0.x/index.html](http://jasig.github.io/cas/4.0.x/index.html)。
 - en: How to do it...
+  id: totrans-474
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'In the unpacked Tomcat directory, edit `conf/server.xml`, commenting out the
     port `8080` configuration information, as follows:'
+  id: totrans-475
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在解压缩的 Tomcat 目录中，编辑 `conf/server.xml`，注释掉端口 `8080` 的配置信息，如下所示：
 - en: '[PRE23]'
+  id: totrans-476
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'Add the following underneath the text needed to enable port `9443` with a SSL
     enabled:'
+  id: totrans-477
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在需要启用 SSL 的端口 `9443` 下面添加以下内容：
 - en: '[PRE24]'
+  id: totrans-478
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'The user that Tomcat will run under creates a self-signed certificate via the
     following command:'
+  id: totrans-479
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Tomcat 将以哪个用户身份运行，可以通过以下命令创建自签名证书：
 - en: '[PRE25]'
+  id: totrans-480
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: Note
+  id: totrans-481
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If `keytool` is not found on your `PATH` environmental variable, then you might
     have to fill in the full location to the `bin` directory of your installed Java.
+  id: totrans-482
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果在你的 `PATH` 环境变量中找不到 `keytool`，那么你可能需要填写已安装的 Java 的 `bin` 目录的完整路径。
 - en: From underneath the root directory of the unpacked CAS server, copy the `modules/cas-server-uber-webapp-3.x.x`
     file. (where `x.x` is the specific version number) to the Tomcat web app's directory,
     making sure the file is renamed to `cas.war`.
+  id: totrans-483
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从解压缩的 CAS 服务器根目录下方，复制 `modules/cas-server-uber-webapp-3.x.x` 文件（其中 `x.x` 是具体版本号）到
+    Tomcat Web 应用程序的目录，确保文件重命名为 `cas.war`。
 - en: Start Tomcat.
+  id: totrans-484
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动 Tomcat。
 - en: Log in via `https://localhost:9443/cas/login` with the username equal to the
     password, for example, `smile`/`smile`.
+  id: totrans-485
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用用户名等于密码，例如，`smile`/`smile`，通过 `https://localhost:9443/cas/login` 登录。
 - en: Stop Tomcat.
+  id: totrans-486
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 停止 Tomcat。
 - en: 'Either modify the `webapps/cas/Web-INF/deployerConfigContext.xml` file or replace
     with the example file previously downloaded from the book''s website. To modify,
     you will need to comment out the `SimpleTestUsernamePasswordAuthenticationHandler`
     line, as follows:'
+  id: totrans-487
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要么修改 `webapps/cas/Web-INF/deployerConfigContext.xml` 文件，要么替换为先前从书籍网站下载的示例文件。要进行修改，你需要注释掉
+    `SimpleTestUsernamePasswordAuthenticationHandler` 行，如下所示：
 - en: '[PRE26]'
+  id: totrans-488
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: 'Underneath the commented-out code, add the configuration information for LDAP:'
+  id: totrans-489
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在注释掉的代码下面，添加 LDAP 的配置信息：
 - en: '[PRE27]'
+  id: totrans-490
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'After `</bean>`, add an extra bean configuration, replacing the `password value`
     with yours:'
+  id: totrans-491
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `</bean>` 后添加额外的 bean 配置，将 `password value` 替换为你自己的密码：
 - en: '[PRE28]'
+  id: totrans-492
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: Restart Tomcat.
+  id: totrans-493
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 重新启动 Tomcat。
 - en: Log in via `https://localhost:9443/cas/login` using the `tester1` account. If
     you see a page similar to the following screenshot, congratulations; you now have
     running SSO!![How to do it...](img/0082OS_02_15.jpg)
+  id: totrans-494
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 `tester1` 帐户通过 `https://localhost:9443/cas/login` 登录。如果看到类似以下截图的页面，恭喜你；你现在已经运行了
+    SSO!![如何操作...](img/0082OS_02_15.jpg)
 - en: How it works...
+  id: totrans-495
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: By default, Tomcat runs against port `8080`, which happens to be the same port
     number as Jenkins. To change the port number to `9443` and turn on SSL, you must
     modify `conf/server.xml`. For the SSL to work, Tomcat needs to have a keystore
     with a private certificate. Use the `${user.home}` variable to point to the home
     directory of the Tomcat user, for example, `keystoreFile="${user.home}/.keystore"
     keystorePass="changeit"`.
+  id: totrans-496
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，Tomcat 运行在端口 `8080` 上，这恰好是 Jenkins 的端口号。要将端口号更改为 `9443` 并启用 SSL，您必须修改
+    `conf/server.xml`。为了让 SSL 正常工作，Tomcat 需要一个带有私有证书的密钥库。使用 `${user.home}` 变量指向 Tomcat
+    用户的主目录，例如，`keystoreFile="${user.home}/.keystore" keystorePass="changeit"`。
 - en: The protocol you chose was TLS, which is a more modern and secure version of
     SSL. For further details, visit [http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html](http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html).
+  id: totrans-497
   prefs: []
   type: TYPE_NORMAL
+  zh: 您选择的协议是TLS，这是SSL的一个较新且安全的版本。有关更多详细信息，请访问[http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html](http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html)。
 - en: Next, you generate a certificate and place it in the Tomcat user's certificate
     store, ready for Tomcat to use. Your certificate store might contain many certificates,
     so the `tomcat` alias uniquely identifies the certificate.
+  id: totrans-498
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，生成一个证书并将其放置在Tomcat用户的证书存储中，准备供Tomcat使用。您的证书存储可能包含许多证书，因此`tomcat`别名唯一标识证书。
 - en: Within the downloaded CAS package, there are two CAS WAR files. The larger WAR
     file contains the libraries for all the authentication handlers including the
     required LDAP handler.
+  id: totrans-499
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下载的CAS包中，存在两个CAS WAR文件。较大的WAR文件包含所有认证处理程序的库，包括所需的LDAP处理程序。
 - en: The default setup allows you to log in with a password equal to username. This
     setup is for demonstration purposes. To replace or chain together handlers, you
     have to edit `webapps/cas/Web-INF/deployerConfigContext.xml`. For more detail,
     refer to [https://wiki.jasig.org/display/CASUM/LDAP](https://wiki.jasig.org/display/CASUM/LDAP).
+  id: totrans-500
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认设置允许您使用与用户名相同的密码登录。此设置仅用于演示目的。要替换或串联处理程序，您必须编辑`webapps/cas/Web-INF/deployerConfigContext.xml`。更多详细信息，请参考[https://wiki.jasig.org/display/CASUM/LDAP](https://wiki.jasig.org/display/CASUM/LDAP)。
 - en: 'If at any time you are having problems with configuration, the best place to
     check is in Tomcat''s main log, `logs/catalina.out`. For example, a bad username
     or password will generate the following error:'
+  id: totrans-501
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果在任何时候您遇到配置问题，最好检查的地方是Tomcat的主日志，`logs/catalina.out`。例如，错误的用户名或密码将生成以下错误：
 - en: '[PRE29]'
+  id: totrans-502
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: There's more...
+  id: totrans-503
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few more things you should consider.
+  id: totrans-504
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有一些您应该考虑的事情。
 - en: Backend authentication
+  id: totrans-505
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 后端认证
 - en: 'Yale CAS has a wide range of backend authentication handlers and it is straightforward
     for a Java developer to write his own. The following table mentions the current
     handlers. Expect the list to expand. Note that, by using well-supported third-party
     frameworks such as JAAS and JDBC implementations, you can connect to a much wider
     set of services than mentioned in the following table:'
+  id: totrans-506
   prefs: []
   type: TYPE_NORMAL
+  zh: Yale CAS具有广泛的后端认证处理程序，对于Java开发人员来说，撰写自己的处理程序是直截了当的。下表列出了当前的处理程序。请注意，通过使用受支持良好的第三方框架如JAAS和JDBC实现，您可以连接到比下表中提到的更广泛的服务：
 - en: '| **Active Directory** | This connects to your Windows infrastructure. |'
+  id: totrans-507
   prefs: []
   type: TYPE_TB
+  zh: '| **Active Directory** | 这连接到您的Windows基础设施。 |'
 - en: '| **JAAS** | This implements a Java version of the standard **Pluggable Authentication
     Module** (**PAM**) framework. This allows you to pull in other authentication
     mechanisms such as Kerberos. |'
+  id: totrans-508
   prefs: []
   type: TYPE_TB
+  zh: '| **JAAS** | 这实现了标准**可插入认证模块**（**PAM**）框架的Java版本。这允许您引入其他认证机制，如Kerberos。 |'
 - en: '| **LDAP** | This connects to your Enterprise directory services. |'
+  id: totrans-509
   prefs: []
   type: TYPE_TB
+  zh: '| **LDAP** | 这连接到您的企业目录服务。 |'
 - en: '| **RADIUS** | This connects to RADIUS. |'
+  id: totrans-510
   prefs: []
   type: TYPE_TB
+  zh: '| **RADIUS** | 这连接到RADIUS。 |'
 - en: '| **Trusted** | This is used to offload some of the authentication to an Apache
     server or another CAS server. |'
+  id: totrans-511
   prefs: []
   type: TYPE_TB
+  zh: '| **受信任** | 这用于将一些认证卸载到Apache服务器或另一个CAS服务器。 |'
 - en: '| **Generic** | A set of small generic handlers such as a handler to accept
     a user from a list or from a file. |'
+  id: totrans-512
   prefs: []
   type: TYPE_TB
+  zh: '| **通用** | 一组小型通用处理程序，例如从列表或文件中接受用户的处理程序。 |'
 - en: '| **JDBC** | This connects to databases and there are even drivers for spreadsheets
     and LDAP. |'
+  id: totrans-513
   prefs: []
   type: TYPE_TB
+  zh: '| **JDBC** | 这个连接数据库，甚至还有用于电子表格和LDAP的驱动程序。 |'
 - en: '| **Legacy** | This supports the CAS2 protocol. |'
+  id: totrans-514
   prefs: []
   type: TYPE_TB
+  zh: '| **传统** | 这支持CAS2协议。 |'
 - en: '| **SPNEGO** | Simple and Protected GSSAPI Negotiation Mechanism allows the
     CAS server to negotiate between protocols with a backend service. It potentially
     allows transitioning between backend services. |'
+  id: totrans-515
   prefs: []
   type: TYPE_TB
+  zh: '| **SPNEGO** | 简单和受保护的GSSAPI协商机制允许CAS服务器在后端服务之间协商协议。它潜在地允许在后端服务之间过渡。 |'
 - en: '| **X.509 Certificates** | This requires a trusted client certificate. |'
+  id: totrans-516
   prefs: []
   type: TYPE_TB
+  zh: '| **X.509证书** | 这需要一个可信客户端证书。 |'
 - en: An alternative installation recipe using ESUP CAS
+  id: totrans-517
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 使用ESUP CAS的另一种安装方法
 - en: The ESUP consortium also provides a repackaged version of CAS that includes
     additional ease-of-use features, including an out-of-the-box demonstration version.
     However, the ESUP version of the CAS server lags behind the most current version.
     If you want to compare the two versions, you can find the ESUP installation documentation
     at [http://esup-casgeneric.sourceforge.net/install-esup-cas-quick-start.html](http://esup-casgeneric.sourceforge.net/install-esup-cas-quick-start.html).
+  id: totrans-518
   prefs: []
   type: TYPE_NORMAL
+  zh: '**ESUP** 联盟还提供了一个经过重新打包的 CAS 版本，包括额外的易用功能，包括一个即开即用的演示版本。然而，ESUP 版本的 CAS 服务器落后于最新版本。如果您想比较这两个版本，您可以在[http://esup-casgeneric.sourceforge.net/install-esup-cas-quick-start.html](http://esup-casgeneric.sourceforge.net/install-esup-cas-quick-start.html)找到
+    ESUP 的安装文档。'
 - en: Note
+  id: totrans-519
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The ESUP package is easier to install and configure than this recipe; however,
     it includes an older version of CAS.
+  id: totrans-520
   prefs: []
   type: TYPE_NORMAL
+  zh: ESUP 软件包比此配方更容易安装和配置；但是，它包含的是 CAS 的旧版本。
 - en: Trusting LDAP SSL
+  id: totrans-521
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 信任 LDAP SSL
 - en: 'Having SSL enabled on your test LDAP server avoids sniffable passwords being
     sent over the wire, but you will need to get the CAS server to trust the certificate
     of the LDAP server. The relevant quote from the JASIG WIKI is:'
+  id: totrans-522
   prefs: []
   type: TYPE_NORMAL
+  zh: 在测试 LDAP 服务器上启用 SSL 可以避免在网络上传送可嗅探的密码，但您需要让 CAS 服务器信任 LDAP 服务器的证书。来自 JASIG WIKI
+    的相关引用是：
 - en: '*Please note that your JVM needs to trust the certificate of your SSL enabled
     LDAP server or CAS will refuse to connect to your LDAP server. You can add the
     LDAP server''s certificate to the JVM trust store ($JAVA_HOME/jre/lib/security/cacerts)
     to solve that issue.*'
+  id: totrans-523
   prefs: []
   type: TYPE_NORMAL
+  zh: '*请注意，您的 JVM 需要信任启用 SSL 的 LDAP 服务器的证书，否则 CAS 将拒绝连接到您的 LDAP 服务器。您可以将 LDAP 服务器的证书添加到
+    JVM 信任存储库 ($JAVA_HOME/jre/lib/security/cacerts) 中来解决此问题。*'
 - en: A few useful resources
+  id: totrans-524
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 几个有用的资源
 - en: 'There are many useful resources for the CAS 3.4 line on the JASIG WIKI ([https://wiki.jasig.org/](https://wiki.jasig.org/)):'
+  id: totrans-525
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 JASIG WIKI（[https://wiki.jasig.org/](https://wiki.jasig.org/)）上有许多有用的 CAS
+    3.4 系列资源：
 - en: Securing your CAS server ([https://wiki.jasig.org/display/CASUM/Securing+Your+New+CAS+Server](https://wiki.jasig.org/display/CASUM/Securing+Your+New+CAS+Server))
+  id: totrans-526
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 保护您的 CAS 服务器 ([https://wiki.jasig.org/display/CASUM/Securing+Your+New+CAS+Server](https://wiki.jasig.org/display/CASUM/Securing+Your+New+CAS+Server))
 - en: Connecting CAS to a database ([https://wiki.jasig.org/display/CAS/Examples+to+Configure+CAS](https://wiki.jasig.org/display/CAS/Examples+to+Configure+CAS))
+  id: totrans-527
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将 CAS 连接到数据库 ([https://wiki.jasig.org/display/CAS/Examples+to+Configure+CAS](https://wiki.jasig.org/display/CAS/Examples+to+Configure+CAS))
 - en: Creating a high-availability infrastructure ([http://www.ja-sig.org/wiki/download/attachments/22940141/HA+CAS.pdf?version=1](http://www.ja-sig.org/wiki/download/attachments/22940141/HA+CAS.pdf?version=1))
+  id: totrans-528
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建一个高可用基础设施 ([http://www.ja-sig.org/wiki/download/attachments/22940141/HA+CAS.pdf?version=1](http://www.ja-sig.org/wiki/download/attachments/22940141/HA+CAS.pdf?version=1))
 - en: See also
+  id: totrans-529
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Enabling SSO in Jenkins* recipe
+  id: totrans-530
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*在 Jenkins 中启用 SSO* 配方'
 - en: Enabling SSO in Jenkins
+  id: totrans-531
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中启用 SSO
 - en: In this recipe, you will enable CAS in Jenkins through the use of the CAS1 plugin.
     For the CAS protocol to work, you will also need to build a trust relationship
     between Jenkins and the CAS server. The Jenkins plugin trusts the certificate
     of the CAS server.
+  id: totrans-532
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个配方中，您将通过使用 CAS1 插件在 Jenkins 中启用 CAS。为了使 CAS 协议正常工作，您还需要在 Jenkins 和 CAS 服务器之间建立信任关系。Jenkins
+    插件信任 CAS 服务器的证书。
 - en: Getting ready
+  id: totrans-533
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: To try this out, you will need to have installed a CAS server as described in
     the *Installing a CAS server* recipe and the Cas1 plugin ([https://wiki.jenkins-ci.org/display/JENKINS/CAS1+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/CAS1+Plugin)).
+  id: totrans-534
   prefs: []
   type: TYPE_NORMAL
+  zh: 要尝试此操作，您需要按照 *安装 CAS 服务器* 配方和 Cas1 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/CAS1+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/CAS1+Plugin))
+    中描述的步骤安装 CAS 服务器。
 - en: Note
+  id: totrans-535
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The Cas1 plugin has performed stably in the environments where the author has
     tried it. However, there is a second CAS plugin ([https://wiki.jenkins-ci.org/display/JENKINS/CAS+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/CAS+Plugin))
     that is meant to replace the CAS1 plugin by providing new features along with
     the existing ones, for example, support for the CAS 2.0 protocol.
+  id: totrans-536
   prefs: []
   type: TYPE_NORMAL
+  zh: Cas1 插件在作者尝试过的环境中表现稳定。然而，还有第二个 CAS 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/CAS+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/CAS+Plugin))，旨在通过提供新功能与现有功能一起，例如支持
+    CAS 2.0 协议，来取代 CAS1 插件。
 - en: Once comfortable with this recipe consider experimenting with the CAS plugin.
+  id: totrans-537
   prefs: []
   type: TYPE_NORMAL
+  zh: 熟悉了这个配方后，考虑尝试使用 CAS 插件。
 - en: How to do it...
+  id: totrans-538
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做…
 - en: You will need to export the public certificate of the CAS server. Do this from
     a Firefox web browser by visiting `http://localhost:9443`. In the address bar,
     you will see an icon of a locked lock on the left-hand side. Click on the icon;
     a security pop-up dialog will appear.
+  id: totrans-539
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您需要导出 CAS 服务器的公共证书。通过在 Firefox 网页浏览器中访问 `http://localhost:9443` 来执行此操作。在地址栏中，您会看到一个锁定的锁图标位于左侧。点击图标；一个安全弹出对话框将出现。
 - en: Click on the **More information** button.
+  id: totrans-540
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**更多信息**按钮。
 - en: Click on the **View Certificate** button.
+  id: totrans-541
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**查看证书**按钮。
 - en: Select the **Details** tab.
+  id: totrans-542
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**详细信息**选项卡。
 - en: Click on the **Export** button.
+  id: totrans-543
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**导出**按钮。
 - en: Choose a location for your public certificate to be stored.
+  id: totrans-544
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择公共证书存储的位置。
 - en: Press **Save**.
+  id: totrans-545
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下**保存**。
 - en: 'Import into the keystore of the Java, as follows:'
+  id: totrans-546
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按以下方式导入到 Java 的密钥库中：
 - en: '[PRE30]'
+  id: totrans-547
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'To configure your CAS setting, visit the Jenkins **Config Global Security**
     screen in the **Security Realm** section. Under **Access Control**, check the
     **CAS protocol version 1** checkbox and add the following details:'
+  id: totrans-548
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要配置您的 CAS 设置，请访问 Jenkins 中的**全局安全配置**屏幕，位于**安全领域**部分下。在**访问控制**下，勾选**CAS 协议版本
+    1**复选框，并添加以下详细信息：
 - en: '**CAS Server URL**: `https://localhost:9443`'
+  id: totrans-549
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**CAS 服务器 URL**：`https://localhost:9443`'
 - en: '**Hudson Host Name**: `localhost:8080`'
+  id: totrans-550
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Hudson 主机名**：`localhost:8080`'
 - en: Log out of Jenkins.
+  id: totrans-551
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 注销。
 - en: Log in to Jenkins. You will now be redirected to the CAS server.
+  id: totrans-552
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Jenkins。您现在将被重定向到 CAS 服务器。
 - en: Log in to the CAS server. You will now be redirected back to Jenkins.
+  id: totrans-553
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 CAS 服务器。您现在将被重定向回 Jenkins。
 - en: How it works...
+  id: totrans-554
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The CAS plugin cannot verify the client's credentials unless it trusts the CAS
     server certificate. If the certificate is generated by a well-known trusted authority,
     then their **ROOT** certificates are most likely already in the default keystore
     (**cacerts**). This comes prepackaged with your Java installation. However, in
     the CAS installation recipe you created a self-signed certificate.
+  id: totrans-555
   prefs: []
   type: TYPE_NORMAL
+  zh: CAS 插件无法验证客户端的凭据，除非它信任 CAS 服务器证书。如果证书由知名的受信任机构生成，那么它们的**根**证书很可能已经存在于默认的密钥库（**cacerts**）中。这是随您的
+    Java 安装一起预先打包的。然而，在您创建的 CAS 安装配方中，您创建了一个自签名的证书。
 - en: The configuration details for the CAS plugin are trivial. Note that you left
     the **Roles Validation Script** field blank. This implies that your matrix-based
     strategies will have to rely on users being given specific permissions rather
     than groups defined by a customized CAS server.
+  id: totrans-556
   prefs: []
   type: TYPE_NORMAL
+  zh: CAS 插件的配置细节微不足道。请注意您将**角色验证脚本**字段留空。这意味着您的基于矩阵的策略将不得不依赖于用户被赋予特定权限，而不是由定制的 CAS
+    服务器定义的组。
 - en: Congratulations, you have a working SSO in which Jenkins can play its part seamlessly
     with a large array of other applications and authentication services!
+  id: totrans-557
   prefs: []
   type: TYPE_NORMAL
+  zh: 恭喜，您拥有一个可以与许多其他应用程序和身份验证服务无缝配合的工作中的 SSO！
 - en: See also
+  id: totrans-558
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Installing a CAS server* recipe
+  id: totrans-559
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*安装 CAS 服务器* 配方'
 - en: Exploring the OWASP Dependency-Check plugin
+  id: totrans-560
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 探索 OWASP 依赖检查插件
 - en: The OWASP Dependency-Check tool compares Java programs and JavaScript libraries
     to known threats in the CVE database ([https://cve.mitre.org/](https://cve.mitre.org/)).
     CVE is a dictionary of around 69,000 publicly known information security vulnerabilities
     and exposures. This process is a natural defense against the OWASP top 10 A9 -
     Using Known Vulnerable Components.
+  id: totrans-561
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP 依赖检查工具将 Java 程序和 JavaScript 库与 CVE 数据库中已知的威胁进行比较（[https://cve.mitre.org/](https://cve.mitre.org/)）。CVE
+    是约 69,000 个公开已知信息安全漏洞和曝光的词典。这个过程是对 OWASP 十大 A9 - 使用已知的易受攻击组件的自然防御。
 - en: The CVE database is used as a standard for reporting issues by vulnerability
     scanners, allowing for a common language that tool users can use to compare the
     susceptibility of their software. The CVE reports include descriptions, where
     the issue was first reported, and the estimated danger level.
+  id: totrans-562
   prefs: []
   type: TYPE_NORMAL
+  zh: CVE 数据库被用作漏洞扫描器报告问题的标准，允许工具用户使用一个通用语言来比较其软件的易受攻击程度。CVE 报告包括描述、问题首次报告位置和估计的危险级别。
 - en: Note
+  id: totrans-563
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The Dependency-Check tool is not always accurate as it needs to link the libraries
     with the vulnerabilities and sometimes it hard to for it to be accurate with library
     signatures. Therefore, you will need to review and filter actions based on the
     output.
+  id: totrans-564
   prefs: []
   type: TYPE_NORMAL
+  zh: 依赖检查工具并不总是准确的，因为它需要将库与漏洞联系起来，有时很难准确匹配库签名。因此，您需要根据输出审查和过滤操作。
 - en: Getting ready
+  id: totrans-565
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the OWASP Dependency-Check plugin.
+  id: totrans-566
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 OWASP 依赖检查插件。
 - en: How to do it...
+  id: totrans-567
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Click on the **Configure System** link in the **Manage Jenkins** page.
+  id: totrans-568
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **管理 Jenkins** 页面中的 **配置系统** 链接。
 - en: Review the **OWASP Dependency-Check** section, as shown in the following screenshot:![How
     to do it...](img/0082OS_02_05a.jpg)
+  id: totrans-569
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 **OWASP 依赖检查** 部分，如以下截图所示：![如何操作...](img/0082OS_02_05a.jpg)
 - en: Press the **Advanced...** button and you'll get something similar to the following
     screenshot:![How to do it...](img/0082OS_02_06a.jpg)
+  id: totrans-570
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下 **高级...** 按钮，您将得到类似以下截图的内容：![如何操作...](img/0082OS_02_06a.jpg)
 - en: Press the **Analyzers...** button and you'll get something similar to the following
     screenshot:![How to do it...](img/0082OS_02_07a.jpg)
+  id: totrans-571
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下 **分析器...** 按钮，您将得到类似以下截图的内容：![如何操作...](img/0082OS_02_07a.jpg)
 - en: Visit `http://localhost:8080/view/All/newJob`.
+  id: totrans-572
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 `http://localhost:8080/view/All/newJob`。
 - en: Create a free-style job named `OWASP`.
+  id: totrans-573
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `OWASP` 的自由样式作业。
 - en: Add a **Build** step for **Invoke OWASP Dependency-Check analysis**.
+  id: totrans-574
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为 **调用 OWASP 依赖检查分析** 添加一个 **构建** 步骤。
 - en: In the **Path to scan** field, type `/var/lib/jenkins/workspace` or the path
     to a project of your choice.
+  id: totrans-575
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **要扫描的路径** 字段中，键入 `/var/lib/jenkins/workspace` 或您选择的项目的路径。
 - en: Make sure **Generate optional HTML reports** is the only checkbox ticked. Notice
     that you have not selected the **Disable CPE auto-update** checkbox:![How to do
     it...](img/0082OS_02_08.jpg)
+  id: totrans-576
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保 **生成可选的 HTML 报告** 是唯一被选中的复选框。请注意，您未选择 **禁用 CPE 自动更新** 复选框：![如何操作...](img/0082OS_02_08.jpg)
 - en: Press **Save**.
+  id: totrans-577
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下 **保存**。
 - en: Press the **Build Now** icon.
+  id: totrans-578
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下 **立即构建** 图标。
 - en: Once the job is finished, press the following workspace icon:![How to do it...](img/0082OS_02_09a.jpg)
+  id: totrans-579
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 作业完成后，请按以下工作区图标：![如何操作...](img/0082OS_02_09a.jpg)
 - en: Click on the **dependency-check-vulnerabilty.html** link. Depending on the jobs
     run within the Jenkins workspace, you will see a report similar to the one shown
     in the following screenshot:![How to do it...](img/0082OS_02_10a.jpg)
+  id: totrans-580
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **dependency-check-vulnerabilty.html** 链接。根据 Jenkins 工作区内运行的作业，您将看到类似以下截图的报告：![如何操作...](img/0082OS_02_10a.jpg)
 - en: How it works...
+  id: totrans-581
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'Installing the plugin automatically installs the OWASP Dependency-Check tool.
     You can find the tool''s home page at [https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check):'
+  id: totrans-582
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装插件会自动安装 OWASP 依赖检查工具。您可以在工具的主页上找到工具的主页：[https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check)：
 - en: '![How it works...](img/0082OS_02_11a.jpg)'
+  id: totrans-583
   prefs: []
   type: TYPE_IMG
+  zh: '![工作原理...](img/0082OS_02_11a.jpg)'
 - en: Through the Jenkins interface, you configured the tool to look at every Java
     library `.jar` file underneath the Jenkins home directory. The scan will take
     time if your Jenkins server has many jobs configured.
+  id: totrans-584
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过 Jenkins 界面，您配置了工具查看 Jenkins 主目录下的每个 Java 库 `.jar` 文件。如果您的 Jenkins 服务器配置了许多作业，扫描将需要一些时间。
 - en: The **Disable CPE auto-update** option was not selected. This was necessary,
     as the first time the tool runs it runs needs to download security information
     from an external CVE database. If you do not allow this to happen, then the report
     will contain no information. Although downloading the newest threat information
     takes time it is the safest approach to finding new issues in time.
+  id: totrans-585
   prefs: []
   type: TYPE_NORMAL
+  zh: '**禁用 CPE 自动更新** 选项未被选中。这是必要的，因为工具首次运行需要从外部 CVE 数据库下载安全信息。如果不允许此操作发生，则报告将不包含任何信息。虽然下载最新的威胁信息需要时间，但这是找到新问题的最安全方法。'
 - en: There's more...
+  id: totrans-586
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容...
 - en: At the time of writing, the dependency plugin options in Jenkins lag behind
     the options available for the command-line tool. To give you an idea of what changes
     you can expect in the plugin, download the command-line tool from [https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check).
+  id: totrans-587
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写本文时，Jenkins 中的依赖插件选项落后于命令行工具可用的选项。为了让您了解插件中可能的更改，从 [https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check)
+    下载命令行工具。
 - en: 'Once the tool is downloaded and extracted, run the advanced help as follows:'
+  id: totrans-588
   prefs: []
   type: TYPE_NORMAL
+  zh: 工具下载并解压缩后，按如下方式运行高级帮助：
 - en: '[PRE31]'
+  id: totrans-589
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: 'Your output will be similar to the following screenshot:'
+  id: totrans-590
   prefs: []
   type: TYPE_NORMAL
+  zh: 你的输出将类似于以下截图：
 - en: '![There''s more...](img/0082OS_02_18.jpg)'
+  id: totrans-591
   prefs: []
   type: TYPE_IMG
+  zh: '![更多内容...](img/0082OS_02_18.jpg)'
 - en: 'The text is followed by a brief set of descriptions for all the options, such
     as:'
+  id: totrans-592
   prefs: []
   type: TYPE_NORMAL
+  zh: 该文本后跟有一组简要的描述，涵盖了所有选项，例如：
 - en: '[PRE32]'
+  id: totrans-593
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: The options are or will be mirrored in the Jenkins GUI configuration.
+  id: totrans-594
   prefs: []
   type: TYPE_NORMAL
+  zh: 选项在 Jenkins GUI 配置中反映出来，或将被反映出来。
 - en: Note
+  id: totrans-595
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You can find the most up-to-date code source for the tool at GitHub ([https://github.com/jeremylong/DependencyCheck](https://github.com/jeremylong/DependencyCheck)).
+  id: totrans-596
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在 GitHub 上找到该工具的最新代码源（[https://github.com/jeremylong/DependencyCheck](https://github.com/jeremylong/DependencyCheck)）。
 - en: See also
+  id: totrans-597
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Reporting overall storage usage* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
     Jenkins"), *Maintaining Jenkins*
+  id: totrans-598
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[Chapter 1](ch01.html "第一章 维护 Jenkins")中的*汇报总体存储使用量*配方，*维护 Jenkins*'
 - en: The *Adding a job to warn of storage use violations through log parsing* recipe
     in [Chapter 1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*
+  id: totrans-599
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[Chapter 1](ch01.html "第一章 维护 Jenkins")中的*通过日志解析添加作业以警告存储使用违规*配方，*维护 Jenkins*'

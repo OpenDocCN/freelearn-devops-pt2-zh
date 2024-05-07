@@ -1,86 +1,126 @@
 - en: Chapter 6. Testing Remotely
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第六章。远程测试
 - en: 'In this chapter, we will cover the following recipes:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下配方：
 - en: Deploying a WAR file from Jenkins to Tomcat
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 部署 WAR 文件到 Tomcat
 - en: Creating multiple Jenkins nodes
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建多个 Jenkins 节点
 - en: Custom setup scripts for slave nodes
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为从节点定制设置脚本
 - en: Testing with FitNesse
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 FitNesse 进行测试
 - en: Activating FitNesse HtmlUnit fixtures
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 激活 FitNesse HtmlUnit 夹具
 - en: Running Selenium IDE tests
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 运行 Selenium IDE 测试
 - en: Triggering failsafe integration tests with Selenium WebDriver
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Selenium WebDriver 触发 failsafe 集成测试
 - en: Creating JMeter test plans
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建 JMeter 测试计划
 - en: Reporting JMeter performance metrics
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 报告 JMeter 性能指标
 - en: Functional testing using JMeter assertions
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 JMeter 断言进行功能测试
 - en: Enabling Sakai web services
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 启用 Sakai Web 服务
 - en: Writing test plans with SoapUI
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 SoapUI 编写测试计划
 - en: Reporting SoapUI test results
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 报告 SoapUI 测试结果
 - en: Introduction
+  id: totrans-15
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍
 - en: 'By the end of this chapter, you will have run performance and functional tests
     against a web application and web services. Two typical setup recipes are included:
     the first is the deployment of a WAR file through Jenkins to an application server,
     the second is the creation of multiple slave nodes, ready to move the hard work
     of testing away from the master node.'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章结束时，您将对 Web 应用程序和 Web 服务运行性能和功能测试。其中包括两个典型的设置配方：第一个是通过 Jenkins 将 WAR 文件部署到应用服务器，第二个是创建多个从节点，准备将测试工作从主节点移开。
 - en: Remote testing through Jenkins considerably increases the number of dependencies
     in your infrastructure and thus the maintenance effort. Remote testing is a problem
     that is domain specific, decreasing the size of the audience that can write tests.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过 Jenkins 进行远程测试会显著增加基础设施中的依赖关系，从而增加了维护工作量。远程测试是一个特定于域的问题，减少了可以编写测试的受众规模。
 - en: This chapter emphasizes the need to make test writing accessible to a large
     audience. Embracing the largest possible audience improves the chances that the
     tests defend the intent of the application.
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章强调了使测试编写对大众可及的必要性。接纳尽可能多的受众可以提高测试捍卫应用程序意图的机会。
 - en: 'The technologies highlighted include:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 突出显示的技术包括：
 - en: '**FitNesse**: This is a wiki with which you can write different types of tests.
     Having a wiki-like language to express and change tests on-the-fly gives functional
     administrators, consultants, and the end user a place to express their needs.
@@ -89,27 +129,39 @@
     The testing types are called fixtures; there are a number of fixtures available,
     including ones for database testing, running tools from the command line, and
     functional testing of web applications.'
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**FitNesse**：这是一个 wiki，您可以在其中编写不同类型的测试。使用 wiki 类似的语言来实时表达和更改测试，为功能管理员、顾问和最终用户提供了一个表达其需求的地方。您将学会如何通过
+    Jenkins 运行 FitNesse 测试。FitNesse 还是一个框架，您可以扩展 Java 接口以创建新的测试类型。这些测试类型称为夹具；有许多可用的夹具，包括用于数据库测试、从命令行运行工具以及对
+    Web 应用程序进行功能测试的夹具。'
 - en: '**JMeter**: This is a popular open source tool for stress testing. It can also
     be used to functionally test through the use of assertions. JMeter has a GUI that
     allows you to build test plans. The test plans are then stored in XML format.
     JMeter is executable through a Maven or Ant script. JMeter is very efficient and
     one instance is normally enough to hit your infrastructure hard. However, for
     super-high-load scenarios JMeter can trigger an array of JMeter instances.'
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**JMeter**：这是一个流行的开源工具，用于压力测试。它还可以通过使用断言进行功能测试。JMeter 有一个允许您构建测试计划的 GUI。然后将测试计划存储在
+    XML 格式中。可以通过 Maven 或 Ant 脚本执行 JMeter。JMeter 非常高效，通常一个实例就足以对基础设施造成很大压力。但是，对于超高负载场景，JMeter
+    可以触发一系列 JMeter 实例。'
 - en: '**Selenium**: This is the de-facto industrial standard for the functional testing
     of web applications. With Selenium IDE, you can record your actions within Firefox
     or Chrome, saving them in HTML format to replay later. The tests can be re-run
     through Maven using Selenium RC (Remote Control). It is common to use Jenkins
     slaves with different OSes and browser types to run the tests. The alternative
     is to use Selenium grid ([https://code.google.com/p/selenium/wiki/Grid2](https://code.google.com/p/selenium/wiki/Grid2)).'
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Selenium**：这是功能测试 Web 应用程序的事实工业标准。使用 Selenium IDE，您可以在 Firefox 或 Chrome 中记录您的操作，以
+    HTML 格式保存以供以后重播。测试可以通过 Maven 使用 Selenium RC（远程控制）重新运行。通常会使用具有不同操作系统和浏览器类型的 Jenkins
+    从节点来运行测试。另一种选择是使用 Selenium Grid（[https://code.google.com/p/selenium/wiki/Grid2](https://code.google.com/p/selenium/wiki/Grid2)）。'
 - en: '**Selenium and TestNG unit tests**: A programmer-specific approach to functional
     testing is to write unit tests using the TestNG framework. The unit tests apply
     the Selenium WebDriver framework. Selenium RC is a proxy that controls the web
@@ -118,2256 +170,3318 @@
     of a real web browser. This enables OS independent testing, but removes the ability
     to test for browser-specific dependencies. WebDriver supports many different browser
     types.'
+  id: totrans-23
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Selenium 和 TestNG 单元测试**：编写单元测试使用 TestNG 框架进行功能测试的程序员特定方法。单元测试应用 Selenium
+    WebDriver 框架。Selenium RC 是控制 Web 浏览器的代理。相反，WebDriver 框架使用本机 API 调用来控制 Web 浏览器。您甚至可以运行
+    HtmlUnit 框架，消除了对真实 Web 浏览器的依赖。这使得测试独立于操作系统，但去除了测试浏览器特定依赖的能力。WebDriver 支持许多不同类型的浏览器。'
 - en: '**SoapUI**: This simplifies the creation of functional tests for web services.
     The tool can read **WSDL** (**Web Service Definition Language**) files publicized
     by web services, using the information to generate the skeleton for functional
     tests. The GUI makes it easy to understand the process.'
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**SoapUI**：这简化了为 Web 服务创建功能测试的过程。该工具可以读取 Web 服务公开的 **WSDL**（Web 服务定义语言）文件，使用该信息生成功能测试的骨架。GUI
+    使理解过程变得容易。'
 - en: Deploying a WAR file from Jenkins to Tomcat
+  id: totrans-25
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从 Jenkins 部署 WAR 文件到 Tomcat
 - en: 'The three main approaches to deploying web applications for integration tests
     are as follows:'
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 部署 Web 应用程序进行集成测试的三种主要方法如下：
 - en: Run the web app locally in a container such as Jetty brought to life during
     a Jenkins job. The applications database is normally in-memory and the data stored
     is not persisted past the end of the job. This saves cleaning up and eliminates
     unnecessary dependency on the infrastructure.
+  id: totrans-27
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 作业中启动 Jetty 等容器本地运行 Web 应用程序。应用程序数据库通常是内存中的，并且存储的数据在作业结束后不会持久化。这样可以节省清理工作，并消除对基础设施的不必要依赖。
 - en: A nightly build is created where the application is rebuilt through a scheduler.
     No polling of the SCM is needed. The advantages of this approach are a distributed
     team that knows exactly when and at which URL a new build exists, and that the
     deployment script is thin.
+  id: totrans-28
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 每晚都会创建一个夜间构建，应用程序会通过调度程序重新构建。不需要轮询 SCM。这种方法的优点是团队分布广，确切地知道新构建存在的时间和 URL，以及部署脚本很简洁。
 - en: Deploy to an application server. First, package the web application in Jenkins
     and then the deploy is ready for testing by a second Jenkins job. The disadvantage
     of this approach is that you are replacing an application on the fly and the host
     server might not always respond stably.
+  id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 部署到应用服务器。首先，在 Jenkins 中打包 Web 应用程序，然后部署准备好由第二个 Jenkins 作业进行测试。这种方法的缺点是，您正在动态替换应用程序，主机服务器可能不会始终稳定地响应。
 - en: In this recipe, you will be using the Deploy plugin to deploy a WAR file to
     a remote Tomcat 7 server. This plugin can deploy across a range of server types
     and version ranges including Tomcat, GlassFish, and JBoss.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此示例中，您将使用 Deploy 插件将 WAR 文件部署到远程 Tomcat 7 服务器。此插件可以在一系列服务器类型和版本范围内部署，包括 Tomcat、GlassFish
+    和 JBoss。
 - en: Getting ready
+  id: totrans-31
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Install the Deploy plugin for Jenkins Deploy plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin)).
     Download the latest version of Tomcat 7 and unpack ([http://tomcat.apache.org/download-70.cgi](http://tomcat.apache.org/download-70.cgi)).
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 为 Jenkins 安装 Deploy 插件（[https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin)）。下载最新版本的
+    Tomcat 7 并解压缩（[http://tomcat.apache.org/download-70.cgi](http://tomcat.apache.org/download-70.cgi)）。
 - en: How to do it...
+  id: totrans-33
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Create a Maven project for a simple WAR file from the command line:'
+  id: totrans-34
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为简单的 WAR 文件从命令行创建一个 Maven 项目：
 - en: '[PRE0]'
+  id: totrans-35
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Commit the newly created project to your Git or subversion repository.
+  id: totrans-36
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将新创建的项目提交到您的 Git 或子版本库中。
 - en: 'To avoid conflict with Jenkins listening on port `8080`, under the Tomcat root
     directory edit `conf/server.xml` change the default connector port number to `38887`:'
+  id: totrans-37
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为避免与监听端口 `8080` 的 Jenkins 冲突，在 Tomcat 根目录下编辑 `conf/server.xml`，将默认连接器端口号更改为
+    `38887`：
 - en: '[PRE1]'
+  id: totrans-38
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'From the command line, start Tomcat:'
+  id: totrans-39
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行启动 Tomcat：
 - en: '[PRE2]'
+  id: totrans-40
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: Log in to Jenkins.
+  id: totrans-41
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Jenkins。
 - en: Create a Maven project named `ch6.remote.deploy`.
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建名为 `ch6.remote.deploy` 的 Maven
 - en: Under the **Source Code Management** section, check the **Subversion** radio
     box, adding your own subversion repository URL to the **Repository URL**.
+  id: totrans-43
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **源代码管理** 部分，选中 **Subversion** 单选框，将您自己的子版本库 URL 添加到 **Repository URL**。
 - en: In the **build** section, for **Goals and options** add `clean package`.
+  id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分，对于**目标和选项**，添加`clean package`。
 - en: 'In the **Post-build Actions** section, check **Deploy war/ear to a container**
     adding the following configuration:'
+  id: totrans-45
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '在**后期构建操作**部分，勾选**部署war/ear到容器**，添加以下配置:'
 - en: '**WAR/EAR files**: `target/simplewar.war`'
+  id: totrans-46
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**WAR/EAR文件**: `target/simplewar.war`'
 - en: '**Container**: Tomcat 7.x'
+  id: totrans-47
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**容器**: Tomcat 7.x'
 - en: '**Manager user name**: `jenkins_build`'
+  id: totrans-48
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**管理器用户名**: `jenkins_build`'
 - en: '**Manager password**: `mylongpassword`'
+  id: totrans-49
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**管理器密码**: `mylongpassword`'
 - en: '**Tomcat URL**: `http://localhost:38887`'
+  id: totrans-50
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Tomcat URL**: `http://localhost:38887`'
 - en: Click on **Save**.
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the build.
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行构建。
 - en: 'The build will fail with output similar to: **java.io.IOException: Server returned
     HTTP response code: 401 for URL: http://localhost:38887/manager/text/list**.'
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '构建将以类似以下的输出失败: **java.io.IOException: 服务器返回HTTP响应代码: 401，网址为: http://localhost:38887/manager/text/list**。'
 - en: 'Edit `conf/tomcat-users.xml` by adding the following before `</tomcat-users>`
     :'
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过在`conf/tomcat-users.xml`中添加以下内容，编辑：在`</tomcat-users>`之前：
 - en: '[PRE3]'
+  id: totrans-55
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Restart Tomcat.
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重新启动Tomcat。
 - en: 'In Jenkins, build the job again. The build will now succeed. Reviewing the
     Tomcat log `logs/catalina.out` will reveal output similar to: **Oct 06, 2014 9:37:11
     PM org.apache.catalina.startup.HostConfig deployWAR**'
+  id: totrans-57
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '在Jenkins中，再次构建该任务。现在构建将成功。查看Tomcat日志`logs/catalina.out`将显示类似于以下内容的输出: **Oct
+    06, 2014 9:37:11 PM org.apache.catalina.startup.HostConfig deployWAR**'
 - en: '**INFO: Deploying web application archive /xxxxx/apache-tomcat-7.0.23/webapps/simplewar.war**.'
+  id: totrans-58
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '**信息: 正在部署Web应用程序存档 /xxxxx/apache-tomcat-7.0.23/webapps/simplewar.war**。'
 - en: With a web browser visit `http://localhost:38887/simplewar/`, as shown in the
     following screenshot:![How to do it...](img/0082OS_06_10.jpg)
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '使用Web浏览器访问`http://localhost:38887/simplewar/`，如下面的屏幕截图所示: ![操作步骤...](img/0082OS_06_10.jpg)'
 - en: Note
+  id: totrans-60
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'A potential gotcha: if you misspell the name of the WAR file in your post build
     configuration then it will fail silently and the build will still succeed.'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个可能的陷阱：如果你在后期构建配置中拼错了WAR文件的名称，那么它会悄无声息地失败，但构建仍然会成功。
 - en: How it works...
+  id: totrans-62
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'At the time of writing, the Deploy plugin deploys to the following server types
     and versions:'
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: '在撰写本文时，Deploy插件部署到以下服务器类型和版本:'
 - en: Tomcat 4.x/5.x/6.x/7.x
+  id: totrans-64
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Tomcat 4.x/5.x/6.x/7.x
 - en: JBoss 3.x/4.x
+  id: totrans-65
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: JBoss 3.x/4.x
 - en: GlassFish 2.x/3.x
+  id: totrans-66
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: GlassFish 2.x/3.x
 - en: In this recipe, Jenkins packages a simple WAR file and deploys to a Tomcat instance.
     By default, Tomcat listens on port `8080` as does Jenkins. By editing `conf/server.xml`,
     the port was moved to `38887` avoiding conflict.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此示例中，Jenkins打包了一个简单的WAR文件并部署到了Tomcat实例。默认情况下，Tomcat监听`8080`端口，Jenkins也是如此。通过编辑`conf/server.xml`，将端口移动到了`38887`，避免了冲突。
 - en: The Jenkins plugin calls the Tomcat Manager. After failing to deploy with a
     `401` not authorized error ([http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)),
     you created a Tomcat user with the required roles. In fact, the new user has more
     power than is needed for deployment. The user has the power to review JMX data
     for monitoring. This helps you with debugging later.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins插件调用Tomcat Manager。在部署失败且出现`401`未经授权错误([http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html))后，你创建了一个具有所需角色的Tomcat用户。实际上，新用户比部署所需的权限更大。用户有权查看用于监控的JMX数据。这会帮助你以后进行调试。
 - en: When deploying in production, use an SSL connection to avoid sending unencrypted
     passwords over the wire.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 在生产环境中部署时，使用SSL连接以避免在网络上传送未加密的密码。
 - en: There's more...
+  id: totrans-70
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'On startup, the Tomcat logs mention that the Apache Tomcat Native library is
     missing:'
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: '启动时，Tomcat日志会提到缺少Apache Tomcat本机库:'
 - en: '**INFO: The APR based Apache Tomcat Native library which allows optimal performance
     in production environments was not found on the java.library.path: /usr/java/packages/lib/i386:/usr/lib/i386-linux-gnu/jni:/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu:/usr/lib/jni:/lib:/usr/lib**.'
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: '**信息: 基于APR的Apache Tomcat本机库，允许在生产环境中获得最佳性能，在java.library.path中找不到: /usr/java/packages/lib/i386:/usr/lib/i386-linux-gnu/jni:/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu:/usr/lib/jni:/lib:/usr/lib**。'
 - en: The library improves the performance when running on a Linux platform, and it
     is based on Apache Portable Runtime Projects effort ([http://apr.apache.org/](http://apr.apache.org/)).
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 该库在Linux平台上运行时提高了性能，基于Apache Portable Runtime项目的努力 ([http://apr.apache.org/](http://apr.apache.org/))。
 - en: You can find the source code in `bin/tomcat-native.tar.gz`. The build instructions
     can be found at [http://tomcat.apache.org/native-doc/](http://tomcat.apache.org/native-doc/).
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在`bin/tomcat-native.tar.gz`中找到源代码。构建说明可以在[http://tomcat.apache.org/native-doc/](http://tomcat.apache.org/native-doc/)找到。
 - en: See also
+  id: totrans-75
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Configuring Jetty for integration tests* recipe in [Chapter 3](ch03.html
     "Chapter 3. Building Software"), *Building Software*
+  id: totrans-76
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第3章](ch03.html "第3章。构建软件") 中的 *为 Jetty 配置集成测试* 配方，*构建软件*'
 - en: Creating multiple Jenkins nodes
+  id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建多个 Jenkins 节点
 - en: Testing is a heavyweight process. If you want to scale your services then you
     will need to plan to offset most of the work to other nodes.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试是一个繁重的过程。如果您想要扩展您的服务，那么您需要计划将大部分工作分配给其他节点。
 - en: One evolutionary path for Jenkins in an organization is to start off with one
     Jenkins master. As the number of jobs increases we need to push off the heavier
     jobs such as testing to slaves. This leaves the master the lighter and more specialized
     work of aggregating the results. There are other reasons as well to farm out testing,
     for example for functional testing when you want to use different web browsers
     under different OS or run .NET applications natively.
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 在组织中的一个进化路径是从一个 Jenkins 主节点开始。随着作业数量的增加，我们需要将更重的作业，例如测试，推送到从节点。这使得主节点更轻巧且更专业地聚合结果。还有其他原因可以分配测试，例如当您希望在不同的操作系统下使用不同的网络浏览器或在本机运行
+    .NET 应用程序时进行功能测试。
 - en: This recipe uses the Multi slave config plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Multi+slave+config+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multi+slave+config+plugin))
     to install an extra Jenkins node locally. It is Linux-specific, allowing Jenkins
     to install, configure, and command the slave through SSH.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 此配方使用 Multi slave config 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Multi+slave+config+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multi+slave+config+plugin))
+    在本地安装额外的 Jenkins 节点。它是针对 Linux 的，允许 Jenkins 通过 SSH 安装、配置和控制从节点。
 - en: Getting ready
+  id: totrans-81
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: In Jenkins, install the Multi slave config plugin. You will also need to have
     a test instance of Ubuntu as described in the *Using a test Jenkins instance*
     recipe, [Chapter 1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining
     Jenkins*.
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中安装 Multi slave config 插件。您还需要一个 Ubuntu 的测试实例，如 *使用测试 Jenkins 实例*
+    配方中描述的那样，[第1章](ch01.html "第1章。维护 Jenkins")，*维护 Jenkins*。
 - en: How to do it...
+  id: totrans-83
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'From the command line of the slave node create the user `jenkins-unix-nodex`:'
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从从节点的命令行创建用户 `jenkins-unix-nodex`：
 - en: '[PRE4]'
+  id: totrans-85
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Generate a private key and a public certificate for the master Jenkins with
     an empty passphase:'
+  id: totrans-86
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用空密码为主 Jenkins 生成私钥和公共证书：
 - en: '[PRE5]'
+  id: totrans-87
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Create the `.ssh` directory and the Jenkins public certificate to `.ssh/authorized_keys`.
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建 `.ssh` 目录和 Jenkins 的公共证书到 `.ssh/authorized_keys`。
 - en: '[PRE6]'
+  id: totrans-89
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Change the ownership and group of `authorized_keys` to `jenkins-unix-nodex`:`jenkins-unix-nodex`:'
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更改 `authorized_keys` 的所有者和组为 `jenkins-unix-nodex`:`jenkins-unix-nodex`：
 - en: '[PRE7]'
+  id: totrans-91
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Test that you can log in without a password as `jenkins` to `jenkins-unix-nodex`.`jenkins-unix-nodex`:'
+  id: totrans-92
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 测试您是否可以无密码登录到 `jenkins-unix-nodex` 作为 `jenkins`。
 - en: '[PRE8]'
+  id: totrans-93
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: Note
+  id: totrans-94
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You will need to accept the key fingerprint.
+  id: totrans-95
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 您将需要接受密钥指纹。
 - en: Log in to Jenkins.
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到 Jenkins。
 - en: Visit the credentials store (`localhost:8080/credential-store`).
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问凭据存储库（`localhost:8080/credential-store`）。
 - en: Click on the **Global credentials** link, as shown in the following screenshot:![How
     to do it...](img/0082OS_06_03.jpg)
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **全局凭据** 链接，如下图所示：![如何操作...](img/0082OS_06_03.jpg)
 - en: Click on **Add Credentials**.
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **添加凭据**。
 - en: 'Add the following details:'
+  id: totrans-100
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加以下详细信息：
 - en: '**Kind**: SSH username with private key'
+  id: totrans-101
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**类型**：带私钥的 SSH 用户名'
 - en: '**Scope**: **Global**'
+  id: totrans-102
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**范围**：**全局**'
 - en: '**Username**: `jenkins-unix-nodex`'
+  id: totrans-103
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用户名**：`jenkins-unix-nodex`'
 - en: '**Private Key**: **From the Jenkins master ~ /.ssh**'
+  id: totrans-104
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**私钥**：**来自 Jenkins 主机的 ~/.ssh**'
 - en: Click on **Save**.![How to do it...](img/0082OS_06_01.jpg)
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **保存**。![如何操作...](img/0082OS_06_01.jpg)
 - en: Visit the **MultiSlave Config Plugin** under **Manage Jenkins** (`localhost:8080/multi-slave-config-plugin/?`).
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 **Manage Jenkins** 下的 **MultiSlave Config Plugin**（`localhost:8080/multi-slave-config-plugin/?`）。
 - en: Click on **Add Slaves**.
+  id: totrans-107
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **添加从节点**。
 - en: 'Add to **Create slaves by names separated with space**: **unix-node01** and
     then click on **Proceed**.'
+  id: totrans-108
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加到 **使用空格分隔的名称创建从节点**：**unix-node01**，然后单击 **继续**。
 - en: 'In the **Multi Slave Config Plugin – Add slaves** screen, add the following
     details:'
+  id: totrans-109
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Multi Slave Config Plugin – 添加从节点** 屏幕上，添加以下详细信息：
 - en: '**Description**: **I am a dumb Ubuntu node**'
+  id: totrans-110
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**描述**：**我是一个愚蠢的 Ubuntu 节点**'
 - en: '**# of executors**: **2**'
+  id: totrans-111
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**执行器数量**：**2**'
 - en: '**Remote FS root**: **/home/jenkins-unix-nodex**'
+  id: totrans-112
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**远程文件系统根目录**：**/home/jenkins-unix-nodex**'
 - en: '**Set labels**: **unix dumb functional**'
+  id: totrans-113
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**设置标签**：**unix dumb functional**'
 - en: 'Select for launch method **Launch slave agents on Unix machines via SSH** and
     add the details:'
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择启动方法为 **通过 SSH 在 Unix 机器上启动从节点** 并添加详细信息：
 - en: '**Host**: **localhost**'
+  id: totrans-115
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**主机**：**localhost**'
 - en: '**Credentials**: **jenkins-unix-nodex**'
+  id: totrans-116
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**凭据**：**jenkins-unix-nodex**'
 - en: Click on **Save**.
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Return to the main page. You will now see that the **Build Executor Status**
     includes the **Master** and **unix-node01**, as shown in the following screenshot:![How
     to do it...](img/0082OS_06_02.jpg)
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 返回到主页面。 您现在将看到**Build Executor Status**中包含**Master**和**unix-node01**，如下图所示：![如何做...](img/0082OS_06_02.jpg)
 - en: How it works...
+  id: totrans-119
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: 'In this recipe, you have deployed one node locally to a *NIX box. A second
     user account is used. The account is provisioned with the public key of the Jenkins
     user for easier administration: Jenkins can now use `ssh` and `scp` without a
     password.'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: '在这个示例中，您已经将一个节点部署到本地*NIX框中。 使用了第二个用户帐户。 该帐户使用了Jenkins用户的公钥以便更轻松地进行管理：Jenkins现在可以在没有密码的情况下使用`ssh`和`scp`。 '
 - en: The Multi slave config plugin takes the drudgery out of deploying slave nodes.
     It allows you to copy from one template slave and deploy a number of nodes.
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 多从节点配置插件可以消除部署从节点的繁琐工作。 它允许您从一个模板从节点复制并部署多个节点。
 - en: 'Jenkins can run nodes in a number of different ways: using SSH, the master
     runs a custom script, or through Windows services ([https://wiki.jenkins-ci.org/display/JENKINS/Distributed+builds](https://wiki.jenkins-ci.org/display/JENKINS/Distributed+builds)).
     The most reliable approach is through the SSH protocol. The strength of this approach
     is multifold:'
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins可以以多种不同的方式运行节点：使用SSH，主节点运行自定义脚本，或通过Windows服务（[https://wiki.jenkins-ci.org/display/JENKINS/Distributed+builds](https://wiki.jenkins-ci.org/display/JENKINS/Distributed+builds)）。
+    最可靠的方法是通过SSH协议。 这种方法的优点是多方面的：
 - en: The use of SSH is popular, implying a shallow learning curve for a large audience.
+  id: totrans-123
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用SSH是流行的，意味着对大多数人来说学习曲线较为平缓。
 - en: SSH is a reliable technology that has been battle-hardened over many generations.
+  id: totrans-124
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: SSH是一种可靠的技术，经过多代人的实践证明其稳健性。
 - en: There are SSH daemons for most operating systems, not just for *NIX. One alternative
     is to install **Cygwin** ([http://www.cygwin.com/](http://www.cygwin.com/)) with
     an SSH daemon on Windows.
+  id: totrans-125
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 大多数操作系统都有SSH守护程序，不仅仅是*NIX。 一种选择是在Windows上安装Cygwin（[http://www.cygwin.com/](http://www.cygwin.com/)）并带有一个SSH守护程序。
 - en: Note
+  id: totrans-126
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If you want to have your Unix scripts running in Windows under Cygwin, consider
     installing the Cygpath plugin. The plugin converts Unix-style paths to Windows-style.
     For more information, visit
+  id: totrans-127
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果您希望在Cygwin下的Windows中运行您的Unix脚本，请考虑安装Cygpath插件。 该插件将Unix样式路径转换为Windows样式。 有关更多信息，请访问
 - en: '[https://wiki.jenkins-ci.org/display/JENKINS/Cygpath+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Cygpath+Plugin).'
+  id: totrans-128
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '[https://wiki.jenkins-ci.org/display/JENKINS/Cygpath+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Cygpath+Plugin)。'
 - en: 'The configured node has three labels assigned: `unix`, `dumb`, and `functional`.
     When creating a new job, checking the setting **Restrict where this project can
     be run** and adding one of the labels will ensure that the job is run on a node
     with that label.'
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置的节点已分配了三个标签：`unix`，`dumb`和`functional`。 在创建新作业时，检查设置**限制此项目可以运行的位置**并添加其中一个标签，将确保作业在具有该标签的节点上运行。
 - en: The master calculates which node to run a job based on a priority list. Unless
     otherwise configured, jobs created when there was only a master will still run
     on the master. Newer jobs will run by default on the slaves.
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 主节点根据优先级列表计算要运行作业的节点。 除非另有配置，否则在只有主节点时创建的作业仍将在主节点上运行。 新创建的作业默认将在从节点上运行。
 - en: When deploying more than one Jenkins node, it saves effort if you are consistent
     with the structure of their environments. Consider using a virtual environment
     starting from the same basic set of images. **CloudBees** ([http://www.cloudbees.com](http://www.cloudbees.com))
     is one example of a commercial service centered on the deployment of virtual instances.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 当部署多个Jenkins节点时，如果您的环境结构保持一致，则可以节省工作量。 考虑使用从相同基本镜像开始的虚拟环境。 CloudBees（[http://www.cloudbees.com](http://www.cloudbees.com)）是一个以部署虚拟实例为中心的商业服务的示例。
 - en: Note
+  id: totrans-132
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You can find more information about installing a Windows service for a Jenkins
     slave at [https://wiki.jenkins-ci.org/display/JENKINS/Step+by+step+guide+to+set+up+master+and+slave+machines](https://wiki.jenkins-ci.org/display/JENKINS/Step+by+step+guide+to+set+up+master+and+slave+machines).
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[https://wiki.jenkins-ci.org/display/JENKINS/Step+by+step+guide+to+set+up+master+and+slave+machines](https://wiki.jenkins-ci.org/display/JENKINS/Step+by+step+guide+to+set+up+master+and+slave+machines)找到有关为Jenkins从节点安装Windows服务的更多信息。
 - en: There's more...
+  id: totrans-134
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Since Version 1.446 ([http://jenkins-ci.org/changelog](http://jenkins-ci.org/changelog)),
     Jenkins has an in-built SSH daemon. This will decrease the amount of effort writing
     client-side code. The command-line interface is accessible through the SSH protocol.
     You can set the port number of the daemon through the Jenkins management web page
     or leave the port number to float.
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 从版本 1.446 开始（[http://jenkins-ci.org/changelog](http://jenkins-ci.org/changelog)），Jenkins
+    已经内置了 SSH 守护程序。这将减少编写客户端代码的工作量。命令行界面可以通过 SSH 协议访问。您可以通过 Jenkins 管理网页设置守护程序的端口号，或者将端口号浮动。
 - en: 'Jenkins publishes the port number using header information for **X-SSH-Endpoint**.
     To see for yourself, use curl ([http://curl.haxx.se/](http://curl.haxx.se/)) to
     find out what headers are returned from Jenkins. For example, for *NIX systems
     from the command line try:'
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 使用头部信息发布端口号为 **X-SSH-Endpoint**。要自己查看，请使用 curl（[http://curl.haxx.se/](http://curl.haxx.se/)）查找从
+    Jenkins 返回的头部信息。例如，对于 *NIX 系统，可以尝试从命令行输入：
 - en: '[PRE9]'
+  id: totrans-137
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: The header information is sent to `stdout` for you to view and the body is sent
     to `/dev/null` which is the system location that ignores all input.
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: 头部信息被发送到`stdout`供您查看，而正文被发送到`/dev/null`，这是一个系统位置，忽略所有输入。
 - en: 'The response from Jenkins will be similar to the following:'
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 来自 Jenkins 的响应将类似于以下内容：
 - en: '[PRE10]'
+  id: totrans-140
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: See also
+  id: totrans-141
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Using a test Jenkins instance* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
     Jenkins"), *Maintaining Jenkins*
+  id: totrans-142
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第1章](ch01.html "第1章。维护 Jenkins")中的 *使用测试 Jenkins 实例* 方法，*维护 Jenkins*'
 - en: The *Custom setup scripts for slave nodes* recipe
+  id: totrans-143
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 从节点的*自定义设置脚本*方法
 - en: Custom setup scripts for slave nodes
+  id: totrans-144
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从节点的自定义设置脚本
 - en: This recipe shows you how to run your own initialization scripts on slave nodes.
     This allows you to perform node system cleanups, check health, set up tests, and
     a multitude of other necessary tasks.
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 此方法向您展示如何在从节点上运行自己的初始化脚本。这使您可以执行节点系统清理、检查健康状况、设置测试以及执行其他必要的任务。
 - en: Getting ready
+  id: totrans-146
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: For this recipe to work, you will need to have installed a slave node as described
     by the *Creating multiple Jenkins nodes* recipe.
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使此方法生效，您需要按照*创建多个 Jenkins 节点*的方法描述安装一个从节点。
 - en: You will also have installed the Slave Setup plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Slave+Setup+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Slave+Setup+Plugin)).
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还将安装了从节点设置插件（[https://wiki.jenkins-ci.org/display/JENKINS/Slave+Setup+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Slave+Setup+Plugin)）。
 - en: How to do it...
+  id: totrans-149
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作方法...
 - en: Create a free-style job named `ch6.remote.slave.setup`.
+  id: totrans-150
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`ch6.remote.slave.setup`的自由样式作业。
 - en: Check **Restrict** where this project can run.
+  id: totrans-151
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查**限制**此项目可运行的位置。
 - en: Add the text `dumb` to **Label Expression**, as shown in the following screenshot:![How
     to do it...](img/0082OS_06_08.jpg)
+  id: totrans-152
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **标签表达式** 中添加文本`dumb`，如以下截图所示：![操作方法...](img/0082OS_06_08.jpg)
 - en: Click on **Save** and thenbuild the job.
+  id: totrans-153
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**，然后构建作业。
 - en: Click on **Back to Dashboard**.
+  id: totrans-154
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**返回仪表板**。
 - en: Under **Build Executor Status** click on the **unix-node01**.
+  id: totrans-155
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建执行者状态**下点击**unix-node01**。
 - en: Click on **Script Console**.
+  id: totrans-156
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**脚本控制台**。
 - en: 'Add the following text to the **Script Console** and then click on **Run**:'
+  id: totrans-157
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下文本添加到**脚本控制台**，然后点击**运行**：
 - en: '[PRE11]'
+  id: totrans-158
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: Create the directory `/var/lib/jenkins/myfiles`.
+  id: totrans-159
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录`/var/lib/jenkins/myfiles`。
 - en: 'Create the file `/var/lib/jenkins/myfiles/banner.sh` with the following text:'
+  id: totrans-160
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建文件`/var/lib/jenkins/myfiles/banner.sh`，内容如下：
 - en: '[PRE12]'
+  id: totrans-161
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Visit the **Configure system** page (`http://localhost:8080/configure`).
+  id: totrans-162
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问**配置系统**页面（`http://localhost:8080/configure`）。
 - en: Under the **Slave Setup** section, click on the **Add** button for the **Slave
     Setups list**.
+  id: totrans-163
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**从节点设置**部分，点击**添加**按钮添加**从节点设置列表**。
 - en: 'Add the following details:'
+  id: totrans-164
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加以下细节：
 - en: '**setup files directory**: `/var/lib/jenkins/myfiles`'
+  id: totrans-165
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**设置文件目录**：`/var/lib/jenkins/myfiles`'
 - en: '**setup script after copy**: `./banner.sh`'
+  id: totrans-166
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**复制后的设置脚本**：`./banner.sh`'
 - en: '**Label Expression**: `dumb`'
+  id: totrans-167
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**标签表达式**：`dumb`'
 - en: '![How to do it...](img/0082OS_06_09.jpg)'
+  id: totrans-168
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![操作方法...](img/0082OS_06_09.jpg)'
 - en: Check **deploy on save now**.
+  id: totrans-169
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查 **立即保存部署**。
 - en: Click on **Save**.
+  id: totrans-170
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job `ch6.remote.slave.setup`.
+  id: totrans-171
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业`ch6.remote.slave.setup`。
 - en: 'Review the workspace. You will now see a `banner.txt` file with content similar
     to the following:'
+  id: totrans-172
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看工作空间。您现在将看到一个名为`banner.txt`的文件，内容类似于以下内容：
 - en: '[PRE13]'
+  id: totrans-173
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: How it works...
+  id: totrans-174
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: You used the Slave Setup plugin to copy `banner.sh` from `/var/lib/jenkins`
     to the home directory of the slave, `banner.sh`. This action runs before each
     job run on the node.
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 您使用从节点设置插件将`banner.sh`从`/var/lib/jenkins`复制到从节点的主目录下的 `banner.sh`。此操作在每次节点上运行作业之前运行。
 - en: Checking **deploy on save now** makes sure that the script on the slave is fresh.
+  id: totrans-176
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择**保存后部署**以确保从节点上获取的脚本是最新的。
 - en: You used the script console to discover the home location of the node. You also
     verified that the workspace contained a directory for the `ch6.remote.slave.setup`
     job with the same name as the job.
+  id: totrans-177
   prefs: []
   type: TYPE_NORMAL
+  zh: 你使用脚本控制台发现了节点的主目录位置。你还验证了工作区包含了与`ch6.remote.slave.setup`作业同名的目录。
 - en: In the job, you restricted where it ran to the nodes with the **dumb** label.
     This way you are certain that the job runs on the node.
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 在作业中，您将其运行限制在具有**dumb**标签的节点上。这样，您就可以确保作业在节点上运行。
 - en: '`banner.sh` uses the `sh` shell by default that is really pointing to `bash`
     the **Bourne Again Shell** ([http://www.gnu.org/software/bash/](http://www.gnu.org/software/bash/)),
     or `dash` the **Debian Almquist Shell** ([http://gondor.apana.org.au/~herbert/dash/](http://gondor.apana.org.au/~herbert/dash/)).'
+  id: totrans-179
   prefs: []
   type: TYPE_NORMAL
+  zh: '`banner.sh`默认使用的是`sh` shell，实际上指向了**Bourne Again Shell** ([http://www.gnu.org/software/bash/](http://www.gnu.org/software/bash/))，或者是**Debian
+    Almquist Shell** ([http://gondor.apana.org.au/~herbert/dash/](http://gondor.apana.org.au/~herbert/dash/))的`dash`。'
 - en: Note
+  id: totrans-180
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For the reasoning behind the use of dash in Ubuntu visit [https://wiki.ubuntu.com/DashAsBinSh](https://wiki.ubuntu.com/DashAsBinSh).
+  id: totrans-181
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关在Ubuntu中使用破折号的原因，请访问[https://wiki.ubuntu.com/DashAsBinSh](https://wiki.ubuntu.com/DashAsBinSh)。
 - en: To show that it has run, the script outputs to `banner.txt,` a small banner
     with a time stamp. The last command in the script moves `banner.txt` to the jobs
     directory under the nodes workspace.
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了显示已运行，脚本将一个带有时间戳的小横幅输出到`banner.txt`。脚本中的最后一个命令将`banner.txt`移动到节点工作区下的作业目录。
 - en: Once the job has run, the slave copies the workspace back to the Jenkins master's
     workspace. Later you viewed the results.
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: 作业运行后，从节点将工作空间复制回Jenkins主服务器的工作空间。稍后您会查看结果。
 - en: There's more...
+  id: totrans-184
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'If your Jenkins node supports other languages, such as Perl, you can run them
     by adding the `#!` convention as the first line of your script, pointing to the
     full path of the binary of the scripting language. To discover the path to the
     binary, you can use the nodes script console and run the `which` command:'
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您的Jenkins节点支持其他语言，例如Perl，您可以通过在脚本的第一行添加`#!`约定，指向脚本语言的二进制完整路径来运行它们。要发现二进制文件的路径，您可以使用节点脚本控制台并运行`which`命令：
 - en: '[PRE14]'
+  id: totrans-186
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: This results in `/usr/bin/perl`.
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 这导致了`/usr/bin/perl`。
 - en: 'A "Hello World" Perl script would then look like the following code:'
+  id: totrans-188
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个“Hello World”Perl脚本将如下代码所示：
 - en: '[PRE15]'
+  id: totrans-189
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: See also
+  id: totrans-190
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Creating multiple Jenkins nodes* recipe
+  id: totrans-191
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*创建多个Jenkins节点*配方'
 - en: Testing with FitNesse
+  id: totrans-192
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用FitNesse进行测试
 - en: FitNesse ([http://fitnesse.org](http://fitnesse.org)) is a fully integrated
     standalone wiki and acceptance-testing framework. You can write tests in tables
     and run them. Writing tests in a wiki language widens the audience of potential
     test writers and decreases the initial efforts required to learning a new framework.
+  id: totrans-193
   prefs: []
   type: TYPE_NORMAL
+  zh: FitNesse ([http://fitnesse.org](http://fitnesse.org))是一个完全集成的独立wiki和验收测试框架。您可以在表格中编写测试并运行它们。在wiki语言中编写测试扩大了潜在测试编写者的受众，并减少了学习新框架所需的初始工作量。
 - en: '![Testing with FitNesse](img/0082OS_06_04.jpg)'
+  id: totrans-194
   prefs: []
   type: TYPE_IMG
+  zh: '![使用FitNesse进行测试](img/0082OS_06_04.jpg)'
 - en: If a test passes, the table row is displayed in green. If it fails, it is displayed
     in red. The tests can be surrounded by wiki content delivering context information
     such as user stories at the same location as the tests. You can also consider
     creating mock-ups of your web applications in FitNesse next to the tests and pointing
     the tests at those mock-ups.
+  id: totrans-195
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果测试通过，则表格行以绿色显示。如果失败，则以红色显示。测试可以被wiki内容包围，以在相同位置提供上下文信息，如用户故事。您还可以考虑在FitNesse中创建您的Web应用程序的模拟以及将测试指向这些模拟。
 - en: This recipe describes how to run FitNesse remotely and display the results within
     Jenkins.
+  id: totrans-196
   prefs: []
   type: TYPE_NORMAL
+  zh: 本配方描述了如何远程运行FitNesse并在Jenkins中显示结果。
 - en: Getting ready
+  id: totrans-197
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Download the latest stable FitNesse JAR from [http://fitnesse.org/FitNesseDownload](http://fitnesse.org/FitNesseDownload).
     Install the FitNesse plugins for Jenkins from [https://wiki.jenkins-ci.org/display/JENKINS/FitNesse+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/FitNesse+Plugin).
+  id: totrans-198
   prefs: []
   type: TYPE_NORMAL
+  zh: 从[http://fitnesse.org/FitNesseDownload](http://fitnesse.org/FitNesseDownload)下载最新稳定的FitNesse
+    JAR。从[https://wiki.jenkins-ci.org/display/JENKINS/FitNesse+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/FitNesse+Plugin)安装Jenkins的FitNesse插件。
 - en: Note
+  id: totrans-199
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The release number used to test this recipe was `20140901`.
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于测试此配方的发布号是`20140901`。
 - en: How to do it...
+  id: totrans-201
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Create the directories `fit/logs` and place them in the fit directory `fitnesse-standalone.jar`.
+  id: totrans-202
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录`fit/logs`并将其放置在`fitnesse-standalone.jar`的`fit`目录中。
 - en: 'Run the FitNesse help from the command line and review the options:'
+  id: totrans-203
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行运行 FitNesse 帮助并查看选项：
 - en: '[PRE16]'
+  id: totrans-204
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'Run FitNesse from the command line and review the startup output:'
+  id: totrans-205
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行运行 FitNesse 并查看启动输出：
 - en: '[PRE17]'
+  id: totrans-206
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: Using a web browser, visit `http://localhost:39996`.
+  id: totrans-207
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 web 浏览器，访问`http://localhost:39996`。
 - en: Click on the **Acceptance Test** link.
+  id: totrans-208
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**验收测试**链接。
 - en: Click on the **Suite** link. This will activate a set of tests. Depending on
     your computer, the tests may take a few minutes to complete. The direct link is
     `http://localhost:39996/FitNesse.SuiteAcceptanceTests?suite`.
+  id: totrans-209
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**套件**链接。这将激活一组测试。根据您的计算机，测试可能需要几分钟才能完成。直接链接是`http://localhost:39996/FitNesse.SuiteAcceptanceTests?suite`。
 - en: Click on the **Test History** link. You will need to log on as user `tester`
     with password `test`.
+  id: totrans-210
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**测试历史记录**链接。您需要以用户`tester`和密码`test`登录。
 - en: 'Review the log in the `fit/logs` directory. After running the suite again,
     you will now see an entry similar to:'
+  id: totrans-211
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看`fit/logs`目录中的日志。再次运行套件后，您现在将看到类似于以下条目：
 - en: '[PRE18]'
+  id: totrans-212
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Log in to Jenkins and create a free-style software project named `ch6.remote.fitnesse`.
+  id: totrans-213
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Jenkins 并创建一个名为`ch6.remote.fitnesse`的自由风格软件项目。
 - en: In the **build** section, select the **Execute fitnesse tests** option from
     **Add Build step**.
+  id: totrans-214
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分，从**添加构建步骤**中选择**执行 fitnesse 测试**选项。
 - en: 'Check the option **FitNesse instance is already running**, adding:'
+  id: totrans-215
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查**FitNesse 实例已运行**选项，并添加：
 - en: '**Fitnesses Host**: `localhost`'
+  id: totrans-216
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**FitNesse 主机**：`localhost`'
 - en: '**Fitnesses Port**: `39996`'
+  id: totrans-217
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**FitNesse 端口**：`39996`'
 - en: '**Target Page**: `FitNesse.SuiteAcceptanceTests?suite`'
+  id: totrans-218
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标页面**：`FitNesse.SuiteAcceptanceTests?suite`'
 - en: Check the **Is target a suite?** option
+  id: totrans-219
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 检查**目标是否为套件？**选项
 - en: '**HTTP Timeout (ms)**: `180000`'
+  id: totrans-220
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**HTTP 超时（毫秒）**：`180000`'
 - en: '**Path to fitnesse xml results file**: `fitnesse-results.xml`'
+  id: totrans-221
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**fitnesse xml 结果文件路径**：`fitnesse-results.xml`'
 - en: In the **Post-build Actions** section, check the **Publish FitNesse results**
     report option.
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分，检查**发布 FitNesse 结果**报告选项。
 - en: Add the value `fitnesse-results.xml` to the input **Path to fitnesse xml results
     file**.
+  id: totrans-223
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将值`fitnesse-results.xml`添加到输入**fitnesse xml 结果文件路径**中。
 - en: Click on **Save**.
+  id: totrans-224
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**保存**。
 - en: Run the job.
+  id: totrans-225
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行该任务。
 - en: Review the latest job by clicking on the link **FitNesse Results**.![How to
     do it...](img/0082OS_06_11.jpg)
+  id: totrans-226
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过点击**FitNesse 结果**链接查看最新的任务。![如何做...](img/0082OS_06_11.jpg)
 - en: How it works...
+  id: totrans-227
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它的工作原理...
 - en: 'FitNesse has a built-in set of acceptance tests that it uses to check itself
     for regressions. The Jenkins plugin calls the test and asks for the results to
     be returned in XML format using an HTTP `GET` request with the URL: `http://localhost:39996/FitNesse.SuiteAcceptanceTests?suite&format=xml`.
     The results look similar to the following:'
+  id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: FitNesse有一组内置的验收测试，用于检查自身是否存在回归。Jenkins 插件调用测试，并要求以 XML 格式返回结果，使用 HTTP `GET`
+    请求的 URL：`http://localhost:39996/FitNesse.SuiteAcceptanceTests?suite&format=xml`。结果看起来类似于以下内容：
 - en: '[PRE19]'
+  id: totrans-229
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: The Jenkins plugin then parses the XML and generates a report.
+  id: totrans-230
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，Jenkins 插件解析 XML 并生成报告。
 - en: By default, there is no security enabled on FitNesse pages. In this recipe,
     a username and password were defined during start-up. However, we did not take
     this further and define the security permissions on the page. To activate, you
     will need to go to the properties link on the left-hand side of a page and check
     the security permission for `secure-test`.
+  id: totrans-231
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，FitNesse 页面上没有启用安全性。在这个示例中，启动时定义了用户名和密码。但是，我们没有进一步定义页面的安全权限。要激活，您需要转到页面左侧的属性链接，并检查`secure-test`的安全权限。
 - en: You can also authenticate through a list of users in a text file or Kerberos/ActiveDirectory.
     For more details review [http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.AdministeringFitNesse.SecurityDescription](http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.AdministeringFitNesse.SecurityDescription).
+  id: totrans-232
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还可以通过文本文件中的用户列表或 Kerberos/ActiveDirectory 进行身份验证。有关更多详细信息，请查看[http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.AdministeringFitNesse.SecurityDescription](http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.AdministeringFitNesse.SecurityDescription)。
 - en: 'There is also a contributed plugin for LDAP authentication: [https://github.com/timander/fitnesse-ldap-authenticator](https://github.com/timander/fitnesse-ldap-authenticator)'
+  id: totrans-233
   prefs: []
   type: TYPE_NORMAL
+  zh: 也有一个为 LDAP 认证贡献的插件：[https://github.com/timander/fitnesse-ldap-authenticator](https://github.com/timander/fitnesse-ldap-authenticator)
 - en: Note
+  id: totrans-234
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'Consider applying `security in depth`: adding IP restrictions through a firewall
     on the FitNesse server creates an extra layer of defense. For example, you can
     place an Apache server in front of the wiki, and enabling SSL/TLS ensures encrypted
     passwords. A thinner alternative to Apache is Nginx: [http://wiki.nginx.org](http://wiki.nginx.org).'
+  id: totrans-235
   prefs: []
   type: TYPE_NORMAL
+  zh: 考虑应用 `深度安全性`：通过防火墙在 FitNesse 服务器上添加 IP 限制可以创建额外的防御层。例如，你可以在 wiki 前面放置一个 Apache
+    服务器，并启用 SSL/TLS 来确保密码加密。一个比 Apache 更轻量的替代方案是 Nginx：[http://wiki.nginx.org](http://wiki.nginx.org)。
 - en: There's more...
+  id: totrans-236
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'You will find the source code with information on building the newest version
     of FitNesse at its GitHub home: [https://github.com/unclebob/fitnesse](https://github.com/unclebob/fitnesse)'
+  id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在其 GitHub 主页上找到有关构建最新版本 FitNesse 的源代码信息：[https://github.com/unclebob/fitnesse](https://github.com/unclebob/fitnesse)
 - en: 'If you like FitNesse, why not involve yourself in the community discussions?
     You can subscribe to its Yahoo group at `<[fitnesse-subscribe@yahoogroups.com](mailto:fitnesse-subscribe@yahoogroups.com)>`
     and then post messages at `<[fitnesse@yahoogroups.com.](mailto:fitnesse@yahoogroups.com.)>`
     Yahoo''s usage guidelines discusses the general etiquette: [http://info.yahoo.com/guidelines/us/yahoo/groups/](http://info.yahoo.com/guidelines/us/yahoo/groups/)'
+  id: totrans-238
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你喜欢 FitNesse，为什么不参与社区讨论呢？你可以订阅它的 Yahoo 群组 `<[fitnesse-subscribe@yahoogroups.com](mailto:fitnesse-subscribe@yahoogroups.com)>`，然后在
+    `<[fitnesse@yahoogroups.com.](mailto:fitnesse@yahoogroups.com.)>` 发布消息。Yahoo 的使用准则讨论了一般礼仪：[http://info.yahoo.com/guidelines/us/yahoo/groups/](http://info.yahoo.com/guidelines/us/yahoo/groups/)
 - en: See also
+  id: totrans-239
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Activating FitNesse HtmlUnit fixtures* recipe
+  id: totrans-240
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*激活 FitNesse HtmlUnit fixtures* 教程'
 - en: Activating FitNesse HtmlUnit fixtures
+  id: totrans-241
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 激活 FitNesse HtmlUnit fixtures
 - en: FitNesse is an extendable testing framework. It is possible to write your own
     testing types known as fixtures and call the new test types through FitNesse tables.
     This allows Jenkins to run alternative tests from the ones available.
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: FitNesse 是一个可扩展的测试框架。可以编写自己的测试类型，称为 fixtures，并通过 FitNesse 表调用新的测试类型。这允许 Jenkins
+    运行不同于现有测试的替代测试。
 - en: This recipe shows you how to integrate functional tests using an HtmlUnit fixture.
     The same approach can be used for other fixtures as well.
+  id: totrans-243
   prefs: []
   type: TYPE_NORMAL
+  zh: 此教程向你展示了如何集成使用 HtmlUnit fixture 的功能测试。同样的方法也适用于其他 fixtures。
 - en: Getting ready
+  id: totrans-244
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: This recipe assumes that you have already performed the *Testing with FitNesse*
     recipe.
+  id: totrans-245
   prefs: []
   type: TYPE_NORMAL
+  zh: 此教程假设你已经执行了 *使用 FitNesse 进行测试* 教程。
 - en: How to do it...
+  id: totrans-246
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Visit [http://sourceforge.net/projects/htmlfixtureim/](http://sourceforge.net/projects/htmlfixtureim/)
     and download and unpack `HtmlFixture-2.5.1`.
+  id: totrans-247
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 [http://sourceforge.net/projects/htmlfixtureim/](http://sourceforge.net/projects/htmlfixtureim/)，下载并解压缩
+    `HtmlFixture-2.5.1`。
 - en: Move the `HtmlFixture-2.5.1/lib` directory to the `FitNesseRoot` directory.
+  id: totrans-248
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 `HtmlFixture-2.5.1/lib` 目录移动到 `FitNesseRoot` 目录下。
 - en: Copy `HtmlFixture-2.5.1/log4j.properties` to `FitNesseRoot/log4j.properties`.
+  id: totrans-249
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 `HtmlFixture-2.5.1/log4j.properties` 复制到 `FitNesseRoot/log4j.properties`。
 - en: 'Start FitNesse:'
+  id: totrans-250
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动 FitNesse：
 - en: '[PRE20]'
+  id: totrans-251
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'In a web browser, visit `http://localhost:39996/root?edit`, adding the following
     content, replacing `FitHome` with the fully qualified path to the home of your
     Fitnesse server:'
+  id: totrans-252
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在网络浏览器中访问 `http://localhost:39996/root?edit`，添加以下内容，将 `FitHome` 替换为你的 Fitnesse
+    服务器主目录的完全限定路径：
 - en: '[PRE21]'
+  id: totrans-253
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: Visit `http://localhost:39996`. In the left-hand menu, click on **Edit**.
+  id: totrans-254
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 `http://localhost:39996`。在左侧菜单中，点击 **编辑**。
 - en: At the bottom of the page, add the text `ThisIsMyPageTest`.
+  id: totrans-255
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在页面底部添加文本 `ThisIsMyPageTest`。
 - en: Click on **Save**.
+  id: totrans-256
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。
 - en: Click on the new **ThisIsMyPageTest** link.
+  id: totrans-257
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击新的 **ThisIsMyPageTest** 链接。
 - en: Click on the **Tools** button.
+  id: totrans-258
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **工具** 按钮。
 - en: Select **Properties**.
+  id: totrans-259
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择 **属性**。
 - en: Click on **Page Type** test.
+  id: totrans-260
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **页面类型** 测试。
 - en: A pop-up appears asking for your **username** and **password**. Type `tester`
     and `test`.
+  id: totrans-261
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一个弹出窗口会询问你的 **用户名** 和 **密码**。输入 `tester` 和 `test`。
 - en: You will be returned to the **ThisisMyPageTest** page; click on **Save**.
+  id: totrans-262
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将被返回到 **ThisisMyPageTest** 页面；点击 **保存**。
 - en: Click on the **Edit** button on the left-hand side menu.
+  id: totrans-263
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击左侧菜单上的 **编辑** 按钮。
 - en: 'Add the following content after the line starting with `!contents`:'
+  id: totrans-264
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在以 `!contents` 开头的行后添加以下内容：
 - en: '[PRE22]'
+  id: totrans-265
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: Click on **Save**.
+  id: totrans-266
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。
 - en: Click on **Test**.![How to do it...](img/0082OS_06_06.jpg)
+  id: totrans-267
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **测试**。![如何操作...](img/0082OS_06_06.jpg)
 - en: In Jenkins under **New Job**, copy **existing job** / **copy** from `ch6.remote.fitness`
     to **Job name** `ch6.remote.fitness_fixture`.
+  id: totrans-268
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中 **新建任务** 下，从 `ch6.remote.fitness` 复制 **现有任务** / **复制** 到 **任务名称**
+    `ch6.remote.fitness_fixture`。
 - en: In the **build** section, under **Target** | **Target Page** replace `FitNesse.SuiteAcceptanceTests`
     with `ThisIsMyPageTest`.
+  id: totrans-269
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建** 部分，下面的 **目标** | **目标页面** 将 `FitNesse.SuiteAcceptanceTests` 替换为 `ThisIsMyPageTest`。
 - en: Uncheck **Is target a suite?**.
+  id: totrans-270
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 不勾选 **目标是否为套件？**。
 - en: Click on **Save**.
+  id: totrans-271
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **Save**。
 - en: Run the job. It fails because the extra debugging information sent with the
     results confuses the Jenkins plugin parser.
+  id: totrans-272
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行任务。由于额外的调试信息与结果一起发送，导致 Jenkins 插件解析器混淆而失败。
 - en: 'Visit the test page `http://localhost:39996/ThisIsMyPageTest?edit,` replacing
     the contents of the test table with the following code:'
+  id: totrans-273
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问测试页面 `http://localhost:39996/ThisIsMyPageTest?edit`，用以下代码替换测试表格的内容：
 - en: '[PRE23]'
+  id: totrans-274
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: Run the Jenkins job again. The results will now be parsed.
+  id: totrans-275
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 再次运行 Jenkins 任务。现在结果将被解析。
 - en: How it works...
+  id: totrans-276
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Fixtures are written in Java. By placing the downloaded libraries in the FitNesse
     `lib` directory, you are making them accessible. You then defined the classpath
     and location of the fixture in the root page, allowing the fixture to be loaded
     at start-up. For more details, review the file `HtmlFixture-2.5.1/README`.
+  id: totrans-277
   prefs: []
   type: TYPE_NORMAL
+  zh: Fixture 是用 Java 编写的。通过将下载的库放置在 FitNesse 的 `lib` 目录中，使它们可访问。然后在根页面中定义类路径和夹具位置，允许在启动时加载夹具。有关更多详细信息，请查看文件
+    `HtmlFixture-2.5.1/README`。
 - en: Next, you created the link using wiki CamelCase notation to the non-existent
     **ThisIsMyPageTest** page. An HtmlUnit fixture test was then added.
+  id: totrans-278
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，你使用 wiki 的 CamelCase 笔记法创建了链接到不存在的 **ThisIsMyPageTest** 页面。然后添加了一个 HtmlUnit
+    夹具测试。
 - en: 'First, you needed to import the fixture whose library path was defined in the
     Root page:'
+  id: totrans-279
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，你需要导入夹具，其库路径在 Root 页面中定义：
 - en: '[PRE24]'
+  id: totrans-280
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: Next, some example descriptive wiki content was added to show that you can create
     a story without affecting the tests. Finally, the tests were added.
+  id: totrans-281
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，添加了一些示例描述性 wiki 内容以显示你可以创建一个故事而不影响测试。最后，添加了测试。
 - en: The first row of the table `!|HtmlFixture|` defines which fixture to use. The
     second row stores the location to test.
+  id: totrans-282
   prefs: []
   type: TYPE_NORMAL
+  zh: 表格 `!|HtmlFixture|` 的第一行定义要使用的夹具。第二行存储要测试的位置。
 - en: Print commands such as `Print Cookies` or `Print Response` `Headers` return
     information that is useful for building tests.
+  id: totrans-283
   prefs: []
   type: TYPE_NORMAL
+  zh: 打印命令，如 `Print Cookies` 或 `Print Response` `Headers` 返回有助于构建测试的信息。
 - en: 'If you are not sure of a list of acceptable commands, then deliberately make
     a syntax error and the commands are returned as results. For example:'
+  id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你不确定一系列可接受的命令，则故意制造语法错误，命令将作为结果返回。例如：
 - en: '[PRE25]'
+  id: totrans-285
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: The `Has Text` command is an assertion and will fail if `log in` is not found
     in the text of the returned page.
+  id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: '`Has Text` 命令是一个断言，如果返回页面的文本中找不到 `log in` 则失败。'
 - en: By focusing on a specific element and then `Set Value`, you can add input to
     a form.
+  id: totrans-287
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过聚焦到特定元素然后 `Set Value`，你可以向表单添加输入。
 - en: 'During testing, if you want to display the returned content for a particular
     request then you need three columns; for example, the first row displays the returned
     page and the second does not:'
+  id: totrans-288
   prefs: []
   type: TYPE_NORMAL
+  zh: 在测试期间，如果你想要显示特定请求的返回内容，则需要三列；例如，第一行显示返回的页面，第二行则不显示：
 - en: '[PRE26]'
+  id: totrans-289
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: Returning HTML pages as part of the results adds extra information to the results
     that the Jenkins plugin needs to parse. This is prone to failure. Therefore, in
     step 19 you removed the extra columns, ensuring reliable parsing.
+  id: totrans-290
   prefs: []
   type: TYPE_NORMAL
+  zh: 将 HTML 页面作为结果的一部分返回，为 Jenkins 插件提供了需要解析的额外信息。这容易出错。因此，在第 19 步中，你移除了额外的列，确保可靠的解析。
 - en: Full documentation for this fixture can be found at [http://htmlfixtureim.sourceforge.net/documentation.shtml](http://htmlfixtureim.sourceforge.net/documentation.shtml).
+  id: totrans-291
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以在 [http://htmlfixtureim.sourceforge.net/documentation.shtml](http://htmlfixtureim.sourceforge.net/documentation.shtml)
+    找到此夹具的完整文档。
 - en: There's more...
+  id: totrans-292
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'FitNesse has the potential to increase the vocabulary of remote tests that
     Jenkins can perform. A few interesting fixtures to review are:'
+  id: totrans-293
   prefs: []
   type: TYPE_NORMAL
+  zh: FitNesse 有可能增加 Jenkins 可执行的远程测试的词汇量。有几个有趣的夹具需要审查：
 - en: '**RestFixture for REST services**:'
+  id: totrans-294
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**RestFixture 用于 REST 服务**：'
 - en: '[https://github.com/smartrics/RestFixture/wiki](https://github.com/smartrics/RestFixture/wiki)'
+  id: totrans-295
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '[https://github.com/smartrics/RestFixture/wiki](https://github.com/smartrics/RestFixture/wiki)'
 - en: '**Webtestfixtures using Selenium for web-based functional testing**:'
+  id: totrans-296
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**使用 Selenium 进行基于 Web 的功能测试的 Webtestfixtures**：'
 - en: '[http://sourceforge.net/projects/webtestfixtures/](http://sourceforge.net/projects/webtestfixtures/)'
+  id: totrans-297
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '[http://sourceforge.net/projects/webtestfixtures/](http://sourceforge.net/projects/webtestfixtures/)'
 - en: '**DBfit that allows you to test databases**:'
+  id: totrans-298
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**DBfit 可以帮助你测试数据库**：'
 - en: '[http://gojko.net/fitnesse/dbfit/](http://gojko.net/fitnesse/dbfit/)'
+  id: totrans-299
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '[http://gojko.net/fitnesse/dbfit/](http://gojko.net/fitnesse/dbfit/)'
 - en: See also
+  id: totrans-300
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Testing with FitNesse* recipe
+  id: totrans-301
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 FitNesse 进行测试* 配方'
 - en: Running Selenium IDE tests
+  id: totrans-302
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行 Selenium IDE 测试
 - en: Selenium IDE allows you to record your clicks within web pages in Firefox and
     replay them. This is good for functional testing. The test plans are saved in
     HTML format.
+  id: totrans-303
   prefs: []
   type: TYPE_NORMAL
+  zh: Selenium IDE 允许你在 Firefox 中记录你在网页中的点击操作，并重放它们。这对于功能测试非常有用。测试计划以 HTML 格式保存。
 - en: This recipe shows you how to replay the tests automatically using Maven and
     then Jenkins. It uses an in-memory X-server **Xvfb** ([http://en.wikipedia.org/wiki/Xvfb](http://en.wikipedia.org/wiki/Xvfb))
     so that Firefox can be run on an otherwise headless server. Maven runs the tests
     using Selenium RC, which then acts as a proxy between the tests and the browser.
     Although we record with Firefox, you can run the tests with other browser types
     as well.
+  id: totrans-304
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个示例展示了如何使用 Maven 和 Jenkins 自动重放测试。它使用内存中的 X 服务器 **Xvfb** ([http://en.wikipedia.org/wiki/Xvfb](http://en.wikipedia.org/wiki/Xvfb))，这样
+    Firefox 就可以在无头服务器上运行。Maven 使用 Selenium RC 运行测试，然后充当测试和浏览器之间的代理。虽然我们使用 Firefox
+    进行录制，但你也可以使用其他类型的浏览器运行测试。
 - en: With the release of Selenium 2.0, the Selenium server now has built-in grid
     functionality ([https://code.google.com/p/selenium/wiki/Grid2](https://code.google.com/p/selenium/wiki/Grid2)).
     It is beyond the scope of this chapter to discuss this other than to note that
     Selenium grid allows you to run Selenium tests in parallel across a number of
     OS.
+  id: totrans-305
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着 Selenium 2.0 的发布，Selenium 服务器现在具有内置的网格功能 ([https://code.google.com/p/selenium/wiki/Grid2](https://code.google.com/p/selenium/wiki/Grid2))。本章不讨论这个功能，只是说明
+    Selenium 网格允许你在多个操作系统上并行运行 Selenium 测试。
 - en: Getting ready
+  id: totrans-306
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Selenium HTML report plugin ([https://wiki.jenkins-ci.org/display/JENKINS/seleniumhtmlreport+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/seleniumhtmlreport+Plugin))
     and EnvInject plugin ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)).
     Both Xvfb and Firefox are also required. To install Xvfb in an Ubuntu Linux environment
     run `sudo apt-get install xvfb`.
+  id: totrans-307
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Selenium HTML 报告插件 ([https://wiki.jenkins-ci.org/display/JENKINS/seleniumhtmlreport+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/seleniumhtmlreport+Plugin))
+    和 EnvInject 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin))。同时需要
+    Xvfb 和 Firefox。在 Ubuntu Linux 环境中安装 Xvfb 运行 `sudo apt-get install xvfb`。
 - en: Note
+  id: totrans-308
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: In the Jenkins plugin manager, the plugin is called the Environment Injector
     plugin, whereas in the wiki it is called the EnvInject plugin. It can be confusing,
     but both names belong to the same plugin.
+  id: totrans-309
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 插件管理器中，该插件称为环境注入器插件，而在 Wiki 中称为 EnvInject 插件。这可能会让人感到困惑，但两个名称都属于同一个插件。
 - en: How to do it...
+  id: totrans-310
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'From the command line, create a simple Maven project:'
+  id: totrans-311
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行创建一个简单的 Maven 项目：
 - en: '[PRE27]'
+  id: totrans-312
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'In the newly created `pom.xml` file, add the following `build` section just
     before the `</project>` tag:'
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在新创建的 `pom.xml` 文件中，在 `</project>` 标签之前添加以下 `build` 部分：
 - en: '[PRE28]'
+  id: totrans-314
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'Create the `src/test/resources/log4j.properties` file with the following content:'
+  id: totrans-315
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建 `src/test/resources/log4j.properties` 文件，并添加以下内容：
 - en: '[PRE29]'
+  id: totrans-316
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: Make the directory `src/test/resources/selenium`.
+  id: totrans-317
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录 `src/test/resources/selenium`。
 - en: 'Create the file `src/test/resources/selenium/TestSuite.xhtml` with the content:'
+  id: totrans-318
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建文件 `src/test/resources/selenium/TestSuite.xhtml`，并添加以下内容：
 - en: '[PRE30]'
+  id: totrans-319
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'The HTML will render into the following screenshot:'
+  id: totrans-320
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: HTML 将会渲染成以下截图：
 - en: '![How to do it...](img/0082OS_06_12.jpg)'
+  id: totrans-321
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_06_12.jpg)'
 - en: 'Create the test file `src/test/resources/selenium/MyTest.xhtml` with the following
     content:'
+  id: totrans-322
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建测试文件 `src/test/resources/selenium/MyTest.xhtml`，并添加以下内容：
 - en: '[PRE31]'
+  id: totrans-323
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: 'The HTML will render as per the following screenshot:'
+  id: totrans-324
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: HTML 将会按照以下截图进行渲染：
 - en: '![How to do it...](img/0082OS_06_13.jpg)'
+  id: totrans-325
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_06_13.jpg)'
 - en: 'Run the Maven project from the command line, verifying that the build succeeds,
     as shown:'
+  id: totrans-326
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行运行 Maven 项目，验证构建是否成功，如下所示：
 - en: '[PRE32]'
+  id: totrans-327
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: Run `mvn clean` and then commit the project to your subversion repository.
+  id: totrans-328
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 `mvn clean` 然后提交项目到你的 Subversion 仓库。
 - en: Log in to Jenkins and create a Maven job named `ch6.remote.selenium_html`.
+  id: totrans-329
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到 Jenkins 并创建一个名为 `ch6.remote.selenium_html` 的 Maven 作业。
 - en: In the **Global** section (at the top of the configuration page), check **Prepare
     an environment for the job** adding `DISPLAY=:20` for **Properties Content**.
+  id: totrans-330
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Global** 部分（配置页面顶部），勾选 **Prepare an environment for the job** 并添加 `DISPLAY=:20`
+    到 **Properties Content**。
 - en: In the **Source Code Management** section, check **Subversion** and add your
     subversion URL to **Repository URL**.
+  id: totrans-331
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Source Code Management** 部分，勾选 **Subversion**，并将你的 Subversion URL 添加到 **Repository
+    URL**。
 - en: In the **build** section, add `clean integration-test –Dlog4j.configuration=file./src/test/resources/log4j.properties`
     to **Goals and options**.
+  id: totrans-332
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **build** 部分，将 `clean integration-test –Dlog4j.configuration=file./src/test/resources/log4j.properties`
+    添加到 **Goals and options**。
 - en: In the **Post-build Actions** section, check **Publish Selenium HTML Report**.
+  id: totrans-333
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分，勾选**发布Selenium HTML报告**。
 - en: Add `target/results` to **Selenium test results location**.
+  id: totrans-334
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将`target/results`添加到**Selenium测试结果位置**。
 - en: Check **Set build result state to failure if an exception occurred while parsing
     results file**.
+  id: totrans-335
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查**如果解析结果文件时发生异常，则将构建结果状态设置为失败**。
 - en: Click on **Save**.
+  id: totrans-336
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**保存**。
 - en: Run the job, reviewing the results, as shown in the following screenshot:![How
     to do it...](img/0082OS_06_14.jpg)
+  id: totrans-337
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业，查看结果，如下图所示：![操作步骤...](img/0082OS_06_14.jpg)
 - en: How it works...
+  id: totrans-338
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: A primitive Selenium IDE test suite was created comprising two HTML pages. The
     first `TestSuite.xhtml` defines the suite as having HTML links to the tests. We
     have only one test defined in `MyTest.xhtml`.
+  id: totrans-339
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建了一个原始的Selenium IDE测试套件，包含两个HTML页面。第一个`TestSuite.xhtml`定义了套件，其中包含指向测试的HTML链接。我们只在`MyTest.xhtml`中定义了一个测试。
 - en: The test hits the login page for your local Jenkins and verifies that the **log
     in** text is present.
+  id: totrans-340
   prefs: []
   type: TYPE_NORMAL
+  zh: 该测试访问本地Jenkins的登录页面，并验证**登录**文本是否存在。
 - en: The `pom.xml` file defines phases for bringing up and tearing down the Xvfb
     server. The default configuration is for Xvfb to accept input on `DISPLAY 20`.
+  id: totrans-341
   prefs: []
   type: TYPE_NORMAL
+  zh: '`pom.xml`文件定义了启动和关闭Xvfb服务器的阶段。默认配置是让Xvfb在`DISPLAY 20`上接受输入。'
 - en: Maven assumes that the Xvfb binary is installed and does not try to download
     it as a dependency. The same is true for the Firefox browser. This makes for a
     fragile OS-specific configuration. In a complex Jenkins environment, it is this
     type of dependency that is the most likely to fail. There has to be a significant
     advantage in automating functional testing to offset the increased maintenance
     effort.
+  id: totrans-342
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven假设Xvfb二进制文件已安装，并且不尝试将其作为依赖项下载。对于Firefox浏览器也是如此。这样做会导致一个脆弱的特定于操作系统的配置。在复杂的Jenkins环境中，这种依赖项最有可能失败。自动化功能测试必须具有显著的优势，以抵消增加的维护工作量。
 - en: The option `Multiwindow` is set to true as the tests run in their own Firefox
     window. The option `Background` is set to true so that Maven runs the tests in
     the background. The results are stored in the relative location `./target/results/selenium.html`
     ready for the Jenkins plugin to parse. For more information on the Selenium-Maven-plugin,
     visit [http://mojo.codehaus.org/selenium-maven-plugin/](http://mojo.codehaus.org/selenium-maven-plugin/).
+  id: totrans-343
   prefs: []
   type: TYPE_NORMAL
+  zh: 选项`Multiwindow`设置为true，因为测试在它们自己的Firefox窗口中运行。选项`Background`设置为true，以便Maven在后台运行测试。结果存储在相对位置`./target/results/selenium.html`，准备供Jenkins插件解析。有关Selenium-Maven-plugin的更多信息，请访问[http://mojo.codehaus.org/selenium-maven-plugin/](http://mojo.codehaus.org/selenium-maven-plugin/)。
 - en: The Jenkins job sets the `DISPLAY` variable to `20` so that Firefox renders
     within Xvfb. It then runs the Maven job and generates the results page. The results
     are then parsed by the Jenkins plugin.
+  id: totrans-344
   prefs: []
   type: TYPE_NORMAL
+  zh: 'Jenkins作业将`DISPLAY`变量设置为`20`，以便Firefox在Xvfb中呈现。然后运行Maven作业并生成结果页面。然后Jenkins插件解析结果。  '
 - en: 'Two ways to increase the reliability of your automatic functional tests are:'
+  id: totrans-345
   prefs: []
   type: TYPE_NORMAL
+  zh: 增加自动功能测试的可靠性的两种方法是：
 - en: Use HtmlUnit, which does not need OS-specific configuration. However, you will
     then lose the ability to perform cross-browser checks.
+  id: totrans-346
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用HtmlUnit，它不需要特定于操作系统的配置。但是，您将失去执行跨浏览器检查的能力。
 - en: Run WebDriver instead of Selenium RC. WebDriver uses native API calls that function
     more reliably. Like Selenium RC, WebDriver can be run against a number of different
     browser types.
+  id: totrans-347
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 运行WebDriver而不是Selenium RC。WebDriver使用本地API调用，功能更可靠。与Selenium RC一样，WebDriver可以针对多种不同的浏览器类型运行。
 - en: The next recipe will showcase using unit testing with WebDriver and HtmlUnit.
+  id: totrans-348
   prefs: []
   type: TYPE_NORMAL
+  zh: 下一个示例将展示如何使用WebDriver和HtmlUnit进行单元测试。
 - en: There's more...
+  id: totrans-349
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: On my development Jenkins Ubuntu server, the job running this recipe broke.
     The reason was that the dependencies in the Maven plugin for Selenium did not
     like the newer version of Firefox that was installed by an auto-update script.
     The resolution to the problem was to install a known working binary for Firefox
     under the Jenkins home directory and point directly at the binary in the `pom.xml`
     file, replacing `<browser>*firefox</browser>` with `<browser>*firefox Path</browser>`.
+  id: totrans-350
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我的开发Jenkins Ubuntu服务器上，运行此示例的作业失败了。原因是Maven插件对Selenium的依赖项不喜欢由自动更新脚本安装的新版本Firefox。解决问题的方法是在Jenkins主目录下安装一个已知工作的Firefox二进制文件，并在`pom.xml`文件中直接指向该二进制文件，将`<browser>*firefox</browser>`替换为`<browser>*firefox
+    Path</browser>`。
 - en: Here, the `Path` is similar to `/var/lib/Jenkins/firefox/firefox-bin`.
+  id: totrans-351
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里，`Path`类似于`/var/lib/Jenkins/firefox/firefox-bin`。
 - en: 'Another cause of issues is the need to create a custom profile for Firefox
     that includes helper plugins to stop pop-ups or the rejection of self-signed certificates.
     For more complete information review: [http://docs.seleniumhq.org/docs/](http://docs.seleniumhq.org/docs/)'
+  id: totrans-352
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个问题的原因是需要为 Firefox 创建一个自定义配置文件，其中包含停止弹出窗口或拒绝自签名证书的辅助插件。有关更完整的信息，请参阅：[http://docs.seleniumhq.org/docs/](http://docs.seleniumhq.org/docs/)
 - en: Note
+  id: totrans-353
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: An alternative to Firefox is Chrome. There is a Jenkins plugin that helps provision
     chrome across Jenkins nodes ([https://wiki.jenkins-ci.org/display/JENKINS/ChromeDriver+plugin](https://wiki.jenkins-ci.org/display/JENKINS/ChromeDriver+plugin)).
+  id: totrans-354
   prefs: []
   type: TYPE_NORMAL
+  zh: Firefox 的替代方案是 Chrome。有一个 Jenkins 插件可以帮助在 Jenkins 节点上部署 Chrome ([https://wiki.jenkins-ci.org/display/JENKINS/ChromeDriver+plugin](https://wiki.jenkins-ci.org/display/JENKINS/ChromeDriver+plugin))。
 - en: In the Maven `pom.xml` file, you will have to change the browser to `*chrome`.
+  id: totrans-355
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Maven `pom.xml` 文件中，您将不得不将浏览器更改为 `*chrome`。
 - en: See also
+  id: totrans-356
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参见
 - en: The *Triggering failsafe integration tests with Selenium WebDriver* recipe
+  id: totrans-357
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Selenium WebDriver 触发失败安全集成测试的方法
 - en: Triggering failsafe integration tests with Selenium WebDriver
+  id: totrans-358
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Selenium WebDriver 触发失败安全集成测试
 - en: Unit tests are a natural way for programmers to defend their code against regressions.
     Unit tests are lightweight and easy to run. Writing unit tests should be as easy
     as writing print statements. JUnit ([http://www.junit.org/](http://www.junit.org/))
     is a popular unit test framework for Java, TestNG ([http://testng.org/doc/index.html](http://testng.org/doc/index.html))
     is another.
+  id: totrans-359
   prefs: []
   type: TYPE_NORMAL
+  zh: 单元测试是程序员保护其代码免受回归的自然方式。单元测试轻量且易于运行。编写单元测试应该像编写打印语句一样容易。JUnit ([http://www.junit.org/](http://www.junit.org/))
+    是 Java 的流行单元测试框架，另一个是 TestNG ([http://testng.org/doc/index.html](http://testng.org/doc/index.html))。
 - en: This recipe uses WebDriver and HtmlUnit in combination with TestNG to write
     simple automated functional tests. Using HtmlUnit instead of a real browser makes
     for stable OS-agnostic tests that, although they do not test browser compatibility,
     can spot the majority of functional failures.
+  id: totrans-360
   prefs: []
   type: TYPE_NORMAL
+  zh: 此方案使用 WebDriver 和 HtmlUnit 与 TestNG 结合编写简单的自动化功能测试。使用 HtmlUnit 而不是真正的浏览器可以创建稳定的与操作系统无关的测试，虽然它们不测试浏览器兼容性，但可以发现大多数功能失败。
 - en: Getting ready
+  id: totrans-361
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create a project directory. Review the Maven Compiler plugin documentation ([http://maven.apache.org/plugins/maven-compiler-plugin/](http://maven.apache.org/plugins/maven-compiler-plugin/)).
+  id: totrans-362
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个项目目录。查看 Maven 编译器插件文档 ([http://maven.apache.org/plugins/maven-compiler-plugin/](http://maven.apache.org/plugins/maven-compiler-plugin/))。
 - en: How to do it...
+  id: totrans-363
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Create `pom.xml` with the content:'
+  id: totrans-364
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建带有以下内容的 `pom.xml`：
 - en: '[PRE33]'
+  id: totrans-365
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: 'Create the directory named `src/test/java/nl/berg/packt/webdriver` by adding
     the `TestIT.java` file with the following content:'
+  id: totrans-366
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过添加以下内容的 `TestIT.java` 文件创建名为 `src/test/java/nl/berg/packt/webdriver` 的目录：
 - en: '[PRE34]'
+  id: totrans-367
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: 'In the top-level project directory, run `mvn clean verify`. The build should
     succeed with output similar to:'
+  id: totrans-368
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在顶级项目目录中，运行 `mvn clean verify`。构建应该成功，并输出类似于以下内容：
 - en: '[PRE35]'
+  id: totrans-369
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: Commit the code to your subversion repository.
+  id: totrans-370
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将代码提交到您的子版本库。
 - en: Log in to Jenkins and create a new maven project named `ch6.remote.driver`.
+  id: totrans-371
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Jenkins 并创建名为 `ch6.remote.driver` 的新的 maven 项目。
 - en: In the **Source Code Management** section, check **Subversion.**
+  id: totrans-372
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Source Code Management** 部分，勾选 **Subversion**。
 - en: Under **Modules** | **Repository URL**, add the location of your local subversion
     repository.
+  id: totrans-373
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Modules** | **Repository URL** 下，添加本地子版本库的位置。
 - en: In the **build** section for **Goals and options**, add `clean verify`.
+  id: totrans-374
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Goals and options** 的 **build** 部分中，添加 `clean verify`。
 - en: Click on **Save**.
+  id: totrans-375
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **保存**。
 - en: Run the job. After a successful build, you will see a link to **Latest Test
     Results** that details the functional tests.
+  id: totrans-376
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行该作业。成功构建后，您将看到一个指向**最新测试结果**的链接，详细说明功能测试情况。
 - en: How it works...
+  id: totrans-377
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: Maven uses the Failsafe plugin ([http://maven.apache.org/surefire/maven-failsafe-plugin/](http://maven.apache.org/surefire/maven-failsafe-plugin/))
     to run integration tests. The plugin does not fail a build if its `integration-test`
     phase contains failures. Rather, it allows the `post-integration-test` phase to
     run, allowing teardown duties to occur.
+  id: totrans-378
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 使用 Failsafe 插件 ([http://maven.apache.org/surefire/maven-failsafe-plugin/](http://maven.apache.org/surefire/maven-failsafe-plugin/))
+    运行集成测试。如果其 `integration-test` 阶段包含故障，则插件不会导致构建失败。相反，它允许运行 `post-integration-test`
+    阶段，以执行拆卸任务。
 - en: 'The `pom.xml` file has two dependencies mentioned: one for TestNG and the other
     for HtmlUnit driver. If you are going to use a real browser then you will need
     to define their Maven dependencies.'
+  id: totrans-379
   prefs: []
   type: TYPE_NORMAL
+  zh: '`pom.xml` 文件提到了两个依赖项：一个是 TestNG，另一个是 HtmlUnit 驱动程序。如果要使用真正的浏览器，则需要定义它们的 Maven
+    依赖项。'
 - en: For further details on how the Failsafe plugin works with the TestNG framework,
     see [http://maven.apache.org/plugins/maven-failsafe-plugin/examples/testng.html](http://maven.apache.org/plugins/maven-failsafe-plugin/examples/testng.html)
+  id: totrans-380
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关 Failsafe 插件如何与 TestNG 框架配合使用的详细信息，请参阅 [http://maven.apache.org/plugins/maven-failsafe-plugin/examples/testng.html](http://maven.apache.org/plugins/maven-failsafe-plugin/examples/testng.html)
 - en: The Java class uses annotations to define in which part of the unit testing
     cycle the code will be called. `@BeforeSuite` calls the creation of the WebDriver
     instance at the start of the suite of tests. `@AfterSuite` closes down the driver
     after the tests have run. `@test` defines a method as a test.
+  id: totrans-381
   prefs: []
   type: TYPE_NORMAL
+  zh: Java 类使用注解来定义代码将在单元测试周期的哪个部分调用。`@BeforeSuite` 在测试套件开始时调用 WebDriver 实例的创建。`@AfterSuite`
+    在测试运行结束后关闭驱动程序。`@test` 定义方法为一个测试。
 - en: The test visits the Google page and verifies the existence of the title. HtmlUnit
     notices some errors in the style sheet and JavaScript of the returned Google page
     and resources; however, the assertion succeeds.
+  id: totrans-382
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试访问 Google 页面并验证标题的存在。HtmlUnit 注意到返回的 Google 页面和资源中的样式表和 JavaScript 存在一些错误；然而，断言成功。
 - en: The main weakness of the example tests is the failure to separate out the assertions
     from the navigation of web pages. Consider creating Java classes according to
     the web page ([https://code.google.com/p/selenium/wiki/PageObjects](https://code.google.com/p/selenium/wiki/PageObjects)).
     Page objects return other page objects. The test assertions are then run in separate
     classes comparing the members of the page objects returned with expected values.
     This design pattern supports a greater degree of reusability.
+  id: totrans-383
   prefs: []
   type: TYPE_NORMAL
+  zh: 示例测试的主要弱点是未能将断言与网页导航分开。考虑根据网页创建 Java 类（[https://code.google.com/p/selenium/wiki/PageObjects](https://code.google.com/p/selenium/wiki/PageObjects)）。页面对象返回其他页面对象。然后，在单独的类中运行测试断言，将返回的页面对象的成员与预期值进行比较。这种设计模式支持更高程度的可重用性。
 - en: Tip
+  id: totrans-384
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: An excellent framework in Groovy that supports the page object architecture
     is **Geb** ([http://www.gebish.org/](http://www.gebish.org/)).
+  id: totrans-385
   prefs: []
   type: TYPE_NORMAL
+  zh: 支持页面对象架构的 Groovy 中的优秀框架是**Geb**（[http://www.gebish.org/](http://www.gebish.org/)）。
 - en: There's more...
+  id: totrans-386
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多……
 - en: '80 percent of all sensory information processed by the brain is delivered through
     the eyes. A picture can save a thousand words of descriptive text. WebDriver has
     the ability to capture screenshots. For example, the following code for the Firefox
     driver saves a screenshot to `loginpage_firefox.png`:'
+  id: totrans-387
   prefs: []
   type: TYPE_NORMAL
+  zh: 大脑处理的所有感官信息的 80% 通过眼睛传递。一张图片可以节省一千字的描述性文本。WebDriver 有捕获屏幕截图的能力。例如，以下代码对于 Firefox
+    驱动程序将截图保存到 `loginpage_firefox.png`：
 - en: '[PRE36]'
+  id: totrans-388
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: Note
+  id: totrans-389
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'Unfortunately, the HtmlUnit driver does not create screenshots: [http://code.google.com/p/selenium/issues/detail?id=1361](http://code.google.com/p/selenium/issues/detail?id=1361).'
+  id: totrans-390
   prefs: []
   type: TYPE_NORMAL
+  zh: 不幸的是，HtmlUnit 驱动程序不会创建截图：[http://code.google.com/p/selenium/issues/detail?id=1361](http://code.google.com/p/selenium/issues/detail?id=1361)。
 - en: However, you can find an experimental update at [https://groups.google.com/forum/#!msg/selenium-developers/PTR_j4xLVRM/k2yVq01Fa7oJ](https://groups.google.com/forum/#!msg/selenium-developers/PTR_j4xLVRM/k2yVq01Fa7oJ).
+  id: totrans-391
   prefs: []
   type: TYPE_NORMAL
+  zh: 然而，您可以在 [https://groups.google.com/forum/#!msg/selenium-developers/PTR_j4xLVRM/k2yVq01Fa7oJ](https://groups.google.com/forum/#!msg/selenium-developers/PTR_j4xLVRM/k2yVq01Fa7oJ)
+    找到一个实验性更新。
 - en: See also
+  id: totrans-392
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另见
 - en: The *Running Selenium IDE tests* recipe
+  id: totrans-393
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*运行 Selenium IDE 测试*食谱'
 - en: The *Activating FitNesse HtmlUnit fixtures* recipe
+  id: totrans-394
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*激活 FitNesse HtmlUnit 夹具*食谱'
 - en: Creating JMeter test plans
+  id: totrans-395
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建 JMeter 测试计划
 - en: JMeter ([http://jmeter.apache.org](http://jmeter.apache.org)) is an open source
     tool for stress testing. It allows you to visually create a test plan and then
     hammer systems based on that plan.
+  id: totrans-396
   prefs: []
   type: TYPE_NORMAL
+  zh: JMeter（[http://jmeter.apache.org](http://jmeter.apache.org)）是一个用于压力测试的开源工具。它允许您可视化地创建测试计划，然后根据该计划对系统进行测试。
 - en: JMeter can make many types of requests known as **samplers**. It can sample
     HTTP, LDAP, and databases, use scripts, and much more. It can report back visually
     with **listeners**.
+  id: totrans-397
   prefs: []
   type: TYPE_NORMAL
+  zh: JMeter 可以进行多种类型的请求，称为**采样器**。它可以对 HTTP、LDAP 和数据库进行采样，使用脚本等等。它可以通过**监听器**进行可视化报告。
 - en: Note
+  id: totrans-398
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'A beginner''s book on JMeter is: Apache JMeter by Emily H. Halili published
     by Packt Publishing, ISBN 1847192955 ([http://www.packtpub.com/beginning-apache-jmeter](http://www.packtpub.com/beginning-apache-jmeter)).'
+  id: totrans-399
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关 JMeter 的入门书籍是：《Apache JMeter》作者 Emily H. Halili，由 Packt Publishing 出版，ISBN
+    1847192955（[http://www.packtpub.com/beginning-apache-jmeter](http://www.packtpub.com/beginning-apache-jmeter)）。
 - en: Two more advanced books from the same publisher are [https://www.packtpub.com/application-development/performance-testing-jmeter-29](https://www.packtpub.com/application-development/performance-testing-jmeter-29)
     and [https://www.packtpub.com/application-development/jmeter-cookbook-raw](https://www.packtpub.com/application-development/jmeter-cookbook-raw).
+  id: totrans-400
   prefs: []
   type: TYPE_NORMAL
+  zh: 同一出版商出版的另外两本更高级的书籍是 [https://www.packtpub.com/application-development/performance-testing-jmeter-29](https://www.packtpub.com/application-development/performance-testing-jmeter-29)
+    和 [https://www.packtpub.com/application-development/jmeter-cookbook-raw](https://www.packtpub.com/application-development/jmeter-cookbook-raw)。
 - en: In this recipe, you will write a test plan for hitting web pages whose URLs
     are defined in a text file. In the next recipe, *Reporting JMeter test plans*,
     you will configure Jenkins to run JMeter test plans.
+  id: totrans-401
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个示例中，您将编写一个用于访问网页的测试计划，这些网页的 URL 在文本文件中定义。在下一个示例中，*报告 JMeter 测试计划*，您将配置 Jenkins
+    运行 JMeter 测试计划。
 - en: Getting ready
+  id: totrans-402
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Download and unpack a modern version of JMeter. ([http://jmeter.apache.org/download_jmeter.cgi](http://jmeter.apache.org/download_jmeter.cgi)).
     JMeter is a Java application and so will run on any system that has Java correctly
     installed.
+  id: totrans-403
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载并解压现代版本的 JMeter。（[http://jmeter.apache.org/download_jmeter.cgi](http://jmeter.apache.org/download_jmeter.cgi)）。JMeter
+    是一个 Java 应用程序，因此将在正确安装了 Java 的任何系统上运行。
 - en: How to do it...
+  id: totrans-404
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何实现...
 - en: Create the subdirectories `plans` and `example`.
+  id: totrans-405
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建子目录 `plans` 和 `example`。
 - en: 'Create a CSV file `./data/URLS.csv` with the following content:'
+  id: totrans-406
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个 CSV 文件 `./data/URLS.csv`，内容如下：
 - en: '[PRE37]'
+  id: totrans-407
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: Run the JMeter GUI—for example, `./bin/jmeter.sh` or `jmeter.bat,` depending
     on the OS. The GUI will start up with a new test plan.
+  id: totrans-408
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 JMeter GUI—例如，`./bin/jmeter.sh` 或 `jmeter.bat`，根据操作系统而定。GUI 将启动一个新的测试计划。
 - en: Right-click on **Test Plan** then select **Add** | **Threads (Users)** | **Thread
     Group**.
+  id: totrans-409
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击 **测试计划**，然后选择 **添加** | **线程（用户）** | **线程组**。
 - en: Change the **Number of Threads (users)** to **2**.
+  id: totrans-410
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 **线程数（用户数）** 更改为 **2**。
 - en: 'Right-click on **Test Plan** then select **Add** | **Config Element** | **CSV
     Data Set Config**. Add the following details:'
+  id: totrans-411
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击 **测试计划**，然后选择 **添加** | **配置元素** | **CSV 数据文件设置**。添加以下细节：
 - en: '**Filename**: Full path to the CSV file'
+  id: totrans-412
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**文件名**：CSV 文件的完整路径'
 - en: '**Variable Names (comma-delimited**): `HOST`, `PORT`, `URL`'
+  id: totrans-413
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**变量名称（逗号分隔）**：`HOST`、`PORT`、`URL`'
 - en: '**Delimiter (use ''\t''for tab)**: `,`'
+  id: totrans-414
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**分隔符（使用 ''\t'' 表示制表符）**：`,`'
 - en: Right-click on **Test Plan**, then select **Add** | **Config Element** | **HTTP
     cookie Manager**.
+  id: totrans-415
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击 **测试计划**，然后选择 **添加** | **配置元素** | **HTTP Cookie 管理器**。
 - en: Right-click on **Test Plan**, then select **Add** | **Listener** | **View Tree
     Results**.
+  id: totrans-416
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击 **测试计划**，然后选择 **添加** | **监听器** | **查看树状结果**。
 - en: 'Right-click on **Thread Group**, then select **Add** | **Sampler** | **HTTP
     request**. Add the following details:'
+  id: totrans-417
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击 **线程组**，然后选择 **添加** | **采样器** | **HTTP 请求**。添加以下细节：
 - en: '**Name**: `${HOST}:${PORT}${URL}`'
+  id: totrans-418
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`${HOST}:${PORT}${URL}`'
 - en: '**Server Name or IP**: `${HOST}`'
+  id: totrans-419
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**服务器名称或 IP**：`${HOST}`'
 - en: '**Port Number**: `${PORT}`'
+  id: totrans-420
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**端口号**：`${PORT}`'
 - en: Under **Optional Tasks**, check **Retrieve All Embedded Resources from HTML
     Files**
+  id: totrans-421
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 **可选任务** 下，勾选 **从 HTML 文件中检索所有嵌入资源**
 - en: Click on **Test Plan** and then **File** | **Save**. Save the test plan to `example/jmeter_example.jmx`.
+  id: totrans-422
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **测试计划** 然后 **文件** | **保存**。将测试计划保存为 `example/jmeter_example.jmx`。
 - en: Run the test plan by pressing *Ctrl* + *R*.
+  id: totrans-423
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下 *Ctrl* + *R* 运行测试计划。
 - en: Click on **View Results Tree** and explore the responses:![How to do it...](img/0082OS_06_15.jpg)
+  id: totrans-424
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **查看结果树** 并查看响应：![如何实现...](img/0082OS_06_15.jpg)
 - en: Commit this project to your subversion repository.
+  id: totrans-425
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将此项目提交到您的 Subversion 存储库。
 - en: How it works...
+  id: totrans-426
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: JMeter uses threads to run requests in parallel. Each thread is supposed to
     approximately simulate one user. In reality, a real user hits the system a lot
     less hard than a thread. Threads can hit the system many times a second, whereas
     typically a user clicks approximately once every twenty seconds.
+  id: totrans-427
   prefs: []
   type: TYPE_NORMAL
+  zh: JMeter 使用线程并行运行请求。每个线程应该大约模拟一个用户。实际上，真实用户对系统的影响远远小于线程。线程可以每秒击中系统多次，而通常用户大约每二十秒点击一次。
 - en: 'The test plan uses a number of elements:'
+  id: totrans-428
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试计划使用了许多元素：
 - en: '**Thread Group**:This defines the number of threads that run.'
+  id: totrans-429
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**线程组**：这定义了运行的线程数。'
 - en: '**Cookie manager**: This keeps track of cookies per thread. This is important
     if you want to keep track through cookies between requests. For example, if a
     thread logs in to a Tomcat server the unique `Jsessionid` needs to be stored for
     each thread.'
+  id: totrans-430
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Cookie 管理器**：这个元素用于每个线程跟踪 cookie。如果您想在请求之间通过 cookie 跟踪，请确保使用这个元素。例如，如果一个线程登录到一个
+    Tomcat 服务器，需要为每个线程存储唯一的 `Jsessionid`。'
 - en: '**CSV Data Set Config**: This element parses the content of a CSV, file putting
     values in the `HOST`, `PORT`, and `URL` variables. A new line of the CSV file
     is read for each thread, once per iteration. The variables are expanded in the
     elements by using the `${variable_name}` notation.'
+  id: totrans-431
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**CSV Data Set Config**：此元素解析 CSV 文件的内容，并将值放入`HOST`、`PORT`和`URL`变量中。每个迭代每个线程读取
+    CSV 文件的一行。使用`${variable_name}`表示法在元素中展开变量。'
 - en: '**View Results Tree**: This listener displays the results in the GUI as a tree
     of requests and responses. This is great for debugging but should be removed later.'
+  id: totrans-432
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**查看结果树**：此监听器将结果显示在 GUI 中，以请求和响应的树形式显示。这对调试很有用，但稍后应该将其删除。'
 - en: A common mistake is to assume that a thread is equivalent to a user. The main
     difference is that threads can respond faster than an average user. If you do
     not add delay factors in the request then you can really hammer your applications
     with a few threads. For example, a delay of 25 seconds per click is typical for
     the online systems at the University of Amsterdam.
+  id: totrans-433
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个常见的错误是假设一个线程等同于一个用户。主要区别在于线程的响应速度可能比平均用户快。如果在请求中不添加延迟因素，那么您可能会使用少量线程来让您的应用程序负荷过重。例如，阿姆斯特丹大学的在线系统每次点击的典型延迟为
+    25 秒。
 - en: Tip
+  id: totrans-434
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: If you are looking to coax out multithreading issues in your applications then
     use a random delay element rather than a constant delay. This is also a better
     simulation of a typical user interaction.
+  id: totrans-435
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您想要诱发应用程序中的多线程问题，则使用随机延迟元素而不是常量延迟。这也更好地模拟了典型用户交互。
 - en: There's more...
+  id: totrans-436
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Consider storing user agents and other browser headers in a text file and then
     picking the values up for HTTP requests through the CSV Data Set Config element.
     This is useful if resources returned to your web browser, such as JavaScript or
     images, depend on the user agent. JMeter can then loop through the user agents,
     asserting that the resources exist.
+  id: totrans-437
   prefs: []
   type: TYPE_NORMAL
+  zh: 考虑将用户代理和其他浏览器标头存储在文本文件中，然后通过 CSV Data Set Config 元素选择这些值进行 HTTP 请求。如果返回给您的 Web
+    浏览器的资源（如 JavaScript 或图像）取决于用户代理，则这是有用的。然后，JMeter 可以循环遍历用户代理，断言资源存在。
 - en: See also
+  id: totrans-438
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Reporting JMeter performance metrics* recipe
+  id: totrans-439
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 报告 JMeter 性能指标 的示例
 - en: The *Functional testing using JMeter assertions* recipe
+  id: totrans-440
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 JMeter 断言进行功能测试 的示例
 - en: Reporting JMeter performance metrics
+  id: totrans-441
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 报告 JMeter 性能指标
 - en: In this recipe, you will be shown how to configure Jenkins to run a JMeter test
     plan, and then collect and report the results. The passing of variables from an
     Ant script to JMeter will also be explained.
+  id: totrans-442
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个示例中，将向您展示如何配置 Jenkins 来运行 JMeter 测试计划，然后收集和报告结果。还将解释如何从 Ant 脚本传递变量到 JMeter。
 - en: Getting ready
+  id: totrans-443
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: It is assumed that you have run through the last recipe creating the JMeter
     test plan. You will also need to install the Jenkins performance plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin)).
+  id: totrans-444
   prefs: []
   type: TYPE_NORMAL
+  zh: 假设您已经按照上一个示例创建了 JMeter 测试计划。您还需要安装 Jenkins 性能插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin))。
 - en: How to do it...
+  id: totrans-445
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Open `./examples/jmeter_example.jmx` in JMeter and save as `./plans/URL_ping.jmx`.
+  id: totrans-446
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 JMeter 中打开`./examples/jmeter_example.jmx`，并另存为`./plans/URL_ping.jmx`。
 - en: Select **CSV Data Set Config** changing **Filename** to `${__property(csv)}`.
+  id: totrans-447
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**CSV Data Set Config**，将**Filename**更改为`${__property(csv)}`。
 - en: Under the **File** menu select the **Save** option.
+  id: totrans-448
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**文件**菜单下选择**保存**选项。
 - en: 'Create a `build.xml` file at the top level of your project with the following
     content:'
+  id: totrans-449
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在项目的顶层创建一个`build.xml`文件，并添加以下内容：
 - en: '[PRE38]'
+  id: totrans-450
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: Commit the updates to your subversion project.
+  id: totrans-451
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将更新提交到您的 Subversion 项目。
 - en: Log in to Jenkins.
+  id: totrans-452
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Jenkins。
 - en: Create a new free-style job with the name `ch6.remote.jmeter`.
+  id: totrans-453
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用名称为`ch6.remote.jmeter`的新自由风格任务。
 - en: Under **Source Code Management**, check **Subversion**, adding your subversion
     repository URL to **Repository URL**.
+  id: totrans-454
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**下，勾选**Subversion**，并将您的 Subversion 仓库 URL 添加到**Repository URL**中。
 - en: Within the **build** section, add the build step **Invoke Ant**.
+  id: totrans-455
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分中，添加构建步骤**Invoke Ant**。
 - en: 'Click on **Advanced** in the new **Invoke Ant** subsection, adding for properties:'
+  id: totrans-456
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击新的**Invoke Ant**子部分中的**高级**，并添加属性：
 - en: '[PRE39]'
+  id: totrans-457
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE39]'
 - en: In the **Post-build Actions** section, check **Publish Performance test result
     report**. Add the input `jmeter_results/*.jtl` to **Report Files**.
+  id: totrans-458
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分，勾选**发布性能测试结果报告**。将输入`jmeter_results/*.jtl`添加到**报告文件**中。
 - en: Click on **Save**.
+  id: totrans-459
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job a couple of times and review the results found under the **Performance
     trend** link.
+  id: totrans-460
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业几次并查看在 **性能趋势** 链接下找到的结果。
 - en: How it works...
+  id: totrans-461
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The `build.xml` file is an Ant script that sets up the environment and then
     calls the JMeter Ant tasks defined in the library `/extras/ant-jmeter-1.0.9.jar`.
     The JAR file is installed as part of the standard JMeter distribution.
+  id: totrans-462
   prefs: []
   type: TYPE_NORMAL
+  zh: '`build.xml` 文件是一个 Ant 脚本，用于设置环境，然后调用库 `/extras/ant-jmeter-1.0.9.jar` 中定义的 JMeter
+    Ant 任务。该 JAR 文件作为标准 JMeter 发行版的一部分安装。'
 - en: Any JMeter test plan found under the `plans` directory will be run. Moving the
     test plan from the `examples` directory to the `plans` directory activates it.
     The results are aggregated in `jmeter_results/LoadTestResults.jtl`.
+  id: totrans-463
   prefs: []
   type: TYPE_NORMAL
+  zh: 找到 `plans` 目录下的任何 JMeter 测试计划都将被运行。将测试计划从 `examples` 目录移动到 `plans` 目录将其激活。结果将汇总在
+    `jmeter_results/LoadTestResults.jtl` 中。
 - en: The Ant script passes the `csv` variable to the JMeter test plan; the location
     of the CSV file `${basedir}/data/URLS.csv`. `${basedir}`is automatically defined
     by Ant. As the name suggests it is the base directory of the Ant project.
+  id: totrans-464
   prefs: []
   type: TYPE_NORMAL
+  zh: Ant 脚本将 `csv` 变量传递给 JMeter 测试计划；CSV 文件的位置为 `${basedir}/data/URLS.csv`。 `${basedir}`
+    是由 Ant 自动定义的。顾名思义，它是 Ant 项目的基目录。
 - en: You can call JMeter functions within its elements using the structure `${__functioncall(parameters)}`.
     You have added the function call `${__property(csv)}` to the test plan CSV Data
     Set Configelement. The function pulls in the value of `csv` that was defined in
     the Ant script.
+  id: totrans-465
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在 JMeter 元素中使用结构 `${__functioncall(parameters)}` 调用 JMeter 函数。你已经将函数调用 `${__property(csv)}`
+    添加到测试计划 CSV Data Set Config 元素中。该函数引入了在 Ant 脚本中定义的 `csv` 的值。
 - en: The Jenkins job runs the Ant script, which in turn runs the JMeter test plans
     and aggregates the results. The Jenkins performance plugin then parses the results,
     creating a report.
+  id: totrans-466
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 作业运行 Ant 脚本，Ant 脚本然后运行 JMeter 测试计划并汇总结果。然后 Jenkins 性能插件解析结果，生成报告。
 - en: There's more...
+  id: totrans-467
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: To build complex test plans speedily, consider using the transparent proxy ([http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server](http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server))
     built into JMeter. You can run it on a given port on your local machine, setting
     the proxy preferences in your web browser to match. The recorded JMeter elements
     will then give you a good idea of the parameters sent in the captured requests.
+  id: totrans-468
   prefs: []
   type: TYPE_NORMAL
+  zh: 要快速构建复杂的测试计划，请考虑使用内置于 JMeter 中的透明代理 ([http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server](http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server))。你可以在本地机器上的给定端口上运行它，并设置浏览器中的代理首选项以匹配。然后，记录的
+    JMeter 元素将为您提供捕获请求中发送的参数的很好的概念。
 - en: An alternative is **BadBoy** ([http://www.badboysoftware.biz/docs/jmeter.htm](http://www.badboysoftware.biz/docs/jmeter.htm)),
     which has its own built-in web browser. It allows you to record your actions in
     a similar way to Selenium IDE and then save to a JMeter plan.
+  id: totrans-469
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个替代方案是 **BadBoy** ([http://www.badboysoftware.biz/docs/jmeter.htm](http://www.badboysoftware.biz/docs/jmeter.htm))，它有自己的内置网络浏览器。它允许您以与
+    Selenium IDE 类似的方式记录操作，然后保存到 JMeter 计划中。
 - en: See also
+  id: totrans-470
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Creating JMeter test plans* recipe
+  id: totrans-471
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*创建 JMeter 测试计划* 的方法'
 - en: The *Functional testing using JMeter assertions* recipe
+  id: totrans-472
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 JMeter 断言进行功能测试* 的方法'
 - en: Functional testing using JMeter assertions
+  id: totrans-473
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 JMeter 断言进行功能测试
 - en: This recipe will show you how to use JMeter assertions in combination with a
     Jenkins job. JMeter can test the responses to its HTTP requests and other samplers
     with assertions. This allows JMeter to fail Jenkins builds based on a range of
     JMeter tests. This approach is especially important when starting a mockup of
     a web from an HTML application whose underlying code is changing rapidly.
+  id: totrans-474
   prefs: []
   type: TYPE_NORMAL
+  zh: 此方法将向您展示如何在 Jenkins 作业中使用 JMeter 断言。JMeter 可以通过断言测试其 HTTP 请求和其他采样器的响应。这使得 JMeter
+    可以基于一系列 JMeter 测试来使 Jenkins 构建失败。当从 HTML 应用程序的底层代码快速变化时，这种方法尤其重要。
 - en: The test plan logs in and out of your local instance of Jenkins checking size,
     duration, and text found in the login response.
+  id: totrans-475
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试计划登录到您的本地 Jenkins 实例并检查登录响应中的大小、持续时间和文本。
 - en: Getting ready
+  id: totrans-476
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: We assume that you have already performed the *Creating JMeter test plans* and
     *Reporting JMeter performance metrics* recipes.
+  id: totrans-477
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们假设您已经执行了 *创建 JMeter 测试计划* 和 *报告 JMeter 性能指标* 的方法。
 - en: Note
+  id: totrans-478
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The recipe requires the creation of a user `tester1` in Jenkins. Feel free to
     change the username and password. Remember to delete the test user once it is
     no longer needed.
+  id: totrans-479
   prefs: []
   type: TYPE_NORMAL
+  zh: 该配方需要在 Jenkins 中创建一个名为 `tester1` 的用户。随意更改用户名和密码。记得在不再需要时删除测试用户。
 - en: How to do it...
+  id: totrans-480
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Create a user in Jenkins named `tester1` with password `testtest`.
+  id: totrans-481
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中创建名为 `tester1` 的用户，密码为 `testtest`。
 - en: 'Run JMeter. In the **Test Plan** element change the **Name** to `LoginLogoutPlan,`
     adding for **User defined Variables**:'
+  id: totrans-482
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 JMeter。在**测试计划**元素中将**名称**更改为 `LoginLogoutPlan`，为**用户定义变量**添加：
 - en: '**Name**: `USER` and **Value**: `tester1`'
+  id: totrans-483
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`用户`，**值**：`tester1`'
 - en: '**Name**: `PASS` and **Value**: `testtest`'
+  id: totrans-484
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`密码`，**值**：`testtest`'
 - en: '![How to do it...](img/0082OS_06_16.jpg)'
+  id: totrans-485
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_06_16.jpg)'
 - en: Right-click on **Test Plan** then select **Add** | **Config Element** | **HTTP
     cookie Manager**.
+  id: totrans-486
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**测试计划**上右键单击，然后选择**添加** | **配置元件** | **HTTP Cookie 管理器**。
 - en: Right-click on **Test Plan** and then select **Add** | **Listener** | **View
     Tree Results**.
+  id: totrans-487
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**测试计划**上右键单击，然后选择**添加** | **监听器** | **查看树形结果**。
 - en: Right-click on **Test Plan** and then select **Add** | **Threads (Users)** |
     **Thread Group**.
+  id: totrans-488
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**测试计划**上右键单击，然后选择**添加** | **线程（用户）** | **线程组**。
 - en: Right-click on **Thread Group** and then select **Add** | **Sampler** | **HTTP
     Request**, as shown in the following screenshot:![How to do it...](img/0082OS_06_17.jpg)
+  id: totrans-489
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**线程组**上右键单击，然后选择**添加** | **取样器** | **HTTP 请求**，如下图所示：![如何操作...](img/0082OS_06_17.jpg)
 - en: 'Add the following details to the **HTTP Request Sampler**:'
+  id: totrans-490
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下细节添加到**HTTP 请求取样器**中：
 - en: '**Name**: `/j_aceqi_security_check`'
+  id: totrans-491
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`/j_aceqi_security_check`'
 - en: '**Server Name or IP**: `localhost`'
+  id: totrans-492
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**服务器名称或 IP**：`localhost`'
 - en: '**Port Number**: `8080`'
+  id: totrans-493
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**端口号**：`8080`'
 - en: '**Path**: `/j_aceqi_security_check`'
+  id: totrans-494
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**路径**：`/j_aceqi_security_check`'
 - en: 'Under the section **Send Parameters With the Request** add:'
+  id: totrans-495
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**发送请求参数**部分中添加：
 - en: '**Name**: `j_username` and **Value**: `${USER}`'
+  id: totrans-496
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`j_username`，**值**：`${USER}`'
 - en: '**Name**: `j_password` and **Value**: `${PASS}`'
+  id: totrans-497
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`j_password`，**值**：`${PASS}`'
 - en: Right-click on **Thread Group** and then select **Add** | **Sampler** | **HTTP
     Request**.
+  id: totrans-498
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**线程组**上右键单击，然后选择**添加** | **取样器** | **HTTP 请求**。
 - en: Add the following details to the **HTTP Request Sampler**. If necessary drag-and-drop
     the newly created element so that it is placed after `/j_acegi_security_check`.
+  id: totrans-499
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下细节添加到**HTTP 请求取样器**中。如有必要，拖放新创建的元素，使其位于 `/j_acegi_security_check` 之后。
 - en: 'Add the following details to the **HTTP Request Sampler**:'
+  id: totrans-500
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下细节添加到**HTTP 请求取样器**中：
 - en: '**Name**: `/logout`'
+  id: totrans-501
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`/logout`'
 - en: '**Server Name or IP**: `localhost`'
+  id: totrans-502
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**服务器名称或 IP**：`localhost`'
 - en: '**Port Number**: `8080`'
+  id: totrans-503
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**端口号**：`8080`'
 - en: '**Path**: `/logout`'
+  id: totrans-504
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**路径**：`/logout`'
 - en: Save the test plan to the location `./plans/LoginLogoutPlan_without_assertions.jmx`.
+  id: totrans-505
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将测试计划保存到位置 `./plans/LoginLogoutPlan_without_assertions.jmx`。
 - en: Commit the changes to your local subversion repository.
+  id: totrans-506
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将更改提交到您的本地 SVN 仓库。
 - en: In Jenkins run the previously created job `ch6.remote.jmeter`. Notice that at
     the **Performance Report** link the `/j_acegi_security_check` HTTP request sampler
     succeeds.
+  id: totrans-507
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中运行先前创建的作业 `ch6.remote.jmeter`。注意，在**性能报告**链接中，`/j_acegi_security_check`
+    HTTP 请求取样器成功。
 - en: Copy `./plans/LoginLogoutPlan_without_assertions.jmx` to `./plans/LoginLogoutPlan.jmx`.
+  id: totrans-508
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 `./plans/LoginLogoutPlan_without_assertions.jmx` 复制到 `./plans/LoginLogoutPlan.jmx`。
 - en: In JMeter edit `./plans/LoginLogoutPlan.jmx`.
+  id: totrans-509
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 JMeter 中编辑 `./plans/LoginLogoutPlan.jmx`。
 - en: Right-click on the JMeter element `j_acegi_security_check`, selecting **Add**
     | **Assertion** | **Duration Assertion**.
+  id: totrans-510
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 JMeter 元素 `j_acegi_security_check` 上右键单击，选择**添加** | **断言** | **持续时间断言**。
 - en: In the newly created assertion set **Duration in milliseconds** to `1000`.
+  id: totrans-511
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在新创建的断言中，将**持续时间（毫秒）**设置为 `1000`。
 - en: Right-click on the JMeter element `j_acegi_security_check`, selecting **Add**
     | **Assertion** | **Size Assertion**.
+  id: totrans-512
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 JMeter 元素 `j_acegi_security_check` 上右键单击，选择**添加** | **断言** | **大小断言**。
 - en: In the newly created assertion set **Size in bytes:** to `40000` and checking
     **Type of Comparison** to **<**.
+  id: totrans-513
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在新创建的断言中，将**字节大小**设置为 `40000`，并将**比较类型**设置为 **<**。
 - en: 'Right-click on the JMeter element `j_acegi_security_check`, selecting **Add**
     | **Assertion** | **Response Assertion** with the details:'
+  id: totrans-514
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 JMeter 元素 `j_acegi_security_check` 上右键单击，选择**添加** | **断言** | **响应断言**，并填写细节：
 - en: In the **Apply to** section check **Main Sample only**
+  id: totrans-515
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在**应用于**部分中检查**仅主样本**
 - en: In the **Response Field to Test** section check **Text Response**
+  id: totrans-516
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在**要测试的响应字段**部分中检查**文本响应**
 - en: In the **Pattern Matching Rules** section check **Contains**
+  id: totrans-517
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在**模式匹配规则**部分中检查**包含**
 - en: For **Patterns to Test** add **<title>Dashboard [Jenkins]</title>**
+  id: totrans-518
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对于**要测试的模式**添加 **<title>仪表板 [Jenkins]</title>**
 - en: '![How to do it...](img/0082OS_06_18.jpg)'
+  id: totrans-519
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_06_18.jpg)'
 - en: Save the test plan and commit to your local subversion repository.
+  id: totrans-520
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 保存测试计划并提交到您的本地子版本库。
 - en: Run JMeter (*Ctrl* + *R*) and review the **View Results Tree**. Notice that
     the size and response assertions fail.
+  id: totrans-521
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 JMeter（*Ctrl* + *R*）并查看 **查看结果树**。请注意，大小和响应断言失败。
 - en: In Jenkins run the previously created job `ch6.remote.jmeter`. Notice that within
     the **Performance Report** link the `/j_acegi_security_check` also fails.
+  id: totrans-522
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中运行先前创建的作业 `ch6.remote.jmeter`。注意，在 **性能报告** 链接中 `/j_acegi_security_check`
+    也会失败。
 - en: How it works...
+  id: totrans-523
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The scaffolding from the previous recipe has not changed. Any JMeter test plan
     found under the `plans` directory is called during the running of the Jenkins
     job.
+  id: totrans-524
   prefs: []
   type: TYPE_NORMAL
+  zh: 上一个配方中的脚手架没有改变。在 `plans` 目录下找到的任何 JMeter 测试计划都会在运行 Jenkins 作业时调用。
 - en: You created a new test plan with two HTTP request samplers. The first sampler
     posts to the login URL `/j_acegi_security_check` with the variables `j_username`
     and `j_password`. The response contains a cookie with a valid session ID that
@@ -2375,629 +3489,919 @@
     under the HTTP request login sampler. If any of the assertions fail then the HTTP
     request result fails. In Jenkins, you can configure the job to fail or to warn
     based on definable thresholds.
+  id: totrans-525
   prefs: []
   type: TYPE_NORMAL
+  zh: 你创建了一个新的测试计划，其中包含两个 HTTP 请求采样器。第一个采样器将变量 `j_username` 和 `j_password` 提交到登录 URL
+    `/j_acegi_security_check`。响应包含一个包含有效会话 ID 的 cookie，该 ID 被存储在 cookie 管理器中。还添加了三个断言元素作为
+    HTTP 请求登录采样器的子项。如果其中任何一个断言失败，则 HTTP 请求结果也会失败。在 Jenkins 中，您可以根据可定义的阈值配置作业以失败或警告的方式运行。
 - en: 'The three assertions are typical for a test plan. These are:'
+  id: totrans-526
   prefs: []
   type: TYPE_NORMAL
+  zh: 三个断言对于测试计划来说是典型的。它们是：
 - en: An assertion on the size of the result returned. The size should not be greater
     than 40,000 bytes.
+  id: totrans-527
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对返回结果的大小进行断言。大小不应大于 40,000 字节。
 - en: An assertion for duration. If the response takes too long then you have a performance
     regression that you want to check further.
+  id: totrans-528
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对持续时间进行断言。如果响应时间太长，那么您就有了一个需要进一步检查的性能回归。
 - en: The most powerful assertion is for checking for text patterns.—in this case,
     reviewing details about the returned title. The JMeter element can also parse
     text against regular patterns.
+  id: totrans-529
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 最强大的断言用于检查文本模式。—在这种情况下，查看返回标题的详细信息。JMeter 元素还可以根据正则模式解析文本。
 - en: There's more...
+  id: totrans-530
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: JMeter has the power to hammer away with requests. 200 threads each firing,
     one request per second, is roughly equivalent to 5,000 users simultaneously logged
     in to an application clicking once every 25 seconds. A rough rule of thumb is
     that approximately 10 percent of the membership of a site is logged in to an application
     in the busiest hour of the year. Therefore, 200 threads hitting once a second
     is good for a total membership of 50,000 users.
+  id: totrans-531
   prefs: []
   type: TYPE_NORMAL
+  zh: JMeter 具有使用请求进行压力测试的能力。每秒钟发出一个请求的 200 个线程大致相当于同时登录到一个应用程序的 5,000 个用户，每 25 秒点击一次。一个粗略的经验法则是，一个站点在一年中最繁忙的时间内约有
+    10% 的成员登录到应用程序中。因此，每秒点击一次的 200 个线程适合总成员数为 50,000 的站点。
 - en: The understanding of usage patterns is also important; the less you know about
     how your system is going to be used, the wider a safety margin you will have to
     build in. It is not uncommon to plan for 100 percent extra capacity. The extra
     capacity may well be the difference between you going on holiday or not.
+  id: totrans-532
   prefs: []
   type: TYPE_NORMAL
+  zh: 了解使用模式也很重要；您对系统的使用了解越少，您就需要建立更宽的安全边界。为额外的容量进行计划不是不寻常的。额外的容量可能会成为您是否度假的差异。
 - en: Note
+  id: totrans-533
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'To expand its load creation capabilities, JMeter has the ability to run a number
     of JMeter slave nodes. For an official tutorial on this subject review: [http://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.pdf](http://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.pdf)'
+  id: totrans-534
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了扩展其负载生成能力，JMeter 具有运行多个 JMeter 从节点的能力。有关此主题的官方教程，请参阅：[http://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.pdf](http://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.pdf)
 - en: See also
+  id: totrans-535
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Creating JMeter test plans* recipe
+  id: totrans-536
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*创建 JMeter 测试计划* 配方'
 - en: The *Reporting JMeter performance metrics* recipe
+  id: totrans-537
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*报告 JMeter 性能指标* 配方'
 - en: Enabling Sakai web services
+  id: totrans-538
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 启用 Sakai web 服务
 - en: Sakai CLE is an application used by many hundreds of universities around the
     world. Based on more than a million lines of Java code, Sakai CLE allows students
     to interact with online course and project sites. It empowers instructors to make
     those sites easily.
+  id: totrans-539
   prefs: []
   type: TYPE_NORMAL
+  zh: Sakai CLE是全球许多大学使用的应用程序。基于超过一百万行的Java代码，Sakai CLE允许学生与在线课程和项目站点进行交互。它赋予教师轻松创建这些站点的权限。
 - en: In this recipe, you will enable web services and write your own simple ping
     service. In the next recipe, you will write tests for these services.
+  id: totrans-540
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个示例中，您将启用Web服务并编写自己的简单ping服务。在下一个示例中，您将为这些服务编写测试。
 - en: Getting ready
+  id: totrans-541
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: You can find links to the newest downloads under [http://sakaiproject.org](http://sakaiproject.org).
+  id: totrans-542
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[http://sakaiproject.org](http://sakaiproject.org)找到到最新下载的链接。
 - en: Download and unpack Sakai CLE version 2.8.1 from [http://source.sakaiproject.org/release/2.8.1](http://source.sakaiproject.org/release/2.8.1).
+  id: totrans-543
   prefs: []
   type: TYPE_NORMAL
+  zh: 从[http://source.sakaiproject.org/release/2.8.1](http://source.sakaiproject.org/release/2.8.1)下载并解压Sakai
+    CLE版本2.8.1。
 - en: The newest release can be found at [http://source.sakaiproject.org/release](http://source.sakaiproject.org/release).
+  id: totrans-544
   prefs: []
   type: TYPE_NORMAL
+  zh: 最新版本可以在[http://source.sakaiproject.org/release](http://source.sakaiproject.org/release)找到。
 - en: Please note that the server will take more time on its first startup than later
     startups. This is due to the initial creation of sample courses.
+  id: totrans-545
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，服务器在第一次启动时所需的时间比后续启动要长。这是由于样例课程的初始创建。
 - en: How to do it...
+  id: totrans-546
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Edit `sakai/sakai.properties` to include:'
+  id: totrans-547
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 编辑`sakai/sakai.properties`以包含：
 - en: '[PRE40]'
+  id: totrans-548
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE40]'
 - en: 'Run Sakai from the root folder `./start-sakai.sh` for *NIX systems or `./start-sakai.bat`
     for Windows. If Jenkins or another service is running on port `8080` Sakai will
     fail with:'
+  id: totrans-549
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在NIX系统中，从根文件夹`./start-sakai.sh`运行Sakai，或者在Windows中运行`./start-sakai.bat`。如果Jenkins或另一个服务正在端口`8080`上运行，Sakai将无法启动，并显示：
 - en: '[PRE41]'
+  id: totrans-550
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE41]'
 - en: Stop Sakai `./stop-sakai.sh` or `./stop-sakai.bat`.
+  id: totrans-551
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 停止Sakai `./stop-sakai.sh` 或者 `./stop-sakai.bat`。
 - en: 'Modify `conf/server.xml` to move the port number to `39955`, for example:'
+  id: totrans-552
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将端口号移动到`39955`，例如修改`conf/server.xml`文件：
 - en: '[PRE42]'
+  id: totrans-553
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE42]'
 - en: Run Sakai from the root folder `./start-sakai.sh` for NIX systems or `./start-sakai.bat`
     for Windows.
+  id: totrans-554
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在NIX系统中，从根文件夹`./start-sakai.sh`运行Sakai，或者在Windows中运行`./start-sakai.bat`。
 - en: Note
+  id: totrans-555
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The first startup may take a long time as demonstration data is populated into
     a built in database.
+  id: totrans-556
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 第一次启动可能需要很长时间，因为演示数据被填充到内置数据库中。
 - en: In a web browser visit `http://localhost:39955/portal`.
+  id: totrans-557
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Web浏览器中访问`http://localhost:39955/portal`。
 - en: Log in in as user `admin` with password `admin`.
+  id: totrans-558
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以`admin`用户登录，密码为`admin`。
 - en: Log out.
+  id: totrans-559
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 注销。
 - en: Visit `http://localhost:39955/sakai-axis/SakaiScript.jws?wsdl`.
+  id: totrans-560
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问`http://localhost:39955/sakai-axis/SakaiScript.jws?wsdl`。
 - en: 'Create a simple unauthenticated web service by adding the following content
     to `./webapps/sakai-axis/PingTest.jws`:'
+  id: totrans-561
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过将以下内容添加到`./webapps/sakai-axis/PingTest.jws`来创建一个简单的未经身份验证的Web服务：
 - en: '[PRE43]'
+  id: totrans-562
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE43]'
 - en: To verify that the service is available, visit `http://localhost:39955/sakai-axis/PingTest.jws?wsdl`.
+  id: totrans-563
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要验证服务是否可用，请访问`http://localhost:39955/sakai-axis/PingTest.jws?wsdl`。
 - en: To verify that REST services are available, visit `http://localhost:39955/direct`.
+  id: totrans-564
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要验证REST服务是否可用，请访问`http://localhost:39955/direct`。
 - en: How it works...
+  id: totrans-565
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The Sakai package is self-contained with its own database and Tomcat server.
     Its main configuration file is `sakai/sakai.properties`. You updated it to allow
     the use of web services from anywhere. In real-world deployments, the IP address
     is more restricted.
+  id: totrans-566
   prefs: []
   type: TYPE_NORMAL
+  zh: Sakai软件包是自包含的，拥有自己的数据库和Tomcat服务器。它的主要配置文件是`sakai/sakai.properties`。您已经更新了它以允许从任何地方使用Web服务。在实际部署中，IP地址受到更严格的限制。
 - en: To avoid port conflict with your local Jenkins server, the Tomcat `conf/server.xml`
     file was modified.
+  id: totrans-567
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了避免与本地Jenkins服务器端口冲突，修改了Tomcat的`conf/server.xml`文件。
 - en: Sakai has both REST and SOAP web services. You will find the REST services underneath
     the `/direct` URL. The many services are described at `/direct/describe`. Services
     are supplied one level down. For example, to create or delete users, you would
     need to use the user service described at `/direct/user/describe`.
+  id: totrans-568
   prefs: []
   type: TYPE_NORMAL
+  zh: Sakai同时具有REST和SOAP Web服务。您将在`/direct`URL下找到REST服务。许多服务在`/direct/describe`下描述。服务向下提供一级。例如，要创建或删除用户，您需要使用在`/direct/user/describe`中描述的用户服务。
 - en: The REST services use the Sakai Framework to register with Entitybroker ([https://confluence.sakaiproject.org/display/SAKDEV/Entity+Provider+and+Broker](https://confluence.sakaiproject.org/display/SAKDEV/Entity+Provider+and+Broker)).
     Entitybroker ensures consistent handling between services, saving coding effort.
     Entitybroker takes care of supplying the services information in the right format.
     To view who Sakai thinks you currently are in XML format visit `http://localhost:39955/direct/user/current.xml`
     and to view JSON format replace `current.xml` with `current.json`.
+  id: totrans-569
   prefs: []
   type: TYPE_NORMAL
+  zh: REST 服务使用 Sakai 框架注册到 Entitybroker ([https://confluence.sakaiproject.org/display/SAKDEV/Entity+Provider+and+Broker](https://confluence.sakaiproject.org/display/SAKDEV/Entity+Provider+and+Broker))。Entitybroker
+    确保服务之间的一致处理，节省了编码工作量。Entitybroker 负责以正确的格式提供服务信息。要以 XML 格式查看 Sakai 认为您当前是谁，请访问`http://localhost:39955/direct/user/current.xml`，要以
+    JSON 格式查看，请用`current.xml`替换为`current.json`。
 - en: The SOAP services are based on the Apache AXIS framework ([http://axis.apache.org/axis/](http://axis.apache.org/axis/)).
     To create a new SOAP-based web service you dropped a text file in the `webapps/sakai-axis`
     directory with the extension `.jws`. Apache AXIS compiles the code on the fly
     the first time it is called. This allows for rapid application development, as
     any modifications to the text files are seen immediately by the caller.
+  id: totrans-570
   prefs: []
   type: TYPE_NORMAL
+  zh: SOAP 服务基于 Apache AXIS 框架 ([http://axis.apache.org/axis/](http://axis.apache.org/axis/))。要创建一个新的基于
+    SOAP 的 Web 服务，您可以将一个扩展名为`.jws`的文本文件放入`webapps/sakai-axis`目录中。Apache AXIS 在第一次调用时即时编译代码。这样可以实现快速应用程序开发，因为调用者可以立即看到对文本文件的任何修改。
 - en: The `PingTest` includes a class without a package. The class name is the same
     as the filename with the `.jws` extension removed. Any public methods become web
     services. If you visit `http://localhost:39955/sakai-axis/SakaiScript.jws?wsdl`
     you will notice that the `youCantSeeMe` method is not publicized; that is because
     it has a private scope.
+  id: totrans-571
   prefs: []
   type: TYPE_NORMAL
+  zh: '`PingTest`包含一个没有包的类。类名与去除`.jws`扩展名的文件名相同。任何公共方法都会成为 Web 服务。如果访问`http://localhost:39955/sakai-axis/SakaiScript.jws?wsdl`，您会注意到`youCantSeeMe`方法没有公开;
+    这是因为它具有私有范围。'
 - en: Most of the interesting web services require logging in to Sakai through `/sakai-axis/SakaiLogin.jws`
     using the method `login` passing the `username` and `password` as strings. The
     returned string is a **GUID** (a long random string of letters and numbers) that
     is needed to pass to other methods as evidence of authentication.
+  id: totrans-572
   prefs: []
   type: TYPE_NORMAL
+  zh: 大多数有趣的 Web 服务都需要通过`/sakai-axis/SakaiLogin.jws`登录 Sakai，方法是`login`并传递`username`和`password`作为字符串。返回的字符串是一个
+    **GUID**（一个由字母和数字组成的长随机字符串），需要将其传递给其他方法以证明身份验证。
 - en: To log out at the end of the transaction, use the method `logout` passing to
     it the GUID.
+  id: totrans-573
   prefs: []
   type: TYPE_NORMAL
+  zh: 在交易结束时登出，使用方法`logout`并传递GUID。
 - en: There's more...
+  id: totrans-574
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Sakai CLE is not only a learning management system, it is also a framework that
     makes developing new tools straightforward.
+  id: totrans-575
   prefs: []
   type: TYPE_NORMAL
+  zh: Sakai CLE 不仅仅是一个学习管理系统，它还是一个使开发新工具变得简单的框架。
 - en: 'The programmer''s cafe for new Sakai developers can be found at the following
     URL: [https://confluence.sakaiproject.org/display/BOOT/Programmer%27s+Cafe](https://confluence.sakaiproject.org/display/BOOT/Programmer%27s+Cafe)'
+  id: totrans-576
   prefs: []
   type: TYPE_NORMAL
+  zh: 新 Sakai 开发人员的程序员咖啡厅位于以下 URL：[https://confluence.sakaiproject.org/display/BOOT/Programmer%27s+Cafe](https://confluence.sakaiproject.org/display/BOOT/Programmer%27s+Cafe)
 - en: Boot camps based on the programmer's cafe occur periodically at Sakai conferences
     or through consultancy engagements. The boot camps walk developers through creating
     their first Sakai tools using Eclipse as the standard IDE of choice.
+  id: totrans-577
   prefs: []
   type: TYPE_NORMAL
+  zh: 基于程序员咖啡厅的训练营定期在 Sakai 会议上或通过咨询活动进行。训练营指导开发人员使用 Eclipse 作为首选的标准 IDE 来创建他们的第一个
+    Sakai 工具。
 - en: 'You can find the book *Sakai CLE Courseware Management: The Official Guide*,
     *Packt Publishing*, at [http://www.packtpub.com/sakai-cle-courseware-management-for-elearning-research/book](http://www.packtpub.com/sakai-cle-courseware-management-for-elearning-research/book).'
+  id: totrans-578
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[http://www.packtpub.com/sakai-cle-courseware-management-for-elearning-research/book](http://www.packtpub.com/sakai-cle-courseware-management-for-elearning-research/book)找到书籍*Sakai
+    CLE 课程管理：官方指南*，*Packt Publishing*。
 - en: Note
+  id: totrans-579
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Another related product is the Apereo **Open Academic Environment** (**OAE**)
     [http://www.oaeproject.org/](http://www.oaeproject.org/).
+  id: totrans-580
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个相关产品是 Apereo **开放学术环境**（**OAE**）[http://www.oaeproject.org/](http://www.oaeproject.org/)。
 - en: Apereo OAE, like Sakai, is community-sourced. It has unique capabilities such
     as the ability to run in multiple organizations at the same time, looking different
     for each, and being able to search documents between organizations or not, depending
     on how you configure groups.
+  id: totrans-581
   prefs: []
   type: TYPE_NORMAL
+  zh: Apereo OAE，就像Sakai一样，是社区驱动的。它具有独特的功能，例如能够在多个组织中同时运行，每个组织看起来都不同，并且可以根据配置的组在组织之间搜索文档或不搜索文档。
 - en: See also
+  id: totrans-582
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Writing test plans with SoapUI* recipe
+  id: totrans-583
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用SoapUI编写测试计划*示例'
 - en: The *Reporting SoapUI test results* recipe
+  id: totrans-584
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*报告SoapUI测试结果*示例'
 - en: Writing test plans with SoapUI
+  id: totrans-585
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用SoapUI编写测试计划
 - en: SoapUI ([http://www.soapui.org/](http://www.soapui.org/)) is a tool that allows
     the efficient writing of functional, performance and security tests, mostly for
     web services.
+  id: totrans-586
   prefs: []
   type: TYPE_NORMAL
+  zh: SoapUI（[http://www.soapui.org/](http://www.soapui.org/)）是一个工具，允许高效地编写功能、性能和安全性测试，主要用于Web服务。
 - en: In this recipe, you will be using SoapUI to create a basic functional test against
     the Sakai SOAP web service created in the last recipe.
+  id: totrans-587
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本示例中，您将使用SoapUI对上一示例中创建的Sakai SOAP Web服务进行基本功能测试。
 - en: Getting ready
+  id: totrans-588
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: As described in the previous recipe, we assume that you have Sakai CLE running
     on port `39955` with the `PingTest` service available.
+  id: totrans-589
   prefs: []
   type: TYPE_NORMAL
+  zh: 如前一示例所述，我们假设您的Sakai CLE在端口`39955`上运行，并且`PingTest`服务可用。
 - en: To download and install SoapUI, visit [http://www.soapui.org/getting-started/installing-soapui/installing-on-windows.html](http://www.soapui.org/getting-started/installing-soapui/installing-on-windows.html)
     and follow the installation instructions.
+  id: totrans-590
   prefs: []
   type: TYPE_NORMAL
+  zh: 要下载并安装SoapUI，请访问[http://www.soapui.org/getting-started/installing-soapui/installing-on-windows.html](http://www.soapui.org/getting-started/installing-soapui/installing-on-windows.html)并按照安装说明进行操作。
 - en: 'For the Linux package to work with older versions of SoapUI, you may have to
     uncomment the following line in the SoapUI startup script:'
+  id: totrans-591
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使Linux软件包与旧版本的SoapUI配合使用，您可能需要取消注释SoapUI启动脚本中的以下行：
 - en: '[PRE44]'
+  id: totrans-592
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE44]'
 - en: Note
+  id: totrans-593
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: This recipe was tested against version 5.0.0 of SoapUI.
+  id: totrans-594
   prefs: []
   type: TYPE_NORMAL
+  zh: 此示例已针对SoapUI的5.0.0版本进行了测试。
 - en: How to do it...
+  id: totrans-595
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Start SoapUI.
+  id: totrans-596
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动SoapUI。
 - en: Right-click on **Projects** and select **New Soap Project**.
+  id: totrans-597
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击**项目**，然后选择**新建Soap项目**。
 - en: 'Fill in the dialog box with the following details:'
+  id: totrans-598
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在对话框中填写以下详细信息：
 - en: '**Project Name**: `SakaiSoapTests`'
+  id: totrans-599
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**项目名称**：`SakaiSoapTests`'
 - en: '**Initial WSDL/WADL**: `http://localhost:39955/sakai-axis/PingTest.jws?wsdl`'
+  id: totrans-600
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**初始WSDL/WADL**：`http://localhost:39955/sakai-axis/PingTest.jws?wsdl`'
 - en: '![How to do it...](img/0082OS_06_19.jpg)'
+  id: totrans-601
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_06_19.jpg)'
 - en: Check **Create TestSuite**.
+  id: totrans-602
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 勾选**创建测试套件**。
 - en: Click on **OK**.
+  id: totrans-603
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**。
 - en: Click on **OK** for the **Generate TestSuite** dialog box.
+  id: totrans-604
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**以生成**测试套件**对话框。
 - en: Click on **OK** for **TestSuite to create**.
+  id: totrans-605
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**以创建**测试套件**。
 - en: In the left-hand side navigator click on the **+** icon next to **PingTestSoapBinding
     TestSuite**.![How to do it...](img/0082OS_06_20.jpg)
+  id: totrans-606
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧导航器中，单击**PingTestSoapBinding TestSuite**旁边的**+**图标。![如何操作...](img/0082OS_06_20.jpg)
 - en: Click on the **+** icon next to **ping TestCase**.
+  id: totrans-607
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**ping TestCase**旁边的**+**图标。
 - en: Click on the **+** icon next to **Test Steps (1)**.
+  id: totrans-608
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**测试步骤（1）**旁边的**+**图标。
 - en: Right-click on **ping** and then select **Open Editor**.
+  id: totrans-609
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击**ping**，然后选择**打开编辑器**。
 - en: At the top of the editor, click on the **Add Assertion** icon ![How to do it...](img/0082OS_06_21.jpg).
+  id: totrans-610
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在编辑器顶部，点击**添加断言**图标 ![如何操作...](img/0082OS_06_21.jpg)。
 - en: Select **Assertion Contains** and click on **OK**.
+  id: totrans-611
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**断言包含**，然后点击**确定**。
 - en: For **Content** select `NOT IN TEXT` and click on **OK**.
+  id: totrans-612
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于**内容**选择`NOT IN TEXT`，然后点击**确定**。
 - en: In the left-hand side navigation, right-click on **PingTestSoapBinding TestSuite**
     and select **Show TestSuite Editor**.
+  id: totrans-613
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧导航中，右键单击**PingTestSoapBinding TestSuite**，然后选择**显示测试套件编辑器**。
 - en: In the editor click on the **Start tests** icon ![How to do it...](img/0082OS_06_22.jpg).
+  id: totrans-614
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在编辑器中点击**开始测试**图标 ![如何操作...](img/0082OS_06_22.jpg)。
 - en: Review the results. The **ping TestCase** fails due to the assertion and the
     **pong TestCase** succeeds.
+  id: totrans-615
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看结果。**ping TestCase**由于断言而失败，而**pong TestCase**成功。
 - en: Create the directory named `src/test/soapui`.
+  id: totrans-616
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建名为`src/test/soapui`的目录。
 - en: Right-click on **SakaiSoapTest** and then **Save Project as** `SakaiSoapTests-soapui-project.xml`
     in directory `src/test/soapui`.![How to do it...](img/0082OS_06_23.jpg)
+  id: totrans-617
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击**SakaiSoapTest**，然后在目录`src/test/soapui`中**另存项目为**`SakaiSoapTests-soapui-project.xml`。![如何操作...](img/0082OS_06_23.jpg)
 - en: How it works...
+  id: totrans-618
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: SoapUI takes the drudgery out of making test suites for Soap services. SoapUI
     used the `PingTest` WSDL file to discover the details of the service.
+  id: totrans-619
   prefs: []
   type: TYPE_NORMAL
+  zh: SoapUI让制作Soap服务的测试套件变得简单。SoapUI使用`PingTest` WSDL文件来发现服务的详细信息。
 - en: WSDL stands for **Web Services Description Language** ([http://www.w3.org/TR/wsdl](http://www.w3.org/TR/wsdl)).
     An XML file with information on the location and use of the `PingTest` service
     is generated.
+  id: totrans-620
   prefs: []
   type: TYPE_NORMAL
+  zh: WSDL 代表 **Web Services Description Language** ([http://www.w3.org/TR/wsdl](http://www.w3.org/TR/wsdl))。
+    生成一个包含有关 `PingTest` 服务位置和使用信息的 XML 文件。
 - en: From the WSDL file, SoapUI created a basic test for the `Ping` and `Pong` services.
     You added an assertion under the `Ping` service, checking that the text `NOT IN
     TEXT` exists in the SOAP response. As the text does exist, the assertion failed.
+  id: totrans-621
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 WSDL 文件中，SoapUI 为 `Ping` 和 `Pong` 服务创建了一个基本测试。 您在 `Ping` 服务下添加了一个断言，检查 SOAP
+    响应中是否存在文本 `NOT IN TEXT`。 由于文本确实存在，断言失败。
 - en: SoapUI has a wide range of assertions that it can enforce, including checking
     for Xpath or Xquery matches, checking for status codes, or assertions tested by
     custom scripts.
+  id: totrans-622
   prefs: []
   type: TYPE_NORMAL
+  zh: SoapUI 具有广泛的断言，它可以强制执行，包括检查 Xpath 或 Xquery 匹配，检查状态码，或由自定义脚本测试的断言。
 - en: Finally, the project was saved in XML format ready for reuse in a Maven project
     in the next recipe.
+  id: totrans-623
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，项目以 XML 格式保存，准备在下一个配方的 Maven 项目中重用。
 - en: There's more...
+  id: totrans-624
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: SoapUI does a lot more than functional tests for web services. It performs security
     tests by checking boundary input. It also has a load runner for stress testing.
+  id: totrans-625
   prefs: []
   type: TYPE_NORMAL
+  zh: SoapUI 不仅仅是 Web 服务的功能测试。 它通过检查边界输入执行安全性测试。 它还具有用于压力测试的负载运行程序。
 - en: Another important feature is its ability to build mock services from WSDL files.
     This allows the building of tests locally while the web services are still being
     developed. Early creation of tests reduces the number of defects that reach production,
     lowering costs. You can find an excellent introduction to mock services at [http://www.soapui.org/Service-Mocking/mocking-soap-services.html](http://www.soapui.org/Service-Mocking/mocking-soap-services.html).
+  id: totrans-626
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个重要功能是它能够从 WSDL 文件构建模拟服务。 这允许在 Web 服务仍在开发中时在本地构建测试。 早期创建的测试减少了到达生产环境的缺陷数量，降低了成本。
+    您可以在 [http://www.soapui.org/Service-Mocking/mocking-soap-services.html](http://www.soapui.org/Service-Mocking/mocking-soap-services.html)
+    找到模拟服务的优秀介绍。
 - en: See also
+  id: totrans-627
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Enabling Sakai web services* recipe
+  id: totrans-628
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*启用 Sakai Web 服务* 配方'
 - en: The *Reporting SoapUI test results* recipe
+  id: totrans-629
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*报告 SoapUI 测试结果* 配方'
 - en: Reporting SoapUI test results
+  id: totrans-630
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 报告 SoapUI 测试结果
 - en: In this recipe, you will be creating a Maven project that runs the SoapUI test
     created in the previous recipe. A Jenkins project using the xUnit plugin ([https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin))
     will then parse the results and generate a detailed report.
+  id: totrans-631
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个配方中，您将创建一个 Maven 项目，该项目运行上一个配方中创建的 SoapUI 测试。 使用 xUnit 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin))
+    的 Jenkins 项目将解析结果并生成详细报告。
 - en: Getting ready
+  id: totrans-632
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Jenkins xUnit plugin. Run both the *Enabling Sakai web services*
     and *Writing test plans with SoapUI* recipes. You will now have Sakai CLE running
     and a SoapUI test plan ready to use.
+  id: totrans-633
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Jenkins xUnit 插件。 运行 *启用 Sakai Web 服务* 和 *使用 SoapUI 编写测试计划* 配方。 现在你已经拥有运行
+    Sakai CLE 和一个准备好使用的 SoapUI 测试计划。
 - en: To experiment with the newest version of the Maven plugin visit [http://www.soapui.org/Test-Automation/maven-2x.html](http://www.soapui.org/Test-Automation/maven-2x.html)
+  id: totrans-634
   prefs: []
   type: TYPE_NORMAL
+  zh: 要尝试最新版本的 Maven 插件，请访问 [http://www.soapui.org/Test-Automation/maven-2x.html](http://www.soapui.org/Test-Automation/maven-2x.html)
 - en: How to do it...
+  id: totrans-635
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Create a project directory. At the root of the project, add a `pom.xml` file
     with the following content:'
+  id: totrans-636
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个项目目录。 在项目的根目录下，添加一个包含以下内容的 `pom.xml` 文件：
 - en: '[PRE45]'
+  id: totrans-637
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE45]'
 - en: Verify that you have correctly placed the SoapUI project at `src/test/soapui/SakaiSoapTests-soapui-project.xml`.
+  id: totrans-638
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保您已将 SoapUI 项目正确放置在 `src/test/soapui/SakaiSoapTests-soapui-project.xml`。
 - en: 'Run from the command line:'
+  id: totrans-639
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行运行：
 - en: '[PRE46]'
+  id: totrans-640
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE46]'
 - en: Log in to Jenkins.
+  id: totrans-641
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Jenkins。
 - en: Create a Maven project named `ch6.remote.soapui`.
+  id: totrans-642
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch6.remote.soapui` 的 Maven 项目。
 - en: Under the **Source Code Management** section, check **Subversion,** adding your
     **Repository URL**.
+  id: totrans-643
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **源代码管理** 部分，检查 **Subversion**，添加您的 **仓库 URL**。
 - en: In the **build** section, under **Goals and options**, add `clean test`.
+  id: totrans-644
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建** 部分，下 **目标和选项**，添加 `clean test`。
 - en: In the **Post-build Actions** section, check **Publish testing tools result
     report**.
+  id: totrans-645
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **后构建操作** 部分，检查 **发布测试工具结果报告**。
 - en: Click on the **Add** button.
+  id: totrans-646
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **添加** 按钮。
 - en: Select **JUnit**.
+  id: totrans-647
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择 **JUnit**。
 - en: Under the **JUNIT Pattern** add `**/target/surefire-reports/TEST-PingTestSoapBinding_TestSuite.xml`.
+  id: totrans-648
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **JUNIT 模式** 下添加 `**/target/surefire-reports/TEST-PingTestSoapBinding_TestSuite.xml`。
 - en: Click on **Save**.
+  id: totrans-649
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **保存**。
 - en: Run the job.
+  id: totrans-650
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。
 - en: Click on the **Latest Test Result** link. You will see one failed and one successful
     job, as shown in the following screenshot:![How to do it...](img/0082OS_06_24.jpg)
+  id: totrans-651
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: You will find the full details of the failure at `http://localhost:8080/job/ch6.remote.soapui/ws/target/surefire-reports/PingTestSoapBinding_TestSuite-ping_TestCase-ping-0-FAILED.txt`.
+  id: totrans-652
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How it works...
+  id: totrans-653
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The Maven project uses the maven-soapui `plugin` ([http://www.soapui.org/Test-Automation/maven-2x.html](http://www.soapui.org/Test-Automation/maven-2x.html)).
     As the plugin is not available in one of the main Maven repositories, you had
     to configure it to use the `eviwarePluginRepository` repository.
+  id: totrans-654
   prefs: []
   type: TYPE_NORMAL
 - en: The SoapUI plugin was configured to pick up its plan from the project file `src/test/soapui/SakaiSoapTests-soapui-project.xml`
     and save the results relative to the `project.build.directory`, which is the root
     of the workspace.
+  id: totrans-655
   prefs: []
   type: TYPE_NORMAL
 - en: 'The options set were:'
+  id: totrans-656
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE47]'
+  id: totrans-657
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE47]'
 - en: '`junitReport` set to `true` tells the plugin to create a JUnit report. `exportwAll`
     set to `true` implies that the results of all tests are exported, not just the
     errors. This option is useful during the debugging phase and should be set to
     `on` unless you have severe disc space constraints. `printReport` set to `true`
     ensures Maven sends a small test report to the console with output similar to:'
+  id: totrans-658
   prefs: []
   type: TYPE_NORMAL
 - en: '**SoapUI 4.0.1 TestCaseRunner Summary**'
+  id: totrans-659
   prefs: []
   type: TYPE_NORMAL
 - en: '**-----------------------------**'
+  id: totrans-660
   prefs: []
   type: TYPE_NORMAL
 - en: '**Total TestSuites: 1**'
+  id: totrans-661
   prefs: []
   type: TYPE_NORMAL
 - en: '**Total TestCases: 2 (1 failed)**'
+  id: totrans-662
   prefs: []
   type: TYPE_NORMAL
 - en: '**Total Request Assertions: 1**'
+  id: totrans-663
   prefs: []
   type: TYPE_NORMAL
 - en: '**Total Failed Assertions: 1**'
+  id: totrans-664
   prefs: []
   type: TYPE_NORMAL
 - en: '**Total Exported Results: 1**'
+  id: totrans-665
   prefs: []
   type: TYPE_NORMAL
 - en: '**[ERROR] java.lang.Exception: Not Contains in [ping] failed;**'
+  id: totrans-666
   prefs: []
   type: TYPE_NORMAL
 - en: '**[Response contains token [Insecure answer =>?]]**'
+  id: totrans-667
   prefs: []
   type: TYPE_NORMAL
 - en: The ping test case failed as the assertion failed. The pong test case succeeded
     as the service existed. Therefore, even without assertions, using the auto generation
     feature of SoapUI allows you to quickly generate a scaffold that ensures that
     all services are running. You can always add assertions later as the project develops.
+  id: totrans-668
   prefs: []
   type: TYPE_NORMAL
 - en: Creation of the Jenkins job is straightforward. The xUnit plugin allows you
     to pull in many types of unit test including the JUnit ones created from the Maven
     project. The location is set in step 10 as `**/target/surefire-reports/TEST-PingTestSoapBinding_TestSuite.xml`.
+  id: totrans-669
   prefs: []
   type: TYPE_NORMAL
 - en: Tip
+  id: totrans-670
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
@@ -3005,14 +4409,17 @@
     and displaying its historic trends within Jenkins. It works by parsing the XML
     results found by the plugin with a custom style sheet. This gives you a great
     deal of flexibility in adding your own custom results.
+  id: totrans-671
   prefs: []
   type: TYPE_NORMAL
 - en: There's more...
+  id: totrans-672
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The ping service is dangerous as it does not filter input, and the input is
     reflected back through the output.
+  id: totrans-673
   prefs: []
   type: TYPE_NORMAL
 - en: Many web applications use web services to load content into a page, to avoid
@@ -3022,22 +4429,34 @@
     On returning the response, the script is run in the client browser. This bypasses
     the intent of the same origin policy ([http://en.wikipedia.org/wiki/Same_origin_policy](http://en.wikipedia.org/wiki/Same_origin_policy)).
     This is known as a non-persistent attack as the script is not persisted to storage.
+  id: totrans-674
   prefs: []
   type: TYPE_NORMAL
+  zh: 许多网络应用程序使用 Web 服务将内容加载到页面中，以避免重新加载整个页面。一个典型的例子是当你输入搜索词并且替代建议即时显示时。通过一点社会工程魔法，受害者最终会发送一个包含脚本的请求到
+    Web 服务。在返回响应时，脚本将在客户端浏览器中运行。这绕过了同源策略的初衷（[http://en.wikipedia.org/wiki/Same_origin_policy](http://en.wikipedia.org/wiki/Same_origin_policy)）。这被称为非持久性攻击，因为脚本不会持久存储。
 - en: Web services are more difficult to test than web pages for XSS attacks. Luckily,
     SoapUI simplifies the testing process to a manageable level. You can find an introductory
     tutorial on SoapUI security tests at [http://www.soapui.org/Security/working-with-security-tests.html](http://www.soapui.org/Security/working-with-security-tests.html).
+  id: totrans-675
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于 XSS 攻击，Web 服务比网页更难测试。幸运的是，SoapUI简化了测试流程，使其达到了可控制的水平。你可以在[http://www.soapui.org/Security/working-with-security-tests.html](http://www.soapui.org/Security/working-with-security-tests.html)找到关于
+    SoapUI 安全测试的入门教程。
 - en: See also
+  id: totrans-676
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Enabling Sakai web services* recipe
+  id: totrans-677
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*启用 Sakai Web 服务* 配方'
 - en: The *Writing test plans with SoapUI* recipe
+  id: totrans-678
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 SoapUI 编写测试计划* 配方'

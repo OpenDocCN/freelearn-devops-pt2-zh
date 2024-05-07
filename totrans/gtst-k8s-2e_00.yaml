@@ -1,294 +1,438 @@
 - en: Preface
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 前言
 - en: This book is a guide to getting started with Kubernetes and overall container
     management. We will walk you through the features and functions of Kubernetes
     and show how it fits into an overall operations strategy. You’ll learn what hurdles
     lurk in moving a container off the developer's laptop and managing them at a larger
     scale. You’ll also see how Kubernetes is the perfect tool to help you face these
     challenges with confidence.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书是 Kubernetes 和整体容器管理入门指南。我们将为您介绍 Kubernetes 的特性和功能，并展示它如何融入整体运营策略。您将了解将容器从开发人员的笔记本移到更大规模时面临的障碍。您还将看到
+    Kubernetes 如何是帮助您自信面对这些挑战的完美工具。
 - en: What this book covers
+  id: totrans-2
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书内容
 - en: '[Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml), *Introduction to Kubernetes*,
     is a brief overview of containers and the how, what, and why of Kubernetes orchestration,
     exploring how it impacts your business goals and everyday operations.'
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第1章](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)，*Kubernetes 简介*，简要介绍容器和 Kubernetes
+    编排的如何、什么和为什么，探讨它如何影响您的业务目标和日常操作。'
 - en: '[Chapter 2](281f1b00-8685-4614-895f-df5ae1518373.xhtml), *Pods, Services, Replication
     Controllers, and Labels*, uses a few simple examples to explore core Kubernetes
     constructs, namely pods, services, replication controllers, replica sets, and
     labels. Basic operations including health checks and scheduling will also be covered.'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第2章](281f1b00-8685-4614-895f-df5ae1518373.xhtml)，*Pods、服务、复制控制器和标签*，使用几个简单的示例来探索核心
+    Kubernetes 构造，即 Pod、服务、复制控制器、副本集和标签。还将涵盖基本操作，包括健康检查和调度。'
 - en: '[Chapter 3](112f7a80-e9ed-43e9-a165-ea41fa523250.xhtml), *Networking, Load
     Balancers, and Ingress*, covers cluster networking for Kubernetes and the Kubernetes
     proxy. It also takes a deeper dive into services, finishing up, it shows a brief
     overview of some higher level isolation features for mutli-tenancy.'
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第3章](112f7a80-e9ed-43e9-a165-ea41fa523250.xhtml)，*网络、负载均衡器和入口*，涵盖了 Kubernetes
+    的集群网络和 Kubernetes 代理。它还深入探讨了服务，最后，它展示了一些更高级别的隔离特性的简要概述，用于多租户。'
 - en: '[Chapter 4](2888632c-f8c3-4919-8a94-da591fb637b2.xhtml), *Updates, Gradual
     Rollouts, and Autoscaling*, is a quick look at how to roll out updates and new
     features with minimal disruption to uptime. We will also look at scaling for applications
     and the Kubernetes cluster.'
+  id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第4章](2888632c-f8c3-4919-8a94-da591fb637b2.xhtml)，*更新、渐进式部署和自动缩放*，快速了解如何在最小化停机时间的情况下推出更新和新功能。我们还将研究应用程序和
+    Kubernetes 集群的扩展。'
 - en: '[Chapter 5](2b01951a-9eae-41b1-9c7a-d35ba8efa565.xhtml), *Deployments, Jobs,
     and DaemonSets*, covers both long-running application deployments as well as short-lived
     jobs. We will also look at using DaemonSets to run containers on all or subsets
     of nodes in the cluster.'
+  id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第5章](2b01951a-9eae-41b1-9c7a-d35ba8efa565.xhtml)，*部署、任务和 DaemonSets*，涵盖了长时间运行的应用程序部署以及短期任务。我们还将研究使用
+    DaemonSets 在集群中的所有或子集节点上运行容器。'
 - en: '[Chapter 6](6fe5bf81-87e4-441f-964b-380da7a8d6a0.xhtml), *Storage and Running
     Stateful Applications*, covers storage concerns and persistent data across pods
     and the container life cycle. We will also look at new constructs for working
     with stateful application in Kubernetes.'
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第6章](6fe5bf81-87e4-441f-964b-380da7a8d6a0.xhtml)，*存储和运行有状态的应用程序*，涵盖了跨 Pod
+    和容器生命周期的存储问题和持久数据。我们还将研究在 Kubernetes 中使用有状态应用程序的新构建。'
 - en: '[Chapter 7](95d0ce8f-a5cf-4fe1-bef8-ca120e3d4284.xhtml), *Continuous Delivery*,
     explains how to integrate Kubernetes into your continuous delivery pipeline. We
     will see how to use a k8s cluster with Gulp.js and Jenkins as well.'
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第7章](95d0ce8f-a5cf-4fe1-bef8-ca120e3d4284.xhtml)，*持续交付*，解释了如何将 Kubernetes
+    集成到您的持续交付流水线中。我们将看到如何使用 Gulp.js 和 Jenkins 来使用 k8s 集群。'
 - en: '[Chapter 8](1809040d-4981-427d-8de7-600c4354a872.xhtml), *Monitoring and Logging*,
     teaches how to use and customize built-in and third-party monitoring tools on
     your Kubernetes cluster. We will look at built-in logging and monitoring, the
     Google Cloud Monitoring/Logging service, and Sysdig.'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第8章](1809040d-4981-427d-8de7-600c4354a872.xhtml)，*监控与日志*，教你如何在你的 Kubernetes
+    集群上使用和定制内置和第三方监控工具。我们将研究内置日志记录和监控、Google Cloud 监控/日志服务以及 Sysdig。'
 - en: '[Chapter 9](94a98b1d-202e-43ba-a517-3be079d3a20c.xhtml), *Cluster Federation*,
     enables you to try out the new federation capabilities and explains how to use
     them to manage multiple clusters across cloud providers. We will also cover the
     federated version of the core constructs from previous chapters.'
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第9章](94a98b1d-202e-43ba-a517-3be079d3a20c.xhtml)，*集群联邦*，使您能够尝试新的联邦功能，并解释如何使用它们来管理跨云提供商的多个集群。我们还将涵盖前几章中核心构造的联邦版本。'
 - en: '[Chapter 10](3e204a07-a7dd-41d2-806d-f9995a1a9e7f.xhtml), *Container Security*,
     teaches the basics of container security from the container runtime level to the
     host itself. It also explains how to apply these concepts to running containers
     and some of the security concerns and practices that relate specifically to running
     Kubernetes.'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第10章](3e204a07-a7dd-41d2-806d-f9995a1a9e7f.xhtml)，*容器安全*，从容器运行时层级到主机本身，教授容器安全的基础知识。它还解释了如何将这些概念应用于运行容器，以及与运行
+    Kubernetes 相关的一些安全问题和做法。'
 - en: '[Chapter 11](2c73e607-6421-466f-b327-9c3e207674e3.xhtml), *Extending Kubernetes
     with OCP, CoreOS, and Tectonic*, discovers how open standards benefit the entire
     container ecosystem. We’ll look at a few of the prominent standards organizations
     and cover CoreOS and Tectonic, exploring their advantages as a host OS and enterprise
     platform.'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第11章](2c73e607-6421-466f-b327-9c3e207674e3.xhtml)，*使用 OCP、CoreOS 和 Tectonic
+    扩展 Kubernetes*，探讨了开放标准如何使整个容器生态系统受益。我们将介绍一些知名的标准组织，并涵盖 CoreOS 和 Tectonic，探讨它们作为主机操作系统和企业平台的优势。'
 - en: '[Chapter 12](0ebbb579-01ba-4e51-b801-b1656d0558d7.xhtml), *Towards Production
     Ready*, the final chapter, shows some of the helpful tools and third-party projects
     that are available and where you can go to get more help.'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第12章](0ebbb579-01ba-4e51-b801-b1656d0558d7.xhtml)，*走向生产就绪*，最后一章，展示了一些有用的工具和第三方项目，以及您可以获取更多帮助的地方。'
 - en: What you need for this book
+  id: totrans-15
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书所需内容
 - en: This book will cover downloading and running the Kubernetes project. You’ll
     need access to a Linux system (VirtualBox will work if you are on Windows) and
     some familiarity with the command shell.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书将涵盖下载和运行 Kubernetes 项目。您需要访问 Linux 系统（如果您使用 Windows，VirtualBox 也可行），并对命令行有一定了解。
 - en: 'Additionally, you should have a Google Cloud Platform account. You can sign
     up for a free trial here:'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，您应该有一个 Google Cloud Platform 账户。您可以在此处注册免费试用：
 - en: '[https://cloud.google.com/](https://cloud.google.com/)'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://cloud.google.com/](https://cloud.google.com/)'
 - en: 'Also, an AWS account is necessary for a few sections of the book. You can sign
     up for a free trial here:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，本书的一些部分需要有 AWS 账户。您可以在此处注册免费试用：
 - en: '[https://aws.amazon.com/](https://aws.amazon.com/)'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://aws.amazon.com/](https://aws.amazon.com/)'
 - en: Who this book is for
+  id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书适合谁
 - en: Whether you’re heads down in development, neck deep in operations, or looking
     forward as an executive, Kubernetes and this book are for you. *Getting Started
     with Kubernetes* will help you understand how to move your container applications
     into production with best practices and step by step walk-throughs tied to a real-world
     operational strategy. You’ll learn how Kubernetes fits into your everyday operations,
     which can help you prepare for production-ready container application stacks.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 无论您是深入开发、深入运维，还是作为执行人员展望未来，Kubernetes 和本书都适合您。*开始使用 Kubernetes* 将帮助您了解如何将容器应用程序移入生产环境，并与现实世界的操作策略相结合的最佳实践和逐步演练。您将了解
+    Kubernetes 如何融入您的日常操作中，这可以帮助您为生产就绪的容器应用程序堆栈做好准备。
 - en: Having some familiarity with Docker containers, general software developments,
     and operations at a high-level will be helpful.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 对 Docker 容器、一般软件开发和高级操作有一定了解会很有帮助。
 - en: Conventions
+  id: totrans-24
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 惯例
 - en: In this book, you will find a number of text styles that distinguish between
     different kinds of information. Here are some examples of these styles and an
     explanation of their meaning.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，您将找到许多文本样式，用以区分不同类型的信息。以下是这些样式的一些示例及其含义的解释。
 - en: 'Code words in text, folder names, filenames, file extensions, and pathnames
     are shown as follows: "Do a simple `curl` command to the pod IP."'
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 文本中的代码词、文件夹名称、文件名、文件扩展名和路径名如下所示："执行一个简单的`curl`命令到 pod IP。"
 - en: 'URLs are shown as follows:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: URL 如下所示：
 - en: '[http://swagger.io/](http://swagger.io/)'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: '[http://swagger.io/](http://swagger.io/)'
 - en: 'If we wish you to replace a portion of the URL with your own values it will
     be shown like this:'
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们希望您用自己的值替换 URL 的一部分，则会显示如下：
 - en: '`https://**<your master ip>**/swagger-ui/`'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: '`https://**<你的主机IP>**/swagger-ui/`'
 - en: 'Resource definition files and other code blocks are set as follows:'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 资源定义文件和其他代码块设置如下：
 - en: '[PRE0]'
+  id: totrans-32
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'When we wish you to replace a portion of the listing with your own value, the
     relevant lines or items are set in bold between less than and greater than symbols:'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们希望您用自己的值替换列表的一部分时，相关行或项目将以小于和大于符号之间的粗体设置：
 - en: '[PRE1]'
+  id: totrans-34
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Any command-line input or output is written as follows:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 任何命令行输入或输出都以如下形式编写：
 - en: '[PRE2]'
+  id: totrans-36
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'New terms and important words are shown in bold. Words that you see on the
     screen, for example, in menus or dialog boxes, appear in the text like this: "Clicking
     the Add New button moves you to the next screen."'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 新术语和重要单词以**粗体**显示。屏幕上看到的单词，例如在菜单或对话框中，会出现在文本中，如：“单击添加新按钮会将您移至下一个屏幕。”
 - en: 'There are several areas where the text refers to key-value pairs or to input
     dialogs on the screen. In these case the **key** or **input label** will be shown
     in bold and the ***value*** will be shown in bold italics. For example: "In the
     box labelled **Timeout** enter ***5s***."'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 文本中有几个地方涉及到键值对或屏幕上的输入对话框。在这些情况下，**键**或**输入标签**将以粗体显示，而***值***将以粗体斜体显示。例如：“在标有**超时**的框中输入***5s***。”
 - en: Warnings or important notes appear in a box like this.
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 警告或重要注释会以此类框的形式显示。
 - en: Tips and tricks appear like this.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 提示和技巧以此类形式显示。
 - en: Reader feedback
+  id: totrans-41
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 读者反馈
 - en: Feedback from our readers is always welcome. Let us know what you think about
     this book-what you liked or disliked. Reader feedback is important for us as it
     helps us develop titles that you will really get the most out of.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们非常欢迎读者的反馈。让我们知道您对这本书的看法-您喜欢或不喜欢的内容。读者的反馈对我们非常重要，因为它有助于我们开发出真正能让您受益的标题。
 - en: To send us general feedback, simply e-mail `feedback@packtpub.com`, and mention
     the book's title in the subject of your message.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 要发送给我们一般反馈，只需发送电子邮件至`feedback@packtpub.com`，并在消息主题中提及书名。
 - en: If there is a topic that you have expertise in and you are interested in either
     writing or contributing to a book, see our author guide at [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果有您擅长并且有兴趣撰写或贡献书籍的主题，请参阅我们的作者指南，网址为[www.packtpub.com/authors](http://www.packtpub.com/authors)。
 - en: Customer support
+  id: totrans-45
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 客户支持
 - en: Now that you are the proud owner of a Packt book, we have a number of things
     to help you to get the most from your purchase.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在您是 Packt 图书的骄傲拥有者，我们有很多东西可以帮助您充分利用您的购买。
 - en: Downloading the example code
+  id: totrans-47
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载示例代码
 - en: You can download the example code files for this book from your account at [http://www.packtpub.com](http://www.packtpub.com).
     If you purchased this book elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
     and register to have the files e-mailed directly to you.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从[http://www.packtpub.com](http://www.packtpub.com)的账户中下载本书的示例代码文件。如果您在其他地方购买了本书，您可以访问[http://www.packtpub.com/support](http://www.packtpub.com/support)，注册后文件将直接发送到您的邮箱。
 - en: 'You can download the code files by following these steps:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以按照以下步骤下载代码文件：
 - en: Log in or register to our website using your e-mail address and password.
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用您的电子邮件地址和密码登录或注册到我们的网站。
 - en: Hover the mouse pointer on the SUPPORT tab at the top.
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将鼠标指针悬停在顶部的 SUPPORT 选项卡上。
 - en: Click on Code Downloads & Errata.
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“代码下载与勘误”。
 - en: Enter the name of the book in the Search box.
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在搜索框中输入书名。
 - en: Select the book for which you're looking to download the code files.
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择您要下载代码文件的书籍。
 - en: Choose from the drop-down menu where you purchased this book from.
+  id: totrans-55
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从下拉菜单中选择您购买本书的地方。
 - en: Click on Code Download.
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“下载代码”。
 - en: 'Once the file is downloaded, please make sure that you unzip or extract the
     folder using the latest version of:'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载文件后，请确保使用最新版本的以下操作解压或提取文件夹：
 - en: WinRAR / 7-Zip for Windows
+  id: totrans-58
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: WinRAR / 7-Zip 适用于 Windows
 - en: Zipeg / iZip / UnRarX for Mac
+  id: totrans-59
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Zipeg / iZip / UnRarX 适用于 Mac
 - en: 7-Zip / PeaZip for Linux
+  id: totrans-60
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 7-Zip / PeaZip 适用于 Linux
 - en: The code bundle for the book is also hosted on GitHub at [https://github.com/PacktPublishing/Getting-Started-with-Kubernetes-Second-Edition](https://github.com/PacktPublishing/Getting-Started-with-Kubernetes-Second-Edition).
     We also have other code bundles from our rich catalog of books and videos available
     at [https://github.com/PacktPublishing/](https://github.com/PacktPublishing/).
     Check them out!
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 该书的代码包也托管在 GitHub 上，网址为[https://github.com/PacktPublishing/Getting-Started-with-Kubernetes-Second-Edition](https://github.com/PacktPublishing/Getting-Started-with-Kubernetes-Second-Edition)。我们还提供了来自丰富图书和视频目录的其他代码包，可在[https://github.com/PacktPublishing/](https://github.com/PacktPublishing/)找到。快去看看吧！
 - en: Downloading the color images of this book
+  id: totrans-62
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载本书的彩色图像
 - en: We also provide you with a PDF file that has color images of the screenshots/diagrams
     used in this book. The color images will help you better understand the changes
     in the output. You can download this file from
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还向您提供了一份 PDF 文件，其中包含本书中使用的屏幕截图/图表的彩色图像。彩色图像将帮助您更好地理解输出中的变化。您可以从以下位置下载此文件：
 - en: '[https://www.packtpub.com/sites/default/files/downloads/GettingStartedwithKubernetesSecondEdition_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/GettingStartedwithKubernetesSecondEdition_ColorImages.pdf).'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://www.packtpub.com/sites/default/files/downloads/GettingStartedwithKubernetesSecondEdition_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/GettingStartedwithKubernetesSecondEdition_ColorImages.pdf).'
 - en: Errata
+  id: totrans-65
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 勘误
 - en: Although we have taken every care to ensure the accuracy of our content, mistakes
     do happen. If you find a mistake in one of our books-maybe a mistake in the text
     or the code-we would be grateful if you could report this to us. By doing so,
@@ -298,37 +442,53 @@
     the details of your errata. Once your errata are verified, your submission will
     be accepted and the errata will be uploaded to our website or added to any list
     of existing errata under the Errata section of that title.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管我们已经竭尽全力确保内容的准确性，但错误确实会发生。如果您发现我们书籍中的错误 - 也许是文本或代码中的错误 - 如果您能向我们报告此错误，我们将不胜感激。通过这样做，您可以帮助其他读者免受挫折，帮助我们改进此书的后续版本。如果您发现任何勘误，请访问[http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata)报告它们，选择您的书籍，点击勘误提交表单链接，并输入您的勘误详情。一旦您的勘误被验证，您的提交将被接受，勘误将被上传到我们的网站或添加到该书标题的勘误部分的任何现有勘误列表中。
 - en: To view the previously submitted errata, go to [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
     and enter the name of the book in the search field. The required information will
     appear under the Errata section.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 要查看以前提交的勘误，请访问[https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)并在搜索栏中输入书名。相关信息将显示在勘误部分下面。
 - en: Piracy
+  id: totrans-68
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 盗版
 - en: Piracy of copyrighted material on the Internet is an ongoing problem across
     all media. At Packt, we take the protection of our copyright and licenses very
     seriously. If you come across any illegal copies of our works in any form on the
     Internet, please provide us with the location address or website name immediately
     so that we can pursue a remedy.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 互联网上盗版版权材料是所有媒体都面临的持续问题。在Packt，我们非常重视保护我们的版权和许可。如果您在互联网上发现我们作品的任何形式的非法复制，请立即向我们提供位置地址或网站名称，以便我们可以采取补救措施。
 - en: Please contact us at `copyright@packtpub.com` with a link to the suspected pirated
     material.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 请通过`copyright@packtpub.com`与我们联系，并附上涉嫌盗版材料的链接。
 - en: We appreciate your help in protecting our authors and our ability to bring you
     valuable content.
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们感谢您帮助我们保护我们的作者以及我们为您提供有价值内容的能力。
 - en: Questions
+  id: totrans-72
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 问题
 - en: If you have a problem with any aspect of this book, you can contact us at `questions@packtpub.com`,
     and we will do our best to address the problem.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您对本书的任何方面有问题，请通过`questions@packtpub.com`与我们联系，我们将尽力解决问题。

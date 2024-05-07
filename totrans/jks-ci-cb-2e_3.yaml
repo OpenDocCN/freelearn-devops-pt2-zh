@@ -1,66 +1,98 @@
 - en: Chapter 3. Building Software
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第3章 构建软件
 - en: 'In this chapter, we will cover the following recipes:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章中，我们将介绍以下内容：
 - en: Plotting alternative code metrics in Jenkins
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在Jenkins中绘制替代代码指标图
 - en: Running Groovy scripts through Maven
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过Maven运行Groovy脚本
 - en: Manipulating environmental variables
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 操纵环境变量
 - en: Running Ant through Groovy in Maven
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过Maven在Groovy中运行Ant
 - en: Failing Jenkins jobs based on JSP syntax errors
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于JSP语法错误使Jenkins作业失败
 - en: Configuring Jetty for integration tests
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为集成测试配置Jetty
 - en: Looking at license violations with Rat
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用Rat查看许可证违规情况
 - en: Reviewing license violations from within Maven
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在Maven中审查许可证违规
 - en: Exposing information through build descriptions
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过构建描述公开信息
 - en: Reacting to generated data with the groovy-postbuild plugin
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过groovy-postbuild插件对生成的数据做出反应
 - en: Remotely triggering jobs through the Jenkins API
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过Jenkins API远程触发作业
 - en: Adaptive site generation
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 自适应站点生成
 - en: Introduction
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍
 - en: This chapter reviews the relationship between Jenkins and Maven builds, and
     there is also a small amount of scripting with Groovy and Ant.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章回顾了Jenkins和Maven构建之间的关系，还包含了一些使用Groovy和Ant进行脚本编写的内容。
 - en: Jenkins is the master of flexibility. It works well across multiple platforms
     and technologies. Jenkins has an intuitive interface with clear configuration
     settings. This is great for getting the job done. However, it is also important
@@ -69,8 +101,10 @@
     If you know that you will always run your builds through Jenkins, then you can
     afford to place some of the core work in Jenkins plugins, gaining interesting
     extra functionality.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins是灵活性的大师。它在多个平台和技术上表现出色。Jenkins具有直观的界面和清晰的配置设置。这对完成工作很有帮助。然而，同样重要的是，您清楚地定义Jenkins插件与Maven构建文件之间的界限。缺乏区分会使您不必要地依赖于Jenkins。如果您知道您将始终通过Jenkins运行构建，则可以放置一些核心工作在Jenkins插件中，获得有趣的额外功能。
 - en: 'However, if you want to always be able to build, test, and deploy directly,
     then you will need to keep the details in `pom.xml`. You will have to judge the
     balance; it is easy to have "feature creep". The UI is easier to configure than
@@ -80,43 +114,61 @@
     the trends of tests. An example of the interplay between Jenkins and Maven is
     the use of the Jenkins Publish Over SSH plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Publish+Over+SSH+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Publish+Over+SSH+Plugin)).
     You can configure transferring files or add a section to the `pom.xml` as follows:'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 然而，如果您希望始终能够直接构建、测试和部署，那么您将需要保持`pom.xml`中的细节。您必须权衡利弊；拥有“功能蔓延”是很容易的。与编写冗长的`pom.xml`文件相比，UI更容易配置。提高的可读性会导致较少的与配置相关的缺陷。对于您来说使用Jenkins完成大多数常见任务，如传输工件、通信和绘制测试趋势，也更加简单。Jenkins与Maven之间的互动示例是使用Jenkins
+    Publish Over SSH插件（[https://wiki.jenkins-ci.org/display/JENKINS/Publish+Over+SSH+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Publish+Over+SSH+Plugin)）。您可以配置传输文件或将以下内容添加到`pom.xml`中：
 - en: '[PRE0]'
+  id: totrans-18
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Remembering the dependencies on specific JARs and versions, which Maven plugin
     to use at times feels like magic. Jenkins plugins simplify details.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 记住特定JAR和版本的依赖关系，有时使用Maven插件会感觉像魔术一样。Jenkins插件简化了细节。
 - en: Maven uses profiles so that you can use different configurations in your projects—for
     example, server names for development, acceptance, or production. This also allows
     you to update version numbers for plugins, easing maintenance effort. For more
     information, visit [http://maven.apache.org/guides/introduction/introduction-to-profiles.html](http://maven.apache.org/guides/introduction/introduction-to-profiles.html).
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven使用配置文件，以便您可以在项目中使用不同的配置，例如开发、验收或生产服务器名称。这还允许您更新插件的版本号，从而简化维护工作。有关更多信息，请访问
+    [http://maven.apache.org/guides/introduction/introduction-to-profiles.html](http://maven.apache.org/guides/introduction/introduction-to-profiles.html)。
 - en: Later in the chapter, you will be given the chance to run Groovy scripts with
     AntBuilder. Each approach is viable; use depends more on your preferences than
     one clear choice.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章后面，您将有机会使用AntBuilder运行Groovy脚本。每种方法都是可行的；使用取决于您的偏好而不是一个明确的选择。
 - en: 'Jenkins plugins work well together. For example, the promoted-builds plugin
     ([https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin))
     signals when a build has met certain criteria, placing an icon by a successful
     build as shown in the following screenshot:'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins插件可以很好地协同工作。例如，推广构建插件（[https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin)）在构建满足某些条件时发出信号，并在成功构建旁边放置一个图标，如下截图所示：
 - en: '![Introduction](img/0082OS_03_01.jpg)'
+  id: totrans-23
   prefs: []
   type: TYPE_IMG
+  zh: '![Introduction](img/0082OS_03_01.jpg)'
 - en: You can use this feature to signal, for example, to the QA team that they need
     to test the build, or for system administrators to pick up artifacts and deploy.
     Other plugins can also be triggered by promotion (for example, when a developer
     signs off on a build using the promotions plugin), including the SSH plugin. However,
     Maven is not aware of the promotion mechanism. As Jenkins evolves, expect more
     plugin interrelationships.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以使用此功能来发出信号，例如，通知质量保证团队需要测试构建，或者通知系统管理员收集构件并部署。其他插件也可以通过推广触发（例如，当开发人员使用推广插件签署构建时），包括SSH插件。然而，Maven不知道推广机制。随着Jenkins的发展，预计会有更多的插件相互关系。
 - en: Jenkins is well versed in the choreographing of actions. You should keep the
     running time of a job to a minimum and offset heavier jobs to nodes. Heavy jobs
     tend to be clustered around document generation or testing. Jenkins allows you
@@ -127,119 +179,170 @@
     or a thicker `pom.xml` file with different goals ready to be called across jobs.
     **Keep It Simple Stupid** (**KISS**) biases the decision towards a larger single
     file.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins精通操作的编排。你应该将作业的运行时间最小化，并将较重的作业偏移到节点上。较重的作业往往聚集在文档生成或测试周围。Jenkins允许你将作业链接在一起，因此作业将与特定的Maven目标相结合，例如集成测试（[http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference](http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference)）。在这种情况下，你可以选择编写一些构建文件，也许是一个多模块项目（[http://maven.apache.org/guides/mini/guide-multiple-modules.html](http://maven.apache.org/guides/mini/guide-multiple-modules.html)），或者是一个更厚的`pom.xml`文件，其中包含不同的目标，可以在作业之间调用。**保持简单傻瓜**（**KISS**）倾向于决策朝着一个较大的单一文件。
 - en: Jenkins is an enterprise-friendly agnostic
+  id: totrans-26
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: Jenkins是一个企业友好的技术中立平台。
 - en: Jenkins is technology-agnostic and can glue together project technologies across
     the organization, development teams, and software position in their lifecycle.
     Jenkins lets you run scripting languages of choice, makes it easy to pull in source
     code using Git, subversion, CVS, and a number of other version control systems.
     If Jenkins is not compatible, developers with a little practice can write their
     own integration.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins是技术中立的，可以将组织、开发团队和软件在生命周期中的位置的项目技术粘合在一起。Jenkins让你可以运行自己选择的脚本语言，轻松地使用Git、子版本、CVS和许多其他版本控制系统拉取源代码。如果Jenkins不兼容，开发人员可以通过一点实践编写自己的集成。
 - en: In this book, you will see both subversion and GIT projects mentioned. This
     represents a realistic mix. Many consider Git more versatile than subversion.
     Feel free to use Git as your repository of choice for the examples in this book.
     Designed in from the start, Jenkins makes it easy for you to choose between the
     different revision control systems.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，你将看到涉及到子版本和GIT项目。这代表了一个现实的混合。许多人认为Git比子版本更加灵活多变。请放心在本书的示例中选择Git作为你的存储库。从一开始就设计，Jenkins使你可以轻松选择不同的版本控制系统。
 - en: Note
+  id: totrans-29
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: If you look at the relative use of Git and subversion for a representative collection
     from Ohoh in early 2014, for Git there were 247,103 repositories (37 percent of
     the total) and subversion had 324,895 repositories (48 percent of the total).
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你看一下2014年初Ohoh的代表性集合中Git和子版本的相对使用情况，对于Git，有247,103个存储库（总数的37%），子版本有324,895个存储库（总数的48%）。
 - en: Typical enterprises lag behind when using the most modern offerings because
     of their resistance to changing their working processes. Therefore, expect this
     category of businesses to have a higher percentage of subversion repositories
     compared to smaller organizations.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 典型企业在使用最现代化的服务时落后于小型组织，因为他们不愿改变工作流程。因此，预计与较小组织相比，这类企业的子版本仓库比例较高。
 - en: A pom.xml template
+  id: totrans-32
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 一个 pom.xml 模板
 - en: The recipes in this chapter will include `pom.xml` examples. To save page space,
     only the essential details will be shown. You can download the full examples from
     the book's website.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章中的配方将包括`pom.xml`示例。为节省页面空间，只显示必要的细节。您可以从书籍网站下载完整的示例。
 - en: The examples were tested against Maven 3.2.1, though the examples should work
     with the latest version of Maven.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些示例是针对 Maven 3.2.1 进行测试的，尽管这些示例应该与最新版本的 Maven 一起工作。
 - en: From the main Jenkins configuration screen (`http://localhost:8080/configure`)
     under the **Maven** section, you will need to install this version, giving it
     the label `3.2.1`.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 从主 Jenkins 配置屏幕（`http://localhost:8080/configure`）下的**Maven**部分，您将需要安装此版本，并为其提供标签`3.2.1`。
 - en: 'To generate a basic template for a Maven project, you have two choices. You
     can create a project via the archetype goal ([http://Maven.apache.org/guides/introduction/introduction-to-archetypes.html](http://Maven.apache.org/guides/introduction/introduction-to-archetypes.html))
     or you can start off with a simple `pom.xml` file as shown here:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 要为 Maven 项目生成基本模板，您有两个选择。您可以通过原型目标（[http://Maven.apache.org/guides/introduction/introduction-to-archetypes.html](http://Maven.apache.org/guides/introduction/introduction-to-archetypes.html)）创建项目，或者您可以从这里开始一个简单的`pom.xml`文件：
 - en: '[PRE1]'
+  id: totrans-37
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'The template looks simple, but is only part of a larger effective `pom.xml`.
     It is combined with default values that are hidden in Maven. To view the expanded
     version, you will need to run the following command:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 模板看起来简单，但只是较大有效`pom.xml`的一部分。它与 Maven 中隐藏的默认值相结合。要查看扩展版本，您需要运行以下命令：
 - en: '[PRE2]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: Unless otherwise stated, the fragments mentioned in the recipes should be inserted
     into the template just before the `</project>` tag, updating your `groupID`, `artifactID`,
     and `version` values based on convention. For more detail, visit [http://maven.apache.org/guides/mini/guide-naming-conventions.html](http://maven.apache.org/guides/mini/guide-naming-conventions.html).
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 除非另有说明，否则应将配方中提到的片段插入模板中，就在`</project>`标签之前，根据约定更新您的`groupID`、`artifactID`和`version`值。有关更多详细信息，请访问[http://maven.apache.org/guides/mini/guide-naming-conventions.html](http://maven.apache.org/guides/mini/guide-naming-conventions.html)。
 - en: Maven changes
+  id: totrans-41
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: Maven 变更
 - en: Maven 2 has reached the end of its life ([http://maven.apache.org/maven-2.x-eol.html](http://maven.apache.org/maven-2.x-eol.html))
     and the development team has stopped supporting it. You cannot expect prompt removal
     of newly discovered bugs. At the time of writing this book, Maven 4 is in planning
     and has not been released.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 2 已经结束其生命周期（[http://maven.apache.org/maven-2.x-eol.html](http://maven.apache.org/maven-2.x-eol.html)），开发团队已经停止支持它。您不能指望及时删除新发现的错误。在撰写本书时，Maven
+    4 正在规划中，尚未发布。
 - en: 'If you have Maven 2 installed as a package and wish to upgrade to Maven 3,
     then you will need to install the Maven package. To swap between the alternative
     Maven versions, you will need to run the following Ubuntu command:'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您已经安装了作为软件包的 Maven 2，并希望升级到 Maven 3，则需要安装 Maven 软件包。要在不同 Maven 版本之间切换，您需要运行以下
+    Ubuntu 命令：
 - en: '[PRE3]'
+  id: totrans-44
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Setting up a File System SCM
+  id: totrans-45
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 设置文件系统 SCM
 - en: In previous chapters, you used recipes that copied files into the workspace.
     This is easy to explain, but OS-specific. You can also do the file copying through
     the File System SCM plugin ([https://wiki.jenkins-ci.org/display/JENKINS/File+System+SCM](https://wiki.jenkins-ci.org/display/JENKINS/File+System+SCM)),
     as this is OS-agnostic. You will need to install the plugin, ensuring that the
     files have the correct permissions so that the Jenkins user can copy them. In
     Linux, consider placing the files beneath the Jenkins home directory `/var/lib/jenkins`.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 在前几章中，您使用了将文件复制到工作区的配方。这很容易解释，但受操作系统特定。您还可以通过文件系统 SCM 插件（[https://wiki.jenkins-ci.org/display/JENKINS/File+System+SCM](https://wiki.jenkins-ci.org/display/JENKINS/File+System+SCM)）进行文件复制，因为这是与操作系统无关的。您需要安装该插件，并确保文件具有正确的权限，以便
+    Jenkins 用户可以复制它们。在 Linux 中，考虑将文件放在 Jenkins 主目录`/var/lib/jenkins`下。
 - en: Plotting alternative code metrics in Jenkins
+  id: totrans-47
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中绘制替代代码度量
 - en: This recipe details how to plot custom data using the plot plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin)).
     This allows you to expose numeric build data visually.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 本篇介绍了如何使用绘图插件绘制自定义数据（[https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin)）。这使您可以通过可视化方式展示数值构建数据。
 - en: Jenkins has many plugins that create views of the test results generated by
     builds. The analysis-collector plugin pulls in the results from a number of these
     plugins to create an aggregated summary and history ([https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin)).
@@ -249,423 +352,624 @@
     SonarQube specializes in reporting a project's code quality. However, despite
     the wealth of options, there may come a time when you will need to plot custom
     results.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 有许多插件可以创建由构建生成的测试结果的视图。分析收集器插件从这些插件中汇总结果以创建聚合摘要和历史记录（[https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Analysis+Collector+Plugin)）。这非常适合绘制标准结果类型的历史记录，如JUnit、JMeter、FindBugs和NCSS。还有一个
+    SonarQube 插件（[http://docs.codehaus.org/display/SONAR/Jenkins+Plugin](http://docs.codehaus.org/display/SONAR/Jenkins+Plugin)）支持将数据推送到
+    SonarQube（[http://www.sonarsource.org/](http://www.sonarsource.org/)）。SonarQube
+    专注于报告项目的代码质量。然而，尽管选项很多，但可能会有一天你需要绘制自定义结果。
 - en: 'Let''s assume you want to know the history of how many hits or misses are generated
     in your custom cache during integration testing. Plotting over builds will give
     you an indicator of whether the changes in the code are improving or degrading
     the performance. The data is faked: a simple Perl script will generate random
     results.'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 假设你想了解在集成测试期间你的自定义缓存中生成了多少次命中或未命中的历史记录。通过构建的绘图可以让你了解代码的变化是改善还是降低了性能。数据是伪造的：一个简单的
+    Perl 脚本会生成随机结果。
 - en: Getting ready
+  id: totrans-51
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: In the plugin **Manager** section of Jenkins (`http://localhost:8080/pluginManager/available`),
     install the plot plugin. Create a directory named `ch3.building_software/plotting`.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 的插件**管理器**部分（`http://localhost:8080/pluginManager/available`），安装绘图插件。创建一个名为`ch3.building_software/plotting`的目录。
 - en: How to do it...
+  id: totrans-53
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Create the `ch3.building_software/plotting/hit_and_miss.pl` file and add the
     following lines of code:'
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建`ch3.building_software/plotting/hit_and_miss.pl`文件，并添加以下代码行：
 - en: '[PRE4]'
+  id: totrans-55
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Create a free-style job with **Job name** as `ch3.plotting`.
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个自由样式的作业，**作业名称**为`ch3.plotting`。
 - en: In the **Source Code Management** section, check **File System**, and add a
     fully qualified path of your plotting directory, such as `/var/lib/jenkins/cookbook/ch3.building_software/plotting`,
     in the **Path** field.
+  id: totrans-57
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，勾选**文件系统**，并在**路径**字段中添加你的绘图目录的完全限定路径，例如`/var/lib/jenkins/cookbook/ch3.building_software/plotting`。
 - en: In the **Build** section, select **Add a build step** for **Execute Shell**
     or in the case of a Windows system, select the **Execute Windows** batch command.
+  id: totrans-58
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分，为**执行 Shell**选择**添加构建步骤**，或者在 Windows 系统中，选择**执行 Windows**批处理命令。
 - en: For the command, add `perl hit_and_miss.pl`.
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于命令，添加`perl hit_and_miss.pl`。
 - en: In the **Post-build Actions** section, select the **Plot build data** checkbox.
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分，选中**绘制构建数据**复选框。
 - en: 'Add the following values to the newly expanded region:'
+  id: totrans-61
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下值添加到新扩展区域：
 - en: '**Plot group**: `Cache Data`'
+  id: totrans-62
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图组**：`缓存数据`'
 - en: '**Plot title**: `Hit and misses`'
+  id: totrans-63
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图标题**：`命中和未命中`'
 - en: '**Plot y-axis label**: `Number of hits or misses`'
+  id: totrans-64
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图 y 轴标签**：`命中或未命中的次数`'
 - en: '**Plot style**: **Stacked Area**'
+  id: totrans-65
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**绘图样式**：**堆积面积**'
 - en: Type `misses.properties` in **Data series file** and type `Misses` in the **Data
     series legend** label.
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**数据系列文件**中输入`misses.properties`，在**数据系列图例**标签中输入`Misses`。
 - en: Type `hits.properties` in **Data series file** and type `Hits` in the **Data
     series legend** label.
+  id: totrans-67
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**数据系列文件**中输入`hits.properties`，在**数据系列图例**标签中输入`Hits`。
 - en: At the bottom of the configuration page, click on the **Save** button, as shown
     in the following screenshot:![How to do it...](img/0082OS_03_02.jpg)
+  id: totrans-68
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在配置页面底部，点击**保存**按钮，如下图所示：![如何操作...](img/0082OS_03_02.jpg)
 - en: Run the job multiple times.
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 多次运行该作业。
 - en: Review the **Plot** link and you will see something similar to the following
     screenshot:![How to do it...](img/0082OS_03_03.jpg)
+  id: totrans-70
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看**Plot**链接，你会看到类似以下截图：![如何操作...](img/0082OS_03_03.jpg)
 - en: How it works...
+  id: totrans-71
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: 'The Perl script generates two property files: `hits` and `misses`. The `hits`
     file contains `YVALUE` between 0 and 100 and the `misses` file contains `YVALUE`
     between `0` and 50\. The numbers are generated randomly. The plot plugin then
     reads values out of the `YVALUE` property.'
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: Perl脚本生成两个属性文件：`hits`和`misses`。 `hits`文件包含介于0和100之间的`YVALUE`，而`misses`文件包含介于`0`和50之间的`YVALUE`。这些数字是随机生成的。然后绘图插件从`YVALUE`属性中读取值。
 - en: The two property files are read by the plot plugin. The plugin keeps track of
     the history, their values displayed in a trend graph. You will have to experiment
     with the different graph types to find the optimum plot for your custom measurements.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 两个属性文件被绘图插件读取。该插件跟踪历史记录，它们的值显示在趋势图中。你将不得不尝试不同的图形类型，找到最佳的绘图方法来适应自定义测量。
 - en: 'There are currently two other data formats that you can use: XML and CSV. However,
     until the online help clearly explains the structures used, I would recommend
     staying with the properties format.'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前有两种其他数据格式可供使用：XML和CSV。然而，在在线帮助清楚解释所使用的结构之前，我建议仍然使用属性格式。
 - en: Perl was chosen for its coding brevity and because it is platform-agnostic.
     The script could have also been written in Groovy and run from within a Maven
     project. You can see a Groovy example in the *Running Groovy scripts through Maven*
     recipe.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择Perl的原因是其编码简洁和跨平台特性。该脚本也可以用Groovy编写，并在Maven项目中运行。你可以在*通过Maven运行Groovy脚本*方法中看到一个Groovy示例。
 - en: There's more...
+  id: totrans-76
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多信息...
 - en: The plot plugin allows you can choose from a number of plot types, including
     **Area**, **Bar**, **Bar 3D**, **Line**, **Line 3D**, **Stacked Area**, **Stacked
     Bar**, **Stacked Bar 3D**, and **Waterfall**. If you choose the right graph type,
     you can generate beautiful plots.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 绘图插件允许选择多种绘图类型，包括**区域**、**条形**、**条形 3D**、**线条**、**线条 3D**、**堆叠区域**、**堆叠条形**、**堆叠条形
+    3D**和**瀑布**。如果选择正确的图形类型，可以生成漂亮的图形。
 - en: If you want to add these custom graphs to your reports, you will need to save
     them. You can do so by right-clicking on the image in your browser.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果想将这些自定义图形添加到报告中，必须保存它们。您可以通过在浏览器中右键单击图像来完成。
 - en: You may also wish for a different graph size. You can generate an image by visiting
     `http://host/job/JobName/plot/getPlot?index=n&width=x&height=y`.
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可能希望有不同大小的图形。你可以通过访问`http://host/job/JobName/plot/getPlot?index=n&width=x&height=y`生成图像。
 - en: 'The `[Width]` and `[height]` parameters define the size of the plot. `n` is
     an index number pointing to a specific plot. If you have only one plot, then `n=0`.
     If you have two plots configured, then `n` could be either 0 or 1\. To discover
     the index, visit the plot''s link and examine the **Jump to** drop-down menu and
     take one from the highest **Plot** number, as shown in the following screenshot:'
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: '`[Width]`和`[height]`参数定义了图形的大小。 `n`是指向特定图表的索引号。如果只有一个图表，那么`n=0`。如果配置了两个图表，那么`n`可以是0或1。要发现索引，请访问图表的链接，并检查**跳转到**下拉菜单，从中选择最高的**图表**编号之一，如下截图所示：'
 - en: '![There''s more...](img/0082OS_03_04.jpg)'
+  id: totrans-81
   prefs: []
   type: TYPE_IMG
+  zh: '![更多信息...](img/0082OS_03_04.jpg)'
 - en: To generate a graph in PNG format of dimensions 800 x 600 based on the job in
     this recipe, you would use a URL similar to `localhost:8080/job/ch3.plotting/plot/getPlot?index=0&width=800&height=600`.
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 要根据本方法中的作业生成尺寸为800 x 600的PNG格式图形，可以使用类似`localhost:8080/job/ch3.plotting/plot/getPlot?index=0&width=800&height=600`的URL。
 - en: Tip
+  id: totrans-83
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: To download the image without logging in yourself, you can use the scriptable
     authentication method mentioned in the *Remotely triggering jobs through the Jenkins
     API* recipe.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲下载图像而不登录自己，请使用*通过Jenkins API远程触发作业*方法中提到的可脚本化身份验证方法。
 - en: See also
+  id: totrans-85
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 参见
 - en: The *Running Groovy scripts through Maven* recipe
+  id: totrans-86
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过Maven运行Groovy脚本*方法'
 - en: The *Adaptive site generation* recipe
+  id: totrans-87
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*自适应站点生成*方法'
 - en: The *Remotely triggering jobs through the Jenkins API* recipe
+  id: totrans-88
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过Jenkins API远程触发作业*方法'
 - en: Running Groovy scripts through Maven
+  id: totrans-89
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过Maven运行Groovy脚本
 - en: This recipe describes how to use the GMaven plugin ([http://docs.codehaus.org/display/GMAVEN/Home](http://docs.codehaus.org/display/GMAVEN/Home))
     to run Groovy scripts.
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 本方法描述如何使用GMaven插件（[http://docs.codehaus.org/display/GMAVEN/Home](http://docs.codehaus.org/display/GMAVEN/Home)）运行Groovy脚本。
 - en: The ability to run Groovy scripts in builds allows you to consistently use one
     scripting language in Maven and Jenkins. Groovy can be run in any Maven phase.
     For more detail, refer to the *Maven phases* section in this recipe.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 在构建中运行Groovy脚本的能力可以让您在Maven和Jenkins中始终使用同一种脚本语言。Groovy可以在任何Maven阶段运行。有关详细信息，请参阅本篇中*关于Maven阶段*部分。
 - en: Maven can execute the Groovy source code from within the build file, at another
     file location, or from a remote web server.
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven可以从构建文件内部执行Groovy源代码，也可以在另一个文件位置或从远程Web服务器执行。
 - en: Note
+  id: totrans-93
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: An alternative plugin is GMavenPlus. For a comparison between the GMaven and
     GMavenPlus plugins, visit [http://docs.codehaus.org/display/GMAVENPLUS/Choosing+Your+Build+Tool](http://docs.codehaus.org/display/GMAVENPLUS/Choosing+Your+Build+Tool).
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一种插件是GMavenPlus。要比较GMaven和GMavenPlus插件之间的差异，请访问[http://docs.codehaus.org/display/GMAVENPLUS/Choosing+Your+Build+Tool](http://docs.codehaus.org/display/GMAVENPLUS/Choosing+Your+Build+Tool)。
 - en: You will find instructions on how to configure the plugin at [http://groovy.github.io/GMavenPlus/index.html](http://groovy.github.io/GMavenPlus/index.html).
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[http://groovy.github.io/GMavenPlus/index.html](http://groovy.github.io/GMavenPlus/index.html)找到有关如何配置插件的说明。
 - en: Getting ready
+  id: totrans-96
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create a directory named `ch3.building_software/running_groovy`.
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个名为`ch3.building_software/running_groovy`的目录。
 - en: Tip
+  id: totrans-98
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Maintainability of scripting**'
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: '**脚本的可维护性**'
 - en: For later reuse, consider centralizing your Groovy code outside the build files.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了以后重复使用，请考虑在构建文件之外集中您的Groovy代码。
 - en: How to do it...
+  id: totrans-101
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Add the following lines of code just before the `</project>` tag within your
     template file (mentioned in the introduction). Make sure the `pom.xml` file is
     readable by Jenkins:'
+  id: totrans-102
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在模板文件（在介绍中提到）的`</project>`标签之前添加以下代码行。确保`pom.xml`文件可被Jenkins读取：
 - en: '[PRE5]'
+  id: totrans-103
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Create a free-style job with **Job name** as `ch3.groovy_verify`.
+  id: totrans-104
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个自由风格的作业，将**作业名称**设为`ch3.groovy_verify`。
 - en: In the **Source Code Management** section, check **File System** and a fully
     qualified path of your plotting directory, such as `/var/lib/jenkins/cookbook/ch3.building_software/running_groovy`,
     in the **Path** field.
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，勾选**文件系统**并在**路径**字段中输入您的绘图目录的完整路径，例如`/var/lib/jenkins/cookbook/ch3.building_software/running_groovy`。
 - en: 'In the **Build** section, select **Add a build step** for **Invoke top-level
     Maven targets**. In the newly expanded section, add the following details:'
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分中，为**调用顶级Maven目标**选择**添加构建步骤**。在新展开的部分中，添加以下细节：
 - en: '**Maven Version**: `3.2.1`'
+  id: totrans-107
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Maven 版本**：`3.2.1`'
 - en: '**Goals**: `verify`'
+  id: totrans-108
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标**：`verify`'
 - en: 'Run the job. If your system is on a *NIX box, you''ll get the following output:'
+  id: totrans-109
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。如果您的系统是在*NIX系统上，您将获得以下输出：
 - en: '[PRE6]'
+  id: totrans-110
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'On a Windows system with Jenkins properly configured, the script will fail
     with the following message:'
+  id: totrans-111
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 在已正确配置Jenkins的Windows系统上，脚本将失败并显示以下消息：
 - en: '[PRE7]'
+  id: totrans-112
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: How it works...
+  id: totrans-113
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: You can execute the GMaven plugin multiple times during a build. In the example,
     the `verify` phase is the trigger point.
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在构建过程中多次执行GMaven插件。在示例中，`verify`阶段是触发点。
 - en: 'To enable the Groovy plugin to find imported classes outside its core features,
     you will need to add an element in the `<classpath>` tag. The source code is contained
     within the `<source>` tag:'
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使Groovy插件能够找到其核心功能之外导入的类，您需要在`<classpath>`标签中添加一个元素。源代码包含在`<source>`标签内：
 - en: '[PRE8]'
+  id: totrans-116
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: The `Import` statement works as the dependency is mentioned in the `<classpath>`
     tag.
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: '`Import`语句起作用是因为依赖项在`<classpath>`标签中被提及。'
 - en: The `SystemUtils` class ([https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/SystemUtils.html](https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/SystemUtils.html))
     provides helper methods such as the ability to discern which OS you are running,
     the Java version, and the user's home directory.
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: '`SystemUtils`类（[https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/SystemUtils.html](https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/SystemUtils.html)）提供助手方法，例如判断您正在运行哪个操作系统、Java版本和用户的主目录。'
 - en: The fail method allows the Groovy script to fail the build, in this case when
     you are not running the build on a *NIX OS. Most of the time, you will want your
     builds to be OS-agnostic. However, during integration testing you may want to
     use a specific OS to perform functional tests with a specific web browser. The
     check will stop the build if your tests find themselves on the wrong node.
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这种情况下，`fail`方法允许Groovy脚本使构建失败，注意当您不在*NIX操作系统上运行构建时。大部分时间，您希望您的构建是与操作系统无关的。然而，在集成测试期间，您可能希望使用特定操作系统通过一个特定的Web浏览器执行功能测试。如果您的测试发现自己在错误的节点上，检查将停止构建。
 - en: Tip
+  id: totrans-120
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: Once you are satisfied with your Groovy code, consider compiling the code into
     the underlying Java byte code. You can find full instructions at [http://docs.codehaus.org/display/GMAVEN/Building+Groovy+Projects](http://docs.codehaus.org/display/GMAVEN/Building+Groovy+Projects).
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦您满意您的 Groovy 代码，请考虑将代码编译成底层 Java 字节码。您可以在 [http://docs.codehaus.org/display/GMAVEN/Building+Groovy+Projects](http://docs.codehaus.org/display/GMAVEN/Building+Groovy+Projects)
+    找到完整的说明。
 - en: There's more...
+  id: totrans-122
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a number of tips you might find useful.
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是您可能会发现有用的一些提示。
 - en: Keeping track of warnings
+  id: totrans-124
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 警告跟踪
 - en: 'It is important to review your logfiles, not only on failure, but also for
     the warnings. In this case, you will see the two warnings:'
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: 重要的是要审查您的日志文件，不仅在失败时，还要注意警告。在这种情况下，您会看到两个警告：
 - en: '`[WARNING] Using platform encoding (UTF-8 actually) to copy`'
+  id: totrans-126
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`[WARNING] 使用平台编码（实际上是 UTF-8）进行复制`'
 - en: '`[WARNING] JAR will be empty - no content was marked for inclusion!`'
+  id: totrans-127
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`[WARNING] JAR will be empty - no content was marked for inclusion!`'
 - en: 'The platform encoding warning states that the files will be copied using the
     default platform encoding. If you change servers and the default encoding on the
     server is different, the results of the copying may also be different. For consistency,
     it is better to enforce a specific coding in the file by adding the following
     lines just before the `<build>` tag:'
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 平台编码警告说明将使用默认平台编码复制文件。如果更改服务器并且服务器上的默认编码不同，则复制结果也可能不同。为了保持一致性，最好在`<build>`标签之前添加以下行以强制在文件中使用特定编码：
 - en: '[PRE9]'
+  id: totrans-129
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Update your template file to take this into account.
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 更新您的模板文件以考虑这一点。
 - en: The JAR warning is because we are only running a script and have no content
     to make a JAR. If you had called the script in an earlier phase than the packaging
     of the JAR, you would not have triggered the warning.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: JAR 警告是因为我们只运行了一个脚本，并没有内容来制作一个 JAR。如果您在比 JAR 打包更早的阶段调用了脚本，就不会触发警告。
 - en: Where's my source?
+  id: totrans-132
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 我的源代码在哪里？
 - en: 'There are two other ways to point to Groovy scripts to be executed. The first
     way is to point to the filesystem, as follows:'
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 还有两种指向要执行的 Groovy 脚本的方法。第一种方法是指向文件系统，如下所示：
 - en: '[PRE10]'
+  id: totrans-134
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'The other approach is to connect to a web server through a URL as follows:'
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一种方法是通过以下方式通过 URL 连接到 Web 服务器：
 - en: '[PRE11]'
+  id: totrans-136
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: Using a web server to store Groovy scripts adds an extra dependency to the infrastructure.
     However, it is also great for centralizing code in an SCM with web access.
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Web 服务器存储 Groovy 脚本会为基础架构增加额外的依赖性。但是，它也非常适合在具有 Web 访问权限的 SCM 中集中代码。
 - en: Maven phases
+  id: totrans-138
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Maven 阶段
 - en: Jenkins lumps work together in jobs. It is coarsely grained for building with
     pre- and post-build support. Maven is much more refined, having 21 phases as trigger
     points. For more information, visit [http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html](http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html).
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 将工作组合在作业中。它对于具有预先和后续构建支持的粗粒度构建是有效的。相比之下，Maven 更加精细，具有 21 个阶段作为触发点。有关更多信息，请访问
+    [http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html](http://Maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html)。
 - en: Goals bundle phases. For example, there are four phases `pre-site`, `site`,
     `post-site`, and `site-deploy` for the site goal, all of which will be called
     in order by the `mvn` site, or directly by using the `mvn site:phase` syntax.
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 目标绑定阶段。例如，有四个阶段 `pre-site`、`site`、`post-site` 和 `site-deploy` 用于站点目标，所有这些阶段都将按顺序由
+    `mvn site` 调用，或者直接使用 `mvn site:phase` 语法调用。
 - en: The idea is to chain together a series of lightweight jobs. You should farm
     out any heavy jobs such as integration tests or a large amount of JavaDoc generation
     to a slave node. You should also separate by time to even the load and aid in
     diagnosing issues.
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 思想是将一系列轻量级作业串在一起。您应该将任何重型作业（例如集成测试或大量 JavaDoc 生成）分配给从节点。您还应该按时间分离以均匀负载并帮助诊断问题。
 - en: You can find the XML wiring the lifecycle code at [https://git-wip-us.apache.org/repos/asf?p=maven.git;a=blob;f=maven-core/src/main/resources/META-INF/plexus/components.xml](https://git-wip-us.apache.org/repos/asf?p=maven.git;a=blob;f=maven-core/src/main/resources/META-INF/plexus/components.xml).
+  id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在 [https://git-wip-us.apache.org/repos/asf?p=maven.git;a=blob;f=maven-core/src/main/resources/META-INF/plexus/components.xml](https://git-wip-us.apache.org/repos/asf?p=maven.git;a=blob;f=maven-core/src/main/resources/META-INF/plexus/components.xml)
+    找到 XML 配置生命周期代码的方式。
 - en: 'You will find the Maven phases mentioned in `components.xml` under the following
     line:'
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 您会在 `components.xml` 中的以下行下找到 Maven 阶段的提及：
 - en: '[PRE12]'
+  id: totrans-144
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Maven plugins bind to particular phases. For site generation, the `<reporting>`
     tag surrounds the majority of configuration. The plugins configured under reporting
     generate useful information whose results are saved under the `target/site` directory.
@@ -675,189 +979,280 @@
     and task scanner plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin)).
     These differences will be explored later in [Chapter 5](ch05.html "Chapter 5. Using
     Metrics to Improve Quality"), *Using Metrics to Improve Quality*.
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 插件绑定到特定阶段。对于站点生成，`<reporting>` 标签围绕大部分配置。在报告下配置的插件生成有用信息，其结果保存在 `target/site`
+    目录下。有一些插件会获取生成的结果，然后绘制它们的历史。一般来说，Jenkins 插件不执行测试；它们消耗结果。有一些例外，比如 Sloccount 插件
+    ([https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin))
+    和任务扫描器插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin))。这些差异将在稍后的
+    [第 5 章](ch05.html "第 5 章. 使用度量改进质量") *使用度量改进质量* 中探讨。
 - en: Note
+  id: totrans-146
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: To install the sloccount plugin, you will need first to install the static analysis
     utilities plugin.
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 要安装 sloccount 插件，您首先需要安装静态分析实用程序插件。
 - en: The Groovy plugin is useful in all phases, as it is not specialized to any specific
     task such as packaging or deployment. It gives you a uniform approach to reacting
     to situations that are outside the common functionality of Maven.
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: Groovy 插件在所有阶段都非常有用，因为它不专门针对任何特定任务，比如打包或部署。它为您提供了一种统一的方法来应对超出 Maven 通用功能范围之外的情况。
 - en: Tip
+  id: totrans-149
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 小贴士
 - en: '**The differences between Maven versions**'
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Maven 版本之间的差异**'
 - en: To upgrade between Maven 2 and Maven 3 projects, you need to know the differences
     and incompatibilities. There are a number of differences, especially around site
     generation. They are summarized at [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes).
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 要升级到 Maven 3 项目之间的 Maven 2 和 Maven 3，您需要了解差异和不兼容性。有一些差异，特别是围绕站点生成。它们在 [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes)
+    中总结。
 - en: You will find the plugin compatibility list at [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix).
+  id: totrans-152
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在 [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix)
+    找到插件兼容性列表。
 - en: See also
+  id: totrans-153
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Running Ant through Groovy in Maven* recipe
+  id: totrans-154
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Maven 中通过 Groovy 运行 Ant 的配方
 - en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  id: totrans-155
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 groovy-postbuild 插件 *响应生成的数据的差异* 配方
 - en: The *Adaptive site generation* recipe
+  id: totrans-156
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*自适应站点生成* 配方'
 - en: Manipulating environmental variables
+  id: totrans-157
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 操作环境变量
 - en: This recipe shows you how to pass variables from Jenkins to your build job,
     and how different variables are overwritten. It also describes one way of failing
     the build if crucial information has not been correctly passed.
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 本配方向您展示如何将变量从 Jenkins 传递到您的构建作业，并说明不同变量是如何被覆盖的。它还描述了一种在关键信息未正确传递时使构建失败的方法。
 - en: In a typical development/acceptance/production environment, you will want to
     keep the same `pom.xml` files, but pass different configuration. One example is
     the extension names of property files such as `.dev`, `.acc`, and `.prd`. You
     would want to fail the build if critical configuration values are missing due
     to human error.
+  id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: 在典型的开发/验收/生产环境中，您可能希望保留相同的 `pom.xml` 文件，但传递不同的配置。一个示例是属性文件的扩展名，例如 `.dev`、`.acc`
+    和 `.prd`。如果由于人为错误导致关键配置值丢失，您将希望使构建失败。
 - en: Jenkins has a number of plugins for passing information to builds, including
     the EnvFile plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Envfile+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Envfile+Plugin))
     and the EnvInject plugin ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)).
     The EnvInject plugin was chosen for this recipe as it is reported to work with
     nodes and offers a wide range of property-injection options.
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins有许多插件可用于将信息传递给构建，包括EnvFile插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Envfile+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Envfile+Plugin))
+    和 EnvInject插件 ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin))。由于EnvInject插件据说可以与节点一起工作并提供广泛的属性注入选项，因此选择了EnvInject插件用于此配方。
 - en: Getting ready
+  id: totrans-161
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the EnvInject plugin ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)).
     Create the recipe directory named `ch3.building_software/environment`.
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装EnvInject插件 ([https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin))。创建名为`ch3.building_software/environment`的配方目录。
 - en: How to do it...
+  id: totrans-163
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Create a `pom.xml` file that is readable by Jenkins with the following lines
     of code:'
+  id: totrans-164
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个可由Jenkins读取的`pom.xml`文件，并添加以下代码行：
 - en: '[PRE13]'
+  id: totrans-165
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'Create a file named `my.properties` and place it in the same directory as the
     `pom.xml` file. Then, add the following lines of code in the `my.properties` file:'
+  id: totrans-166
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在与`pom.xml`文件相同的目录中创建一个名为`my.properties`的文件。然后，在`my.properties`文件中添加以下代码行：
 - en: '[PRE14]'
+  id: totrans-167
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Create a blank free-style job with the **Job name** as `ch3.environment`.
+  id: totrans-168
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个空白的自由风格作业，**作业名称**为`ch3.environment`。
 - en: In the **Source Code Management** section, check **File System** and add a fully
     qualified path of your directory, such as `/var/lib/jenkins/cookbook/ch3.building_software/environment`,
     in the **Path** field.
+  id: totrans-169
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源码管理**部分，勾选**文件系统**并在**路径**字段中添加您目录的完全合格路径，例如`/var/lib/jenkins/cookbook/ch3.building_software/environment`。
 - en: 'In the **Build** section, select **Add a build step** for **Invoke top-level
     Maven targets**. In the newly expanded section, add the following details:'
+  id: totrans-170
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分，为**调用顶级Maven目标**选择**添加一个构建步骤**。在新展开的部分中，添加以下细节：
 - en: '**Maven Version**: `3.2.1`'
+  id: totrans-171
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Maven版本**: `3.2.1`'
 - en: '**Goals**: `verify`'
+  id: totrans-172
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标**: `verify`'
 - en: Click on the **Advanced** button and type `longname=SuperGood` in **Properties**.
+  id: totrans-173
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**高级**按钮，在**属性**中键入`longname=超级好`。
 - en: Inject the values in `my.properties` by selecting the **Prepare an environment
     for the job** checkbox (near the top of the job configuration page).
+  id: totrans-174
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过选中作业配置页面顶部附近的**为作业准备环境**复选框来注入`my.properties`中的值。
 - en: For the **Properties File Path**, add `/full_path/my.properties`; for example
     `/home/var/lib/cookbook/ch3.building_software/environment/my.properties`.
+  id: totrans-175
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于**属性文件路径**，添加`/full_path/my.properties`；例如`/home/var/lib/cookbook/ch3.building_software/environment/my.properties`。
 - en: 'The preceding option is depicted in the following screenshot:'
+  id: totrans-176
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 前面的选项如下图所示：
 - en: '![How to do it...](img/0082OS_03_05.jpg)'
+  id: totrans-177
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_03_05.jpg)'
 - en: 'Run the job. The build will fail:'
+  id: totrans-178
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '运行作业。构建将失败:'
 - en: '[PRE15]'
+  id: totrans-179
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: In the **Build** section, for **Invoke top-level Maven targets**, click on the
     **Advanced** button. In the newly expanded section, add an extra property `name.from.jenkins=The
     build with a name`.
+  id: totrans-180
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分，对于**调用顶级Maven目标**，点击**高级**按钮。在新展开的部分中，添加一个额外的属性 `name.from.jenkins=带名称的构建`。
 - en: Run the job. It should now succeed.
+  id: totrans-181
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。现在应该成功了。
 - en: How it works...
+  id: totrans-182
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The EnvInject plugin is useful for injecting properties into a build.
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: EnvInject插件对于将属性注入到构建中非常有用。
 - en: During the recipe, Maven is run twice. The first time, it is run without the
     `name.from.jenkins` variable defined, and the Jenkins job fails. The second time,
     it is run with the variable defined, and the Jenkins job now succeeds.
+  id: totrans-184
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个配方中，Maven被运行了两次。第一次，它在没有定义`name.from.jenkins`变量的情况下运行，Jenkins作业失败了。第二次，它在定义了该变量的情况下运行，Jenkins作业现在成功了。
 - en: 'Maven expects that the `name.from.jenkins` variable is defined, or the name
     of the project will also not be defined. Normally, this would not be enough to
     stop your job succeeding. However, when running the Groovy code, the `println
     "Project name: ${project.name}"` line, specifically the `project.name` call, will
     fail the build. This is great for protecting against missing property values.'
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: 'Maven期望定义了`name.from.jenkins`变量，否则项目的名称也将不会被定义。通常，这还不足以阻止您的作业成功。但是，当运行Groovy代码时，特别是`println
+    "Project name: ${project.name}"`行中的`project.name`调用将导致构建失败。这对于防止缺少属性值非常有用。'
 - en: The Groovy code can see instances of the `org.apache.Maven.model.Model` project
     and the `org.apache.Maven.execution.MavenSession` class. The project instance
     is a model of the XML configuration that you can programmatically access. You
@@ -865,233 +1260,335 @@
     Your Maven goal will fail if the property does not exist. You can also get at
     the property through the `System.getProperty("longname")` call. However, you cannot
     get to the property by using the `System.getenv()`environment call.
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: Groovy代码可以看到`org.apache.Maven.model.Model`项目的实例和`org.apache.Maven.execution.MavenSession`类的实例。项目实例是您可以以编程方式访问的XML配置的模型。您可以通过`project.properties.longname`引用来获取`longname`属性。如果属性不存在，您的Maven目标将失败。您还可以通过`System.getProperty("longname")`调用获取属性。但是，您无法通过使用`System.getenv()`环境调用获取属性。
 - en: 'It is well worth learning the various options:'
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 值得学习各种选项：
 - en: '**Keep Jenkins Environment Variables** and **Keep Jenkins Build Variables**:
     Both these options affect the Jenkins-related variables that your job sees. It
     is good to keep your environment as clean as possible as it will aid you in debugging
     later.'
+  id: totrans-188
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**保留Jenkins环境变量** 和 **保留Jenkins构建变量**：这两个选项影响您的作业看到的与Jenkins相关的变量。保持您的环境尽可能干净是很好的，因为这将有助于您以后进行调试。'
 - en: '**Properties Content**: You can override specific values in the properties
     files.'
+  id: totrans-189
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**属性内容**：您可以覆盖属性文件中的特定值。'
 - en: '**Environment Script File Path**: This option points to a script that will
     set up your environment. This is useful if you want to detect specific details
     of the running environment and configure your build accordingly.'
+  id: totrans-190
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**环境脚本文件路径**：此选项指向一个脚本，该脚本将设置您的环境。如果您想要检测运行环境的特定细节并相应地配置构建，这将非常有用。'
 - en: '**Populate Build Cause**: You enable Jenkins to set the `BUILD_CAUSE` environment
     variable. The variable contains information about the event that triggered the
     job.'
+  id: totrans-191
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**填充构建原因**：您可以使Jenkins设置`BUILD_CAUSE`环境变量。该变量包含有关触发作业的事件的信息。'
 - en: There's more...
+  id: totrans-192
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'Maven has a plugin for reading properties ([http://mojo.codehaus.org/properties-maven-plugin/](http://mojo.codehaus.org/properties-maven-plugin/)).To
     choose between property files, you will need to set a variable in the plugin configuration
     and call it as part of the Jenkins job, as follows:'
+  id: totrans-193
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven有一个用于读取属性的插件（[http://mojo.codehaus.org/properties-maven-plugin/](http://mojo.codehaus.org/properties-maven-plugin/)）。要在属性文件之间进行选择，您需要在插件配置中设置一个变量，并在Jenkins作业中调用它，如下所示：
 - en: '[PRE16]'
+  id: totrans-194
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: If you use a relative path to the properties file, then the file can reside
     in your source code. If you use a full path, then the property file can be stored
     on the Jenkins server. The second option is preferable if sensitive passwords,
     such as those for database connections, are included.
+  id: totrans-195
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您使用相对路径到属性文件，则该文件可以驻留在您的源代码中。如果您使用全路径，则属性文件可以存储在Jenkins服务器上。如果包含敏感密码（例如数据库连接密码），则第二个选项更可取。
 - en: Jenkins has the ability to ask for variables when you run a job manually. This
     is called a parameterized build ([https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build)).
     At build time, you can choose your property files by selecting from a choice of
     property file locations.
+  id: totrans-196
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins有能力在您手动运行作业时请求变量。这称为参数化构建（[https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build)）。在构建时，您可以通过从属性文件位置的选择中进行选择来选择您的属性文件。
 - en: See also
+  id: totrans-197
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参见
 - en: The *Running Ant through Groovy in Maven* recipe
+  id: totrans-198
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*在Maven中通过Groovy运行Ant* 的步骤'
 - en: Running Ant through Groovy in Maven
+  id: totrans-199
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在Maven中通过Groovy运行Ant
 - en: Jenkins interacts with an audience with a wide technological background. There
     are many developers who became proficient in Ant scripting before moving on to
     using Maven, developers who might be happier with writing an Ant task than editing
     a `pom.xml` file. There are mission-critical Ant scripts that still run in a significant
     proportion of organizations.
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins与技术背景广泛的观众进行交互。有许多开发人员在转向使用Maven之前已经熟练掌握了Ant脚本编写，这些开发人员可能更喜欢编写Ant任务而不是编辑`pom.xml`文件。在大部分组织中，仍然运行着关键任务的Ant脚本。
 - en: In Maven, you can run Ant tasks directly with the AntRun plugin ([http://maven.apache.org/plugins/maven-antrun-plugin/](http://maven.apache.org/plugins/maven-antrun-plugin/))
     or through Groovy ([http://docs.codehaus.org/display/GROOVY/Using+Ant+from+Groovy](http://docs.codehaus.org/display/GROOVY/Using+Ant+from+Groovy)).
     AntRun represents a natural migration path. This is the path of least initial
     work.
+  id: totrans-201
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Maven中，您可以直接使用AntRun插件（[http://maven.apache.org/plugins/maven-antrun-plugin/](http://maven.apache.org/plugins/maven-antrun-plugin/)）或通过Groovy（[http://docs.codehaus.org/display/GROOVY/Using+Ant+from+Groovy](http://docs.codehaus.org/display/GROOVY/Using+Ant+from+Groovy)）运行Ant任务。AntRun代表了一条自然的迁移路径。这是最初工作量最小的路径。
 - en: The Groovy approach makes sense for Jenkins administrators who use Groovy as
     part of their tasks. Groovy, being a first class programming language, has a wide
     range of control structures that are hard to replicate in Ant. You can partially
     do this by using the `Ant-contrib` library ([http://ant-contrib.sourceforge.net](http://ant-contrib.sourceforge.net)).
     However Groovy, as a feature-rich programming language, is much more expressive.
+  id: totrans-202
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于将Groovy作为任务的一部分使用的Jenkins管理员来说，Groovy方法是有意义的。Groovy作为一种一流的编程语言，拥有一系列难以在Ant中复制的控制结构。您可以部分地通过使用`Ant-contrib`库（[http://ant-contrib.sourceforge.net](http://ant-contrib.sourceforge.net)）来实现这一点。然而，作为一个功能丰富的编程语言，Groovy更加表达力强。
 - en: This recipe details how you can run two Maven POMs involving Groovy and Ant.
     The first POM shows you how to run the simplest of Ant tasks within Groovy and
     the second performs an Ant-contrib task to securely copy files from a large number
     of computers.
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 本教程详细介绍了如何运行涉及Groovy和Ant的两个Maven POM。第一个POM向您展示了如何在Groovy中运行最简单的Ant任务，而第二个则执行一个Ant-contrib任务，以安全地从大量计算机复制文件。
 - en: Getting ready
+  id: totrans-204
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create a directory named `ch3.building_software/antbuilder`.
+  id: totrans-205
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个名为`ch3.building_software/antbuilder`的目录。
 - en: How to do it...
+  id: totrans-206
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Create a template file and name it `pom_ant_simple.xml`.
+  id: totrans-207
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个模板文件并命名为`pom_ant_simple.xml`。
 - en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
     your preferences.
+  id: totrans-208
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更改`groupId`、`artifactId`、`version`和`name`的值以适应您的偏好。
 - en: 'Add the following XML fragment just before the `</project>` tag:'
+  id: totrans-209
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`</project>`标签之前添加以下XML片段：
 - en: '[PRE17]'
+  id: totrans-210
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: Run `mvn test –f pom_ant_simple.xml`. Review the output (note that there are
     no warnings about empty JAR files):![How to do it...](img/0082OS_03_06.jpg)
+  id: totrans-211
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行`mvn test –f pom_ant_simple.xml`。查看输出（请注意，没有关于空JAR文件的警告）：![操作步骤...](img/0082OS_03_06.jpg)
 - en: Run `mvn verify –f pom_ant_simple.xml`. Review the output; it should look similar
     to the following screenshot:![How to do it...](img/0082OS_03_07.jpg)
+  id: totrans-212
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行`mvn verify –f pom_ant_simple.xml`。查看输出；它应该类似于以下屏幕截图：![操作步骤...](img/0082OS_03_07.jpg)
 - en: Create a second template file named `pom_ant_contrib.xml`.
+  id: totrans-213
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建第二个模板文件并命名为`pom_ant_contrib.xml`。
 - en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
     your preferences.
+  id: totrans-214
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更改`groupId`、`artifactId`、`version`和`name`的值以适应您的偏好。
 - en: 'Add the following XML fragment just before the `</project>` tag:'
+  id: totrans-215
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`</project>`标签之前添加以下XML片段：
 - en: '[PRE18]'
+  id: totrans-216
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'This is only representative code, unless you have set it up to point to real
     files on real servers:'
+  id: totrans-217
   prefs: []
   type: TYPE_NORMAL
+  zh: 这只是代表性代码，除非您已经设置它指向真实服务器上的真实文件：
 - en: '[PRE19]'
+  id: totrans-218
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: How it works...
+  id: totrans-219
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它的工作原理...
 - en: 'Groovy runs basic Ant tasks without the need for extra dependencies. An `AntBuilder`
     instance ([http://groovy.codehaus.org/Using+Ant+Libraries+with+AntBuilder](http://groovy.codehaus.org/Using+Ant+Libraries+with+AntBuilder))
     is created and then the Ant echo task is called. Under the bonnet, Groovy calls
     the Java classes that Ant uses to perform the `echo` command. Within the `echo`
     command, a date is printed by directly creating an anonymous object:'
+  id: totrans-220
   prefs: []
   type: TYPE_NORMAL
+  zh: Groovy运行基本的Ant任务而无需额外的依赖关系。创建一个`AntBuilder`实例（[http://groovy.codehaus.org/Using+Ant+Libraries+with+AntBuilder](http://groovy.codehaus.org/Using+Ant+Libraries+with+AntBuilder)），然后调用Ant
+    echo任务。在底层，Groovy调用Ant用于执行`echo`命令的Java类。在`echo`命令中，通过直接创建一个匿名对象打印日期：
 - en: '[PRE20]'
+  id: totrans-221
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'You configured the `pom.xml` file to fire off the Groovy scripts in two phases:
     the `test` phase and then later in the `verify` phase. The `test` phase occurs
     before the generation of a JAR file and thus avoids creating a warning about an
     empty JAR file. As the name suggests, this phase is useful for testing before
     packaging.'
+  id: totrans-222
   prefs: []
   type: TYPE_NORMAL
+  zh: 您配置了`pom.xml`文件以在两个阶段触发Groovy脚本：`test`阶段，然后稍后在`verify`阶段。`test`阶段发生在生成JAR文件之前，因此避免了创建有关空JAR文件的警告。顾名思义，此阶段用于打包前的测试。
 - en: The second example script highlights the strength of combining Groovy with Ant.
     The SCP task ([http://ant.apache.org/manual/Tasks/scp.html](http://ant.apache.org/manual/Tasks/scp.html))
     is run many times across many servers. The script first asks for the username
     and password, avoiding storage on your filesystem or your revision control system.
     The Groovy script expects you to inject the `host`, `full_path_to_location`, and
     `myfile` variables.
+  id: totrans-223
   prefs: []
   type: TYPE_NORMAL
+  zh: 第二个示例脚本突显了将 Groovy 与 Ant 结合使用的优势。SCP 任务 ([http://ant.apache.org/manual/Tasks/scp.html](http://ant.apache.org/manual/Tasks/scp.html))
+    在许多服务器上多次运行。脚本首先要求输入用户名和密码，避免存储在您的文件系统或版本控制系统中。Groovy 脚本期望您注入 `host`、`full_path_to_location`
+    和 `myfile` 变量。
 - en: Observe the similarity between the Ant SCP task and the way it is expressed
     in the `pom_ant_contrib.xml` file.
+  id: totrans-224
   prefs: []
   type: TYPE_NORMAL
+  zh: 注意 Ant SCP 任务与 `pom_ant_contrib.xml` 文件中表达方式的相似之处。
 - en: There's more...
+  id: totrans-225
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Another example of running Ant through Groovy is the creation of custom property
     files on the fly. This allows you to pass on information from one Jenkins job
     to another.
+  id: totrans-226
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过 Groovy 运行 Ant 的另一个示例是动态创建自定义属性文件。这允许您将信息从一个 Jenkins 作业传递到另一个作业。
 - en: 'You can create property files through AntBuilder using the `echo` task. The
     following lines of code creates a `value.properties` file with two lines `x=1`
     and `y=2`:'
+  id: totrans-227
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过 AntBuilder 使用 `echo` 任务创建属性文件。以下代码行创建一个包含两行 `x=1` 和 `y=2` 的 `value.properties`
+    文件：
 - en: '[PRE21]'
+  id: totrans-228
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: The first `echo` command sets `append` to `false`, so that every time a build
     occurs, a new properties file is created. The second `echo` appends its message.
+  id: totrans-229
   prefs: []
   type: TYPE_NORMAL
+  zh: 第一个 `echo` 命令将 `append` 设置为 `false`，这样每次构建发生时，都会创建一个新的属性文件。第二个 `echo` 附加其消息。
 - en: Note
+  id: totrans-230
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You can remove the second `append` attribute as the default value is set to
     `true`.
+  id: totrans-231
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以移除第二个 `append` 属性，因为默认值已设置为 `true`。
 - en: See also
+  id: totrans-232
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Running Groovy scripts through Maven* recipe
+  id: totrans-233
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过 Maven 运行 Groovy 脚本* 配方'
 - en: Failing Jenkins jobs based on JSP syntax errors
+  id: totrans-234
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 基于 JSP 语法错误导致 Jenkins 作业失败
 - en: '**JavaServer Pages** (**JSP**) ([http://www.oracle.com/technetwork/java/overview-138580.html](http://www.oracle.com/technetwork/java/overview-138580.html))
     is a standard that makes the creation of simple web applications straightforward.
     You write HTML, such as pages with extra tags interspersed with Java coding, into
@@ -1100,275 +1597,404 @@
     the risk is that developers make messy, hard-to-read JSP code that is difficult
     to maintain. It would be nice if Jenkins could display metrics about the code
     to defend quality.'
+  id: totrans-235
   prefs: []
   type: TYPE_NORMAL
+  zh: '**JavaServer Pages** (**JSP**) ([http://www.oracle.com/technetwork/java/overview-138580.html](http://www.oracle.com/technetwork/java/overview-138580.html))
+    是一种使创建简单 Web 应用程序变得简单的标准。您可以将 HTML 编写到文本文件中，例如带有额外标签的页面与 Java 代码交错。如果您在运行的 Web
+    应用程序中执行此操作，则代码将在下一页调用时重新编译。此过程支持敏捷编程实践，但风险在于开发人员编写混乱、难以阅读的 JSP 代码，难以维护。如果 Jenkins
+    能够显示有关代码质量的指标，那将很好。'
 - en: JSP pages are compiled on the fly the first time a user request for the page
     is received. The user will perceive this as a slow loading of the page and this
     may deter them from future visits. To avoid this situation, you can compile the
     JSP page during the build process and place the compiled code in the `WEB-INF/classes`
     directory or packaged in the `WEB-INF/lib` directory of your web app. This approach
     has the advantage of a faster first page load.
+  id: totrans-236
   prefs: []
   type: TYPE_NORMAL
+  zh: 用户首次请求页面时，JSP 页面会即时编译。用户会将此视为页面加载缓慢，并可能阻止他们未来的访问。为了避免这种情况，您可以在构建过程中编译 JSP 页面，并将编译后的代码放置在您
+    Web 应用程序的 `WEB-INF/classes` 目录中或打包到 `WEB-INF/lib` 目录中。这种方法具有更快的第一页加载速度的优势。
 - en: A secondary advantage of having compiled source code is that you can run a number
     of statistical code review tools over the code base and obtain testability metrics.
     This generates testing data ready for Jenkins plugins to display.
+  id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: 拥有已编译源代码的次要优势是您可以在代码库上运行许多统计代码审查工具，并获取可测试性指标。这将生成供 Jenkins 插件显示的测试数据。
 - en: This recipe describes how to compile JSP pages based on the maven-jetty-jspc-plugin
     ([http://www.eclipse.org/jetty/documentation/current/jetty-jspc-maven-plugin.html](http://www.eclipse.org/jetty/documentation/current/jetty-jspc-maven-plugin.html)).
     The compiled code will work with the Jetty server, which is often used for integration
     tests.
+  id: totrans-238
   prefs: []
   type: TYPE_NORMAL
+  zh: 本文介绍了如何基于 maven-jetty-jspc-plugin ([http://www.eclipse.org/jetty/documentation/current/jetty-jspc-maven-plugin.html](http://www.eclipse.org/jetty/documentation/current/jetty-jspc-maven-plugin.html))
+    编译 JSP 页面的配方。编译后的代码将与 Jetty 服务器一起使用，Jetty 服务器通常用于集成测试。
 - en: Note
+  id: totrans-239
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The JSP mentioned in this recipe is deliberately insecure and hence ready for
     testing later in this book.
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 本教程中提到的 JSP 故意不安全，因此稍后在本书中进行测试。
 - en: A complementary plugin specifically for Tomcat deployment is the Tomcat Maven
     plugin ([http://tomcat.apache.org/maven-plugin.html](http://tomcat.apache.org/maven-plugin.html)).
+  id: totrans-241
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于 Tomcat 部署的补充插件是 Tomcat Maven 插件 ([http://tomcat.apache.org/maven-plugin.html](http://tomcat.apache.org/maven-plugin.html))。
 - en: Getting ready
+  id: totrans-242
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create a directory named `ch3.building_software/jsp_example`.
+  id: totrans-243
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch3.building_software/jsp_example` 的目录。
 - en: How to do it...
+  id: totrans-244
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Create a WAR project from a Maven archetype by typing the following command:'
+  id: totrans-245
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过输入以下命令从 Maven 原型创建一个 WAR 项目：
 - en: '[PRE22]'
+  id: totrans-246
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'Enter the following values:'
+  id: totrans-247
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 输入以下值：
 - en: '**groupId**: `ch3.packt.builds`'
+  id: totrans-248
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**groupId**: `ch3.packt.builds`'
 - en: '**artifactId**: `jsp_example`'
+  id: totrans-249
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**artifactId**: `jsp_example`'
 - en: '**version**: `1.0-SNAPSHOT`'
+  id: totrans-250
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**version**: `1.0-SNAPSHOT`'
 - en: '**package**: `ch3.packt.builds`'
+  id: totrans-251
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**package**: `ch3.packt.builds`'
 - en: Click on **Enter to confirm the values**.
+  id: totrans-252
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 **输入以确认值**。
 - en: 'Edit the `jsp_example/pom.xml` file by adding the following build section:'
+  id: totrans-253
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过添加以下构建部分编辑 `jsp_example/pom.xml` 文件：
 - en: '[PRE23]'
+  id: totrans-254
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'Replace the code snippet in the `src/main/webapp/index.jsp` file with the following
     lines of code:'
+  id: totrans-255
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 `src/main/webapp/index.jsp` 文件中的代码段替换为以下代码行：
 - en: '[PRE24]'
+  id: totrans-256
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: Create a WAR file by using the `mvn package` command.
+  id: totrans-257
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 `mvn package` 命令创建 WAR 文件。
 - en: Modify `./src/main/webapp/index.jsp` by adding `if (evilInput==null)` underneath
     the line starting with `if` so that it is no longer a valid JSP file.
+  id: totrans-258
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改 `./src/main/webapp/index.jsp`，在以 `if` 开头的行下面添加 `if (evilInput==null)`，以使其不再是有效的
+    JSP 文件。
 - en: 'Run the `mvn package` command. The build will now fail with the following error
     message:'
+  id: totrans-259
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 `mvn package` 命令。现在，构建将因以下错误消息而失败：
 - en: '[PRE25]'
+  id: totrans-260
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: How it works...
+  id: totrans-261
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: You created a template project using an archetype.
+  id: totrans-262
   prefs: []
   type: TYPE_NORMAL
+  zh: 您使用原型创建了一个模板项目。
 - en: 'The Maven plugin, upon seeing the `index.jsp` page, compiles it into a class
     with the `jsp.index_jsp` name, placing the compiled class under `WEB-INF/classes`.
     The plugin then defines the class as a servlet in `WEB-INF/web.xml` with a mapping
     to `/index.jsp`. Let''s take a look at the following example:'
+  id: totrans-263
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 插件在看到 `index.jsp` 页面时，会将其编译为名为 `jsp.index_jsp` 的类，并将编译后的类放置在 `WEB-INF/classes`
+    下。然后，该插件在 `WEB-INF/web.xml` 中将该类定义为一个 servlet，并将其映射到 `/index.jsp`。让我们看一下以下示例：
 - en: '[PRE26]'
+  id: totrans-264
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: Tip
+  id: totrans-265
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: The list of archetypes is increasing over time. You can find the full list at
     [http://maven-repository.com/archetypes](http://maven-repository.com/archetypes).
     If you are running Ubuntu, you will find a local XML catalog listing all the archetypes
     named `archetype-catalog.xml` in the`~/.m2` directory.
+  id: totrans-266
   prefs: []
   type: TYPE_NORMAL
+  zh: 原型列表会随着时间的推移而增加。您可以在 [http://maven-repository.com/archetypes](http://maven-repository.com/archetypes)
+    找到完整的列表。如果您正在使用 Ubuntu，则会在 `~/.m2` 目录中找到名为 `archetype-catalog.xml` 的本地 XML 目录，其中列出了所有的原型。
 - en: There's more...
+  id: totrans-267
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few things you should consider.
+  id: totrans-268
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是您应考虑的一些事项。
 - en: Different server types
+  id: totrans-269
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 不同的服务器类型
 - en: 'By default, the Jetty Maven plugin (Version 6.1.14) loads JSP 2.1 libraries
     with JDK 15\. This will not work for all server types. For example, if you deploy
     the WAR file generated by this recipe to a Tomcat 7 server, it will fail to deploy
     properly. If you look at `logs/catalina.out`, you will see the following error:'
+  id: totrans-270
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，Jetty Maven 插件（版本 6.1.14）使用 JDK 15 加载 JSP 2.1 库。这对于所有服务器类型都不起作用。例如，如果将此教程生成的
+    WAR 文件部署到 Tomcat 7 服务器上，则将无法正确部署。如果查看 `logs/catalina.out`，您将看到以下错误：
 - en: '[PRE27]'
+  id: totrans-271
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: This is because different servers have different assumptions about how JSP code
     is compiled, and which libraries they depend on to run. For Tomcat, you will need
     to tweak the compiler used and the Maven plugin dependencies. For more details,
     visit [http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin](http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin).
+  id: totrans-272
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是因为不同的服务器对 JSP 代码的编译方式以及运行所依赖的库有不同的假设。对于 Tomcat，您需要调整所使用的编译器以及 Maven 插件的依赖关系。有关更多详细信息，请访问
+    [http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin](http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin)。
 - en: Eclipse templates for JSP pages
+  id: totrans-273
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Eclipse JSP 页面模板
 - en: 'Eclipse is a popular open source IDE for Java developers ([http://www.eclipse.org/](http://www.eclipse.org/)).
     If you are using Eclipse with its default template for JSP pages, then your pages
     may fail to compile. This is because, at the time of writing, the default compiler
     does not like the meta-information mentioned before the `<html>` tag as follows:'
+  id: totrans-274
   prefs: []
   type: TYPE_NORMAL
+  zh: Eclipse 是 Java 开发人员的流行开源 IDE ([http://www.eclipse.org/](http://www.eclipse.org/))。如果您正在使用
+    Eclipse 的默认 JSP 页面模板，则您的页面可能无法编译。这是因为在撰写本文时，默认编译器不喜欢在 `<html>` 标签之前提及的元信息，如下所示：
 - en: '[PRE28]'
+  id: totrans-275
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: As the meta-information follows the JSP specification, it is likely that later
     the JSP compiler will accept the information. Until that day, simply remove the
     lines before compiling or change the JSP compiler that you use.
+  id: totrans-276
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于元信息遵循JSP规范，所以很可能以后JSP编译器会接受这些信息。在那一天之前，只需在编译之前删除这些行或更改你使用的JSP编译器。
 - en: See also
+  id: totrans-277
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Configuring Jetty for integration tests* recipe
+  id: totrans-278
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*配置Jetty进行集成测试*配方'
 - en: Configuring Jetty for integration tests
+  id: totrans-279
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置Jetty进行集成测试
 - en: 'Jenkins plugins that keep a history of tests are normally consumers of the
     data generated within Maven builds. For Maven to automatically run integration,
     performance, or functional tests, it will need to hit a live test server. You
     have two main choices:'
+  id: totrans-280
   prefs: []
   type: TYPE_NORMAL
+  zh: 通常保留测试历史记录的Jenkins插件是Maven构建中生成的数据的使用者。要让Maven自动运行集成、性能或功能测试，它需要访问一个活动的测试服务器。你有两个主要选择：
 - en: '**Deploy your artifacts such as WAR files to a live server**: This can be done
     using the Maven Wagon plugin ([http://mojo.codehaus.org/wagon-maven-plugin/](http://mojo.codehaus.org/wagon-maven-plugin/))
     or through a Jenkins plugin such as the aptly-named Deploy plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin)).'
+  id: totrans-281
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**部署你的艺术品，比如WAR文件到一个活动的服务器**：这可以通过Maven Wagon插件（[http://mojo.codehaus.org/wagon-maven-plugin/](http://mojo.codehaus.org/wagon-maven-plugin/)）或通过一个Jenkins插件来完成，比如名为Deploy的插件（[https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin)）。'
 - en: '**Run the lightweight Jetty server within the build**: This simplifies your
     infrastructure. However, the server will be run as part of a Jenkins job, consuming
     potentially scarce resources. This will limit the number of parallel executors
     Jenkins can run, decreasing the maximum throughput of jobs. This should be delegated
     to dedicated slave nodes set up for this purpose.'
+  id: totrans-282
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**在构建中运行轻量级Jetty服务器**：这简化了你的基础设施。但是，服务器将作为Jenkins作业的一部分运行，消耗潜在的稀缺资源。这将限制Jenkins可以运行的并行执行器数量，降低作业的最大吞吐量。这应该委托给专门为此目的设置的专用从节点。'
 - en: This recipe runs the web application developed in the *Failing Jenkins jobs
     based on JSP syntax errors* recipe, tying Jetty into integration testing by bringing
     the server up just before tests are run and then shutting down afterwards. The
     build creates a self-signed certificate. Two Jetty connectors are defined for
     HTTP and for the secure TLS traffic. To create a port to Telnet, the `shutdown`
     command is also defined.
+  id: totrans-283
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个配方运行了在*基于JSP语法错误的失败Jenkins作业*配方中开发的Web应用程序，通过在运行测试之前启动服务器并在测试之后关闭来将Jetty与集成测试联系起来。该构建创建了一个自签名证书。为HTTP和安全的TLS流量定义了两个Jetty连接器。为了创建一个到Telnet的端口，还定义了`shutdown`命令。
 - en: Getting ready
+  id: totrans-284
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Follow the *Failing Jenkins jobs based on JSP syntax errors* recipe generating
     a WAR file. Copy the project to the directory named `ch3.building_software/jsp_jetty`.
+  id: totrans-285
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照*基于JSP语法错误的失败Jenkins作业*配方生成一个WAR文件。将项目复制到名为`ch3.building_software/jsp_jetty`的目录中。
 - en: How to do it...
+  id: totrans-286
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Add the following XML fragment just before `</plugins>` tag within the `pom.xml`
     file:'
+  id: totrans-287
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`pom.xml`文件的`</plugins>`标签之前添加以下XML片段：
 - en: '[PRE29]'
+  id: totrans-288
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: Run the `mvn jetty:run` command. You will now see console output from the Jetty
     server starting up.
+  id: totrans-289
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行`mvn jetty:run`命令。现在你会看到Jetty服务器启动时的控制台输出。
 - en: Using a web browser, visit the `https://localhost:9443` location. After passing
     through the warnings about the self-signed certificate, you will see the web application
     working.
+  id: totrans-290
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用Web浏览器，访问`https://localhost:9443`位置。在通过有关自签名证书的警告后，你将看到Web应用程序正常工作。
 - en: Press *Ctrl* + *C* to stop the server.
+  id: totrans-291
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下*Ctrl* + *C*停止服务器。
 - en: Run `mvn verify`. You will now see the server starting up and then stopping.
+  id: totrans-292
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行`mvn verify`。现在你会看到服务器启动然后停止。
 - en: How it works...
+  id: totrans-293
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Within the `<executions>` tag, Jetty is run in the Maven's `pre-integration-test`
     phase and later stopped in the Maven's `post-integration-test` phase. In the `generate-resources`
     phase, Maven uses the `keytool` plugin to create a self-signed certificate. The
@@ -1377,384 +2003,568 @@
     set in your certificate, then your web browser will complain about the certificate.
     To change the **Distinguished Name** (**DN**) of the certificate to the name of
     your host, modify `<dname>cn=HOSTNAME</dname>`.
+  id: totrans-294
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 `<executions>` 标签内，Jetty 在 Maven 的 `pre-integration-test` 阶段运行，并且在 Maven 的
+    `post-integration-test` 阶段停止。在 `generate-resources` 阶段，Maven 使用 `keytool` 插件创建自签名证书。证书存储在具有已知密码和别名的
+    Java `keystore` 中。密钥加密设置为 RSA。如果您的证书中未正确设置 **Common Name** (**CN**)，则您的网络浏览器将会报错。要将证书的
+    **Distinguished Name** (**DN**) 更改为您主机的名称，请修改 `<dname>cn=HOSTNAME</dname>`。
 - en: 'Jetty is configured with two connector types: port `8082` for HTTP and port
     `9443` for secure connections. These ports are chosen as they are above port `1023`,
     so you do not need administrative rights to run the build. The port numbers also
     avoid the ports used by Jenkins. Both the `jetty` and `Keytool` plugin use the
     `keystore` tag to define the location of the keystore.'
+  id: totrans-295
   prefs: []
   type: TYPE_NORMAL
+  zh: Jetty 配置有两种连接器类型：端口 `8082` 用于 HTTP，端口 `9443` 用于安全连接。选择这些端口是因为它们在端口 `1023` 以上，因此您无需管理员权限即可运行构建。端口号还避免了
+    Jenkins 使用的端口。`jetty` 和 `Keytool` 插件都使用 `keystore` 标签来定义密钥库的位置。
 - en: The generated WAR file is pointed to by the `webapp` tag and Jetty runs the
     application.
+  id: totrans-296
   prefs: []
   type: TYPE_NORMAL
+  zh: 生成的 WAR 文件由 `webapp` 标签指向，并且 Jetty 运行应用程序。
 - en: Note
+  id: totrans-297
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Using self-signed certificates causes extra work for functional testers. Every
     time they encounter a new version of the certificate, they will need to accept
     the certificate as a security exception in their web browser. It is better to
     use certificates from well-known authorities. You can achieve this with this recipe
     by removing the key generation and pointing the `keystore` tag to a known file
     location.
+  id: totrans-298
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于功能测试人员来说，使用自签名证书会增加额外的工作量。每当他们遇到证书的新版本时，他们都需要在其网络浏览器中将证书接受为安全异常。最好使用来自知名权威机构的证书。通过删除密钥生成并将
+    `keystore` 标签指向已知文件位置，您可以通过此方法实现这一点。
 - en: There's more...
+  id: totrans-299
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Maven 3 is fussier about defining plugin versions than Maven 2.2.1\. There are
     good reasons for this. If you know that your build works well with a specific
     version of Maven, this defends against unwanted changes. For example, at the time
     of writing this book, the Jetty plugin used in this recipe is held at Version
     8.1.16.v20140903\. As you can see from the bug report at [http://jira.codehaus.org/browse/JETTY-1071](http://jira.codehaus.org/browse/JETTY-1071),
     configuration details have changed over versions.
+  id: totrans-300
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 3 对于定义插件版本比 Maven 2.2.1 更挑剔。这是有充分理由的。如果你知道你的构建能够很好地与特定版本的 Maven 配合工作，那么这可以防止不必要的变化。例如，在撰写本书时，此示例中使用的
+    Jetty 插件被保持在版本 8.1.16.v20140903。正如你可以从[这里的错误报告](http://jira.codehaus.org/browse/JETTY-1071)中看到的，配置细节随着版本的变化而变化。
 - en: Another advantage is that if the plugin version is too old, the plugin will
     be pulled out of the central plugin repository. When you next clean up your local
     repository, this will break your build. This is what you want as this clearly
     signals the need to review and then upgrade.
+  id: totrans-301
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个优点是，如果插件版本过旧，则插件将被从中央插件仓库中移除。当您下次清理本地仓库时，这将破坏您的构建。这正是您想要的，因为这清晰地表明了需要进行审查然后升级。
 - en: See also
+  id: totrans-302
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Failing Jenkins jobs based on JSP syntax errors* recipe
+  id: totrans-303
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*基于 JSP 语法错误的 Jenkins 作业失败* 方法'
 - en: The *Adaptive site generation* recipe
+  id: totrans-304
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*自适应站点生成* 方法'
 - en: Looking at license violations with Rat
+  id: totrans-305
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Rat 查看许可证违规行为
 - en: This recipe describes how to search any job in Jenkins for license violations.
     It is based on the Apache Rat project ([http://creadur.apache.org/rat/](http://creadur.apache.org/rat/)).
     You can search for license violations by running a Rat JAR file directly with
     a contributed Ant task or through Maven. In this recipe, you will be running directly
     through a JAR file. The report output goes to the console, ready for Jenkins plugins
     such as the log-parser plugin to process the information.
+  id: totrans-306
   prefs: []
   type: TYPE_NORMAL
+  zh: 此方法描述了如何在 Jenkins 中搜索任何作业的许可证违规情况。它基于 Apache Rat 项目 ([http://creadur.apache.org/rat/](http://creadur.apache.org/rat/))。您可以通过直接运行贡献的
+    Ant 任务或通过 Maven 来运行 Rat JAR 文件以搜索许可证违规情况。在此方法中，您将通过 JAR 文件直接运行。报告输出会发送到控制台，准备供
+    Jenkins 插件（如日志解析插件）处理信息。
 - en: Getting ready
+  id: totrans-307
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create the `License_Check` directory underneath the Jenkins home directory (`/var/lib/jenkins`).
     Log in to Jenkins.
+  id: totrans-308
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 主目录 (`/var/lib/jenkins`) 下创建 `License_Check` 目录。登录 Jenkins。
 - en: How to do it...
+  id: totrans-309
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 怎么做...
 - en: Create a Maven job named `License_Check`.
+  id: totrans-310
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `License_Check` 的 Maven 作业。
 - en: Under the **Source Code Management** section, check **Subversion**.
+  id: totrans-311
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，勾选**Subversion**。
 - en: Fill in `http://svn.apache.org/repos/asf/creadur/rat/trunk/` for **Modules,
     Repository URL**.
+  id: totrans-312
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**Modules, Repository URL**中填入 `http://svn.apache.org/repos/asf/creadur/rat/trunk/`。
 - en: Set **Check-out Strategy** to **Use 'svn update' as much as possible**.
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将**Check-out Strategy**设置为**尽可能使用 'svn update'**。
 - en: Under the **Build** section, add a clean package to **Goals and options**.
+  id: totrans-314
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**Build**部分，添加 `clean package` 到 **Goals and options**。
 - en: Under the **Post steps** section, check **Run only if build succeeds**.
+  id: totrans-315
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**Post steps**部分，勾选**仅在构建成功时运行**。
 - en: 'Add **Post-build step** for **Execute Shell** (we assume that you are running
     a NIX system). Add the following text to the **Execute Shell** text area if necessary,
     replacing the JAR version number:'
+  id: totrans-316
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加**Post-build step**来执行**Shell**（假设你正在运行一个 NIX 系统）。如果需要，将以下文本添加到**执行 Shell**文本区域中，替换
+    JAR 版本号：
 - en: '[PRE30]'
+  id: totrans-317
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: Click on the **Save** button and run the job.
+  id: totrans-318
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**按钮并运行作业。
 - en: Review the path to the workspace of your jobs. Visit the **Configure Jenkins**
     screen, for example, `http://localhost:8080/configure`. Just under **Home Directory**,
     click on the **Advanced** button. The **Workspace Root Directory** values become
     visible, as shown in the following screenshot:![How to do it...](img/0082OS_03_08.jpg)
+  id: totrans-319
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看作业工作区的路径。访问**配置 Jenkins**界面，例如 `http://localhost:8080/configure`。在**Home Directory**下方，点击**高级**按钮。如下截图所示，**Workspace
+    Root Directory** 的值变得可见：![怎么做...](img/0082OS_03_08.jpg)
 - en: How it works...
+  id: totrans-320
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The Rat source code is compiled and then run twice—the first time to print the
     help out and the second time to check license headers.
+  id: totrans-321
   prefs: []
   type: TYPE_NORMAL
+  zh: Rat 源代码被编译然后运行两次——第一次打印出帮助信息，第二次检查许可证头部。
 - en: The code base is changing; expect the number of options to increase over time.
     You will find the most up-to-date information by running `help`.
+  id: totrans-322
   prefs: []
   type: TYPE_NORMAL
+  zh: 代码库正在改变；随着时间的推移，预计选项的数量会增加。通过运行 `help`，你将找到最新的信息。
 - en: The `–d` option tells the application in which directory your source code can
     be found. In this example, you have used the `${JENKINS_HOME}` variable to define
     the top level of the path. Next, we assume that the job is found under the `./job/jobname/workspace`
     directory. You checked that this assumption is true in step 9 of the recipe. If
     incorrect, you will need to adjust the option. To generate a report for another
     project, simply change the path by replacing the job name.
+  id: totrans-323
   prefs: []
   type: TYPE_NORMAL
+  zh: '`–d` 选项告诉应用程序你的源代码在哪个目录中。在这个示例中，你使用了 `${JENKINS_HOME}` 变量来定义路径的顶层。接下来，我们假设作业位于
+    `./job/jobname/workspace` 目录下。你在第9步骤中检查了这个假设是否正确。如果不正确，你需要调整选项。要为另一个项目生成报告，只需通过替换作业名称更改路径。'
 - en: The `–e` option excludes certain file name patterns from review. You have excluded
     JavaScript files `'*.js'` and `'*target*'` for all generated files under the target
     directory. In a complex project, expect a long list of exclusions.
+  id: totrans-324
   prefs: []
   type: TYPE_NORMAL
+  zh: '`–e` 选项排除了某些文件名模式的审核。你已经排除了 JavaScript 文件 `''*.js''` 和 `''*target*''`，适用于目标目录下的所有生成文件。在一个复杂的项目中，预计会有很长的排除列表。'
 - en: Note
+  id: totrans-325
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'Even if the directory to check does not exist, then the build will still succeed
     with an error reported as follows:'
+  id: totrans-326
   prefs: []
   type: TYPE_NORMAL
+  zh: 即使要检查的目录不存在，构建仍将成功，并报告错误如下：
 - en: '[PRE31]'
+  id: totrans-327
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: You will have to use a log-parsing plugin to force failure.
+  id: totrans-328
   prefs: []
   type: TYPE_NORMAL
+  zh: 你将需要使用一个日志解析插件来强制失败
 - en: There's more...
+  id: totrans-329
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容...
 - en: 'A complimentary Maven plugin for updating licenses in source code is the maven-license
     plugin ([http://code.mycila.com/license-maven-plugin/](http://code.mycila.com/license-maven-plugin/)).
     You can use it to keep your source code license headers up to date. To add/update
     the source code with the `src/etc/header.txt` license, add the following XML fragment
     to your build section:'
+  id: totrans-330
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于更新源代码许可证的一款 Maven 插件是 maven-license 插件 ([http://code.mycila.com/license-maven-plugin/](http://code.mycila.com/license-maven-plugin/))。你可以使用它来保持源代码许可头部的更新。要添加/更新源代码的
+    `src/etc/header.txt` 许可证，请将以下 XML 片段添加到你的构建部分：
 - en: '[PRE32]'
+  id: totrans-331
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: You will then need to add your own `src/etc/header.txt` license file.
+  id: totrans-332
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后你需要添加你自己的 `src/etc/header.txt` 许可证文件。
 - en: 'One powerful feature is that you can add variables to expand. In the following
     example, `${year}` will get expanded as follows:'
+  id: totrans-333
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个强大的功能是你可以添加变量来扩展。在下面的示例中，`${year}` 将会被扩展为如下内容：
 - en: '[PRE33]'
+  id: totrans-334
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: 'To format your source code, you would then run the following command:'
+  id: totrans-335
   prefs: []
   type: TYPE_NORMAL
+  zh: 要格式化你的源代码，你需要运行以下命令：
 - en: '[PRE34]'
+  id: totrans-336
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: See also
+  id: totrans-337
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Reviewing license violations from within Maven* recipe
+  id: totrans-338
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*在 Maven 中审查许可证违规行为*食谱'
 - en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  id: totrans-339
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 groovy-postbuild 插件对生成的数据进行反应*食谱'
 - en: Reviewing license violations from within Maven
+  id: totrans-340
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Maven 中审查许可证违规行为
 - en: In this recipe, you will run Rat through Maven. It will then check for license
     violations in your source code.
+  id: totrans-341
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本示例中，您将通过 Maven 运行 Rat。然后它将检查源代码中的许可证违规行为。
 - en: Getting ready
+  id: totrans-342
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Create the directory named `ch3.building_software/license_maven`.
+  id: totrans-343
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建名为`ch3.building_software/license_maven`的目录。
 - en: How to do it...
+  id: totrans-344
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Create a template `pom.xml` file.
+  id: totrans-345
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个模板`pom.xml`文件。
 - en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
     your preferences.
+  id: totrans-346
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更改`groupId`、`artifactId`、`version`和`name`的值以适应您的偏好。
 - en: 'Add the following XML fragment just before the `</project>` tag:'
+  id: totrans-347
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`</project>`标记之前添加以下 XML 片段：
 - en: '[PRE35]'
+  id: totrans-348
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: Create a Maven project with the **Project name** as `ch3.BasicLTI_license`.
+  id: totrans-349
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用**项目名称**为`ch3.BasicLTI_license`创建一个 Maven 项目。
 - en: Under the **Source Code Management** section, tick **Subversion** with **URL
     Repository** as `https://source.sakaiproject.org/svn/basiclti/trunk`.
+  id: totrans-350
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，选中**Subversion**，**URL 仓库**为`https://source.sakaiproject.org/svn/basiclti/trunk`。
 - en: Note
+  id: totrans-351
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Do not spam the subversion repository. Double-check that there are no build
     triggers activated.
+  id: totrans-352
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 不要向 SVN 仓库发送垃圾邮件。确保没有激活任何构建触发器。
 - en: 'Under the **Build** section set, add the following details:'
+  id: totrans-353
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分设置，添加以下详细信息：
 - en: '**Root POM**: `pom.xml`'
+  id: totrans-354
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Root POM**：`pom.xml`'
 - en: '**Goals and options**: `clean`'
+  id: totrans-355
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标和选项**：`clean`'
 - en: 'Under the **Pre Steps** section, invoke Inject environment variables and add
     the following to the property''s context:'
+  id: totrans-356
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**预处理步骤**部分，调用注入环境变量并将以下内容添加到属性的上下文中：
 - en: '[PRE36]'
+  id: totrans-357
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: 'Under the **Post Steps** section, invoke the top-level Maven targets:'
+  id: totrans-358
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后续步骤**部分，调用顶级 Maven 目标：
 - en: '**Maven Version**: `3.2.1`'
+  id: totrans-359
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Maven 版本**：`3.2.1`'
 - en: '**Goals**: `verify`'
+  id: totrans-360
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标**：`verify`'
 - en: Click on the **Advanced** button.
+  id: totrans-361
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**高级**按钮。
 - en: In the expanded section, set the **POM** section to the full path to your Rat's
     POM file, for example, `/var/lib/cookbook/ch3.building_software/license_maven
     /pom.xml`.
+  id: totrans-362
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在扩展部分中，将**POM**部分设置为 Rat 的 POM 文件的完整路径，例如，`/var/lib/cookbook/ch3.building_software/license_maven/pom.xml`。
 - en: Under the **Post Steps** section, add a copy command to move the report into
     your workspace (such as `cp /var/lib/cookbook/ch3.building_software/license_maven/target/rat.txt
     ${WORKSPACE}`) and **Execute Shell**.
+  id: totrans-363
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后续步骤**部分，添加一个复制命令以将报告移动到您的工作空间（例如 `cp /var/lib/cookbook/ch3.building_software/license_maven/target/rat.txt
+    ${WORKSPACE}`）和**执行 Shell**。
 - en: Run the job. You can now visit the workspace and view `./target/rat.txt`. The
     file should look similar to the following screenshot:![How to do it...](img/0082OS_03_09.jpg)
+  id: totrans-364
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业。您现在可以访问工作区并查看`./target/rat.txt`。文件应类似于以下屏幕截图：![如何操作...](img/0082OS_03_09.jpg)
 - en: How it works...
+  id: totrans-365
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: You have pulled source code from an open source project; in this case, from
     one of the subversion and Git repositories of the Apereo Foundation ([https://source.sakaiproject.org/svn/](https://source.sakaiproject.org/svn/)).
+  id: totrans-366
   prefs: []
   type: TYPE_NORMAL
+  zh: 您从一个开源项目中拉取了源代码；在这种情况下，从 Apereo 基金会的一个子版本和 Git 仓库中拉取（[https://source.sakaiproject.org/svn/](https://source.sakaiproject.org/svn/)）。
 - en: Note
+  id: totrans-367
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: In 2013, the Sakai Foundation ([www.sakaiproject.org](http://www.sakaiproject.org))
     merged with JASIG ([www.jasig.org](http://www.jasig.org)) to become the Apereo
     Foundation ([www.apereo.org](http://www.apereo.org)).
+  id: totrans-368
   prefs: []
   type: TYPE_NORMAL
+  zh: 2013年，Sakai 基金会 ([www.sakaiproject.org](http://www.sakaiproject.org)) 与 JASIG
+    ([www.jasig.org](http://www.jasig.org)) 合并成为 Apereo 基金会 ([www.apereo.org](http://www.apereo.org))。
 - en: Sakai is a **Learning Management System** (**LMS**) used by many millions of
     students daily. The Apereo Foundation represents over 100 organizations, mostly
     universities.
+  id: totrans-369
   prefs: []
   type: TYPE_NORMAL
+  zh: Sakai 是被许多百万学生每天使用的**学习管理系统**（**LMS**）。Apereo 基金会代表着100多个组织，主要是大学。
 - en: The source code includes different licenses that are checked by the Rat Maven
     plugin. The plugin is called during the `verify` phase and checks the workspace
     location of your job, as defined by the `${WORKSPACE}` variable that Jenkins injected.
+  id: totrans-370
   prefs: []
   type: TYPE_NORMAL
+  zh: 源代码包含由 Rat Maven 插件检查的不同许可证。插件在`verify`阶段调用，并检查 Jenkins 注入的`${WORKSPACE}`变量所定义的作业的工作区位置。
 - en: The `excludeSubProjects` statement set to `false` tells Rat to visit any subproject
     as well as the master project. The `numUnapprovedLicenses` statement is the number
     of unapproved licenses that are acceptable before your job fails.
+  id: totrans-371
   prefs: []
   type: TYPE_NORMAL
+  zh: 将`excludeSubProjects`语句设置为`false`，告诉 Rat 除了主项目外还要访问任何子项目。`numUnapprovedLicenses`语句是在作业失败之前可接受的未批准许可证数量。
 - en: The `excludes` statement excludes the target directory and any other directory.
     The `includes` statement overrides specific file types under the `src` directory.
     Depending on the type of frameworks used in your projects, the range of includes
     will change.
+  id: totrans-372
   prefs: []
   type: TYPE_NORMAL
+  zh: '`excludes` 语句排除目标目录和任何其他目录。 `includes` 语句覆盖 `src` 目录下的特定文件类型。 根据项目中使用的框架类型，包含的范围将会改变。'
 - en: Note
+  id: totrans-373
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'For information on customizing Rat for specific license types, visit:'
+  id: totrans-374
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关定制 Rat 以适用于特定许可证类型的信息，请访问：
 - en: '[http://creadur.apache.org/rat/apache-rat-plugin/examples/custom-license.html](http://creadur.apache.org/rat/apache-rat-plugin/examples/custom-license.html).'
+  id: totrans-375
   prefs: []
   type: TYPE_NORMAL
+  zh: '[http://creadur.apache.org/rat/apache-rat-plugin/examples/custom-license.html](http://creadur.apache.org/rat/apache-rat-plugin/examples/custom-license.html)。'
 - en: There's more...
+  id: totrans-376
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few more useful tips to review.
+  id: totrans-377
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些有用的审查提示。
 - en: Multiple approaches and antipatterns
+  id: totrans-378
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 多种方法和反模式
 - en: There were multiple approaches to configuring the Jenkins job. You can avoid
     copying the Rat report file by fixing its location in the Maven plugins configuration.
     This has the advantage of avoiding a copying action. You can also use the multiple-scms
@@ -1762,678 +2572,988 @@
     to first copy the source code into the workspace. You should also consider splitting
     into two jobs and then pointing the Rat job at the source code's workspace. The
     last approach is a best practice as it cleanly separates the testing.
+  id: totrans-379
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置 Jenkins 作业有多种方法。 您可以通过在 Maven 插件配置中固定其位置来避免复制 Rat 报告文件。 这样做的好处是避免了复制操作。 您还可以使用多个源码管理器插件（[https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin)）首先将源代码复制到工作空间中。
+    您还应考虑将其拆分为两个作业，然后将 Rat 作业指向源代码的工作空间。 最后一种方法是最佳实践，因为它清晰地将测试与源代码分开。
 - en: Snapshots
+  id: totrans-380
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 快照
 - en: Unlike fixed versions of artifacts, snapshots have no guarantee that their details
     will not vary over time. Snapshots are useful if you want to test the latest and
     greatest. However, for the most maintainable code, it is much better to use fixed
     versions artifact.
+  id: totrans-381
   prefs: []
   type: TYPE_NORMAL
+  zh: 与构件的固定版本不同，快照不能保证其详细信息随时间不变。 如果要测试最新和最好的内容，则快照很有用。 但是，为了获得最可维护的代码，最好使用固定版本构件。
 - en: To defend base-level stability, consider writing a job triggering a small Groovy
     script inside a `pom.xml` file to visit all your projects. The script needs to
     search for the `SNAPSHOT` word in the `version` tag and then write a recognizable
     warning for the groovy-postbuild plugin to pick up and, if necessary, fail the
     job. Using this approach, you can incrementally tighten the boundaries, giving
     time to developers to improve their builds.
+  id: totrans-382
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了捍卫基本稳定性，考虑编写一个在 `pom.xml` 文件中触发小 Groovy 脚本的作业，以访问所有项目。 脚本需要搜索 `version` 标签中的
+    `SNAPSHOT` 单词，然后为 groovy-postbuild 插件写入一个可识别的警告，以便该作业在必要时失败。 使用这种方法，您可以逐步加强边界，给开发人员改进其构建的时间。
 - en: See also
+  id: totrans-383
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Looking at license violations with Rat* recipe
+  id: totrans-384
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 Rat 检查许可证违规* 配方'
 - en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  id: totrans-385
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 groovy-postbuild 插件对生成的数据做出反应* 配方'
 - en: Exposing information through build descriptions
+  id: totrans-386
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过构建描述公开信息
 - en: The setter plugin allows you to gather information out of the build log and
     add it as a description to a builds history. This is useful as it allows you later
     to quickly assess the historic cause of the issue without drilling down into the
     console output. This saves many mouse clicks. You can now see details immediately
     in the trend report without needing to review all the build results separately.
+  id: totrans-387
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置插件允许您从构建日志中获取信息，并将其作为构建历史的描述添加。 这非常有用，因为它允许您稍后快速评估问题的历史原因，而无需深入查看控制台输出。 这样可以节省很多鼠标点击。
+    现在，您可以立即在趋势报告中看到详细信息，而无需逐个查看所有构建结果。
 - en: The setter plugin uses regex expressions to scrape the descriptions. This recipe
     shows you how to do this.
+  id: totrans-388
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置插件使用正则表达式来解析描述。 此配方向您展示了如何做到这一点。
 - en: Getting ready
+  id: totrans-389
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the description-setter plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin)).
     Create a directory for the recipe files named `ch3.building_software/descriptions`.
+  id: totrans-390
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装描述设置插件（[https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin)）。
+    创建一个名为 `ch3.building_software/descriptions` 的配方文件目录。
 - en: How to do it...
+  id: totrans-391
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 怎么做...
 - en: Create a template `pom.xml` file.
+  id: totrans-392
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个模板 `pom.xml` 文件。
 - en: Change the values of `groupId`, `artifactId`, `version`, and `name` to suit
     your preferences.
+  id: totrans-393
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更改`groupId`、`artifactId`、`version`和`name`的值以满足您的偏好。
 - en: 'Add the following XML fragment just before the `</project>` tag:'
+  id: totrans-394
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`</project>`标签之前添加以下 XML 片段：
 - en: '[PRE37]'
+  id: totrans-395
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: Create a Maven project with the **Job name** as `ch3.descriptions`.
+  id: totrans-396
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个 Maven 项目，**作业名称**设为 `ch3.descriptions`。
 - en: In the **Source Code Management** section, check **File System** and add a fully
     qualified path of your directory, such as `/var/lib/Jenkins/cookbook/ch3.building_software/description`,
     in the **Path** field.
+  id: totrans-397
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分，选中**文件系统**并在**路径**字段中添加您目录的完全限定路径，例如`/var/lib/Jenkins/cookbook/ch3.building_software/description`。
 - en: Tick **Set build description** and add the values shown in the following screenshot:![How
     to do it...](img/0082OS_03_10.jpg)
+  id: totrans-398
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 勾选**设置构建描述**并添加以下截图中显示的值：![操作步骤...](img/0082OS_03_10.jpg)
 - en: Run the job a number of times and review the **Build History**. You will see
     that the description of each build varies:![How to do it...](img/0082OS_03_11.jpg)
+  id: totrans-399
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 多次运行作业并查看**构建历史记录**。您会发现每次构建的描述都不同：![操作步骤...](img/0082OS_03_11.jpg)
 - en: How it works...
+  id: totrans-400
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'The Groovy code is called as part of the `install` goal. The code either fails
     the job with the `MySever issue` pattern or prints the output to the build with
     the `Great stuff happens because` pattern:'
+  id: totrans-401
   prefs: []
   type: TYPE_NORMAL
+  zh: Groovy 代码是作为`install`目标的一部分调用的。该代码会根据`MySever issue`模式使作业失败，或者根据`Great stuff
+    happens because`模式将输出打印到构建中：
 - en: '[PRE38]'
+  id: totrans-402
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: 'As a post build action, the description-setter plugin is triggered. On build
     success, it looks for the `Great stuff happens because: (.*)` pattern.'
+  id: totrans-403
   prefs: []
   type: TYPE_NORMAL
+  zh: '作为后置构建操作，将触发 description-setter 插件。在构建成功时，它会查找`Great stuff happens because:
+    (.*)`模式。'
 - en: The `(.*)` pattern pulls in any text after the first part of the pattern into
     the `"\1"` variable, which is later expanded out in the setting of the description
     of the specific build.
+  id: totrans-404
   prefs: []
   type: TYPE_NORMAL
+  zh: '`(.*)`模式将第一个模式部分后的任何文本拉入`"\1"`变量中，稍后在设置特定构建的描述中展开。'
 - en: The same is true for the failed build apart from some extra text that is added
     before the expansion of `"\1"`. You defined this in the configuration of **Description
     for failed builds**.
+  id: totrans-405
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于失败的构建也是如此，除了在`"\1"`展开之前添加了一些额外文本。您在**失败构建的描述**配置中定义了这些内容。
 - en: Tip
+  id: totrans-406
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: It is possible to have more variables than just `\1` by expanding the regex
     expressions. For example, if the console output was `fred is happy`, then the
     `(.*)` pattern generates `"\1"` equal to `fred` and `"\2"` equal to `happy`.
+  id: totrans-407
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以通过扩展正则表达式获得比`\1`更多的变量。例如，如果控制台输出是`fred is happy`，那么`(.*)`模式生成的`"\1"`等于`fred`，`"\2"`等于`happy`。
 - en: There's more...
+  id: totrans-408
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The plugin gets its ability to parse text from the token-macro plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin)).
     The token-macro plugin allows macros to be defined in text; they are then expanded
     by calling a utility method. This approach, using utility plugins, simplifies
     plugin creation and supports consistency.
+  id: totrans-409
   prefs: []
   type: TYPE_NORMAL
+  zh: 该插件获取其解析文本的能力来自 token-macro 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin))。token-macro
+    插件允许在文本中定义宏；然后通过调用实用方法来扩展它们。这种使用实用程序插件的方法简化了插件的创建，并支持一致性。
 - en: See also
+  id: totrans-410
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Reacting to generated data with the groovy-postbuild plugin* recipe
+  id: totrans-411
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 groovy-postbuild 插件响应生成的数据* 的方法'
 - en: Reacting to generated data with the groovy-postbuild plugin
+  id: totrans-412
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 groovy-postbuild 插件响应生成的数据
 - en: Build information is sometimes left obscure in logfiles or reports that are
     difficult for Jenkins to expose. This recipe will show you one approach of pulling
     those details into Jenkins.
+  id: totrans-413
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建信息有时会被模糊地记录在日志文件或报告中，这些对于 Jenkins 来说很难暴露。本文将展示一种将这些细节拉到 Jenkins 中的方法。
 - en: The groovy-postbuild plugin allows you to run Groovy scripts after the build
     has run. Because the plugin runs within Jenkins, it has programmatic access to
     services, such as being able to read console input or change a build's summary
     page.
+  id: totrans-414
   prefs: []
   type: TYPE_NORMAL
+  zh: groovy-postbuild 插件允许您在构建运行后运行 Groovy 脚本。因为该插件在 Jenkins 中运行，所以可以编程地访问服务，例如能够读取控制台输入或更改构建摘要页面。
 - en: This recipe uses a Groovy script within Maven `pom.xml` to output a file to
     the console. The console input is then picked up by the Groovy code from the plugin
     and vital statistics displayed in the build history. The build summary details
     are also modified.
+  id: totrans-415
   prefs: []
   type: TYPE_NORMAL
+  zh: 该方法在 Maven 的 `pom.xml` 中使用了一个 Groovy 脚本来将文件输出到控制台。然后，插件中的 Groovy 代码会捕获控制台输入，并在构建历史记录中显示关键统计信息。构建摘要详情也被修改了。
 - en: Getting ready
+  id: totrans-416
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Follow the *Reviewing license violations from within Maven* recipe. Add the
     groovy-postbuild plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Postbuild+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Postbuild+Plugin)).
+  id: totrans-417
   prefs: []
   type: TYPE_NORMAL
+  zh: 遵循*从Maven内部审查许可证违规*的配方。添加groovy-postbuild插件（[https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Postbuild+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Postbuild+Plugin)）。
 - en: How to do it...
+  id: totrans-418
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作方法...
 - en: 'Update the `pom.xml` file by adding the following XML fragment just before
     the `</plugins>` tag:'
+  id: totrans-419
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过在`pom.xml`文件中在`</plugins>`标记之前添加以下XML片段来更新文件：
 - en: '[PRE39]'
+  id: totrans-420
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE39]'
 - en: 'Update the configuration of the `ch3.BasicLTI_license` job under the **Post-build
     Actions** section. Check **Groovy Postbuild**. Add the following script to the
     Groovy script text input:'
+  id: totrans-421
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分更新`ch3.BasicLTI_license`作业的配置。选中**Groovy Postbuild**。将以下脚本添加到Groovy脚本文本输入中：
 - en: '[PRE40]'
+  id: totrans-422
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE40]'
 - en: Make sure that the **If the script fails** select box is set to **Do Nothing**.
+  id: totrans-423
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保**如果脚本失败**选择框设置为**什么都不做**。
 - en: Click on **Save**.
+  id: totrans-424
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Run the job a number of times. In **Build History**, you will see results similar
     to the following screenshot:![How to do it...](img/0082OS_03_12.jpg)
+  id: totrans-425
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业多次。在**构建历史**中，您将看到类似以下截图的结果：![操作方法...](img/0082OS_03_12.jpg)
 - en: Clicking on the newest build link displays the build page with summary information
     about unknown licenses, as shown in the following screenshot:![How to do it...](img/0082OS_03_13.jpg)
+  id: totrans-426
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击最新构建链接会显示有关未知许可证的摘要信息的构建页面，如以下截图所示：![操作方法...](img/0082OS_03_13.jpg)
 - en: How it works...
+  id: totrans-427
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The Rat licensing report is saved to the `target/rat.txt` file. The Groovy code
     then reads the Rat file and prints it out to the console, ready to be picked up
     by the groovy-postbuild plugin. You could have done all the work in the groovy-postbuild
     plugin, but you might later want to reuse the build.
+  id: totrans-428
   prefs: []
   type: TYPE_NORMAL
+  zh: Rat许可报告保存到`target/rat.txt`文件中。然后，Groovy代码读取Rat文件并将其打印到控制台，以便groovy-postbuild插件接收。您可以在groovy-postbuild插件中完成所有工作，但以后可能希望重用构建。
 - en: 'After the build is finished, the groovy-postbuild plugin runs. A number of
     Jenkins services are visible to the plugin:'
+  id: totrans-429
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建完成后，groovy-postbuild插件将运行。插件可见一些Jenkins服务：
 - en: '`manager.build.logFile`: This gets the logfile, which now includes the licensing
     information.'
+  id: totrans-430
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`manager.build.logFile`: 这会获取日志文件，其中现在包括许可信息。'
 - en: '`manager.getMatcher`: This checks the logfile for patterns matching `"^(.*)
     Unknown Licenses\$"`. The symbol `^` checks for the beginning of the line and
     `\$` checks for the end of the line. Any line with the `Unknown Licenses` pattern
     at the end of the line will be matched with anything before that stored in `matcher.group(1)`.
     It sets the `title` string to the number of unknown licenses.'
+  id: totrans-431
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`manager.getMatcher`: 这会检查日志文件以查找与`"^(.*) Unknown Licenses\$"`匹配的模式。符号`^`检查行的开头，`\$`检查行的结尾。以`Unknown
+    Licenses`模式结尾的任何行将与之前存储在`matcher.group(1)`中的任何内容匹配。它将`title`字符串设置为未知许可证的数量。'
 - en: '`manager.addWarningBadge(title)`: This adds a warning badge to the build history
     box and `title` is used as the text that is displayed as the mouse hovers over
     the icon.'
+  id: totrans-432
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`manager.addWarningBadge(title)`: 这会向构建历史框添加警告徽章，`title`将用作鼠标悬停在图标上时显示的文本。'
 - en: '`manager.addShortText`: This adds visible text next to the icon.'
+  id: totrans-433
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`manager.addShortText`: 这会在图标旁添加可见文本。'
 - en: A summary is created through the `manager.createSummary` method. An image that
     already exists in Jenkins is added with the title.
+  id: totrans-434
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过`manager.createSummary`方法创建摘要。已在Jenkins中存在的图像将以标题的形式添加。
 - en: There's more...
+  id: totrans-435
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Pulling information into a report by searching for regular patterns is called
     scraping. The stability of scraping relies on a consistent pattern being generated
     in the Rat report. If you change the version of the Rat plugin, the pattern might
     change and break your report. When possible, it is more maintainable for you to
     use stable data sources, such as XML files, that have a well-defined syntax.
+  id: totrans-436
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过搜索常规模式将信息提取到报告中称为爬取。爬取的稳定性依赖于在Rat报告中生成一致的模式。如果更改Rat插件的版本，则模式可能会更改并破坏报告。可能时，最好使用稳定的数据源，例如具有明确定义语法的XML文件。
 - en: See also
+  id: totrans-437
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Exposing information through build descriptions* recipe
+  id: totrans-438
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过构建描述公开信息*配方'
 - en: The *Improving security via small configuration changes* recipe in [Chapter
     2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*
+  id: totrans-439
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过小的配置更改增强安全性*配方在[第2章](ch02.html "第2章。增强安全性")中，*增强安全性*'
 - en: Remotely triggering jobs through the Jenkins API
+  id: totrans-440
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过Jenkins API远程触发作业
 - en: Jenkins has a remote API which allows you to enable, disable, run, and delete
     jobs; it also lets you change the configuration. The API is increasing with each
     Jenkins version. To get the most up-to-date details, you will need to review `http://yourhost/job/Name_of_Job/api/`.
     Where `yourhost` is the location of your Jenkins server and `Name_of_Job` is the
     name of a job that exists on your server.
+  id: totrans-441
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins具有远程API，允许您启用、禁用、运行和删除作业；它还允许您更改配置。API随着每个Jenkins版本的增加而增加。要获取最新的详细信息，您需要查看`http://yourhost/job/Name_of_Job/api/`。其中`yourhost`是您的Jenkins服务器的位置，`Name_of_Job`是服务器上存在的作业的名称。
 - en: This recipe details how you can trigger build remotely by using security tokens.
     This will allow you to run other jobs from within your Maven.
+  id: totrans-442
   prefs: []
   type: TYPE_NORMAL
+  zh: 此方案详细介绍了如何使用安全令牌远程触发构建。这将允许您从Maven内运行其他作业。
 - en: Getting ready
+  id: totrans-443
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: This recipe expects Jenkins security to be turned on so that you can log in
     as a user. It also assumes you have a modern version of `wget` ([http://www.gnu.org/software/wget/](http://www.gnu.org/software/wget/))
     installed.
+  id: totrans-444
   prefs: []
   type: TYPE_NORMAL
+  zh: 此方案期望Jenkins安全性已打开，以便您可以作为用户登录。它还假设您已安装了现代版本的`wget`（[http://www.gnu.org/software/wget/](http://www.gnu.org/software/wget/)）。
 - en: How to do it...
+  id: totrans-445
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何执行...
 - en: Create a free-style project with **Project name** as `ch3.RunMe`.
+  id: totrans-446
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个自由风格项目，**项目名称**为`ch3.RunMe`。
 - en: 'Check **This Build is parameterized**, select **String Parameter**, and add
     the following details:'
+  id: totrans-447
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查**此构建已参数化**，选择**字符串参数**，并添加以下细节：
 - en: '**Name**: `myvariable`'
+  id: totrans-448
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名称**：`myvariable`'
 - en: '**Default Value**: `Default`'
+  id: totrans-449
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**默认值**：`默认`'
 - en: '**Description**: `This is my example variable`'
+  id: totrans-450
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**描述**：`这是我的示例变量`'
 - en: Under the **Build Triggers** section, check **Trigger builds remotely** (For
     example, from scripts).
+  id: totrans-451
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**触发构建**部分下，勾选**远程触发构建**（例如，从脚本中）。
 - en: In the **Authentication Token** textbox, add `changeme`.
+  id: totrans-452
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**身份验证令牌**文本框中添加`changeme`。
 - en: Click on the **Save** button.
+  id: totrans-453
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**按钮。
 - en: Click on the **Build with Parameters** link.
+  id: totrans-454
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**带参数构建**链接。
 - en: You will be asked for the variable named `myvariable`. Click on **Build**.
+  id: totrans-455
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将要求您输入名为`myvariable`的变量。点击**构建**。
 - en: Visit your personal configuration page, such as `http://localhost:8080/user/your_user/configure`,
     where you replace `your_user` with your Jenkins username.
+  id: totrans-456
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问您的个人配置页面，例如`http://localhost:8080/user/your_user/configure`，其中您将`your_user`替换为您的Jenkins用户名。
 - en: In the **API Token** section, click on the **Show API Token…** button.
+  id: totrans-457
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**API令牌**部分，点击**显示API令牌…**按钮。
 - en: Copy the token to `apiToken`.
+  id: totrans-458
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将令牌复制到`apiToken`中。
 - en: 'From a terminal console, run `wget` to log in and run the job remotely:'
+  id: totrans-459
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端控制台远程运行`wget`以登录并运行作业：
 - en: '[PRE41]'
+  id: totrans-460
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE41]'
 - en: 'Check the Jenkins job to verify that it has not run and returns a `405` HTTP
     status code:'
+  id: totrans-461
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查Jenkins作业以验证其未运行并返回`405`HTTP状态代码：
 - en: '[PRE42]'
+  id: totrans-462
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE42]'
 - en: 'From a terminal console, run `wget` to log in and run the job returning a `201`
     HTTP status code:'
+  id: totrans-463
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端控制台运行`wget`以登录并运行返回`201`HTTP状态代码的作业：
 - en: '[PRE43]'
+  id: totrans-464
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE43]'
 - en: Note
+  id: totrans-465
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: HTTP can be packet-sniffed by a third party. Use HTTPS when transporting passwords.
+  id: totrans-466
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: HTTP可以被第三方抓包。传输密码时请使用HTTPS。
 - en: How it works...
+  id: totrans-467
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: To run a job, you need to authenticate as a user and then obtain permission
     to run the specific job. This is achieved through `apiTokens`, which you should
     consider to be the same as passwords.
+  id: totrans-468
   prefs: []
   type: TYPE_NORMAL
+  zh: 要运行作业，您需要作为用户进行身份验证，然后获取运行特定作业的权限。这通过`apiTokens`实现，您应该将其视为密码的一种。
 - en: There were two remote methods calls. The first is build, which used to run the
     build without passing parameters. The method is currently not accepted. The second
     working method is `buildWithParameters`, which expects you to pass at least one
     parameter to Jenkins. The parameters are separated by `\&`.
+  id: totrans-469
   prefs: []
   type: TYPE_NORMAL
+  zh: 有两个远程方法调用。第一个是build，用于在不传递参数的情况下运行构建。该方法当前不被接受。第二个有效的方法是`buildWithParameters`，它期望您至少向Jenkins传递一个参数。参数用`\&`分隔。
 - en: The `wget` tool does the heavy lifting; otherwise you would have to write some
     tricky Groovy code. We have chosen simplicity and OS dependence for the sake of
     a short recipe. Running an executable risks making your build OS-specific. The
     executable will depend on how the underlying environment has been set up. However,
     sometimes you will need to make compromises to avoid complexity.
+  id: totrans-470
   prefs: []
   type: TYPE_NORMAL
+  zh: '`wget`工具承担了大部分工作；否则，您将不得不编写一些棘手的Groovy代码。为了简短的方案，我们选择了简单性和操作系统的依赖性。运行一个可执行文件会使您的构建依赖于操作系统。可执行文件将取决于底层环境的设置方式。然而，有时您需要做出妥协以避免复杂性。'
 - en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Authenticating+scripted+clients](https://wiki.jenkins-ci.org/display/JENKINS/Authenticating+scripted+clients).
+  id: totrans-471
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关更多详细信息，请访问 [https://wiki.jenkins-ci.org/display/JENKINS/Authenticating+scripted+clients](https://wiki.jenkins-ci.org/display/JENKINS/Authenticating+scripted+clients).
 - en: Note
+  id: totrans-472
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'You can find the equivalent Java code at the following URL:'
+  id: totrans-473
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在以下网址找到等效的 Java 代码：
 - en: '[https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API](https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API).'
+  id: totrans-474
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API](https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API).'
 - en: There's more...
+  id: totrans-475
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few things you should consider.
+  id: totrans-476
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是一些你应该考虑的事项。
 - en: Running jobs from within Maven
+  id: totrans-477
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 从 Maven 中运行作业
 - en: 'With little fuss, you can run `wget` through the maven-antrun plugin. The following
     is the equivalent `pom.xml` fragment:'
+  id: totrans-478
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 `maven-antrun` 插件，你可以轻松运行 `wget`。以下是等效的 `pom.xml` 片段：
 - en: '[PRE44]'
+  id: totrans-479
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE44]'
 - en: You can use the exec-maven plugin for the same purpose as the maven-ant plugin.
     For more details, visit [http://mojo.codehaus.org/exec-maven-plugin/](http://mojo.codehaus.org/exec-maven-plugin/).
+  id: totrans-480
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以使用 exec-maven 插件来实现与 maven-ant 插件相同的目的。有关更多详细信息，请访问 [http://mojo.codehaus.org/exec-maven-plugin/](http://mojo.codehaus.org/exec-maven-plugin/).
 - en: Remotely generating jobs
+  id: totrans-481
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 远程生成作业
 - en: There is also a project that allows you to create Jenkins jobs through Maven
     remotely ([https://github.com/evgeny-goldin/maven-plugins/tree/master/jenkins-maven-plugin](https://github.com/evgeny-goldin/maven-plugins/tree/master/jenkins-maven-plugin)).
     The advantage of this approach is its ability to enforce consistency and reuse
     between Jobs. You can use one parameter to choose a Jenkins server and populate
     it. This is useful for generating a large set of consistently structured jobs.
+  id: totrans-482
   prefs: []
   type: TYPE_NORMAL
+  zh: 还有一个项目可以让你通过 Maven 远程创建 Jenkins 作业（[https://github.com/evgeny-goldin/maven-plugins/tree/master/jenkins-maven-plugin](https://github.com/evgeny-goldin/maven-plugins/tree/master/jenkins-maven-plugin)）。这种方法的优点是它能够在作业之间强制执行一致性和重用。你可以使用一个参数选择
+    Jenkins 服务器并填充它。这对于生成一组结构一致的作业非常有用。
 - en: See also
+  id: totrans-483
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Running Ant through Groovy in Maven* recipe
+  id: totrans-484
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*在 Maven 中通过 Groovy 运行 Ant* 示例'
 - en: Adaptive site generation
+  id: totrans-485
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自适应站点生成
 - en: Jenkins is a great communicator. It can consume the results of tests generated
     by builds. Maven has a goal for site generation where, within the `pom.xml` file,
     many of the Maven testing plugins are configured. The configuration is bounded
     by the `reporting` tag.
+  id: totrans-486
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 是一个出色的通信工具。它可以消耗构建生成的测试结果。Maven 有一个用于站点生成的目标，在 `pom.xml` 文件中，许多 Maven
+    测试插件被配置。配置受 `reporting` 标签限制。
 - en: 'A Jenkins Maven software project job run notes when a site is generated, and
     creates a shortcut icon in the jobs home page. This is a very visible icon that
     you can link with content:'
+  id: totrans-487
   prefs: []
   type: TYPE_NORMAL
+  zh: 当站点生成时，Jenkins Maven 软件项目作业记录，并在作业主页上创建一个快捷图标。这是一个非常显眼的图标，你可以将其与内容链接起来：
 - en: '![Adaptive site generation](img/0082OS_03_14.jpg)'
+  id: totrans-488
   prefs: []
   type: TYPE_IMG
+  zh: '![自适应站点生成](img/0082OS_03_14.jpg)'
 - en: You can gain fine-grained control of Maven site generation through triggering
     Groovy scripts that structure sites in different Maven phases.
+  id: totrans-489
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过触发 Groovy 脚本，你可以对 Maven 站点生成进行细粒度控制，以在不同的 Maven 阶段中构建站点。
 - en: In this recipe, you will use Groovy to generate a dynamic site menu that has
     different menu links depending on a random choice made in the script. A second
     script then generates a fresh results page per site generation. These actions
     are useful if you want to expose your own custom test results. The *Reporting
     alternative code metrics in Jenkins* recipe describes how you can plot custom
     results in Jenkins, enhancing the user experience further.
+  id: totrans-490
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个示例中，你将使用 Groovy 生成一个动态站点菜单，该菜单具有根据脚本中的随机选择而不同的菜单链接。然后，第二个脚本生成每个站点生成的新结果页面。如果你想公开自定义的测试结果，这些操作非常有用。*在
+    Jenkins 中报告替代代码度量* 的示例描述了如何在 Jenkins 中绘制自定义结果，进一步增强用户体验。
 - en: Note
+  id: totrans-491
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: This recipe works in Version 2.2.1 of Maven or earlier. Maven 3 has a slightly
     different approach to site generation.
+  id: totrans-492
   prefs: []
   type: TYPE_NORMAL
+  zh: 该示例适用于 Maven 版本 2.2.1 或更早版本。Maven 3 在站点生成方面有稍微不同的方法。
 - en: To enforce a minimum Maven version from within your `pom.xml` file, you will
     need to add `<prerequisites><maven>2.2.1</maven></prerequisites>`.
+  id: totrans-493
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在你的 `pom.xml` 文件中强制使用最低 Maven 版本，你需要添加 `<prerequisites><maven>2.2.1</maven></prerequisites>`。
 - en: Getting ready
+  id: totrans-494
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create a directory named `ch3.building_software/sit`e. Install the Copy Data
     to Workspace plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Copy+Data+To+Workspace+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Copy+Data+To+Workspace+Plugin)).
     This will give you practice with another useful plugin. You will use this plugin
     to copy the files, as mentioned in this recipe, into the Jenkins workspace. This
     is used to copy sensitive configuration files with passwords into a project, which
     you do not want in your Revision Control System.
+  id: totrans-495
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch3.building_software/site` 的目录。安装 `Copy Data to Workspace` 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Copy+Data+To+Workspace+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Copy+Data+To+Workspace+Plugin))。这将使你练习另一个有用的插件。你将使用此插件将文件复制到
+    Jenkins 工作空间中，如本教程中所述。这用于将包含密码的敏感配置文件复制到项目中，你不希望它们出现在版本控制系统中。
 - en: How to do it...
+  id: totrans-496
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Add the following XML fragment just before `</project>` within your template
     `pom.xml` file (mentioned in the introduction), making sure the `pom.xml` file
     is readable by Jenkins:'
+  id: totrans-497
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在你的模板 `pom.xml` 文件中的 `</project>` 之前添加以下 XML 片段（在介绍中提到），确保 `pom.xml` 文件可被 Jenkins
+    读取：
 - en: '[PRE45]'
+  id: totrans-498
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE45]'
 - en: 'Create the `site_xml.Groovy` file within the same directory as your `pom.xml`
     file with the following lines of code:'
+  id: totrans-499
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在与你的 `pom.xml` 文件相同的目录中创建 `site_xml.Groovy` 文件，并使用以下代码行：
 - en: '[PRE46]'
+  id: totrans-500
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE46]'
 - en: 'Add the `site.Groovy` file within the same directory as your `pom.xml` file
     with the following lines of code:'
+  id: totrans-501
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在与你的 `pom.xml` 文件相同的目录中添加 `site.Groovy` 文件，并使用以下代码行：
 - en: '[PRE47]'
+  id: totrans-502
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE47]'
 - en: Create a Maven project with the name `ch3.site`.
+  id: totrans-503
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch3.site` 的 Maven 项目。
 - en: 'Under the **Build** section, fill in the following details:'
+  id: totrans-504
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建** 部分，填写以下细节：
 - en: '**Maven Version**: `2.2.1`'
+  id: totrans-505
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Maven 版本**: `2.2.1`'
 - en: '**Root POM**: `pom.xml`'
+  id: totrans-506
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**根 POM**: `pom.xml`'
 - en: '**Goals and options**: `site`'
+  id: totrans-507
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标和选项**: `site`'
 - en: Under the **Build Environment** section, select **Copy data to workspace**.
+  id: totrans-508
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建环境** 部分，选择 **将数据复制到工作空间**。
 - en: Add whichever directory you have placed the files in (mentioned in this recipe)
     to the **Path to folder** field.
+  id: totrans-509
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将你放置文件的任何目录（在本教程中提到）添加到 **文件夹路径** 字段。
 - en: Run the job a number of times reviewing the generated site. On the right-hand
     side, you should see a menu section named **My super project**. For half of the
     runs, there will be a submenu link named **Key Performance Indicators**:![How
     to do it...](img/0082OS_03_15.jpg)
+  id: totrans-510
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业多次，查看生成的站点。在右侧，你应该看到一个名为 **我的超级项目** 的菜单部分。对于一半的运行，将会有一个名为 **关键绩效指标** 的子菜单链接：![如何操作...](img/0082OS_03_15.jpg)
 - en: How it works...
+  id: totrans-511
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Two Groovy scripts are run in two different phases of the site goal. The first
     generates the `site.xml` file. Maven uses this to create an additional menu structure
     on the left-hand side of the index page. The second Groovy script generates a
     page of random results.
+  id: totrans-512
   prefs: []
   type: TYPE_NORMAL
+  zh: 有两个 Groovy 脚本在站点目标的两个不同阶段运行。第一个生成 `site.xml` 文件。Maven 使用此文件在索引页面的左侧创建一个额外的菜单结构。第二个
+    Groovy 脚本生成一个随机结果页面。
 - en: The `site_xml.Groovy` file runs in the `pre-site` phase. The `site.Groovy` file
     executes during site generation. The `site_xml.Groovy` file generates the `src/site`
     directory and then the `src/site/site.xml` file. This is the file that the Maven
     site generation plugin uses to define the left-hand side of a site's menu. For
     more details of the process, visit [http://Maven.apache.org/guides/mini/guide-site.html](http://Maven.apache.org/guides/mini/guide-site.html).
+  id: totrans-513
   prefs: []
   type: TYPE_NORMAL
+  zh: '`site_xml.Groovy` 文件在 `pre-site` 阶段运行。`site.Groovy` 文件在站点生成期间执行。`site_xml.Groovy`
+    文件生成 `src/site` 目录，然后生成 `src/site/site.xml` 文件。这是 Maven 站点生成插件用于定义站点菜单左侧的文件。有关此过程的更多详细信息，请访问
+    [http://Maven.apache.org/guides/mini/guide-site.html](http://Maven.apache.org/guides/mini/guide-site.html)。'
 - en: The Groovy script then randomly decides, in the `if (random.nextInt(10) > 5)`
     line, when to show an extra menu item for the results page.
+  id: totrans-514
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后 Groovy 脚本在 `if (random.nextInt(10) > 5)` 行中随机决定何时显示额外的结果页面菜单项。
 - en: The `site.Groovy` file generates a random results page of 40 entries. If an
     older results page exists, the Groovy script deletes it. The script cheats a little
     by creating the `target/site directory` first. If you want a much longer or shorter
     page, modify the number `40` in the `for ( i in 1..40 ) {` line.
+  id: totrans-515
   prefs: []
   type: TYPE_NORMAL
+  zh: '`site.Groovy` 文件生成一个包含 40 个条目的随机结果页面。如果存在旧的结果页面，Groovy 脚本会将其删除。该脚本通过首先创建 `target/site
+    目录`来稍微作弊。如果你想要更长或更短的页面，请修改 `for ( i in 1..40 ) {` 行中的数字 `40`。'
 - en: After the build script is run, Jenkins checks that a site sits in the conventional
     place and adds an icon to the job.
+  id: totrans-516
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建脚本运行后，Jenkins 检查站点是否位于传统位置，并将图标添加到任务中。
 - en: Note
+  id: totrans-517
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: At the time of writing this book, only **Maven** project jobs sense the existence
     of generated sites and publish the site icon. free-style jobs do not.
+  id: totrans-518
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写本书时，只有**Maven**项目作业意识到生成的站点的存在并发布站点图标。自由样式作业不行。
 - en: There's more...
+  id: totrans-519
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here is some more useful information.
+  id: totrans-520
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些有用的信息。
 - en: Searching for example site generation configurations
+  id: totrans-521
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 搜索示例站点生成配置
 - en: Sometimes, there can be arbitrary XML magic in configuring site generation.
     One of the ways to learn quickly is to use a software code search engine. For
     example, try searching for the term `<reporting>` using the Black Duck code search
     engine ([http://code.ohloh.net/](http://code.ohloh.net/)).
+  id: totrans-522
   prefs: []
   type: TYPE_NORMAL
+  zh: 有时，在配置站点生成时可能会出现任意的 XML 魔法。学习的一种快速方法是使用软件代码搜索引擎。例如，尝试使用 Black Duck 代码搜索引擎（[http://code.ohloh.net/](http://code.ohloh.net/)）搜索术语
+    `<reporting>`。
 - en: Maven 2 and 3 pitfalls
+  id: totrans-523
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Maven 2 和 3 的陷阱
 - en: Maven 3 is mostly backwards-compatible with Maven 2\. However, it does have
     some differences that you can review at [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes).
     For the list of compatible plugins, visit [https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix).
+  id: totrans-524
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 3 在大多数情况下与 Maven 2 向后兼容。然而，它确实有一些你可以在[https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Compatibility+Notes)中审查的差异。关于兼容插件的列表，请访问[https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix](https://cwiki.apache.org/confluence/display/MAVEN/Maven+3.x+Plugin+Compatibility+Matrix)。
 - en: 'Under the bonnet, Maven 3 is a rewrite of Maven 2, with improved architecture
     and performance. Emphasis has been placed on compatibility with Maven 2\. You
     don''t want to break legacy configuration as that would cause unnecessary maintenance
@@ -2442,86 +3562,133 @@
     in the first edition of this book, the *Failing Jenkins jobs based on JSP syntax
     errors* recipe included a `pom.xml` file that had its `keytool-maven-plugin` float
     without a defined version:'
+  id: totrans-525
   prefs: []
   type: TYPE_NORMAL
+  zh: 在幕后，Maven 3 是 Maven 2 的重写，具有改进的架构和性能。强调兼容性与 Maven 2。你不想破坏传统配置，因为那会导致不必要的维护工作。Maven
+    3 对语法比 Maven 2 更挑剔。如果你忘记为任何依赖项或插件添加版本号，它会抱怨。例如，在本书的第一版中，基于 JSP 语法错误的 *失败的 Jenkins
+    作业* 配方包括一个没有定义版本的 `pom.xml` 文件中的 `keytool-maven-plugin` 浮动：
 - en: '[PRE48]'
+  id: totrans-526
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE48]'
 - en: When running with Maven 3, the recipe fails with the following output.
+  id: totrans-527
   prefs: []
   type: TYPE_NORMAL
+  zh: 当使用 Maven 3 运行时，该配方将失败，并显示以下输出。
 - en: '![Maven 2 and 3 pitfalls](img/0082OS_03_16.jpg)'
+  id: totrans-528
   prefs: []
   type: TYPE_IMG
+  zh: '![Maven 2 和 3 的陷阱](img/0082OS_03_16.jpg)'
 - en: 'The `genkey` goal no longer existed because Maven 3 was scanning using the
     newest version of the plugin, Version 1.5\. Reviewing the plugin''s website at
     [http://mojo.codehaus.org/keytool/keytool-maven-plugin/](http://mojo.codehaus.org/keytool/keytool-maven-plugin/),
     it was clear that we needed to update the version number and goal:'
+  id: totrans-529
   prefs: []
   type: TYPE_NORMAL
+  zh: '`genkey` 目标不再存在，因为 Maven 3 正在使用最新版本的插件进行扫描，即版本 1.5。在插件的网站[http://mojo.codehaus.org/keytool/keytool-maven-plugin/](http://mojo.codehaus.org/keytool/keytool-maven-plugin/)上查看，明显我们需要更新版本号和目标：'
 - en: '![Maven 2 and 3 pitfalls](img/0082OS_03_17.jpg)'
+  id: totrans-530
   prefs: []
   type: TYPE_IMG
+  zh: '![Maven 2 和 3 的陷阱](img/0082OS_03_17.jpg)'
 - en: 'The changes are reflected in the updated `pom.xml` file:'
+  id: totrans-531
   prefs: []
   type: TYPE_NORMAL
+  zh: 更改体现在更新的 `pom.xml` 文件中：
 - en: '[PRE49]'
+  id: totrans-532
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE49]'
 - en: Another pitfall is the use of the Maven site plugin in Maven 3 reflected in
     the way the `<reporting>` section is configured.
+  id: totrans-533
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个陷阱是 Maven 3 中 Maven 站点插件的使用反映在 `<reporting>` 部分配置的方式上。
 - en: An efficient method of upgrading site generation from Maven 2 is to start from
     a working archetype generated in Maven 3 and incrementally transfer and test the
     features from the Maven 2 project. Once you have a fully featured Maven 3 project,
     you can turn it into its own archetype later to act as a template for further
     projects.
+  id: totrans-534
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 Maven 2 升级站点生成的有效方法是从 Maven 3 生成的工作原型开始，并逐步将功能从 Maven 2 项目转移和测试。一旦你有了完整功能的
+    Maven 3 项目，你可以稍后将其转换为自己的原型，以充当进一步项目的模板。
 - en: Note
+  id: totrans-535
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You will find information on building your own archetypes at [http://maven.apache.org/guides/mini/guide-creating-archetypes.html](http://maven.apache.org/guides/mini/guide-creating-archetypes.html).
+  id: totrans-536
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在[http://maven.apache.org/guides/mini/guide-creating-archetypes.html](http://maven.apache.org/guides/mini/guide-creating-archetypes.html)找到关于构建自己原型的信息。
 - en: 'When upgrading from Maven 2 to 3, you will mostly find that JAR dependencies
     and versions are explicitly mentioned. Let''s take a look at the following example:'
+  id: totrans-537
   prefs: []
   type: TYPE_NORMAL
+  zh: 当从 Maven 2 升级到 3 时，你会发现大多数 JAR 依赖关系和版本都是明确指定的。让我们看一个以下示例：
 - en: '[PRE50]'
+  id: totrans-538
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE50]'
 - en: 'An upgrade is an ideal time to look to see if you can find newer versions with
     bugs and known security issues removed. The Maven repository search engine ([http://search.maven.org/](http://search.maven.org/))
     is a logical place to look for new versions. You can also consider browsing the
     repository at [http://search.maven.org/#browse](http://search.maven.org/#browse)
     for JUnit and click on the link:'
+  id: totrans-539
   prefs: []
   type: TYPE_NORMAL
+  zh: 升级是寻找是否可以找到新版本，其中已经修复了错误和已知安全问题的理想时机。Maven 仓库搜索引擎（[http://search.maven.org/](http://search.maven.org/)）是寻找新版本的合适地方。你还可以考虑浏览
+    [http://search.maven.org/#browse](http://search.maven.org/#browse) 上的仓库，然后点击 JUnit
+    的链接：
 - en: '![Maven 2 and 3 pitfalls](img/0082OS_03_18.jpg)'
+  id: totrans-540
   prefs: []
   type: TYPE_IMG
+  zh: '![Maven 2 和 3 的陷阱](img/0082OS_03_18.jpg)'
 - en: You can now see the different version numbers and dates uploaded. In the case
     of JUnit, I would upgrade to the latest version; if the build does not work because
     of API incompatibilities, then fall back to the last stable point version, Version
     3.8.2.
+  id: totrans-541
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在你可以看到不同的版本号和上传日期。在JUnit的情况下，我会升级到最新版本；如果由于API不兼容而导致构建失败，那么回退到最后一个稳定的点版本，即版本3.8.2。
 - en: See also
+  id: totrans-542
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Running Groovy scripts through Maven* recipe
+  id: totrans-543
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过 Maven 运行 Groovy 脚本* 配方'
 - en: The *Plotting alternative code metrics in Jenkins* recipe
+  id: totrans-544
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*在 Jenkins 中绘制备选代码指标* 配方'
 - en: The *Failing Jenkins jobs based on JSP syntax errors* recipe
+  id: totrans-545
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*基于JSP语法错误的 Jenkins 作业失败* 配方'

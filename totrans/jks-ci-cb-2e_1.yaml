@@ -1,70 +1,104 @@
 - en: Chapter 1. Maintaining Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第一章 维护 Jenkins
 - en: 'In this chapter, we will cover the following recipes:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: '在本章中，我们将涵盖以下步骤:'
 - en: Using a test Jenkins instance
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用测试 Jenkins 实例
 - en: Backing up and restoring
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 备份和恢复
 - en: Modifying the Jenkins configuration from the command line
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 从命令行修改 Jenkins 配置
 - en: Installing Nginx
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 Nginx
 - en: Configuring Nginx as a reverse proxy
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置 Nginx 作为反向代理
 - en: Reporting overall storage use
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 报告总体存储使用情况
 - en: Deliberately failing builds through log parsing
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过日志解析故意失败的构建
 - en: Adding a job to warn of storage use violations through log parsing
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过日志解析添加警告存储使用违规的作业
 - en: Keeping in contact with Jenkins through Firefox
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 Firefox 与 Jenkins 保持联系
 - en: Monitoring via JavaMelody
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 JavaMelody 进行监视
 - en: Keeping track of script glue
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 跟踪脚本粘合剂
 - en: Scripting the Jenkins command-line interface
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 编写 Jenkins 命令行界面脚本
 - en: Global modifications of jobs with Groovy
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Groovy 全局修改作业
 - en: Signaling the need to archive
+  id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 发出归档需求信号
 - en: Introduction
+  id: totrans-16
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍
 - en: 'Jenkins is feature-rich and is vastly extendable through plugins. Jenkins talks
     to numerous external systems and its jobs work with many diverse technologies.
     Maintaining Jenkins in a rich environment running 24 x 7 with uneven scheduling
@@ -76,17 +110,24 @@
     clean up storage, back up, keep control of your Jenkins scripts, and consistently
     clean and polish. This chapter has recipes for the most common tasks. Proper maintenance
     lowers the risk of failures such as:'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 'Jenkins 功能丰富，通过插件可以大大扩展。Jenkins 与许多外部系统进行通信，其作业与许多不同的技术合作。在一个运行 24 x 7 的丰富环境中维护
+    Jenkins 是一个挑战。你必须注意细节。添加新作业很容易，而且你不太可能很快删除旧项目。负载增加，密码过期，存储填满。此外，Jenkins 及其插件的改进速度很快。每周都会发布一个新的
+    Jenkins 小版本，主要是改进，偶尔会有 bug。在复杂环境中保持系统稳定，你需要监视、清理存储、备份、控制你的 Jenkins 脚本，并始终保持清洁和抛光。本章包含最常见任务的步骤。正确的维护可以降低失败的风险，例如:'
 - en: '**New plugins causing exceptions**: There are a lot of good plugins being written
     with rapid version changes. In this situation, it is easy for you to accidentally
     add new versions of plugins with new defects. There have been a number of occasions
     during upgrades when suddenly the plugin does not work. To combat the risk of
     plugin exceptions, consider using a test Jenkins instance before releasing to
     a critical system.'
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**新插件引发异常**: 有很多优秀的插件正在快速版本更改中编写。在这种情况下，你很容易意外添加带有新缺陷的插件新版本。在升级期间曾出现过插件突然不起作用的情况。为了防止插件异常的风险，在发布到关键系统之前考虑使用一个测试
+    Jenkins 实例。'
 - en: '**Storage over-flowing with artifacts**: If you keep a build history that includes
     artifacts such as war files, large sets of JAR files, or other types of binaries
     and source code, then your storage space is consumed at a surprising rate. Storage
@@ -94,383 +135,553 @@
     times and more communication from slave to master. To minimize the risk of disk
     overflowing, you will need to consider your backup and restore policy and the
     associated build retention policy expressed in the advanced options of jobs.'
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**存储溢出的问题**: 如果你保留了包括 war 文件、大量的 JAR 文件或其他类型的二进制文件和源代码在内的构建历史记录，那么你的存储空间会以惊人的速度被消耗掉。存储成本已经大幅降低，但存储使用量意味着更长的备份时间和更多从从节点到主节点的通信。为了最小化磁盘溢出的风险，你需要考虑你的备份和恢复策略，以及作业高级选项中表达的相关构建保留策略。'
 - en: '**Script spaghetti**: As jobs are written by various development teams, the
     location and style of the included scripts vary. This makes it difficult for you
     to keep track. Consider using well-defined locations for your scripts and a scripts
     repository managed through a plugin.'
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**脚本混乱**: 由于作业由各个开发团队编写，所包含脚本的位置和风格各异。这使得你很难跟踪。考虑使用明确定义的脚本位置和通过插件管理的脚本仓库。'
 - en: '**Resource depletion**: As memory is consumed or the number of intense jobs
     increases, then Jenkins slows down. Proper monitoring and quick reactions reduce
     impact.'
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**资源耗尽**: 随着内存消耗或强烈作业数量增加，Jenkins 会变慢。正确的监控和快速反应会减少影响。'
 - en: '**A general lack of consistency between jobs due to organic growth**: Jenkins
     is easy to install and use. The ability to seamlessly turn on plugins is addictive.
     The pace of adoption of Jenkins within an organization can be breathtaking. Without
     a consistent policy, your teams will introduce lots of plugins and also lots of
     ways of performing the same work. Conventions improve consistency and readability
     of jobs and thus decrease maintenance.'
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**由于有机增长而导致工作之间普遍缺乏一致性**：Jenkins 安装和使用都很简单。无缝开启插件的能力令人上瘾。Jenkins 在组织内的采用速度可能令人叹为观止。没有一致的政策，你的团队将引入大量插件，并且也会有很多执行相同工作方式的方式。规范提高了工作的一致性和可读性，从而减少了维护工作。'
 - en: Note
+  id: totrans-23
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The recipes in this chapter are designed to address the risks mentioned. They
     represent only one set of approaches. If you have comments or improvements, feel
     free to contact me at `<[bergsmooth@gmail.com](mailto:bergsmooth@gmail.com)>`
     or better still add tutorials to the Jenkins community wiki.
+  id: totrans-24
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 本章中的示例旨在解决提到的风险。它们只代表一套方法。如果您有意见或改进意见，请随时通过 `<[bergsmooth@gmail.com](mailto:bergsmooth@gmail.com)>`
+    联系我，或者最好是向 Jenkins 社区维基添加教程。
 - en: The Jenkins community is working hard on your behalf. There are weekly minor
     releases of Jenkins and many of the plugins are incrementally improved occasionally
     because of the velocity of change, bugs are introduced. If you see an issue, please
     report it back.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 社区正在为您努力工作。Jenkins 每周都有小版本发布，并且许多插件偶尔都会有增量改进，因为变化的速度，会引入错误。如果您发现问题，请报告。
 - en: Tip
+  id: totrans-26
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Signing up to the community**'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: '**加入社区**'
 - en: To add community bug reports or modify wiki pages, you will need to create an
     account at [https://wiki.jenkins-ci.org/display/JENKINS/Issue+Tracking](https://wiki.jenkins-ci.org/display/JENKINS/Issue+Tracking).
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 要添加社区错误报告或修改维基页面，您需要在 [https://wiki.jenkins-ci.org/display/JENKINS/Issue+Tracking](https://wiki.jenkins-ci.org/display/JENKINS/Issue+Tracking)
+    创建一个帐户。
 - en: Using a test Jenkins instance
+  id: totrans-29
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用测试 Jenkins 实例
 - en: '**Continuous Integration** (**CI**) servers are critical in the creation of
     deterministic release cycles. Any long-term instability in the CI will reflect
     in a slowing down of the rate at which milestones are reached in your project
     plans. Incremental upgrading is addictive and mostly straightforward, but should
     be seen in the light of a Jenkins critical role—a software project''s life cycle.'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: '**持续集成**（**CI**）服务器在创建确定性发布周期方面至关重要。如果 CI 存在长期不稳定性，那么在项目计划中达到里程碑的速度将会减慢。增量升级令人上瘾并且大多数情况下很简单，但应该以
+    Jenkins 的关键角色——软件项目的生命周期为依据来看待。'
 - en: Before releasing plugins to your Jenkins production server, it is worth aggressively
     deploying to a test Jenkins instance and then sitting back and letting the system
     run jobs. This gives you enough time to react to any minor defects found.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 在将插件发布到您的 Jenkins 生产服务器之前，值得积极部署到一个测试 Jenkins 实例，然后坐下来让系统运行作业。这样可以给你足够的时间来对发现的任何轻微缺陷做出反应。
 - en: 'There are many ways to set up a test instance. One is to use a virtual image
     of Ubuntu and share the workspace with the *host* server (the server that the
     virtual machine runs on). There are a number of advantages to this approach:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置测试实例的方法有很多种。其中一种是使用 Ubuntu 的虚拟图像，并与 *主机* 服务器（虚拟机运行的服务器）共享工作区。这种方法有很多优点：
 - en: '**Saving state**: At any moment, you can save the state of the running virtual
     image and return to that running state later. This is excellent for short-term
     experiments that have a high risk of failure.'
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**保存状态**：您可以随时保存运行中虚拟图像的状态，并在以后返回到该运行状态。这对于有高风险失败的短期实验非常有用。'
 - en: '**Ability to share images**: You can run your virtual image anywhere that a
     player can run. This may include your home desktop or a hardcore server.'
+  id: totrans-34
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**共享图像的能力**：您可以在任何可以运行播放器的地方运行虚拟图像。这可能包括您的家庭桌面或一个高级服务器。'
 - en: '**Use a number of different operating systems**: This is good for node machines
     running integration tests or functional tests with multiple browser types.'
+  id: totrans-35
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**使用多种不同操作系统**：这对运行具有多种浏览器类型的集成测试或功能测试的节点机器非常有用。'
 - en: '**Swap workspaces**: By having the workspace outside the virtual image on the
     host of the virtual server, you can test different version levels of OSes against
     one workspace. You can also test one version of Jenkins against different host
     workspaces with different plugin combinations.'
+  id: totrans-36
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**交换工作区**：通过将工作区放在虚拟服务器主机外部，您可以测试不同版本级别的操作系统与一个工作区。您还可以测试 Jenkins 的一个版本与具有不同插件组合的不同主机工作区。'
 - en: Tip
+  id: totrans-37
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**The long-term support release**'
+  id: totrans-38
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '**长期支持版本**'
 - en: The community manages core stability via the use of a long-term support release
     of Jenkins, which is mature and less feature rich when compared to the latest
     version. However, it is considered the most stable platform to upgrade ([http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war](http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war)).
+  id: totrans-39
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 社区通过使用长期支持版本的 Jenkins 来管理核心稳定性，这个版本相对于最新版本来说更加成熟，功能较少。然而，它被认为是升级最稳定的平台（[http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war](http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war)）。
 - en: The test instance is normally of lower specification than the acceptance and
     production systems. By starving a test instance, you can expose certain types
     of issues such as memory leaks early. As you move your configuration to production,
     you want to scale up capacity, which might involve moving from virtual to hardware.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试实例通常比接受和生产系统的规格低。通过让测试实例处于饥饿状态，你可以及早暴露出某些类型的问题，比如内存泄漏。随着你将配置移到生产环境，你希望扩大容量，这可能涉及从虚拟机移动到硬件。
 - en: This recipe details the use of VirtualBox ([http://www.virtualbox.org/](http://www.virtualbox.org/)),
     an open source virtual image player with a Ubuntu image ([http://www.ubuntu.com/](http://www.ubuntu.com/)).
     The virtual image will mount a directory on the host server. You will then point
     Jenkins to the mounted directory. When the guest OS is restarted, then Jenkins
     will automatically run against the shared directory.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个教程详细介绍了如何使用 VirtualBox（[http://www.virtualbox.org/](http://www.virtualbox.org/)），这是一个开源的虚拟图像播放器，带有一个
+    Ubuntu 镜像（[http://www.ubuntu.com/](http://www.ubuntu.com/)）。虚拟图像将挂载主机服务器上的一个目录。然后你将
+    Jenkins 指向挂载的目录。当客户端操作系统重新启动时，Jenkins 将自动运行并对共享目录进行操作。
 - en: Note
+  id: totrans-42
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Throughout this book, recipes will be cited using Ubuntu as the example OS.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 在整本书中，将使用 Ubuntu 作为示例操作系统引用各个案例。
 - en: Getting ready
+  id: totrans-44
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: You will need to download and install VirtualBox. You can find detailed instructions
     to download a recent version of VirtualBox at [https://www.virtualbox.org/manual/UserManual.html](https://www.virtualbox.org/manual/UserManual.html).
     At the time of writing this book, Ubuntu 11.04 was the latest version available
     from the VirtualBox image SourceForge site. Unpack an Ubuntu 11.04 virtual image
     from [http://sourceforge.net/projects/virtualboximage/files/Ubuntu%20Linux/11.04/ubuntu_11.04-x86.7z/download](http://sourceforge.net/projects/virtualboximage/files/Ubuntu%20Linux/11.04/ubuntu_11.04-x86.7z/download).
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 你需要下载并安装 VirtualBox。你可以在[https://www.virtualbox.org/manual/UserManual.html](https://www.virtualbox.org/manual/UserManual.html)找到下载最新版本
+    VirtualBox 的详细说明。在撰写本书时，从 VirtualBox 镜像 SourceForge 网站下载的最新版本是 Ubuntu 11.04。解压缩
+    Ubuntu 11.04 虚拟图像文件从[http://sourceforge.net/projects/virtualboximage/files/Ubuntu%20Linux/11.04/ubuntu_11.04-x86.7z/download](http://sourceforge.net/projects/virtualboximage/files/Ubuntu%20Linux/11.04/ubuntu_11.04-x86.7z/download)。
 - en: If you run into problems, then the manual is a good starting point; in particular,
     refer to *Chapter 12*, *Troubleshooting*, at [http://www.virtualbox.org/manual/ch12.html](http://www.virtualbox.org/manual/ch12.html).
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果遇到问题，手册是一个很好的起点；特别是，请参考*第12章*，*故障排除*，网址为[http://www.virtualbox.org/manual/ch12.html](http://www.virtualbox.org/manual/ch12.html)。
 - en: Note that newer images will be available at the time of reading. Feel free to
     try the most modern version; it is probable that the recipe still works with this.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，在阅读时可能会有更新的图像可用。随时尝试最新版本；很可能这个教程仍然适用。
 - en: You will find an up-to-date series of Ubuntu virtual images at [http://virtualboxes.org/images/ubuntu-server/](http://virtualboxes.org/images/ubuntu-server/).
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 你会在[http://virtualboxes.org/images/ubuntu-server/](http://virtualboxes.org/images/ubuntu-server/)找到一系列最新的
+    Ubuntu 虚拟图像。
 - en: Tip
+  id: totrans-49
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Security Considerations**'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: '**安全注意事项**'
 - en: If you consider using other's OS images, which is a bad security practice, then
     you should create a Ubuntu image from a boot CD as mentioned at [https://wiki.ubuntu.com/Testing/VirtualBox](https://wiki.ubuntu.com/Testing/VirtualBox).
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你考虑使用他人的操作系统镜像，这是一个不良的安全实践，那么你应该按照[https://wiki.ubuntu.com/Testing/VirtualBox](https://wiki.ubuntu.com/Testing/VirtualBox)中提到的方法从引导光盘创建一个
+    Ubuntu 镜像。
 - en: How to do it...
+  id: totrans-52
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Run VirtualBox and click on the **New** icon in the top left-hand corner. You
     will now see a wizard for installing virtual images.
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 VirtualBox 并点击左上角的**新建**图标。现在你会看到一个用于安装虚拟图像的向导。
 - en: Set **Name** to `Jenkins_Ubuntu_11.04`. The OS type will be automatically updated.
     Click on the **Next** button.
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将**名称**设置为`Jenkins_Ubuntu_11.04`。操作系统类型将自动更新。点击**下一步**按钮。
 - en: Set **Memory** to **2048 MB** and then click on **Next**.
+  id: totrans-55
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将**内存**设置为**2048 MB**，然后点击**下一步**。
 - en: Note that the host machine requires 1 GB more RAM than the total allocated to
     its guest images. In this example, your host machine requires 3 GB of RAM. For
     more details, visit [http://www.oracle.com/us/technologies/virtualization/oraclevm/oracle-vm-virtualbox-ds-1655169.pdf](http://www.oracle.com/us/technologies/virtualization/oraclevm/oracle-vm-virtualbox-ds-1655169.pdf).
+  id: totrans-56
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 请注意，主机机器需要比其分配给客户镜像的总内存多1GB RAM。在本例中，你的主机机器需要3GB RAM。欲了解更多详情，请访问[http://www.oracle.com/us/technologies/virtualization/oraclevm/oracle-vm-virtualbox-ds-1655169.pdf](http://www.oracle.com/us/technologies/virtualization/oraclevm/oracle-vm-virtualbox-ds-1655169.pdf)。
 - en: Select **Use existing hard disk**. Browse and select the unpacked VDI image
     by clicking on the folder icon:![How to do it...](img/0082OS_01_01.jpg)
+  id: totrans-57
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**使用现有硬盘**。单击文件夹图标浏览并选择未打包的VDI镜像：![如何做...](img/0082OS_01_01.jpg)
 - en: Press the **Create** button.
+  id: totrans-58
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下**创建**按钮。
 - en: Start the virtual image by clicking on the **Start** icon:![How to do it...](img/0082OS_01_02.jpg)
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**启动**图标启动虚拟镜像：![如何做...](img/0082OS_01_02.jpg)
 - en: Log in to the guest OS with username and password as `Ubuntu reverse`.
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用用户名和密码`Ubuntu reverse`登录客户操作系统。
 - en: 'Change the password of user Ubuntu from a terminal as follows:'
+  id: totrans-61
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端更改Ubuntu用户的密码如下：
 - en: '[PRE0]'
+  id: totrans-62
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Install the Jenkins repository as explained at [http://pkg.jenkins-ci.org/debian/](http://pkg.jenkins-ci.org/debian/).
+  id: totrans-63
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按照[http://pkg.jenkins-ci.org/debian/](http://pkg.jenkins-ci.org/debian/)中的说明安装Jenkins存储库。
 - en: 'Update the OS with regard to security patches (this may take some time depending
     on bandwidth):'
+  id: totrans-64
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据安全补丁更新操作系统（这可能需要一些时间取决于带宽）：
 - en: '[PRE1]'
+  id: totrans-65
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Install the kernel''s `dkms` module :'
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装内核的`dkms`模块：
 - en: '[PRE2]'
+  id: totrans-67
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: Note that the `dkms` module supports installing other kernel modules such as
     the modules needed by VirtualBox. For more details, visit [https://help.ubuntu.com/community/DKMS](https://help.ubuntu.com/community/DKMS).
+  id: totrans-68
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 注意，`dkms`模块支持安装其他内核模块，例如VirtualBox所需的模块。欲了解更多详情，请访问[https://help.ubuntu.com/community/DKMS](https://help.ubuntu.com/community/DKMS)。
 - en: 'Install Jenkins:'
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装Jenkins：
 - en: '[PRE3]'
+  id: totrans-70
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Install the kernel modules for VirtualBox:'
+  id: totrans-71
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装VirtualBox的内核模块：
 - en: '[PRE4]'
+  id: totrans-72
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Install guest additions using the **Devices** menu option in the VirtualBox
     window:![How to do it...](img/0082OS_01_03.jpg)
+  id: totrans-73
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用VirtualBox窗口中的**设备**菜单选项安装客户附件：![如何做...](img/0082OS_01_03.jpg)
 - en: 'Add the `jenkins` user to the `vboxsf` group, as follows:'
+  id: totrans-74
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将`jenkins`用户添加到`vboxsf`组，如下所示：
 - en: '[PRE5]'
+  id: totrans-75
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'Modify the `JENKINS_HOME` variable in `/etc/default/jenkins` to point to the
     mounted shared directory:'
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改`/etc/default/jenkins`中的`JENKINS_HOME`变量，以指向挂载的共享目录：
 - en: '[PRE6]'
+  id: totrans-77
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: On the host OS, create the directory named `workspacej`.
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在主机操作系统上创建名为`workspacej`的目录。
 - en: Within VirtualBox, right-click on the Ubuntu image and select **Settings**.
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在VirtualBox中，右键单击Ubuntu镜像并选择**设置**。
 - en: Update the **Folder Path** field to point to the directory that you previously
     created. In the following screenshot, you can see that the folder was created
     under my `home` directory:![How to do it...](img/0082OS_01_04.jpg)
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将**文件夹路径**字段更新为指向您之前创建的目录。在下面的截屏中，你可以看到该文件夹是在我的`home`目录下创建的：![如何做...](img/0082OS_01_04.jpg)
 - en: Restart VirtualBox and then start the Ubuntu guest OS.
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重新启动VirtualBox，然后启动Ubuntu客户操作系统。
 - en: On the guest OS, run Firefox and browse to `http://localhost:8080`. You will
     see a locally running instance of Jenkins ready for your experiments.
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在客户操作系统上运行Firefox并浏览`http://localhost:8080`。你将看到一个本地运行的Jenkins实例，准备用于实验。
 - en: How it works...
+  id: totrans-83
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: First, you installed a virtual image of Ubuntu, changed the password so that
     it is harder for others to log in, and updated the guest OS for security patches.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，你安装了一个Ubuntu的虚拟镜像，更改了密码，使其他人更难登录，并更新了客户操作系统的安全补丁。
 - en: The Jenkins repository was added to the list of known repositories in the guest
     OS. This involved installing a repository key locally. The key is used to verify
     that the packages automatically downloaded belong to a repository that you have
     agreed to trust. Once the trust is enabled, you can install the most current version
     of Jenkins via standard package management and later update it aggressively.
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins存储库已添加到客户操作系统中已知存储库的列表。这涉及在本地安装存储库密钥。该密钥用于验证自动下载的软件包属于您同意信任的存储库。一旦信任启用，您可以通过标准软件包管理安装最新版本的Jenkins，并随后积极更新。
 - en: You need to install some additional code called guest additions so that VirtualBox
     can share folders from the host. Guest additions depend on **Dynamic Kernel Module
     Support** (**DKMS**). DKMS allows bits of code to be dynamically added to the
     kernel. When you ran the `/etc/init.d/vboxadd setup` command, VirtualBox added
     guest addition modules through DKMS.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要安装一些额外的代码，称为客户端附加组件，以便VirtualBox可以从主机共享文件夹。客户端附加组件依赖于**动态内核模块支持**（**DKMS**）。DKMS允许将代码的部分动态添加到内核中。当您运行`/etc/init.d/vboxadd
+    setup`命令时，VirtualBox通过DKMS添加了客户端附加组件模块。
 - en: Note
+  id: totrans-87
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: '**Warning**: If you forget to add the DKMS module, then sharing folders will
     fail without any errors being shown.'
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: '**警告**：如果您忘记添加DKMS模块，则共享文件夹将在没有显示任何错误的情况下失败。'
 - en: 'The default Jenkins instance now needs a little reconfiguration:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认的Jenkins实例现在需要进行一些重新配置：
 - en: The `jenkins` user needs to belong to the `vboxsf` group to have permission
     to use the shared folder
+  id: totrans-90
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`jenkins`用户需要属于`vboxsf`组，以便具有使用共享文件夹的权限'
 - en: The `/etc/init.d/jenkins startup` script points to `/etc/default/jenkins` and
     thereby picks up the values of specific properties such as `JENKINS_HOME`
+  id: totrans-91
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`/etc/init.d/jenkins启动`脚本指向`/etc/default/jenkins`，从而获取特定属性的值，如`JENKINS_HOME`'
 - en: Next you added a shared folder to the guest OS from the VirtualBox GUI, and
     finally you restarted VirtualBox and the guest OS to guarantee that the system
     was in a fully configured and correctly initialized state.
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，您可以通过VirtualBox GUI向宿主操作系统添加共享文件夹，最后重新启动VirtualBox和宿主操作系统，以确保系统处于完全配置和正确初始化的状态。
 - en: There are a number of options for configuring VirtualBox with networking. You
     can find a good introduction at [http://www.virtualbox.org/manual/ch06.html](http://www.virtualbox.org/manual/ch06.html).
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置VirtualBox网络有许多选项。您可以在[http://www.virtualbox.org/manual/ch06.html](http://www.virtualbox.org/manual/ch06.html)找到一个很好的介绍。
 - en: See also
+  id: totrans-94
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 参见
 - en: The *Monitoring via JavaMelody* recipe
+  id: totrans-95
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*通过JavaMelody进行监控*的方法'
 - en: Two excellent sources of virtual images at [http://virtualboximages.com/](http://virtualboximages.com/)
     and [http://virtualboxes.org/images/](http://virtualboxes.org/images/)
+  id: totrans-96
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在[http://virtualboximages.com/](http://virtualboximages.com/)和[http://virtualboxes.org/images/](http://virtualboxes.org/images/)有两个优秀的虚拟镜像来源
 - en: Backing up and restoring
+  id: totrans-97
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 备份和恢复
 - en: A core task for the smooth running of Jenkins is the scheduled backing up of
     its home directory (within Ubuntu `/var/lib/jenkins`), not necessarily all the
     artifacts, but at the least its configuration and the history of testing that
     plugins need to make reports.
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于Jenkins的顺利运行来说，一个核心任务是定期备份其主目录（在Ubuntu中为`/var/lib/jenkins`），不一定是所有的工件，但至少是其配置以及插件需要生成报告的测试历史记录。
 - en: Backups are not interesting unless you can restore. There is a wide range of
     stories on this subject. My favorite (and I won't name the well-known company
     involved) is that somewhere in the early 70s, a company brought a very expensive
@@ -484,329 +695,482 @@
     to regularly test the restore process. The process failed, not the poorly paid
     person. Hence, learning the lessons of history, this recipe describes both backup
     and restore.
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 备份没有意义，除非您可以还原。关于此主题有很多故事。我最喜欢的（我不会提及涉及的著名公司）是在70年代初期的某个地方，一家公司购买了一台非常昂贵的软件和磁带备份设备，以备份通过他们的主机收集的所有营销结果。然而，并非所有事情都是自动化的。每晚都需要将一盘磁带移入特定插槽。一个工人被分配了这项任务。一年来，工人专业地完成了这项任务。有一天发生了故障，需要备份。备份无法还原。原因是工人每晚还需要按下录制按钮，但这不是分配给他的任务的一部分。没有定期测试还原过程。失败的是过程，而不是薪水微薄的人。因此，吸取历史教训，本配方描述了备份和还原。
 - en: Currently, there is more than one plugin for backups. I have chosen the thinBackup
     plugin ([https://wiki.jenkins-ci.org/display/JENKINS/thinBackup](https://wiki.jenkins-ci.org/display/JENKINS/thinBackup))
     as it allows scheduling.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前，备份有多个插件可用。我选择了thinBackup插件（[https://wiki.jenkins-ci.org/display/JENKINS/thinBackup](https://wiki.jenkins-ci.org/display/JENKINS/thinBackup)），因为它允许调度。
 - en: Tip
+  id: totrans-101
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**The rapid evolution of plugins and the validity of recipes**'
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: '**插件的快速演进和配方的有效性**'
 - en: Plugins improve aggressively and you may need to update them weekly. However,
     it is unlikely that the core configuration changes, but quite likely that extra
     options will be added, increasing the variables that you input in the GUI. Therefore,
     the screenshots shown in this book may be slightly different from the most modern
     version, but the recipes should remain intact.
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件更新频繁，可能每周都需要更新。然而，核心配置改变的可能性不大，但增加额外选项的可能性很大，这会增加你在 GUI 中输入的变量。因此，本书中显示的截图可能与最新版本略有不同，但配方应该保持不变。
 - en: Getting ready
+  id: totrans-104
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create a directory with read and write permissions for Jenkins and install the
     thinBackup plugin.
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 为 Jenkins 创建一个具有读写权限的目录并安装 thinBackup 插件。
 - en: Tip
+  id: totrans-106
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 小贴士
 - en: '**Murphy as a friend**'
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: '**把墨菲当朋友**'
 - en: 'You should assume the worst for all of the recipes in this book: aliens attacking,
     coffee on motherboard, cat eats cable, cable eats cat, and so on. Make sure that
     you are using a test Jenkins instance.'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该假设本书中的所有配方情况最糟糕：外星人攻击、咖啡泼在主板上、猫吃电缆、电缆吃猫等等。确保你正在使用一个测试 Jenkins 实例。
 - en: How to do it...
+  id: totrans-109
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作步骤...
 - en: Click on the **ThinBackup** link in the **Manage Jenkins** page:![How to do
     it...](img/0082OS_01_32.jpg)
+  id: totrans-110
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**管理 Jenkins**页面点击**ThinBackup**链接：![操作步骤...](img/0082OS_01_32.jpg)
 - en: Click on the link to **Settings** by the **Toolset** icon.
+  id: totrans-111
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**工具集**图标旁边的**设置**链接。
 - en: Add the details as shown in the following screenshot where `/data/jenkins/backups`
     is a placeholder for the directory you have previously created. Notice the warning
     about using the `H` syntax; this will be explained later.![How to do it...](img/0082OS_01_05.jpg)
+  id: totrans-112
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按照以下截图中显示的细节添加，其中`/data/jenkins/backups`是你之前创建的目录的占位符。注意关于使用`H`语法的警告；这将在稍后解释。![操作步骤...](img/0082OS_01_05.jpg)
 - en: Click on **Save**.
+  id: totrans-113
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Then, click on the **Backup now** icon.
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 然后，点击**立即备份**图标。
 - en: From the command line, visit your backup directory. You should now see an extra
     subdirectory named `FULL-{timestamp}` where `{timestamp}` is the time in seconds
     needed to create a full backup.
+  id: totrans-115
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行访问你的备份目录。现在你应该看到一个名为`FULL-{timestamp}`的额外子目录，其中`{timestamp}`是创建完整备份所需的秒数。
 - en: Click on the **Restore** icon.
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**还原**图标。
 - en: A drop-down menu named **restore backup from** will be shown with the dates
     of the backups. Select the backup just created and click on the **Restore** button:![How
     to do it...](img/0082OS_01_06.jpg)
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将显示一个名为**从备份还原**的下拉菜单，其中显示了备份的日期。选择刚刚创建的备份，然后点击**还原**按钮：![操作步骤...](img/0082OS_01_06.jpg)
 - en: To guarantee consistency, restart the Jenkins server.
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为了保证一致性，重新启动 Jenkins 服务器。
 - en: How it works...
+  id: totrans-119
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The backup scheduler uses cron notation ([http://en.wikipedia.org/wiki/Cron](http://en.wikipedia.org/wiki/Cron)).
     `1 0 * * 7` means every seventh day of the week at 00:01 A.M. `1 1 * * *` implies
     that differential backups occur once per day at 1.01 A.M. Every seventh day, the
     previous differentials are deleted.
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 备份调度程序使用 cron 表示法（[http://en.wikipedia.org/wiki/Cron](http://en.wikipedia.org/wiki/Cron)）。`1
+    0 * * 7`表示每周的第七天在凌晨 00:01。`1 1 * * *`意味着差异备份每天只发生一次，在凌晨 1:01。每隔七天，前一次的差异备份将被删除。
 - en: Remember the warning when configuring? Replacing the time symbols with `H` allows
     Jenkins to choose when to run the thinBackup plugin. `H H * * *` will trigger
     a job at a random time in the day, which spreads the load.
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 还记得配置时的警告吗？将时间符号替换为`H`允许 Jenkins 选择何时运行 thinBackup 插件。`H H * * *`将在一天中的随机时间触发作业，从而分散负载。
 - en: Waiting until Jenkins/Hudson is idle to perform a backup is a safety method
     and helps Jenkins to spread the load. It is recommended that this option is enabled;
     otherwise there is a risk of corruption of the backups due to builds locking files.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 等待 Jenkins/Hudson 空闲以执行备份是一种安全方法，并帮助 Jenkins 分散负载。建议启用此选项；否则，由于构建锁定文件，备份可能会损坏。
 - en: Force Jenkins to quiet mode after specified minutes ensures that no jobs are
     running while backing up. This option forces quiet mode after waiting for Jenkins
     to be quiet for a specific amount of time. This avoids problems with backups waiting
     on Jenkins naturally reaching a quiet moment.
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 在指定的分钟数后强制 Jenkins 进入安静模式，确保在备份时没有作业在运行。此选项在等待 Jenkins 在特定时间内保持安静后强制进入安静模式。这可以避免备份等待
+    Jenkins 自然达到安静时刻时出现问题。
 - en: Differential backups contain only files that have been modified since the last
     full backup. The plugin looks at the last modified date to work out which files
     need to be backed up. The process can sometimes go wrong if another process changes
     the last modified date without actually changing the content of the files.
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 差异备份仅包含自上次完整备份以来已修改的文件。插件查看最后修改日期以确定需要备份的文件。如果另一个进程更改了最后修改日期但实际上没有更改文件内容，该过程有时可能会出错。
 - en: '**61** is the number of directories created with backups. As we are cleaning
     up the differentials via the **Clean up differential backups** option, we will
     get to around 54 full backups, roughly a year of archives before cleaning up the
     oldest.'
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: '**61** 是使用备份创建的目录数。由于我们通过 **清理差异备份** 选项清理差异，因此在清理最旧的备份之前，我们将达到大约 54 个完整备份，大约一年的存档。'
 - en: Backup build results were selected as we assume that we are doing the cleaning
     within the job. There will not be much extra added to the full archive. However,
     in case of misconfiguration, you should monitor the archive for storage usage.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们选择了备份构建结果，因为我们假设我们是在作业内进行清理。完整存档中不会有太多额外的内容添加。但是，如果配置错误，你应该监视存档的存储使用情况。
 - en: Cleaning up differential backups saves you doing the clean-up work by hand.
     Moving old backups to ZIP files saves space, but might temporarily slow down your
     Jenkins server.
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 清理差异备份可以避免手动进行清理工作。将旧备份移到 ZIP 文件中可以节省空间，但可能会暂时减慢 Jenkins 服务器的速度。
 - en: Note
+  id: totrans-128
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For safety's sake, regularly copy the archives off your system.
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了安全起见，定期将存档复制到系统之外。
 - en: The backup options called **Backup build archive**, **Backup 'userContent' folder**,
     and **Backup next build number file**, increase the amount of content and system
     state backed up.
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 名为**备份构建存档**、**备份 'userContent' 文件夹**和**备份下一个构建编号文件**的备份选项会增加备份的内容和系统状态。
 - en: Restoring is a question of returning to the restore menu and choosing the date.
     Extra options include restoring the build number file and plugins (downloaded
     from an external server to decrease backup size).
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 恢复是返回到恢复菜单并选择日期的问题。额外选项包括恢复构建编号文件和插件（从外部服务器下载以减小备份大小）。
 - en: Note
+  id: totrans-132
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: I cannot repeat this enough; you should practice a restore occasionally to avoid
     embarrassment.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 我再次强调，你应该定期进行恢复操作，以避免尴尬。
 - en: Full backups are the safest as they restore to a known state. Therefore, don't
     generate too many differential backups between full backups.
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 全面备份是最安全的，因为它们会恢复到一个已知的状态。因此，在完整备份之间不要生成太多差异备份。
 - en: There's more...
+  id: totrans-135
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 这还没完呢…
 - en: Here are a couple more points for you to think about.
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 还有几点给你思考。
 - en: Checking for permission errors
+  id: totrans-137
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 检查权限错误
 - en: 'If there are permission issues, the plugin fails silently. To discover these
     types of issues, you will need to check the Jenkins logfile, `/var/log/jenkins/jenkins.log
     for *NIX distributions`, for the log level `SEVERE`:'
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果有权限问题，插件将悄无声息地失败。要发现这些问题，你需要检查 Jenkins 的日志文件，`/var/log/jenkins/jenkins.log（适用于
+    *NIX 发行版）`，查看日志级别为 `SEVERE` 的日志：
 - en: '[PRE7]'
+  id: totrans-139
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: Testing exclude patterns
+  id: totrans-140
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 测试排除模式
 - en: 'The following Perl script will allow you to test the exclude pattern. Simply
     replace the `$content` value with your Jenkins workspace location and `$exclude_pattern`
     with the pattern you wish to test. The following script will print a list of the
     excluded files:'
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的 Perl 脚本将允许你测试排除模式。只需将 `$content` 值替换为你的 Jenkins 工作区位置，将 `$exclude_pattern`
+    替换为你要测试的模式。以下脚本将打印排除的文件列表：
 - en: '[PRE8]'
+  id: totrans-142
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: Tip
+  id: totrans-143
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 小贴士
 - en: '**Downloading the example code**'
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: '**下载示例代码**'
 - en: You can download the example code files from your account at [http://www.packtpub.com](http://www.packtpub.com)
     for all the Packt Publishing books you have purchased. If you purchased this book
     elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
     and register to have the files e-mailed directly to you.
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以从你在[http://www.packtpub.com](http://www.packtpub.com)的帐户中下载所有你购买的 Packt Publishing
+    书籍的示例代码文件。如果你在其他地方购买了这本书，你可以访问[http://www.packtpub.com/support](http://www.packtpub.com/support)注册，以便直接通过电子邮件接收文件。
 - en: You can find the documentation for the standard Perl module `File::Find` at
     [http://perldoc.perl.org/File/Find.html](http://perldoc.perl.org/File/Find.html).
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在[http://perldoc.perl.org/File/Find.html](http://perldoc.perl.org/File/Find.html)找到标准
+    Perl 模块 `File::Find` 的文档。
 - en: For every file and directory under the location mentioned in `$content`, the
     `find(\&excluded_file_summary,$content);` line calls the `excluded_file_summary`
     function.
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于 `$content` 提及的每个文件和目录，`find(\&excluded_file_summary,$content);` 行调用 `excluded_file_summary`
+    函数。
 - en: The exclude pattern `'^.*\.(war)|(class)|(jar)$` ignores all WAR, class, and
     JAR files.
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 排除模式`'^.*\.(war)|(class)|(jar)$`忽略所有的 WAR、class 和 JAR 文件。
 - en: Tip
+  id: totrans-149
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**EPIC Perl**'
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: '**EPIC Perl**'
 - en: If you are a Java developer who occasionally writes Perl scripts, then consider
     using the EPIC plugin for Eclipse ([http://www.epic-ide.org/](http://www.epic-ide.org/)).
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你是一名偶尔编写 Perl 脚本的 Java 开发人员，请考虑在 Eclipse 中使用 EPIC 插件（[http://www.epic-ide.org/](http://www.epic-ide.org/)）。
 - en: See also
+  id: totrans-152
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Reporting overall storage use* recipe
+  id: totrans-153
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*报告整体存储使用*示例'
 - en: The *Adding a job to warn of storage use violations through log parsing* recipe
+  id: totrans-154
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*添加一个通过日志解析警告存储使用违规的作业*示例'
 - en: Modifying the Jenkins configuration from the command line
+  id: totrans-155
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从命令行修改 Jenkins 配置
 - en: You may well be wondering about the XML files at the top level of the Jenkins
     workspace. These are configuration files. The `config.xml` file is the main one
     that deals with the default server values, but there are also specific ones for
     any plugins that have values set through the GUI.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可能会想知道 Jenkins 工作空间顶层的 XML 文件。这些是配置文件。`config.xml` 文件是处理默认服务器值的主要文件，但也有特定的文件用于通过
+    GUI 设置任何插件的值。
 - en: 'There is also a `jobs` subdirectory underneath the workspace. Each individual
     job configuration is contained in a subdirectory with the same name as the job.
     The job-specific configuration is then stored in `config.xml` within the subdirectory.
     It''s a similar situation for the `users` directory: one subdirectory per user
     with the personal information stored in `config.xml`.'
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 工作空间下还有一个`jobs`子目录。每个单独的作业配置都包含在与作业同名的子目录中。然后，作业特定的配置存储在子目录中的`config.xml`中。对于`users`目录也是类似的情况：每个用户一个子目录，其中个人信息存储在`config.xml`中。
 - en: 'Under a controlled situation where all the Jenkins servers in your infrastructure
     have the same plugins and version levels, it is possible for you to test on one
     test machine and then push the configuration files to all the other machines.
     You can then restart the Jenkins servers with the **command-line interface** (**CLI**)
     or scripts under `/etc/init.d`, as follows:'
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 在所有基础设施中的 Jenkins 服务器具有相同的插件和版本级别的受控情况下，您可以在一个测试机器上进行测试，然后将配置文件推送到所有其他机器上。然后，你可以使用**命令行界面**（**CLI**）或`/etc/init.d`下的脚本重启
+    Jenkins 服务器，如下所示：
 - en: '[PRE9]'
+  id: totrans-159
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: This recipe familiarizes you with the main XML configuration structure and then
     provides hints about the plugin API based on the details of the XML.
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 此示例使你熟悉主要的 XML 配置结构，然后根据 XML 的详细信息提供有关插件 API 的提示。
 - en: Getting ready
+  id: totrans-161
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: You will need a Jenkins server with security enabled and the ability to edit
     files either by logging in and working from the command line or through editing
     with a text editor.
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 你需要一个启用了安全性并且能够通过登录并通过命令行或通过文本编辑器进行编辑的能力来编辑文件的 Jenkins 服务器。
 - en: How to do it...
+  id: totrans-163
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'In the top level directory of Jenkins, look for the `config.xml` file. Edit
     the line with `numExecutors`, changing the number `2` to `3`:'
+  id: totrans-164
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 的顶层目录中，寻找`config.xml`文件。编辑带有`numExecutors`的行，将数字`2`改为`3`：
 - en: '[PRE10]'
+  id: totrans-165
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: Restart the server. You will see that the number of executors has increased
     from the default two to three:![How to do it...](img/0082OS_01_07.jpg)
+  id: totrans-166
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重新启动服务器。你会看到执行器的数量已从默认的两个增加到三个：![如何操作...](img/0082OS_01_07.jpg)
 - en: Plugins persist their configuration through XML files. To prove this point,
     look for the `thinBackup.xml` file. You will not find it unless you have installed
     the thinBackup plugin.
+  id: totrans-167
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 插件通过 XML 文件持久保存其配置。为了证明这一点，请查找`thinBackup.xml`文件。除非你已安装 thinBackup 插件，否则你找不到它。
 - en: 'Look at the *Backing up and restoring* recipe again. You will now find the
     following XML file:'
+  id: totrans-168
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 再次查看*备份和恢复*的示例。现在你会找到以下 XML 文件：
 - en: '[PRE11]'
+  id: totrans-169
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: How it works...
+  id: totrans-170
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Jenkins uses XStream ([http://xstream.codehaus.org/](http://xstream.codehaus.org/))
     to persist its configuration into a readable XML format. The XML files in the
     workspace are configuration files for plugins, tasks, and an assortment of other
@@ -815,693 +1179,1036 @@
     the GUI. Plugins use the same structure and the XML values correspond to member
     values in the underlying plugin classes. The GUI itself is created from XML via
     the Jelly framework ([http://commons.apache.org/jelly/](http://commons.apache.org/jelly/)).
+  id: totrans-171
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 使用 XStream ([http://xstream.codehaus.org/](http://xstream.codehaus.org/))
+    将其配置持久化为可读的 XML 格式。工作空间中的 XML 文件是插件、任务和各种其他持久化信息的配置文件。`config.xml` 文件是主配置文件。安全设置和全局配置在这里设置，并反映通过
+    GUI 进行的更改。插件使用相同的结构，XML 值对应于底层插件类中的成员值。GUI 本身是通过 Jelly 框架 ([http://commons.apache.org/jelly/](http://commons.apache.org/jelly/))
+    从 XML 创建的。
 - en: By restarting the server, you are certain that any configuration changes are
     picked up during the initialization phase.
+  id: totrans-172
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过重新启动服务器，您可以确保在初始化阶段捕获到任何配置更改。
 - en: Note
+  id: totrans-173
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: It is also possible to use **Reload configuration** from a storage feature from
     the **Manage Jenkins** page, to load an updated configuration without restarting.
+  id: totrans-174
   prefs: []
   type: TYPE_NORMAL
+  zh: 还可以从**管理 Jenkins**页面的存储功能中使用**重新加载配置**，在不重新启动的情况下加载更新的配置。
 - en: There's more...
+  id: totrans-175
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few things for you to consider.
+  id: totrans-176
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有几件事情供你考虑。
 - en: Turning off security
+  id: totrans-177
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 关闭安全性
 - en: When you are testing new security features, it is easy to lock yourself out
     of Jenkins. You will not be able to log in again. To get around this problem,
     modify `useSecurity` to `false` by editing `config.xml` and restart Jenkins; the
     security features are now turned off.
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您测试新的安全功能时，很容易将自己锁在 Jenkins 外面。您将无法再次登录。要解决此问题，通过编辑 `config.xml` 将 `useSecurity`
+    修改为 `false`，然后重新启动 Jenkins；现在安全功能已关闭。
 - en: Finding JavaDoc for custom plugin extensions
+  id: totrans-179
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 查找自定义插件扩展的 JavaDoc
 - en: 'The following line of code is the first line of the thin plugin configuration
     file named `thinBackup.xml`, mentioning the class from which the information is
     persisted. The class name is a great Google search term. Plugins can extend the
     functionality of Jenkins and there may well be useful methods exposed for administrative
     Groovy scripts:'
+  id: totrans-180
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的代码行是名为 `thinBackup.xml` 的薄插件配置文件的第一行，提到了信息持久化的类。类名是一个很好的 Google 搜索词。插件可以扩展
+    Jenkins 的功能，可能会为管理 Groovy 脚本公开有用的方法：
 - en: '[PRE12]'
+  id: totrans-181
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: The effects of adding garbage
+  id: totrans-182
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 添加垃圾的效果
 - en: 'Jenkins is great at recognizing invalid configurations as long as they are
     recognizable as a valid XML fragment. For example, add the following line of code
     to `config.xml`:'
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: 只要它们被识别为有效的 XML 片段，Jenkins 就能很好地识别无效配置。例如，将以下代码添加到 `config.xml` 中：
 - en: '[PRE13]'
+  id: totrans-184
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'When you reload the configuration, you will see this at the top of the **Manage
     Jenkins** screen:'
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您重新加载配置时，您将在**管理 Jenkins**屏幕的顶部看到这个：
 - en: '![The effects of adding garbage](img/0082OS_01_08.jpg)'
+  id: totrans-186
   prefs: []
   type: TYPE_IMG
+  zh: '![添加垃圾的效果](img/0082OS_01_08.jpg)'
 - en: 'Pressing the **Manage** button will return you to a detailed page of debug
     information, including the opportunity to reconcile the data:'
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 按下**管理**按钮将返回到详细的调试信息页面，其中包括调和数据的机会：
 - en: '![The effects of adding garbage](img/0082OS_01_09.jpg)'
+  id: totrans-188
   prefs: []
   type: TYPE_IMG
+  zh: '![添加垃圾的效果](img/0082OS_01_09.jpg)'
 - en: You can see from this that Jenkins is developer-friendly when reading corrupted
     configuration that it does not understand.
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: 从中可以看出，Jenkins 在阅读不理解的损坏配置时是开发人员友好的。
 - en: See also
+  id: totrans-190
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另见
 - en: The *Using a test Jenkins instance* recipe
+  id: totrans-191
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用测试 Jenkins 实例* 配方'
 - en: Installing Nginx
+  id: totrans-192
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Nginx
 - en: This recipe describes the steps required to install a basic Nginx installation.
+  id: totrans-193
   prefs: []
   type: TYPE_NORMAL
+  zh: 此配方描述了安装基本 Nginx 安装所需的步骤。
 - en: Nginx (pronounce as *engine-x*) is a free, open source, high-performance HTTP
     server and reverse proxy, as well as an IMAP/POP3 proxy server. Igor Sysoev started
     development of Nginx in 2002, with the first public release in 2004\. Nginx is
     known for its high performance, stability, rich feature set, simple configuration,
     and low resource consumption.
+  id: totrans-194
   prefs: []
   type: TYPE_NORMAL
+  zh: Nginx（发音为 *engine-x*）是一个免费的、开源的、高性能的 HTTP 服务器和反向代理，以及 IMAP/POP3 代理服务器。Igor Sysoev
+    在 2002 年开始开发 Nginx，在 2004 年发布了第一个公开版本。Nginx 以其高性能、稳定性、丰富的功能集、简单的配置和低资源消耗而闻名。
 - en: Note
+  id: totrans-195
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You can find the wiki site for the Nginx community at [http://wiki.nginx.org/Main](http://wiki.nginx.org/Main).
+  id: totrans-196
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在 [http://wiki.nginx.org/Main](http://wiki.nginx.org/Main) 找到 Nginx 社区的 wiki
+    站点。
 - en: 'Placing an Nginx server in front of your Jenkins server has a number of advantages:'
+  id: totrans-197
   prefs: []
   type: TYPE_NORMAL
+  zh: 在你的 Jenkins 服务器前面放置一个 Nginx 服务器有很多优点：
 - en: '**Easy configuration**: The syntax is straightforward. Configuring the basic
     details of a new server requires only a few lines of easily readable text.'
+  id: totrans-198
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**简单配置**: 语法简单直观。配置新服务器的基本细节只需要几行易于阅读的文本。'
 - en: '**Speed and resource consumption**: Nginx has a reputation for running faster
     than its competitors and with fewer resources.'
+  id: totrans-199
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**速度和资源消耗**: Nginx 以比竞争对手更快的速度运行，并且资源消耗更少。'
 - en: '**URL rewriting**: Powerful configuration options allow you to straightforwardly
     manage the URL namespace for multiple servers sitting behind Nginx.'
+  id: totrans-200
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**URL 重写**: 强大的配置选项允许你直接管理 Nginx 后面的多个服务器的 URL 命名空间。'
 - en: '**Offsetting SSL**: Nginx can take on the responsibility for secure connections,
     diminishing the number of certificates needed in an organization and decreasing
     the CPU load of the Jenkins server.'
+  id: totrans-201
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**抵消 SSL**: Nginx 可以负责安全连接，减少组织中所需的证书数量，并降低 Jenkins 服务器的 CPU 负载。'
 - en: '**Caching**: Nginx can cache much of the content from Jenkins, decreasing the
     number of requests that the Jenkins server has to return.'
+  id: totrans-202
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**缓存**: Nginx 可以缓存 Jenkins 的大部分内容，减少 Jenkins 服务器必须返回的请求数量。'
 - en: '**Monitoring**: When Nginx sits in front of many Jenkins servers, its central
     logfiles can act as a clear point of monitoring.'
+  id: totrans-203
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**监控**: 当 Nginx 部署在多个 Jenkins 服务器前时，其集中日志文件可以作为一个明确的监控点。'
 - en: Getting ready
+  id: totrans-204
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Read the official installation instructions at [http://wiki.nginx.org/Install](http://wiki.nginx.org/Install).
+  id: totrans-205
   prefs: []
   type: TYPE_NORMAL
+  zh: 阅读官方安装说明：[http://wiki.nginx.org/Install](http://wiki.nginx.org/Install)。
 - en: How to do it...
+  id: totrans-206
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'From a terminal, type:'
+  id: totrans-207
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端输入：
 - en: '[PRE14]'
+  id: totrans-208
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Browse to the localhost location. You will now see the Nginx welcome page:![How
     to do it...](img/0082OS_01_10.jpg)
+  id: totrans-209
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览至本地主机位置。现在你将看到 Nginx 的欢迎页面：![如何操作...](img/0082OS_01_10.jpg)
 - en: 'From a terminal, type `sudo /etc/init.d/nginx` and you''ll get the following
     output:'
+  id: totrans-210
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端输入 `sudo /etc/init.d/nginx`，你将获得以下输出：
 - en: '[PRE15]'
+  id: totrans-211
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: Note that not only can you stop and start the server, you can also check the
     status and run configuration tests.
+  id: totrans-212
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 请注意，你不仅可以停止和启动服务器，还可以检查状态并运行配置测试。
 - en: 'Check the status of the server by typing the `sudo /etc/init.d/nginx status`
     command:'
+  id: totrans-213
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过输入 `sudo /etc/init.d/nginx status` 命令检查服务器状态：
 - en: '[PRE16]'
+  id: totrans-214
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'Edit the welcome page within gedit:'
+  id: totrans-215
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 gedit 中编辑欢迎页面：
 - en: '[PRE17]'
+  id: totrans-216
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: After the `<body>` tag, add `<h1>Welcome to nginx working with Jenkins</h1>`.
+  id: totrans-217
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `<body>` 标签后，添加 `<h1>Welcome to nginx working with Jenkins</h1>`。
 - en: Save the file.
+  id: totrans-218
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 保存文件。
 - en: Browse to the localhost location. You will see a modified welcome page:![How
     to do it...](img/0082OS_01_11.jpg)
+  id: totrans-219
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览至本地主机位置。你将看到一个修改过的欢迎页面：![如何操作...](img/0082OS_01_11.jpg)
 - en: 'Review the `/etc/nginx/nginx.conf` configuration file, especially the following
     lines:'
+  id: totrans-220
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 `/etc/nginx/nginx.conf` 配置文件，特别是以下几行：
 - en: '[PRE18]'
+  id: totrans-221
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'Edit and save `/etc/nginx/sites-available/default`. For the two listen stanzas,
     change the number `80` to `8000`:'
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 编辑并保存 `/etc/nginx/sites-available/default`。对于两个 `listen` 部分，将数字 `80` 改为 `8000`：
 - en: '[PRE19]'
+  id: totrans-223
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: If port `8000` is already in use by another server, then feel free to change
     to another port number.
+  id: totrans-224
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果端口 `8000` 已被另一个服务器使用，则可以随意更改为其他端口号。
 - en: 'Test the configuration by running the following command from the terminal:'
+  id: totrans-225
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过终端运行以下命令测试配置：
 - en: '[PRE20]'
+  id: totrans-226
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'From the terminal, restart the server:'
+  id: totrans-227
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端重新启动服务器：
 - en: '[PRE21]'
+  id: totrans-228
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: Browse to the localhost location. You will see a warning that you are unable
     to connect:![How to do it...](img/0082OS_01_12.jpg)
+  id: totrans-229
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览至本地主机位置。你将看到无法连接的警告：![如何操作...](img/0082OS_01_12.jpg)
 - en: Browse to `localhost:8000` and you will see the welcome page.
+  id: totrans-230
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览至 `localhost:8000`，你将看到欢迎页面。
 - en: How it works...
+  id: totrans-231
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: You installed Nginx with default settings using the `apt` command. The `/etc/init.d/nginx`
     command controls the server. You edited the welcome page, which resides at `/usr/share/nginx/html/index.html`,
     and restarted Nginx.
+  id: totrans-232
   prefs: []
   type: TYPE_NORMAL
+  zh: 你使用 `apt` 命令以默认设置安装了 Nginx。 `/etc/init.d/nginx` 命令用于控制服务器。你编辑了欢迎页面，位于 `/usr/share/nginx/html/index.html`，并重新启动了
+    Nginx。
 - en: The master configuration file is`/etc/nginx/nginx.conf`. The `include /etc/nginx/conf.d/*.conf;`
     line collects configuration settings from any file in the `/etc/nginx/conf.d`
     directory that has the `conf` extension. It also collects any configuration file
     from the `/etc/nginx/sites-enabled` directory through the `include /etc/nginx/sites-enabled/*;`
     command.
+  id: totrans-233
   prefs: []
   type: TYPE_NORMAL
+  zh: 主配置文件是 `/etc/nginx/nginx.conf`。 `include /etc/nginx/conf.d/*.conf;` 行从 `/etc/nginx/conf.d`
+    目录中具有 `conf` 扩展名的任何文件收集配置设置。它还通过 `include /etc/nginx/sites-enabled/*;` 命令收集 `/etc/nginx/sites-enabled`
+    目录中的任何配置文件。
 - en: You changed the port number that the Nginx server was listening to through the
     `listen` directives in the default configuration file named `/etc/nginx/sites-available/default`.
     To avoid embarrassment, we tested the configuration before deploying the changes.
     You did this through the terminal with the `/etc/init.d/nginx configtest` command.
+  id: totrans-234
   prefs: []
   type: TYPE_NORMAL
+  zh: 您通过在名为`/etc/nginx/sites-available/default`的默认配置文件中使用`listen`指令更改了Nginx服务器监听的端口号。为了避免尴尬，我们在部署更改之前测试了配置。您可以通过终端使用`/etc/init.d/nginx
+    configtest`命令来执行此操作。
 - en: Tip
+  id: totrans-235
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Support information**'
+  id: totrans-236
   prefs: []
   type: TYPE_NORMAL
+  zh: '**支持信息**'
 - en: The *Nginx HTTP Server* book by *Packt Publishing* details many aspects of Nginx.
     You can find this book at [https://www.packtpub.com/nginx-http-server-for-web-applications/book](https://www.packtpub.com/nginx-http-server-for-web-applications/book).
+  id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: '*Nginx HTTP服务器*由*Packt Publishing*出版的书籍详细介绍了Nginx的许多方面。您可以在[https://www.packtpub.com/nginx-http-server-for-web-applications/book](https://www.packtpub.com/nginx-http-server-for-web-applications/book)找到此书。'
 - en: A sample chapter on configuration is available online at [http://www.packtpub.com/sites/default/files/0868-chapter-3-basic-nginx-configuration_1.pdf](http://www.packtpub.com/sites/default/files/0868-chapter-3-basic-nginx-configuration_1.pdf).
+  id: totrans-238
   prefs: []
   type: TYPE_NORMAL
+  zh: 关于配置的示例章节可在线获取，网址为[http://www.packtpub.com/sites/default/files/0868-chapter-3-basic-nginx-configuration_1.pdf](http://www.packtpub.com/sites/default/files/0868-chapter-3-basic-nginx-configuration_1.pdf)。
 - en: There's more...
+  id: totrans-239
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容……
 - en: Here are a couple more points for you to think about.
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些您需要考虑的要点。
 - en: Naming logfiles
+  id: totrans-241
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 命名日志文件
 - en: 'Nginx allows you run multiple virtual hosts on multiple ports. To help you
     with maintenance of the servers, it is advisable to separate the logfiles. To
     do this, you will need to change the following lines in `/etc/nginx/nginx.conf`:'
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: Nginx允许您在多个端口上运行多个虚拟主机。为了帮助您维护服务器，建议您将日志文件分开。为此，您需要更改`/etc/nginx/nginx.conf`中的以下行：
 - en: '[PRE22]'
+  id: totrans-243
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'Make it easier for others. Consider using consistently naming conventions such
     as including the hostname and port numbers:'
+  id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: 为他人提供方便。考虑使用一致的命名约定，例如包括主机名和端口号：
 - en: '[PRE23]'
+  id: totrans-245
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: Backing up configuration
+  id: totrans-246
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 备份配置
 - en: I cannot over-emphasize this enough. Backing up changes to configurations is
     vital to the smooth running of your infrastructure. Personally, I back up all
     configuration changes to a version control system. I can go through the commit
     logs and see exactly when I have made mistakes or used a clever tweak. However,
     revision control is not always feasible because sensitive information such as
     passwords may be contained. At least automatically back up the configuration locally.
+  id: totrans-247
   prefs: []
   type: TYPE_NORMAL
+  zh: 我再次强调一下这一点。备份配置更改对于您的基础设施的平稳运行至关重要。就个人而言，我将所有配置更改备份到版本控制系统中。我可以查看提交日志，准确地了解何时犯了错误或使用了巧妙的调整。但是，版本控制并不总是可行的，因为可能包含诸如密码之类的敏感信息。至少要在本地自动备份配置。
 - en: See also
+  id: totrans-248
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Configuring Nginx as a reverse proxy* recipe
+  id: totrans-249
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*将Nginx配置为反向代理*配方'
 - en: Configuring Nginx as a reverse proxy
+  id: totrans-250
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置Nginx为反向代理
 - en: This recipe configures Nginx to act as a reverse proxy for Jenkins. You will
     modify logfiles and port locations and tweak buffer sizes and the request headers
     passed through. I will also acquaint you with the best practice of testing configurations
     before restarting Nginx. This best practice has saved me a number of embarrassing
     moments.
+  id: totrans-251
   prefs: []
   type: TYPE_NORMAL
+  zh: 本文介绍如何将Nginx配置为Jenkins的反向代理。您将修改日志文件和端口位置，调整缓冲区大小和传递的请求标头。我还会介绍在重新启动Nginx之前测试配置的最佳实践。这种最佳实践帮助我避免了许多尴尬的时刻。
 - en: Getting ready
+  id: totrans-252
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: You need to have followed the *Installing Nginx* recipe and have a Jenkins instance
     running on `localhost:8080`.
+  id: totrans-253
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要遵循*安装Nginx*配方，并在`localhost:8080`上运行Jenkins实例。
 - en: How to do it...
+  id: totrans-254
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做……
 - en: 'Create `/etc/nginx/proxy.conf` with the following lines of code:'
+  id: totrans-255
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建`/etc/nginx/proxy.conf`文件，并添加以下代码：
 - en: '[PRE24]'
+  id: totrans-256
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'Create the `/etc/nginx/sites-enabled/jenkins_8080_proxypass` file with the
     following lines of code:'
+  id: totrans-257
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建`/etc/nginx/sites-enabled/jenkins_8080_proxypass`文件，并添加以下代码：
 - en: '[PRE25]'
+  id: totrans-258
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'From the terminal, run `sudo /etc/init.d/nginx configtest`. You will see the
     following output:'
+  id: totrans-259
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端运行`sudo /etc/init.d/nginx configtest`。您将看到以下输出：
 - en: '[PRE26]'
+  id: totrans-260
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: 'In a terminal, restart the server by running the following command:'
+  id: totrans-261
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在终端中，通过运行以下命令重新启动服务器：
 - en: '[PRE27]'
+  id: totrans-262
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: Browse to the localhost location. The connection will time out, as shown in
     the following screenshot:![How to do it...](img/0082OS_01_13.jpg)
+  id: totrans-263
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览至本地主机位置。连接将超时，如下面的截图所示：![如何做……](img/0082OS_01_13.jpg)
 - en: 'Review the access log `/var/log/nginx/jenkins _8080_proxypass_access.log`.
     You will see a line similar to the following line (note that `499` is the status
     code):'
+  id: totrans-264
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看访问日志 `/var/log/nginx/jenkins _8080_proxypass_access.log`。您将看到类似于以下行的行（请注意，`499`
+    是状态码）：
 - en: '[PRE28]'
+  id: totrans-265
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'Edit `/etc/nginx/sites-enabled/jenkins_8080_proxypass` by changing `7070` to
     `8080`:'
+  id: totrans-266
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 编辑 `/etc/nginx/sites-enabled/jenkins_8080_proxypass`，将 `7070` 更改为 `8080`：
 - en: '[PRE29]'
+  id: totrans-267
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'Test the configuration changes:'
+  id: totrans-268
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 测试配置更改：
 - en: '[PRE30]'
+  id: totrans-269
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'From a terminal, restart the Nginx server by running the following command:'
+  id: totrans-270
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端运行以下命令重新启动 Nginx 服务器：
 - en: '[PRE31]'
+  id: totrans-271
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: Browse to the localhost location. You will see the Jenkins main page.
+  id: totrans-272
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览到本地主机位置。您将看到 Jenkins 的主页面。
 - en: How it works...
+  id: totrans-273
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: It is a tribute to Nginx configuration syntax that you configured Nginx with
     only a few lines.
+  id: totrans-274
   prefs: []
   type: TYPE_NORMAL
+  zh: Nginx 配置语法的致敬之处在于您只需配置几行即可配置 Nginx。
 - en: By default, Nginx acts on any configuration in the files in the `/etc/nginx/sites-enabled/`
     directory. During the recipe, you added a file to this directory; it was then
     added to the configuration settings of Nginx on the next restart.
+  id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，Nginx 对 `/etc/nginx/sites-enabled/` 目录中的文件中的任何配置都会起作用。在本次操作中，您向该目录添加了一个文件；然后，它被添加到
+    Nginx 的配置设置中，并在下次重启时生效。
 - en: 'The configuration file includes a `server` block with a port and the server
     name `localhost`. You can have multiple servers defined in the configuration listening
     on different ports and with different server names. However, in our case, we needed
     only one server:'
+  id: totrans-276
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置文件包含一个带有端口和服务器名称 `localhost` 的 `server` 块。您可以在配置中定义多个服务器，它们监听不同的端口并具有不同的服务器名称。但是，在我们的情况下，我们只需要一个服务器：
 - en: '[PRE32]'
+  id: totrans-277
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: 'You also defined the location of the logfiles, as follows:'
+  id: totrans-278
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还定义了日志文件的位置，如下所示：
 - en: '[PRE33]'
+  id: totrans-279
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: 'Nginx tests the URI specified in the request''s header against the parameters
     of the location directives defined inside the server block. In this case, you
     had only one location command that points at the top level `/`:'
+  id: totrans-280
   prefs: []
   type: TYPE_NORMAL
+  zh: Nginx 将请求头中指定的 URI 与服务器块内定义的位置指令的参数进行比较。在本例中，您只有一个指向顶级 `/` 的位置命令：
 - en: '[PRE34]'
+  id: totrans-281
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: 'There can be more than one location configured. However, in our example, there
     is only one that passed on all requests to the Jenkins server found at `127.0.0.1:8080`:'
+  id: totrans-282
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以配置多个位置。但是，在我们的示例中，只有一个位置将所有请求传递给位于 `127.0.0.1:8080` 的 Jenkins 服务器：
 - en: '[PRE35]'
+  id: totrans-283
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: As noted, when `proxy_pass` is pointing to a non-existent location, then a `499`
     HTTP status code is returned. This is an Nginx-specific way of flagging the issue.
+  id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 如上所述，当 `proxy_pass` 指向不存在的位置时，将返回 `499` HTTP 状态码。这是 Nginx 特定的标记问题的方式。
 - en: Note
+  id: totrans-285
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Note that `proxy_pass` works with both the HTTP and HTTPS protocols.
+  id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: 注意，`proxy_pass` 可以同时使用 HTTP 和 HTTPS 协议。
 - en: We loaded in a second configuration file that deals with the detailed settings
     of the proxying. This is useful as you can repeat the same settings consistently
     across a number of server configurations, keeping the details central. This approach
     aids readability and maintenance.
+  id: totrans-287
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们加载了第二个配置文件，该文件处理了代理的详细设置。这是有用的，因为您可以在许多服务器配置中重复相同的设置，使详细信息保持集中。这种方法有助于可读性和维护。
 - en: '[PRE36]'
+  id: totrans-288
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: Note
+  id: totrans-289
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Nginx configuration allows you to use embedded variables such as the remote
     address of the `$remote_addr` client. The Nginx reference manual details the embedded
     variables. You can find the manual at [http://nginx.com/wp-content/uploads/2014/03/nginx-modules-reference-r3.pdf](http://nginx.com/wp-content/uploads/2014/03/nginx-modules-reference-r3.pdf).
+  id: totrans-290
   prefs: []
   type: TYPE_NORMAL
+  zh: Nginx 配置允许您使用嵌入变量，如 `$remote_addr` 客户端的远程地址。Nginx 参考手册详细介绍了嵌入变量。您可以在 [http://nginx.com/wp-content/uploads/2014/03/nginx-modules-reference-r3.pdf](http://nginx.com/wp-content/uploads/2014/03/nginx-modules-reference-r3.pdf)
+    找到该手册。
 - en: 'Within `proxy.conf`, you set headers. You set `X-REAL-IP` and `X-Forwarded-For`
     to the remote address of the requester. You need both headers for the smooth running
     of backend servers and load balancers:'
+  id: totrans-291
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 `proxy.conf` 中，您设置了头信息。您将 `X-REAL-IP` 和 `X-Forwarded-For` 设置为请求者的远程地址。对于后端服务器和负载均衡器的顺利运行，您需要这两个头信息：
 - en: '[PRE37]'
+  id: totrans-292
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: Note
+  id: totrans-293
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For more information about `X-Forwarded-For`, visit [http://en.wikipedia.org/wiki/X-Forwarded-For](http://en.wikipedia.org/wiki/X-Forwarded-For).
+  id: totrans-294
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多关于 `X-Forwarded-For` 的信息，请访问 [http://en.wikipedia.org/wiki/X-Forwarded-For](http://en.wikipedia.org/wiki/X-Forwarded-For)。
 - en: 'Other performance-related details you configured included the maximum size
     of the client body (10 megabytes), time out values (90 seconds), and internal
     buffer sizes (324 kilobytes):'
+  id: totrans-295
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还定义了性能相关的其他细节，包括客户端主体的最大大小（10兆字节）、超时值（90秒）和内部缓冲区大小（324千字节）：
 - en: '[PRE38]'
+  id: totrans-296
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: Note
+  id: totrans-297
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For more information on Nginx as a reverse proxy server, visit [http://nginx.com/resources/admin-guide/reverse-proxy/](http://nginx.com/resources/admin-guide/reverse-proxy/).
+  id: totrans-298
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关 Nginx 作为反向代理服务器的更多信息，请访问 [http://nginx.com/resources/admin-guide/reverse-proxy/](http://nginx.com/resources/admin-guide/reverse-proxy/)。
 - en: There's more...
+  id: totrans-299
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多……
 - en: Here are a couple more points for you to think about.
+  id: totrans-300
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些你需要考虑的要点。
 - en: Testing complex configuration
+  id: totrans-301
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 测试复杂配置
 - en: Modern computers are cheap and powerful. They are able to support multiple test
     Jenkins and Nginx servers. There are a number of ways of testing complex configurations.
     One is to run multiple virtual machines on a virtual network. Another is to use
     different loopback addresses and/or different ports (`127.0.0.1:8080`, `127.0.0.2:8080`,
     and so on). Both approaches have the advantage of keeping your network traffic
     off Ethernet cards and local to your computer.
+  id: totrans-302
   prefs: []
   type: TYPE_NORMAL
+  zh: 现代计算机价格便宜而且功能强大。它们能够支持多个测试 Jenkins 和 Nginx 服务器。测试复杂配置的方法有很多。其中一种是在虚拟网络上运行多个虚拟机。另一种是使用不同的环回地址和/或不同的端口（`127.0.0.1:8080`、`127.0.0.2:8080`等）。这两种方法的优点是可以将网络流量保持在以太网卡上，并保留在计算机本地。
 - en: 'As mentioned in the preface, you can run Jenkins from the command line with
     commands similar to:'
+  id: totrans-303
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如前言中所述，您可以通过类似以下命令从命令行运行 Jenkins：
 - en: '[PRE39]'
+  id: totrans-304
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE39]'
 - en: Jenkins will start to run over HTTPS on port `8443`. The `–httpPort=-1` turned
     off the HTTP port.
+  id: totrans-305
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 将开始在端口`8443`上通过 HTTPS 运行。 `-httpPort=-1` 关闭了 HTTP 端口。
 - en: To choose a separate home directory, you will need first to set the `JENKINS_HOME`
     environment variable.
+  id: totrans-306
   prefs: []
   type: TYPE_NORMAL
+  zh: 要选择一个单独的主目录，您首先需要设置 `JENKINS_HOME` 环境变量。
 - en: 'You would use the following command to run Jenkins on `127.0.0.2`, port `80`:'
+  id: totrans-307
   prefs: []
   type: TYPE_NORMAL
+  zh: 您将使用以下命令在`127.0.0.2`的端口`80`上运行 Jenkins：
 - en: '[PRE40]'
+  id: totrans-308
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE40]'
 - en: Offloading SSL
+  id: totrans-309
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 卸载 SSL
 - en: One of the advantages of Nginx is that you can allow it to service SSL requests
     and then pass them onto multiple Jenkins servers as HTTP requests. You can find
     the basic configuration for this at [https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+behind+an+nginx+reverse+proxy](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+behind+an+nginx+reverse+proxy).
+  id: totrans-310
   prefs: []
   type: TYPE_NORMAL
+  zh: Nginx 的优点之一是你可以让它处理 SSL 请求，然后将它们作为 HTTP 请求传递给多个 Jenkins 服务器。你可以在 [https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+behind+an+nginx+reverse+proxy](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+behind+an+nginx+reverse+proxy)
+    找到这个基本配置。
 - en: 'First, you need to redirect requests on port `80` to an HTTPS URL. In the following
     example, the `301` status code is used:'
+  id: totrans-311
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，您需要将端口`80`上的请求重定向到 HTTPS URL。在以下示例中，使用了`301`状态码：
 - en: '[PRE41]'
+  id: totrans-312
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE41]'
 - en: 'This states that the link has been permanently moved. This allows the redirect
     to be cached. You will then need to set a server up on port `443`, the standard
     port for HTTPS, and load in a certificate for the server and its associated key:'
+  id: totrans-313
   prefs: []
   type: TYPE_NORMAL
+  zh: 这表示链接已永久移动。这允许重定向被缓存。然后，您将需要在端口`443`上设置服务器，这是 HTTPS 的标准端口，并加载服务器和其关联密钥的证书：
 - en: '[PRE42]'
+  id: totrans-314
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE42]'
 - en: 'Finally, you will need to use `location` and `proxy_pass` within the server
     configured for port `443` to pass on to Jenkins servers running over HTTP:'
+  id: totrans-315
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，您需要在配置为端口`443`的服务器中使用 `location` 和 `proxy_pass` 将 HTTP 传递给运行 HTTP 的 Jenkins
+    服务器：
 - en: '[PRE43]'
+  id: totrans-316
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE43]'
 - en: Tip
+  id: totrans-317
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: Despite its simplicity, there are well-known configuration pitfalls, some of
     which are mentioned at [http://wiki.nginx.org/Pitfalls](http://wiki.nginx.org/Pitfalls).
+  id: totrans-318
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管它很简单，但已知的配置陷阱是众所周知的，其中一些在 [http://wiki.nginx.org/Pitfalls](http://wiki.nginx.org/Pitfalls)
+    中提到。
 - en: See also
+  id: totrans-319
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Installing Nginx* recipe
+  id: totrans-320
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*安装 Nginx* 配方'
 - en: Reporting overall storage use
+  id: totrans-321
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 报告整体存储使用情况
 - en: Organizations have their own way of dealing with increasing disk usage. Policy
     ranges from no policy, depending on ad hoc human interactions, to the most state-of-the-art
     software with central reporting facilities. Most organizations sit between these
     two extremes with mostly ad hoc intervention with some automatic reporting for
     the more crucial systems. With minimal effort, you can make Jenkins report disk
     usage from the GUI and periodically run Groovy scripts that trigger helpful events.
+  id: totrans-322
   prefs: []
   type: TYPE_NORMAL
+  zh: 组织有各自的方式来处理不断增长的磁盘使用情况。政策从没有政策，依赖于临时人类互动，到拥有最先进的软件和中央报告设施。大多数组织处于这两个极端之间，大部分是临时干预，对于更关键的系统则自动报告一些情况。凭借极小的努力，你可以让
+    Jenkins 通过 GUI 报告磁盘使用情况，并定期运行触发有用事件的 Groovy 脚本。
 - en: This recipe highlights the disk usage plugin and uses the recipe as a vehicle
     to discuss the cost of keeping archives stored within the Jenkins workspace.
+  id: totrans-323
   prefs: []
   type: TYPE_NORMAL
+  zh: 该配方突出了磁盘使用插件，并使用该配方来讨论在 Jenkins 工作区中存储归档的成本。
 - en: The disk usage plugin is strongest in combination with an early warning system
     that notifies you when soft or hard disk limits are reached. The *Adding a job
     to warn of storage use violations through log parsing* recipe details a solution.
     This recipe show that configuring Jenkins requires little effort. Each step might
     even seem trivial. The power of Jenkins is that you can build complex responses
     out of a series of simple steps and scripts.
+  id: totrans-324
   prefs: []
   type: TYPE_NORMAL
+  zh: 磁盘使用插件与一个早期警告系统结合使用时效果最好，该系统在达到软限制或硬限制时会通知您。通过日志解析来警告存储使用违规的作业添加配方详细说明了解决方案。这个配方表明配置
+    Jenkins 需要很少的努力。每一步甚至可能看起来都很琐碎。Jenkins 的强大之处在于你可以从一系列简单的步骤和脚本中构建复杂的响应。
 - en: Getting ready
+  id: totrans-325
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: You will need to install the disk usage plugin.
+  id: totrans-326
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要安装磁盘使用插件。
 - en: How to do it...
+  id: totrans-327
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Click on the **Disk usage** link under the **Manage Jenkins** page:![How to
     do it...](img/0082OS_01_14.jpg)
+  id: totrans-328
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**管理 Jenkins**页面下的**磁盘使用情况**链接：![如何做...](img/0082OS_01_14.jpg)
 - en: Jenkins displays a page with each project name, builds, and a workspace disk
     usage summary. Click at the top of the table to sort the workspace by file usage:![How
     to do it...](img/0082OS_01_15.jpg)
+  id: totrans-329
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Jenkins 显示每个项目名称、构建和工作空间磁盘使用情况摘要的页面。点击表格顶部以按文件使用情况对工作空间进行排序：![如何做...](img/0082OS_01_15.jpg)
 - en: How it works...
+  id: totrans-330
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Adding a plugin in Jenkins is simplicity itself. The question is what you are
     going to do with the information.
+  id: totrans-331
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中添加插件非常简单。问题是您将如何处理这些信息。
 - en: It is easy for you to forget a checkbox in a build; perhaps an advanced option
     is enabled where it should not be. Advanced options can at times be problematic
     as they are not displayed directly in the GUI, so you will need to hit the **Advanced**
     button first before reviewing them. On a Friday afternoon, this might be one step
     too far.
+  id: totrans-332
   prefs: []
   type: TYPE_NORMAL
+  zh: 在构建中你很容易忘记一个复选框；也许一个高级选项被错误地启用了。高级选项有时可能会有问题，因为它们不直接显示在 GUI 中，所以您需要先点击**高级**按钮，然后再查看它们。在星期五下午，这可能是一步太远了。
 - en: 'Advanced options include artifact retention choices that you will need to correctly
     configure to avoid overwhelming disk usage. In the previous example, the workspace
     for **Sakai Trunk** is **2 GB**. The size is to do with the job having its own
@@ -1509,19 +2216,29 @@
     option. The option is easy for you to miss. In this case, there is nothing to
     be done as trunk pulls in snapshot jars that might cause instability for other
     projects. The advanced options shown in the following screenshot include artifact:'
+  id: totrans-333
   prefs: []
   type: TYPE_NORMAL
+  zh: 高级选项包括工件保留选项，您需要正确配置以避免磁盘使用过多。在上一个示例中，**Sakai Trunk**的工作空间为**2 GB**。这个大小与作业有自己的本地
+    Maven 存储库有关，如**使用私有 Maven 存储库**高级选项所定义。你很容易忽略这个选项。在这种情况下，没有什么可以做的，因为 trunk 拉取可能会导致其他项目不稳定的快照
+    jar。以下截图显示的高级选项包括工件：
 - en: '![How it works...](img/0082OS_01_16.jpg)'
+  id: totrans-334
   prefs: []
   type: TYPE_IMG
+  zh: '![工作原理...](img/0082OS_01_16.jpg)'
 - en: Reviewing the advanced options of a project after looking at the disc usage
     of the project helps you to find unnecessary private repositories.
+  id: totrans-335
   prefs: []
   type: TYPE_NORMAL
+  zh: 查看项目的高级选项后，查看项目的磁盘使用情况，可以帮助您找到不必要的私有存储库。
 - en: There's more...
+  id: totrans-336
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'If you are keeping a large set of artifacts, it is an indicator of a failure
     of purpose of your use of Jenkins. Jenkins is the engine that pushes a product
     through its life cycle. For example, when a job builds snapshots every day, then
@@ -1531,41 +2248,60 @@
     Archiva ([http://archiva.apache.org/](http://archiva.apache.org/)), or Nexus ([http://nexus.sonatype.org/](http://nexus.sonatype.org/)).
     These repository managers have significant advantages over dumping to disk, such
     as:'
+  id: totrans-337
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您保留了大量的工件，这表明您使用 Jenkins 的目的失败了。Jenkins 是推动产品通过其生命周期的引擎。例如，当一个作业每天构建快照时，你应该将快照推送到开发人员认为最有用的地方。那不是
+    Jenkins，而是一个 Maven 存储库或者像 Artifactory ([http://www.jfrog.com/products.php](http://www.jfrog.com/products.php))、Apache
+    Archiva ([http://archiva.apache.org/](http://archiva.apache.org/)) 或 Nexus ([http://nexus.sonatype.org/](http://nexus.sonatype.org/))
+    这样的存储库管理器。这些存储库管理器与将内容转储到磁盘相比具有显著优势，例如：
 - en: '**Speed builds by acting as a cache**: Development teams tend to work on similar
     or the same code. If you build and use the repository manager as a mirror, then
     the repository manager will cache the dependencies; when job Y asks for the same
     artifact, the download will be local.'
+  id: totrans-338
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**通过充当缓存加快构建速度**：开发团队往往会处理相似或相同的代码。如果您构建并使用仓库管理器作为镜像，那么仓库管理器将缓存依赖项；当作业Y请求相同的构件时，下载将在本地进行。'
 - en: '**Acts as a mechanism to share snapshots locally**: Perhaps some of your snapshots
     are only for local consumption. The repository manager has facilities to limit
     access.'
+  id: totrans-339
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**充当本地共享快照的机制**：也许您的一些快照仅用于本地使用。仓库管理器具有限制访问的功能。'
 - en: '**A GUI interface for ease of artifact management**: All three repository managers
     have intuitive GUIs, making your management tasks as easy as possible.'
+  id: totrans-340
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用于便捷的构件管理的图形用户界面**：所有三个仓库管理器都有直观的GUI，使您的管理任务尽可能简单。'
 - en: With these considerations in mind, if you are seeing a buildup of artifacts
     in Jenkins where they are less accessible and beneficial than deployed to a repository,
     consider this a signal of the need to upgrade your infrastructure.
+  id: totrans-341
   prefs: []
   type: TYPE_NORMAL
+  zh: 在考虑到这些因素的情况下，如果您在Jenkins中看到构件的积累，而它们比部署到仓库更不可访问和有益，请将其视为需要升级基础设施的信号。
 - en: For further reading, visit [http://maven.apache.org/repository-management.html](http://maven.apache.org/repository-management.html).
+  id: totrans-342
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[http://maven.apache.org/repository-management.html](http://maven.apache.org/repository-management.html)。
 - en: Note
+  id: totrans-343
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: '**Retention policy**'
+  id: totrans-344
   prefs: []
   type: TYPE_NORMAL
+  zh: '**保留策略**'
 - en: 'Jenkins can be a significant consumer of disk space. In the job configuration,
     you can decide to either keep artifacts or remove them automatically after a given
     period of time. The issue with removing artifacts is that you will also remove
@@ -1576,347 +2312,497 @@
     and results are kept. This has one important consequence: you have now allowed
     the reporting plugins to keep displaying a history of tests even though you have
     removed the other more disk-consuming artifacts.'
+  id: totrans-345
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins可能会消耗大量磁盘空间。在作业配置中，您可以决定是保留构件还是在一段时间后自动删除它们。删除构件的问题是您也将删除任何自动测试的结果。幸运的是，有一个简单的技巧可以避免这种情况。在配置作业时，点击**丢弃旧构建**，选中**高级**复选框，并定义**保留构件的最大构建数**。然后在指定的构建数后删除构件，但日志和结果会被保留。这有一个重要的后果：即使您已经删除了其他占用磁盘更多的构件，您现在也允许报告插件继续显示测试历史。
 - en: See also
+  id: totrans-346
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Backing up and restoring* recipe
+  id: totrans-347
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**备份和恢复**配方'
 - en: Deliberately failing builds through log parsing
+  id: totrans-348
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过日志解析有意失败的构建
 - en: Let's imagine you have been asked to clean up code that does not have any unit
     tests run during its build. There is a lot of code. To force the improvement of
     quality if you miss some residual defects, then you will want the Jenkins build
     to fail.
+  id: totrans-349
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们想象一下，您被要求清理没有在其构建过程中运行任何单元测试的代码。代码很多。为了迫使质量的提高，如果您错过了一些残留的缺陷，那么您希望Jenkins构建失败。
 - en: What you need is a flexible log parser that can fail or warn about issues found
     in the build output. To the rescue, this recipe describes how you can configure
     a log parsing plugin that spots unwanted patterns in the console output and fails
     jobs if the pattern is spotted. For example, a warning from Maven when there are
     no unit tests.
+  id: totrans-350
   prefs: []
   type: TYPE_NORMAL
+  zh: 你需要的是一个灵活的日志解析器，它可以在构建输出中发现的问题失败或警告。救命稻草是，本配方描述了如何配置一个日志解析插件，该插件可以在控制台输出中发现不需要的模式，并在发现模式时失败作业。例如，当没有单元测试时，Maven会发出警告。
 - en: Getting ready
+  id: totrans-351
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: You will need to install the log-parser plugin as mentioned at [https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin).
+  id: totrans-352
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要按照[https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin)中提到的安装日志解析器插件。
 - en: How to do it...
+  id: totrans-353
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Create the `log_rules` directory owned by Jenkins under the Jenkins workspace.
+  id: totrans-354
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins工作空间下创建由Jenkins拥有的`log_rules`目录。
 - en: 'Add the `no_tests.rule` file to the `log_rules` directory with one line:'
+  id: totrans-355
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将`no_tests.rule`文件添加到`log_rules`目录中，内容为一行：
 - en: '[PRE44]'
+  id: totrans-356
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE44]'
 - en: 'Create a job with source code that gives deprecated warnings on compilation.
     In the following example, you are using the CLOG tool from the Sakai project:'
+  id: totrans-357
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个带有在编译过程中产生弃用警告的源代码的作业。在以下示例中，您正在使用来自Sakai项目的CLOG工具：
 - en: '**Job name**: `Sakai_CLOG_Test`'
+  id: totrans-358
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**作业名称**：`Sakai_CLOG_Test`'
 - en: '**Maven 2/3 Project**'
+  id: totrans-359
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Maven 2/3 项目**'
 - en: '**Source code Management**: `Git`'
+  id: totrans-360
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**源代码管理**：`Git`'
 - en: '**Repository URL**: `https://source.sakaiproject.org/contrib/clog/trunk`'
+  id: totrans-361
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**仓库 URL**：`https://source.sakaiproject.org/contrib/clog/trunk`'
 - en: '**Build**'
+  id: totrans-362
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**构建**'
 - en: '**Maven Version**: `3.2.1` (or whatever your label is for your current version)'
+  id: totrans-363
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Maven 版本**：`3.2.1`（或者您当前版本的标签）'
 - en: '**Goals and options**: `clean install`'
+  id: totrans-364
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**目标和选项**：`clean install`'
 - en: Run the build. It should not fail.
+  id: totrans-365
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行构建。它不应该失败。
 - en: As shown in the following screenshot, visit the **Manage Configuration** page
     for Jenkins and add a description and the location of parsing rules file in the
     **Console Output Parsing** section:![How to do it...](img/0082OS_01_17.jpg)
+  id: totrans-366
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如下截图所示，访问 Jenkins 的**管理配置**页面，并在**控制台输出解析**部分添加描述和解析规则文件的位置：![操作方法...](img/0082OS_01_17.jpg)
 - en: Check the **Console output (build log) parsing** box in the **Post-build Actions**
     section of your `Sakai_CLOG_Test` job.
+  id: totrans-367
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `Sakai_CLOG_Test` 作业的**后构建操作**部分中选中**控制台输出（构建日志）解析**框。
 - en: Check the **Mark build Failed on Error** checkbox:![How to do it...](img/0082OS_01_18.jpg)
+  id: totrans-368
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选中**在错误时标记构建失败**复选框：![操作方法...](img/0082OS_01_18.jpg)
 - en: Select **Stop on no tests** for **Select Parsing Rules**.
+  id: totrans-369
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 为**选择解析规则**选择**停止无测试**。
 - en: Build the job and it should now fail.
+  id: totrans-370
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 构建作业，现在它应该失败了。
 - en: Click on the **Parsed Console Output** link in the left-hand menu. You will
     now be able to see the parsed errors, as shown in the following screenshot:![How
     to do it...](img/0082OS_01_19.jpg)
+  id: totrans-371
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击左侧菜单中的**解析的控制台输出**链接。现在您将能够看到解析的错误，如下截图所示：![操作方法...](img/0082OS_01_19.jpg)
 - en: How it works...
+  id: totrans-372
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The global configuration page allows you to add files each with a set of parsing
     rules. The rules use regular expressions mentioned in the home page of the plugin
     ([https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin)).
+  id: totrans-373
   prefs: []
   type: TYPE_NORMAL
+  zh: 全局配置页面允许您添加每个带有一组解析规则的文件。规则使用插件主页（[https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin)）中提到的正则表达式。
 - en: 'The rule file you used is composed of one line: `error /no tests/`.'
+  id: totrans-374
   prefs: []
   type: TYPE_NORMAL
+  zh: 您使用的规则文件由一行组成：`error /no tests/`。
 - en: If the **no tests** pattern (a case-sensitive test) is found in the console
     output, then the plugin considers this an error and the build fails. More lines
     to test can be added to the file. The first rule found wins. Other levels include
     `warn` and `ok`.
+  id: totrans-375
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果在控制台输出中找到**无测试**模式（区分大小写的测试），则插件会将其视为错误，构建将失败。可以添加更多的测试行。找到的第一个规则胜出。其他级别包括`warn`和`ok`。
 - en: The source code was pulled in from the Sakai ([http://www.sakaiproject.org](http://www.sakaiproject.org))
     areas where no unit tests exist.
+  id: totrans-376
   prefs: []
   type: TYPE_NORMAL
+  zh: 源代码是从不存在单元测试的 Sakai ([http://www.sakaiproject.org](http://www.sakaiproject.org))
+    区域中拉取的。
 - en: The rules file has the distinct `.rules` extension in case you want to write
     an exclude rule during backups.
+  id: totrans-377
   prefs: []
   type: TYPE_NORMAL
+  zh: 规则文件具有独特的`.rules`扩展名，以防您想在备份期间编写排除规则。
 - en: Once the plugin is installed, you can choose per job between the rule files
     previously created.
+  id: totrans-378
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装插件后，您可以在先前创建的规则文件之间为每个作业选择。
 - en: Note
+  id: totrans-379
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: This plugin empowers you to periodically scan for obvious lint and adapt to
     new circumstances. You should consider systematically sweeping through a series
     of rule files that fail suspect builds, until a full cleanup to the in-house style
     has taken place.
+  id: totrans-380
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个插件赋予您周期性扫描明显的语法错误并适应新环境的能力。您应该考虑系统地遍历一系列失败的可疑构建的规则文件，直到完全清理为止。
 - en: There's more...
+  id: totrans-381
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'Two other examples of common log patterns that are an issue but do not normally
     fail a build are:'
+  id: totrans-382
   prefs: []
   type: TYPE_NORMAL
+  zh: 另外两个常见的日志模式示例可能会出现问题，但通常不会导致构建失败：
 - en: '**MD5 checksums**: If a Maven repository has an artifact but not its associated
     MD5 checksum file, then the build will download the artifact even if it already
     has a copy. Luckily, the process will leave a `warn` message in the console output.'
+  id: totrans-383
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**MD5 校验和**：如果 Maven 仓库有一个工件，但没有其关联的 MD5 校验和文件，那么构建将下载该工件，即使它已经有一个副本。幸运的是，该过程将在控制台输出中留下一条`warn`消息。'
 - en: '**Failure to start up custom integration services**: These failures might be
     logged at the `warn` or `info` level when you really want them to fail the build.'
+  id: totrans-384
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**启动自定义集成服务失败**：当您真正希望构建失败时，这些失败可能会以`warn`或`info`级别记录。'
 - en: See also
+  id: totrans-385
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Adding a job to warn of storage use violations through log parsing* recipe
+  id: totrans-386
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*添加一个作业以通过日志解析警告存储使用违规情况*的步骤'
 - en: Adding a job to warn of storage use violations through log parsing
+  id: totrans-387
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 添加一个作业以通过日志解析警告存储使用违规情况
 - en: The disk usage plugin is unlikely to fulfill all your disk maintenance requirements.
     This recipe will show you how you can strengthen disk monitoring by adding a custom
     Perl script to warn about disk usage violations.
+  id: totrans-388
   prefs: []
   type: TYPE_NORMAL
+  zh: 磁盘使用插件不太可能满足您的所有磁盘维护需求。此方案将向您展示如何通过添加自定义Perl脚本来加强磁盘监视，以警告磁盘使用违规行为。
 - en: 'The script will generate two alerts: a hard error when disk usage is above
     an acceptable level and a soft warning when the disk is getting near to that limit.
     The log-parser plugin will then react appropriately.'
+  id: totrans-389
   prefs: []
   type: TYPE_NORMAL
+  zh: 脚本将生成两个警报：当磁盘使用量超出可接受水平时生成硬错误，当磁盘接近该限制时生成软警告。然后，日志解析器插件将相应地做出反应。
 - en: Note
+  id: totrans-390
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Using Perl is typical for a Jenkins job as Jenkins plays well and adapts to
     most environments. You can expect Perl, Bash, Ant, Maven, and a full range of
     scripts and binding code to be used in the battle to get work done.
+  id: totrans-391
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于Jenkins任务而言，使用Perl是典型的，因为Jenkins可以很好地适应大多数环境。您可以预期在获取工作时使用Perl、Bash、Ant、Maven和全系列的脚本和绑定代码。
 - en: Getting ready
+  id: totrans-392
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: If you have not already done so, create a directory owned by Jenkins under the
     Jenkins workspace named `log_rules`. Also make sure that the Perl scripting language
     is installed on your computer and is accessible by Jenkins. Perl is installed
     by default on Linux distributions. ActiveState provides a decent Perl distribution
     for Mac and Windows ([http://www.activestate.com/downloads](http://www.activestate.com/downloads)).
+  id: totrans-393
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果尚未这样做，请在Jenkins工作区下创建一个由Jenkins拥有的名为`log_rules`的目录。还要确保Perl脚本语言已安装在您的计算机上，并且Jenkins可以访问。Perl默认安装在Linux发行版上。ActiveState为Mac和Windows提供了一个体面的Perl发行版（[http://www.activestate.com/downloads](http://www.activestate.com/downloads)）。
 - en: How to do it...
+  id: totrans-394
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Add a file named `disk.rule` to the `log_rules` directory with the following
     two lines:'
+  id: totrans-395
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`log_rules`目录下添加名为`disk.rule`的文件，并包含以下两行：
 - en: '[PRE45]'
+  id: totrans-396
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE45]'
 - en: Visit the **Manage Configuration** page for Jenkins and add the description
     `DISC_USAGE` to the **Console Output** section. Point to the location of the parsing
     rules file.
+  id: totrans-397
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问Jenkins的**管理配置**页面，并将描述`DISC_USAGE`添加到**控制台输出**部分。指向解析规则文件的位置。
 - en: 'Add the following Perl script named `disk_limits.pl` to a location of choice,
     making sure that the Jenkins user can read the file:'
+  id: totrans-398
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下名为`disk_limits.pl`的Perl脚本添加到选择的位置，确保Jenkins用户可以读取该文件：
 - en: '[PRE46]'
+  id: totrans-399
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE46]'
 - en: Modify the `$content` variable to point to the Jenkins workspace.
+  id: totrans-400
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改`$content`变量以指向Jenkins工作区。
 - en: Create a free-style software project job.
+  id: totrans-401
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个自由风格软件项目任务。
 - en: Under the **Build** section, add **Build Step / Execute Shell**. For the command,
     add `perl disk_limits.pl 9000000 2000000`.
+  id: totrans-402
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建**部分下，添加**构建步骤 / 执行Shell**。对于命令，请添加`perl disk_limits.pl 9000000 2000000`。
 - en: Feel free to change the hard and soft limits (`9000000` `2000000`).
+  id: totrans-403
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 随意更改硬限制和软限制（`9000000` `2000000`）。
 - en: Check **Console output (build log) parsing** in **Post-build Actions**.
+  id: totrans-404
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**中检查**控制台输出（构建日志）解析**。
 - en: Check the **Mark build Unstable on Warning** checkbox.
+  id: totrans-405
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 勾选**在警告时标记构建不稳定**复选框。
 - en: Check the **Mark build Failed on Error** checkbox.
+  id: totrans-406
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 勾选**在错误时标记构建失败**复选框。
 - en: Select the Parsing rules file as **DISC_USAGE**:![How to do it...](img/0082OS_01_20.jpg)
+  id: totrans-407
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将解析规则文件选择为**DISC_USAGE**：![如何操作...](img/0082OS_01_20.jpg)
 - en: Run the build a number of times.
+  id: totrans-408
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 多次运行构建。
 - en: Under **Build History** on the left-hand side, select the trend link. You can
     now view trend reports and see a timeline of success and failure, as shown in
     the following screenshot:![How to do it...](img/0082OS_01_21.jpg)
+  id: totrans-409
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧的**构建历史**下，选择趋势链接。您现在可以查看趋势报告，并查看成功和失败的时间线，如以下屏幕截图所示：![如何操作...](img/0082OS_01_21.jpg)
 - en: How it works...
+  id: totrans-410
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'The Perl script expects two command-line inputs: hard and soft limits. The
     hard limit is the value in bytes that the disk utilization under the `$content`
     directory should not exceed. The soft limit is a smaller value in bytes that triggers
     a warning rather than an error. The warning gives time to administrators to clean
     up before the hard limit is reached.'
+  id: totrans-411
   prefs: []
   type: TYPE_NORMAL
+  zh: Perl脚本期望接收两个命令行输入：硬限制和软限制。硬限制是`$content`目录下磁盘利用率不应超过的字节值。软限制是一个较小的字节值，触发警告而不是错误。警告给管理员提供了在达到硬限制之前清理的时间。
 - en: The Perl script transverses the Jenkins workspace and counts the size of all
     the files. The script calls the `size_summary` method for each file or directory
     underneath the workspace.
+  id: totrans-412
   prefs: []
   type: TYPE_NORMAL
+  zh: Perl脚本遍历Jenkins工作区并计算所有文件的大小。对于工作区下的每个文件或目录，脚本调用`size_summary`方法。
 - en: If the hard limit is less than the content size, then the script generates the
     log output `[HARD_LIMIT ERROR]` The parsing rules will pick this up and fail the
     build. If the soft limit is reached, then the script will generate the output
     `[SOFT_LIMIT WARN]`. The plugin will spot this due to the `warn /SOFT_LIMIT/`
     rule and then signal a job `warn`.
+  id: totrans-413
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果硬限制小于内容大小，则脚本会生成日志输出`[HARD_LIMIT ERROR]`。解析规则将捕获此错误并导致构建失败。如果达到软限制，则脚本将生成输出`[SOFT_LIMIT
+    WARN]`。插件将根据`warn /SOFT_LIMIT/`规则检测到这一点，然后发出作业`warn`信号。
 - en: There's more...
+  id: totrans-414
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Welcome to the wonderful world of Jenkins. You can now utilize all the installed
     features at your disposal. The job can be scheduled and e-mails can be sent out
     on failure. You can also tweet, add entries to Google calendar, and trigger extra
     events such as disk cleaning builds and more. You are mostly limited by your imagination
     and twenty-first century technologies.
+  id: totrans-415
   prefs: []
   type: TYPE_NORMAL
+  zh: 欢迎来到Jenkins的奇妙世界。您现在可以利用所有安装的功能。作业可以按计划执行，并在失败时发送电子邮件。您还可以发布推文、添加Google日历条目，并触发额外的事件，例如磁盘清理构建等等。您的想象力和21世纪的技术基本上是有限的。
 - en: See also
+  id: totrans-416
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Backing up and restoring* recipe
+  id: totrans-417
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*备份和恢复*配方'
 - en: Keeping in contact with Jenkins through Firefox
+  id: totrans-418
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过Firefox与Jenkins保持联系
 - en: If you are a Jenkins administrator, then it is your role to keep an eye on the
     ebb and flow of build activity within your infrastructure. Builds can occasionally
     freeze or break due to non-coding reasons. If a build fails and this is related
@@ -1927,173 +2813,255 @@
     a wide range of prods, kicks, shouts, and pings. I could even imagine a Google
     Summer of Code project with a remotely controlled buggy moving to the sleeping
     administrator and then tooting.
+  id: totrans-419
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您是Jenkins管理员，则您的角色是密切关注您的基础架构内构建活动的起伏变化。由于非编码原因，构建有时会偶尔冻结或中断。如果构建失败并且这与基础架构问题有关，则您需要迅速收到警告。Jenkins可以通过多种方式做到这一点。[第4章](ch04.html
+    "第4章。通过Jenkins进行通信") *通过Jenkins进行通信*，专门介绍了针对不同受众的不同方法。从电子邮件、Twitter和对话服务器，您可以选择广泛的提示、踢、喊和ping。我甚至可以想象一个Google夏季代码项目，其中一个远程控制的小车移动到睡着的管理员身边，然后吹口哨。
 - en: This recipe is one of the more pleasant ways for you to be reached. You will
     pull in Jenkins RSS feeds using a Firefox add-on. This allows you to view the
     build process while going about your everyday business.
+  id: totrans-420
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个配方是你被联系的更愉快的方式之一。你将使用Firefox附加组件拉取Jenkins的RSS源。这样你就可以在日常工作中查看构建过程了。
 - en: Getting ready
+  id: totrans-421
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: You will need Jenkins installed on your computer and an account on at least
     one Jenkins instance with a history of running jobs. You will also need to add
     the Status-4-Evar plugin, which you can get from [https://addons.mozilla.org/en-US/firefox/addon/status-4-evar/](https://addons.mozilla.org/en-US/firefox/addon/status-4-evar/).
+  id: totrans-422
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要在计算机上安装Jenkins，并在至少一个Jenkins实例上拥有一个运行作业历史的帐户。您还需要添加Status-4-Evar插件，您可以从[https://addons.mozilla.org/zh-CN/firefox/addon/status-4-evar/](https://addons.mozilla.org/zh-CN/firefox/addon/status-4-evar/)获取。
 - en: Note
+  id: totrans-423
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: The following URL will explain what happened to the Firefox status bar since
     the last edition of this book [https://support.mozilla.org/en-US/kb/what-happened-status-bar](https://support.mozilla.org/en-US/kb/what-happened-status-bar).
+  id: totrans-424
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下网址将解释自上一版书籍以来Firefox状态栏发生了什么变化[https://support.mozilla.org/zh-CN/kb/what-happened-status-bar](https://support.mozilla.org/zh-CN/kb/what-happened-status-bar)。
 - en: Tip
+  id: totrans-425
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**A plug for the developers**'
+  id: totrans-426
   prefs: []
   type: TYPE_NORMAL
+  zh: '**为开发者做广告**'
 - en: If you like the add-on and want more features in the future, then it is enlightened
     self-interest to donate a few bucks at the add-on author's website.
+  id: totrans-427
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你喜欢这个附加组件，并希望将来获得更多功能，那么在附加组件作者的网站上捐款几美元是理性的自利行为。
 - en: How to do it...
+  id: totrans-428
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Select the open menu icon at the top right-hand side of the browser:![How to
     do it...](img/0082OS_01_22.jpg)
+  id: totrans-429
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择浏览器右上角的打开菜单图标：![如何操作...](img/0082OS_01_22.jpg)
 - en: Click on the add-ons button:![How to do it...](img/0082OS_01_23.jpg)
+  id: totrans-430
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击附加组件按钮：![如何操作...](img/0082OS_01_23.jpg)
 - en: In **Search bulk** (top right), the **Search all add-ons** title searches for
     Jenkins.
+  id: totrans-431
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**搜索批量**（右上角），**搜索所有附加组件**标题搜索Jenkins。
 - en: Click on the **Install** button for **Jenkins build monitor**.
+  id: totrans-432
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**安装**按钮安装**Jenkins构建监视器**。
 - en: Restart Firefox.
+  id: totrans-433
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重新启动Firefox。
 - en: Now, at the bottom right-hand side of Firefox, you will see a small Jenkins
     icon:![How to do it...](img/0082OS_01_24.jpg)
+  id: totrans-434
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，在 Firefox 的右下角，您会看到一个小的 Jenkins 图标：![如何操作...](img/0082OS_01_24.jpg)
 - en: Right-click on the icon.
+  id: totrans-435
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击图标。
 - en: Select **Preferences** and the **Feeds** screen appears.
+  id: totrans-436
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**首选项**，然后会出现**订阅**屏幕。
 - en: Add a recognizable but short name for your Jenkins instance. For example, `Plugin
     test Server`.
+  id: totrans-437
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为您的 Jenkins 实例添加一个可识别但简短的名称。例如，`插件测试服务器`。
 - en: Add a URL using the following structure for **Feed URL** `http://host:port/rssAll`
     for example, `http://localhost:8080/rssAll`:![How to do it...](img/0082OS_01_25.jpg)
+  id: totrans-438
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为 **Feed URL** 添加 URL，结构如下 `http://host:port/rssAll` 例如，`http://localhost:8080/rssAll`：![如何操作...](img/0082OS_01_25.jpg)
 - en: Check **Enable executor monitoring**.
+  id: totrans-439
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查**启用执行器监控**。
 - en: Click on the **OK** button. An area in the add-on toolbar will appear with the
     **Plugin test Server** name of the feed URL(s) displayed and a health icon. If
     you hover your mouse over the name, more detailed status information will be displayed:![How
     to do it...](img/0082OS_01_26.jpg)
+  id: totrans-440
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**确定**按钮。插件工具栏中会出现一个区域，显示着**插件测试服务器**的订阅 URL 名称和一个健康图标。如果您将鼠标悬停在名称上，将显示更详细的状态信息：![如何操作...](img/0082OS_01_26.jpg)
 - en: How it works...
+  id: totrans-441
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Jenkins provides RSS feeds to make its status information accessible to a wide
     variety of tools. The Firefox add-on polls the configured feed and displays the
     information in a digestible format.
+  id: totrans-442
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 提供了 RSS 订阅以使其状态信息可供各种工具访问。Firefox 插件会轮询配置的订阅，并以易于理解的格式显示信息。
 - en: 'To configure for a specific crucial job, you will need to use the following
     structure: `http://host:port/job/job name/rssAll`'
+  id: totrans-443
   prefs: []
   type: TYPE_NORMAL
+  zh: 要为特定的关键作业进行配置，您需要使用以下结构：`http://host:port/job/job name/rssAll`
 - en: To view only build failures, replace `rssAll` with `rssFailed`. To view only
     the last build, replace `rssAll` with `rssLatest`.
+  id: totrans-444
   prefs: []
   type: TYPE_NORMAL
+  zh: 要仅查看构建失败，请将 `rssAll` 替换为 `rssFailed`。要仅查看最后一次构建，请将 `rssAll` 替换为 `rssLatest`。
 - en: There's more...
+  id: totrans-445
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few more things to consider.
+  id: totrans-446
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些需要考虑的事项。
 - en: RSS credentials
+  id: totrans-447
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: RSS 凭据
 - en: 'If security is enabled on your Jenkins instances, then most of your RSS feeds
     will be password-protected. To add a password, you will need to modify the feed
     URL to the following structure:'
+  id: totrans-448
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果在您的 Jenkins 实例上启用了安全性，则大多数 RSS 订阅将受到密码保护。要添加密码，您需要修改订阅 URL 为以下结构：
 - en: '`http://username:password@host:port/path`'
+  id: totrans-449
   prefs: []
   type: TYPE_NORMAL
+  zh: '`http://username:password@host:port/path`'
 - en: Tip
+  id: totrans-450
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Warning**'
+  id: totrans-451
   prefs: []
   type: TYPE_NORMAL
+  zh: '**警告**'
 - en: The negative aspect of using this add-on is that any feed URL password is displayed
     in plain text during editing.
+  id: totrans-452
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用此插件的负面方面是在编辑期间显示任何订阅 URL 密码的纯文本。
 - en: Alternatives to Firefox
+  id: totrans-453
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Firefox 的替代方案
 - en: Firefox runs on a number of operating systems. This allows you to use one plugin
     for notifications across those operating systems. However, the disadvantage is
     that you have to keep a Firefox browser running in the background. An alternative
     is OS-specific notification software that pops up in the system tray. Examples
     of this type of software include CCMenu for Mac OSX ([http://ccmenu.org](http://ccmenu.org))
     or CCTray for Windows ([http://en.sourceforge.jp/projects/sfnet_ccnet/releases/](http://en.sourceforge.jp/projects/sfnet_ccnet/releases/)).
+  id: totrans-454
   prefs: []
   type: TYPE_NORMAL
+  zh: Firefox 可在多个操作系统上运行。这使您可以在这些操作系统上使用一个插件进行通知。然而，缺点是您必须保持 Firefox 浏览器在后台运行。另一种选择是特定于操作系统的通知软件，它会在系统托盘中弹出。这种软件的示例包括用于
+    Mac OSX 的 CCMenu ([http://ccmenu.org](http://ccmenu.org)) 或用于 Windows 的 CCTray
+    ([http://en.sourceforge.jp/projects/sfnet_ccnet/releases/](http://en.sourceforge.jp/projects/sfnet_ccnet/releases/))。
 - en: See also
+  id: totrans-455
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Mobile presentations using Google Calendar* recipe in [Chapter 4](ch04.html
     "Chapter 4. Communicating Through Jenkins"), *Communicating Through Jenkins*
+  id: totrans-456
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第 4 章](ch04.html "第 4 章。通过 Jenkins 进行通信")中的 *使用 Google 日历进行移动演示* 配方，*通过 Jenkins
+    进行通信*'
 - en: Monitoring via JavaMelody
+  id: totrans-457
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 JavaMelody 进行监控
 - en: JavaMelody ([http://code.google.com/p/javamelody/](http://code.google.com/p/javamelody/))
     is an open source project that provides comprehensive monitoring. The Jenkins
     plugin monitors both the master instance of Jenkins and also its nodes. The plugin
@@ -2103,79 +3071,113 @@
     JavaMelody allows you to keep a pulse on incremental degradation of resources.
     It eases the writing of reports by exporting statistics in a PDF format. Containing
     over 25 person years of effort, JavaMelody is feature-rich.
+  id: totrans-458
   prefs: []
   type: TYPE_NORMAL
+  zh: JavaMelody（[http://code.google.com/p/javamelody/](http://code.google.com/p/javamelody/)）是一个提供全面监控的开源项目。Jenkins插件监控Jenkins的主实例和节点。该插件提供了大量重要信息。你可以查看主要数量（如CPU或内存）1天、1周甚至数月的演变图表。演变图表非常适合确定资源消耗大的定期作业。JavaMelody允许您实时监控资源的渐进性退化。它通过将统计数据导出为PDF格式来简化报告的编写。JavaMelody已经拥有超过25个人年的努力，功能丰富。
 - en: This recipe shows you how easy it is to install the Monitoring plugin ([https://wiki.jenkins-ci.org/display/Jenkins/Monitoring](https://wiki.jenkins-ci.org/display/Jenkins/Monitoring))
     and then discusses troubleshooting strategies and their relationship to the generated
     metrics.
+  id: totrans-459
   prefs: []
   type: TYPE_NORMAL
+  zh: 本文介绍了如何轻松安装监控插件（[https://wiki.jenkins-ci.org/display/Jenkins/Monitoring](https://wiki.jenkins-ci.org/display/Jenkins/Monitoring)），然后讨论了故障排除策略及其与生成的指标的关系。
 - en: Tip
+  id: totrans-460
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Community partnership**'
+  id: totrans-461
   prefs: []
   type: TYPE_NORMAL
+  zh: '**社区合作**'
 - en: If you find this plugin useful, consider contributing back to either the plugin
     or the core JavaMelody project.
+  id: totrans-462
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你觉得这个插件有用，请考虑回馈给插件或核心JavaMelody项目。
 - en: Getting ready
+  id: totrans-463
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: You will need to have installed the Monitoring plugin.
+  id: totrans-464
   prefs: []
   type: TYPE_NORMAL
+  zh: 你需要安装监控插件。
 - en: How to do it...
+  id: totrans-465
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Click on the **Monitoring Jenkins master** link on the **Manage Jenkins** page.
     You will now see the detailed monitoring information, as shown in the following
     screenshot:![How to do it...](img/0082OS_01_27.jpg)
+  id: totrans-466
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**管理Jenkins**页面点击**监控Jenkins主节点**链接。现在你会看到详细的监控信息，如下截图所示：![如何操作...](img/0082OS_01_27.jpg)
 - en: Read the online help at `http://host:port/monitoring?resource=help/help.html`
     where host and port point to your server.
+  id: totrans-467
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`http://host:port/monitoring?resource=help/help.html`上阅读在线帮助，其中host和port指向你的服务器。
 - en: Review the monitoring of the node processes directly by visiting `http://host:port/monitoring/nodes`.
+  id: totrans-468
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过访问`http://host:port/monitoring/nodes`直接查看节点进程的监控。
 - en: How it works...
+  id: totrans-469
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: JavaMelody has the advantage of running as the Jenkins user and can gain access
     to all the relevant metrics. Its main disadvantage is that it runs as part of
     the server and will stop monitoring as soon as there is a failure. Because of
     this disadvantage, you should consider JavaMelody as part of the monitoring solution
     and not the whole solution.
+  id: totrans-470
   prefs: []
   type: TYPE_NORMAL
+  zh: JavaMelody的优点是以Jenkins用户身份运行，并且可以访问所有相关的指标。它的主要缺点是作为服务器的一部分运行，一旦发生故障就会停止监视。因此，由于这个缺点，你应该将JavaMelody视为监控解决方案的一部分，而不是整个解决方案。
 - en: There's more...
+  id: totrans-471
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Monitoring is the foundation for comprehensive testing and troubleshooting.
     This section explores the relation between these issues and the measurements exposed
     in the plugin.
+  id: totrans-472
   prefs: []
   type: TYPE_NORMAL
+  zh: 监控是全面测试和故障排除的基础。本节探讨了这些问题与插件中提供的测量之间的关系。
 - en: Troubleshooting with JavaMelody – memory
+  id: totrans-473
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 使用JavaMelody进行故障排除 - 内存
 - en: Your Jenkins server can at times have memory issues due to greedy builds, leaky
     plugins, or some hidden complexity in the infrastructure. JavaMelody has a comprehensive
     range of memory measurements, including a heap dump and a memory histogram.
+  id: totrans-474
   prefs: []
   type: TYPE_NORMAL
+  zh: 你的Jenkins服务器有时可能会出现内存问题，原因是构建过于贪婪、插件泄露或基础架构中的某些隐藏复杂性。JavaMelody具有广泛的内存测量范围，包括堆转储和内存直方图。
 - en: The Java virtual machine divides memory into various areas and, to clean up,
     it removes objects that have no references to other objects. Garbage collection
     can be CPU-intensive when it is busy and the nearer to full memory, the busier
@@ -2184,29 +3186,41 @@
     manages memory, it is also a fallacy to believe there is no potential for memory
     leakage in Java. Memory can be held too long by many common practices such as
     custom caches or calls to native libraries.
+  id: totrans-475
   prefs: []
   type: TYPE_NORMAL
+  zh: Java 虚拟机将内存分成各种区域，为了清理，它会删除没有对其他对象的引用的对象。当垃圾回收忙碌时，它可能会占用大量 CPU 资源，而且内存越满，垃圾回收就越繁忙。对于外部监控代理来说，这看起来像是一个
+    CPU 峰值，通常很难追踪到。仅仅因为垃圾收集器管理内存，就认为 Java 中不存在内存泄漏的潜力也是一种错误。许多常见做法，如自定义缓存或调用本地库，都可能导致内存被持有太长时间。
 - en: Slow burning memory leaks will show up as gentle slopes on the memory-related
     evolution graphs. If you suspect that you have a memory leak, then you can get
     the plugin to force a full garbage collection through the **Execute the garbage
     collector** link. If it is not a memory leak, the gentle slope will abruptly fall.
+  id: totrans-476
   prefs: []
   type: TYPE_NORMAL
+  zh: 慢慢渗漏的内存泄漏将显示为与内存相关的演化图上的缓缓上升。如果你怀疑有内存泄漏，那么你可以通过**执行垃圾收集器**链接来强制插件进行完整的垃圾收集。如果不是内存泄漏，那么这个缓缓上升将会突然下降。
 - en: Memory issues can also express themselves as large CPU spikes as the garbage
     collector franticly tries to clean up, but can barely clean enough space. The
     garbage collector can also pause the application while comprehensively looking
     for no longer referenced objects ("Stop the world garbage collection") and thus
     cause large response times for web browser requests. This can be seen through
     the **mean** and **max** times in **Statistics http – 1 day**.
+  id: totrans-477
   prefs: []
   type: TYPE_NORMAL
+  zh: 内存问题也可能表现为大的 CPU 峰值，因为垃圾收集器拼命尝试清理，但几乎无法清理足够的空间。垃圾收集器还可以在全面寻找不再被引用的对象时暂停应用程序（"停止世界"垃圾收集），从而导致网页浏览器请求的响应时间增加。这可以通过**统计
+    http - 1 天**中的**平均**和**最大**时间来观察到。
 - en: Troubleshooting with JavaMelody – painful jobs
+  id: totrans-478
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 使用 JavaMelody 进行故障排除 - 痛苦的工作
 - en: 'You should consider the following points:'
+  id: totrans-479
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该考虑以下几点：
 - en: '**Offload work**: For a stable infrastructure, offload as much work from the
     master instance as possible. If you have scheduled tasks, keep the heaviest ones
     separate in time. Time separation not only evens out load, but also makes finding
@@ -2214,57 +3228,80 @@
     JavaMelody. Also consider spatial separation; if a given node or a labeled set
     of nodes shows problematic issues, then start switching around machine location
     of jobs and view their individual performance characteristics through `http://host:port/monitoring/nodes`.'
+  id: totrans-480
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**卸载工作**：为了稳定的基础设施，尽可能地从主实例中卸载尽可能多的工作。如果你有定期任务，请将最重的任务在时间上保持分离。时间分离不仅能均匀负载，而且可以通过观察
+    JavaMelody 的演化图来更容易地找到有问题的构建。还要考虑空间分离；如果某个节点或一组标记的节点显示出问题，那么开始切换作业的机器位置，并通过 `http://host:port/monitoring/nodes`
+    查看它们的单独性能特征。'
 - en: '**Hardware is cheap**: Compared to paying for human hours, buying an extra
     8 GB is roughly equivalent to one man''s hour effort.'
+  id: totrans-481
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**硬件成本低廉**：与支付人工小时相比，购买额外的 8 GB 大约相当于一个人小时的努力。'
 - en: Note
+  id: totrans-482
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: A common gotcha is to add memory to the server, while forgetting to update the
     init scripts to allow Jenkins to use more memory.
+  id: totrans-483
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 一个常见的错误是向服务器添加内存，同时忘记更新初始化脚本以允许 Jenkins 使用更多内存。
 - en: '**Review the build scripts**: Javadoc generation and custom Ant scripts can
     fork JVMs and reserve memory defined within their own configuration. Programming
     errors can also be the cause of the frustration. Don''t forget to review JavaMelody''s
     report on **Statistic system error log** and **Statistic http system errors**.'
+  id: totrans-484
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**审查构建脚本**：Javadoc 生成和自定义 Ant 脚本可以分叉 JVM 并在其自己的配置中保留定义的内存。编程错误也可能是问题的原因。不要忘记审查
+    JavaMelody 关于**统计系统错误日志**和**统计 http 系统错误**的报告。'
 - en: '**Don''t forget external factors**: Factors include backups, cron jobs, updating
     the locate database, and network maintenance. These will show up as periodic patterns
     in the evolution charts.'
+  id: totrans-485
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**不要忘记外部因素**：因素包括备份、定期任务、更新 locate 数据库和网络维护。这些将显示为演化图中的周期性模式。'
 - en: '**Strength in numbers**: Use JavaMelody in combination with the disk usage
     plugin and others to keep a comprehensive overview of the vital statistics. Each
     plugin is simple to configure, but their usefulness to you will grow quicker than
     the maintenance costs of adding extra plugins.'
+  id: totrans-486
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**人多势众**：结合磁盘使用插件等使用JavaMelody，以全面了解重要统计信息。每个插件都很容易配置，但它们对您的有用性将比增加额外插件的维护成本增长更快。'
 - en: See also
+  id: totrans-487
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Using Groovy hook scripts and triggering events on startup* recipe in [Chapter
     7](ch07.html "Chapter 7. Exploring Plugins"), *Exploring Plugins*
+  id: totrans-488
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第7章](ch07.html "第7章. 插件探索"), *插件探索*中的*使用Groovy钩子脚本和在启动时触发事件*食谱'
 - en: Keeping track of script glue
+  id: totrans-489
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 跟踪脚本粘合剂
 - en: There are negative implications for backing up and especially restoring if maintenance
     scripts are scattered across the infrastructure. It is better to keep your scripts
     in one place and then run them remotely through the nodes. Consider placing your
@@ -2273,493 +3310,729 @@
     scripts online. Your organization can reap the benefits; the scripts will then
     get some significant peer review and improvements. For the communities repository
     details, review the support information at `http://localhost:8080/scriptler.git/`.
+  id: totrans-490
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果维护脚本在基础架构中分散，备份和特别是还原将产生负面影响。最好将您的脚本放在一个地方，然后通过节点远程运行它们。考虑将您的脚本放在主Jenkins主目录下并备份到Git存储库。如果您能在线共享较不敏感的脚本，对社区来说将更好。您的组织将获得好处；然后脚本将得到一些重要的同行审查和改进。有关社区存储库详细信息，请查看`http://localhost:8080/scriptler.git/`中的支持信息。
 - en: In this recipe, we will explore the use of the Scriptler plugin to manage your
     scripts locally and download useful scripts from an online catalogue.
+  id: totrans-491
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本食谱中，我们将探讨Scriptler插件的使用，以在本地管理您的脚本并从在线目录下载有用的脚本。
 - en: Getting ready
+  id: totrans-492
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: You will need to install the Scriptler plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin)).
+  id: totrans-493
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要安装Scriptler插件（[https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin)）。
 - en: How to do it...
+  id: totrans-494
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Click on the **Scriptler** link under the **Manage Jenkins** page. You will
     notice the text in bold. Currently you do not have any scripts available; you
     can import scripts from a remote catalog or create your own.
+  id: totrans-495
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**Manage Jenkins**页面下点击**Scriptler**链接。您会注意到粗体文本。当前您没有任何可用的脚本；您可以从远程目录导入脚本或创建自己的脚本。
 - en: Click on the **Remote Script catalogs** link on the left-hand side.
+  id: totrans-496
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧点击**远程脚本目录**链接。
 - en: Click on the **ScriptierWeb** tab.
+  id: totrans-497
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**ScriptierWeb**选项卡。
 - en: Click on the icon of the floppy disk for **getThreadDump**. If the script is
     not available, then choose another script of your choice.
+  id: totrans-498
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**getThreadDump**的软盘图标。如果脚本不可用，则选择另一个您喜欢的脚本。
 - en: Click on the **Submit** button.
+  id: totrans-499
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**Submit**按钮。
 - en: You have now returned to the **Scriptler** main page. You will see three icons.
     Choose the furthest right to execute the script:![How to do it...](img/0082OS_01_28.jpg)
+  id: totrans-500
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您现在已经返回到**Scriptler**主页面。您会看到三个图标。选择最右边的图标来执行脚本：![如何操作...](img/0082OS_01_28.jpg)
 - en: You are now in the **Run a script** page. Select a node and then hit the **Run**
     button.
+  id: totrans-501
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您现在位于**运行脚本**页面。选择一个节点，然后点击**运行**按钮。
 - en: Note
+  id: totrans-502
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If the script fails with a message `startup failed`, then please add a new line
     between `entry.key` and `for` and the script will then function correctly.
+  id: totrans-503
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果脚本出现`startup failed`消息，则请在`entry.key`和`for`之间添加一行，然后脚本将正常运行。
 - en: To write a new Groovy script or upload the one that you have on your local system,
     click on the **Add a new Script** link on the left-hand side.
+  id: totrans-504
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要编写新的Groovy脚本或上传您本地系统上的脚本，请在左侧点击**添加新脚本**链接。
 - en: How it works...
+  id: totrans-505
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: This plugin allows you to easily manage your Groovy scripts and enforces a standard
     place for all Jenkins administrators to keep their code, making it easier for
     you to plan backups and indirectly share knowledge.
+  id: totrans-506
   prefs: []
   type: TYPE_NORMAL
+  zh: 此插件允许您轻松管理您的Groovy脚本，并强制将所有Jenkins管理员的代码放在一个标准位置，这样您就可以更轻松地计划备份，并间接共享知识。
 - en: The plugin creates a directory named `scriptler` under the Jenkins workspace
     and persists the metainformation about the files you created in the `scriptler.xml`
     file. A second file named `scriptlerweb-catalog.xml` mentions the list of online
     files that you can download.
+  id: totrans-507
   prefs: []
   type: TYPE_NORMAL
+  zh: 该插件创建了一个名为 `scriptler` 的目录，位于 Jenkins 工作空间下，并将你创建的文件的元信息持久化到 `scriptler.xml`
+    文件中。第二个文件名为 `scriptlerweb-catalog.xml`，提到了可以下载的在线文件列表。
 - en: All local scripts are contained in the subdirectory scripts.
+  id: totrans-508
   prefs: []
   type: TYPE_NORMAL
+  zh: 所有本地脚本都包含在子目录 scripts 中。
 - en: There's more...
+  id: totrans-509
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: If enough people use this plugin, then the list of online scripts will radically
     increase the process of generating a significant library of reusable code. Therefore,
     if you have interesting Groovy scripts, then upload them. You will need to create
     a new account the first time to log in at [http://scriptlerweb.appspot.com/login.gtpl](http://scriptlerweb.appspot.com/login.gtpl).
+  id: totrans-510
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果足够多的人使用这个插件，那么在线脚本列表将大大增加生成一个重要的可重用代码库的过程。因此，如果你有有趣的 Groovy 脚本，那就上传吧。你需要在第一次登录时创建一个新账户，以便登录到
+    [http://scriptlerweb.appspot.com/login.gtpl](http://scriptlerweb.appspot.com/login.gtpl)。
 - en: Uploading your scripts allows people to vote on them and to send you feedback.
     The free peer review can only improve your scripting skills and increase your
     recognition in the wider community.
+  id: totrans-511
   prefs: []
   type: TYPE_NORMAL
+  zh: 上传你的脚本允许人们对其投票，并向你发送反馈。免费的同行评审只会提高你的脚本技能，并在更广泛的社区中增加你的认可度。
 - en: See also
+  id: totrans-512
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Scripting the Jenkins CLI* recipe
+  id: totrans-513
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*Scripting the Jenkins CLI* 配方'
 - en: The *Global modifications of jobs with Groovy* recipe
+  id: totrans-514
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 Groovy 对作业进行全局修改* 配方'
 - en: Scripting the Jenkins CLI
+  id: totrans-515
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Scripting the Jenkins CLI
 - en: The Jenkins CLI ([https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI))
     allows you to perform a number of maintenance tasks on remote servers. Tasks include
     moving Jenkins instances on-and off-line, triggering builds, and running Groovy
     scripts. This makes for easy scripting of the most common chores.
+  id: totrans-516
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins CLI ([https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI))
+    允许你在远程服务器上执行多项维护任务。任务包括将 Jenkins 实例上线和下线、触发构建以及运行 Groovy 脚本。这使得对最常见的琐事进行脚本化变得容易。
 - en: In this recipe, you will log on to a Jenkins instance, run a Groovy script that
     looks for files greater than a certain size, and log off. The script represents
     a typical maintenance task. After reviewing the output, you can run a second script
     to remove a list of files you want deleted.
+  id: totrans-517
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个配方中，你将登录到 Jenkins 实例，运行一个查找大于某个大小的文件的 Groovy 脚本，然后退出登录。该脚本代表了一个典型的维护任务。在审查输出后，你可以运行第二个脚本来删除你想要删除的文件列表。
 - en: Note
+  id: totrans-518
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: At the time of writing this chapter, the interactive Groovy shell was not working
     from the CLI. This is mentioned in the bug report at [https://issues.jenkins-ci.org/browse/JENKINS-5930](https://issues.jenkins-ci.org/browse/JENKINS-5930).
+  id: totrans-519
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写本章时，交互式 Groovy shell 无法从 CLI 中工作。这在错误报告中有所提及：[https://issues.jenkins-ci.org/browse/JENKINS-5930](https://issues.jenkins-ci.org/browse/JENKINS-5930)。
 - en: Getting ready
+  id: totrans-520
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Download the CLI JAR file from `http://host/jnlpJars/jenkins-cli.jar`.
+  id: totrans-521
   prefs: []
   type: TYPE_NORMAL
+  zh: 从`http://host/jnlpJars/jenkins-cli.jar`下载 CLI JAR 文件。
 - en: 'Add the following script to a directory under the control of Jenkins and call
     it `large_files.groovy`:'
+  id: totrans-522
   prefs: []
   type: TYPE_NORMAL
+  zh: 将以下脚本添加到 Jenkins 控制下的一个目录，并将其命名为 `large_files.groovy`：
 - en: '[PRE47]'
+  id: totrans-523
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE47]'
 - en: How to do it...
+  id: totrans-524
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Run the following command from a terminal replacing `http://host` with the real
     address of your server, for example, `http://localhost:8080`.
+  id: totrans-525
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从终端运行以下命令，将`http://host`替换为你服务器的真实地址，例如，`http://localhost:8080`。
 - en: '[PRE48]'
+  id: totrans-526
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE48]'
 - en: Input your password.
+  id: totrans-527
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 输入你的密码。
 - en: 'Look at the online help:'
+  id: totrans-528
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看在线帮助：
 - en: '[PRE49]'
+  id: totrans-529
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE49]'
 - en: 'Run the Groovy script. The output will now mention all the oversized files:'
+  id: totrans-530
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 Groovy 脚本。输出现在将提到所有超大文件：
 - en: '[PRE50]'
+  id: totrans-531
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE50]'
 - en: 'Logout by running the following command:'
+  id: totrans-532
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过运行以下命令注销：
 - en: '[PRE51]'
+  id: totrans-533
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE51]'
 - en: How it works...
+  id: totrans-534
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The CLI allows you to work from the command line and perform standard tasks.
     Wrapping the CLI in a shell script such as Bash allows you to script maintenance
     tasks and a large number of Jenkins instances at the same time. This recipe performs
     a lot of maintenance. In this case, it reviews x number of files for oversized
     artifacts, saving you time that you can better spend on more interesting tasks.
+  id: totrans-535
   prefs: []
   type: TYPE_NORMAL
+  zh: CLI 允许你从命令行工作并执行标准任务。将 CLI 包装在诸如 Bash 等的 shell 脚本中，可以让你同时脚本化维护任务和大量 Jenkins
+    实例。本配方执行了大量维护工作。在这种情况下，它检查 x 个文件以查找超大的构件，节省你可以用在更有趣任务上的时间。
 - en: Before performing any commands, you needed to first authenticate via the `login`
     command.
+  id: totrans-536
   prefs: []
   type: TYPE_NORMAL
+  zh: 在执行任何命令之前，你需要通过 `login` 命令进行身份验证。
 - en: Reviewing the `root = jenkins.model.Jenkins.instance.getRootDir()`script uses
     the Jenkins framework to obtain a `java.io.File` that points to the Jenkins workspace.
+  id: totrans-537
   prefs: []
   type: TYPE_NORMAL
+  zh: 评审`root = jenkins.model.Jenkins.instance.getRootDir()`脚本使用Jenkins框架获取指向Jenkins工作空间的`java.io.File`。
 - en: The maximum file size is set to 32 MB via `maxsize=1024*1024*32`.
+  id: totrans-538
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过`maxsize=1024*1024*32`设置最大文件大小为32 MB。
 - en: The script visits every file under the Jenkins workspace using the standard
     `root.eachFileRecurse(){ file ->` Groovy method.
+  id: totrans-539
   prefs: []
   type: TYPE_NORMAL
+  zh: 该脚本使用标准的`root.eachFileRecurse(){ file ->` Groovy方法访问Jenkins工作空间下的每个文件。
 - en: Note
+  id: totrans-540
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You can find the current JavaDoc for Jenkins at [http://javadoc.jenkins-ci.org/](http://javadoc.jenkins-ci.org/).
+  id: totrans-541
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在[Jenkins的当前JavaDoc](http://javadoc.jenkins-ci.org/)中找到最新的文档。
 - en: There's more...
+  id: totrans-542
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The authentication used in this recipe can be improved. You can add your SSH
     public key under `http://localhost:8080/user/{username}/configure` (where `username`
     is your username) by cutting and pasting into the **SSH Public Keys** section.
     You can find detailed instructions at [https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI).
+  id: totrans-543
   prefs: []
   type: TYPE_NORMAL
+  zh: 此示例中使用的身份验证可以改进。你可以在`http://localhost:8080/user/{username}/configure`（其中`username`是你的用户名）下添加你的SSH公钥，方法是将其剪切并粘贴到**SSH公钥**部分。你可以在[https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+CLI)找到详细说明。
 - en: At the time of writing this book, there were some issues with the key approach.
     For more information, visit [https://issues.jenkins-ci.org/browse/JENKINS-10647](https://issues.jenkins-ci.org/browse/JENKINS-10647).
     Feel free to resort to the method used in this recipe that has proven to work
     stably, though less securely.
+  id: totrans-544
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写本书时，关键方法存在一些问题。有关更多信息，请访问[https://issues.jenkins-ci.org/browse/JENKINS-10647](https://issues.jenkins-ci.org/browse/JENKINS-10647)。尽管安全性较低，但请随时使用在本示例中已被证明稳定运行的方法。
 - en: Note
+  id: totrans-545
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The CLI is easily extendable and therefore, over time, the CLI's command list
     increases. It is thus important that you occasionally check the help option.
+  id: totrans-546
   prefs: []
   type: TYPE_NORMAL
+  zh: CLI易于扩展，因此随着时间的推移，CLI的命令列表会增加。因此，偶尔检查帮助选项非常重要。
 - en: See also
+  id: totrans-547
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Global modifications of jobs with Groovy* recipe
+  id: totrans-548
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用Groovy全局修改作业* 示例'
 - en: The *Scripting global build reports* recipe
+  id: totrans-549
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*编写全局构建报告的脚本* 示例'
 - en: Global modifications of jobs with Groovy
+  id: totrans-550
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Groovy全局修改作业
 - en: Jenkins is not only a Continuous Integration server, but also a rich framework
     with an exposed internal structure available from within the script console. You
     can programmatically iterate through the jobs, plugins, node configuration, and
     a variety of rich objects. As the number of jobs increases, you will notice the
     scripting becomes more valuable. For example, imagine that you need to increase
     custom memory settings across 100 jobs. A Groovy script can do that in seconds.
+  id: totrans-551
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins不仅是一个持续集成服务器，而且还是一个具有从脚本控制台中可用的暴露内部结构的丰富框架。你可以通过编程方式迭代作业、插件、节点配置和各种丰富的对象。随着作业数量的增加，你会注意到脚本变得更有价值。例如，想象一下，如果你需要在100个作业中增加自定义内存设置。一个Groovy脚本可以在几秒钟内完成。
 - en: 'This recipe is a representative example: you will run a script that iterates
     through all jobs. The script then finds one specific job by its name and then
     updates the description of that job with a random number.'
+  id: totrans-552
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个示例是一个典型的例子：你将运行一个脚本，该脚本通过所有作业进行迭代。然后，脚本通过作业名称找到一个特定的作业，然后使用一个随机数更新该作业的描述。
 - en: Getting ready
+  id: totrans-553
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Log in to Jenkins with an administrative account.
+  id: totrans-554
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用管理员帐户登录Jenkins。
 - en: How to do it...
+  id: totrans-555
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作步骤...
 - en: Create an empty job named `MyTest`.
+  id: totrans-556
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`MyTest`的空作业。
 - en: Within the **Manage Jenkins** page, click on the **Script Console** link.
+  id: totrans-557
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**管理Jenkins**页面中，点击**脚本控制台**链接。
 - en: Click on **Add new script**.
+  id: totrans-558
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**添加新脚本**。
 - en: 'Cut and paste the following script into the **Script** text area input:'
+  id: totrans-559
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下脚本剪切并粘贴到**脚本**文本区域输入：
 - en: '[PRE52]'
+  id: totrans-560
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE52]'
 - en: Click on the **Run** button. The results should be similar to the following
     screenshot:![How to do it...](img/0082OS_01_29.jpg)
+  id: totrans-561
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**运行**按钮。结果应与以下屏幕截图类似：![操作步骤...](img/0082OS_01_29.jpg)
 - en: Run the script again; you will notice that the random number in the description
     has now changed.
+  id: totrans-562
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 再次运行脚本；您会注意到描述中的随机数现在已经改变了。
 - en: 'Copy and run the following script:'
+  id: totrans-563
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制并运行以下脚本：
 - en: '[PRE53]'
+  id: totrans-564
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE53]'
 - en: 'If you have no `slave` instances on your Jenkins master, then no results are
     returned. Otherwise, the output will look similar to the following screenshot:'
+  id: totrans-565
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果您的Jenkins主服务器上没有`slave`实例，则不会返回任何结果。否则，输出将类似于以下屏幕截图：
 - en: '![How to do it...](img/0082OS_01_30.jpg)'
+  id: totrans-566
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![操作步骤...](img/0082OS_01_30.jpg)'
 - en: How it works...
+  id: totrans-567
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: Jenkins has a rich framework that is exposed to the script console. The first
     script iterates through jobs whose parent is `AbstractItem` ([http://javadoc.jenkins-ci.org/hudson/model/AbstractItem.html](http://javadoc.jenkins-ci.org/hudson/model/AbstractItem.html)).
     The second script iterates through instances of `slave` objects ([http://javadoc.jenkins-ci.org/hudson/slaves/SlaveComputer.html](http://javadoc.jenkins-ci.org/hudson/slaves/SlaveComputer.html)).
+  id: totrans-568
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 有一个丰富的框架，可以在脚本控制台中使用。第一个脚本遍历其父级为 `AbstractItem` 的作业 ([http://javadoc.jenkins-ci.org/hudson/model/AbstractItem.html](http://javadoc.jenkins-ci.org/hudson/model/AbstractItem.html))。第二个脚本遍历
+    `slave` 对象的实例 ([http://javadoc.jenkins-ci.org/hudson/slaves/SlaveComputer.html](http://javadoc.jenkins-ci.org/hudson/slaves/SlaveComputer.html))。
 - en: There's more...
+  id: totrans-569
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'For the hard core Java developer: if you don''t know how to do a programmatic
     task, then excellent sources of example code are the Jenkins subversion directories
     for plugins ([https://svn.jenkins-ci.org/trunk/hudson/plugins/](https://svn.jenkins-ci.org/trunk/hudson/plugins/))
     and the more up-to-date Github location ([https://github.com/jenkinsci](https://github.com/jenkinsci)).'
+  id: totrans-570
   prefs: []
   type: TYPE_NORMAL
+  zh: 针对硬核的Java开发者：如果您不知道如何执行编程任务，那么示例代码的极佳来源是 Jenkins 插件的 Subversion 目录 ([https://svn.jenkins-ci.org/trunk/hudson/plugins/](https://svn.jenkins-ci.org/trunk/hudson/plugins/))
+    和更新更及时的 Github 位置 ([https://github.com/jenkinsci](https://github.com/jenkinsci))。
 - en: Note
+  id: totrans-571
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If you're interested in donating your own plugin, review the information at
     [https://wiki.jenkins-ci.org/display/JENKINS/Hosting+Plugins](https://wiki.jenkins-ci.org/display/JENKINS/Hosting+Plugins).
+  id: totrans-572
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您有兴趣捐赠您自己的插件，请查阅[https://wiki.jenkins-ci.org/display/JENKINS/Hosting+Plugins](https://wiki.jenkins-ci.org/display/JENKINS/Hosting+Plugins)上的信息。
 - en: See also
+  id: totrans-573
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Scripting the Jenkins CLI* recipe
+  id: totrans-574
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*Scripting the Jenkins CLI* 配方'
 - en: The *Scripting global build reports* recipe
+  id: totrans-575
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*Scripting global build reports* 配方'
 - en: Signaling the need to archive
+  id: totrans-576
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 表示需要归档
 - en: Each development team is unique. Teams have their own way of doing business.
     In many organizations, there are one-off tasks that need to be done periodically.
     For example, at the end of each year, making a full backup of the entire filesystem.
+  id: totrans-577
   prefs: []
   type: TYPE_NORMAL
+  zh: 每个开发团队都是独特的。团队有自己的业务方式。在许多组织中，周期性需要完成一次性任务。例如，每年结束时，对整个文件系统进行全面备份。
 - en: This recipe details a script that checks for the last successful run of any
     job; if the year is different to the current year, then a warning is set at the
     beginning of the jobs description. Thus it is hinting to you it's time to perform
     some action, such as archiving and then deleting. You can of course programmatically
     do the archiving. However, for high-value actions it is worth forcing interceding,
     letting the Groovy scripts focus your attention.
+  id: totrans-578
   prefs: []
   type: TYPE_NORMAL
+  zh: 本配方详细介绍了一个脚本，该脚本检查任何作业的最后一次成功运行；如果年份与当前年份不同，则在作业描述的开头设置警告。因此，它向您提示现在是执行某些操作的时候，例如归档然后删除。当然，您也可以通过编程方式执行归档。但是，对于高价值的操作，值得强制干预，让
+    Groovy 脚本引起您的注意。
 - en: Getting ready
+  id: totrans-579
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Log in to Jenkins with an administrative account.
+  id: totrans-580
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用管理账户登录 Jenkins。
 - en: How to do it...
+  id: totrans-581
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何执行...
 - en: 'Within the **Manage Jenkins** page, click on the **Script Console** link and
     run the following script:'
+  id: totrans-582
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **管理 Jenkins** 页面中，点击 **Script Console** 链接，然后运行以下脚本：
 - en: '[PRE54]'
+  id: totrans-583
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE54]'
 - en: 'Any project that had its last successful build in another year than this will
     have the word **[ARCHIVE]** in red added at the start of its description, as shown
     in the following screenshot:'
+  id: totrans-584
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 任何项目，如果其上次成功构建的年份不同于当前年份，则在其描述的开头添加了以红色显示的 **[ARCHIVE]** 一词，如下图所示：
 - en: '![How to do it...](img/0082OS_01_31.jpg)'
+  id: totrans-585
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何执行...](img/0082OS_01_31.jpg)'
 - en: How it works...
+  id: totrans-586
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: 'Reviewing the code listing:'
+  id: totrans-587
   prefs: []
   type: TYPE_NORMAL
+  zh: 检查代码清单：
 - en: A warning string is defined and the current date is stored in now. Each job
     in Jenkins is programmatically iterated via the `for` statement.
+  id: totrans-588
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 定义了一个警告字符串，并将当前日期存储在 now 中。通过 `for` 语句在 Jenkins 中以编程方式迭代每个作业。
 - en: Jenkins has a class to store build run information. The runtime information
     is retrieved via `job.getLastSuccessfulBuild()` and is stored in the `lastSuccessfulBuild`
     instance. If no successful build has occurred, then `lastSuccessfulBuild` is set
     to `null`; otherwise, it has the runtime information.
+  id: totrans-589
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 有一个用于存储构建运行信息的类。运行时信息通过 `job.getLastSuccessfulBuild()` 检索，并存储在 `lastSuccessfulBuild`
+    实例中。如果没有成功的构建，则 `lastSuccessfulBuild` 被设置为 `null`；否则，它具有运行时信息。
 - en: The time of the last successful build is retrieved and then stored in the `time`
     instance via `lastSuccessfulBuild.getTimestamp().getTime()`.
+  id: totrans-590
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 检索上次成功构建的时间，然后通过 `lastSuccessfulBuild.getTimestamp().getTime()` 将其存储在 `time`
+    实例中。
 - en: The current year is compared with the year of the last successful build and,
     if they are different and the warning string has not already been added to the
     front of the job description, then the description is updated.
+  id: totrans-591
   prefs: []
   type: TYPE_NORMAL
+  zh: 当前年份与上次成功构建的年份进行比较，如果它们不同并且警告字符串尚未添加到作业描述的开头，则更新描述。
 - en: Tip
+  id: totrans-592
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Javadoc**'
+  id: totrans-593
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Javadoc**'
 - en: You will find the job API mentioned at [http://javadoc.jenkins-ci.org/hudson/model/Job.html](http://javadoc.jenkins-ci.org/hudson/model/Job.html)
     and the `Run` information at [http://javadoc.jenkins-ci.org/hudson/model/Run.html](http://javadoc.jenkins-ci.org/hudson/model/Run.html).
+  id: totrans-594
   prefs: []
   type: TYPE_NORMAL
+  zh: 你会在 [http://javadoc.jenkins-ci.org/hudson/model/Job.html](http://javadoc.jenkins-ci.org/hudson/model/Job.html)
+    找到作业 API，并且在 [http://javadoc.jenkins-ci.org/hudson/model/Run.html](http://javadoc.jenkins-ci.org/hudson/model/Run.html)
+    找到 `Run` 信息。
 - en: There's more...
+  id: totrans-595
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Before writing your own code, you should review what already exists. With 1,000
     plugins and expanding, Jenkins has a large, freely available, and openly licensed
     example code base. Although in this case, the standard API was used, it is well
     worth reviewing the plugin code base. In this example, you will find part of the
     code reused from the `lastsuccessversioncolumn` plugin. ([http://tinyurl.com/pack-jenkins-1](http://tinyurl.com/pack-jenkins-1)).
+  id: totrans-596
   prefs: []
   type: TYPE_NORMAL
+  zh: 在编写自己的代码之前，你应该审查已经存在的代码。Jenkins 拥有一个庞大、免费可用且开放授权的示例代码库，插件数量达到了 1,000 个并且在不断扩展。尽管在这种情况下使用了标准
+    API，但值得仔细审查插件代码库。在这个例子中，你会发现部分代码是从 `lastsuccessversioncolumn` 插件中重用的。([http://tinyurl.com/pack-jenkins-1](http://tinyurl.com/pack-jenkins-1))。
 - en: Tip
+  id: totrans-597
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: If you find any defects while reviewing the plugin code base, please contribute
     to the community via patches and bug reports.
+  id: totrans-598
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你在审查插件代码库时发现任何缺陷，请通过补丁和错误报告为社区做出贡献。
 - en: See also
+  id: totrans-599
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Scripting the Jenkins CLI* recipe
+  id: totrans-600
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*Scripting the Jenkins CLI* 配方'
 - en: The *Global modifications of jobs with Groovy* recipe
+  id: totrans-601
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 Groovy 全局修改作业* 配方'

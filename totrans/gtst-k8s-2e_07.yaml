@@ -1,36 +1,52 @@
 - en: Continuous Delivery
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 持续交付
 - en: This chapter will show the reader how to integrate their build pipeline and
     deployments with a Kubernetes cluster. It will cover the concept of using Gulp.js
     and Jenkins in conjunction with your Kubernetes cluster.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将向读者展示如何将他们的构建流程和部署与Kubernetes集群集成。它将涵盖如何使用Gulp.js和Jenkins与您的Kubernetes集群配合使用的概念。
 - en: 'This chapter will discuss the following topics:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将讨论以下主题：
 - en: Integrating with continuous deployment pipeline
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 与持续部署流水线集成
 - en: Using Gulp.js with Kubernetes
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用Gulp.js与Kubernetes
 - en: Integrating Jenkins with Kubernetes
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将Jenkins与Kubernetes集成
 - en: Integrating with continuous delivery pipeline
+  id: totrans-6
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 与持续交付流水线集成
 - en: Continuous integration and delivery are key components to modern development
     shops. *Speed to marke*t or *mean-time-to-revenue* are crucial for any company
     that is creating their own software. We'll see how Kubernetes can help you.
+  id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续集成和交付是现代开发工作室的关键组成部分。对于任何正在开发自己软件的公司来说，*上线速度*或*收益的平均时间*至关重要。我们将看看Kubernetes如何帮助您。
 - en: '**CI/CD** (short for **Continuous Integration / Continuous Delivery**) often
     requires ephemeral build and test servers to be available whenever changes are
     pushed to the code repository. Docker and Kubernetes are well suited for this
@@ -38,123 +54,187 @@
     remove them after builds are run. In addition, if you already have a large portion
     of infrastructure available on your cluster, it can make sense to utilize the
     idle capacity for builds and testing.'
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: '**CI/CD**（持续集成/持续交付的缩写）通常需要在代码库推送更改时提供临时构建和测试服务器。Docker和Kubernetes非常适合这项任务，因为可以轻松在几秒钟内创建容器，并在运行构建后同样轻松地将其删除。此外，如果您的集群上已经有大量基础设施可用，那么利用空闲容量进行构建和测试是有意义的。'
 - en: 'In this article, we will explore two popular tools used in building and deploying
     software:'
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本文中，我们将探讨用于构建和部署软件的两种流行工具：
 - en: '**Gulp.js**: This is a simple task runner used to automate the build process
     using **JavaScript** and **Node.js**'
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Gulp.js**：这是一个简单的任务执行器，用于使用**JavaScript**和**Node.js**自动化构建过程。'
 - en: '**Jenkins**: This is a fully-fledged continuous integration server'
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Jenkins**：这是一个完整的持续集成服务器'
 - en: Gulp.js
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Gulp.js
 - en: Gulp.js gives us the framework to do *Build as code*. Similar to *Infrastructure
     as code*, this allows us to programmatically define our build process. We will
     walk through a short example to demonstrate how you can create a complete workflow
     from a Docker image build to the final Kubernetes service.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: Gulp.js为我们提供了*Build as code*的框架。类似于*基础设施即代码*，这使我们能够以程序方式定义我们的构建过程。我们将通过一个简短的示例演示如何从Docker镜像构建到最终Kubernetes服务创建一个完整的工作流程。
 - en: Prerequisites
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: For this section of the article, you will need a **NodeJS** environment installed
     and ready including the **node package manager** (**npm**). If you do not already
     have these packages installed, you can find instructions for installing them at
     [https://docs.npmjs.com/getting-started/installing-node](https://docs.npmjs.com/getting-started/installing-node).
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于本文的这一部分，您需要已安装并准备好一个**NodeJS**环境，包括**node包管理器**（**npm**）。如果您尚未安装这些软件包，可以在[https://docs.npmjs.com/getting-started/installing-node](https://docs.npmjs.com/getting-started/installing-node)找到安装说明。
 - en: You can check whether NodeJS is installed correctly with a `node -v` command.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过执行`node -v`命令检查NodeJS是否已正确安装。
 - en: You'll also need **Docker CE** and a **DockerHub** account to push a new image.
     You can find instructions to install Docker CE at [https://docs.docker.com/installation/](https://docs.docker.com/installation/).
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还需要**Docker CE**和一个**DockerHub**帐户来推送一个新的镜像。您可以在[https://docs.docker.com/installation/](https://docs.docker.com/installation/)找到安装Docker
+    CE的说明。
 - en: You can easily create a DockerHub account at [https://hub.docker.com/](https://hub.docker.com/).
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[https://hub.docker.com/](https://hub.docker.com/)轻松创建一个DockerHub帐户。
 - en: After you have your credentials, you can log in with the CLI using `$ docker
     login` command.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 在您拥有凭证后，您可以使用`$ docker login`命令通过CLI登录。
 - en: Gulp build example
+  id: totrans-20
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Gulp构建示例
 - en: 'Let''s start by creating a project directory named `node-gulp`:'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从创建一个名为`node-gulp`的项目目录开始：
 - en: '[PRE0]'
+  id: totrans-22
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Next, we will install the `gulp` package and check whether it''s ready by running
     the `npm` command with the version flag, as follows:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们将安装`gulp`包，并通过运行带有版本标志的`npm`命令来检查它是否准备好，如下所示：
 - en: '[PRE1]'
+  id: totrans-24
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'You may need to open a new terminal window to make sure that `gulp` is on your
     path. Also, make sure to navigate back to your `node-gulp` directory:'
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可能需要打开一个新的终端窗口，确保`gulp`在您的路径上。同时，确保返回到您的`node-gulp`目录：
 - en: '[PRE2]'
+  id: totrans-26
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'Next, we will install `gulp` locally in our project folder as well as the `gulp-git`
     and `gulp-shell` plugins, as follows:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们将在项目文件夹中本地安装`gulp`以及`gulp-git`和`gulp-shell`插件，如下所示：
 - en: '[PRE3]'
+  id: totrans-28
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Finally, we need to create a Kubernetes controller and service definition file,
     as well as a `gulpfile.js` file, to run all our tasks. Again, these files are
     available in the book file bundle, if you wish to copy them instead. Refer to
     the following code:'
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们需要创建一个 Kubernetes 控制器和服务定义文件，以及一个`gulpfile.js`文件，来运行我们的所有任务。同样，如果你希望复制它们，这些文件也可以在书籍文件包中找到。参考以下代码：
 - en: '[PRE4]'
+  id: totrans-30
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: '*Listing 7-1*: `node-gulp-controller.yaml`'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 7-1*：`node-gulp-controller.yaml`'
 - en: 'As you can see, we have a basic controller. You will need to replace `**<your
     username>**/node-gulp:latest` with your Docker Hub username:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所见，我们有一个基本的控制器。你需要用你的 Docker Hub 用户名替换`**<your username>**/node-gulp:latest`：
 - en: '[PRE5]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: '*Listing 7-2*: `node-gulp-service.yaml`'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 7-2*：`node-gulp-service.yaml`'
 - en: 'Next, we have a simple service that selects the pods from our controller and
     creates an external load balancer for access, as earlier:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们有一个简单的服务，它选择我们控制器中的 pods，并创建一个外部负载平衡器以便访问，就像以前一样：
 - en: '[PRE6]'
+  id: totrans-36
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: '*Listing 7-3*: `gulpfile.js`'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 7-3*：`gulpfile.js`'
 - en: Finally, we have the `gulpfile.js` file. This is where all our build tasks are
     defined. Again, fill in your Docker Hub username in both the `**<your username>**/node-gulp`
     sections.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们有`gulpfile.js`文件。这是我们定义所有构建任务的地方。同样，在`**<your username>**/node-gulp`部分填入你的
+    Docker Hub 用户名。
 - en: Looking through the file, first, the clone task downloads our image source code
     from GitHub. The pull tasks execute a `git` pull on the cloned repository. Next,
     the `docker-build` command builds an image from the `container-info` subfolder
@@ -162,248 +242,382 @@
     commands. As you can guess, the `create-kube-pod` command creates our controller
     and service for the first time, whereas the `update-kube-pod` command simply replaces
     the controller.
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 浏览文件，首先，克隆任务从 GitHub 下载我们的镜像源代码。拉取任务在克隆的存储库上执行`git pull`。接下来，`docker-build`命令从`container-info`子文件夹构建镜像并将其推送到
+    DockerHub。最后，我们有`create-kube-pod`和`update-kube-pod`命令。你可以猜到，`create-kube-pod`命令首次创建我们的控制器和服务，而`update-kube-pod`命令只是替换控制器。
 - en: 'Let''s go ahead and run these commands and see our end-to-end workflow:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们继续运行这些命令，看看我们的端到端工作流程：
 - en: '[PRE7]'
+  id: totrans-41
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'The first time through, you can run the `create-kube-pod` command, as follows:'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 第一次运行时，你可以执行以下`create-kube-pod`命令：
 - en: '[PRE8]'
+  id: totrans-43
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'This is all there is to it. If we run a quick `kubectl` describe command for
     the `node-gulp` service, we can get the external IP for our new service. Browse
     to that IP and you''ll see the familiar `container-info` application running.
     Note that the host starts with `node-gulp`, just as we named it in the previously
     mentioned pod definition:'
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 就是这样。如果我们对`node-gulp`服务运行快速的`kubectl describe`命令，我们可以获取到新服务的外部 IP。浏览该 IP，你会看到熟悉的`container-info`应用程序正在运行。请注意，主机以`node-gulp`开头，就像我们在前面提到的
+    pod 定义中命名的一样：
 - en: '![](img/B06302_07_01.png)'
+  id: totrans-45
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_01.png)'
 - en: Service launched by Gulp build
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 由 Gulp 构建启动的服务
 - en: 'On subsequent updates, run the `pull` and `update-kube-pod` commands, as shown
     here:'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 在后续更新中，像这样运行`pull`和`update-kube-pod`命令：
 - en: '[PRE9]'
+  id: totrans-48
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: This is a very simple example, but you can begin to see how easy it is to coordinate
     your build and deployment end to end with a few simple lines of code. Next, we
     will look at how to use Kubernetes to actually run builds using Jenkins.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 这只是一个非常简单的示例，但你可以开始看到如何通过几行简单的代码协调你的构建和部署端到端是多么容易。接下来，我们将看看如何使用 Kubernetes 来实际运行
+    Jenkins 构建。
 - en: Kubernetes plugin for Jenkins
+  id: totrans-50
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用于 Jenkins 的 Kubernetes 插件
 - en: One way we can use Kubernetes for our CI/CD pipeline is to run our Jenkins build
     slaves in a containerized environment. Luckily, there is already a plugin, written
     by Carlos Sanchez, which allows you to run Jenkins slaves in Kubernetes' pods.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用 Kubernetes 运行我们的 CI/CD 流水线的一种方式是在容器化环境中运行我们的 Jenkins 构建节点。幸运的是，已经有一个插件，由
+    Carlos Sanchez 编写，允许你在 Kubernetes 的 pods 中运行 Jenkins 构建节点。
 - en: Prerequisites
+  id: totrans-52
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: You'll need a Jenkins server handy for this next example. If you don't have
     one you can use, there is a Docker image available at [https://hub.docker.com/_/jenkins/](https://hub.docker.com/_/jenkins/).
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 你将需要一个 Jenkins 服务器来执行下一个示例。如果你没有可用的，你可以使用 Docker Hub 上提供的一个 Docker 镜像 [https://hub.docker.com/_/jenkins/](https://hub.docker.com/_/jenkins/)。
 - en: 'Running it from the Docker CLI is as simple as this:'
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过 Docker CLI 运行它就是这么简单的：
 - en: '[PRE10]'
+  id: totrans-55
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: Installing plugins
+  id: totrans-56
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装插件
 - en: Log in to your Jenkins server, and from your home dashboard, click on Manage
     Jenkins. Then, select Manage Plugins from the list.
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 登录到您的 Jenkins 服务器，从主页仪表板中，点击“管理 Jenkins”。然后，从列表中选择“管理插件”。
 - en: 'A note for those installing a new Jenkins server: When you first log in to
     the Jenkins server, it asks you to install plugins. Choose the default ones or
     no plugins will be installed:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于安装新的 Jenkins 服务器的注意事项：当您首次登录到 Jenkins 服务器时，它会要求您安装插件。选择默认插件或不安装插件将不会安装任何插件：
 - en: '![](img/B06302_07_02.png)'
+  id: totrans-59
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_02.png)'
 - en: Jenkins main dashboard
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 主面板
 - en: 'The credentials plugin is required, but should be installed by default. We
     can check the Installed tab if in doubt, as shown in the following screenshot:'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 凭证插件是必需的，但应默认安装。如果有疑问，可以在“已安装”选项卡中查看，如下所示的截图：
 - en: '![](img/B06302_07_03.png)'
+  id: totrans-62
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_03.png)'
 - en: Jenkins installed plugins
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 已安装的插件
 - en: Next, we can click on the Available tab. The Kubernetes plugin should be located
     under Cluster Management and Distributed Build or Misc (cloud). There are many
     plugins, so you can alternatively search for Kubernetes on the page. Check the
     box for Kubernetes Plugin and click on Install without restart.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们可以点击“可用”选项卡。Kubernetes 插件应该位于“集群管理和分布式构建”或“Misc (cloud)”下。有许多插件，因此您也可以在页面上搜索
+    Kubernetes。勾选 Kubernetes 插件的框，并点击“安装而不重启”。
 - en: 'This will install theKubernetes Plugin and the Durable Task Plugin:'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将安装 Kubernetes 插件和 Durable Task 插件：
 - en: '![](img/B06302_07_04.png)'
+  id: totrans-66
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_04.png)'
 - en: Plugin installation
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件安装
 - en: 'If you wish to install a nonstandard version or just like to tinker, you can
     optionally download the plugins. The latest **Kubernetes** and **Durable Task**
     plugins can be found here:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您希望安装非标准版本或只是喜欢调整，您可以选择下载插件。最新的 **Kubernetes** 和 **Durable Task** 插件可以在这里找到：
 - en: 'Kubernetes plugin: [https://wiki.jenkins-ci.org/display/JENKINS/Kubernetes+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Kubernetes+Plugin)
             Durable Task plugin: [https://wiki.jenkins-ci.org/display/JENKINS/Durable+Task+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Durable+Task+Plugin)
     Next, we can click on the Advanced tab and scroll down to Upload Plugin. Navigate
     to the `durable-task.hpi` file and click on Upload. You should see a screen that
     shows an installing progress bar. After a minute or two, it will update to Success.'
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 'Kubernetes 插件: [https://wiki.jenkins-ci.org/display/JENKINS/Kubernetes+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Kubernetes+Plugin)
+            Durable Task 插件: [https://wiki.jenkins-ci.org/display/JENKINS/Durable+Task+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Durable+Task+Plugin)
+    接下来，我们可以点击“高级”选项卡，然后滚动到“上传插件”。导航到`durable-task.hpi`文件，然后点击“上传”。您应该会看到一个显示安装进度条的屏幕。一两分钟后，它将更新为“成功”。'
 - en: Finally, install the main Kubernetes plugin. On the left-hand side, click on
     Manage Plugins and then the Advanced tab once again. This time, upload the `kubernetes.hpi`
     file and click on Upload. After a few minutes, the installation should be complete.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，安装主要的 Kubernetes 插件。在左侧，点击“管理插件”，然后再次点击“高级”选项卡。这次，上传`kubernetes.hpi`文件，然后点击“上传”。几分钟后，安装应该完成。
 - en: Configuring the Kubernetes plugin
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 Kubernetes 插件
 - en: 'Click on Back to Dashboard or the Jenkins link in the top-left corner. From
     the main dashboard page, click on the Credentials link. Choose a domain from the
     list; in my case, I just used the default Global credentials domain. Click on
     Add Credentials:'
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击“返回仪表板”或左上角的 Jenkins 链接。从主仪表板页面，点击“凭据”链接。从列表中选择一个域；在我的情况下，我只是使用了默认的全局凭据域。点击“添加凭据”：
 - en: '![](img/B06302_07_05.png)'
+  id: totrans-73
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_05.png)'
 - en: Add credentials screen
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 添加凭据屏幕
 - en: 'Leave Kind as Username with password and Scope as Global. Add your Kubernetes
     admin credentials. Remember that you can find these by running the `config` command:'
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 将“类型”留为空，将“范围”设置为全局。添加您的 Kubernetes 管理员凭据。请记住，您可以通过运行`config`命令找到这些凭据：
 - en: '[PRE11]'
+  id: totrans-76
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: You can leave ID blank, give it a sensible description, and click on the OK
     button.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以将 ID 留空，给它一个明智的描述，然后点击“确定”按钮。
 - en: 'Now that we have our credentials saved, we can add our Kubernetes server. Click
     on the Jenkins link in the top-left corner and then Manage Jenkins. From there,
     select Configure System and scroll all the way down to the Cloud section. Select
     Kubernetes from the Add a new cloud dropdown and a Kubernetes section will appear,
     as follows:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经保存了凭证，我们可以添加我们的 Kubernetes 服务器。点击左上角的 Jenkins 链接，然后选择“管理 Jenkins”。从那里，选择“配置系统”，然后滚动到最底部的“云”部分。从“添加新云”下拉菜单中选择
+    Kubernetes，将出现一个 Kubernetes 部分，如下所示：
 - en: '![](img/B06302_07_06_EDIT.png)'
+  id: totrans-79
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_06_EDIT.png)'
 - en: New Kubernetes cloud settings
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 新 Kubernetes 云设置
 - en: You'll need to specify the URL for your master in the form of `https://<Master
     IP>/`.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要以 `https://<Master IP>/` 的形式指定主节点的 URL。
 - en: Next, choose the credentials we added from the drop-down list. Since Kubernetes
     use a self-signed certificate by default, you'll also need to check the Disable
     https certificate check checkbox.
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，从下拉列表中选择我们添加的凭据。由于 Kubernetes 默认使用自签名证书，您还需要检查“禁用 HTTPS 证书检查”复选框。
 - en: Click on Test Connection and if all goes well, you should see Connection successful
     appearing next to the button.
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击“测试连接”，如果一切顺利，您应该看到“连接成功”按钮旁边出现。
 - en: If you are using an older version of the plugin, you may not see the Disable
     https certificate check checkbox. If this is the case, you will need to install
     the self-signed certificate directly on the **Jenkins Master**.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您使用的是插件的旧版本，可能看不到“禁用 HTTPS 证书检查”复选框。如果是这种情况，您需要直接在 **Jenkins 主节点** 上安装自签名证书。
 - en: Finally, we will add a pod template by choosing Kubernetes Pod Template from
     the Add Pod Template dropdown next to Images.
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，通过在图像旁边的“添加 Pod 模板”下拉菜单中选择 Kubernetes Pod 模板，我们将添加一个 Pod 模板。
 - en: This will create another new section. Use `jenkins-slave` for the Name and Labels
     section. Click on Add next to Containers and again use `jenkins-slave` for the
     Name. Use `csanchez/jenkins-slave` for the Docker Image and leave `/home/jenkins`
     for the Working Directory.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将创建另一个新的部分。在名称和标签部分使用 `jenkins-slave`。点击“容器”旁边的“添加”，再次使用 `jenkins-slave` 作为名称。使用
+    `csanchez/jenkins-slave` 作为 Docker 镜像，工作目录保留为 `/home/jenkins`。
 - en: 'Labels can be used later on in the build settings to force the build to use
     the Kubernetes cluster:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 标签可在构建设置中稍后使用，强制构建使用 Kubernetes 集群：
 - en: '![](img/B06302_07_07.png)'
+  id: totrans-88
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_07.png)'
 - en: Kubernetes cluster addition
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 集群添加
 - en: 'Here is the Pod Template that expands below the cluster addition:'
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是扩展到集群添加下面的 Pod 模板：
 - en: '![](img/B06302_07_08.png)'
+  id: totrans-91
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_07_08.png)'
 - en: Kubernetes pod template
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes Pod 模板
 - en: Click on Save and you are all set. Now, new builds created in Jenkins can use
     the slaves in the Kubernetes pod we just created.
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击保存，设置完成。现在，Jenkins 中创建的新构建可以使用我们刚刚创建的 Kubernetes Pod 中的从节点。
 - en: Here is another note about firewalls. The Jenkins Master will need to be reachable
     by all the machines in your Kubernetes cluster, as the pod could land anywhere.
     You can find out your port settings in Jenkins under Manage Jenkins and Configure
     Global Security.
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有关防火墙的另一个注意事项。Jenkins 主节点需要能够被 Kubernetes 集群中的所有机器访问，因为 Pod 可能会部署到任何地方。您可以在
+    Jenkins 的“管理 Jenkins”和“配置全局安全性”下找到端口设置。
 - en: Bonus fun
+  id: totrans-95
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 额外的乐趣
 - en: '**Fabric8** bills itself as an integration platform. It includes a variety
     of logging, monitoring, and continuous delivery tools. It also has a nice console,
     an API registry, and a 3D game that lets you shoot at your pods. It''s a very
     cool project, and it actually runs on Kubernetes. Refer to [http://fabric8.io/](http://fabric8.io/).'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Fabric8** 自称为一个集成平台。它包括各种日志记录、监视和持续交付工具。它还有一个漂亮的控制台、一个 API 注册表，以及一个 3D 游戏，让您可以射击您的
+    Pod。这是一个非常酷的项目，实际上是在 Kubernetes 上运行的。请参考 [http://fabric8.io/](http://fabric8.io/)。'
 - en: It's an easy single command to set up on your Kubernetes cluster, so refer to
     [http://fabric8.io/guide/getStarted/gke.html](http://fabric8.io/guide/getStarted/gke.html).
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: 在您的 Kubernetes 集群上设置起来非常简单，所以请参考 [http://fabric8.io/guide/getStarted/gke.html](http://fabric8.io/guide/getStarted/gke.html)。
 - en: Summary
+  id: totrans-98
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: We looked at two continuous integration tools that can be used with Kubernetes.
     We did a brief walk-through of deploying the Gulp.js task on our cluster. We also
     looked at a new plugin used to integrate Jenkins build slaves into your Kubernetes
     cluster. You should now have a better sense of how Kubernetes can integrate with
     your own CI/CD pipeline.
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们看了两个可与 Kubernetes 一起使用的持续集成工具。我们简要介绍了如何在我们的集群上部署 Gulp.js 任务。我们还看了一个新插件，用于将
+    Jenkins 构建从节点集成到您的 Kubernetes 集群中。现在，您应该更好地了解 Kubernetes 如何与您自己的 CI/CD 管道集成。

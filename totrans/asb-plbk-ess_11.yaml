@@ -413,6 +413,7 @@
   id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用标签和限制的组合使我们能够在playbook运行中精细控制执行的内容，例如：
 - en: '[PRE11]'
   id: totrans-60
   prefs: []
@@ -423,6 +424,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为WordPress创建一个编排playbook
 - en: 'We have a site-wide playbook, that is, the `site.yml` file that serves us to
     install and configure the complete WordPress stack. For updating the application
     with zero downtime and deploying new revisions, the `site.yml` file is not the
@@ -431,39 +433,46 @@
   id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们有一个站点范围的playbook，即`site.yml`文件，该文件用于安装和配置完整的WordPress堆栈。然而，要实现无停机更新应用程序以及部署新版本，`site.yml`文件并不是理想的playbook。我们希望遵循一个涉及以下步骤的工作流程：
 - en: Update the web servers one at a time. This will avoid any downtime.
   id: totrans-63
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 逐个更新Web服务器。这将避免任何停机时间。
 - en: Before updating, deregister the web server from the haproxy load balancer. This
     will stop the traffic to the web server in order to avoid downtime.
   id: totrans-64
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在更新之前，从haproxy负载均衡器中注销Web服务器。这将停止流量流向Web服务器，以避免停机时间。
 - en: Run roles related to the WordPress application, that is, Nginx, php5-fpm, and
     WordPress.
   id: totrans-65
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行与WordPress应用程序相关的角色，即Nginx、php5-fpm和WordPress。
 - en: Ensure that the web server is running and is listening to port 80.
   id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保Web服务器正在运行并监听端口80。
 - en: Register the server back on haproxy and start sending the traffic again.
   id: totrans-67
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将服务器重新注册到haproxy并重新开始发送流量。
 - en: 'Let''s create a playbook by the name `update.yml`, which does the orchestration
     just as explained earlier and uses most of the features discussed previously in
     this chapter. Here is the playbook:'
   id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们创建一个名为`update.yml`的playbook，它正如之前解释的一样进行编排，并且使用了本章前面讨论的大部分功能。以下是这个playbook：
 - en: '[PRE12]'
   id: totrans-69
   prefs: []
@@ -473,12 +482,14 @@
   id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们分析这段代码：
 - en: The playbook contains just one play, which runs on the hosts that belong to
     the `www group in` inventory.
   id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: playbook只包含一个play，该play在属于`www组`的主机上运行。
 - en: The serial keyword specifies the batch size, and allows rolling updates with
     zero downtime. In our case, since we have fewer hosts, we chose one web server
     to be updated at a time.
@@ -486,6 +497,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: serial关键字指定批大小，并允许无停机滚动更新。在我们的情况下，由于主机较少，我们选择逐个更新一个Web服务器。
 - en: Before applying the role, the host is deregistered from the load balancer using
     the pre-tasks section ,which runs a shell command with **socat**. This is run
     on all load balancers using the `delegate` keyword. Socat is a Unix utility similar
@@ -494,12 +506,14 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在应用该角色之前，使用预任务部分从负载平衡器中注销主机，该部分运行一个带有**socat**的shell命令。这在所有负载平衡器上使用`delegate`关键字运行。Socat是类似于并且功能更为丰富的Unix实用程序（nc）。
 - en: After deregistering the host, roles are applied to it; this will update the
     configurations for the web server or deploy new code.
   id: totrans-74
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在注销主机后，应用角色；这将更新Web服务器的配置或部署新代码。
 - en: Once updated, the post-tasks kick in, which first wait until the web server
     is up and listening to port 80, and only after its ready, then it registers it
     back to the load balancer.
@@ -507,57 +521,68 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 更新后，执行后任务，首先等待Web服务器启动并监听端口80，只有在Web服务器准备就绪时，才将其重新注册到负载平衡器。
 - en: Review questions
   id: totrans-76
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 复习问题
 - en: 'Do you think you''ve understood the chapter well enough? Try answering the
     following questions to test your understanding:'
   id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 你认为你已经足够了解本章了吗？尝试回答以下问题来测试你的理解：
 - en: Is it possible to use Ansible to orchestrate another configuration management
     tool?
   id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 是否可能使用Ansible来编排另一个配置管理工具？
 - en: How can you achieve zero downtime while deploying applications with Ansible?
   id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如何使用Ansible实现无停机部署应用程序？
 - en: What does the `--limit` command do to Ansible playbook?
   id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`--limit`命令对Ansible playbook有什么作用？'
 - en: How would you run a subset of tasks for a given role in a playbook?
   id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如何在playbook中针对给定角色运行任务的子集？
 - en: What is the purpose of using pre-tasks and post-tasks?
   id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用预任务和后任务的目的是什么？
 - en: What modules can be used to run tests from playbooks?
   id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 可以使用哪些模块来从playbook运行测试？
 - en: Why is the `always` tag special?
   id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`always`标签为何如此特殊？'
 - en: Summary
   id: totrans-85
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: We started this chapter by discussing what orchestration is, what different
     orchestration scenarios are, and how Ansible can fit in. You learned about Ansible's
     set of rich features in the context or orchestration. This includes multi-playbook

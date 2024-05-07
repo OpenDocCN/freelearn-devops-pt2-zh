@@ -1,184 +1,274 @@
 - en: Updates, Gradual Rollouts, and Autoscaling
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更新、渐进式发布和自动扩展
 - en: This chapter will expand upon the core concepts, which show you how to roll
     out updates and test new features of your application with minimal disruption
     to up-time. It will cover the basics of doing application updates, gradual rollouts,
     and A/B testing. In addition, we will look at scaling the Kubernetes cluster itself.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将扩展核心概念，向您展示如何在最小中断上线时间内推出更新并测试应用程序的新功能。它将介绍进行应用程序更新、渐进式发布和 A/B 测试的基础知识。此外，我们还将了解如何扩展
+    Kubernetes 集群本身。
 - en: 'This chapter will discuss the following topics:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将讨论以下主题：
 - en: Application scaling
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 应用程序扩展
 - en: Rolling updates
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 滚动更新
 - en: A/B testing
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: A/B 测试
 - en: Application autoscaling
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 应用程序自动扩展
 - en: Scaling up your cluster
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 扩展您的集群
 - en: Since version 1.2, Kubernetes has released a Deployments API. Deployments are
     the recommended way to deal with scaling and application updates going forward.
     However, it is still considered beta at the time of writing this book, while rolling
     updates has been stable for several versions. We will explore rolling updates
     in this chapter as an introduction to the scaling concept and then dive into the
     preferred method of using deployments in the next chapter.
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: 从版本1.2开始，Kubernetes发布了一个部署 API。在处理扩展和应用程序更新方面，部署是推荐的方法。然而，在撰写本书时，它仍被视为测试版，而滚动更新已经稳定了几个版本。本章将探讨滚动更新作为引入扩展概念的一种方法，然后在下一章深入探讨使用部署的首选方法。
 - en: Example set up
+  id: totrans-9
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 示例设置
 - en: 'Before we start exploring the various capabilities built into Kubernetes for
     scaling and updates, we will need a new example environment. We are going to use
     a variation of our previous container image with a blue background (refer to the
     *v0.1 and v0.2 (side by side)* image, later in this chapter, for a comparison).
     We have the following code:'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 在探索 Kubernetes 中用于扩展和更新的各种功能之前，我们将需要一个新的示例环境。我们将使用具有蓝色背景的先前容器映像的变体（请参考本章后面的*v0.1
+    和 v0.2（并排）*图像进行比较）。我们有以下代码：
 - en: '[PRE0]'
+  id: totrans-11
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: '*Listing 4-1*: `pod-scaling-controller.yaml`'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 4-1*：`pod-scaling-controller.yaml`'
 - en: '[PRE1]'
+  id: totrans-13
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: '*Listing 4-2*: `pod-scaling-service.yaml`'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: '*列表 4-2*：`pod-scaling-service.yaml`'
 - en: 'Create these services with the following commands:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用以下命令创建这些服务：
 - en: '[PRE2]'
+  id: totrans-16
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: The public IP address for the service may take a moment to create.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 服务的公共 IP 地址可能需要一段时间才能创建。
 - en: Scaling up
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 扩展
 - en: Over time, as you run your applications in the Kubernetes cluster, you will
     find that some applications need more resources, whereas others can manage with
     fewer resources. Instead of removing the entire RC (and associated pods), we want
     a more seamless way to scale our application up and down.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着时间推移，在 Kubernetes 集群中运行应用程序时，您会发现一些应用程序需要更多资源，而其他应用程序可以使用更少的资源。我们希望有一种更无缝的方式来使我们的应用程序进行扩展。而不是删除整个
+    RC（及其关联的 pod）。
 - en: 'Thankfully, Kubernetes includes a `scale` command, which is suited specifically
     for this purpose. The `scale` command works both with Replication Controllers
     and the new Deployments abstraction. For now, we will explore the usage with Replication
     Controllers. In our new example, we have only one replica running. You can check
     this with a `get pods` command:'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 幸运的是，Kubernetes 包含一个`scale`命令，专门用于此目的。`scale`命令既适用于复制控制器，也适用于新的部署抽象。目前，我们将使用复制控制器探索其用法。在我们的新示例中，只有一个副本在运行。您可以使用`get
+    pods`命令来检查：
 - en: '[PRE3]'
+  id: totrans-21
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Let''s try scaling that up to three with the following command:'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们尝试使用以下命令将其扩展到三个：
 - en: '[PRE4]'
+  id: totrans-23
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: If all goes well, you'll simply see the scaled word on the output of your terminal
     window.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一切顺利，您将在终端窗口的输出中看到`scaled`一词。
 - en: Optionally, you can specify the `--current-replicas` flag as a verification
     step. The scaling will only occur if the actual number of replicas currently running
     matches this count.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 可选地，您可以指定`--current-replicas`标志作为验证步骤。只有当前正在运行的副本数与此计数匹配时，才会进行扩展。
 - en: After listing our pods once again, we should now see three pods running with
     a name similar to `node-js-scale-**XXXXX**`, where the `X` characters are a random
     string.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次列出我们的 pods 后，现在应该看到三个名称类似`node-js-scale-**XXXXX**`的正在运行的 pods，其中`X`字符是一个随机字符串。
 - en: You can also use the `scale` command to reduce the number of replicas. In either
     case, the `scale` command adds or removes the necessary pod replicas, and the
     service automatically updates and balances across new or remaining replicas.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 您也可以使用`scale`命令减少副本的数量。在任何情况下，`scale`命令都会添加或删除必要的 pod 副本，并且服务会自动更新和在新的或剩余的副本之间平衡。
 - en: Smooth updates
+  id: totrans-28
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 平滑的更新
 - en: The scaling of our application up and down as our resource demands change is
     useful for many production scenarios, but what about simple application updates?
     Any production system will have code updates, patches, and feature additions.
     These could be occurring monthly, weekly, or even daily. Making sure that we have
     a reliable way to push out these changes without interruption to our users is
     a paramount consideration.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们的资源需求发生变化时，我们的应用程序进行上下缩放是许多生产场景中很有用的，但是对于简单的应用程序更新呢？任何生产系统都会有代码更新、补丁和功能添加。这些可能每月、每周甚至每天都在发生。确保我们有可靠的方法来推送这些变更而不会中断用户是一个首要考虑因素。
 - en: Once again, we benefit from the years of experience the Kubernetes system is
     built on. There is a built-in support for rolling updates with the 1.0 version.
     The `rolling-update` command allows us to update entire RCs or just the underlying
     Docker image used by each replica. We can also specify an update interval, which
     will allow us to update one pod at a time and wait until proceeding to the next.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 再次，我们受益于 Kubernetes 系统建立在多年经验基础上。1.0 版本内置了对滚动更新的支持。`rolling-update` 命令允许我们更新整个
+    RC 或仅更新每个副本使用的底层 Docker 镜像。我们还可以指定更新间隔，这将允许我们逐个更新一个 pod，并等待继续下一个。
 - en: 'Let''s take our scaling example and perform a rolling update to the 0.2 version
     of our container image. We will use an update interval of 2 minutes, so we can
     watch the process as it happens in the following way:'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们以我们的缩放示例为例，并对我们容器映像的 0.2 版本执行滚动更新。我们将使用 2 分钟的更新间隔，这样我们可以观察到进程如何进行：
 - en: '[PRE5]'
+  id: totrans-32
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: You should see some text about creating a new RC named `node-js-scale-XXXXX`,
     where the `X` characters will be a random string of numbers and letters. In addition,
     you will see the beginning of a loop that is starting one replica of the new version
     and removing one from the existing RC. This process will continue until the new
     RC has the full count of replicas running.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 您应该会看到一些关于创建名为 `node-js-scale-XXXXX` 的新 RC 的文本，其中 `X` 字符将是一串随机的数字和字母。此外，您将看到一个循环的开始，它开始一个新版本的副本，并从现有
+    RC 中删除一个。这个过程将继续，直到新的 RC 具有完整的副本计数运行。
 - en: 'If we want to follow along in real time, we can open another terminal window
     and use the `get pods` command, along with a label filter, to see what''s happening:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们想实时跟踪，可以打开另一个终端窗口，并使用 `get pods` 命令，再加上一个标签过滤器，来查看正在发生的情况：
 - en: '[PRE6]'
+  id: totrans-35
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: This command will filter for pods with `node-js-scale` in the name. If you run
     this after issuing the `rolling-update` command, you should see several pods running
     as it creates new versions and removes the old ones one by one.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 此命令将筛选出名称中带有 `node-js-scale` 的 pod。如果在发出 `rolling-update` 命令后运行此命令，您应该会看到几个
+    pod 在运行，因为它逐个创建新版本并逐个删除旧版本。
 - en: 'The full output of the previous `rolling-update` command should look something
     like the screenshot below:'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面 `rolling-update` 命令的完整输出应该看起来像下面的截图一样：
 - en: '![](img/B06302_04_01.png)'
+  id: totrans-38
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_01.png)'
 - en: The scaling output
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 缩放输出
 - en: As we can see here, Kubernetes is first creating a new RC named `node-js-scale-10ea08ff9a118ac6a93f85547ed28f6`.
     K8s then loops through one by one, creating a new pod in the new controller and
     removing one from the old. This continues until the new controller has the full
     replica count and the old one is at zero. After this, the old controller is deleted
     and the new one is renamed with the original controller name.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们在这里所看到的，Kubernetes 首先创建了一个名为 `node-js-scale-10ea08ff9a118ac6a93f85547ed28f6`
+    的新 RC。然后，K8s 逐个循环，创建一个新的 pod 在新的控制器中，并从旧的控制器中删除一个。这个过程会持续到新的控制器达到完整的副本数量，而旧的控制器为零。之后，旧的控制器被删除，新的控制器被重命名为原始的控制器名称。
 - en: 'If you run a `get pods` command now, you''ll notice that the pods still all
     have a longer name. Alternatively, we could have specified the name of a new controller
     in the command, and Kubernetes will create a new RC and pods using that name.
@@ -186,23 +276,36 @@
     completed. I recommend that you specify a new name for the updated controller
     to avoid confusion in your pod naming down the line. The same `update` command
     with this method will look like this:'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果现在运行 `get pods` 命令，您会注意到所有的 pod 仍然有一个更长的名称。或者，我们可以在命令中指定一个新控制器的名称，Kubernetes
+    将使用该名称创建一个新的 RC 和 pod。再次，更新完成后，旧名称的控制器简单消失了。我建议您为更新后的控制器指定一个新名称，以避免以后在 pod 命名中造成混淆。使用此方法的相同
+    `update` 命令将如下所示：
 - en: '[PRE7]'
+  id: totrans-42
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Using the static external IP address from the service we created in the first
     section, we can open the service in a browser. We should see our standard container
     information page. However, you''ll notice that the title now says Pod Scaling
     v0.2 and the background is light yellow:'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 利用我们在第一节创建的服务的静态外部 IP 地址，我们可以在浏览器中打开该服务。我们应该看到我们的标准容器信息页面。但是，你会注意到标题现在显示为 Pod
+    缩放 v0.2，背景为浅黄色：
 - en: '![](img/B06302_04_02-1.png)'
+  id: totrans-44
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_02-1.png)'
 - en: v0.1 and v0.2 (side by side)
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: v0.1 和 v0.2（并列）
 - en: It's worth noting that, during the entire update process, we've only been looking
     at pods and RCs. We didn't do anything with our service, but the service is still
     running fine and now directing to the new version of our pods. This is because
@@ -210,345 +313,517 @@
     new replicas use the same labels, the service has no problem using the new pods
     to service requests. The updates are done on the pods one by one, so it's seamless
     for the users of the service.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 值得注意的是，在整个更新过程中，我们只关注了 pod 和 RC。我们没有对我们的服务做任何操作，但服务仍然正常运行，并且现在指向我们的 pod 的新版本。这是因为我们的服务正在使用标签选择器进行成员身份验证。因为我们的旧副本和新副本都使用相同的标签，所以服务没有问题使用新副本来提供请求服务。更新是逐个
+    pod 进行的，所以对于服务的用户来说是无缝的。
 - en: Testing, releases, and cutovers
+  id: totrans-47
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 测试、发布和切换
 - en: The rolling update feature can work well for a simple blue-green deployment
     scenario. However, in a real-world blue-green deployment with a stack of multiple
     applications, there can be a variety of interdependencies that require in-depth
     testing. The `update-period` command allows us to add a `timeout` flag where some
     testing can be done, but this will not always be satisfactory for testing purposes.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 滚动更新功能可以很好地适用于简单的蓝绿部署场景。但是，在具有多个应用程序堆栈的实际蓝绿部署中，可能存在各种相互依赖关系，需要进行深入测试。`update-period`
+    命令允许我们添加一个 `timeout` 标志，其中可以进行一些测试，但这并不总是令人满意的测试目的。
 - en: Similarly, you may want partial changes to persist for a longer time and all
     the way up to the load balancer or service level. For example, you may wish to
     run an A/B test on a new user interface feature with a portion of your users.
     Another example is running a canary release (a replica in this case) of your application
     on new infrastructure like a newly added cluster node.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 类似地，您可能希望部分更改持续时间更长，一直到负载均衡器或服务级别。例如，您可能希望在一部分用户身上运行新用户界面功能的 A/B 测试。另一个例子是在新添加的集群节点等新基础设施上运行您应用程序的金丝雀发布（在这种情况下是副本）。
 - en: 'Let''s take a look at an A/B testing example. For this example, we will need
     to create a new service that uses `sessionAffinity`. We will set the affinity
     to `ClientIP`, which will allow us to forward clients to the same backend pod.
     This is a key if we want a portion of our users to see one version while others
     see another:'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看一个 A/B 测试的例子。对于此示例，我们需要创建一个新的服务，该服务使用 `sessionAffinity`。我们将亲和性设置为 `ClientIP`，这将允许我们将客户端转发到相同的后端
+    pod。这是关键的，如果我们希望我们的一部分用户看到一个版本，而其他用户看到另一个版本：
 - en: '[PRE8]'
+  id: totrans-51
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: '*Listing 4-3*: `pod-AB-service.yaml`'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 4-3：*`pod-AB-service.yaml`'
 - en: 'Create this service as usual with the `create` command, as follows:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 像往常一样使用 `create` 命令创建此服务，如下所示：
 - en: '[PRE9]'
+  id: totrans-54
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'This will create a service that will point to our pods running both version
     0.2 and 0.3 of the application. Next, we will create the two RCs that create two
     replicas of the application. One set will have version 0.2 of the application,
     and the other will have version 0.3, as shown here:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将创建一个指向我们运行应用程序版本 0.2 和 0.3 的 pod 的服务。接下来，我们将创建两个 RC，用于创建应用程序的两个副本。一个集合将具有应用程序版本
+    0.2，另一个将具有版本 0.3，如下所示：
 - en: '[PRE10]'
+  id: totrans-56
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: '*Listing 4-4*: `pod-A-controller.yaml`'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 4-4：*`pod-A-controller.yaml`'
 - en: '[PRE11]'
+  id: totrans-58
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: '*Listing 4-5: *`pod-B-controller.yaml`'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 4-5：*`pod-B-controller.yaml`'
 - en: 'Note that we have the same service label, so these replicas will also be added
     to the service pool based on this selector. We also have `livenessProbe` and `readinessProbe`
     defined to make sure that our new version is working as expected. Again, use the
     `create` command to spin up the controller:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，我们有相同的服务标签，因此这些副本也将根据此选择器添加到服务池中。我们还定义了 `livenessProbe` 和 `readinessProbe`
+    来确保我们的新版本按预期工作。同样，使用 `create` 命令启动控制器：
 - en: '[PRE12]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Now we have a service balancing to both versions of our app. In a true A/B test,
     we would now want to start collecting metrics on the visit to each version. Again,
     we have `sessionAffinity` set to `ClientIP`, so all requests will go to the same
     pod. Some users will see v0.2, and some will see v0.3.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们的服务已平衡到应用程序的两个版本。在一个真正的A/B测试中，我们现在希望开始收集对每个版本的访问指标。同样，我们将`sessionAffinity`设置为`ClientIP`，所以所有请求都将发送到相同的pod。一些用户将看到v0.2，一些用户将看到v0.3。
 - en: Because we have `sessionAffinity` turned on, your test will likely show the
     same version every time. This is expected, and you would need to attempt a connection
     from multiple IP addresses to see both user experiences with each version.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 因为我们打开了`sessionAffinity`，所以您的测试可能每次都会显示相同的版本。这是正常现象，您需要尝试从多个IP地址连接以查看每个版本的用户体验。
 - en: Since the versions are each on their own pod, one can easily separate logging
     and even add a logging container to the pod definition for a sidecar logging pattern.
     For brevity, we will not cover that setup in this book, but we will look at some
     of the logging tools in [Chapter 8](1809040d-4981-427d-8de7-600c4354a872.xhtml),
     *Monitoring and Logging*.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于每个版本都在自己的pod上，可以轻松地分离日志甚至在pod定义中添加一个日志容器以实现旁车日志模式。为简洁起见，在本书中我们不会介绍这种设置，但我们将在[第8章](1809040d-4981-427d-8de7-600c4354a872.xhtml)中介绍一些日志工具，*监视和日志记录*。
 - en: We can start to see how this process will be useful for a canary release or
     a manual blue-green deployment. We can also see how easy it is to launch a new
     version and slowly transition over to the new release.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以看到这个过程将如何对金丝雀发布或手动蓝绿部署有所帮助。我们还可以看到启动新版本并逐渐过渡到新版本的过程是多么容易。
 - en: 'Let''s look at a basic transition quickly. It''s really as simple as a few
     `scale` commands, which are as follows:'
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们快速看一下基本过渡。这实际上就是几个`scale`命令，如下所示：
 - en: '[PRE13]'
+  id: totrans-67
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: Use the `get pods` command combined with the `-l` filter in between the `scale`
     commands to watch the transition as it happens.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用`get pods`命令结合`-l`过滤器在`scale`命令之间观察转换过程。
 - en: 'Now, we have fully transitioned over to version 0.3 (`node-js-scale-b`). All
     users will now see the version 0.3 of the site. We have four replicas of version
     0.3 and none of 0.2\. If you run a `get rc` command, you will notice that we still
     have an RC for 0.2 (`node-js-scale-a`). As a final cleanup, we can remove that
     controller completely, as follows:'
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们已完全过渡到版本0.3（`node-js-scale-b`）。所有用户现在都将看到站点的版本0.3。我们有版本0.3的四个副本，没有0.2的。如果运行`get
+    rc`命令，您会注意到我们仍然有一个0.2的RC（`node-js-scale-a`）。作为最后的清理，我们可以完全删除该控制器，如下所示：
 - en: '[PRE14]'
+  id: totrans-70
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Application autoscaling
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 应用自动扩展
 - en: A recent feature addition to Kubernetes is that of the **Horizontal Pod Autoscaler**.
     This resource type is really useful as it gives us a way to automatically set
     thresholds for scaling our application. Currently, that support is only for CPU,
     but there is alpha support for custom application metrics as well.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes最近增加的一个功能是**水平Pod自动缩放器**。这种资源类型非常有用，因为它为我们提供了自动设置应用程序扩展阈值的方式。目前，该支持仅针对CPU，但也有自定义应用程序指标的alpha支持。
 - en: 'Let''s use the `node-js-scale` Replication Controller from the beginning of
     the chapter and add an autoscaling component. Before we start, let''s make sure
     we are scaled back down to one replica using the following command:'
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们使用本章开头的`node-js-scale`复制控制器，并加上一个自动扩缩组件。在开始之前，让我们确保使用以下命令缩减到一个副本：
 - en: '[PRE15]'
+  id: totrans-74
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Now we can create a Horizontal Pod Autoscaler with the following `hpa` definition:'
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以创建一个水平Pod自动缩放器，其定义如下：
 - en: '[PRE16]'
+  id: totrans-76
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: '*Listing 4-6.* `node-js-scale-hpa.yaml`'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: '*表4-6.* `node-js-scale-hpa.yaml`'
 - en: 'Go ahead and create this with the `kubectl create -f` command. Now we can list
     the hpas and get a description as well:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 继续使用`kubectl create -f`命令创建这个。现在我们可以列出hpas并获得描述：
 - en: '[PRE17]'
+  id: totrans-79
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'We can also create autoscaling in the command line with the `kubectl autoscale`
     command. The preceding YAML will look like the following:'
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们也可以使用`kubectl autoscale`命令在命令行中创建自动缩放。前面的YAML看起来像下面这样：
 - en: '`$ kubectl autoscale rc/node-js-scale --min=1 --max=3 --cpu-percent=20`'
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: '`$ kubectl autoscale rc/node-js-scale --min=1 --max=3 --cpu-percent=20`'
 - en: 'This will show us an autoscaler on the `node-js-scale` Replication Controller
     with a Target CPU of 30%. Additionally, you will see that the minimum pods is
     set to 1 and maximum is 3:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将显示一个具有目标CPU为30%的`node-js-scale`复制控制器上的自动扩展器。此外，您将看到最小pod设置为1，最大设置为3：
 - en: '![](img/B06302_04_03.png)'
+  id: totrans-83
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_03.png)'
 - en: Horizontal Pod Autoscaler with no load
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 没有负载的水平Pod自动缩放器
 - en: 'Let''s also query our pods to see how many are running right now:'
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们还查询一下我们的 pod，看看现在有多少在运行：
 - en: '[PRE18]'
+  id: totrans-86
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'We should see only one `node-js-scale` pod because our HPA is showing 0% utilization,
     so we will need to generate some load. We will use the popular `boom` application
     common in many container demos. The following listing will help us create continuous
     load until we can hit the CPU threshold for autoscaler:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于我们的 HPA 显示 0% 利用率，因此我们只应该看到一个 `node-js-scale` pod，因此我们需要生成一些负载。我们将使用在许多容器演示中常见的流行应用程序
+    `boom`。以下清单将帮助我们创建连续的负载，直到我们可以达到自动缩放器的 CPU 阈值：
 - en: '[PRE19]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: '*Listing 4-7.* `boomload.yaml`'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: '*清单 4-7.* `boomload.yaml`'
 - en: Use the `kubectl create -f` command with this listing and then be ready to start
     monitoring the `hpa`. We can do this with the `kubectl get hpa` command we used
     earlier.
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用此清单的 `kubectl create -f` 命令，然后准备好开始监视我们之前使用的 `kubectl get hpa` 命令。
 - en: 'It may take a few moments, but we should start to see the current CPU utilization
     increase. Once it goes above the 20% threshold we set the autoscaler will kick
     in:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 可能需要一些时间，但我们应该开始看到当前 CPU 利用率增加。一旦超过我们设置的 20% 阈值，自动缩放器就会启动：
 - en: '![](img/B06302_04_04.png)'
+  id: totrans-92
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_04.png)'
 - en: Horizontal Pod Autoscaler after load starts
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 负载开始后的水平 Pod 自动缩放
 - en: 'Once we see this, we can run `kubectl get pod` again and see there are now
     several `node-js-scale` pods:'
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦我们看到这一点，我们可以再次运行 `kubectl get pod`，看到现在有几个 `node-js-scale` pod：
 - en: '[PRE20]'
+  id: totrans-95
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'We can clean up now by killing our load generation pod:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在可以通过停止我们的负载生成 pod 来进行清理：
 - en: '[PRE21]'
+  id: totrans-97
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: Now if we watch the `hpa`, we should start to see the CPU usage drop. It may
     take a few minutes, but, eventually, we will go back down to 0% CPU load.
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在如果我们观察 `hpa`，我们应该开始看到 CPU 使用率下降。可能需要几分钟，但最终，我们将会回到 0% 的 CPU 负载。
 - en: Scaling a cluster
+  id: totrans-99
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 缩放集群
 - en: All these techniques are great for the scaling of the application, but what
     about the cluster itself. At some point, you will pack the nodes full and need
     more resources to schedule new pods for your workloads.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 所有这些技术对于应用程序的扩展都非常棒，但是集群本身怎么样呢？在某些时候，您将会将节点填满，并且需要更多资源来为您的工作负载安排新的 pod。
 - en: Autoscaling
+  id: totrans-101
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自动缩放
 - en: When you create your cluster, you can customize the starting number of nodes
     (minions) with the `NUM_MINIONS` environment variable. By default, it is set to
     ***4***.
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您创建集群时，您可以使用 `NUM_MINIONS` 环境变量自定义起始节点（minions）的数量。默认情况下，它设置为***4***。
 - en: Additionally, the Kubernetes team has started to build autoscaling capability
     into the cluster itself. Currently, this is the only support on GCE and GKE, but
     work is being done on other providers. This capability utilizes the `KUBE_AUTOSCALER_MIN_NODES`,
     `KUBE_AUTOSCALER_MAX_NODES`, and `KUBE_ENABLE_CLUSTER_AUTOSCALER` environment
     variables.
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，Kubernetes 团队已开始将自动缩放功能构建到集群本身中。目前，这是 GCE 和 GKE 上唯一支持的功能，但正在为其他提供者进行工作。此功能利用了
+    `KUBE_AUTOSCALER_MIN_NODES`、`KUBE_AUTOSCALER_MAX_NODES` 和 `KUBE_ENABLE_CLUSTER_AUTOSCALER`
+    环境变量。
 - en: 'The following example shows how to set the environment variables for autoscalingbefore
     running `kube-up.sh`:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下示例显示了在运行 `kube-up.sh` 之前设置自动缩放环境变量的方法：
 - en: '[PRE22]'
+  id: totrans-105
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: Also, bear in mind that changing this after the cluster is started will have
     no effect. You would need to tear down the cluster and create it once again. Thus,
     this section will show you how to add nodes to an existing cluster without rebuilding
     it.
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，请注意，在启动集群后更改这些内容将不会产生任何效果。您需要拆除集群并重新创建它。因此，本节将向您展示如何向现有集群添加节点而无需重新构建它。
 - en: Once you start a cluster with these settings, your cluster will automatically
     scale up and down with the minimum and maximum limits based on compute resource
     usage in the cluster.
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦您以这些设置启动了集群，您的集群将根据集群中的计算资源使用情况自动按最小和最大限制进行缩放。
 - en: GKE clusters also support autoscaling when launched, when using the alpha features.
     The preceding example will use a flag such as `--enable-autoscaling --min-nodes=2 --max-nodes=5`
     in a command-line launch.
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: GKE 集群在启动时也支持自动缩放，当使用 alpha 特性时。前述示例将在命令行启动时使用诸如 `--enable-autoscaling --min-nodes=2 --max-nodes=5`
+    这样的标志。
 - en: Scaling up the cluster on GCE
+  id: totrans-109
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 GCE 上扩展集群规模
 - en: If you wish to scale out an existing cluster, we can do it with a few steps.
     Manually scaling up your cluster on GCE is actually quite easy. The existing plumbing
     uses managed instance groups in GCE, which allow you to easily add more machines
     of a standard configuration to the group via an instance template.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您希望扩展现有集群，我们可以通过几个步骤来实现。在 GCE 上手动扩展集群实际上非常简单。现有的管道使用了 GCE 中的托管实例组，这允许您通过实例模板轻松地向组中添加更多具有标准配置的机器。
 - en: You can see this template easily in the GCE console. First, open the console;
     by default, this should open your default project console. If you are using another
     project for your Kubernetes cluster, simply select it from the project dropdown
     at the top of the page.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在 GCE 控制台中轻松看到这个模板。首先，打开控制台；默认情况下，这应该会打开你的默认项目控制台。如果你正在使用另一个项目来进行 Kubernetes
+    集群，请简单地从页面顶部的项目下拉菜单中选择它。
 - en: 'On the side panel, see under Compute and then Compute Engine, and select Instance
     templates. You should see a template titled kubernetes-minion-template. Note that
     the name could vary slightly if you''ve customized your cluster naming settings.
     Click on that template to see the details. Refer to the following screenshot:'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 在侧边栏中，查看计算，然后是计算引擎，然后选择“实例模板”。你应该会看到一个名为 kubernetes-minion-template 的模板。请注意，如果你已经自定义了你的集群命名设置，名称可能会略有不同。点击该模板以查看详细信息。参考下面的截图：
 - en: '![](img/B06302_04_05-1.png)'
+  id: totrans-113
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_05-1.png)'
 - en: The GCE Instance template for minions
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于从实例模板创建 GCE 实例组的模板
 - en: You'll see a number of settings, but the meat of the template is under the Custom
     metadata. Here, you will see a number of environment variables and also a startup
     script that is run after a new machine instance is created. These are the core
     components that allow us to create new machines and have them automatically added
     to the available cluster nodes.
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 你会看到一些设置，但模板的核心部分在“自定义元数据”下。在这里，你将看到一些环境变量以及一个在创建新机器实例后运行的启动脚本。这些是允许我们创建新机器并自动将它们添加到可用集群节点的核心组件。
 - en: 'Because the template for new machines is already created, it is very simple
     to scale out our cluster in GCE. Once in the Compute section of the console, simply
     go to Instance groups located right above the Instance templates link on the side
     panel. Again, you should see a group titled kubernetes-minion-group or something
     similar. Click on that group to see the details, as shown in the following screenshot:'
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 因为新机器的模板已经创建，所以在 GCE 中扩展我们的集群非常简单。一旦进入控制台的计算部分，只需在侧边栏的“实例模板”链接上方找到“实例组”即可。同样，你应该看到一个名为
+    kubernetes-minion-group 或类似的组。点击该组以查看详细信息，如下面的截图所示：
 - en: '![](img/B06302_04_06.png)'
+  id: totrans-117
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_06.png)'
 - en: The GCE Instance group for minions
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于从实例模板创建 GCE 实例组的模板
 - en: 'You''ll see a page with a CPU metrics graph and three instances listed here.
     By default, the cluster creates three nodes. We can modify this group by clicking
     on the EDIT GROUP button at the top of the page:'
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 你会看到一个 CPU 指标图和三个在此列出的实例。默认情况下，集群会创建三个节点。我们可以通过点击页面顶部的“编辑组”按钮来修改这个组：
 - en: '![](img/B06302_04_07-2.png)'
+  id: totrans-120
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_07-2.png)'
 - en: The GCE Instance group edit page
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: GCE 实例组编辑页面
 - en: You should see kubernetes-minion-template selected in Instance template that
     we reviewed a moment ago. You'll also see an Autoscaling setting, which is Off
     by default and an instance count of `3`. Simply, increment this to `4` and click
     on Save. You'll be taken back to the group details page and you'll see a pop-up
     dialog showing the pending changes.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该看到我们刚才审查的实例模板中选择了 kubernetes-minion-template。你还会看到一个自动缩放设置，默认为关闭状态，以及一个实例计数为`3`。简单地将此数值增加到`4`，然后点击“保存”。你将被带回到组详细信息页面，会看到一个显示待定更改的弹出对话框。
 - en: You'll also see some auto healing properties on the `Instance Group` edit page.
     This recreates failed instances and allows you to set health checks as well as
     an initial delay period before an action is taken.
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 你还会在“实例组”编辑页面上看到一些自动修复属性。这会重新创建失败的实例，并允许你设置健康检查以及在执行操作之前的初始延迟时间。
 - en: 'In a few minutes, you''ll have a new instance listed on the details page. We
     can test that this is ready using the `get nodes` command from the command line:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 几分钟后，你将在详细信息页面上看到一个新的实例。我们可以使用命令行中的`get nodes`命令来测试是否准备就绪：
 - en: '[PRE23]'
+  id: totrans-125
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: A word of caution on autoscaling and scale down in generalFirst, if we repeat
     the earlier process and decrease the countdown to four, GCE will remove one node.
     However, it will not necessarily be the node you just added. The good news is
@@ -558,67 +833,96 @@
     In addition, this is not a live migration, so any application state will be lost
     in the transition. The bottom line is that you should carefully consider the implications
     before scaling down or implementing an autoscaling scheme.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 关于自动缩放和一般缩减的一些警告首先，如果我们重复之前的过程并将倒计时减少到四，GCE会移除一个节点。但是，并不一定是你刚刚添加的节点。好消息是，Pod将在剩余的节点上重新调度。然而，它只能重新调度可用资源的地方。如果你接近满负荷并关闭一个节点，那么有很大的机会一些Pod将无法重新调度。此外，这不是一个实时迁移，因此任何应用程序状态在过渡中都将丢失。底线是，在缩小规模或实施自动缩放方案之前，你应该仔细考虑其影响。
 - en: For more information on general autoscaling in GCE, refer to the [https://cloud.google.com/compute/docs/autoscaler/?hl=en_US#scaling_based_on_cpu_utilization](https://cloud.google.com/compute/docs/autoscaler/?hl=en_US#scaling_based_on_cpu_utilization) link.
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 关于在GCE中的一般自动扩展的更多信息，请参考[https://cloud.google.com/compute/docs/autoscaler/?hl=en_US#scaling_based_on_cpu_utilization](https://cloud.google.com/compute/docs/autoscaler/?hl=en_US#scaling_based_on_cpu_utilization)链接。
 - en: Scaling up the cluster on AWS
+  id: totrans-128
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在AWS上扩展集群
 - en: The AWS provider code also makes it very easy to scale up your cluster. Similar
     to GCE, the AWS setup uses autoscaling groups to create the default four minion
     nodes. In the future, the autoscaling groups will hopefully be integrated into
     the Kubernetes cluster autoscaling functionality. For now, we will walk though
     a manual setup.
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: AWS提供商代码也使得扩展集群变得非常容易。与GCE类似，AWS设置使用自动扩展组来创建默认的四个从节点。将来，自动扩展组有望被集成到Kubernetes集群自动扩展功能中。目前，我们将通过手动设置来完成。
 - en: 'This can also be easily modified using the CLI or the web console. In the console,
     from the EC2 page, simply go to the Auto Scaling Groups section at the bottom
     of the menu on the left. You should see a name similar to kubernetes-minion-group.
     Select this group and you will see details as shown in the following screenshot:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 这也可以很容易地通过CLI或Web控制台进行修改。在控制台中，从EC2页面，只需转到左侧菜单底部的Auto Scaling Groups部分。你应该会看到一个类似于kubernetes-minion-group的名称。选择此组，你将会看到如下屏幕截图所示的详细信息：
 - en: '![](img/B06302_04_08.png)'
+  id: totrans-131
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_04_08.png)'
 - en: Kubernetes minion autoscaling details
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes minion autoscaling details
 - en: We can scale this group up easily by clicking on Edit. Then, change the Desired,
     Min, and Max values to `5` and click on Save. In a few minutes, you'll have the
     fifth node available. You can once again check this using the `get nodes` command.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以通过点击**编辑**来轻松扩展这个组。然后，将所需、最小和最大值更改为`5`，然后点击保存。几分钟后，你将会有第五个节点可用。你可以再次使用`get
+    nodes`命令来检查这一点。
 - en: Scaling down is the same process, but remember that we discussed the same considerations
     in the previous *Scaling up the cluster on GCE *section. Workloads could get abandoned
     or, at the very least, unexpectedly restarted.
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 缩小规模的过程相同，但请记住我们在前一节*在GCE上扩展集群*中讨论了相同的考虑因素。工作负载可能会被放弃，或者至少会意外重新启动。
 - en: Scaling manually
+  id: totrans-135
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 手动扩展
 - en: For other providers, creating new minions may not be an automated process. Depending
     on your provider, you'll need to perform various manual steps. It can be helpful
     to look at the provider-specific scripts in the `cluster` directory.
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于其他提供商，创建新的从节点可能不是一个自动化的过程。根据你的提供商，你需要执行各种手动步骤。查看`cluster`目录中的特定于提供商的脚本可能会有所帮助。
 - en: Summary
+  id: totrans-137
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: We should now be a bit more comfortable with the basics of application scaling
     in Kubernetes. We also looked at the built-in functions in order to roll updates
     as well as a manual process for testing and slowly integrating updates. We took
     a look at how to scale the nodes of our underlying cluster and increase the overall
     capacity for our Kubernetes resources. Finally, we explored some of the new auto
     scaling concepts for both the cluster and our applications themselves.
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们对Kubernetes中应用程序扩展的基础有了更多的了解。我们还研究了内置功能以便进行滚动更新以及一个用于测试和缓慢集成更新的手动流程。我们看了一下如何扩展底层集群的节点，并增加我们Kubernetes资源的总体容量。最后，我们探讨了一些新的自动扩展概念，包括集群和应用程序本身。
 - en: In the next chapter, we will look at the latest techniques for scaling and updating
     applications with the new **deployments** resource type, as well as some of the
     other types of workloads we can run on Kubernetes.
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将探讨利用新的**deployments**资源类型来扩展和更新应用程序的最新技术，以及在Kubernetes上可以运行的其他工作负载类型。

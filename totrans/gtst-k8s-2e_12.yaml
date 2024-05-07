@@ -1,48 +1,70 @@
 - en: Towards Production Ready
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 朝着生产就绪方向
 - en: In this chapter, we'll look at considerations to move to production. We will
     also show some helpful tools and third-party projects available in the Kubernetes
     community at large and where you can go to get more help.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将讨论转向生产的考虑因素。我们还将展示 Kubernetes 社区中的一些有用工具和第三方项目，并介绍您可以获取更多帮助的地方。
 - en: 'This chapter will discuss the following topics:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将讨论以下主题：
 - en: Production characteristics
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 生产特性
 - en: The Kubernetes ecosystem
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Kubernetes 生态系统
 - en: Where to get help?
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如何获得帮助？
 - en: Ready for production
+  id: totrans-6
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 准备就绪投入生产
 - en: We walked through a number of typical operations using Kubernetes. As we saw,
     K8s offers a variety of features and abstractions that ease the burden of day-to-day
     management for container deployments.
+  id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们通过 Kubernetes 进行了许多典型操作。正如我们所见，K8s 提供了各种功能和抽象，可以减轻容器部署的日常管理负担。
 - en: 'There are many characteristics that define a production ready system for containers.
     The following diagram provides a high-level view of the major concerns for production
     ready clusters. This is by no means an exhaustive list, but it''s meant to provide
     some solid ground heading into production operations:'
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: 有许多特性定义了一个容器生产就绪系统。以下图表提供了一个高级视图，涵盖了生产就绪集群的主要关注点。这绝不是一个详尽的列表，但旨在为投入生产操作提供一些坚实的基础：
 - en: '![](img/B06302_12_01.png)'
+  id: totrans-9
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/B06302_12_01.png)'
 - en: Production characteristics for container operations
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 容器运行的生产特性
 - en: We saw how the core concepts and abstractions of Kubernetes address a few of
     these concerns. The service abstraction has built-in service discovery and health
     checking at both the service and application level. We also get seamless application
@@ -50,107 +72,153 @@
     All the core abstractions of services, replication controllers, replica sets,
     and pods work with a core scheduling and affinity rulesets and give us easy service
     and application composition.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们看到了 Kubernetes 的核心概念和抽象如何解决一些这些问题。服务抽象在服务和应用程序级别都内置了服务发现和健康检查。我们还从复制控制器和部署构造中获得无缝应用程序更新和可伸缩性。所有服务、复制控制器、副本集和
+    Pod 的核心抽象都与核心调度和亲和力规则集一起工作，并为我们提供了易于服务和应用程序组合的功能。
 - en: There is built-in support for a variety of persistent storage options, and the
     networking model provides manageable network operations with options to work with
     other third-party providers. Also, we took a brief look at CI/CD integration with
     some of the popular tools in the marketplace.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 内置支持各种持久存储选项，并且网络模型提供了可管理的网络操作，并提供与其他第三方提供商合作的选项。此外，我们简要介绍了市场上一些热门工具与 CI/CD
+    集成。
 - en: Furthermore, we have built-in system events tracking, and with the major cloud
     providers, an out-of-the-box setup for monitoring and logging. We also saw how
     this can be extended to third-party providers such as **StackDriver** and **Sysdig**.
     These services also address overall node health and proactive trend deviation
     alerts.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，我们还内置了系统事件跟踪，并与主要云服务提供商集成，提供了监控和日志记录的即用即连设置。我们还看到了如何将这些扩展到第三方提供商，如**StackDriver**和**Sysdig**。这些服务还关注节点的整体健康状况，并提供主动的趋势偏差警报。
 - en: The core constructs also help us address high availability in our application
     and service layers. The scheduler can be used with autoscaling mechanisms to provide
     this at a node level. Then there is support for making the Kubernetes master itself
     highly available. In [Chapter 9](94a98b1d-202e-43ba-a517-3be079d3a20c.xhtml),
     *Cluster Federation*, we took a brief look at the new federation capabilities
     that which promise a multi-cloud and multi-datacenter model for the future.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 核心构建还帮助我们解决应用程序和服务层的高可用性问题。调度器可以与自动缩放机制一起在节点级别提供此功能。然后，支持使 Kubernetes 主节点本身高度可用。在[第
+    9 章](94a98b1d-202e-43ba-a517-3be079d3a20c.xhtml)中，*集群联合*，我们简要介绍了承诺未来多云和多数据中心模型的新联合功能。
 - en: We finally explored a new breed of operating systems that give us a slim base
     to build on and secure update mechanisms for patching and updates. The slim base,
     together with scheduling, can help us with efficient resource utilization. In
     addition, we looked at some hardened concerns and explored the image trust and
     verification tools available. Security is a wide topic and capabilities matrix
     exist for this topic alone.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们探讨了一种新的操作系统类型，为我们提供了精简的基础和用于补丁和更新的安全更新机制。精简的基础，结合调度，可以帮助我们实现高效的资源利用。此外，我们还关注了一些加固问题，并探索了可用的图像信任和验证工具。安全性是一个广泛的话题，针对这个话题存在一系列功能矩阵。
 - en: Ready, set, go
+  id: totrans-16
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 准备好，开始吧
 - en: While there are still some gaps, a variety of the remaining security and operation
     concerns are actively being addressed by third-party companies, as we will see
     in the following section. Going forward, the Kubernetes project will continue
     to evolve, and the community of projects and partners around K8s and Docker will
     also grow. The community is closing the remaining gaps at a phenomenal pace.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管仍有一些空白，剩余的安全性和运维问题正在被第三方公司积极解决，我们将在下一节中看到。未来，Kubernetes 项目将继续发展，周围的 K8s 和
+    Docker 项目以及合作伙伴社区也会不断壮大。社区正在以惊人的速度弥补剩余缺陷。
 - en: Third-party companies
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第三方公司
 - en: Since the Kubernetes project's initial release, there has been a growing ecosystem
     of partners. We looked at CoreOS, Sysdig, and many others in the previous chapters,
     but there are a variety of projects and companies in this space. We will highlight
     a few that may be useful as you move towards production. This is by no means an
     exhaustive list and it is merely meant to provide some interesting starting points.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 自 Kubernetes 项目最初发布以来，合作伙伴生态系统不断增长。我们在之前的章节中曾关注了 CoreOS、Sysdig 和许多其他公司，但在这个领域有各种项目和公司。我们将突出一些可能在您向生产环境迈进时有用的项目。这绝对不是一个详尽的清单，只是为了提供一些有趣的起点。
 - en: Private registries
+  id: totrans-20
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 私有注册表
 - en: In many situations, organizations will not want to place their applications
     and/or intellectual property in public repositories. For those cases, a private
     registry solution is helpful in securely integrating deployments end to end.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 在许多情况下，组织可能不希望将他们的应用程序和/或知识产权放入公共存储库中。对于这些情况，私有注册表解决方案有助于在端到端安全地集成部署。
 - en: Google Cloud offers the **Google Container Registry** at [https://cloud.google.com/container-registry/](https://cloud.google.com/container-registry/).
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 谷歌云提供 **Google Container Registry** [https://cloud.google.com/container-registry/](https://cloud.google.com/container-registry/)。
 - en: Docker has its own **Trusted Registry** offering at [https://www.docker.com/docker-trusted-registry](https://www.docker.com/docker-trusted-registry).
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker 提供了自己的 **Trusted Registry** [https://www.docker.com/docker-trusted-registry](https://www.docker.com/docker-trusted-registry)。
 - en: '**Quay.io** also provides secure private registries, vulnerability scanning,
     and comes from the CoreOS team at [https://quay.io/](https://quay.io/).'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Quay.io** 也提供安全的私有注册表、漏洞扫描，并来自 CoreOS 团队 [https://quay.io/](https://quay.io/)。'
 - en: Google Container Engine
+  id: totrans-25
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 谷歌容器引擎
 - en: Google was the main author of the original Kubernetes project and is still a
     major contributor. Although this book has mostly focused on running Kubernetes
     on our own, Google is also offering a fully managed container service through
     the Google Cloud Platform.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 谷歌是原始 Kubernetes 项目的主要作者，仍然是主要贡献者。尽管本书主要关注在我们自己运行 Kubernetes，谷歌还通过 Google 云平台提供了一个完全托管的容器服务。
 - en: Find more information on the **Google Container Engine** (**GKE**) website at
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 **Google Container Engine** (**GKE**) 网站上找到更多信息 [https://cloud.google.com/container-engine/](https://cloud.google.com/container-engine/)。
 - en: '[https://cloud.google.com/container-engine/](https://cloud.google.com/container-engine/).'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://cloud.google.com/container-engine/](https://cloud.google.com/container-engine/)。'
 - en: Kubernetes will be installed on GCE and will be managed by Google engineers.
     They also provide private registries and integration with your existing private
     networks.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 将安装在 GCE 上，并由 Google 工程师进行管理。他们还提供私有注册表和与现有私有网络集成。
 - en: '**Create your first GKE cluster** From the GCP console, in Compute, click on
     Container Engine, and then on Container Clusters.'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: '**创建您的第一个 GKE 集群** 从 GCP 控制台，在 Compute 中，点击容器引擎，然后点击容器集群。'
 - en: If this is your first time creating a cluster, you'll have an information box
     in the middle of the page. Click on the Create a container cluster button.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果这是您第一次创建集群，在页面中间会有一个信息框。点击创建一个容器集群按钮。
 - en: Choose a name for your cluster and the zone. You'll also be able to choose the
     machine type (instance size) for your nodes and how many nodes (cluster size)
     you want in your cluster. You'll also see a choice for node image, which lets
@@ -158,220 +226,332 @@
     is managed and updated by the Google team themselves. Leave Stackdriver Logging and
     Stackdriver Monitoring checked. Click on Create, and in a few minutes, you'll
     have a new cluster ready for use.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 为您的集群和区域选择一个名称。您还将能够为您的节点选择机器类型（实例大小）和您希望在您的集群中有多少个节点（集群大小）。您还将看到一个节点镜像的选择，它让您可以为节点自身选择基础操作系统和机器镜像。主节点由
+    Google 团队自行管理和更新。保留 Stackdriver Logging 和 Stackdriver Monitoring 勾选状态。单击创建，几分钟后，您将拥有一个新的可以使用的集群。
 - en: You'll need `kubectl` that is included with the Google SDK to begin using your
     GKE cluster. Refer to [Chapter 1](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml),
     *Introduction to Kubernetes*, for details on installing the SDK. Once we have
     the SDK, we can configure `kubectl` and the SDK for our cluster using the steps
     outlined at
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 您需要使用包含在 Google SDK 中的 `kubectl` 来开始使用您的 GKE 集群。有关安装 SDK 的详细信息，请参阅 [第 1 章](772262b1-5b78-4a9b-bbb4-09c6fd858fdf.xhtml)，*Kubernetes
+    简介*。一旦我们有了 SDK，我们可以使用以下步骤为我们的集群配置 `kubectl` 和 SDK
 - en: '[https://cloud.google.com/container-engine/docs/before-you-begin#install_kubectl](https://cloud.google.com/container-engine/docs/before-you-begin#install_kubectl).'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://cloud.google.com/container-engine/docs/before-you-begin#install_kubectl](https://cloud.google.com/container-engine/docs/before-you-begin#install_kubectl).'
 - en: Azure Container Service
+  id: totrans-35
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Azure 容器服务
 - en: Another cloud-managed offering is Microsoft's **Azure Container Service** (**ACS**).
     ACS is really nice because it allows you to choose from industry standard tools
     such as Docker Swarm, Kubernetes, and Mesos. It then creates a managed cluster
     for you, but uses one of these tool sets as the foundation. The advantage is that
     you can still use the tool's native API and management tools, but leave the management
     of the cloud infrastructure to Azure.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个云托管的选择是微软的**Azure 容器服务**（**ACS**）。ACS 非常好，因为它允许您选择诸如 Docker Swarm、Kubernetes
+    和 Mesos 等行业标准工具。然后，它为您创建一个托管的集群，但使用其中一个工具集作为基础。优点是您仍然可以使用工具的本机 API 和管理工具，但将云基础设施的管理留给
+    Azure。
 - en: Find out more about ACS at
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 了解有关 ACS 的更多信息
 - en: '[https://azure.microsoft.com/en-us/services/container-service/](https://azure.microsoft.com/en-us/services/container-service/).'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://azure.microsoft.com/en-us/services/container-service/](https://azure.microsoft.com/en-us/services/container-service/).'
 - en: ClusterHQ
+  id: totrans-39
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: ClusterHQ
 - en: ClusterHQ provides a solution for bringing stateful data into your containerized
     applications. They provide Flocker, a tool for managing persistent storage volumes
     with containers, and FlockerHub which provides a storage repository for your data
     volumes.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: ClusterHQ 提供了一种将有状态数据引入您的容器化应用的解决方案。他们提供 Flocker，这是一个用于管理容器持久性存储卷的工具，以及 FlockerHub，为您的数据卷提供存储库。
 - en: Please refer to the ClusterHQ website for more information at
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 请参考 ClusterHQ 网站以获取更多信息。
 - en: '[https://clusterhq.com/](https://clusterhq.com/).'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://clusterhq.com/](https://clusterhq.com/).'
 - en: Portworx
+  id: totrans-43
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Portworx
 - en: Portworx is another player in the storage space. It provides solutions for bringing
     persistence storage to your containers. Additionally, it has features for snapshotting,
     encryption, and even multi-cloud replication.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: Portworx 是存储领域的另一家参与者。它提供了将持久性存储引入您的容器的解决方案。此外，它还具有用于快照、加密甚至多云复制的功能。
 - en: Please refer to the portworx website for more information at
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 请参考 portworx 网站以获取更多信息。
 - en: '[https://portworx.com/](https://portworx.com/).'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://portworx.com/](https://portworx.com/).'
 - en: Shippable
+  id: totrans-47
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Shippable
 - en: Shippable is a continuous integration, continuous deployment, and release automation
     platform that has built-in support for a variety of modern container environments.
     The product touts supporting any language with a uniform support for packaging
     and test.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: Shippable 是一个持续集成、持续部署和发布自动化平台，内置对各种现代容器环境的支持。该产品标榜支持任何语言，并统一支持打包和测试。
 - en: Please refer to the Shippable website for more information at
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 请参考 Shippable 网站以获取更多信息。
 - en: '[https://app.shippable.com/](https://app.shippable.com/).'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://app.shippable.com/](https://app.shippable.com/).'
 - en: Twistlock
+  id: totrans-51
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Twistlock
 - en: '**Twistlock.io **is a vulnerability and hardening tool tailor-made for containers.
     It provides the ability to enforce policies, hardens according to CIS standards,
     and scans images in any popular registry for vulnerabilities. It also provides
     scan integration with popular CI/CD tools and RBAC solutions for many orchestration
     tools such as Kubernetes.'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Twistlock.io** 是一个专为容器量身定制的漏洞和加固工具。它提供了执行策略的能力，根据 CIS 标准进行加固，并扫描任何流行注册表中的图像以查找漏洞。它还提供了与流行
+    CI/CD 工具的扫描集成，以及为诸如 Kubernetes 等编排工具的 RBAC 解决方案。'
 - en: Please refer to the Twistlock website for more information at
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 请参考 Twistlock 网站获取更多信息。
 - en: '[https://www.twistlock.io/](https://www.twistlock.io/).'
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://www.twistlock.io/](https://www.twistlock.io/)。'
 - en: AquaSec
+  id: totrans-55
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: AquaSec
 - en: AquaSec is another security tool providing a variety of features. Image scanning
     with popular registries, policy enforcement, user access control, and container
     hardening are all covered. Additionally, AquaSec has some interesting functionality
     in network segmentation.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: AquaSec 是另一个提供各种功能的安全工具。它与流行注册表的图像扫描、策略执行、用户访问控制和容器加固等功能都有涉及。此外，AquaSec 在网络分割方面还具有一些有趣的功能。
 - en: Please refer to the Aqua's website for more information at
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 请参考 Aqua 的网站获取更多信息。
 - en: '[https://www.aquasec.com/](https://www.aquasec.com/).'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://www.aquasec.com/](https://www.aquasec.com/)。'
 - en: Mesosphere (Kubernetes on Mesos)
+  id: totrans-59
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Mesosphere（Kubernetes on Mesos）
 - en: '**Mesosphere** itself is building a commercially supported product (**DCOS**)
     around the open-source Apache Mesos project. **Apac**he Mesos is a cluster management
     system that offers scheduling and resource sharing a bit like Kubernetes itself,
     but at a much higher level. The open-source project is used by several well-known
     companies, such as **Twitter** and **AirBnB**.'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Mesosphere** 本身正在围绕开源的 Apache Mesos 项目构建一个商业支持的产品（**DCOS**）。**Apache Mesos**
+    是一个类似于 Kubernetes 的集群管理系统，提供调度和资源共享，但在更高的层面上。这个开源项目被一些知名公司使用，如 **Twitter** 和 **AirBnB**。'
 - en: 'Get more information on the Mesos OS project and the Mesosphere offerings at
     these sites:'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这些网站上获取有关 Mesos OS 项目和 Mesosphere 提供的更多信息：
 - en: '[http://mesos.apache.org/](http://mesos.apache.org/)'
+  id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[http://mesos.apache.org/](http://mesos.apache.org/)'
 - en: '[https://mesosphere.com/](https://mesosphere.com/)'
+  id: totrans-63
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://mesosphere.com/](https://mesosphere.com/)'
 - en: 'Mesos by its nature is modular and allows the use of different frameworks for
     a variety of platforms. A Kubernetes framework is now available, so we can take
     advantage of the cluster managing in Mesos while still maintaining the useful
     application-level abstractions in K8s. Refer to the following link:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于 Mesos 的模块化特性，它允许在各种平台上使用不同的框架。现在已经有了一个 Kubernetes 框架，所以我们可以利用 Mesos 中的集群管理，同时保持
+    K8s 中有用的应用级抽象。请参考以下链接：
 - en: '[https://github.com/kubernetes-incubator/kube-mesos-framework](https://github.com/kubernetes-incubator/kube-mesos-framework)'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://github.com/kubernetes-incubator/kube-mesos-framework](https://github.com/kubernetes-incubator/kube-mesos-framework)'
 - en: Deis
+  id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Deis
 - en: The **Deis** project provides an open-source **Platform as a Service** (**PaaS**)
     solution based on and around Kubernetes. This allows companies to deploy their
     own PaaS on-premise or on the public cloud. Deis provides tools for application
     composition and deployment, package management (at the pod level), and service
     brokering.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Deis** 项目提供了基于 Kubernetes 的开源**平台即服务**（**PaaS**）解决方案。这使得公司可以在本地部署或在公共云上部署他们自己的
+    PaaS。Deis 提供了应用程序组合和部署工具，包管理（在 pod 级别），以及服务经纪等功能。'
 - en: 'You can refer to the following website for more information on Deis:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以参考以下网站了解更多关于 Deis 的信息：
 - en: '[https://deis.com/](https://deis.com/).'
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://deis.com/](https://deis.com/)。'
 - en: OpenShift
+  id: totrans-70
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: OpenShift
 - en: Another PaaS solution is **OpenShift** from Red Hat. The OpenShift platform
     uses the Red Hat Atomic platform as a secure and slim OS for running containers.
     In version 3, Kubernetes has been added as the orchestration layer for all container
     operations on your PaaS. This is a great combination to manage PaaS installations
     at a large scale.
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个 PaaS 解决方案是来自红帽的 **OpenShift**。OpenShift 平台使用红帽 Atomic 平台作为运行容器的安全且轻量的操作系统。在第
+    3 版中，Kubernetes 被添加为在 PaaS 上进行所有容器操作的编排层。这是一个管理大规模 PaaS 安装的绝佳组合。
 - en: More information on OpenShift can be found at [https://enterprise.openshift.com/.](https://enterprise.openshift.com/)
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 关于 OpenShift 的更多信息，请访问 [https://enterprise.openshift.com/.](https://enterprise.openshift.com/)
 - en: Where to learn more?
+  id: totrans-73
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 想了解更多？
 - en: 'The Kubernetes project is an open-source effort, so there is a broad community
     of contributors and enthusiasts. One great resource in order to find more assistance
     is the Kubernetes **Slack** channel: [http://slack.kubernetes.io/](http://slack.kubernetes.io/)'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: Kubernetes 项目是一个开源项目，因此有广泛的贡献者和爱好者社区。要找到更多帮助的资源之一是 Kubernetes **Slack** 频道：[http://slack.kubernetes.io/](http://slack.kubernetes.io/)
 - en: There is also a Kubernetes group on Google groups. You can join it at
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: Google 群组中还有一个 Kubernetes 群组。你可以加入它
 - en: '[https://groups.google.com/forum/#!forum/kubernetes-users](https://groups.google.com/forum/#!forum/kubernetes-users).'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://groups.google.com/forum/#!forum/kubernetes-users](https://groups.google.com/forum/#!forum/kubernetes-users)。'
 - en: 'If you enjoyed this book, you can find more of my articles, how-tos, and various
     musings on my blogs and Twitter page:'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你喜欢这本书，你可以在我的博客和 Twitter 页面上找到更多我的文章、操作指南和各种思考：
 - en: '[https://medium.com/@grizzbaier](https://medium.com/@grizzbaier)'
+  id: totrans-78
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://medium.com/@grizzbaier](https://medium.com/@grizzbaier)'
 - en: '[https://twitter.com/grizzbaier](https://twitter.com/grizzbaier)'
+  id: totrans-79
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://twitter.com/grizzbaier](https://twitter.com/grizzbaier)'
 - en: Summary
+  id: totrans-80
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: In this final chapter, we left a few breadcrumbs to guide you on your continued
     journey with Kubernetes. You should have a solid set of production characteristics
     to get you started. There is a wide community in both the Docker and Kubernetes
     world. There are also a few additional resources that we provided if you need
     a friendly face along the way.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这最后一章中，我们留下了一些线索，引导你继续你的 Kubernetes 之旅。你应该有一套坚实的生产特性来帮助你入门。在 Docker 和 Kubernetes
+    的世界中有一个广泛的社区。如果需要在旅途中有一个友好的面孔，我们还提供了一些额外的资源。
 - en: By now, we have seen the full spectrum of container operations with Kubernetes.
     You should be more confident in how Kubernetes can streamline the management of
     your container deployments and how you can plan to move containers off the developer
     laptops onto production servers. Now get out there and start shipping your containers!
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们已经看到了 Kubernetes 的容器操作的全景。你应该对 Kubernetes 如何简化容器部署的管理以及如何计划将容器从开发人员的笔记本迁移到生产服务器上有更多信心。现在出发，开始部署你的容器吧！

@@ -1,306 +1,451 @@
 - en: Chapter 4. Communicating Through Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第四章。通过 Jenkins 进行沟通
 - en: 'In this chapter, we will cover the following recipes:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下配方：
 - en: Skinning Jenkins with the simple themes plugin
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用简单主题插件为 Jenkins 进行皮肤定制
 - en: Skinning and provisioning Jenkins using a WAR overlay
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 WAR 覆盖层对 Jenkins 进行皮肤定制和配置
 - en: Generating a home page
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 生成主页
 - en: Creating HTML reports
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建 HTML 报告
 - en: Efficient use of views
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 高效使用视图
 - en: Saving screen space with the Dashboard View plugin
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用仪表板视图插件节省屏幕空间
 - en: Making noise with HTML5 browsers
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 HTML5 浏览器发出声音
 - en: An extreme view for reception areas
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用于接待区的极端视图
 - en: Mobile presentation using Google Calendar
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Google 日历进行移动演示
 - en: Mobile apps for Android and iOS
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 适用于 Android 和 iOS 的移动应用程序
 - en: Knowing your audience with Google Analytics
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 Google Analytics 了解您的受众
 - en: Simplifying powerful visualizations using the R plugin
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 R 插件简化强大的可视化
 - en: Introduction
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍
 - en: This chapter explores communication through Jenkins, recognizing that there
     are different target audiences.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章探讨了通过 Jenkins 进行沟通，认识到有不同的目标受众。
 - en: Jenkins is a talented communicator. Its home page displays the status of all
     jobs, allowing you to make quick decisions. You can easily set up multiple views,
     prioritizing information naturally. Jenkins, with its hordes of plugins, notifies
     you by e-mail, dashboards, and Google services. It shouts at you through mobile
     devices, radiates information as you walk past big screens, and fires at you with
     USB sponge missile launchers.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 是一种有才能的沟通工具。其首页显示所有作业的状态，让您能够快速做出决策。您可以轻松设置多个视图，自然地优先考虑信息。Jenkins 具有大量的插件，可以通过电子邮件、仪表板和
+    Google 服务通知您。它通过移动设备向您发出呼唤，在您经过大屏幕时辐射信息，并用 USB 海绵导弹发射器向您发射。
 - en: Its primary audience is developers, but don't forget the wider audience that
     wants to use the software being developed. Seeing Jenkins regularly building with
     consistent views and a corporate look and feel builds confidence in the software's
     roadmap. This chapter includes recipes to help you reach this wider audience.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 它的主要受众是开发人员，但不要忘记希望使用正在开发的软件的更广泛受众。定期看到 Jenkins 以一致的视图和公司的外观和感觉进行构建，可以增强对软件路线图的信心。本章包括帮助您触及更广泛受众的配方。
 - en: 'When creating a coherent communication strategy, there are many Jenkins-specific
     details to configure. Here are a few that will be considered in this chapter:'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 在创建连贯的沟通策略时，有许多 Jenkins 特定的细节需要配置。以下是本章将考虑的一些细节：
 - en: '**Notifications**: Developers need to know quickly when something is broken.
     Jenkins has many plugins: you should select a few that suit the team''s ethos.'
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**通知**：开发人员需要快速了解何时出现问题。Jenkins 有许多插件：您应该选择一些适合团队理念的插件。'
 - en: '**Page decoration**: A page decorator is a plugin that adds content to each
     page. You can cheaply generate a corporate look and feel by adding your own style
     sheets and JavaScript.'
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**页面装饰**：页面装饰器是一种插件，可以向每个页面添加内容。您可以通过添加自己的样式表和 JavaScript 便宜地生成公司的外观和感觉。'
 - en: '**Overlaying Jenkins**: Using the Maven WAR plugin, you can overlay your own
     content on top of Jenkins. You can use this to add custom content and provision
     resources such as home pages, which will enhance the corporate look and feel.'
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**覆盖 Jenkins**：使用 Maven WAR 插件，您可以将自己的内容覆盖在 Jenkins 之上。您可以使用此功能添加自定义内容并配置资源，例如主页，从而增强公司的外观和感觉。'
 - en: '**Optimize the views**: Front page views are lists of jobs that are displayed
     in a tab. The front page is used by the audience to quickly decide which job to
     select for review. Plugins expand the choice of view types and optimize information
     digestion. This potentially avoids the need to look further, saving precious time.'
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**优化视图**：前页视图是以选项卡显示的作业列表。受众使用前页快速决定选择哪个作业进行审查。插件扩展了视图类型的选择并优化了信息消化。这可能避免了查找更多信息的需要，节省了宝贵的时间。'
 - en: '**Drive by notification**: Extreme views that radiate information visually
     look great on large monitors. If you place a monitor by watering holes such as
     receptions or coffee machines, then passers-by will absorb the ebb and flow of
     job status changes. The view sublimely hints at the professionalism of your company
     and the stability of your product''s roadmap.'
+  id: totrans-23
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**随身通知**：极端的视图可以在大型监视器上直观地显示信息。如果您将监视器放置在接待处或咖啡机等地方，那么过路人将会吸收工作状态变化的起伏。这种视图巧妙地暗示了您公司的专业水平和产品路线图的稳定性。'
 - en: '**Keeping track of your audience**: If you are openly communicating then you
     should track usage patterns so that you can improve services. Consider connecting
     your Jenkins pages to Google Analytics or Piwik, an open source analytics application.'
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**跟踪你的受众群体**：如果你在公开交流，那么你应该跟踪使用模式，以便改进服务。考虑将你的 Jenkins 页面连接到 Google Analytics
+    或 Piwik，一个开源分析应用程序。'
 - en: Tip
+  id: totrans-25
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Subversion repository**'
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Subversion 存储库**'
 - en: From this chapter onwards you will need either a Git or a subversion repository.
     This will allow you to use Jenkins in the most natural way possible. For the sake
     of brevity, we mention only subversion in the recipes, but it is easy to choose
     Git. If you do not already have a repository, there are a number of free or semi-free
     services you can sign up to on the Internet, for example, [http://www.straw-dogs.co.uk/09/20/6-free-svn-project-hosting-services/](http://www.straw-dogs.co.uk/09/20/6-free-svn-project-hosting-services/)
     or an example of a Git repository [https://bitbucket.org/](https://bitbucket.org/).
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 从本章开始，你将需要一个 Git 或 Subversion 存储库。这将使你能够以最自然的方式使用 Jenkins。为了简洁起见，我们在示例中仅提到 Subversion，但选择
+    Git 也很容易。如果你还没有存储库，你可以在互联网上注册一些免费或半免费的服务，例如[http://www.straw-dogs.co.uk/09/20/6-free-svn-project-hosting-services/](http://www.straw-dogs.co.uk/09/20/6-free-svn-project-hosting-services/)或
+    Git 存储库的示例 [https://bitbucket.org/](https://bitbucket.org/)。
 - en: Alternatively, you can consider setting up subversion or Git locally. For Ubuntu
     installation instructions, visit [https://help.ubuntu.com/community/Subversion](https://help.ubuntu.com/community/Subversion)
     and [https://help.ubuntu.com/lts/serverguide/git.html](https://help.ubuntu.com/lts/serverguide/git.html).
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者，你可以考虑在本地设置 Subversion 或 Git。有关 Ubuntu 的安装说明，请访问 [https://help.ubuntu.com/community/Subversion](https://help.ubuntu.com/community/Subversion)
+    和 [https://help.ubuntu.com/lts/serverguide/git.html](https://help.ubuntu.com/lts/serverguide/git.html)。
 - en: Skinning Jenkins with the simple themes plugin
+  id: totrans-29
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用简单主题插件美化 Jenkins
 - en: This recipe modifies the Jenkins look and feel through the themes plugin.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 本示例通过主题插件修改了 Jenkins 的外观和感觉。
 - en: 'The themes plugin is a page decorator: it decorates each page with extra HTML
     tags. The plugin allows you to upload a style sheet and JavaScript file. The files
     are then reachable through a local URL. Each Jenkins page is then decorated with
     HTML tags that use the URLs to pull in your uploaded files. Although straightforward,
     when properly crafted, the visual effects are powerful.'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 主题插件是一个页面装饰器：它在每个页面上添加额外的 HTML 标签。该插件允许你上传样式表和 JavaScript 文件。然后通过本地 URL 访问这些文件。然后，每个
+    Jenkins 页面都使用使用这些 URL 的 HTML 标签装饰。虽然简单，但如果正确制作，视觉效果是强大的。
 - en: Getting ready
+  id: totrans-32
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the themes plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Simple+Theme+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Simple+Theme+Plugin)).
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装主题插件（[https://wiki.jenkins-ci.org/display/JENKINS/Simple+Theme+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Simple+Theme+Plugin)）。
 - en: How to do it...
+  id: totrans-34
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Under the Jenkins `userContent` directory, create a file named `my.js` with
     the following line of code:'
+  id: totrans-35
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 的 `userContent` 目录下，创建一个名为 `my.js` 的文件，其中包含以下代码行：
 - en: '[PRE0]'
+  id: totrans-36
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Create a `mycss.css` file in the Jenkins `userContent` directory with the following
     lines of code:'
+  id: totrans-37
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 的 `userContent` 目录中创建一个名为 `mycss.css` 的文件，其中包含以下代码行：
 - en: '[PRE1]'
+  id: totrans-38
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: Download and unpack the icon archive [http://sourceforge.net/projects/openiconlibrary/files/0.11/open_icon_library-standard-0.11.tar.bz2/download](http://sourceforge.net/projects/openiconlibrary/files/0.11/open_icon_library-standard-0.11.tar.bz2/download)
     and review the available icons. Alternatively, you can use the icon included in
     the download from the book's website ([www.packtpub.com/support](http://www.packtpub.com/support)).
     Add an icon to the `userContent` directory renaming to `camera.png`.
+  id: totrans-39
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 下载并解压图标存档[http://sourceforge.net/projects/openiconlibrary/files/0.11/open_icon_library-standard-0.11.tar.bz2/download](http://sourceforge.net/projects/openiconlibrary/files/0.11/open_icon_library-standard-0.11.tar.bz2/download)并查看可用图标。或者，你可以使用书籍网站下载的图标。将图标添加到
+    `userContent` 目录并将其重命名为 `camera.png`。
 - en: 'Visit the Jenkins main configuration page: `/configure`. Under the **Theme**
     section, fill in the location of the CSS and JavaScript files:'
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 Jenkins 的主配置页面：`/configure`。在 **Theme** 部分下，填写 CSS 和 JavaScript 文件的位置：
 - en: '**URL of theme CSS**: `/userContent/myjavascript.css`'
+  id: totrans-41
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**主题 CSS 的 URL**：`/userContent/myjavascript.css`'
 - en: '**URL of theme JS**: `/userContent/mycss.js`'
+  id: totrans-42
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**主题 JS 的 URL**：`/userContent/mycss.js`'
 - en: Click on **Save**.
+  id: totrans-43
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。
 - en: Return to the Jenkins home page and review your work, as shown in the following
     screenshot:![How to do it...](img/0082OS_04_01.jpg)
+  id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 返回 Jenkins 主页并查看你的工作，如下截图所示：![如何操作...](img/0082OS_04_01.jpg)
 - en: How it works...
+  id: totrans-45
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'The simple themes plugin is a page decorator. It adds the following information
     to every page:'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 简单主题插件是一个页面装饰器。它向每个页面添加以下信息：
 - en: '[PRE2]'
+  id: totrans-47
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: The JavaScript writes a heading near the top of the generated pages with `id="test"`.
     Triggering the cascading style sheet rule through the CSS locator `#test` adds
     the camera icon to the background.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: JavaScript 在生成的页面顶部附近写入一个带有`id="test"`的标题。通过 CSS 定位符`#test`触发级联样式表规则会将相机图标添加到背景中。
 - en: The picture dimensions are not properly tailored for the top of the screen;
     they are trimmed by the browser. This is a problem you can solve later by experimenting.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 图片尺寸未经调整，不适合屏幕顶部；它们被浏览器裁剪。这是一个你可以通过实验来解决的问题。
 - en: The second CSS rule is triggered for `main-table,` which is part of the standard
     front page generated by Jenkins. The full camera icon is displayed there.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 第二个 CSS 规则针对`main-table`触发，这是 Jenkins 生成的标准首页的一部分。完整的相机图标显示在那里。
 - en: On visiting other parts of Jenkins, you will notice that the camera icon looks
     out of context and is oversized. You will need time to modify the CSS and JavaScript
     to generate better effects. With care and custom code, you can skin Jenkins to
     fit your corporate image.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 当访问 Jenkins 的其他部分时，您会注意到相机图标看起来不合适，而且过大。您需要时间修改 CSS 和 JavaScript 来生成更好的效果。通过小心和自定义代码，您可以使
+    Jenkins 适应公司形象。
 - en: Tip
+  id: totrans-52
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**CSS 3 quirks**'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: '**CSS 3 怪癖**'
 - en: There are quirks in the support for the various CSS standards between browser
     types and versions. For an overview, please visit [http://www.quirksmode.org/css/contents.html](http://www.quirksmode.org/css/contents.html).
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 各种浏览器类型和版本在支持各种 CSS 标准上存在一些怪异之处。有关概述，请访问[http://www.quirksmode.org/css/contents.html](http://www.quirksmode.org/css/contents.html)。
 - en: There's more...
+  id: totrans-55
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few more things for you to consider.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些需要考虑的事情。
 - en: CSS 3
+  id: totrans-57
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: CSS 3
 - en: 'CSS 3 has a number of features. To draw a button around the header generated
     by the JavaScript, change the `#test` section of the CSS file to the following
     code:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: CSS 3 有许多功能。要在 JavaScript 生成的标题周围绘制按钮，请将 CSS 文件中的`#test`部分更改为以下代码：
 - en: '[PRE3]'
+  id: totrans-59
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Using Firefox, the CSS rule generated the following button:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Firefox，CSS 规则生成了以下按钮：
 - en: '![CSS 3](img/0082OS_04_02.jpg)'
+  id: totrans-61
   prefs: []
   type: TYPE_IMG
+  zh: '![CSS 3](img/0082OS_04_02.jpg)'
 - en: Note
+  id: totrans-62
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'For the impatient, you can download a CSS 3 cheat sheet at the Smashing Magazine
     website: [http://coding.smashingmagazine.com/wp-content/uploads/images/css3-cheat-sheet/css3-cheat-sheet.pdf](http://coding.smashingmagazine.com/wp-content/uploads/images/css3-cheat-sheet/css3-cheat-sheet.pdf)'
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于急于行动的人，你可以在 Smashing Magazine 网站上下载 CSS 3 技巧表：[http://coding.smashingmagazine.com/wp-content/uploads/images/css3-cheat-sheet/css3-cheat-sheet.pdf](http://coding.smashingmagazine.com/wp-content/uploads/images/css3-cheat-sheet/css3-cheat-sheet.pdf)
 - en: Included JavaScript library frameworks
+  id: totrans-64
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 包含的 JavaScript 库框架
 - en: Jenkins uses the YUI library [http://yuilibrary.com/](http://yuilibrary.com/).
     Decorated in each HTML page, the core YUI library (`/scripts/yui/yahoo/yahoo-min.js`)
     is pulled in ready for reuse. However, many web developers are used to jQuery.
     You can include this library as well by installing the jQuery plugin ([https://wiki.jenkins-ci.org/display/JENKINS/jQuery+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/jQuery+Plugin)).
     You can also consider adding your favorite JavaScript library to the Jenkins `/scripts`
     directory through a WAR overlay (see the next recipe).
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 使用 YUI 库[http://yuilibrary.com/](http://yuilibrary.com/)。在每个 HTML 页面中装饰，核心
+    YUI 库(`/scripts/yui/yahoo/yahoo-min.js`)已经准备好以供重复使用。然而，许多 web 开发人员习惯于 jQuery。你也可以通过安装
+    jQuery 插件（[https://wiki.jenkins-ci.org/display/JENKINS/jQuery+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/jQuery+Plugin)）来包含此库。你还可以考虑通过
+    WAR 叠加层将你喜欢的 JavaScript 库添加到 Jenkins 的`/scripts`目录中（参见下一个示例）。
 - en: Trust but verify
+  id: totrans-66
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 信而验证
 - en: With great power comes great responsibility. If only a few administrators maintain
     your Jenkins deployment, then you can most likely trust everyone to add JavaScript
     with no harmful side effects. However, if you have a large set of administrators
@@ -308,641 +453,963 @@
     increase rapidly. Please consider your security policy and at least add the audit
     trail plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin))
     to keep track of actions.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 伴随着巨大的能力而来的是巨大的责任。如果只有少数管理员维护您的 Jenkins 部署，则您很可能信任每个人都可以添加 JavaScript 而不会产生有害的副作用。然而，如果有大量管理员使用各种各样的
+    Java 库，则您的维护和安全风险会迅速增加。请考虑您的安全策略，并至少添加审计追踪插件（[https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin)）以跟踪行动。
 - en: See also
+  id: totrans-68
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Skinning and provisioning Jenkins using a WAR overlay* recipe
+  id: totrans-69
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 WAR 覆盖为 Jenkins 进行换肤和资源配置* 配方'
 - en: The *Generating a home page* recipe
+  id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*生成主页* 配方'
 - en: Skinning and provisioning Jenkins using a WAR overlay
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 WAR 覆盖为 Jenkins 进行换肤和资源配置
 - en: This recipe describes how to overlay content onto the Jenkins WAR file. With
     a WAR overlay, you can change the Jenkins look and feel ready for corporate branding
     and content provisioning of home pages. The basic example of adding your own custom
     `favicon.ico` (the icon in your web browser's address bar) is used. It requires
     little effort to include more content.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 本配方描述了如何将内容覆盖到 Jenkins WAR 文件上。通过 WAR 覆盖，你可以更改 Jenkins 的外观和感觉，以进行企业品牌化和主页内容配置。本示例基本上只添加了自定义的
+    `favicon.ico`（在网页浏览器地址栏中的图标）。包含更多内容几乎不需要额外的努力。
 - en: Jenkins keeps its versions as dependencies in a Maven repository. You can use
     Maven to pull in the WAR file, expand it, add content, and then repackage. This
     enables you to provision resources such as images, home pages, the icon in the
     address bar called a `fav` icon, and `robots.txt` that affects how search engines
     look through your content.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 将其版本作为依赖项保存在 Maven 仓库中。你可以使用 Maven 拉取 WAR 文件，展开它，添加内容，然后重新打包。这使你能够提供资源，如图像、主页、地址栏中称为
+    `fav` 图标的图标，以及影响搜索引擎浏览你内容的 `robots.txt`。
 - en: 'Be careful: using a WAR overlay will be cheap if the structure and the graphical
     content of Jenkins do not radically change over time. However, if the overlay
     does break the structure, then you might not spot this until you perform detailed
     functional tests.'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 要小心：如果 Jenkins 的结构和图形内容随时间发生根本性变化，使用 WAR 覆盖将很便宜。然而，如果覆盖物破坏了结构，那么你可能要进行详细的功能测试才能发现这一点。
 - en: You can also consider minimal changes through a WAR overlay, perhaps only changing
     `favicon.ico`, adding images and `userContent,` then using the simple theme plugin
     (see the preceding recipe) to do the styling.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 你还可以考虑通过 WAR 覆盖进行最小更改，也许只更改 `favicon.ico`，添加图像和 `userContent`，然后使用简单主题插件（参见前面的配方）进行样式设置。
 - en: Getting ready
+  id: totrans-76
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create the directory named `ch4.communicating/war_overlay` for the files in
     this recipe.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建名为 `ch4.communicating/war_overlay` 的目录以存放此配方中的文件。
 - en: How to do it...
+  id: totrans-78
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何实现...
 - en: Browse to the Maven repository [http://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-war/](http://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-war/)and
     review the Jenkins dependencies.
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览到 Maven 仓库 [http://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-war/](http://repo.jenkins-ci.org/releases/org/jenkins-ci/main/jenkins-war/)
+    并查看 Jenkins 的依赖项。
 - en: 'Create the following `pom.xml` file. Feel free to update to a newer Jenkins
     version:'
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建以下 `pom.xml` 文件。随意更新为更新版本的 Jenkins：
 - en: '[PRE4]'
+  id: totrans-81
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Visit a `favicon.ico` generation website such as [http://www.favicon.cc/](http://www.favicon.cc/).
     Following their instructions, create your own `favicon.ico`. Alternatively, use
     the example provided.
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 `favicon.ico` 生成网站，例如 [http://www.favicon.cc/](http://www.favicon.cc/)。按照其说明，创建你自己的
+    `favicon.ico`。或者，使用提供的示例。
 - en: Add `favicon.ico` to the `src/main/webapp` location.
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 `favicon.ico` 添加到 `src/main/webapp` 位置。
 - en: 'Create the directory `src/main/webapp/META-INF` and add a file named `context.xml`
     with the following line of code:'
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录 `src/main/webapp/META-INF` 并添加一个名为 `context.xml` 的文件，其中包含以下一行代码：
 - en: '[PRE5]'
+  id: totrans-85
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'In your top-level directory, run the following command:'
+  id: totrans-86
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在你的顶层目录中，运行以下命令：
 - en: '[PRE6]'
+  id: totrans-87
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: In the newly generated target directory, you will see the WAR file `overlay-1.437.war`.
     Review the content, verifying that you have modified `favicon.ico`.
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在新生成的目标目录中，你将看到 WAR 文件 `overlay-1.437.war`。检查内容，验证你是否已修改了 `favicon.ico`。
 - en: '[Optional] Deploy the WAR file to a local Tomcat server, verify, and browse
     the updated Jenkins server:![How to do it...](img/0082OS_04_03.jpg)'
+  id: totrans-89
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '[可选] 部署 WAR 文件到本地 Tomcat 服务器，验证并浏览更新后的 Jenkins 服务器：![如何实现...](img/0082OS_04_03.jpg)'
 - en: How it works...
+  id: totrans-90
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Jenkins has its WAR files exposed through a central Maven repository. This allows
     you to pull in specific versions of Jenkins through standard Maven dependency
     management.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 通过中央 Maven 仓库公开了其 WAR 文件。这允许你通过标准的 Maven 依赖管理拉取 Jenkins 的特定版本。
 - en: Maven uses conventions. It expects to find the content to overlay at `src/main/webapp`
     or `src/main/resources`.
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: Maven 使用约定。它期望在 `src/main/webapp` 或 `src/main/resources` 中找到要覆盖的内容。
 - en: The `context.xml` file defines certain behaviors for a web application such
     as database settings. In this example, the setting `logEffectiveWebXML` is asking
     Tomcat to log specific information on startup of the application ([http://tomcat.apache.org/tomcat-7.0-doc/config/context.html](http://tomcat.apache.org/tomcat-7.0-doc/config/context.html)).
     The setting was recommended in the Jenkins Wiki ([https://wiki.jenkins-ci.org/display/JENKINS/Installation+via+Maven+WAR+Overlay](https://wiki.jenkins-ci.org/display/JENKINS/Installation+via+Maven+WAR+Overlay)).
     The file is placed in the `META-INF` directory as Tomcat picks up the settings
     here without the need for a server restart.
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: '`context.xml` 文件定义了 Web 应用程序的某些行为，例如数据库设置。在此示例中，设置 `logEffectiveWebXML` 要求
+    Tomcat 在应用程序启动时记录特定信息（[http://tomcat.apache.org/tomcat-7.0-doc/config/context.html](http://tomcat.apache.org/tomcat-7.0-doc/config/context.html)）。
+    Jenkins Wiki 推荐了此设置（[https://wiki.jenkins-ci.org/display/JENKINS/Installation+via+Maven+WAR+Overlay](https://wiki.jenkins-ci.org/display/JENKINS/Installation+via+Maven+WAR+Overlay)）。该文件放置在
+    `META-INF` 目录中，因为 Tomcat 可以在此处获取设置而无需重新启动服务器。'
 - en: The `<packaging>war</packaging>` tag tells Maven to use the WAR plugin for packaging.
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: '`<packaging>war</packaging>` 标签告诉 Maven 使用 WAR 插件进行打包。'
 - en: You used the same version number in the name of the final overlayed WAR as the
     original Jenkins WAR version. It makes it easier to spot if the Jenkins version
     changes. This again highlights that using conventions aids readability and decreases
     the opportunity for mistakes. When deploying from your acceptance environment
     to production, you should remove the version number.
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 您在最终叠加 WAR 的名称中使用了与原始 Jenkins WAR 版本相同的版本号。这样可以更容易地发现 Jenkins 版本是否更改。这再次凸显了使用惯例有助于提高可读性并减少错误机会。在从验收环境部署到生产环境时，应删除版本号。
 - en: In the `pom.xml` file, you defined [http://repo.jenkins-ci.org/releases](http://repo.jenkins-ci.org/releases)
     as the repository in which to find Jenkins.
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 `pom.xml` 文件中，您将 [http://repo.jenkins-ci.org/releases](http://repo.jenkins-ci.org/releases)
+    定义为查找 Jenkins 的存储库。
 - en: The Jenkins WAR file is pulled in as a dependency of type `war` and scope `runtime`.
     The runtime scope indicates that the dependency is not required for compilation,
     but is for execution. For more detailed information on scoping, review [http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope).
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins WAR 文件作为 `war` 类型的依赖项和 `runtime` 范围的依赖项引入。运行时范围表示该依赖项不需要进行编译，但是需要执行。有关作用域的更详细信息，请参阅
+    [http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope)。
 - en: For further details about WAR overlays, review [http://maven.apache.org/plugins/maven-war-plugin/index.html](http://maven.apache.org/plugins/maven-war-plugin/index.html).
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关 WAR 叠加的更多详细信息，请参阅 [http://maven.apache.org/plugins/maven-war-plugin/index.html](http://maven.apache.org/plugins/maven-war-plugin/index.html)。
 - en: Tip
+  id: totrans-99
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Avoiding work**'
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: '**避免工作'
 - en: To limit maintenance effort, it is better to install extra content rather than
     replacing content that might be used elsewhere or by third-party plugins.
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了减少维护工作量，最好安装额外的内容，而不是替换可能在其他地方或由第三方插件使用的内容。
 - en: There's more...
+  id: totrans-102
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: There are a lot of details that you need to cover if you wish to fully modify
     the look and feel of Jenkins. The following sections mention some of the details.
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您希望完全修改 Jenkins 的外观和感觉，则需要涵盖许多细节。以下部分提及了一些细节。
 - en: Which types of content can you replace?
+  id: totrans-104
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 您可以替换哪些类型的内容？
 - en: 'The Jenkins server deploys to two main locations. The first location is the
     core application and the second is the workspace which stores information that
     changes. To gain a fuller understanding of the content, review the directory structure.
     A useful command in Linux is the tree command, which displays the directory structure.
     To install under Ubuntu, use the following command:'
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 服务器部署到两个主要位置。第一个位置是核心应用程序，第二个位置是存储更改信息的工作空间。为了更全面地了解内容，请查看目录结构。Linux
+    中一个有用的命令是 tree 命令，它显示目录结构。要在 Ubuntu 下安装，请使用以下命令：
 - en: '[PRE7]'
+  id: totrans-106
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'For the Jenkins Ubuntu workspace, using the following command generates a tree
     view of the workspace:'
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于 Jenkins Ubuntu 工作空间，使用以下命令生成工作空间的树状视图：
 - en: '[PRE8]'
+  id: totrans-108
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: '**├── fingerprints** (directory to store checksums to uniquely identify files)'
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── 指纹**（用于存储文件的校验和以唯一标识文件）'
 - en: '**├── jobs** (stores job configuration and build results)'
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── 工作**（存储作业配置和构建结果）'
 - en: '**├── plugins** (where plugins are deployed and usually configured)'
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── 插件**（插件部署和通常配置的位置）'
 - en: '**├── tools** (where tools such as Maven and Ant are deployed)'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── tools**（部署 Maven 和 Ant 等工具的位置）'
 - en: '**├── updates** (updates)'
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── updates**（更新）'
 - en: '**├── userContent** (content made available under the URL `/userContent`)'
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── userContent**（在`/userContent` URL 下提供的内容）'
 - en: '**└── users** (user information displayed under the `/me` URL)'
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: '**└── users**（显示在`/me` URL 下的用户信息）'
 - en: 'The default Ubuntu location of the web app is `/var/run/jenkins/war`. If you
     are running Jenkins from the command line, then the option for placing the web
     app is:'
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: Web 应用程序的默认 Ubuntu 位置是`/var/run/jenkins/war`。如果您从命令行运行 Jenkins，则放置 Web 应用程序的选项是：
 - en: '[PRE9]'
+  id: totrans-117
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: '**├── css** (location of Jenkins style sheets)'
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── css**（Jenkins 样式表的位置）'
 - en: '**├── executable** (used for running Jenkins from the command line)'
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── executable**（用于从命令行运行 Jenkins）'
 - en: '**├── favicon.ico** (the icon we replaced in this recipe)'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── favicon.ico**（在此方法中替换的图标）'
 - en: '**├── help** (directory with help content)'
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── help**（帮助内容目录）'
 - en: '**├── images** (graphics in different sizes)'
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── images**（不同尺寸的图形）'
 - en: '**├── META-INF** (location for manifest file and `pom.xml` file that generated
     the WAR)'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── META-INF**（manifes文件和生成的WAR的`pom.xml`文件的位置）'
 - en: '**├── robots.txt** (used to tell search engines where they are allowed to crawl)'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── robots.txt**（用于告诉搜索引擎允许爬行的位置）'
 - en: '**├── scripts** (JavaScript library location)'
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── scripts**（JavaScript库位置）'
 - en: '**├── WEB-INF** (main location for the servlet part of the web application)'
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: '**├── WEB-INF**（Web 应用程序的 servlet 部分的主要位置）'
 - en: '**└── winstone.jar** (The servlet container: [http://winstone.sourceforge.net/](http://winstone.sourceforge.net/))'
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: '**└── winstone.jar**（Servlet 容器：[http://winstone.sourceforge.net/](http://winstone.sourceforge.net/)）'
 - en: Search engines and robots.txt
+  id: totrans-128
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 搜索引擎和 robots.txt
 - en: 'If you are adding your own custom content, such as user home pages, company
     contact information, or product details, then consider modifying the top-level
     `robots.txt` file. At present, it excludes search engines from all content:'
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您要添加自己的自定义内容，例如用户主页、公司联系信息或产品详情，请考虑修改顶级`robots.txt`文件。目前，它将搜索引擎从所有内容中排除在外：
 - en: '[PRE10]'
+  id: totrans-130
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: You can find the full details of the structure of the `robots.txt` at [http://www.w3.org/TR/html4/appendix/notes.html#h-B.4.1.1](http://www.w3.org/TR/html4/appendix/notes.html#h-B.4.1.1).
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[http://www.w3.org/TR/html4/appendix/notes.html#h-B.4.1.1](http://www.w3.org/TR/html4/appendix/notes.html#h-B.4.1.1)找到`robots.txt`结构的完整详情。
 - en: Google uses richer structures that allow as well as disallow; see [https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt?csw=1](https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt?csw=1)
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: Google 使用更丰富的结构，允许和禁止；请参阅[https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt?csw=1](https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt?csw=1)
 - en: The following `robots.txt` allows access by the Google crawler to the directory
     `/userContent/corporate/`. It is an open question whether all web crawlers will
     honor the intent.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的`robots.txt`允许 Google 爬虫访问`/userContent/corporate/`目录。所有网络爬虫是否会遵守意图尚不确定。
 - en: '[PRE11]'
+  id: totrans-134
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: Note
+  id: totrans-135
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: To help secure your Jenkins infrastructure, refer to recipes in [Chapter 2](ch02.html
     "Chapter 2. Enhancing Security"), *Enhancing Security*.
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了帮助保护您的 Jenkins 基础架构，请参考[第 2 章](ch02.html "Chapter 2. Enhancing Security")中的方法，*Enhancing
+    Security*。
 - en: See also
+  id: totrans-137
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Skinning Jenkins with the simple themes plugin* recipe
+  id: totrans-138
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用简单主题插件为 Jenkins 设置样式的方法
 - en: The *Generating a home page* recipe
+  id: totrans-139
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*生成主页*的方法'
 - en: Generating a home page
+  id: totrans-140
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 生成主页
 - en: The user's home page is a great place to express your organization's identity.
     You can create a consistent look and feel that express your team's spirit.
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 用户的主页是表达您组织身份的好地方。您可以创建一致的外观和感觉，表达您团队的精神。
 - en: This recipe will explore the manipulation of home pages found under the`/user/userid`
     directory and configured by the user through the Jenkins`/me` URL.
+  id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 本方法将探讨位于`/user/userid`目录下的主页的操作，并由用户通过 Jenkins `/me` URL 配置。
 - en: Note
+  id: totrans-143
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: A similar plugin worth reviewing is the Gravatar plugin. You can find the plugins
     home page at [https://wiki.jenkins-ci.org/display/JENKINS/Gravatar+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Gravatar+plugin)
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: 值得审查的类似插件是 Gravatar 插件。您可以在[https://wiki.jenkins-ci.org/display/JENKINS/Gravatar+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Gravatar+plugin)找到插件主页
 - en: Getting ready
+  id: totrans-145
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Avatar plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Avatar+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Avatar+Plugin)).
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Avatar 插件（[https://wiki.jenkins-ci.org/display/JENKINS/Avatar+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Avatar+Plugin)）。
 - en: Create a Jenkins account for the user `fakeuser`. You can configure Jenkins
     with a number of authentication strategies; the choice will affect how you create
     a user. One example is to use Project-based matrix tactics detailed in the *Reviewing
     project-based matrix tactics via a custom group script* recipe in [Chapter 2](ch02.html
     "Chapter 2. Enhancing Security"), *Enhancing Security*.
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 为用户 `fakeuser` 创建一个 Jenkins 帐户。 您可以配置 Jenkins 以使用许多身份验证策略；选择将影响您如何创建用户。 一个例子是使用
+    *Reviewing project-based matrix tactics via a custom group script* 中详细介绍的基于项目的矩阵策略，位于
+    [Chapter 2](ch02.html "Chapter 2. Enhancing Security")，*Enhancing Security* 中的配方。
 - en: Note
+  id: totrans-148
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You will not get this recipe to work unless as a Jenkins administrator you configure
     the **Markup Formatter** under the **Configure Global Security** page as **Raw**.
     By doing so you allow anyone who can edit descriptions to inject their own script
     code. If you are a very trusting small team of developers, this may be an OK practice.
     However, in general consider this a security issue.
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: 除非作为 Jenkins 管理员您在 **Configure Global Security** 页面下配置了 **Markup Formatter**
+    为 **Raw**，否则您将无法使此配方起作用。 通过这样做，您允许任何可以编辑描述的人注入他们自己的脚本代码。 如果您是一个非常信任的小型开发团队，这可能是一种可行的做法。
+    但是，一般来说，考虑这是一个安全问题。
 - en: How to do it...
+  id: totrans-150
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Browse to the location [http://en.wikipedia.org/wiki/Wikipedia:Public_domain_image_resources](http://en.wikipedia.org/wiki/Wikipedia:Public_domain_image_resources)
     for a list of public domain sources of images.
+  id: totrans-151
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 浏览到 [http://en.wikipedia.org/wiki/Wikipedia:Public_domain_image_resources](http://en.wikipedia.org/wiki/Wikipedia:Public_domain_image_resources)
+    以获取图片的公共领域来源列表。
 - en: Search for open source images at [http://commons.wikimedia.org/wiki/Main_Page](http://commons.wikimedia.org/wiki/Main_Page).
+  id: totrans-152
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 [http://commons.wikimedia.org/wiki/Main_Page](http://commons.wikimedia.org/wiki/Main_Page)
+    搜索开源图像。
 - en: 'Download the image from [http://commons.wikimedia.org/wiki/File%3ACharles_Richardson_(W_H_Gibbs_1888).jpg](http://commons.wikimedia.org/wiki/File%3ACharles_Richardson_(W_H_Gibbs_1888).jpg)
     by clicking on the **Download Image File: 75 px** link, as shown in the following
     screenshot:![How to do it...](img/0082OS_04_04.jpg)'
+  id: totrans-153
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '通过点击以下截图中显示的 **Download Image File: 75 px** 链接，从 [http://commons.wikimedia.org/wiki/File%3ACharles_Richardson_(W_H_Gibbs_1888).jpg](http://commons.wikimedia.org/wiki/File%3ACharles_Richardson_(W_H_Gibbs_1888).jpg)
+    下载图像：![操作步骤...](img/0082OS_04_04.jpg)'
 - en: Note
+  id: totrans-154
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If the image is no longer available then choose another.
+  id: totrans-155
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果图像不再可用，请选择另一个。
 - en: Log in to your sacrificial Jenkins server as `fakeuser` and visit their configuration
     page at `http://localhost:8080/user/fakeuser/configure`.
+  id: totrans-156
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以 `fakeuser` 身份登录到您的 Jenkins 服务器并访问其配置页面，地址为 `http://localhost:8080/user/fakeuser/configure`。
 - en: Upload the image under the **Avatar** section:![How to do it...](img/0082OS_04_05.jpg)
+  id: totrans-157
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Avatar** 部分上传图像：![操作步骤...](img/0082OS_04_05.jpg)
 - en: Review the URL `http://localhost:8080/user/fakeuser/avatar/image`.
+  id: totrans-158
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 URL `http://localhost:8080/user/fakeuser/avatar/image`。
 - en: Note
+  id: totrans-159
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: You will now be able to use this known URL whenever you want to display your
     avatar.
+  id: totrans-160
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 现在，您随时都可以使用此已知的 URL 来显示您的头像。
 - en: 'Add the following text to the user profile description:'
+  id: totrans-161
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下文本添加到用户配置文件描述中：
 - en: '[PRE12]'
+  id: totrans-162
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Visit the `/user/fakeuser` page. You will have a link in the description named
     **Switch**. If you click on the link, the **HELLO WORLD** content will appear
     or disappear.
+  id: totrans-163
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 `/user/fakeuser` 页面。 您将在描述中看到一个名为 **Switch** 的链接。 如果您点击该链接，则 **HELLO WORLD**
+    内容将会出现或消失。
 - en: Copy the user directory for the `fakeuser` to a directory `fakeuser2`, for example,
     `/var/lib/jenkins/user/fakeuser`. In the `config.xml` file found in the `fakeuser2`
     directory, change the value of the tag `<fullName>`from `fakeuser` to `fakeuser2`.
     Change the `<emailAddress>` value to `fakeuser2@dev.null`.
+  id: totrans-164
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制 `fakeuser` 的用户目录到一个名为 `fakeuser2` 的目录，例如，`/var/lib/jenkins/user/fakeuser`。
+    在 `fakeuser2` 目录中找到的 `config.xml` 文件中，将 `<fullName>` 标签的值从 `fakeuser` 更改为 `fakeuser2`。
+    将 `<emailAddress>` 的值更改为 `fakeuser2@dev.null`。
 - en: Log in as `fakeuser2` with the same password as `fakeuser`.
+  id: totrans-165
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以 `fakeuser2` 的身份登录，密码与 `fakeuser` 相同。
 - en: Visit the home page `/user/fakeuser2`. Notice the update to the e-mail address.
+  id: totrans-166
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问主页 `/user/fakeuser2`。 注意电子邮件地址的更新。
 - en: How it works...
+  id: totrans-167
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: The Avatar plugin allows you to upload an image to Jenkins. The image's URL
     is in a fixed location. You can reuse it with the simple themes plugin to add
     content without using a WAR overlay.
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: Avatar 插件允许您将图像上传到 Jenkins。 图像的 URL 位于固定位置。 您可以通过简单的主题插件重复使用它，以添加内容而不使用 WAR
+    覆盖。
 - en: There is a vast number of public domain and open source images freely available.
     Before generating your own content, it is worth reviewing resources on the Internet.
     If you create content, consider donating to an open source archive such as [archive.org](http://archive.org).
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 有大量的公共领域和开源图片可供免费使用。在生成自己的内容之前，值得在互联网上查看资源。如果你创建内容，请考虑捐赠给开源存档，比如[archive.org](http://archive.org)。
 - en: Unless you filter the description (refer to the *Exposing information through
     build descriptions* recipe in [Chapter 3](ch03.html "Chapter 3. Building Software"),
     *Building Software*) for HTML tags and JavaScript, you can use custom JavaScript
     or CSS animations to add eye candy to your personalized Jenkins.
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: 除非你过滤掉HTML标签和JavaScript的描述（参见[第三章](ch03.html "第三章。构建软件") *构建软件* 中的 *通过构建描述公开信息*
+    这一做法），否则你可以使用自定义JavaScript或CSS动画来为个性化的Jenkins添加吸引眼球的效果。
 - en: Your `fakeuser` information is stored in `/user/fakeuser/config.xml`. By copying
     it to another directory and slightly modifying the `config.xml` file you have
     created a new user account. The format is readable and easy to structure into
     a template for the creation of yet more accounts. You created the `fakeuser2`
     account to demonstrate this point.
+  id: totrans-171
   prefs: []
   type: TYPE_NORMAL
+  zh: 你的`fakeuser`信息存储在`/user/fakeuser/config.xml`中。通过将其复制到另一个目录并略微修改`config.xml`文件，你创建了一个新的用户帐户。这种格式易于阅读，并且易于结构化成用于创建更多帐户的模板。你创建了`fakeuser2`帐户来证明这一点。
 - en: By using the WAR overlay recipe and adding extra `/user/username` directories
     containing customized `config.xml` files, you can control Jenkins user populations,
     for example, from a central provisioning script or at the first login attempt,
     using a custom authorization script (refer to the *Using Script Realm authentication
     for provisioning* recipe in [Chapter 2](ch02.html "Chapter 2. Enhancing Security"),
     *Enhancing Security*).
+  id: totrans-172
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过使用WAR覆盖配方并添加额外的`/user/username`目录，其中包含自定义的`config.xml`文件，你可以控制Jenkins用户群体，例如，从一个中央配置脚本或在第一次登录尝试时，使用自定义授权脚本（参见[第二章](ch02.html
+    "第二章。增强安全性") *增强安全性* 中的 *使用脚本领域认证进行配置的做法*）。
 - en: There's more...
+  id: totrans-173
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容……
 - en: You can enforce consistency by using a template `config.xml`. This will enforce
     a wider uniform structure. You can set the initial password to a known value or
     empty. An empty password only makes sense if the time from creation of the user
     to the first login is very short. You should consider this bad practice, a problem
     waiting to happen.
+  id: totrans-174
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过使用模板`config.xml`来强制执行一致性。这将强制执行更广泛的统一结构。你可以将初始密码设置为已知值或空值。只有在用户从创建到首次登录的时间非常短的情况下，空密码才有意义。你应该考虑这是一种不好的做法，是一个等待发生问题的问题。
 - en: 'The description is stored under the description tag. The content is stored
     as URL escaped text. For example,`<h1>Description</h1>` is stored as:'
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 描述存储在描述标签下。内容以URL转义文本形式存储。例如，`<h1>描述</h1>`存储为：
 - en: '[PRE13]'
+  id: totrans-176
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: A number of plugins also store their configuration in the same `config.xml`.
     As you increase the number of plugins in your Jenkins server, which is natural
     as you get to know the product, you will need to occasionally review the completeness
     of your template.
+  id: totrans-177
   prefs: []
   type: TYPE_NORMAL
+  zh: 许多插件也将它们的配置存储在同一个`config.xml`文件中。随着你在Jenkins服务器中增加插件的数量，这是很自然的，因为你了解了这个产品，你需要偶尔审查你的模板的完整性。
 - en: See also
+  id: totrans-178
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Skinning Jenkins with the simple themes plugin* recipe
+  id: totrans-179
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用简单主题插件装饰Jenkins的做法*'
 - en: The *Skinning and provisioning Jenkins using a WAR overlay* recipe
+  id: totrans-180
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用WAR覆盖的皮肤和提供Jenkins的做法*'
 - en: The *Reviewing project-based matrix tactics via a custom group script* recipe
     in [Chapter 2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*
+  id: totrans-181
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在[第二章](ch02.html "第二章。增强安全性") *增强安全性* 中的 *通过自定义组脚本审查基于项目矩阵的策略* 这一做法
 - en: Creating HTML reports
+  id: totrans-182
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建HTML报告
 - en: The left-hand side menu of a jobs dashboard is valuable real estate. The developer's
     eyes naturally scan this area. This recipe describes how you can add a link from
     a custom HTML report to the menu, getting the report noticed more quickly.
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: 作业仪表板左侧菜单是有价值的房地产。开发者的眼睛自然会扫描这个区域。这个教程描述了如何将自定义HTML报告的链接添加到菜单中，以便更快地注意到报告。
 - en: Getting ready
+  id: totrans-184
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the HTML publisher plugin ([https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin)).
     We assume that you have a subversion repository with the Packt code committed.
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装HTML发布者插件（[https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin)）。我们假设你有一个已提交了Packt代码的Subversion仓库。
 - en: How to do it...
+  id: totrans-186
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 怎么做…
 - en: Create a free-style software project and name it `ch4.html_report`.
+  id: totrans-187
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个自由风格的软件项目，并将其命名为`ch4.html_report`。
 - en: Under the **Source Code Management** section, click on **Subversion**.
+  id: totrans-188
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分下，单击**Subversion**。
 - en: Under the **Modules** section, add `Repo/ch4.communicating/html_report` to **Repository
     URL**, where `Repo` is the URL to your subversion repository.
+  id: totrans-189
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**模块**部分下，将`Repo/ch4.communicating/html_report`添加到**存储库 URL**，其中`Repo`是您的子版本存储库的
+    URL。
 - en: 'Under the **Post-build Actions** section, check **Publish HTML reports**. Add
     the following details:'
+  id: totrans-190
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建后操作**部分下，检查**发布 HTML 报告**。 添加以下详细信息：
 - en: '**HTML directory to archive**: `target/custom_report`'
+  id: totrans-191
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**要存档的 HTML 目录**：`target/custom_report`'
 - en: '**Index pages[s]**: `index.html`'
+  id: totrans-192
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**索引页面[s]**：`index.html`'
 - en: '**Report title**: `My HTML Report`'
+  id: totrans-193
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**报告标题**：`My HTML Report`'
 - en: Tick the **Keep past HTML reports** checkbox
+  id: totrans-194
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 选中**保留过去的 HTML 报告**复选框
 - en: Click on **Save**.
+  id: totrans-195
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**保存**。
 - en: Run the job and review the left-hand side menu. You will now see a link to your
     report, as shown in the following screenshot:![How to do it...](img/0082OS_04_06.jpg)
+  id: totrans-196
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行作业并查看左侧菜单。 现在您将看到一个指向您报告的链接，如下面的屏幕截图所示：![如何操作...](img/0082OS_04_06.jpg)
 - en: How it works...
+  id: totrans-197
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Your subversion repo contains an `index.html` file that is pulled into the workspace
     of the job. The plugin works as advertised and adds a link pointing to the HTML
     report. This allows your audience to efficiently find your custom-generated information.
+  id: totrans-198
   prefs: []
   type: TYPE_NORMAL
+  zh: 您的子版本存储库包含一个`index.html`文件，该文件被拉入作业的工作区。 插件按照广告中的方式运行，并添加了一个指向 HTML 报告的链接。 这使得您的受众可以有效地找到您生成的自定义信息。
 - en: There's more...
+  id: totrans-199
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'The example report is shown:'
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: 示例报告如下所示：
 - en: '[PRE14]'
+  id: totrans-201
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: It pulls in the main Jenkins style sheet `/css/style.css`.
+  id: totrans-202
   prefs: []
   type: TYPE_NORMAL
+  zh: 它拉取了主 Jenkins 样式表`/css/style.css`。
 - en: 'It is possible that when you update a style sheet in an application, you do
     not see the changes in your browser until you have cleaned your browser cache.
     Jenkins gets around this latency issue in a clever way. It uses a URL with a unique
     number that changes with each Jenkins version. For example, for the `css` directory
     you have two URLs:'
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您在应用程序中更新样式表时，可能会出现在清除浏览器缓存之前看不到更改的情况。 Jenkins 以一种巧妙的方式解决了这个延迟问题。 它使用一个带有每个
+    Jenkins 版本都会更改的唯一数字的 URL。 例如，对于`css`目录，您有两个 URL：
 - en: '`/css`'
+  id: totrans-204
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`/css`'
 - en: '`/static/uniquenumber/css`'
+  id: totrans-205
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`/static/uniquenumber/css`'
 - en: Most Jenkins URLs use the later form. Consider doing so for your style sheets.
+  id: totrans-206
   prefs: []
   type: TYPE_NORMAL
+  zh: 大多数 Jenkins URL 使用后一种形式。 考虑为您的样式表也这样做。
 - en: Note
+  id: totrans-207
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The unique number changes per version, so you will need to update the URL for
     each upgrade.
+  id: totrans-208
   prefs: []
   type: TYPE_NORMAL
+  zh: 每个版本的唯一编号都会更改，因此您需要为每次升级更新 URL。
 - en: When running the `site` goal in a Maven build, a local website is generated
     ([http://maven.apache.org/plugins/maven-site-plugin](http://maven.apache.org/plugins/maven-site-plugin)).
     This website has a fixed URL inside the Jenkins job that you can point at with
     the **My HTML Report** link. This brings documentation such as test results within
     easy reach.
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Maven 构建中运行`site`目标时，将生成一个本地网站（[http://maven.apache.org/plugins/maven-site-plugin](http://maven.apache.org/plugins/maven-site-plugin)）。
+    此网站在 Jenkins 作业内有一个固定的 URL，您可以使用**My HTML Report**链接指向它。 这使得诸如测试结果之类的文档易于访问。
 - en: See also
+  id: totrans-210
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Efficient use of views* recipe
+  id: totrans-211
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*高效使用视图*配方'
 - en: The *Saving screen space with the Dashboard View plugin* recipe
+  id: totrans-212
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用 Dashboard View 插件节省屏幕空间* 配方'
 - en: Efficient use of views
+  id: totrans-213
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 高效使用视图
 - en: Jenkins' addictive ease of configuration lends itself to creating a large number
     of jobs. This increases the volume of information exposed to developers. Jenkins
     needs to avoid chaos by utilizing browser space efficiently. One approach is to
@@ -950,112 +1417,164 @@
     It removes views as tabs and replaces the tabs with one select box. This aids
     in quicker navigation. You will also be shown how to provision lots of jobs quickly
     using a simple HTML form generated by a script.
+  id: totrans-214
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 具有令人上瘾的易配置性，非常适合创建大量作业。 这会增加开发人员暴露的信息量。 Jenkins 需要通过有效地利用浏览器空间来避免混乱。
+    一种方法是定义最小化视图。 在本配方中，您将使用 DropDown ViewsTabBar 插件。 它将视图作为标签删除，并用一个选择框替换这些标签。 这有助于更快地导航。
+    您还将看到如何使用脚本生成的简单 HTML 表单快速提供大量作业。
 - en: Tip
+  id: totrans-215
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: In this recipe, you will be creating a large number of views that you may want
     to delete later. If you are using a virtual box image, consider cloning the image
     and deleting it after you have finished.
+  id: totrans-216
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本配方中，您将创建大量视图，稍后可能需要删除。 如果您使用的是虚拟盒映像，请考虑克隆映像，并在完成后将其删除。
 - en: Getting ready
+  id: totrans-217
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the DropDown ViewsTabBar plugin ([https://wiki.jenkins-ci.org/display/JENKINS/DropDown+ViewsTabBar+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/DropDown+ViewsTabBar+Plugin)).
+  id: totrans-218
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 DropDown ViewsTabBar 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/DropDown+ViewsTabBar+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/DropDown+ViewsTabBar+Plugin))。
 - en: How to do it...
+  id: totrans-219
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Copy and paste the following Perl script into an executable file named `create.pl`:'
+  id: totrans-220
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制并粘贴以下 Perl 脚本到一个名为`create.pl`的可执行文件中：
 - en: '[PRE15]'
+  id: totrans-221
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Create an HTML file from the output of the Perl script, for example:'
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据 Perl 脚本的输出创建一个 HTML 文件，例如：
 - en: '[PRE16]'
+  id: totrans-223
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: In a web browser, as an administrator, log in to Jenkins.
+  id: totrans-224
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在网页浏览器中，以管理员身份登录 Jenkins。
 - en: Create the job `Template1,` adding any details you wish. This is your template
     job that will be copied into many other jobs.
+  id: totrans-225
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建作业`Template1`，添加任何您希望的细节。这是您将复制到许多其他作业中的模板作业。
 - en: Load `form.html` into the same browser.
+  id: totrans-226
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在同一个浏览器中加载`form.html`。
 - en: 'Click on one of the **Create CH4.fake** buttons. Jenkins returns an error message:'
+  id: totrans-227
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击其中一个**创建 CH4.fake**按钮。Jenkins 返回一个错误消息：
 - en: '[PRE17]'
+  id: totrans-228
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: Visit **Configure Global Security** on `http://localhost:8080/configureSecurity`
     and uncheck the **Prevent Cross Site Request Forgery exploits** box.
+  id: totrans-229
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问`http://localhost:8080/configureSecurity`上的**配置全局安全性**，取消勾选**防止跨站请求伪造漏洞**框。
 - en: Click on **Save**.
+  id: totrans-230
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Click on all of the **Create CH4.fake** buttons.
+  id: totrans-231
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击所有的**创建 CH4.fake**按钮。
 - en: Visit the front page of Jenkins and verify that the jobs have been created and
     are based on the `Template1` job.
+  id: totrans-232
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 Jenkins 的首页，验证作业已经创建并基于`Template1`作业。
 - en: Create a large number of views with a random selection of jobs. Review the front
     page, noting the chaos.
+  id: totrans-233
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建大量视图，并随机选择作业。查看首页，注意混乱。
 - en: Visit the configuration screen `/configure,` selecting **DropDownViewsTabBar
     provides a drop down menu for selecting views** in the **View Tab Bar** select
     box**.** In the subsection **DropDownViewsTabBar**, check the **Show Job Counts**
     box, as shown in the following screenshot:![How to do it...](img/0082OS_04_07.jpg)
+  id: totrans-234
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问配置屏幕`/configure`，在**视图选项卡栏提供下拉菜单以选择视图**中的**视图选项卡栏**下拉框中选择**DropDownViewsTabBar**。在**DropDownViewsTabBar**的子部分中，勾选**显示作业计数**框，如下图所示：![如何操作...](img/0082OS_04_07.jpg)
 - en: Click on the **Save** button:![How to do it...](img/0082OS_04_08.jpg)
+  id: totrans-235
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**按钮：![如何操作...](img/0082OS_04_08.jpg)
 - en: In Jenkins, visit **Configure Global Security** `http://localhost:8080/configureSecurity`
     and check the **Prevent Cross Site Request Forgery exploits** box.
+  id: totrans-236
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中，访问**配置全局安全性**`http://localhost:8080/configureSecurity`，并勾选**防止跨站请求伪造漏洞**框。
 - en: Click on **Save**.
+  id: totrans-237
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: How it works...
+  id: totrans-238
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理是...
 - en: The form works as long as the bread crumbing security feature in Jenkins is
     turned off. The feature, when turned on, generates a random number that the form
     has to return when you submit. This allows Jenkins to know that the form is part
@@ -1064,432 +1583,629 @@
     a 5xx error then that would imply a server error. We therefore had to turn the
     feature off when submitting our own data. We do not recommend this in a production
     environment.
+  id: totrans-239
   prefs: []
   type: TYPE_NORMAL
+  zh: 只要 Jenkins 中的面包屑安全功能关闭，该表单就能正常工作。当开启此功能时，它会生成一个随机数，表单在提交时必须返回该随机数。这样 Jenkins
+    就知道该表单是与服务器进行的有效对话的一部分。生成的 HTTP 状态错误在 4xx 范围内，这意味着客户端输入无效。如果 Jenkins 返回了 5xx 错误，则意味着服务器错误。因此，在提交我们自己的数据时，我们不得不关闭此功能。我们不建议在生产环境中这样做。
 - en: 'Once you have logged in to Jenkins as an administrator, you can create jobs.
     You can do this through the GUI or by sending POST information. In this recipe,
     we copied a job named `Template1` to new jobs starting with the name `CH4.fake`,
     as shown in the following code:'
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦您以管理员身份登录 Jenkins，您可以创建作业。您可以通过 GUI 或通过发送 POST 信息来执行此操作。在本教程中，我们将一个名为`Template1`的作业复制到以`CH4.fake`开头的新作业中，如下所示：
 - en: '[PRE18]'
+  id: totrans-241
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: The POST variables you used were `name` for the name of the new job, and `from`
     for the name of your template job. The URL for the POST action is `/createItem?mode=copy`.
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: 您使用的 POST 变量是`name`用于新作业的名称，`from`用于模板作业的名称。POST 操作的 URL 是`/createItem?mode=copy`。
 - en: To change the hostname and port number, you will have to update the `$host`
     variable found in the Perl script.
+  id: totrans-243
   prefs: []
   type: TYPE_NORMAL
+  zh: 要更改主机名和端口号，您需要更新 Perl 脚本中找到的`$host`变量。
 - en: To delete a job, the Perl script generated forms with actions pointing to `/job/Jobname/doDelete`
     (for example, `/job/CH4.fake.1/doDelete`). No extra variables were needed.
+  id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: 要删除一个作业，Perl 脚本生成的表单中的操作指向`/job/Jobname/doDelete`（例如，`/job/CH4.fake.1/doDelete`）。不需要额外的变量。
 - en: To increase the number of form entries, you can change the variable `$end` from
     `20`.
+  id: totrans-245
   prefs: []
   type: TYPE_NORMAL
+  zh: 要增加表单条目的数量，您可以更改变量`$end`的值为`20`。
 - en: There's more...
+  id: totrans-246
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Jenkins uses a standard library, Stapler ([http://stapler.kohsuke.org/what-is.html](http://stapler.kohsuke.org/what-is.html)),
     to bind services to URLs. Plugins also use Stapler. When you install plugins,
     the number of potential actions also increases. This means that you can activate
     a lot of actions through HTML forms similar to this recipe. You will discover
     in [Chapter 7](ch07.html "Chapter 7. Exploring Plugins"), *Exploring Plugins*,
     that writing binding code to Stapler requires minimal effort.
+  id: totrans-247
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins使用标准库Stapler ([http://stapler.kohsuke.org/what-is.html](http://stapler.kohsuke.org/what-is.html))将服务绑定到URL。插件也使用Stapler。当您安装插件时，潜在的操作数量也会增加。这意味着您可以通过类似于本文中的HTML表单激活许多操作。您将在[第7章](ch07.html
+    "Chapter 7. Exploring Plugins")中发现，使用Stapler编写绑定代码所需的工作量很小，*探索插件*。
 - en: See also
+  id: totrans-248
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另见
 - en: The *Saving screen space with the Dashboard View plugin* recipe
+  id: totrans-249
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用仪表板视图插件节省屏幕空间* 步骤'
 - en: Saving screen space with the Dashboard View plugin
+  id: totrans-250
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用仪表板视图插件节省屏幕空间
 - en: In the *Efficient use of views* recipe, you discovered that you can save horizontal
     tab space using the Views plugin. In this recipe, you will use the Dashboard View
     plugin to condense the use of the horizontal space. Condensing the horizontal
     space aids in assimilating information efficiently.
+  id: totrans-251
   prefs: []
   type: TYPE_NORMAL
+  zh: 在*高效使用视图*步骤中，您发现可以使用Views插件节省水平选项卡空间。在这个步骤中，您将使用Dashboard View插件来压缩水平空间的使用。压缩水平空间有助于高效吸收信息。
 - en: The Dashboard View plugin allows you configure areas of a view to display specific
     functionality—for example, a grid view of the jobs or an area of the view that
     shows the subset of jobs failing. The user can drag-and-drop the areas around
     the screen.
+  id: totrans-252
   prefs: []
   type: TYPE_NORMAL
+  zh: 仪表板视图插件允许您配置视图的区域以显示特定功能，例如作业的网格视图或显示失败作业子集的区域。用户可以在屏幕上拖放这些区域。
 - en: Note
+  id: totrans-253
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: The developers have made the dashboard easily extensible, so expect more choices
     later.
+  id: totrans-254
   prefs: []
   type: TYPE_NORMAL
+  zh: 开发人员已经使仪表板易于扩展，因此稍后会有更多选择。
 - en: Getting ready
+  id: totrans-255
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Dashboard View plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View](https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View)).
     Either create a few jobs by hand or use the HTML form that provisioned jobs in
     the last recipe.
+  id: totrans-256
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装仪表板视图插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View](https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View))。要么手动创建一些作业，要么使用上一个步骤中提供的HTML表单创建作业。
 - en: How to do it...
+  id: totrans-257
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作步骤...
 - en: As a Jenkins administrator, log in to the home page of your Jenkins instance.
+  id: totrans-258
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 作为Jenkins管理员，登录到Jenkins实例的主页。
 - en: Create a new view by clicking on the **+** sign in the second tab at the top
     of the screen.
+  id: totrans-259
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击屏幕顶部的第二个标签页上的**+**号创建一个新视图。
 - en: Choose the **Dashboard** view.
+  id: totrans-260
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**仪表板**视图。
 - en: Under the **Jobs** sections, select a few of your fake jobs.
+  id: totrans-261
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**作业**部分，选择一些您的虚拟作业。
 - en: Leave the **Dashboard Portlet** as the default.
+  id: totrans-262
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将**仪表板控件**保留为默认设置。
 - en: Click on **OK**. You will now see a blank view screen.
+  id: totrans-263
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**。您现在将看到一个空白的视图屏幕。
 - en: In the left-hand side menu, click on the **Edit View** link.
+  id: totrans-264
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧菜单中，点击**编辑视图**链接。
 - en: 'In the **Dashboard Portlets** section of the view, select the following:'
+  id: totrans-265
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在视图的**仪表板控件**部分，选择以下内容：
 - en: 'Add Dashboard Portlet to the top of the view: **- Jobs Grid**'
+  id: totrans-266
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将仪表板控件添加到视图顶部：**- 作业网格**
 - en: 'Add Dashboard Portlet to bottom of the view: **- Unstable Jobs**'
+  id: totrans-267
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将仪表板控件添加到视图底部：**- 不稳定的作业**
 - en: At the bottom of the configuration screen, click on the **OK** button. You will
     now see the **Dashboard** view:![How to do it...](img/0082OS_04_09.jpg)
+  id: totrans-268
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '在配置屏幕底部，点击**确定**按钮。现在您将看到**仪表板**视图: ![操作步骤...](img/0082OS_04_09.jpg)'
 - en: 'You can expand or contract the areas of functionality with the arrow icon:'
+  id: totrans-269
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以使用箭头图标扩展或收缩功能区域：
 - en: '![How to do it...](img/0082OS_04_10.jpg)'
+  id: totrans-270
   prefs: []
   type: TYPE_IMG
+  zh: '![操作步骤...](img/0082OS_04_10.jpg)'
 - en: How it works...
+  id: totrans-271
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: The Dashboard plugin divides up the screen into areas. During dashboard configuration,
     you choose the jobs grid and the unstable jobs portlets. Other dashboard portlets
     include a jobs list, latest builds, slave statistics, test statistics chart or
     grid, and the test trend chart. There will be more choices as the plugin matures.
+  id: totrans-272
   prefs: []
   type: TYPE_NORMAL
+  zh: 仪表板插件将屏幕划分为不同的区域。在仪表板配置期间，您可以选择作业网格和不稳定的作业控件。其他仪表板控件包括作业列表、最新构建、从属统计、测试统计图或网格以及测试趋势图。随着插件的成熟，将会有更多的选择。
 - en: The **Job grid** portlet saves space compared to other views, as the density
     of jobs displayed is high.
+  id: totrans-273
   prefs: []
   type: TYPE_NORMAL
+  zh: 与其他视图相比，**作业网格**控件节省空间，因为显示的作业密度很高。
 - en: Tip
+  id: totrans-274
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: If you are also using the Many **Views** tab (see the preceding recipe) there
     is a little glitch. When you click on the dashboard tag, the original set of views
     is displayed rather than the select box.
+  id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你还在使用 **Many Views** 标签（请参阅前面的教程），可能会有一点小问题。当你点击仪表板标签时，会显示原始的视图集，而不是选择框。
 - en: There's more...
+  id: totrans-276
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: '还有更多...  '
 - en: The Dashboard plugin provides a framework for other plugin developers to create
     dashboard views. One example of this type of usage is the Project Statistics plugin
     ([https://wiki.jenkins-ci.org/display/JENKINS/Project+Statistics+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Project+Statistics+Plugin)).
+  id: totrans-277
   prefs: []
   type: TYPE_NORMAL
+  zh: 仪表板插件提供了一个框架，供其他插件开发者创建仪表板视图。这种用法的一个例子是项目统计插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Project+Statistics+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Project+Statistics+Plugin))。
 - en: See also
+  id: totrans-278
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Creating HTML reports* recipe
+  id: totrans-279
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*创建 HTML 报告* 教程'
 - en: The *Efficient use of views* recipe
+  id: totrans-280
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*高效使用视图* 教程'
 - en: Making noise with HTML5 browsers
+  id: totrans-281
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 HTML5 浏览器发出声音
 - en: This recipe describes how to send a custom sound to a Jenkins user's browser
     when an event occurs, such as a successful build. You can also send sound messages
     at arbitrary times. Not only is this good for developers who enjoy being shouted
     at, sang at by famous actors, and so on, but also for system administrators who
     are looking for a computer in a large server farm.
+  id: totrans-282
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个教程描述了如何在 Jenkins 用户的浏览器中发送自定义声音，当事件发生时，比如一个成功的构建。你也可以在任意时间发送声音消息。这不仅适用于喜欢被名人唱歌或者大喊的开发者，也适用于在大型服务器群中寻找计算机的系统管理员。
 - en: Getting ready
+  id: totrans-283
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Jenkins sounds plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Sounds+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Sounds+plugin)).
     Make sure that you have a compliant web browser installed, such as a current version
     of Firefox or Chrome.
+  id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Jenkins 声音插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Sounds+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Sounds+plugin))。确保已安装兼容的网络浏览器，如最新版本的
+    Firefox 或 Chrome。
 - en: Note
+  id: totrans-285
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'For more details of HTML5 compliancy in browsers, consider reviewing: [http://en.wikipedia.org/wiki/Comparison_of_layout_engines_%28HTML5%29](http://en.wikipedia.org/wiki/Comparison_of_layout_engines_%28HTML5%29).'
+  id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: 若要了解更多关于浏览器中的 HTML5 兼容性的详细信息，请考虑查阅：[http://en.wikipedia.org/wiki/Comparison_of_layout_engines_%28HTML5%29](http://en.wikipedia.org/wiki/Comparison_of_layout_engines_%28HTML5%29)。
 - en: How to do it...
+  id: totrans-287
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Log in as a Jenkins administrator and visit the **Configure System** screen
     `/configure`.
+  id: totrans-288
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以 Jenkins 管理员身份登录，访问**配置系统**屏幕`/configure`。
 - en: Under the **Jenkins Sound** section, check **Play through HTML5 Audio enabled
     Browser**.
+  id: totrans-289
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**Jenkins 声音**部分，勾选**通过启用 HTML5 音频浏览器播放**。
 - en: Note
+  id: totrans-290
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: If Jenkins has problems finding the sound archive with an error message such
     as `File not found 'file:/C:/Users/Alan/.jenkins/jar:file:/C:/Users/Alan/.jenkins/plugins/sounds/WEB-INF/lib/classes.jar/sound-archive.zip`',
     then unzip the `classes.jar` file and move the `sounds-archive.zip` file to the
     same directory mentioned in the error message. Finally, point the configuration
     to the archive, for example, `file:/C:/Users/Alan/.jenkins/plugins/sounds/WEB-INF/lib/sound-archive.zip`.
+  id: totrans-291
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 如果 Jenkins 在查找声音存档时出现问题，例如错误消息中出现`文件未找到 'file:/C:/Users/Alan/.jenkins/jar:file:/C:/Users/Alan/.jenkins/plugins/sounds/WEB-INF/lib/classes.jar/sound-archive.zip'`，那么解压`classes.jar`文件，并将`sounds-archive.zip`文件移动到错误消息中提到的相同目录中。最后，将配置指向存档，例如`file:/C:/Users/Alan/.jenkins/plugins/sounds/WEB-INF/lib/sound-archive.zip`。
 - en: Click on the **Save** button.
+  id: totrans-292
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**按钮。
 - en: Select the **Job creation** link found on the Jenkins home page.
+  id: totrans-293
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择位于 Jenkins 主页上的**Job creation**链接。
 - en: Create a **New Job** with the **Job name** `ch4.sound`.
+  id: totrans-294
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch4.sound` 的**新作业**。
 - en: Select **Build a free-style software project**.
+  id: totrans-295
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**构建一个自由风格的软件项目**。
 - en: Click on **OK**.
+  id: totrans-296
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**。
 - en: In the **Post-build Actions** section, check the **Jenkins Sounds** option.
+  id: totrans-297
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**后构建操作**部分，勾选**Jenkins 声音**选项。
 - en: 'Add two sounds: **EXPLODE** and **doh**:![How to do it...](img/0082OS_04_11.jpg)'
+  id: totrans-298
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加两个声音：**EXPLODE** 和 **doh**：![如何做...](img/0082OS_04_11.jpg)
 - en: Click on **Save**.
+  id: totrans-299
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。
 - en: Click on the **Build Now** link.
+  id: totrans-300
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**立即构建**链接。
 - en: On success, your browser will play the `EXPLODE` wav file.
+  id: totrans-301
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 成功时，你的浏览器将播放`EXPLODE`wav文件。
 - en: Edit your job so that it fails, for example, by adding a non-existent source
     code repository.
+  id: totrans-302
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 编辑你的作业，使其失败，例如添加一个不存在的源代码仓库。
 - en: Build the job again. On failure, your web browser will play the `doh` wav file.
+  id: totrans-303
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 再次构建任务。失败时，你的网络浏览器将播放`doh`wav文件。
 - en: How it works...
+  id: totrans-304
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: You have successfully configured your job to play different sounds based on
     the success or failure of the build.
+  id: totrans-305
   prefs: []
   type: TYPE_NORMAL
+  zh: 你已成功配置了你的作业，根据构建的成功或失败播放不同的声音。
 - en: You can refine how the plugin reacts further by configuring which event transitions
     will trigger a sound, for example, if the previous build result was a failure
     and the current build result is a success. This is defined in the **For previous
     build result** set of checkboxes.
+  id: totrans-306
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还可以通过配置哪些事件转换将触发声音来进一步优化插件的反应，例如，如果前一个构建结果是失败，当前构建结果是成功。这在**对于上一个构建结果**一组复选框中定义。
 - en: 'The plugin works as a page decorator. It adds the following JavaScript that
     asynchronously polls for new sounds. Your browser is doing the majority of the
     work, freeing server resources:'
+  id: totrans-307
   prefs: []
   type: TYPE_NORMAL
+  zh: 该插件作为页面装饰器工作。它添加了以下异步轮询新声音的 JavaScript。您的浏览器正在执行大部分工作，释放服务器资源：
 - en: '[PRE19]'
+  id: totrans-308
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: There's more...
+  id: totrans-309
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The sound plugin also allows you to stream arbitrary sounds to connected web
     browsers. Not only is this useful for practical jokes and motivational speeches
     directed at your distributed team, you can also perform useful actions such as
     a 10-minute warning alert before restarting a server.
+  id: totrans-310
   prefs: []
   type: TYPE_NORMAL
+  zh: 该声音插件还允许您向连接的网络浏览器流式传输任意声音。这不仅对于恶作剧和针对您分布式团队的激励演讲有用，还可以执行诸如在重新启动服务器之前发出 10 分钟警告警报等有用操作。
 - en: You can find some decent sound collections at [http://www.archive.org/details/opensource_audio](http://www.archive.org/details/opensource_audio).
+  id: totrans-311
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[http://www.archive.org/details/opensource_audio](http://www.archive.org/details/opensource_audio)找到一些不错的音乐收藏。
 - en: 'For example, you can find a copy of the One Laptop per Child music library
     at [http://www.archive.org/details/OpenPathMusic44V2](http://www.archive.org/details/OpenPathMusic44V2).
     Within the collection, you will discover `shenai.wav`. First, add the sound somewhere
     on the Internet where it can be found. A good place is the Jenkins `userContent`
     directory. To play the sound on any connected web browser, you will need to visit
     the trigger address (replacing `localhost:8080` with your own address):'
+  id: totrans-312
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，您可以在[http://www.archive.org/details/OpenPathMusic44V2](http://www.archive.org/details/OpenPathMusic44V2)找到一份“每个孩子一台笔记本电脑”音乐库的副本。在收藏中，您将发现`shenai.wav`。首先，将声音添加到互联网上的某个地方，以便找到。一个好的地方是
+    Jenkins 的`userContent`目录。要在任何连接的网络浏览器上播放声音，您需要访问触发地址（将`localhost:8080`替换为您自己的地址）：
 - en: '`http://localhost:8080/sounds/playSound?src=http://localhost:8080/userContent/shenai.wav`'
+  id: totrans-313
   prefs: []
   type: TYPE_NORMAL
+  zh: '`http://localhost:8080/sounds/playSound?src=http://localhost:8080/userContent/shenai.wav`'
 - en: See also
+  id: totrans-314
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Keeping in contact with Jenkins through Firefox* recipe in [Chapter 1](ch01.html
     "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*
+  id: totrans-315
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在[第 1 章](ch01.html "Chapter 1. Maintaining Jenkins")中的 *Maintaining Jenkins*，*通过
+    Firefox 与 Jenkins 保持联系* 配方
 - en: An extreme view for reception areas
+  id: totrans-316
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 接待区的极端观点
 - en: 'Agile projects emphasize the role of communication over the need to document.
     **Information radiators** aid in returning feedback quickly. Information radiators
     have two main characteristics: they change over time and the data presented is
     easy to digest.'
+  id: totrans-317
   prefs: []
   type: TYPE_NORMAL
+  zh: 敏捷项目强调沟通的作用胜过于文档的需求。**信息辐射器**有助于快速获得反馈。信息辐射器具有两个主要特征：它们随时间变化，并且呈现的数据易于消化。
 - en: The eXtreme Feedback Panel plugin is one example of an information radiator.
     It is a highly visual Jenkins view. If the layout is formatted consistently and
     displayed on a large monitor, it is ideal for the task. Consider this also as
     a positive advertisement of your development process. You can display behind your
     reception desk or in a well-visited social area such as near the coffee machine
     or project room.
+  id: totrans-318
   prefs: []
   type: TYPE_NORMAL
+  zh: eXtreme Feedback Panel 插件是信息辐射器的一个示例。它是一个高度视觉化的 Jenkins 视图。如果布局格式一致，并在大型监视器上显示，则非常适合此任务。还将其视为对您的开发流程的积极广告。您可以将其显示在接待处后面，或者放在一个受欢迎的社交区域，例如靠近咖啡机或项目室。
 - en: In this recipe, you will add the eXtreme Feedback Panel plugin and modify its
     appearance through HTML tags in the description.
+  id: totrans-319
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此配方中，您将添加 eXtreme Feedback Panel 插件，并通过描述中的 HTML 标签修改其外观。
 - en: Getting ready
+  id: totrans-320
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the eXtreme Feedback Panel plugin ([https://wiki.jenkins-ci.org/display/JENKINS/eXtreme+Feedback+Panel+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/eXtreme+Feedback+Panel+Plugin)).
+  id: totrans-321
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 eXtreme Feedback Panel 插件（[https://wiki.jenkins-ci.org/display/JENKINS/eXtreme+Feedback+Panel+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/eXtreme+Feedback+Panel+Plugin)）。
 - en: How to do it...
+  id: totrans-322
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'Create a job with a descriptive name such as `Blackboard Report Pro Access`
     and add the following description:'
+  id: totrans-323
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`Blackboard Report Pro Access`的作业，并添加以下描述：
 - en: '[PRE20]'
+  id: totrans-324
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: Create a new view (`/newView`) named `eXtreme`. Check the **eXtremeFeedBack
     Panel** and then click on **OK**.
+  id: totrans-325
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为`eXtreme`的新视图（`/newView`）。选中 **eXtremeFeedBack Panel**，然后点击 **OK**。
 - en: Select 6-24 already created jobs including the one previously created in this
     recipe.
+  id: totrans-326
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择6-24个已经创建的作业，包括本配方中之前创建的作业。
 - en: Set the number of columns as **2**.
+  id: totrans-327
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将列数设置为**2**。
 - en: Select the refresh time in seconds as **20**.
+  id: totrans-328
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将刷新时间设置为**20**秒。
 - en: Click on **Show Job descriptions**.
+  id: totrans-329
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**显示作业描述**。
 - en: Click on **OK**.
+  id: totrans-330
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**。
 - en: Experiment with the settings (especially the pixel size of the fonts). Optimizing
     the view depends on the monitors used and the distance from the monitor that the
     audience view at, as shown in the following screenshot:![How to do it...](img/0082OS_04_12.jpg)
+  id: totrans-331
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 尝试设置（特别是字体像素大小）。优化视图取决于使用的显示器以及观众观看显示器的距离，如下图所示：![如何做...](img/0082OS_04_12.jpg)
 - en: How it works...
+  id: totrans-332
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它的工作原理...
 - en: Setting up and running this information radiator was easy. The results deliver
     a beautifully rendered view of the dynamics of your software process.
+  id: totrans-333
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置和运行这个信息辐射器很容易。结果呈现了软件流程动态的精美视图。
 - en: Setting the refresh rate to 20 seconds is debatable. A long delay between updates
     dulls the viewer's interest.
+  id: totrans-334
   prefs: []
   type: TYPE_NORMAL
+  zh: 将刷新率设置为20秒存在争议。更新之间的长时间延迟会降低观看者的兴趣。
 - en: You have written one description that is partially formatted in the extreme
     view, but HTML escaped in the jobs configuration page and elsewhere in Jenkins.
     You can see that the information area is easier to digest than the other projects.
@@ -1497,329 +2213,481 @@
     conventions, below a certain length to fit naturally on the screen. A longer,
     more descriptive name for a job helps the viewer understand the job's context
     better.
+  id: totrans-335
   prefs: []
   type: TYPE_NORMAL
+  zh: 你已经写了一个描述，在极端视图中部分格式化，但在作业配置页面和Jenkins的其他位置中是HTML转义的。你可以看到信息区比其他项目更容易消化。这突显了编写一致描述的必要性，这些描述遵循内部惯例，并且在一定长度以下，以自然地适应屏幕。为工作取一个更长、更具描述性的名称有助于观众更好地理解工作的背景。
 - en: Note
+  id: totrans-336
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: A short cut to configuring views is through the URL `http://localhost:8080/view/Jobname/configure`,
     replacing any spaces in `Jobname` with `%20`.
+  id: totrans-337
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过URL `http://localhost:8080/view/Jobname/configure`快速配置视图，将`Jobname`中的任何空格替换为`%20`。
 - en: There's more...
+  id: totrans-338
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Information radiators are fun and take a rich variety of shapes and forms. From
     different views displayed in large monitors, to USB sponge missile firing and
     abuse from the voices of famous actors (see the *Making noise with HTML5 browsers*
     recipe).
+  id: totrans-339
   prefs: []
   type: TYPE_NORMAL
+  zh: 信息辐射器有趣且形态各异。从在大型显示器上显示不同视图，到USB海绵导弹的发射和名人的声音滥用（参见*使用HTML5浏览器制造噪音*配方）。
 - en: 'A number of example electronic projects worth exploring in Jenkins are:'
+  id: totrans-340
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins中值得探索的一些示例电子项目包括：
 - en: '**Lava Lamps**: [https://wiki.jenkins-ci.org/display/JENKINS/Lava+Lamp+Notifier](https://wiki.jenkins-ci.org/display/JENKINS/Lava+Lamp+Notifier)'
+  id: totrans-341
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**熔岩灯**：[https://wiki.jenkins-ci.org/display/JENKINS/Lava+Lamp+Notifier](https://wiki.jenkins-ci.org/display/JENKINS/Lava+Lamp+Notifier)'
 - en: '**USB missile launcher**: [https://github.com/codedance/Retaliation](https://github.com/codedance/Retaliation)'
+  id: totrans-342
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**USB导弹发射器**：[https://github.com/codedance/Retaliation](https://github.com/codedance/Retaliation)'
 - en: '**Traffic lights**: [http://code.google.com/p/hudsontrafficlights/](http://code.google.com/p/hudsontrafficlights/)'
+  id: totrans-343
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**交通灯**：[http://code.google.com/p/hudsontrafficlights/](http://code.google.com/p/hudsontrafficlights/)'
 - en: Remember, let's be careful out there.
+  id: totrans-344
   prefs: []
   type: TYPE_NORMAL
+  zh: 记住，让我们小心一些。
 - en: See also
+  id: totrans-345
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Saving screen space with the Dashboard View plugin* recipe
+  id: totrans-346
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用仪表板视图插件节省屏幕空间*配方'
 - en: The *Making noise with HTML5 browsers* recipe
+  id: totrans-347
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*使用HTML5浏览器制造噪音*配方'
 - en: Mobile presentation using Google Calendar
+  id: totrans-348
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Google日历进行移动演示
 - en: Jenkins plugins can push build history to different well-known social media
     services. Modern Android or iOS telephones have preinstalled applications for
     both these services, lowering the barrier to adoption. In this recipe, we will
     configure Jenkins to work with Google Calendar.
+  id: totrans-349
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins插件可以将构建历史推送到不同的知名社交媒体服务。现代Android或iOS手机预装了这两种服务的应用程序，降低了采用的门槛。在这个配方中，我们将配置Jenkins与Google日历一起工作。
 - en: Getting ready
+  id: totrans-350
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Download and install the Google Calendar plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Google+Calendar+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Google+Calendar+Plugin)).
     Make sure you have a test user account for Gmail.
+  id: totrans-351
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载并安装Google日历插件（[https://wiki.jenkins-ci.org/display/JENKINS/Google+Calendar+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Google+Calendar+Plugin)）。确保你有一个用于Gmail的测试用户帐户。
 - en: How to do it...
+  id: totrans-352
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Log in to Gmail and visit the **Calendar** page.
+  id: totrans-353
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录Gmail并访问**日历**页面。
 - en: Create a new calendar under the **My Calendars** section by clicking on the
     **Add** link.
+  id: totrans-354
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过单击**添加**链接在**我的日历**部分下创建新的日历。
 - en: Add the calendar name `Test for Jenkins`.
+  id: totrans-355
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加日历名称 `Test for Jenkins`。
 - en: Click on **Create Calendar**. By default, the new calendar is private. Keep
     it private for the time being.
+  id: totrans-356
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **创建日历**。默认情况下，新日历是私有的。暂时保持私有。
 - en: Under the **My Calendars** section, click on the down icon next to **Test for
     Jenkins**. Select the option **Calendar settings**.
+  id: totrans-357
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **我的日历** 部分，点击 **Test for Jenkins** 旁边的向下图标。选择 **日历设置** 选项。
 - en: Right-click on the XML button **Copy the link location**:![How to do it...](img/0082OS_04_13a.jpg)
+  id: totrans-358
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 XML 按钮上右键单击 **复制链接位置**：![如何做...](img/0082OS_04_13a.jpg)
 - en: Review the **Embed this calendar** section. It describes how to add your calendar
     to a web page. Cut and paste the supplied code to an empty HTML page. Save and
     view in a web browser.
+  id: totrans-359
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 **嵌入此日历** 部分。它描述了如何将您的日历添加到网页中。将提供的代码复制并粘贴到空的 HTML 页面中。保存并在 web 浏览器中查看。
 - en: Log in to Jenkins as an administrator.
+  id: totrans-360
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以管理员身份登录 Jenkins。
 - en: Create a new job named `Test_G`.
+  id: totrans-361
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `Test_G` 的新作业。
 - en: In the **Post build** section, check **Publish job status to Google Calendar**.
+  id: totrans-362
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建后** 部分，勾选 **将作业状态发布到 Google 日历**。
 - en: Add the calendar details you copied from the XML button to the **Calendar URL**
     text box.
+  id: totrans-363
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将您从 XML 按钮复制的日历详细信息添加到 **日历网址** 文本框中。
 - en: Add your Gmail login name and password.
+  id: totrans-364
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加您的 Gmail 登录名和密码。
 - en: Tip
+  id: totrans-365
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: Your Gmail credentials will be stored in the `server.xml` file in plain text.
     Unless your server is properly secured, this is not recommended.
+  id: totrans-366
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 您的 Gmail 凭据将以明文形式存储在 `server.xml` 文件中。除非您的服务器得到了适当的安全保护，否则不建议这样做。
 - en: '![How to do it...](img/0082OS_04_13.jpg)'
+  id: totrans-367
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![如何做...](img/0082OS_04_13.jpg)'
 - en: Click on **Save**.
+  id: totrans-368
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。
 - en: Build your job, making sure it succeeds.
+  id: totrans-369
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建您的作业，确保它成功。
 - en: Log in to Gmail. Visit the **Calendar** page. You will now see the build's success
     has been published, as shown in the following screenshot:![How to do it...](img/0082OS_04_14.jpg)
+  id: totrans-370
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Gmail。访问 **日历** 页面。您现在会看到构建成功已经发布，如下面的截图所示：![如何做...](img/0082OS_04_14.jpg)
 - en: How it works...
+  id: totrans-371
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: By creating a calendar in Google and using just three configuration settings,
     you have exposed selected Jenkins jobs to Google Calendar. With the same amount
     of configuration, you can connect most modern smartphones and tablets to the calendar.
+  id: totrans-372
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过在 Google 中创建日历，并仅使用三个配置设置，您已将选定的 Jenkins 作业暴露给了 Google 日历。使用相同数量的配置，您可以将大多数现代智能手机和平板电脑连接到日历。
 - en: Note
+  id: totrans-373
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'Jenkins has a credentials manager that you can find at `http://localhost:8080/credential-store/.`
     The credential manager works with a number of plugins; however, at the time of
     writing not with the Google Calendar plugin. For the most up-to-date compatibility
     information visit: [https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin)'
+  id: totrans-374
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 有一个凭据管理器，您可以在 `http://localhost:8080/credential-store/` 找到它。凭据管理器可以与许多插件一起使用；然而，在撰写本文时，与
+    Google 日历插件不兼容。获取最新的兼容性信息，请访问：[https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin)
 - en: There's more...
+  id: totrans-375
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Under the Jenkins workspace in the plugins directory, you will find an HTML
     file for the Google plugins configuration help `/plugins/gcal/help-projectConfig.html`
+  id: totrans-376
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 工作空间中的插件目录下，您将找到一个用于 Google 插件配置帮助的 HTML 文件 `/plugins/gcal/help-projectConfig.html`
 - en: 'Replace the contents with the following:'
+  id: totrans-377
   prefs: []
   type: TYPE_NORMAL
+  zh: 用以下内容替换原文：
 - en: '[PRE21]'
+  id: totrans-378
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'After restarting the Jenkins server, visit the plugin configuration `/configure`.You
     will now see the new content, as shown in the following screenshot:'
+  id: totrans-379
   prefs: []
   type: TYPE_NORMAL
+  zh: 重新启动 Jenkins 服务器后，访问插件配置 `/configure`。您现在会看到新内容，如下面的截图所示：
 - en: '![There''s more...](img/0082OS_04_15.jpg)'
+  id: totrans-380
   prefs: []
   type: TYPE_IMG
+  zh: '![还有更多...](img/0082OS_04_15.jpg)'
 - en: This example is an anti-pattern. If you need to change content for local needs,
     then it is much better to work with the community, adding to the Jenkins SCM that
     everyone can see and improve.
+  id: totrans-381
   prefs: []
   type: TYPE_NORMAL
+  zh: 此示例是一种反模式。如果您需要根据本地需求更改内容，那么最好与社区合作，在 Jenkins SCM 中添加内容，以便每个人都能看到并改进。
 - en: You will be told immediately that your content is not internationalized. It
     needs to be translated into the languages that Jenkins supports natively. Luckily,
     at the bottom of every Jenkins page, there is a link that volunteers can use to
     upload translations. The translation requires minimal startup effort and is an
     easy way to start with an open source project.
+  id: totrans-382
   prefs: []
   type: TYPE_NORMAL
+  zh: 您将立即收到通知，您的内容尚未国际化。它需要翻译成 Jenkins 原生支持的语言。幸运的是，在每个 Jenkins 页面的底部，都有一个链接，志愿者可以使用它来上传翻译。翻译需要很少的启动工作量，并且是开始参与开源项目的简单方式。
 - en: Note
+  id: totrans-383
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For more development details on how to use property files for internationalization
     in Jenkins, read [https://wiki.jenkins-ci.org/display/JENKINS/Internationalization](https://wiki.jenkins-ci.org/display/JENKINS/Internationalization).
+  id: totrans-384
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关如何在 Jenkins 中使用属性文件进行国际化的更多开发详细信息，请阅读 [https://wiki.jenkins-ci.org/display/JENKINS/Internationalization](https://wiki.jenkins-ci.org/display/JENKINS/Internationalization)。
 - en: See also
+  id: totrans-385
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Mobile apps for Android and iOS* recipe
+  id: totrans-386
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*Android 和 iOS 的移动应用程序* 教程'
 - en: Mobile apps for Android and iOS
+  id: totrans-387
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Android 和 iOS 的移动应用程序
 - en: There are a number of rich mobile apps for notification of Jenkins job statuses.
     This recipe points you to their home pages, so that you can select your favorite.
+  id: totrans-388
   prefs: []
   type: TYPE_NORMAL
+  zh: 有许多用于通知 Jenkins 作业状态的丰富移动应用程序。本教程指向它们的主页，以便您可以选择您喜欢的。
 - en: Getting ready
+  id: totrans-389
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: You will need a Jenkins instance reachable from the Internet or use [http://ci.jenkins-ci.org/](http://ci.jenkins-ci.org/),
     an excellent example of best practices. We also assume that you have a mobile
     device.
+  id: totrans-390
   prefs: []
   type: TYPE_NORMAL
+  zh: 您将需要一个可以从互联网访问的 Jenkins 实例或使用 [http://ci.jenkins-ci.org/](http://ci.jenkins-ci.org/)，这是最佳实践的一个很好的例子。我们还假设您有一个移动设备。
 - en: How to do it...
+  id: totrans-391
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: As an administrator, visit the **Configure System** (`/configure`) screen.
+  id: totrans-392
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 作为管理员，访问**配置系统**（`/configure`）屏幕。
 - en: Review the Jenkins URL; if it is pointing to `localhost,` change it so that
     your server links can be reached from the Internet.
+  id: totrans-393
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查 Jenkins URL；如果指向 `localhost`，请更改为使您的服务器链接能够从互联网访问。
 - en: 'Visit the following app pages and if compatible install and use:'
+  id: totrans-394
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问以下应用程序页面，如果兼容，安装并使用：
 - en: '**JenkinsMobi** ([http://www.jenkins-ci.mobi](http://www.jenkins-ci.mobi))'
+  id: totrans-395
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**JenkinsMobi** ([http://www.jenkins-ci.mobi](http://www.jenkins-ci.mobi))'
 - en: '**Blamer** ([http://www.androidzoom.com/android_applications/tools/blamer_bavqz.html](http://www.androidzoom.com/android_applications/tools/blamer_bavqz.html)
     and [https://github.com/mhussain/Blamer](https://github.com/mhussain/Blamer))'
+  id: totrans-396
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Blamer** ([http://www.androidzoom.com/android_applications/tools/blamer_bavqz.html](http://www.androidzoom.com/android_applications/tools/blamer_bavqz.html)
+    和 [https://github.com/mhussain/Blamer](https://github.com/mhussain/Blamer))'
 - en: '**Jenkins Mood widget** ([https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Mood+monitoring+widget+for+Android](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Mood+monitoring+widget+for+Android))'
+  id: totrans-397
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Jenkins 心情小部件** ([https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Mood+monitoring+widget+for+Android](https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Mood+monitoring+widget+for+Android))'
 - en: '**Jenkins Mobile Monitor** ([http://www.androidzoom.com/android_applications/tools/jenkins-mobile-monitor_bmibm.html](http://www.androidzoom.com/android_applications/tools/jenkins-mobile-monitor_bmibm.html))'
+  id: totrans-398
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Jenkins 移动监控** ([http://www.androidzoom.com/android_applications/tools/jenkins-mobile-monitor_bmibm.html](http://www.androidzoom.com/android_applications/tools/jenkins-mobile-monitor_bmibm.html))'
 - en: '**Hudson Helper** ([http://wiki.hudson-ci.org/display/HUDSON/Hudson+Helper+iPhone+and+iPod+Touch+App](http://wiki.hudson-ci.org/display/HUDSON/Hudson+Helper+iPhone+and+iPod+Touch+App))'
+  id: totrans-399
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Hudson Helper** ([http://wiki.hudson-ci.org/display/HUDSON/Hudson+Helper+iPhone+and+iPod+Touch+App](http://wiki.hudson-ci.org/display/HUDSON/Hudson+Helper+iPhone+and+iPod+Touch+App))'
 - en: '**Hudson2Go Lite** ([http://www.androidzoom.com/android_applications/tools/hudson2go-lite_nane.html](http://www.androidzoom.com/android_applications/tools/hudson2go-lite_nane.html))'
+  id: totrans-400
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Hudson2Go Lite** ([http://www.androidzoom.com/android_applications/tools/hudson2go-lite_nane.html](http://www.androidzoom.com/android_applications/tools/hudson2go-lite_nane.html))'
 - en: On your mobile device, search Google Marketplace or iTunes and install any new
     Jenkins apps that are free and have positive user recommendations.
+  id: totrans-401
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在您的移动设备上，搜索 Google Marketplace 或 iTunes 并安装任何新的 Jenkins 应用程序，这些应用程序是免费的并具有积极的用户推荐。
 - en: How it works...
+  id: totrans-402
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: Most of the apps pull in information using the RSS feeds from Jenkins such as
     `/rssLatest` and `/rssFailed` and then load the linked pages through a mobile
     web browser. Unless the Jenkins URL is properly configured, the links will break
     and `404` `page not found` errors will be returned by your browser.
+  id: totrans-403
   prefs: []
   type: TYPE_NORMAL
+  zh: 大多数应用程序使用 Jenkins 的 RSS 源（例如 `/rssLatest` 和 `/rssFailed`）获取信息，然后通过移动 Web 浏览器加载链接的页面。除非
+    Jenkins URL 配置正确，否则链接将断开，您的浏览器将返回`404` `页面未找到`错误。
 - en: You will soon notice there is a delicate balance between the refresh rate of
     your app potentially generating too many notifications, versus receiving timely
     information.
+  id: totrans-404
   prefs: []
   type: TYPE_NORMAL
+  zh: 您很快会注意到，您的应用程序刷新率可能会产生过多的通知，与接收及时信息之间存在微妙的平衡。
 - en: The **JenkinsMobi** application runs in both Android and iOS operating systems.
     It gathers its data using the remote API with XML ([http://www.slideshare.net/lucamilanesio/jenkinsmobi-jenkins-xml-api-for-mobile-applications](http://www.slideshare.net/lucamilanesio/jenkinsmobi-jenkins-xml-api-for-mobile-applications))
     rather than the more raw RSS feeds. This choice allowed the app writers to add
     a wide range of features, making it arguably the most compelling app in the collection.
+  id: totrans-405
   prefs: []
   type: TYPE_NORMAL
+  zh: '**JenkinsMobi** 应用可以在 Android 和 iOS 操作系统上运行。它使用 XML 的远程 API 来收集数据 ([http://www.slideshare.net/lucamilanesio/jenkinsmobi-jenkins-xml-api-for-mobile-applications](http://www.slideshare.net/lucamilanesio/jenkinsmobi-jenkins-xml-api-for-mobile-applications))，而不是更原始的
+    RSS 订阅。这个选择使得应用的作者能够添加各种功能，使其成为收藏中最引人注目的应用之一。'
 - en: There's more...
+  id: totrans-406
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Here are a few more things for you to consider.
+  id: totrans-407
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有一些需要考虑的事情。
 - en: Android 1.6 and Hudson apps
+  id: totrans-408
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Android 1.6 和 Hudson 应用
 - en: Jenkins split off from the source code of Hudson due to an argument about trademarking
     the Hudson name ([http://en.wikipedia.org/wiki/Jenkins_%28software%29](http://en.wikipedia.org/wiki/Jenkins_%28software%29)).
     Most developers moved over to working with Jenkins. This left much of the third-party
@@ -1828,20 +2696,32 @@
     may well diverge in detail over time. For older Android versions, such as Android
     1.6, you will not see any Jenkins apps in the Google Marketplace. Try looking
     for Hudson apps instead. They mostly work on Jenkins.
+  id: totrans-409
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 由于关于 Hudson 名称的商标问题而从 Hudson 的源代码中分离出来 ([http://en.wikipedia.org/wiki/Jenkins_%28software%29](http://en.wikipedia.org/wiki/Jenkins_%28software%29))。大多数开发者转向了与
+    Jenkins 的合作。这导致了很多第三方 Hudson 代码要么得不到支持，要么被重新命名为 Jenkins。然而，Hudson 和 Jenkins 有很大的共同基础，包括
+    RSS 订阅的内容。这些细节可能随着时间的推移而有所不同。对于较旧版本的 Android，如 Android 1.6，在 Google Marketplace
+    中你不会看到任何 Jenkins 应用。可以尝试寻找 Hudson 应用。它们大多在 Jenkins 上运行。
 - en: Virtualbox and the Android x86 project
+  id: totrans-410
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: Virtualbox 和 Android x86 项目
 - en: There are a number of options for running Android apps. The easiest is to download
     through the Google Marketplace onto a mobile device. However, if you want to play
     with Android apps in a sand box on your PC, consider downloading the Android SDK
     ([http://developer.android.com/sdk/index.html](http://developer.android.com/sdk/index.html))
     and use an emulator and a tool such as `adb` ([http://developer.android.com/guide/developing/tools/adb.html](http://developer.android.com/guide/developing/tools/adb.html))
     to upload and install apps.
+  id: totrans-411
   prefs: []
   type: TYPE_NORMAL
+  zh: 有多种选择可以运行 Android 应用。最简单的方法是通过 Google Marketplace 下载到移动设备上。然而，如果你想在 PC 上通过模拟器来玩耍
+    Android 应用，可以考虑下载 Android SDK ([http://developer.android.com/sdk/index.html](http://developer.android.com/sdk/index.html))，并使用模拟器和像
+    `adb` 这样的工具 ([http://developer.android.com/guide/developing/tools/adb.html](http://developer.android.com/guide/developing/tools/adb.html))
+    来上传和安装应用。
 - en: 'You can also run a virtual machine through VirtualBox, VMware Player, and so
     on, and install an x86 image ([http://www.android-x86.org](http://www.android-x86.org)).
     A significant advantage of this approach is the raw speed of the Android OS, plus
@@ -1849,11 +2729,17 @@
     not always get Google Marketplace preinstalled. You will either have to find particular
     apps'' `.apk` file yourself or add other marketplaces such as **Slide me** ([http://m.slideme.org](http://m.slideme.org)).
     Unfortunately, secondary marketplaces give you much less choice:'
+  id: totrans-412
   prefs: []
   type: TYPE_NORMAL
+  zh: 你也可以通过 VirtualBox、VMware Player 等虚拟机运行一个 x86 映像 ([http://www.android-x86.org](http://www.android-x86.org))。这种方法的一个显著优势是
+    Android OS 的原始速度，以及保存虚拟机在特定状态下的能力。然而，你不会总是得到预安装的 Google Marketplace。你要么自己找到特定应用的
+    `.apk` 文件，要么添加其他的市场，比如 **Slide me** ([http://m.slideme.org](http://m.slideme.org))。不幸的是，第二市场提供的选择要少得多。
 - en: '![Virtualbox and the Android x86 project](img/0082OS_04_16.jpg)'
+  id: totrans-413
   prefs: []
   type: TYPE_IMG
+  zh: '![Virtualbox 和 Android x86 项目](img/0082OS_04_16.jpg)'
 - en: The Windows Android emulator [http://bluestacks.com/home.html](http://bluestacks.com/home.html)
     shows great promise. Not only is it an emulator, it also provides a cloud service
     to move apps from your mobile device into and out of the emulation. This promises
@@ -1861,20 +2747,30 @@
     this emulator, please thoroughly review the license you agree to on installation.
     BlueStacks wishes to obtain detailed information about your system to help improve
     their product.
+  id: totrans-414
   prefs: []
   type: TYPE_NORMAL
+  zh: Windows Android 模拟器 [http://bluestacks.com/home.html](http://bluestacks.com/home.html)
+    展示了很大的潜力。它不仅是一个模拟器，还提供了一个云服务，可将应用程序从您的移动设备移入和移出模拟器。这承诺是一种高效的开发方法。然而，如果您选择使用此模拟器，请务必彻底审查您在安装时同意的许可证。BlueStacks
+    希望获取关于您的系统的详细信息，以帮助改进其产品。
 - en: See also
+  id: totrans-415
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 参见
 - en: The *Mobile presentation using Google Calendar* recipe
+  id: totrans-416
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Google 日历进行移动演示的食谱
 - en: Knowing your audience with Google Analytics
+  id: totrans-417
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 Google Analytics 了解您的受众
 - en: If you have a policy of pushing your build history or other information such
     as home pages to the public, then you will want to know viewer habits. One approach
     is to use Google Analytics. With Google, you can watch in real time as visitors
@@ -1882,452 +2778,677 @@
     of traffic, browser types, (for example, if mobile apps are hitting your site),
     entry points, and country origins. This is particularly useful as your product
     reaches key points in its roadmap and you want to gain insight into customer interest.
+  id: totrans-418
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您有将构建历史或其他信息（例如主页）推送到公共位置的策略，那么您将希望了解查看者的习惯。一种方法是使用 Google Analytics。通过 Google，您可以实时观察访问者访问您的网站。详细的报告提到了流量的整体量、浏览器类型（例如，如果移动应用程序正在访问您的网站）、入口点和国家来源等内容。当您的产品达到路线图的关键点并且您希望了解客户兴趣时，这是特别有用的。
 - en: In this recipe, you will create a Google Analytics account and configure tracking
     in Jenkins. You will then watch traffic live.
+  id: totrans-419
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此食谱中，您将创建一个 Google Analytics 帐户并在 Jenkins 中配置跟踪。然后，您将实时观看流量。
 - en: Getting ready
+  id: totrans-420
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the Google Analytics plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Google+Analytics+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Google+Analytics+Plugin)).
+  id: totrans-421
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Google Analytics 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/Google+Analytics+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Google+Analytics+Plugin))。
 - en: Tip
+  id: totrans-422
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: If you are not the owner of your Jenkins URL, please ask for permission first
     before creating a Google Analytics profile.
+  id: totrans-423
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您不是 Jenkins URL 的所有者，请在创建 Google Analytics 档案之前先征得许可。
 - en: How to do it...
+  id: totrans-424
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: Log in with your Gmail account to Google Analytics ([http://www.google.com/analytics/](http://www.google.com/analytics/)).
+  id: totrans-425
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用您的 Gmail 帐户登录 Google Analytics ([http://www.google.com/analytics/](http://www.google.com/analytics/))。
 - en: 'Fill in the details of the **Create New Account** page:'
+  id: totrans-426
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 填写**创建新帐户**页面的详细信息：
 - en: '**Account Name**: My Jenkins Server'
+  id: totrans-427
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**账户名称**：我的 Jenkins 服务器'
 - en: '**Website Name**: Jenkins Server X'
+  id: totrans-428
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**网站名称**：Jenkins 服务器 X'
 - en: '**Website URL**: This is the same as the Jenkins URL in the `/configure` screen
     of Jenkins.'
+  id: totrans-429
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**网站 URL**：与 Jenkins `/configure` 屏幕中的 Jenkins URL 相同。'
 - en: '**Reporting Time zone**: Enter the correct value'
+  id: totrans-430
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**报告时区**：输入正确的值'
 - en: Select **Data Sharing Settings** | **Sharing Setting** | **Do not share my Google
     Analytics data**
+  id: totrans-431
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 选择**数据共享设置** | **共享设置** | **不共享我的 Google Analytics 数据**
 - en: Click on **Get Tracking ID**
+  id: totrans-432
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 点击**获取跟踪ID**
 - en: Click on **I Accept** for the **Google Analytics Terms of Service Agreement**
+  id: totrans-433
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 点击**接受**以接受**Google Analytics 服务条款**
 - en: Click on **Create Account**.
+  id: totrans-434
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**创建帐户**。
 - en: You are now in the **Accounts** page for your newly created profile. Copy the
     **TrackingID,** which will look something like `UA-121212121212121-1`.
+  id: totrans-435
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您现在位于新创建的档案的 **帐户** 页面。复制 **TrackingID**，类似于 `UA-121212121212121-1`。
 - en: Open a second browser and log in as an administrator to Jenkins.
+  id: totrans-436
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开第二个浏览器，并以管理员身份登录 Jenkins。
 - en: In the **Jenkins Configure System** screen (`/configure`), add the **Profile
     ID** that you copied from the Google Analytics **Web Property ID** and set the
     **Domain Name** equal to your Jenkins URL.
+  id: totrans-437
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Jenkins 配置系统** 屏幕 (`/configure`) 中，添加从 Google Analytics **Web Property ID**
+    复制的 **Profile ID**，并将 **Domain Name** 设置为您的 Jenkins URL。
 - en: Click on the **Save** button.
+  id: totrans-438
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**按钮。
 - en: Visit the home page of Jenkins so that tracking is triggered.
+  id: totrans-439
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 Jenkins 的首页以触发跟踪。
 - en: Return to Google Analytics, and you should still be on the **Tracking code**
     tab. Click on **Save** at the bottom of the page. You will now see that the warning
     **Tracking not installed** has disappeared.
+  id: totrans-440
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 返回 Google Analytics，您应该仍然在 **跟踪代码** 选项卡上。点击页面底部的 **保存**。现在，您将看到警告 **跟踪未安装**
+    已消失。
 - en: How it works...
+  id: totrans-441
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'The plugin decorates each Jenkins page with a JavaScript page tracker that
     includes the domain and profile ID. The JavaScript is kept fresh by being pulled
     in from the Google Analytics hosts, as shown in the following code:'
+  id: totrans-442
   prefs: []
   type: TYPE_NORMAL
+  zh: 该插件在每个 Jenkins 页面上都添加了一个 JavaScript 页面跟踪器，其中包括域和配置文件 ID。JavaScript 是通过从 Google
+    Analytics 主机中获取并保持更新的，如下所示的代码所示：
 - en: '[PRE22]'
+  id: totrans-443
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: Google Analytics has the ability to drill into the details of your web usage
     thoroughly. Consider browsing Jenkins and reviewing the traffic generated through
     the real-time reporting feature.
+  id: totrans-444
   prefs: []
   type: TYPE_NORMAL
+  zh: Google Analytics 有能力彻底深入了解您的网络使用情况。考虑浏览 Jenkins 并查看通过实时报告功能生成的流量。
 - en: Note
+  id: totrans-445
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Google regularly updates its analytics services. If you notice any changes then
     the help page for analytics will document them ([https://support.google.com/analytics](https://support.google.com/analytics)).
+  id: totrans-446
   prefs: []
   type: TYPE_NORMAL
+  zh: Google 定期更新其分析服务。如果您注意到任何更改，则分析的帮助页面将记录这些更改（[https://support.google.com/analytics](https://support.google.com/analytics)）。
 - en: There's more...
+  id: totrans-447
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The open source version of Google Analytics is Piwik ([http://piwik.org/](http://piwik.org/)).
     You can set up a server locally and use the equivalent Jenkins plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Piwik+Analytics+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Piwik+Analytics+Plugin))
     to generate statistics. This has the advantage of keeping your local data usage
     under your control.
+  id: totrans-448
   prefs: []
   type: TYPE_NORMAL
+  zh: Google Analytics 的开源版本是 Piwik（[http://piwik.org/](http://piwik.org/)）。您可以在本地设置服务器并使用等效的
+    Jenkins 插件（[https://wiki.jenkins-ci.org/display/JENKINS/Piwik+Analytics+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Piwik+Analytics+Plugin)）来生成统计信息。这样做的好处是可以将您的本地数据使用保持在您的控制之下。
 - en: As you would expect, the Piwik plugin is a page decorator injecting in a similar
     way to JavaScript as the Google Analytics plugin.
+  id: totrans-449
   prefs: []
   type: TYPE_NORMAL
+  zh: 顾名思义，Piwik 插件是一个页面装饰器，以与 Google Analytics 插件类似的方式注入 JavaScript。
 - en: See also
+  id: totrans-450
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Generating a home page* recipe
+  id: totrans-451
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*生成首页* 示例'
 - en: Simplifying powerful visualizations using the R plugin
+  id: totrans-452
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 R 插件简化强大的可视化效果
 - en: R is a popular programming language for statistics [http://en.wikipedia.org/wiki/R_(programming_language)](http://en.wikipedia.org/wiki/R_(programming_language)).
     It has many hundreds of extensions and has a powerful set of graphical capabilities.
     In this recipe, we will show you how to use the graphical capabilities of R within
     your Jenkins jobs and then point you to some excellent starter resources.
+  id: totrans-453
   prefs: []
   type: TYPE_NORMAL
+  zh: R 是一种流行的统计编程语言 [http://en.wikipedia.org/wiki/R_(programming_language)](http://en.wikipedia.org/wiki/R_(programming_language))。它有许多扩展，并具有强大的图形功能。在本示例中，我们将向您展示如何在
+    Jenkins 任务中使用 R 的图形功能，然后指向一些优秀的入门资源。
 - en: Note
+  id: totrans-454
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: For a full list of plugins that improve the UI of Jenkins, including Jenkins
     graphical capabilities, visit [https://wiki.jenkins-ci.org/display/JENKINS/Plugins#Plugins-UIplugins](https://wiki.jenkins-ci.org/display/JENKINS/Plugins#Plugins-UIplugins).
+  id: totrans-455
   prefs: []
   type: TYPE_NORMAL
+  zh: 要查看可改善 Jenkins UI 的插件的完整列表，包括 Jenkins 的图形功能，请访问 [https://wiki.jenkins-ci.org/display/JENKINS/Plugins#Plugins-UIplugins](https://wiki.jenkins-ci.org/display/JENKINS/Plugins#Plugins-UIplugins)。
 - en: Getting ready
+  id: totrans-456
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the R plugin ([https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin)).
     Review the R installation documentation ([http://cran.r-project.org/doc/manuals/r-release/R-admin.html](http://cran.r-project.org/doc/manuals/r-release/R-admin.html)).
+  id: totrans-457
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 R 插件（[https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/R+Plugin)）。查看
+    R 安装文档（[http://cran.r-project.org/doc/manuals/r-release/R-admin.html](http://cran.r-project.org/doc/manuals/r-release/R-admin.html)）。
 - en: How to do it...
+  id: totrans-458
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: 'From the command line install the R language:'
+  id: totrans-459
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行安装 R 语言：
 - en: '[PRE23]'
+  id: totrans-460
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'Review the available R packages:'
+  id: totrans-461
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看可用的 R 包：
 - en: '[PRE24]'
+  id: totrans-462
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: Create a free-style job with the name `ch4.powerfull.visualizations`.
+  id: totrans-463
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch4.powerfull.visualizations` 的自由式任务。
 - en: In the **Build** section, under **Add build step**, select **Execute R script**.
+  id: totrans-464
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建** 部分，在 **添加构建步骤** 下选择 **执行 R 脚本**。
 - en: 'In the **Script** text area add the following code:'
+  id: totrans-465
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **脚本** 文本区域添加以下代码：
 - en: '[PRE25]'
+  id: totrans-466
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: Click on the **Save** button.
+  id: totrans-467
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存** 按钮。
 - en: Click on the **Build Now** icon.
+  id: totrans-468
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **立即构建** 图标。
 - en: Beneath **Build History**, click on the **Workspace** button.
+  id: totrans-469
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **构建历史** 下，点击 **工作空间** 按钮。
 - en: Review the generated graphics by clicking on the links **freq_1.pdf**, **pie_1.pdf**,
     and **scatter_1.pdf**, as shown in the following screenshot:![How to do it...](img/0082OS_04_17.jpg)
+  id: totrans-470
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过单击链接 **freq_1.pdf**、**pie_1.pdf** 和 **scatter_1.pdf** 来查看生成的图形，如下截图所示：![如何做...](img/0082OS_04_17.jpg)
 - en: The following screenshot is a histogram of the values from the random data generated
     by the R script during the build process. The data simulates class sizes within
     a large project.
+  id: totrans-471
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是由 R 脚本在构建过程中生成的随机数据的值的直方图。该数据模拟了大型项目中的班级规模。
 - en: '![How to do it...](img/0082OS_04_18.jpg)'
+  id: totrans-472
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_04_18.jpg)'
 - en: Another view is a pie chart. The fake data represents the number of failed jobs
     for each day of the week. If you plot this against your own values, you might
     see particularly bad days, such as the day before or after the weekend. This might
     have implications for how developers work, or how motivation is distributed through
     the week.
+  id: totrans-473
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一个视图是饼图。伪数据表示一周中每天失败任务的数量。如果你将其与你自己的值绘制在一起，可能会看到特别糟糕的日子，比如周末前后的日子。这可能会影响开发人员的工作方式，或者周内的动力分配。
 - en: '![How to do it...](img/0082OS_04_19.jpg)'
+  id: totrans-474
   prefs: []
   type: TYPE_IMG
+  zh: '![如何操作...](img/0082OS_04_19.jpg)'
 - en: 'Perform the following steps:'
+  id: totrans-475
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行以下步骤：
 - en: Run the job and review the **Workspace**.
+  id: totrans-476
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行任务并查看 **工作区**。
 - en: 'Click on **Console Output**. You will see output similar to:'
+  id: totrans-477
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **控制台输出**。你会看到类似于以下内容的输出：
 - en: '[PRE26]'
+  id: totrans-478
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: Click on **Back to Proj**.
+  id: totrans-479
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **返回项目**。
 - en: Click on **Workspace**.
+  id: totrans-480
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **工作区**。
 - en: How it works...
+  id: totrans-481
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: With a few lines of R code, you have generated three different well-presented
     PDF graphs.
+  id: totrans-482
   prefs: []
   type: TYPE_NORMAL
+  zh: 用几行 R 代码，你就生成了三个不同的、精美的 PDF 图表。
 - en: 'The R plugin ran a script as part of the build. The script printed out the
     `WORKSPACE` and other Jenkins environment variables to the console:'
+  id: totrans-483
   prefs: []
   type: TYPE_NORMAL
+  zh: R 插件在构建过程中运行了一个脚本。该脚本将 `WORKSPACE` 和其他 Jenkins 环境变量打印到控制台上：
 - en: '[PRE27]'
+  id: totrans-484
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'Next, a filename is set with the build number appended to the string `pie_`.
     This allows the script to generate a different filename each time it is run, as
     shown:'
+  id: totrans-485
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，文件名以附加到字符串 `pie_` 的构建号设置。这样可以使脚本每次运行时生成不同的文件名，如下所示：
 - en: '[PRE28]'
+  id: totrans-486
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: The script now opens output to the location defined in the `filename` variable,
     through the command `pdf(file=filename)`. By default, the output directory is
     the job's workspace.
+  id: totrans-487
   prefs: []
   type: TYPE_NORMAL
+  zh: 脚本现在通过命令 `pdf(file=filename)` 打开输出到 `filename` 变量中定义的位置。默认情况下，输出目录是任务的工作区。
 - en: 'Next, we define fake data for the graph, representing the number of failed
     jobs on any given day of the week. Notice that in the simulated world Friday is
     a bad day:'
+  id: totrans-488
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们为图表定义了伪数据，表示一周中任意一天失败任务的数量。注意，在模拟世界中，星期五是一个糟糕的日子：
 - en: '[PRE29]'
+  id: totrans-489
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'Plot a pie graph:'
+  id: totrans-490
   prefs: []
   type: TYPE_NORMAL
+  zh: 绘制饼图：
 - en: '[PRE30]'
+  id: totrans-491
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'For the second graph, we generated 10,000 pieces of random data within a normal
     distribution. The fake data represents the number of lines of active code that
     ran for a given job, as shown:'
+  id: totrans-492
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于第二个图表，我们在正态分布内生成了 10,000 个随机数据。伪数据表示运行给定作业的活动代码行数，如下所示：
 - en: '[PRE31]'
+  id: totrans-493
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: 'The `hist` command generates a frequency plot:'
+  id: totrans-494
   prefs: []
   type: TYPE_NORMAL
+  zh: '`hist` 命令生成频率图：'
 - en: '[PRE32]'
+  id: totrans-495
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: 'The third graph is a scatter plot with 3,000 data points generated at random
     within a normal distribution. This represents a typical sampling process, such
     as the number of potential defects found using Sonar or FindBugs, as shown:'
+  id: totrans-496
   prefs: []
   type: TYPE_NORMAL
+  zh: 第三个图表是一个散点图，包含在正态分布内随机生成的 3,000 个数据点。这代表了一个典型的抽样过程，比如使用 Sonar 或 FindBugs 找到的潜在缺陷数量，如下所示：
 - en: '[PRE33]'
+  id: totrans-497
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: We will leave it as an exercise for the reader to link real data to the graphing
     capabilities of R.
+  id: totrans-498
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将把将真实数据与 R 的绘图功能链接起来的工作留给读者作为练习。
 - en: There's more...
+  id: totrans-499
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容...
 - en: Here are a couple more points for you to think about.
+  id: totrans-500
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里还有几点让你思考。
 - en: RStudio or StatET
+  id: totrans-501
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: RStudio 或 StatET
 - en: 'A popular IDE for R is **RStudio** ([http://www.rstudio.com/](http://www.rstudio.com/)).
     The open source edition is free. The feature set includes a source code editor
     with code completion and syntax highlighting, integrated help, solid debugging
     features, and a slew of other features, as shown in the following screenshot:'
+  id: totrans-502
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于 R 的一个流行的 IDE 是 **RStudio**（[http://www.rstudio.com/](http://www.rstudio.com/)）。开源版本是免费的。功能集包括带有代码完成和语法高亮的源代码编辑器、集成帮助、可靠的调试功能以及一系列其他功能，如下面的截图所示：
 - en: '![RStudio or StatET](img/0082OS_04_20.jpg)'
+  id: totrans-503
   prefs: []
   type: TYPE_IMG
+  zh: '![RStudio 或 StatET](img/0082OS_04_20.jpg)'
 - en: An alternative for the Eclipse environment is the StatET plugin ([http://www.walware.de/goto/statet](http://www.walware.de/goto/statet)).
+  id: totrans-504
   prefs: []
   type: TYPE_NORMAL
+  zh: Eclipse 环境的另一种选择是 StatET 插件（[http://www.walware.de/goto/statet](http://www.walware.de/goto/statet)）。
 - en: Quickly getting help
+  id: totrans-505
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 快速获取帮助
 - en: The first place to start to learn R is by typing `help.start()` from the R console.
     The command launches a browser with an overview of the main documentation.
+  id: totrans-506
   prefs: []
   type: TYPE_NORMAL
+  zh: 学习 R 的第一步是从 R 控制台输入 `help.start()`。该命令会启动一个带有主要文档概述的浏览器。
 - en: 'If you want descriptions of R commands then typing `?` before a command generates
     detailed help documentation. For example, in the recipe we looked at the use of
     the `rnorm` command. Typing `?rnorm` produces documentation similar to:'
+  id: totrans-507
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你想要 R 命令的描述，那么在命令前输入 `?` 将生成详细的帮助文档。例如，在我们查看 `rnorm` 命令的配方时。键入 `?rnorm` 将产生类似的文档：
 - en: '**The Normal Distribution**'
+  id: totrans-508
   prefs: []
   type: TYPE_NORMAL
+  zh: '**正态分布**'
 - en: '**Description**'
+  id: totrans-509
   prefs: []
   type: TYPE_NORMAL
+  zh: '**描述**'
 - en: '**Density, distribution function, quantile function and random generation for
     the normal distribution with mean equal to mean and standard deviation equal to
     sd.**'
+  id: totrans-510
   prefs: []
   type: TYPE_NORMAL
+  zh: '**用平均值等于 mean 和标准差等于 sd 的正态分布的密度、分布函数、分位数函数和随机生成。**'
 - en: '**Usage**'
+  id: totrans-511
   prefs: []
   type: TYPE_NORMAL
+  zh: '**使用方法**'
 - en: '**dnorm(x, mean = 0, sd = 1, log = FALSE)**'
+  id: totrans-512
   prefs: []
   type: TYPE_NORMAL
+  zh: '**dnorm(x, mean = 0, sd = 1, log = FALSE)**'
 - en: '**pnorm(q, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)**'
+  id: totrans-513
   prefs: []
   type: TYPE_NORMAL
+  zh: '**pnorm(q, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)**'
 - en: '**qnorm(p, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)**'
+  id: totrans-514
   prefs: []
   type: TYPE_NORMAL
+  zh: '**qnorm(p, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)**'
 - en: '**rnorm(n, mean = 0, sd = 1)**'
+  id: totrans-515
   prefs: []
   type: TYPE_NORMAL
+  zh: '**rnorm(n, mean = 0, sd = 1)**'
 - en: For more information
+  id: totrans-516
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 了解更多信息
 - en: 'The R language is well documented. Here are a number of useful resources:'
+  id: totrans-517
   prefs: []
   type: TYPE_NORMAL
+  zh: R 语言有很好的文档。以下是一些有用的资源：
 - en: '**Data Camp** ([https://www.datacamp.com/courses](https://www.datacamp.com/courses)):
     This is a great collection of free online courses including a basic introduction
     and a more detailed course on statistics.'
+  id: totrans-518
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Data Camp** ([https://www.datacamp.com/courses](https://www.datacamp.com/courses))：这是一个包括基本介绍和更详细的统计课程的免费在线课程的绝佳集合。'
 - en: '**R programming for those coming from other languages** ([http://www.johndcook.com/blog/r_language_for_programmers/](http://www.johndcook.com/blog/r_language_for_programmers/)):
     This is a quick introduction to potential gotchas for new programmers with experience
     in other languages.'
+  id: totrans-519
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**为其他语言用户准备的 R 编程** ([http://www.johndcook.com/blog/r_language_for_programmers/](http://www.johndcook.com/blog/r_language_for_programmers/))：这是一个快速介绍，针对具有其他语言经验的新程序员可能遇到的问题。'
 - en: '**R style guide by Google** ([https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml)):
     If you follow these guidelines, your code will be consistent and readable.'
+  id: totrans-520
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Google 的 R 风格指南** ([https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))：如果你遵循这些指南，你的代码将保持一致且易读。'
 - en: '**MOOCs**: There are a number of online courses available from Edx, Coursera,
     and so on. It is well worth reviewing their listings for relevance. For the most
     up-to-date listings of Coursera courses, visit [https://www.coursera.org/courses](https://www.coursera.org/courses).'
+  id: totrans-521
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**MOOCs**：Edx、Coursera 等网站提供了许多在线课程。值得浏览它们的课程列表以寻找相关课程。要获取最新的 Coursera 课程列表，请访问
+    [https://www.coursera.org/courses](https://www.coursera.org/courses)。'
 - en: '**Two-minute tutorials** ([http://www.twotorials.com/](http://www.twotorials.com/)):
     This contains many two-minute YouTube examples of what you can do in R.'
+  id: totrans-522
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**两分钟教程** ([http://www.twotorials.com/](http://www.twotorials.com/))：这里包含许多在
+    R 中可以做的事情的两分钟 YouTube 示例。'
 - en: '**Wiki books on R** ([http://en.wikibooks.org/wiki/Category:R_Programming](http://en.wikibooks.org/wiki/Category:R_Programming)):
     This has great articles and examples assembled together in one place.'
+  id: totrans-523
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**R 的 Wiki 书籍** ([http://en.wikibooks.org/wiki/Category:R_Programming](http://en.wikibooks.org/wiki/Category:R_Programming))：这里汇集了许多优秀的文章和示例。'
 - en: See also
+  id: totrans-524
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Analyzing project data with the R plugin* recipe in [Chapter 5](ch05.html
     "Chapter 5. Using Metrics to Improve Quality"), *Using Metrics to Improve Quality*
+  id: totrans-525
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 [第 5 章](ch05.html "Chapter 5. Using Metrics to Improve Quality") 的 *使用指标来提高质量*
+    中的 *使用 R 插件分析项目数据* 配方
