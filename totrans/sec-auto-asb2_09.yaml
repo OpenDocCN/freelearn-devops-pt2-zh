@@ -1,0 +1,542 @@
+- en: Automating Lab Setups for Forensics Collection and Malware Analysis
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Malware is one of the biggest challenges faced by the security community. It
+    impacts everyone who gets to interact with information systems. While there is
+    a massive effort required in keeping computers safe from malware for operational
+    systems, a big chunk of work in malware defenses is about understanding where
+    they come from and what they are capable of.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This is the part where Ansible can be used for automation and enabling experts
+    who do malware analysis. In this chapter, we will look at various workflows which
+    are all for classification, analysis of malware using tools like Cuckoo Sandbox,
+    and more. Also, we will be looking into creating Ansible playbooks for labs for
+    isolated environments and for collection and storage with secure backup of forensic
+    artifacts.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating Ansible playbooks for labs for isolated environments
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We will start by using VirusTotal and move on to Cuckoo with a Windows virtual
+    machine in an isolated network. Another important aspect of malware analysis is
+    the ability to collaborate and share threats using the **Malware Information Sharing
+    Platform** (**MISP**). We also setup Viper (binary management and analysis framework)
+    to perform the analysis.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Collecting file and domain malware identification and classification
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: One of the initial phases of malware analysis is identification and classification.
+    The most popular source is using VirusTotal to scan and get the results of the
+    malware samples, domain information, and so on. It has a very rich API and a lot
+    of people have written custom apps that leverage the API to perform the automated
+    scans using the API key for identifying the malware type.  The following example
+    is to set up the VirusTotal tool in the system, scan the malware samples against
+    the VirusTotal API, and identify whether or not it's really malware. It generally
+    checks using more than 60 antivirus scanners and tools and provides detailed information.
+  prefs: []
+  type: TYPE_NORMAL
+- en: VirusTotal  API tool set up
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following playbook will set up the VirusTotal API tool ([https://github.com/doomedraven/VirusTotalApi](https://github.com/doomedraven/VirusTotalApi)),
+    which is officially supported in the VirusTotal page itself:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The playbook execution will download the repository and set up the VirusTotal
+    API tool and this will get us ready for scanning the malware samples:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/8ac588de-ea81-47b6-bc36-ca873f7ea3bb.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: VirusTotal API scan for malware samples
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Once we have the setup ready, it is as simple as using the Ansible playbook
+    to run a scan for the list of malware samples. The following playbook will find
+    and copy the local malware samples to a remote system and scan them recursively
+    and return the results. Once the scan has been completed, it will remove the samples
+    from the remote system:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The results of the malware sample scan using the VirusTotal API looks like
+    this. It returns the hashes and pointers to the VirusTotal API scan report for
+    detailed results:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/2aa46276-21d0-4017-becf-af14138a51ea.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Setting up the Cuckoo Sandbox environment
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Cuckoo Sandbox** is one of the most popular open source automated malware
+    analysis systems. It has a lot of integrations to perform the malware analysis
+    of suspicious files. Its setup requirements include dependencies, and other software
+    such as VirtualBox, yara, ssdeep, and volatility. Also, the VM analysis is Windows
+    and it requires some prerequisites to perform the analysis.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Read more about Cuckoo Sandbox at [https://cuckoosandbox.org](https://cuckoosandbox.org).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up the Cuckoo host
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The following Ansible Playbook will set up the host operating system and dependencies
+    required for Cuckoo Sandbox to work. This has different roles to install all the
+    required packages in the Ubuntu operating system.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following roles are included to set up the host system:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The dependencies role has lot of `apt` packages that have to be installed to
+    perform other installations. Then we will set up capabilities for the `tcpdump`
+    package, so Cuckoo can access them for analysis:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then we will install the VirtualBox, so the VM analysis can be installed in
+    VirtualBox. Cuckoo uses the VirtualBox API to interact with VM analysis to perform
+    operations:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'After that, we will install some additional packages and tools for Cuckoo to
+    use in the analysis:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The custom scripts have the build scripts to install the `yara` and `ssdeep`
+    packages:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Finally, we will install the Cuckoo and other required settings, such as creating
+    users, to the `vboxusers` group. The configuration files are taken from templates,
+    so these will be modified based on the VM analysis environment:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following playbook will copy the configurations and start the Cuckoo and
+    web server to perform the Cuckoo analysis:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: Setting up Cuckoo guest
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Most of the settings will need to be performed in the Windows operating system.
+    The following guide will help you set up the Windows Guest VM for Cuckoo analysis.
+    Refer to [https://cuckoo.sh/docs/installation/guest/index.html](https://cuckoo.sh/docs/installation/guest/index.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshots are the reference that the first adapter is the Host-only
+    Adapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/23aa5335-c165-4eb2-8df1-fb25cac7e27d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'And the second adapter is the NAT:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/4589cb15-147a-4cdb-8dd6-f7ae6b67bea9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Once the Windows VM starts, we need to install the VirtualBox guest addition
+    tools. This allows Cuckoo to perform analysis using a command-line utility called
+    VBoxManage:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d669e0d8-d604-4501-ba2f-41363b6bf086.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Next, we have to install Python locally to start the Cuckoo agent locally, we
+    can install Python from the official Python website: [https://www.python.org/downloads/release/python-2714](https://www.python.org/downloads/release/python-2714).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now download the agent from the Cuckoo host, it will be available in the Cuckoo
+    working directory in the `agent` folder. We need to keep this in the Windows VM
+    for the Cuckoo server to interact with:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/84ad3515-6fee-42d1-b791-ee43d3e4de9e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then, we have to add the Python file path to the system startups using the `regedit`
+    command. This can be done by navigating to `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Current\Version\Run`.
+    Then, add the new string in the registry editor right side, with name Cuckoo and
+    give the full path for the `agent.py` file in the value section:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/42a0f513-4974-44d3-a3c2-9cc746144a44.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Now, we can take a snapshot and update the configurations in the Cuckoo host.
+    Once this is done, we are ready to start the Cuckoo server and web server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot is the home page of the Cuckoo web server. Once we
+    submit the malware sample, then we can click on analyze to start:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/5d4f710c-39ff-4224-bed2-61bb91846267.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then, it will take some time to perform the analysis with the VirtualBox Windows
+    VM. This will perform the analysis based on the option you selected:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/e1912ee3-c858-4672-8df9-7ff6e3a1c45e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then, it will give complete detailed information about the sample. It includes
+    submitted file checksum, runtime execution screenshot while Cuckoo performing
+    analysis and other information:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/fed7a78b-f2a3-4678-9838-091acf127c6f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The following screenshot is the behavioral analysis of the malware sample,
+    which includes a detailed analysis of the process tree. The left-side menu contains
+    different options such as dropped files, memory dump analysis, and packet analysis:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/f00c00b8-c0ca-482e-bd63-c7464dddbcfb.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Learn more about Cuckoo usage in the Cuckoo documentation at [http://docs.cuckoosandbox.org/en/latest/usage](http://docs.cuckoosandbox.org/en/latest/usage).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Submitting samples and reporting using Ansible playbook
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following playbook will perform the analysis of the given malware sample
+    files in a local system path and return the reports to using Ansible playbook:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot copies the malware samples to a Cuckoo analysis system
+    and submits these files for automated analysis using Ansible playbook:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a0985b27-d3e9-4a7d-aef7-1d311eace559.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The preceding screenshot copies the local binaries into the remote Cuckoo host
+    and submits them for analysis using the Cuckoo submit feature:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/b942741d-1183-457c-b81e-c7ee688627a1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The preceding screenshot is the report of analysis submitted by our Cuckoo scan
+    submission using Ansible Playbook.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up Cuckoo using Docker containers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'This will allows us to simplify the Cuckoo setup using Docker containers. The
+    following commands will allow us to set up the Cuckoo Sandbox using Docker containers:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'It takes a while to download the Docker containers and configure them to work
+    together. Once the installation is complete, we can access Cuckoo using `http://localhost`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/3956ed3e-db8d-40a1-a9cb-bc7b01e43ea9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Now, we can submit the malware samples or suspicious files to Cuckoo to perform
+    an analysis using the tool set and it will return with a detailed analysis. We
+    can also choose what analysis to perform by selecting the configuration options
+    before submitting the sample.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up MISP and Threat Sharing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Malware Information Sharing Platform (MISP)** is an open source threat-sharing
+    platform ([http://www.misp-project.org](http://www.misp-project.org)). It allows
+    us to exchange **Indicators of Compromise** (**IOCs**) about **Advanced Persistent
+    Threat** (**APT**) and targeted attacks within the known community and organizations.
+    By doing this, we can gain more knowledge about different attacks and threats
+    and it''s easy for organizations to defend against such attacks.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The simplest way to get started with this platform is to use their customized
+    VM by the **Computer Incident Response Center Luxembourg** (**CIRCL**), which
+    includes the latest release of the complete setup. This VM is customized to work
+    in different environments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The VM and training materials can be found at [https://www.circl.lu/services/misp-training-materials](https://www.circl.lu/services/misp-training-materials).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up MISP using Ansible playbook
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We can also set up using the Ansible playbooks. Based on our customized use,
+    there are multiple playbooks available in the community:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://github.com/juju4/Ansible-MISP](https://github.com/juju4/Ansible-MISP)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[https://github.com/StamusNetworks/Ansible-misp](https://github.com/StamusNetworks/Ansible-misp)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Setting up MISP using existing Ansible playbooks is as simple as cloning the
+    repository and updating the variables for required changes and configurations.
+    Make sure to update the variables before executing the playbook:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: MISP web user interface
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following is the MISP virtual machine web interface. Here are the default
+    credentials for the MISP VM:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot is the home page of **Malware Information Sharing
+    Platform** (**MISP**) with login panel:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/e83ca3e2-9b9f-4e7e-8266-2f15311fbee6.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The following screenshot is the home screen for the MISP platform web interface,
+    it contains options to share the IOCs, add organisations, and perform access control,
+    among other features:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/724103e4-ddba-4dfc-8195-08e1fc8da6bf.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Read more about MISP using their documentation to learn different features available
+    in MISP at [https://www.circl.lu/doc/misp/](https://www.circl.lu/doc/misp/).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up Viper - binary management and analysis framework
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Viper** ([http://viper.li](http://viper.li)) is a framework dedicated to
+    malware and exploit researchers. It provides a simple solution to easily organize
+    collections of malware and exploit samples. It provides both a CLI and web interface
+    for researchers to perform analysis on binary files and malware samples.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following playbook will set up the entire Viper framework. It has two roles,
+    one is to set up the dependencies required to run the Viper framework, and the
+    other is the main setup:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following snippet is to set up the dependencies and other required packages:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Here, we are using a custom shell script for setting up  `ssdeep`, which has
+    to perform compilation and build:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The set up role will install the Viper packages, required dependencies, and
+    it will start the web server to access the Viper web user interface:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot refers to the playbook execution of the Viper framework
+    setup. and it returns the web interface URL to access:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/8fa9f79e-ba57-4e72-b49f-506b86b25e3c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'If we navigate to `http://192.18.33.22:9090`, we can see the web interface
+    with a lot of options to use this framework:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/daa31818-eebe-4a20-85e3-941154de6423.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The following screenshot is the output of the sample malware we analyzed. This
+    Viper framework also has module support with YARA ruleset, VirusTotal API, and
+    other modules to perform a deep analysis based on the use case:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/2808eb26-b1dd-42fc-92de-906acba6584e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating Ansible playbooks for collection and storage with secure backup of
+    forensic artifacts
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Ansible is an apt replacement for all kinds of bash scripts. Typically, for
+    most activities that require analysis, we follow a set pattern:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Collect logs from running processes into files with a path we already know
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Copy the content from these log files periodically to a secure storage locally
+    or accessible remotely over SSH or a network file share
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once copied successfully, rotate the logs
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Since there is a bit of network activity involved, our bash scripts are usually
+    written to be fault tolerant with regard to network connections and become complex
+    very soon. Ansible playbooks can be used to do all of that while being simple
+    to read for everyone.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Collecting log artifacts for incident response
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The key phase in incident response is **log analysis**. The following playbook
+    will collect the logs from all the hosts and store it locally. This allows responders
+    to perform the further analysis:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following playbook execution will collect a list of logs in specified locations
+    in remote hosts using Ansible modules and store them in the local system. The
+    output of the logs from the playbook looks like this:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/009d900e-d9dd-456e-8c0d-3ad27595a725.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Secure backups for data collection
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When collecting multiple sets of data from servers, it's important to store
+    them securely with encrypted backups. This can be achieved by backing up the data
+    to storage services such as S3.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following Ansible playbook allows us to install and copy the collected
+    data to the AWS S3 service with encryption enabled:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The configuration file looks like the following for the `s3cmd` configuration:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot is the Ansible playbook execution of uploading the
+    data to S3 bucket:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/ea83bd32-edb8-4955-b8e5-888bc36e5f1c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The preceding screenshot shows the Ansible playbook installing `s3cmd`, creating
+    the new bucket called `secretforensicsdatausingAnsible`, and copying the local
+    log data to the remote S3 bucket.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/11e06805-87c5-4129-a36d-942dfb4d18e0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The preceding screenshot is the outcome of the playbook. We can see that the
+    logs are successfully uploaded into the `secretforensicsdatausingAnsible` S3 bucket
+    in AWS S3.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Being able to automate various workflows required for malware analysis allows
+    us to scale the number of malware being analyzed and the resources required for
+    doing such large-scale analysis. This is one way to address the deluge of malware
+    that gets released every day on the internet and create useful defenses against
+    them.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we move on to creating an Ansible module for security testing.
+    We will take baby steps at creating the module right from understanding the basics
+    to utilizing and consuming the API of OWASP ZAP for scanning websites. By the
+    end of the chapter, you will have a complete module that can be used with the
+    Ansible CLI or Ansible playbook.
+  prefs: []
+  type: TYPE_NORMAL

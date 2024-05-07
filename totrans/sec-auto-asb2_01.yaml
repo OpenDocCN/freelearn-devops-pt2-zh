@@ -1,0 +1,474 @@
+- en: Introduction to Ansible Playbooks and Roles
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: According to Wikipedia, Ansible is an open source automation engine that automates
+    software provisioning, configuration management, and application deployment. But
+    you already knew that. This book is about taking the idea of IT automation software
+    and applying it to the domain of Information Security Automation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The book will take you through the journey of *security automation* to show
+    how Ansible is used in the real world.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this book, we will be automating security-related tasks in a structured,
+    modular fashion using a simple human-readable format YAML. Most importantly, what
+    you will learn to create will be repeatable. This means once it is done, you can
+    focus on fine-tuning, expanding the scope, and so on. The tool ensures that we
+    can build and tear down anything, from simple application stacks to simple, but
+    extensive, multi-application frameworks working together.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If you have been playing around with Ansible, and in this book we assume you
+    have, you would have definitely come across some of the following terms:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Playbook
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Ansible Modules
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: YAML
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Roles
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Templates (Jinja2)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Don't worry, we will address all of the aforementioned terms in this chapter.
+    Once you are comfortable with these topics, we will move on to covering scheduler
+    tools, and then to building security automation playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible terms to keep in mind
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Like all new subjects or topics, it is a good idea to get familiar with the
+    terminology of that subject or topic. We will go through some of the Ansible terms
+    that we will be using throughout the book, and if at any point you are not able
+    to follow, you might want to come back to this chapter and refresh your understanding
+    for that particular term.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Playbooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: A playbook, in the classic sense, is about offensive and defensive plays in
+    football. The players keep a record of the plays (plan of action) in a book, usually
+    in the form of a diagram.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In Ansible, a playbook is a series of ordered steps or instructions for an IT
+    process. Think of a nicely-written instruction manual that can be read and understood
+    by humans and computers alike.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the subsequent chapters, all the automation we will focus on regarding security
+    will lead us toward building both simple and complex playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This is what an Ansible playbook command looks like:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: Ignore the `-i` flag for now and notice the extension of the playbook file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'As stated in [http://docs.ansible.com/ansible/playbooks_intro.html](http://docs.ansible.com/ansible/playbooks_intro.html):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '"Playbooks are expressed in YAML format (see YAML syntax ([http://docs.ansible.com/ansible/YAMLSyntax.html](http://docs.ansible.com/ansible/YAMLSyntax.html)))
+    and have a minimum of syntax, which intentionally tries to not be a programming
+    language or script, but rather a model of a configuration or a process."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible modules
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible ships with a number of modules (called the **module library**) that
+    can be executed directly on remote hosts or through playbooks.Tasks in playbooks
+    call modules to do the work.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible has many modules, most of which are community contributed and maintained. Core
+    modules are maintained by the Ansible core engineering team and will always ship
+    with Ansible itself.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Users can also write their own modules. These modules can control system resources,
+    like services, packages, or files (anything really), or handle executing system
+    commands.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Here is the list of modules available by Ansible: [http://docs.ansible.com/ansible/latest/modules_by_category.html#module-index](http://docs.ansible.com/ansible/latest/modules_by_category.html#module-index).
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you use Dash ([https://kapeli.com/dash](https://kapeli.com/dash)) or Zeal
+    ([https://zealdocs.org/](https://zealdocs.org/)), you can download the offline
+    version for easy reference.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Modules can be executed via the command line as well. We will be using modules
+    to write all the tasks inside our playbooks. All modules technically return JSON
+    format data.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Modules should be idempotent and should avoid making any changes if they detect
+    that the current state matches the desired final state. When using Ansible playbooks,
+    these modules can trigger *change events* in the form of notifying *handlers*
+    to run additional tasks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Documentation for each module can be accessed from the command line with the
+    `ansible-doc` tool:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We can list all the modules available on our host:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Start the Apache web server on all nodes grouped under `webservers` by executing
+    the `httpd` module. Note the use of the `-m` flag:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'This snippet shows the exact same command but inside a playbook in YAML syntax:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: Each module contains multiple parameters and options, get to know more about
+    the features of the modules by looking at their documentation and examples.
+  prefs: []
+  type: TYPE_NORMAL
+- en: YAML syntax for writing Ansible playbooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible playbooks are written in **YAML**, which stands for **YAML Ain't Markup
+    Language**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: According to the official document ([http://yaml.org/spec/current.html](http://yaml.org/spec/current.html))[:](http://yaml.org/spec/current.html)
+  prefs: []
+  type: TYPE_NORMAL
+- en: <q>YAML Ain’t Markup Language</q> (abbreviated YAML) is a data serialization
+    language designed to be human-friendly and work well with modern programming languages
+    for everyday tasks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible uses YAML because it is easier for humans to read and write than other
+    common data formats, such as XML or JSON. All YAML files (regardless of their
+    association with Ansible or not) can optionally begin with `---` and end with
+    `...`. This is part of the YAML format and indicates the start and end of a document.
+  prefs: []
+  type: TYPE_NORMAL
+- en: YAML files should end with `.yaml` or `.yml`. YAML is case sensitive.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can also use linters, such as [www.yamllint.com](http://www.yamllint.com),
+    or your text editor plugins for linting YAML syntax, which help you to troubleshoot
+    any syntax errors and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Here is an example of a simple playbook to showcase YAML syntax from Ansible
+    documentation ([http://docs.ansible.com/ansible/playbooks_intro.html#playbook-language-example](http://docs.ansible.com/ansible/playbooks_intro.html#playbook-language-example)):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: Ansible roles
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: While playbooks offer a great way to execute *plays* in a pre-defined order,
+    there is a brilliant feature on Ansible that takes the whole idea to a completely
+    different level. Roles are a convenient way to bundle tasks, supporting assets
+    such as files and templates, coupled with an automatic set of search paths.
+  prefs: []
+  type: TYPE_NORMAL
+- en: By using a concept most programmers would be familiar with, of *including* files
+    and folders and ascribing what is being included, a playbook becomes infinitely
+    more readable and understandable. Roles are basically made up of tasks, handlers,
+    and configurations, but by adding an additional layer to how a playbook is structured,
+    we can easily get the big picture overview as well as the low-level details.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This allows for reusable code and a division of work in a team tasked with writing
+    playbooks. For example, the database guru writes a role (almost like a partial
+    playbook) for setting up the database and the security guru writes one on hardening
+    such a database.
+  prefs: []
+  type: TYPE_NORMAL
+- en: While it is possible to write a playbook in one very large file, eventually
+    you want to reuse files and start to organize things.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Large and complex playbooks are hard to maintain and it is very difficult to
+    reuse sections of a large playbook. Breaking a playbook into roles allows very
+    efficient code reuse and makes playbooks much easier to understand.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The benefits of using roles while building large playbooks include:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Collaborating on writing playbooks
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Reusing existing roles
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Roles can be updated, improved upon independently
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Handling variables, templates, and files is easier
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**LAMP** usually stands for **Linux, Apache, MySQL, PHP**. A popular combination
+    of software that is used to build applications for the web. Nowadays, another
+    common combination in the PHP world is **LEMP**, which is **Linux, NGINX, MySQL,
+    PHP**.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This is an example of what a possible LAMP stack `site.yml` can look like:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: Note the list of roles. Just by reading the role names we can get an idea of
+    the kind of tasks possibly under that role.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Templates with Jinja2
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible uses Jinja2 templating to enable dynamic expressions and access to variables.
+    Jinja2 variables and expressions within playbooks and tasks allow us to create
+    roles that are very flexible. By passing variables to a role written this way,
+    we can have the same role perform different tasks or configurations. Using a templating
+    language, such as Jinja2, we are able to write playbooks that are succinct and
+    easier to read.
+  prefs: []
+  type: TYPE_NORMAL
+- en: By ensuring that all the templating takes place on the Ansible controller, Jinja2
+    is not required on the target machine. Only the required data is copied over,
+    which reduces the data that needs to be transferred. As we know, less data transfer
+    usually results in faster execution and feedback.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jinja templating examples
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: A mark of a good templating language is the ability to allow control of the
+    content without appearing to be a fully-fledged programming language. Jinja2 excels
+    in that by providing us with the ability to do conditional output, such as iterations
+    using loops, among other things.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let's look at some basic examples (obviously Ansible playbook-related) to see
+    what that looks like.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Conditional example
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Execute only when the operating system family is `Debian`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: Loops example
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following task adds users using the Jinja2 templating. This allows for
+    dynamic functionality in playbooks. We can use variables to store data when required,
+    we just need to update the variables rather than the entire playbook:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: LAMP stack playbook example – combining all the concepts
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We will look at how to write a LAMP stack playbook using the skills we have
+    learned so far. Here is the high-level hierarchy structure of the entire playbook:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: Let's start with creating an inventory file. The following inventory file is
+    created using static manual entry. Here is a very basic static inventory file
+    where we will define a since host and set the IP address used to connect to it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Configure the following inventory file as required:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following file is `group_vars/lamp.yml`, which has the configuration of
+    all the global variables:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following file is the `site.yml`, which is the main playbook file to start:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following is the `roles/common/tasks/main.yml` file, which will install `python2`,
+    `curl`, and `git`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following task, `roles/web/tasks/main.yml`, performs multiple operations,
+    such as installation and configuration of `apache2`. It also adds the service
+    to the startup process:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The `notify` parameter will trigger the handlers found in `roles/web/handlers/main.yml`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The template files will be taken from `role/web/templates/web.conf.j2`, which
+    uses Jinja templating, it also takes values from local variables:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The local variables file is located in `roles/web/vars/main.yml`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Similarly, we will write database roles as well. The following file `roles/db/tasks/main.yml`
+    includes installation of the database server with assigned passwords when prompted.
+    At the end of the file, we included `harden.yml`, which executes another set of
+    tasks:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The `harden.yml` performs hardening of MySQL server configuration:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The `db` server role also has `roles/db/handlers/main.yml` and local variables
+    similar to the `web` role:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following file is `roles/db/vars/main.yml`, which has the `mysql_root_password`
+    while configuring the server. We will see how we can secure these plaintext passwords
+    using `ansible-vault` in future chapters:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, we will install PHP and configure it to work with `apache2` by restarting
+    the `roles/php/tasks/main.yml` service:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: To run this playbook, we need to have Ansible installed in the system path.
+    Please refer to [http://docs.ansible.com/ansible/intro_installation.html](http://docs.ansible.com/ansible/intro_installation.html)
+    for installation instructions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Then execute the following command against the Ubuntu 16.04 server to set up
+    LAMP stack. Provide the password when it prompts for system access for user `hodor`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: After successful completion of the playbook execution, we will be ready to use
+    LAMP stack in a Ubuntu 16.04 machine. You might have observed that each task or
+    role is configurable as we need throughout the playbook. Roles give the power
+    to generalize the playbook and customize easily using variables and templating.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We have codified a fairly decent real-world stack for development using a combination
+    of Ansible's features. By thinking about what goes in a LAMP stack overview, we
+    can start by creating the roles. Once we have that thrashed out, the individual
+    tasks are mapped to modules in Ansible. Any task that requires copying of a pre-defined
+    configuration, but with dynamically-generated output, can be done by using variables
+    in our templates and the constructs offered by Jinja2.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will use the same approach to various security-related setups that could
+    do with a bit of automation for orchestration, operations, and so on. Once we
+    have a handle on how to do this for a virtual machine running our laptop, it can
+    be repurposed for deploying on your favorite cloud-computing instance as well.
+    The output is human readable and in text, so that it can be added to version control,
+    various roles can be reused as well.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Now that we have a fairly decent idea of the terms we will be using throughout
+    this book, let's get set for one final piece of the puzzle. In the next chapter,
+    we will learn and understand how we can use automation and scheduling tools, such
+    as Ansible Tower, Jenkins, and Rundeck, to manage and execute playbooks based
+    on certain event triggers or time durations.
+  prefs: []
+  type: TYPE_NORMAL

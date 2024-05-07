@@ -1,0 +1,386 @@
+- en: Preface
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: IT is undergoing a massive paradigm shift. From a time where uptime was a measure
+    of IT success, we are moving to the idea of immutable infrastructure, where, based
+    on the requirements, we can spin up and trash a server on demand automatically.
+    Ansible is playing a lead role in this transformation. It has become the tool
+    of choice for companies big and small for tasks that are meant for one server
+    to entire clusters.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This book is about security automation. We apply our knowledge of Ansible to
+    different scenarios and workloads that revolve around security, hence the title.
+    When boring and mundane tasks are automated, people doing those tasks can focus
+    on solving the security problems they are dealing with. This enables a whole new
+    way to looking at how we learn about security (trainings), how much we can store,
+    process, and analyze log data (DFIR), how we can keep applying security updates
+    without any interruptions (security operations), and more.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this book, we will share our experience of the types of automation we can
+    enable using Ansible. You may be familiar with some of these, or they may be entirely
+    new to you. Regardless, rather than trying to prescribe how Ansible should be
+    used, we hope that you will read and understand how you can take each of these
+    playbooks/workflows, and make your security work faster, better, and more reliable,
+    or simply have fun creating complex infrastructure scenarios for yourself or others.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This book would not have been possible without the excellent documentation provided
+    by the folks at Red Hat Ansible and countless other blogs and projects already
+    creating secure, resilient playbooks that we can all learn from and use.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The book is divided into three main sections:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Essential Ansible you should be familiar with, for building useful playbooks
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Security automation techniques and approaches
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Extending and programming Ansible for even more security
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The idea is to get you to quickly refresh your knowledge of Ansible and move
+    on to becoming productive with it, and toward the end, you'll see how you can
+    do even more by extending Ansible or creating your own security modules.
+  prefs: []
+  type: TYPE_NORMAL
+- en: What this book covers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '[Chapter 1](4f56b7ea-fbea-46f9-9512-1f054caf05f0.xhtml), *Introduction to Ansible
+    Playbooks and Roles*, covers the terms that you would already be familiar with,
+    in Ansible. They are explained with sample playbooks and the Ansible commands
+    required to run those playbooks. If you feel your Ansible concepts and skills
+    are a bit rusty, start here.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 2](254b9e40-9165-42f7-a2f8-522f85f5f58d.xhtml), *Ansible Tower, Jenkins,
+    and Other Automation Tools*, is all about automation of automation. We cover the
+    use of scheduling automation tools commonly used with Ansible such as Ansible
+    Tower, Jenkins, and Rundeck. If you start using these tools the mundane and boring
+    tasks of remembering when to schedule and execute playbooks and get notifications
+    about the output can be delegated to the tools rather than in your head. If you
+    haven''t used any tools like these, you should read this chapter.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 3](8345ba0c-aa35-4968-8caf-a3bcd0668f99.xhtml), *Setting up a Hardened
+    WordPress with Encrypted Automated Backups*, covers the exploration of various
+    security automation techniques and approaches. As with any technique or approach,
+    it is possible that some of what we say doesn''t apply for your use case. However,
+    by taking an opinionated approach, we show you one way of doing this, which we
+    think works well largely. WordPress is the most popular website creation software
+    currently. By tackling how to secure it using playbooks (and running in an IT
+    automation tool), we start talking about an IT/ops requirement of keeping running
+    servers safe and making sure we can recover from failure. If you are responsible
+    for managing websites (even if it is just your own), this chapter should be useful.
+    If you don''t use WordPress, there is enough in this chapter to get you to think
+    about how to apply this chapter to your use case.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 4](8c0a8c69-6d88-4fa9-ad9e-b7ad210ca794.xhtml), *Log Monitoring and
+    Serverless Automated Defense (Elastic Stack in AWS)*, covers log monitoring and
+    security automation, which are like peanut butter and jelly. In this chapter,
+    using Ansible we set up a log monitoring server infrastructure on a server in
+    AWS. Based on attack notifications, we create a near real-time dynamic firewall
+    service using AWS services such as AWS Lambda, Dynamo DB, and AWS Cloudwatch.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 5](5674486e-84e0-49b5-b1b2-e8455a0a1ea0.xhtml), *Automating Web Application
+    Security Testing Using OWASP ZAP*, covers one of the most common security workflows
+    of testing the security of a website using one of the most popular open source
+    tools, that is, OWASP ZAP. Once we have figured out the basic workflow, we supercharge
+    it for continuous scanning of your websites using Ansible and Jenkins. Read this
+    chapter to see how we can work with Docker containers using Ansible, while doing
+    continuous security scanning. A sure win-win!'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 6](5f9a1897-0304-42cb-8801-8004efd8aecb.xhtml), *Vulnerability Scanning
+    with Nessus*, explains the use of Nessus with Ansible for vulnerability scanning.
+    This chapter covers the approach of doing basic network scans, conducting security
+    patch audits, and enumerating vulnerabilities.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 7](8fe755f4-a411-4f82-b2e7-b650c1b1d60f.xhtml), *Security Hardening
+    for Applications and Networks*, shows that Ansible has enabled us to assert our
+    security thinking declaratively. By utilizing the idea of what the system state
+    should be, we can create security hardening playbooks based on standards, such
+    as CIS and NIST, and guidance provided by the US Department of Defense''s STIGs.
+    Familiarize yourself with approaches to hardening applications and servers using
+    existing security documentation, but most importantly, in a repeatable self-documenting
+    way, which is under version control. If you were like us, doing all of this manually
+    for many years, you will appreciate what a game changer this is for security automation.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 8](db9ee51f-53e8-452c-8d5d-b2c3ae5f3361.xhtml), *Continuous Security
+    Scanning for Docker Containers*, covers how to run security scanning tools against
+    Docker containers. A lot of modern applications are deployed using containers,
+    and this chapter will quickly helps you understand whether you have any vulnerable
+    containers, and as always, coupled with Ansible Tower, how to make this a continuous
+    process.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 9](756ea13b-7e67-4583-9df7-fbe8c141066e.xhtml), *Automating Lab Setups
+    for Forensics Collection, Malware Analysis*, is specially for malware researchers.
+    If you have always wanted to use Cuckoo sandbox and MISP, and have shied away
+    because of the complicated steps involved in setting these up, this chapter has
+    got you covered.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 10](5365c833-8b99-4e76-b2b1-fbf3e63ef690.xhtml), *Writing an Ansible
+    Module for Security Testing*, covers how we can extend the functionality offered
+    by Ansible and learn from other projects that are using Ansible to deliver great
+    software solutions. This chapter and the next, bring us to the third section of
+    our book.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Sometimes with all the amazing modules that come with Ansible, they are still
+    not enough for us to do what we want to do. This chapter delves into creating
+    an Ansible module, and if we may say so ourselves, it doesn't try to be very formal
+    about the approach. Remembering that what we want to focus on is security automation,
+    we create a module for running website security scans using a ZAP proxy. With
+    a complete module provided, this will help you writing and using your modules
+    in no time.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 11](695004a2-b349-4e80-aead-17615c65f356.xhtml), *Ansible Security
+    Best Practices, References, and Further reading*, covers how to manage secrets
+    and credentials using Ansible Vault. It will help you in setting up your own instance
+    of Ansible Galaxy. We also highlight other projects using Ansible playbooks for
+    security solutions such as DebOps and Algo. We also cover AWX, which is the free
+    and open source version of Ansible Tower and show you how to set it up and use
+    it. We conclude with a short discussion on Ansible 2.5, which is expected to be
+    released in the first or second quarter of 2018.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: What you need for this book
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible is a tool written in Python2\. For control machines, if Python2 is installed
+    with the minimum version 2.6, you are good to go. Since Ansible 2.2 onwards, Python3
+    is supported as a tech preview.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Who this book is for
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book is for ideally anyone who understands that automation is key to repeatable,
+    error free deployment and provisioning of infrastructure, applications, and networks.
+    However, we really like to specify this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you are a system administrator who also takes care of the security of websites,
+    servers, and networks, this book is for you.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Security consultants and analysts would gain by focusing on [Chapter 3](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_72),
+    *Setting up a Hardened WordPress with Encrypted Automated Backups*, to [Chapter
+    10](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_442), *Writing
+    an Ansible Module for Security Testing*. Even if some of the workloads don't apply
+    to you, you will gain insights into how to use Ansible to provide security as
+    a service to your teams. All the DevOps teams would love to work with someone
+    who considers automation to be as important as the security part itself
+  prefs: []
+  type: TYPE_NORMAL
+- en: Application developers who would like an easy way to deploy secure servers especially
+    should look at [Chapter 3](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_72), *Setting
+    up a Hardened WordPress with Encrypted Automated Backups*, to [Chapter 7](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_265), *Security
+    Hardening for Applications and Networks*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You will get the most out of this book if you are one of these:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Someone who has used Ansible with basic commands before
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Someone who familiar with Linux and Windows operating systems
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Someone who has a basic idea about IP addressing, networking, and working with
+    software installers
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Conventions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this book, you will find a number of text styles that distinguish between
+    different kinds of information. Here are some examples of these styles and an
+    explanation of their meaning. Code words in text, database table names, folder
+    names, filenames, file extensions, pathnames, dummy URLs, user input, and Twitter
+    handles are shown as follows: "The `harden.yml` performs hardening of MySQL server
+    configuration" A block of code is set as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'When we wish to draw your attention to a particular part of a code block, the
+    relevant lines or items are set in bold:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Any command-line input or output is written as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: '**New terms** and **important words** are shown in bold. Words that you see
+    on the screen, for example, in menus or dialog boxes, appear in the text like
+    this: "Click on Confirm Security Exception and continue to proceed with the installation
+    steps"'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Warnings or important notes appear like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tips and tricks appear like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reader feedback
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Feedback from our readers is always welcome. Let us know what you think about
+    this book-what you liked or disliked. Reader feedback is important for us as it
+    helps us develop titles that you will really get the most out of. To send us general
+    feedback, simply email `feedback@packtpub.com`, and mention the book's title in
+    the subject of your message. If there is a topic that you have expertise in and
+    you are interested in either writing or contributing to a book, see our author
+    guide at [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Customer support
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that you are the proud owner of a Packt book, we have a number of things
+    to help you to get the most from your purchase.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Downloading the example code
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'You can download the example code files for this book from your account at
+    [http://www.packtpub.com](http://www.packtpub.com). If you purchased this book
+    elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
+    and register to have the files emailed directly to you. You can download the code
+    files by following these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in or register to our website using your email address and password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Hover the mouse pointer on the SUPPORT tab at the top.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on Code Downloads & Errata.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter the name of the book in the Search box.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the book for which you're looking to download the code files.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose from the drop-down menu where you purchased this book from.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on Code Download.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once the file is downloaded, please make sure that you unzip or extract the
+    folder using the latest version of:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: WinRAR / 7-Zip for Windows
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Zipeg / iZip / UnRarX for Mac
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 7-Zip / PeaZip for Linux
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The code bundle for the book is also hosted on GitHub at [https://github.com/PacktPublishing/Security-Automation-with-Ansible-2](https://github.com/PacktPublishing/Security-Automation-with-Ansible-2).
+    We also have other code bundles from our rich catalog of books and videos available
+    at [https://github.com/PacktPublishing/](https://github.com/PacktPublishing/).
+    Check them out!
+  prefs: []
+  type: TYPE_NORMAL
+- en: Downloading the color images of this book
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We also provide you with a PDF file that has color images of the screenshots/diagrams
+    used in this book. The color images will help you better understand the changes
+    in the output. You can download this file from [https://www.packtpub.com/sites/default/files/downloads/SecurityAutomationwithAnsible2_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/SecurityAutomationwithAnsible2_ColorImages.pdf).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Errata
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Although we have taken every care to ensure the accuracy of our content, mistakes
+    do happen. If you find a mistake in one of our books-maybe a mistake in the text
+    or the code-we would be grateful if you could report this to us. By doing so,
+    you can save other readers from frustration and help us improve subsequent versions
+    of this book. If you find any errata, please report them by visiting [http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata),
+    selecting your book, clicking on the Errata Submission Form link, and entering
+    the details of your errata. Once your errata are verified, your submission will
+    be accepted and the errata will be uploaded to our website or added to any list
+    of existing errata under the Errata section of that title. To view the previously
+    submitted errata, go to [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
+    and enter the name of the book in the search field. The required information will
+    appear under the Errata section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Piracy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Piracy of copyrighted material on the internet is an ongoing problem across
+    all media. At Packt, we take the protection of our copyright and licenses very
+    seriously. If you come across any illegal copies of our works in any form on the
+    internet, please provide us with the location address or website name immediately
+    so that we can pursue a remedy. Please contact us at `copyright@packtpub.com`
+    with a link to the suspected pirated material. We appreciate your help in protecting
+    our authors and our ability to bring you valuable content.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: If you have a problem with any aspect of this book, you can contact us at `questions@packtpub.com`,
+    and we will do our best to address the problem.
+  prefs: []
+  type: TYPE_NORMAL

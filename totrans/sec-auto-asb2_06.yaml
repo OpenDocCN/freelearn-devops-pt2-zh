@@ -1,0 +1,497 @@
+- en: Vulnerability Scanning with Nessus
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Scanning for vulnerabilities is one of the best understood periodic activities
+    security teams take up on their computers. There are well-documented strategies and
+    best practices for doing regular scanning for vulnerabilities in computers, networks,
+    operating system software, and application software:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Basic network scans
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Credentials patch audit
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Correlating system information with known vulnerabilities
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: With networked systems, this type of scanning is usually executed from a connected
+    host that has the right kind of permissions to scan for security issues.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'One of the most popular vulnerability scanning tools is Nessus. Nessus started
+    as a network vulnerability scanning tool, but now incorporates features such as
+    the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Port scanning
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Network vulnerability scanning
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Web application-specific scanning
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Host-based vulnerability scanning
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Introduction to Nessus
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The vulnerability database that Nessus has is its main advantage. While the
+    techniques to understanding which service is running and what version of the software
+    is running the service are known to us, answering the question, "Does this service
+    have a known vulnerability" is the important one. Apart from a regularly updated
+    vulnerability database, Nessus also has information on default credentials found
+    in applications, default paths, and locations. All of this fine-tuned in an easy
+    way to use CLI or web-based tool.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Before diving into how we are going to set up Nessus to perform vulnerability
+    scanning and network scanning against our infrastructure, let's see why we have
+    to set it up and what it will give us in return.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In this chapter, we will focus on doing vulnerability scanning using Nessus.
+    We will try out the standard activities required for that and see what steps are
+    needed to automate them using Ansible:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Nessus using a playbook.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configuring Nessus.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Running a scan.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Running a scan using AutoNessus.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing the Nessus REST API Python client.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Downloading a report using the API.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing Nessus for vulnerability assessments
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'First, get the URL to download the Nessus from [https://www.tenable.com/products/nessus/select-your-operating-system](https://www.tenable.com/products/nessus/select-your-operating-system),
+    then select the Ubuntu operating system, and then run the following playbook role
+    against the server on which you want to set up Nessus:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: Configuring Nessus for vulnerability scanning
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Perform the following steps to configure Nessus for vulnerability scanning:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We have to navigate to `https://NESSUSSERVERIP:8834` to confirm and start the
+    service:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/58f0611c-b54f-47c9-b416-201868d9f18d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'As we can see it returns with an SSL error and we need to accept the SSL error
+    and confirm the security exception  and continue with the  installation:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/9e9d232d-e5e2-48f8-8060-25eeefe4f598.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Click on Confirm Security Exception and continue to proceed with the installation
+    steps:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/05f639e6-42e8-4e60-8814-bce45662c200.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Click on Continue and provide the details of the user, this user has full administrator
+    access:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/39159020-7ba3-45c3-8cbb-a0e3d9774fa9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then finally, we have to provide the registration code (Activation Code), which
+    can be obtained from registering at [https://www.tenable.com/products/nessus-home](https://www.tenable.com/products/nessus-home):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/1c521cde-a718-4cc2-86bb-f428947ceb38.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Now it will install the required plugins. It will take a while to install,
+    and once it is done we can log in to use the application:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/950ca2ed-e42c-424e-8391-569a9769336c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Now, we have successfully set up the Nessus vulnerability scanner:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5c30874c-1cea-4cf6-bdbb-a7ee1a91710a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Executing scans against a network
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now, it's time to perform some vulnerability scanning using Nessus.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Basic network scanning
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Nessus has a wide variety of scans, some of them are free and some of them will
+    be available only in a paid version. So, we can also customize the scanning if
+    required.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are the list of templates currently available:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/7c0480ef-e84c-4cc9-acd5-5b320d09c298.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We can start with a basic network scan to see what''s happening in the network.
+    This scan will perform a basic full system scan for the given hosts:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/409b6465-6b43-4954-8b7c-1c3486b04318.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: As you can see in the preceding screenshot, we have to mention the scan name
+    and targets. Targets are just the hosts we want.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Targets can be given in different formats, such as `192.168.33.1` for a single
+    host, `192.168.33.1-10` for a range of hosts, and also we can upload the target
+    file from our computer.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Choosing the New Scan / Basic Network Scan for analysis using Nessus:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/9f4d07b9-7b4d-42f4-b7a1-1bb418bf6ba2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We can also customize the scan type. For example, we can perform a common ports
+    scan which will scan known ports, we can also perform a full port scan if required:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/cc73d7c7-efc2-416a-98e9-4e3a3a5d681a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then, similarly, we can specify to perform a different type of web application
+    scan, as mentioned previously:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/dd3d24d9-5e2c-4092-b5e2-42089281c460.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The reporting also can be customized as per the requirements using the available
+    options:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/6e06cc24-e150-4017-9425-5261b0d4bdf1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The preceding options are very important while scanning critical infrastructure.
+    These options are to ensure we are not producing a lot of traffic and network
+    bandwidth in the target network. Nessus allows us to customize as per the use
+    case and requirements:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/f7701c34-6ddb-4b4c-b14a-b782f56aa34e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The preceding screenshot represents whether we already have existing credentials
+    for any service and if it requires scanning, we can mention them here. Nessus
+    will use these credentials to authenticate while scanning and this gives better
+    results. Nessus supports multiple types of authentication services:![](img/29a03e0e-e307-4f19-bea6-4171f3bd1250.png)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Scans can be scheduled if required, or are available on-demand. We can click
+    the Launch button (play icon) to start a scan with given configuration parameters:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e7c5a15d-2c0a-43dd-ac42-e17770097d3d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Scan results are available via a dashboard based on host, vulnerabilities,
+    severity level, and so on:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5551dcfc-62c8-4065-9bce-ecfab5adf708.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The preceding screenshot shows how Nessus will produce detailed results of the
+    existing vulnerabilities with sample **Proof of Concept** (**POC**) or command output
+    as well. It also provides a detailed summary of the fix, vulnerability, and references.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Running a scan using AutoNessus
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'With the AutoNessus script, we can do the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: List scans
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: List scan policies
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Do actions on scans such as start, stop, pause, and resume
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The best part of AutoNessus is that since this is a command-line tool, it can
+    easily become part of scheduled tasks and other automation workflows.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Download AutoNessus from [https://github.com/redteamsecurity/AutoNessus](https://github.com/redteamsecurity/AutoNessus).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up AutoNessus
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following code is the Ansible playbook snippet to set up AutoNessus and
+    configure it to use Nessus using credentials. This playbook will allow the setup
+    of the `autoNessus` tool in the path and we can use it as a simple system tool:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: '`no_log: True` will censor the output in the log console of Ansible output.
+    It will be very useful when we are using secrets and keys inside playbooks.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Running scans using AutoNessus
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The following playbook code snippets can be used to perform scans on demand
+    as well as ones that are scheduled. This can also be used in Ansible Tower, Jenkins,
+    or Rundeck.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Before running the automated scans using AutoNessus, we have to create them
+    in the Nessus portal with required customization, and we can use these automated
+    playbooks to perform tasks on top of it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Listing current available scans and IDs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following snippet will return the currently available scans and returns
+    the IDs with information:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/338129f1-3b05-4a74-a585-7da56724ac9f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Ansible output returning list of available scans with IDs information
+  prefs: []
+  type: TYPE_NORMAL
+- en: Starting a specified scan using scan ID
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following snippet will start the specified scan based on `scan_id` and
+    returns the status information:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/b61ac39e-739b-412d-b327-f8b79a6386f0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Ansible output returning scan status after starting
+  prefs: []
+  type: TYPE_NORMAL
+- en: Similarly, we can perform pause, resume, stop, list policies, and so on. Using
+    the AutoNessus program, these playbooks are available. This can be improved by
+    advancing the Nessus API scripts.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Storing results
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We can also get a detailed view of the vulnerability, solutions, and risk information
+    related to vulnerability:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/464e437d-420b-4252-acfb-d12eb22e96b9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The entire report can be exported into multiple formats, such as HTML, CSV,
+    and Nessus. This helps to give more a detailed structure of vulnerabilities found,
+    solutions with risk rating, and other references:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/1394cf57-2ed3-46d2-9eb7-d56c14a12b9e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The output report can be customized based on the audience, if it goes to the
+    technical team, we can list all the vulnerabilities and remediation. For example,
+    if management wants to get the report, we can only get the executive summary of
+    the issues.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reports can be sent by email as well using notification options in Nessus configuration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshots are the detailed reports from the exported HTML format
+    of the recent basic network scan. This can be used to analyze and fix the vulnerabilities
+    based on hosts:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/fcb0d48c-a86a-482b-9cbf-8faeefa42019.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We can see vulnerabilities categorized by hosts previously. We can see each
+    vulnerability in detail in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/bc0712be-d4ce-45ce-a0e1-4e5b095aa853.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Installing the Nessus REST API Python client
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Official API documentation can be obtained by connecting to your Nessus server
+    under `8834/nessus6-api.html`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To perform any operations using the Nessus REST API, we have to obtain the
+    API keys from the portal. This can be found in user settings. Please make sure
+    to save these keys:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/40071468-ac97-4b5f-9882-1c83c8be5799.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Downloading reports using the Nessus REST API
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following playbook will use the Nessus REST API to perform export requests
+    for the report for the given `scan_id`. It will automate the whole process using
+    a simple playbook. This will return the HTML output of the report:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: Read more at about the Nessus REST API  [https://cloud.tenable.com/api#/overview](https://cloud.tenable.com/api#/overview).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'An Ansible playbook for automatic report generation using Nessus REST API:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/204f4904-7160-4058-89f6-8156a1173196.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Ansible playbook for automatic report generation and export using Nessus REST
+    API
+  prefs: []
+  type: TYPE_NORMAL
+- en: Nessus configuration
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Nessus allows us to create different users with role-based authentication to
+    perform scans and review with different access levels:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/f4d85881-e0fa-4b97-bbc4-2b36ea92f5a5.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The following screenshot shows how to create a new user with a role to perform
+    the Nessus activities:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/4ede2d78-3967-4f06-b2c3-1720b479f9d3.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Security teams and IT teams rely on tools for vulnerability scanning, management,
+    remediation, and continuous security processes. Nessus, by being one of the most
+    popular and useful tools, was an automatic choice for the authors to try and automate.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this chapter, we looked at the main activities of vulnerability scanning,
+    such as being able to install and deploy the tool, initiate a scan, and download
+    a report.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will delve deeper into system security and hardening.
+    We will look at various open security initiatives and benchmarking projects such
+    as STIG, OpenSCAP, and **Center for Internet Security** (**CIS**). We will learn
+    how to integrate them with our playbooks and automation tools, such as Tower and
+    Jenkins. This chapter on vulnerability scanning, and the next one on the security
+    hardening of networks and applications create a solid base to explore more ideas
+    on security automation and keeping your systems secure and hardened.
+  prefs: []
+  type: TYPE_NORMAL

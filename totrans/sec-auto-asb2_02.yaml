@@ -1,0 +1,942 @@
+- en: Ansible Tower, Jenkins, and Other Automation Tools
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible is powerful. Once you realize the innumerable benefits of writing down
+    a way to configure and provision systems, you will never want to go back. In fact,
+    you may want to go ahead and write playbooks for complex cloud environments to
+    deploying stacks for data scientists. The rule of thumb is if you can script it,
+    you can create a playbook for it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s assume that you have gone ahead and done just that. Build different
+    playbooks for a variety of scenarios. If you see the advantages of codifying how
+    infrastructure is built and provisioned, you will obviously want to put your playbooks
+    under version control:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c7d7e4ae-5685-4cd2-b4aa-fbb1f6e6dd35.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Multiple playbooks stored under version control, ready to be deployed to systems
+    for provisioning
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'At this point, we have solved interesting challenges surrounding automation:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: We now have the ability to *replay* commands against multiple targets
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Remember that if the playbooks are in an idempotent manner, we can safely run
+    them *n* number of times against our targets without any worries
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: By virtue of them being text-based documents, we get versioning and all the
+    benefits that come from doing so
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'What is still manual is the fact that we need someone or something to execute
+    the `ansible-playbook` command. Not only that, this someone or something will
+    need to do the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Remember when to execute the playbooks
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Schedule them accordingly
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Store secrets safely (usually we require the SSH key to be able to login)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Store the output or remember to rerun a playbook if something failed
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: We can all aspire to be that spectacular when it comes to remembering the small
+    things, or we can accept that these detail-oriented, scheduling-based tasks are
+    better left to competent software rather than superhumans!
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/5754dba5-fa69-4104-9f99-8777b6372c2a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Superhumans will have the ability to remember, schedule, execute, and notify
+    about playbooks
+  prefs: []
+  type: TYPE_NORMAL
+- en: It turns out we don't all have to become superhumans. We can simply use scheduling
+    and automation tools such as Ansible Tower, Jenkins, or Rundeck to do all of what
+    we have defined previously, and more.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this chapter, we will look at all the three tools that we mentioned to understand
+    what do they offer so as to take our automation to the next level of abstraction
+    of automation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Specifically, we will cover the following topics:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing and configuring Ansible Tower
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Using Ansible Tower to manage playbooks and schedule
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing and configuring Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing and configuring Rundeck
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Scheduling tools to enable the next abstraction of automation
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Scheduling and automation tools enable us to automate tasks such as continuous
+    integration and continuous delivery. They are able to do this by providing the
+    following fairly standard services:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A web-based UI we can use to configure them
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Usually, a REST-based API so that we can use their features programmatically
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The ability to authenticate against its local store or possibly another service
+    (OAuth/**Security Assertion Markup Language** (**SAML**))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: They all fundamentally give us a clear way to automate tasks to suit our workflow
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Most security-related automation does boil down to doing a similar task over
+    and over again and looking at the differences. This is especially true when you
+    are in the line of doing security operations and security assessments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Remember that by using Ansible roles and the playbooks containing them, we are
+    already on our way to doing security automation. Now our aim is to take away the
+    grunt work of remembering to execute those playbooks and get going.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'There are three primary contenders that are used for this kind of automation.
+    They are listed and described here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible Tower
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Rundeck
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '| **Tools** | **Our take** | **License ** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Ansible Tower | Brilliant tool by the makers of Ansible so fits very well
+    with the idea of IT automation, which we extend to our security needs. | Paid
+    with a free trial |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Jenkins | The workhorse and the mainstay of a lot of CI/CD pipelines. Has
+    hundreds of plugins to extend its core functionality. The best option if price
+    or license is a concern. | Free and open source  |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Rundeck | Great tool for job scheduling and automation.  | A paid pro version
+    is available |'
+  prefs: []
+  type: TYPE_TB
+- en: In this chapter, we will install and configure all three tools to get you started.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Red Hat, who bought Ansible in the October 2015, has indicated that they plan
+    to open source Ansible Tower. They made this announcement at AnsibleFest 2016\.
+    You can follow the progress of that at [https://www.ansible.com/open-tower](https://www.ansible.com/open-tower).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Getting up and running
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Let's start by setting up each of the three tools we mentioned and look at some
+    of their features.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up Ansible Tower
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: There are multiple ways to install the Ansible Tower trial version. The simplest
+    way to get set up is by using their existing images from [https://www.ansible.com/tower-trial](https://www.ansible.com/tower-trial).
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can also set up manually using their bundle installation. Please have a
+    look at the requirements before installing at [http://docs.ansible.com/ansible-tower/3.1.4/html/installandreference/index.html](http://docs.ansible.com/ansible-tower/3.1.4/html/installandreference/index.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Run the following commands to install Ansible Tower in the Ubuntu 16.04 operating
+    system:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: Then edit the inventory file for updating password and other variables and run
+    the setup. The inventory file contains `admin_password` for the tower administrator
+    login account, `pg_host` and `pg_port` are Postgres database it will be required
+    if we are setting up multi-node setup. Then finally `rabbitmq` details for queuing
+    operations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: If you have Vagrant installed, you can simply download their Vagrant box to
+    get going.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Make sure you have Vagrant installed in your host system before running the
+    following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`$ vagrant init ansible/tower`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`$ vagrant up`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`$ vagrant ssh`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: It will prompt you to enter  IP address, username, and password to login to
+    the Ansible Tower dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/5d64f647-7035-4b4f-929d-25e92ffadc07.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then navigate the browser to `https://10.42.0.42` and accept the SSL error
+    to proceed. This SSL error can be fixed by providing the valid certificates in
+    the configuration at `/etc/tower` and need to restart the Ansible Tower service.
+    Enter the login credentials to access the Ansible Tower dashboard:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/129dc8fb-abed-4a43-853a-5a00bf690e8d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Once you log in, it will prompt you for the Ansible Tower license:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/7046a7ee-92b0-49ba-8cf5-05e48c05cd10.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Ansible Tower also provides **Role-Based Authentication Control** (**RBAC**),
+    which provides a granular level of control for different users and groups to manage
+    Tower. The following screenshot shows a new user being created with the System
+    Administrator privilege:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d59cb20b-cb31-40c8-8cb6-4e551ec6a913.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'To add inventory into Ansible Tower, we can simply enter it manually, we can
+    also use a dynamic script to gather inventory from cloud providers by providing
+    the authentication (or) access key. The following screenshot shows how we can
+    add the inventory into Ansible Tower, we can also provide variables for different
+    hosts by providing it in YAML or JSON format:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/567b4e71-7c73-4b16-b147-56168d855c54.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: We can also add credentials (or) keys to the tower by providing them in credential
+    management, which can be reused as well.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Secrets store in Ansible Tower are encrypted with a symmetric key unique to
+    each Ansible Tower cluster. Once stored in the Ansible Tower database, the credentials
+    may only be used, not viewed, in the web interface. The types of credentials that
+    Ansible Tower can store are passwords, SSH keys, Ansible Vault keys, and cloud
+    credentials.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/78d67f33-0a8a-440d-a564-5ad6814bf7f0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Once we have the inventory gathered, we can create jobs to perform the playbook
+    or ad-hoc command operations:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/4c1877ad-17b2-4efe-b7e8-674c83e238c9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Here we have selected the `shell` module and are running the `uname -a` command
+    against both nodes:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/fc8e0186-52a9-4dce-b9f7-a65a0e4c3183.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Once we launch the execution, we can see the standard output in the dashboard.
+    We can also access this using REST API:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/3ff8c0c0-ec93-40ec-923a-60daef08eb5b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Please refer to the Ansible Tower documentation for more detailed references.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There is another way of using Ansible Tower: `tower-cli` is a command-line tool
+    for Ansible Tower. Get started with the  `pip install ansible-tower-cli` command.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Ansible Tower REST API is a pretty powerful way to interact with the system
+  prefs: []
+  type: TYPE_NORMAL
+- en: This basically allows you to design your playbook workflow and so on using an
+    easy-to-follow web GUI with the added flexibility of calling this from another
+    CI/CD tool such as Jenkins.  Jenkins is, incidentally, the next software to set
+    up and learn.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Let's use an Ansible playbook to install Jenkins and get started with it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The following code snippet is a snippet of an Ansible playbook we wrote for
+    setting up Jenkins in the Ubuntu 16.04 OS.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once the setup has been done, playbook returns the default administrator password
+    required to log in to the application for the first time:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To set up Jenkins, run the following command. Where `192.168.1.7` is the server
+    IP address where Jenkins will be installed:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now we can configure Jenkins to install plugins, run scheduled jobs, and do
+    many other things. First, we have to navigate to the Jenkins dashboard by browsing
+    to `http://192.168.1.7:8080` and providing the auto-generated password. If the
+    playbook runs without any errors, it will display the password at the end of the
+    play:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/b53f3348-ad91-47a6-8fed-99f1792e07ce.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Create the new user by filling in the details and confirming to log in to the
+    Jenkins console:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/3655c6ce-9792-4549-86ec-846d12b19063.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Now we can install custom plugins in Jenkins, navigate to the Manage Jenkins
+    tab, select Manage Plugins, then navigate to the Available tab. In the Filter:
+    enter the plugin name as `Ansible`. Then select the checkbox and click Install
+    without restart:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/fdaded9b-7399-4635-a2e5-635a9d4ea6bf.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Now we are ready to work with the Ansible plugin for Jenkins. Create a new
+    project in the main dashboard, give it a name, and select Freestyle project to
+    proceed:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/eff81a92-6242-49ab-8ebc-4b35971e64b7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Now we can configure the build options, this is where Jenkins will give us
+    more flexibility to define our own triggers, build instructions, and post build
+    scripts:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d7712e23-9f6d-4743-a9b5-abca87358929.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The preceding screenshot is an example of a build invoking an Ansible ad-hoc
+    command. This can be modified to ansible-playbook or any other scripts based on
+    certain events.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Jenkins Ansible plugin also provides useful features such as configuring
+    advanced commands and passing credentials, keys from Jenkins itself.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once the build triggers based on an event, this can be sent to some artifact
+    storage, it can also be available in the Jenkins build console output:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/e933fb26-6493-48e9-b312-e52850dbcda8.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: This is a really very powerful way to perform dynamic operations such as triggering
+    automated server and stacks setup based on a code push to the repository, as well
+    as scheduled scans and automated reporting.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up Rundeck
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following Ansible playbook will set up Rundeck on the Ubuntu 16.04 OS.
+     It also adds the Rundeck service to start up the process:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To set up Rundeck, run the following command. Where `192.168.1.7` is the server
+    IP address where Rundeck will install:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Once it is successfully executed, navigate the browser to `http://192.168.1.7:4440`
+    and you can see the login panel for the Rundeck application. The default username
+    and password to log in to Rundeck is `admin`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c8287e07-3bd9-4c2c-93c0-f1101585a763.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Now we can create a new project to start working on. Provide a new Project
+    Name and go with the default settings for now:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/08461d41-6711-4464-8591-a6d421ca287b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Now, we can add multiple hosts into Rundeck to perform multiple actions. The
+    following screenshot shows an example of running the  `uname -a` command across
+    multiple nodes, which matches `osArch: amd64`, we can also create filters for
+    different use cases:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/2d416d9a-ffe1-45d0-beb7-05149da3c0d1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Using Rundeck, we can also schedule jobs to run at certain times and store the
+    output in different formats. Rundeck also provides a REST API that can be integrated
+    into the existing tool set.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Security automation use cases
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that once we have the tools set up, let''s go through some of the standard
+    tasks that allow us to do useful things with them. In case you haven''t noticed,
+    we love lists. Here is a list of tasks that will prepare you to build layers of
+    automation for the stuff that is important to you:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Adding playbooks or connecting your source code management (SCM) tools, such
+    as GitHub/GitLab/BitBucket
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Authentication and data security
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Logging output and managing reports for the automation jobs
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Job scheduling
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Alerting, notifications, and webhooks
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Adding playbooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When starting out, either we would like to add our custom playbooks to the IT
+    automation tools or we may be adding them to SCM tools such as GitHub, GitLab,
+    and BitBucket. We will configure and add our playbooks to all of the three tools
+    being discussed here.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible Tower configuration
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible Tower has multiple features to add playbooks to perform scheduling and
+    execution. We will see how we can add custom written playbooks (manual) and add
+    playbooks from version control systems such as Git. Pulling playbooks from  Ansible
+    Galaxy as well. Ansible Galaxy is your hub for finding, reusing, and sharing the
+    best Ansible content.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To add playbooks into Ansible Tower, we have to start by creating projects,
+    then select theSCM TYPE as Manual, and add the playbooks that already exist.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Warning**: There are no available playbook directories in `/var/lib/awx/projects`.
+    Either that directory is empty, or all of the contents are already assigned to
+    other projects. Create a new directory there and make sure the playbook files
+    can be read by the `awx` system user, or have Tower directly retrieve your playbooks
+    from source control using the SCM type option previously discussed.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can choose the SCM TYPE set to Git and provide a `github.com` URL pointing
+    to a playbook:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/554af815-f886-4992-9ff5-d82187098819.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Git SCM to add playbooks into projects
+  prefs: []
+  type: TYPE_NORMAL
+- en: We can also change the `PROJECTS_ROOT` under CONFIGURE TOWER to change this
+    location.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The added playbooks are executed by creating a job template. Then we can schedule
+    these jobs (or) we can launch directly:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Following is the screenshot of a new job template creation for playbook execution:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**![](img/c33ce511-85d7-4df6-b2c0-5d1edf3052e8.png)**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Playbook execution job template
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A job run is successful with output in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/fe07b80e-0344-4855-a6f8-5f3e1dbdd6b0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Playbook execution output in Ansible Tower
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins Ansible integration configuration
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Not surprisingly, Jenkins supports SCM to use playbooks and local directories
+    for manual playbooks too. This can be configured with the build options. Jenkins
+    supports both ad-hoc commands and playbooks to trigger as a build (or) post-build
+    action.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot shows how we can point our repository and specify
+    a branch as well. We can also specify credentials if we want to access private
+    repositories:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c2733a7a-ebce-4801-8289-a147ebadb44a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding Github (SCM) based playbooks for build
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Then we can add the Playbook path by specifying the location of the playbook
+    and defining inventory and variables as required:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/0028f394-5ea7-4bd2-be0d-5a599f72cd9c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Start playbook execution when build triggers
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Finally, we can execute the Jenkins job by triggering the Jenkins build (or)
+    we can integrate this with other tools:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/bcef17b5-87e0-489b-a2a3-24e8c8ebac4c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins build output of playbook execution
+  prefs: []
+  type: TYPE_NORMAL
+- en: Rundeck configuration
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Rundeck supports adding custom playbooks, as well as SCM and many other options.
+    The following screenshots show different options to add playbooks and modules
+    in Rundeck using the jobs feature.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/525750e9-851f-4874-be36-3c44b66ec960.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Rundeck has multiple options for us to choose from
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/6e072793-3c21-494b-9ad5-e2befc0fa520.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Rundeck Ansible Playbook configuration for variables and keys
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/8baeae91-7dfc-441e-be3b-becacc09fc15.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Rundeck job definition including overview of job details
+  prefs: []
+  type: TYPE_NORMAL
+- en: Authentication and  data security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When we talk about automation and working with systems, we should talk about
+    security. We are going to keep talking about security automation as that is the
+    title of the book.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Some of the security features the tools offer include:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: RBAC (authentication and authorization)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Web application over TLS/SSL (security for data in motion)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Encryption for storing secrets (security for data at rest)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: RBAC for Ansible Tower
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Ansible Tower supports RBAC to manage multiple users with different permissions
+    and roles. It also supports **Lightweight Directory Access Protocol** (**LDAP**) integration
+    in the enterprise version to support Active Directory. This feature allows us
+    to create different levels of users for accessing Ansible Tower. For example:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The operations team requires a system administrator role to perform playbook
+    execution and other activities like monitoring
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The security team requires a system auditor role to perform audit check for
+    compliance standards such as **Payment Card Industry Data Security Standard**
+    (**PCI DSS**) or even internal policy validation
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Normal users, such as team members, might just want to see how things are going,
+    in the form of status updates and failure (or) success of job status
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '![](img/10acb85d-52aa-4b55-8780-f959c561b05b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Users can be assigned to different types of roles
+  prefs: []
+  type: TYPE_NORMAL
+- en: TLS/SSL for Ansible Tower
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: By default, Ansible Tower uses HTTPS using self-signed certificates at `/etc/tower/tower.cert`
+    and `/etc/tower/tower.key`, these can be configured in the setup script. We can
+    also update this later with the same filenames.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information visit [http://docs.ansible.com/ansible-tower/latest/html/installandreference/install_notes_reqs.html#installation-notes](http://docs.ansible.com/ansible-tower/latest/html/installandreference/install_notes_reqs.html#installation-notes).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Encryption and data security for Ansible Tower
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible Tower has been created with built-in security for handling encryption
+    of credentials that includes passwords and keys. It uses Ansible Vault to perform
+    this operation. It encrypts passwords and key information in the database.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Read more at [http://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html](http://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: RBAC for Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In Jenkins, which is a more generic tool, we can extend its functionality by
+    using a plugin. The Role Strategy Plugin is a community plugin to manage roles
+    for Jenkins. Using it, we can create different access level controls for users
+    and groups:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c745e9a1-51da-4ea4-bb21-0d3b65ed6b4c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Role strategy plugin of Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Roles usually need to align with the team settings and business requirements.
+    You may want to fine-tune this per your requirements.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Read more at [https://wiki.jenkins.io/display/JENKINS/Role+Strategy+Plugin](https://wiki.jenkins.io/display/JENKINS/Role+Strategy+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: TLS/SSL for Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: By default, Jenkins runs as plain old HTTP. To enable HTTPS, we can use a reverse
+    proxy, such as Nginx, in front of Jenkins to serve as HTTPS.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For reference, visit [https://www.digitalocean.com/community/tutorials/how-to-configure-jenkins-with-ssl-using-an-nginx-reverse-proxy](https://www.digitalocean.com/community/tutorials/how-to-configure-jenkins-with-ssl-using-an-nginx-reverse-proxy).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Encryption and data security for Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We are using Jenkins' default credential feature. This will store the keys and
+    passwords in the local filesystem. There are also different plugins available
+    for Jenkins to handle this, such as [https://wiki.jenkins.io/display/JENKINS/Credentials+Plugin](https://wiki.jenkins.io/display/JENKINS/Credentials+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot is a reference to show how we can add credentials
+    in Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/0c385f10-eced-4595-8d00-6e8fcfab0550.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: RBAC for Rundeck
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Rundeck also provides RBAC as Ansible Tower. Unlike Tower, here we have to configure
+    using the YAML configuration file in `/etc/rundeck/`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following code snippet is an example of creating an admin user policy:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: For more information about creating different policies, visit [http://rundeck.org/docs/administration/access-control-policy.html](http://rundeck.org/docs/administration/access-control-policy.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: HTTP/TLS for Rundeck
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'HTTPS can be configured for Rundeck using the `/etc/rundeck/ssl/ssl.properties`
+    file:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: For more information, visit [http://rundeck.org/docs/administration/configuring-ssl.html](http://rundeck.org/docs/administration/configuring-ssl.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Encryption and data security for Rundeck
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Credentials, such as password and keys, are stored in local storage and encrypted
+    and use the Rundeck key store to encrypt and decrypt. This also supports different
+    key store plugins to use key storage, such as the storage converter plugin. Access
+    to the keys in the storage facilities is restricted by use of the **access** **control
+    list** (**ACL**) policies.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Output of the playbooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Once the automation jobs have finished, we would like to know what happened.
+    Did they run completely, were there any errors faced, and so on. We would like
+    to know where can we see the output of the playbooks executing and if any other
+    logs that get created.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Report management for Ansible Tower
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: By default, Ansible Tower itself is a reporting platform for the status of the
+    playbooks, job executions, and inventory collection. The Ansible Tower dashboard
+    gives an overview of the total projects, inventories, hosts, and status of the
+    jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The output can be consumed in the dashboard, standard out, or by using the REST
+    API and we can get this via `tower-cli` command line tool as well, which is just
+    a pre-built command line tool for interfacing with the REST API.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/b8421697-957d-4527-a83c-bd6fe22d6635.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Ansible Tower dashboard
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/ae0d5c7e-73d7-4508-aa80-ed924e9c1699.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Ansible Tower standard output
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/adfa2820-d792-48fb-8012-0e03a7eb070f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Ansible Tower REST API
+  prefs: []
+  type: TYPE_NORMAL
+- en: Report management for Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins provides both standard output and REST API for managing reporting. Jenkins
+    has a very large community and there are multiple plugins available, such as HTML
+    Publisher Plugin and Cucumber Reports Plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'These plugins provide visual representation of the output:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/15fd8b11-130c-42e3-9def-8c0b684f6d18.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Standard output by the Jenkins job console
+  prefs: []
+  type: TYPE_NORMAL
+- en: Report management for Rundeck
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Rundeck also provides both a standard output and a REST API to query the results:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/f50f2cbf-da86-4ca6-ac4f-184e84d63b84.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Output of a job that can be consumed via stdout, TXT, and HTML formats
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scheduling of jobs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The scheduling of jobs is simple and straightforward in Ansible Tower. For a
+    job, you can specify a schedule and the options are mostly like cron.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For example, you can say that you have a daily scan template and would like
+    it to be executed at 4 a.m. every day for the next three months. This kind of
+    schedule makes our meta automation very flexible and powerful.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Alerting, notifications, and webhooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Tower supports multiple ways of alerting and notifying users as per configuration.
+    This can even be configured to make an HTTP `POST` request to a URL of your choice
+    using a webhook:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/de4acb14-dd56-484a-9dc7-3092d583ff66.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Ansible Tower notification using slack webhook
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We completed a whirlwind tour of some IT automation and scheduler software.
+    Our main aim was to introduce the software and highlight some of its common features.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'These features include the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Offering encryption for our secrets
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Running as per our schedule requirements
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The ability to get good reports
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: We already know about Ansible roles that allow us to reuse and create great
+    playbooks. Coupled with these features, we have a complete automation system ready.
+    Not only we will be able to run our tasks and jobs as many times as we like, we
+    will get updates on how they ran. Also, since our tasks run on protected servers,
+    it is important that the secrets we share for them to run are safe as well.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we move away from thinking about the mechanics of Ansible
+    automation to squarely thinking about security automation in specific situations.
+    Automating our server's patches is the most obvious, and possibly popular, requirement.
+    We will apply security automation techniques and approaches to set up a hardened
+    WordPress and enable encrypted backups.
+  prefs: []
+  type: TYPE_NORMAL

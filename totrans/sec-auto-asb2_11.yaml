@@ -1,0 +1,796 @@
+- en: Ansible Security Best Practices, References, and Further Reading
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Last chapter. We have finally got here. Time to reflect on what we have learned
+    together. Time to list where you should head from here. Most importantly, there
+    are a few topics that will enhance your experience of working with Ansible.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Some of the topics we''ll cover in this chapter are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Working with Ansible Vault and why you should be storing all your secrets inside
+    the vault
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Using Ansible Galaxy for sharing playbooks and roles
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Securing the master controller
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Additional references
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Looking forward to what's new and upcoming in Ansible 2.5
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Working with Ansible Vault
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible Vault is a command line utility, by default installed along with Ansible.
+    It allows us to encrypt secrets such as keys, credentials, passwords, and so on
+    to include in our playbooks. By doing this, we can also use these encrypted files
+    to share with others as they contain password protection to access the encrypted
+    data. We can use this feature to encrypt our variables, templates, and files inside
+    our playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible version 2.3 supports encrypting single variables using an Ansible single
+    encrypted variable with the `!vault`  tag. We will see some examples of how we
+    will use this in our playbooks in next section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Read more about Ansible Vault at [https://docs.ansible.com/ansible/latest/vault.html](https://docs.ansible.com/ansible/latest/vault.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: As this is a very simple and powerful way to store and manage secret data, it's
+    really important to use Ansible Vault to store all the secret information in our
+    playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Some of the really good use cases include how we can use these playbooks without
+    changing our version control systems, CI/CD integration pipelines, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How to use Ansible Vault with variables and files
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The following examples demonstrate how we can use secrets in our playbook variable
+    files.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let's take an example of installing MySQL server in an Ubuntu operating system
+    using the following playbook. As per the Ansible documentation, it's easy and
+    better to store Vault variables and normal variables differently.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following code snippet is the high-level file structure for installing
+    MySQL server with the root password:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now we can see that the `mysqlsetup` role contains the following tasks that
+    require the `mysql_root_password` variable, which contains the root password for
+    the MySQL server:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, if we see the `group_vars/main.yml` file, the content looks as shown in
+    the codeblock. It contains the secrets variable to use in the playbook, called `mysql_root_password`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To encrypt the vault file, we will use the following command and it then prompts
+    for the password to protect:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, if we see the vault content it looks like the following, with `AES256`
+    encryption using the given password:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, to execute the playbook run the following command, it will prompt for
+    the vault password:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: The following screenshot shows that we provided the Vault password while executing
+    the Ansible Playbook
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/8c2b8831-0a42-4232-9faf-85a298ee345b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: We can also pass the `ansible-vault` password file with playbook execution by
+    specifying flag, it helps in our continuous integration and pipeline platforms.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The following file contains the password which used to encrypt the `mysql.yml`
+    file:'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: Make sure to give proper permissions for this file, so others cannot access
+    this file using `chmod`. Also, it's good practice to add this file to your `.gitignore`,
+    so it will not be version controlled when pushing playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Vault password file can be an executable script, which can retrieve data stored
+    somewhere securely rather than having to keep the key in plain text on disk and
+    relying on file permissions to keep it safe.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To pass the vault password file through the command line, use the following
+    command when executing playbooks:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: We can also use system environment variables such as `ANSIBLE_VAULT_PASSWORD_FILE=~/.vaultpassword`
+    and Ansible will use this while executing playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can use `ansible-vault` for multiple operations, such as creating a file
+    using `create` argument. This encrypts the content of the file by default. It
+    will also open the default text editor to edit the file as well:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: We can use `view` command to see the vault encrypted information in plain text.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To change the content, we can use the `edit` sub command in `ansible-vault`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: We can also decrypt the secret information using the following command
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To change the vault password for key rotation, we can use the `rekey` option:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: Ansible Vault single encrypted variable
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This feature is available from Ansible version 2.3\. It allows us to use vaulted
+    variables with the `!vault` tag in YAML files; we will see a simple example and
+    use case for this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The following playbook is used to perform reverse IP lookups using the `ViewDNS`
+    API.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We want to secure `api_key` as it contains sensitive information. We use the  `ansible-vault
+    encrypt_string` command to perform this encryption. Here, we used `echo` with
+    the `-n` flag to remove the new line:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/ed750de2-f087-4e59-9f34-e80548233fc6.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then we can place the variable, as shown in the following code block, inside
+    the playbook variables and execute the playbook as normal, using `ansible-playbook`
+    with the `--ask-vault-pass` option:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: Then, playbook being executed will be automatically decrypted after we provide
+    it with the given password.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The screenshot below shows the playbook executing after prompting for the vault
+    password.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/f776e949-4511-4722-a59c-941e88215c39.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Read more about `encrypt_string` options at [https://docs.ansible.com/ansible/2.4/vault.html#use-encrypt-string-to-create-encrypted-variables-to-embed-in-yaml](https://docs.ansible.com/ansible/2.4/vault.html#use-encrypt-string-to-create-encrypted-variables-to-embed-in-yaml).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible Vault usage in Ansible Tower
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible Tower is already integrated with Ansible Vault.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The following screenshot refers to creating new credentials in Ansible Tower.
+    Also we can add Vault Password, this enables users to use a more secure way of
+    storing secrets and retrieving them
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/0f27e1dd-3ce7-443d-99e8-77205adba336.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Setting up and using Ansible Galaxy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible Galaxy, also known as Galaxy, is an official centralized hub for finding,
+    sharing, and reusing Ansible roles. This allows the community to share and collaborate
+    on Ansible playbooks, and allows new users to quickly get started with using Ansible.
+    To share our custom-written roles with the community, we can publish them to Ansible
+    Galaxy using GitHub authentication.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'These roles can be accessed at [https://galaxy.ansible.com](https://galaxy.ansible.com)
+    as well as using a command-line tool called `ansible-galaxy`, which is installed
+    with Ansible:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/4dd06c08-4454-49e5-8430-d2ede35d1d2a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: We can find roles using different parameters such as Author, Platform, Tag,
+    and so on. This allows users to understand whether this role works for their distribution
+    and version, which Ansible version is required, and other information.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot shows how we can use `ansible-galaxy` CLI to perform
+    different operations, such as searching and installing:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/06b0930a-7f1f-4b45-aebb-1d05b34b01cf.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Read more about Ansible Galaxy from docs at [http://docs.ansible.com/ansible/latest/galaxy.html](http://docs.ansible.com/ansible/latest/galaxy.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Learn more about Galaxy usage at [https://galaxy.ansible.com/intro](https://galaxy.ansible.com/intro).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Using Ansible Galaxy roles
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To download a role from the Ansible Galaxy website, we can run the following
+    command, where `username` and `role_name` are the options:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following command will download the `docker_ubuntu` role by user `angstwad`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To use this role to install Docker on Ubuntu is as simple as including this
+    role in our playbook and executing it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We can install or include roles direct from GitHub by specifying the GitHub
+    URL. This allows the use of private version control systems as local inventories
+    of playbook roles:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: Publishing our role to Ansible Galaxy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: To publish our own roles to Ansible Galaxy, we need to have a GitHub account,
+    which will be used to authenticate Ansible Galaxy, and the version control repository
+    in GitHub will be the place to store our roles.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following steps are used to create and share a new role in Ansible Galaxy:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'First, create a new repository in GitHub and clone it locally using the following
+    command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then we can create a role structure using the `ansible-galaxy` command to create
+    the structure:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, we can add tasks and other steps in the same way as we created them previously.
+    The following are some good practices from Ansible Galaxy itself ([https://galaxy.ansible.com/intro#good](https://galaxy.ansible.com/intro#good)):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide clear documentation in`README.md`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give accurate information in `meta/main.yml`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Include dependencies in `meta/main.yml`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Prefix variable names with the role name.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Integrate your roles with Travis CI.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The meta file contains the information that will be used to publish the role
+    in Ansible Galaxy; we can modify it as required. Here is an example:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then we can push the role to GitHub and import it to Ansible Galaxy by adding
+    a new role in the portal:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/6b360bb5-23e8-412b-9829-4d25990532d2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Refer to http://docs.ansible.com/ansible/latest/playbooks_reuse.html for how
+    to write reusable roles and more details about writing community roles.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible Galaxy local setup
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: To set up Ansible Galaxy locally, we have different methods. Most of the installations
+    use containers behind the scenes. The following steps describe how to install
+    an Ansible Galaxy local setup using `docker` and `docker-compose`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Before proceeding, we need the following prerequisites:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible 2.4+
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Docker
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The `docker-py` Python module
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The `docker-compose` Python module
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: GNU make
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Git
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'We can clone the `galaxy` repository by running the following `git` command,
+    which will clone the entire galaxy repository maintained by Ansible:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Change the required variables in the galaxy playbook; by default it will assume
+    that the installation is in localhost. Also, update the passwords and other variables
+    inside `inventory` file:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Then execute the following command to start the Ansible playbook setup to start
+    the local Ansible Galaxy
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: This will take a while, as it has to download multiple Docker containers locally
+    and set up the integration between them using `docker-compose`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once playbook execution has completed, we can see the following output about
+    running Docker containers. It still takes some time to do database migrations
+    and start the web server application:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/2b51ed16-33ff-4012-991b-de32877cf62d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then once the setup is completed, we can navigate to `http://localhost` to
+    see the web interface:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/be1b5fdf-0e22-4a1c-a6a0-59bb5dc91f96.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Read more about Ansible Galaxy local setup and other options for authentication
+    and deployment at [https://github.com/ansible/galaxy/blob/develop/INSTALL.md](https://github.com/ansible/galaxy/blob/develop/INSTALL.md).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible controller machine security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The controller machine for Ansible requires SSH and Python to be installed and
+    configured. Ansible has a very low attack surface. In January 2017, multiple security
+    issues were found by a company called Computest.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Read more about what they found at [https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt](https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt).
+  prefs: []
+  type: TYPE_NORMAL
+- en: This vulnerability was dubbed *owning the farm*, since compromising the controller
+    would imply that all the nodes could potentially be compromised.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The controller machine should be a hardened server and treated with all the
+    seriousness that it deserves. In the vulnerability that was disclosed, if a node
+    gets compromised attackers could leverage that to attack and gain access to the
+    controller. Once they have access, the could extend their control over all the
+    other nodes being managed by the controller.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Since the attack surface is already very limited, the best we can do is ensure
+    that the server stays secure and hardened.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Two projects worth following and investigating are:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: https://docs.openstack.org/ansible-hardening/latest/getting-started.html#usage
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: https://github.com/dev-sec/ansible-os-hardening
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Explanation of Ansible OS hardening playbook
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We have seen multiple playbooks and guidelines for following different standards in
+    [Chapter 7](8fe755f4-a411-4f82-b2e7-b650c1b1d60f.xhtml), *Security Hardening for
+    Applications and Networks*. This can be completely customized based on your environment,
+    but following certain guidelines will ensure it's well protected.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The following playbook is created by DevSec for Linux baselines. It covers most
+    of the required hardening checks based on multiple standards, which includes Ubuntu
+    Security Features, NSA Guide to Secure Configuration, ArchLinux System Hardening
+    and other. This can be improved if required by adding more tasks (or) roles.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible OS Hardening Playbook covers
+  prefs: []
+  type: TYPE_NORMAL
+- en: Configures package management, that is, allows only signed packages
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Removes packages with known issues
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configures `pam` and the `pam_limits` module
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Shadow password suite configuration
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configures system path permissions
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Disables core dumps through soft limits
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Restricts root logins to system console
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Sets SUIDs
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configures kernel parameters through `sysctl`
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The following command is to download the `os-hardening` role from Ansible Galaxy:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/ad9fd2aa-e466-43ec-805d-52c8947b9096.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then call that role in your playbook and execute it to perform the baseline
+    hardening, and also change the variables as required. Refer to [https://galaxy.ansible.com/dev-sec/os-hardening](https://galaxy.ansible.com/dev-sec/os-hardening)
+    for more detailed options:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot refers to the playbook execution, with a list of checks
+    it is performing on the Ansible controller machine:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c7639d3f-641f-430c-adf8-8818d0892621.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The following is the checks to minimize the system access by updating the configuration
+    parameters in the system:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a8b81e39-aabb-48d1-a212-4edf38e73de9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'The following screenshot refers to upgrading the password hashing algorithm,
+    updating the `suid` and guide for the superuser binaries:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c060feb3-0cea-4230-a68e-9b314373093d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: To know more checks what this playbook executes visit [https://github.com/dev-sec/ansible-os-hardening/blob/master/tasks/main.yml](https://github.com/dev-sec/ansible-os-hardening/blob/master/tasks/main.yml).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Best practices and reference playbook projects
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible is powerful and flexible. People use it in many different ways, and
+    one of the ways we can understand how to use it for security automation is to
+    keep track of and read playbooks created for specific use cases.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Projects such as Algo, DebOps, and OpenStack are large Ansible playbook projects
+    that are well maintained and secure by default.
+  prefs: []
+  type: TYPE_NORMAL
+- en: DebOps – your Debian-based data center in a box
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: DebOps ([https://debops.org](https://debops.org)) is a project created by Maciej
+    Delmanowski. It contains a collection of various Ansible playbooks that can be
+    used for Debian and Ubuntu hosts. This project has more than 128 Ansible roles,
+    which are customized for production use cases and work with multiple environments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can see a list of available playbook services at [https://github.com/debops/debops-playbooks](https://github.com/debops/debops-playbooks):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/283f0954-ca5a-4974-be58-a9282c049c5c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Setting up the DebOps controller
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'There are two different ways we can quickly get started with a DebOps setup:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Vagrant setup
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Docker setup
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Run the following command to start the Docker container created by DebOps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: We can create and execute different roles to perform different actions using
+    DebOps playbooks. Refer to the main documentation at [https://docs.debops.org/en/latest/index.html](https://docs.debops.org/en/latest/index.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Algo – set up a personal IPSEC VPN in the cloud
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Algo from Trail of Bits provides Ansible roles and scripts to automate the installation
+    of a personal IPSEC VPN.
+  prefs: []
+  type: TYPE_NORMAL
+- en: By running the Ansible playbooks, you get a complete hardened VPN server, and
+    deployments to all major cloud providers are already configured ([https://github.com/trailofbits/algo/blob/master/docs/deploy-from-ansible.md](https://github.com/trailofbits/algo/blob/master/docs/deploy-from-ansible.md)).
+  prefs: []
+  type: TYPE_NORMAL
+- en: OpenStack-Ansible
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: OpenStack-Ansible is the official project for deploying and configuring OpenStack
+    using Ansible playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Start here for OpenStack-Ansible: [https://github.com/openstack/openstack-ansible](https://github.com/openstack/openstack-ansible).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Not only does this project use Ansible playbooks extensively, but their security
+    documentation is also worth reading and emulating. The best part is that all of
+    the security configuration is declarative security codified in Ansible playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Documentation on this project is available at [https://docs.openstack.org/project-deploy-guide/openstack-ansible/latest/app-security.html](https://docs.openstack.org/project-deploy-guide/openstack-ansible/latest/app-security.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Additional references
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Some good online references and links for Ansible that we found during our
+    research for this book  are:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Streisand**: Automated installation and configuration of anti-censorship
+    software'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Sovereign**: Maintain your own private cloud using Ansible playbooks'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**AWX**: Open source version of Ansible Tower'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Streisand – automated installation and configuration of anti-censorship software
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Using Ansible playbooks, Streisand can set up a cloud server full of software
+    to bypass internet restrictions and online censorship. Tools that are set up include
+    IPSEC-based VPN, OpenVPN, OpenConnect, Tor, and WireGuard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Get started with Streisand at [https://github.com/StreisandEffect/streisand](https://github.com/StreisandEffect/streisand).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Sovereign – maintain your own private cloud using Ansible playbooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Using Ansible playbooks, Sovereign sets up your own private cloud with open
+    source software. This puts you in control of your data with services including
+    email, calendar, file sync, RSS reader, Git hosting, read it later, and chat.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Get started with Sovereign at [https://github.com/sovereign/sovereign](https://github.com/sovereign/sovereign).
+  prefs: []
+  type: TYPE_NORMAL
+- en: AWX – open source version of Ansible Tower
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: AWX provides a web-based user interface, REST API, and task engine built on
+    top of Ansible. AWX can be used with the tower-CLI tool and client library.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Get started with AWX here: [https://github.com/ansible/awx](https://github.com/ansible/awx).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Get started with tower-cli here: [https://github.com/ansible/tower-cli/](https://github.com/ansible/tower-cli/).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Coming soon to Ansible 2.5
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Ansible version 2.5 is expected to be released in March 2018\. There are no
+    major changes from the current stable release of 2.4.2\. Since the software world
+    is always a moving target, a good place to keep track of what may or may not change
+    is to follow the roadmap and porting guide:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Ansible 2.5 Porting Guide** (https://docs.ansible.com/ansible/devel/porting_guide_2.5.html)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Ansible 2.5 roadmap** (https://github.com/ansible/ansible/blob/devel/CHANGELOG.md#2.5)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we covered how to work with Ansible Vault, using the hosted
+    Ansible Galaxy site and even self-hosting it. We also discussed on a need for keeping
+    the controller node safe and secure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Apart from these topics, we also looked at some of the most comprehensive software
+    projects that use Ansible in a variety of ways. In all these projects, Ansible
+    is the centrepiece of their orchestration and provisioning of software and related
+    services. The main idea of highlighting all these projects was to expand on the
+    theme of the book and also make you aware of the sheer number of ways Ansible
+    is being used for automation, especially around security workloads. We also looked
+    at what is coming in the next year in terms of Ansible 2.5, and concluded that
+    so far nothing we have covered will break when it does become stable.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We are looking forward to seeing what kinds of security automation workflows
+    all of you are going to build after taking this journey with us.
+  prefs: []
+  type: TYPE_NORMAL

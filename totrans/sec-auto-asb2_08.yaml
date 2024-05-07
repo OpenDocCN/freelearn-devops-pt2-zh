@@ -1,0 +1,703 @@
+- en: Continuous Security Scanning for Docker Containers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Docker containers are the new way developers package applications. The best feature
+    of containers is the fact that they contain the code, runtime, system libraries,
+    and all the settings that are required for the application to work. Due to the
+    ease of use and deployment, more and more applications are getting deployed in
+    containers for production use.
+  prefs: []
+  type: TYPE_NORMAL
+- en: With so many moving parts, it becomes imperative that we have the capability
+    to continuously scan Docker containers for security issues. In this chapter, we
+    will look at various ways of doing just that. Starting with the familiar CIS benchmark
+    scripts invoked using Ansible, we will move on to clair-scanner, which is a great
+    tool to scan for existing vulnerabilities and integrates well with your existing
+    CI/CD workflow, if you need.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In detail, we will explore the following topics in this chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Understanding continuous security concepts
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Automating vulnerability assessments of Docker containers using Ansible
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Scheduled scans using Ansible Tower for Docker security
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Scheduled scans using Ansible Tower for operating systems and kernel security
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Scheduled scans for file integrity checks, host level monitoring using Ansible
+    for various compliance initiatives
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Understanding continuous security concepts
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: One of the key approaches to emerge out of DevOps is the idea of immutable infrastructure.
+    It means that every time there needs to be a runtime change, either in application
+    code or configuration, the containers are built and deployed again and the existing
+    running ones are torn down.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Since that allows for predictability, resilience, and simplifies deployment
+    choices at runtime, it is no surprise that many operations teams are moving toward
+    it. With that comes the question of when these containers should be tested for
+    security and compliance. By embracing the process of continuous security scanning
+    and monitoring, as discussed in this chapter, you can automate for a variety of
+    workloads and workflows.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Automating vulnerability assessments of Docker containers using Ansible
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Containers are everywhere. Let's look at some of the techniques and tools to
+    perform scans and assess the Docker containers and environments using Ansible.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'There are many different ways of evaluating the security of containers. In
+    this chapter, we will look at some of them and how they can be used with Ansible:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Tool** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Docker Bench | A security shell script to perform checks based on CIS |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Clair | A tool to perform vulnerability analysis based on the CVE database
+    |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Anchore | A tool to perform security evaluation and make runtime policy decisions
+    |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `vuls` | An agent-less vulnerability scanner with CVE, OVAL database |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `osquery` | OS instrumentation framework for OS analytics to do HIDS-type
+    activities |'
+  prefs: []
+  type: TYPE_TB
+- en: Docker Bench for Security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Docker Bench for Security** is a shell script to perform multiple checks
+    against the Docker container environment. It will give a more detailed view of
+    the security configuration based on CIS benchmarks. This script supports most
+    of the Unix operating systems as it was built based on the POSIX 2004 compliant.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: More details about the tool information can be found at [https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are the high-level areas of checks this script will perform:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Host configuration
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Docker daemon configuration and files
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Docker container images
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Docker runtime
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Docker security operations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Docker swarm configuration
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The following playbook will perform a Docker bench security scan against the
+    Docker environment and return a detailed report:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Docker bench security Ansible playbook in action:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/66d4e4e4-d03c-4e8d-add9-ab0a391a6fd0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Docker bench security Ansible playbook in action
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The output of the playbook will download and scan the containers based on the
+    CIS benchmark and store the results in a `log` file, the output of which can be
+    seen here:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/85657f30-7178-4c75-91ac-c19f140c2278.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Detailed Docker bench security analysis report
+  prefs: []
+  type: TYPE_NORMAL
+- en: Clair
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Clair allows us to perform static vulnerability analysis against containers
+    by checking with the existing vulnerability database. It allows us to perform
+    vulnerability analysis checks against our Docker container images using the Clair
+    database. More details about Clair can be found at [https://github.com/coreos/clair](https://github.com/coreos/clair).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up Clair itself is really difficult and scanning using the API with
+    Docker images makes more difficult. Here comes clair-scanner, it makes really
+    simple to set up and perform scans using the REST API.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Read more about clair-scanner at  [https://github.com/arminc/clair-scanner](https://github.com/arminc/clair-scanner).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Clair-scanner can trigger a simple scan against a container based on certain
+    events, to check for existing vulnerabilities. Furthermore, this report can be
+    forwarded to perform the team responsible for fixes and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following playbook will set up the required Docker containers and configuration
+    to perform clair-scanning. It assumes that the target system has Docker and the
+    required libraries installed:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: The following screenshot is the execution of clair-scanner setup with Docker
+    Containers using Ansible
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/95c063eb-a6c0-476b-be4a-243423ab9cf1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Setting up clair-scanner with Docker containers using Ansible
+  prefs: []
+  type: TYPE_NORMAL
+- en: It will take a while to download and setup the CVE database after playbook execution.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following playbook will be used to run clair-scanner to perform an analysis
+    on the containers by making an API request to the server:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: The following screenshot is the clair-scanner in action for the requested docker
+    images. As you can see fatal error, so when it found any issues with docker image
+    it returns error and we can handle it using `ignore_errors`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/20f95437-597d-406e-adcb-317ba4134f1e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Clair-scanner execution in action
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Here is the output of the playbook running clair-scanner and the output of
+    the report in JSON format:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/604c7d53-1ed1-47e0-af85-ae15e4f5b234.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The output of the report includes vulnerability CVE and severity
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scheduled scans using Ansible Tower for Docker security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Continuous security processes are all about the loop of planning, doing, measuring,
+    and acting:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d055e059-aaaf-4d38-a2f1-11c37f25eebb.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Deming Cycle from Wikimedia Commons
+  prefs: []
+  type: TYPE_NORMAL
+- en: By following standard checklists and benchmarks and using Ansible to execute
+    them on containers, we can check for security issues and act on them. Anchore
+    is an analysis and inspection platform for containers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Anchore – open container compliance platform
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Anchore is one of the most popular tools and services to perform analysis, inspection,
+    and certification of container images. It provides multiple services and platforms
+    to set up, the most stable and powerful way is to set up the local service using
+    Anchore Engine, which can be accessed via the REST API. In the following documentation,
+    we will see how to set up the service using Anchore Engine and how we can use
+    this REST API to perform continuous security scanning and analysis of Docker containers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following items are high level operations Anchore can perform:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Policy evaluation operations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Image operations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Policy operations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Registry operations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Subscription operations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: System operations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Read more about the Anchore Engine service at [https://github.com/anchore/anchore-engine](https://github.com/anchore/anchore-engine).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Anchore Engine service setup
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following playbook will set up the Anchore Engine service, which contains
+    the engine container as well as the `postgres` to store database information.
+    The `admin_password` variable is the admin user password to  access the REST API
+    of Anchore:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot is the Ansible playbook execution of Anchore engine
+    service setup:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/3f6352ba-e5ba-4be6-b7c1-b026e4dcb6b8.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Anchore Engine service setup using Ansible playbook
+  prefs: []
+  type: TYPE_NORMAL
+- en: Anchore CLI scanner
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that we have the Anchore Engine service REST API with access details, we
+    can use this to perform the scanning of container images in any host. The following
+    steps are the Ansible Tower setup to perform continuous scanning of container
+    images for vulnerabilities.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The playbook for scanning a container image is shown as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: The options to perform  `anchore-cli` can be customized as required, please
+    refer to the documentation at [https://github.com/anchore/anchore-cli](https://github.com/anchore/anchore-cli).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now, we have to create the new project in Ansible Tower to add the playbook. 
+    Then we can select the playbook source from version control, or required source
+    with details:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/1e8d0847-5d4b-4f7b-9466-3a7d25722f83.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then we have to create a new job template to provide the options for executing
+    the playbook using Ansible Tower:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/454e5c03-dfb4-4682-841d-0ef7042430b0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We can also pass variables via Ansible Tower UI. As you can see, we are passing
+    some secrets and we will see how we can leverage Ansible Vault to store and use
+    them securely:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/e8279541-428b-42f8-9679-85fbbfa0dde3.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We can also schedule this playbook to run weekly or monthly, as required. Also
+    note this can be customized based on use cases:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/9e26ee66-df77-4747-8c18-dea06decca55.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Then we can also perform on-demand scans by launching the job. The following
+    screenshot is the reference for the `ubuntu:latest` Docker image vulnerabilities
+    with CVE details and list of packages vulnerable:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/56b8d6fb-affd-4517-92e1-a1fe9d2b1596.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Scheduled scans using Ansible Tower for operating systems and kernel security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Continuous security scanning requires us to manage it in a software like Ansible
+    Tower. While most of the discussed tools can be used for scanning and maintaining
+    a benchmark for security, we should think about the entire process of the incident
+    response and threat detection workflow:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Preparation
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Detection and analysis
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Containment, eradication, and recovery
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Post-incident activity
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Setting up all such scanners is our preparation. Using the output of these scanners
+    gives us the ability to detect and analyze. Both containment and recovery are
+    beyond the scope of such tools. For the process of recovery and post-incident
+    activity, you may want to consider playbooks that can trash the current infrastructure
+    and recreate it as it is.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'As part of our preparation, it may be useful to get familiar with the following
+    terms as you will see them being used repeatedly in the world of vulnerability
+    scanners and vulnerability management tools:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Term** | **Full form (if any)** | **Description of the term** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| CVE | Common Vulnerabilities and Exposures | It is a list of cybersecurity vulnerability
+    identifiers. Usage typically includes CVE IDs. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| OVAL | Open Vulnerability and Assessment Language | A language for finding
+    out and naming vulnerabilities and configuration issues in computer systems. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| CWE | Common Weakness Enumeration | A common list of software security weaknesses.
+    |'
+  prefs: []
+  type: TYPE_TB
+- en: '| NVD | National Vulnerability Database | A US government vulnerability management
+    database available for public use in XML format. |'
+  prefs: []
+  type: TYPE_TB
+- en: Vuls – vulnerability scanner
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Vuls** is an agent-less scanner written in golang. It supports a different
+    variety of Linux operating systems. It performs the complete end-to-end security
+    system administrative tasks such as scanning for security vulnerabilities and
+    security software updates. It analyzes the system for required security vulnerabilities,
+    performs security risk analysis based on the CVE score, sends notifications via
+    Slack and email, and also provides a simple web report with historical data.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Read more about vuls at [https://github.com/future-architect/vuls](https://github.com/future-architect/vuls).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Vuls setup playbook
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The following playbook is used to set up `vuls` in an Ubuntu 16.04 system using
+    Docker containers. The following playbook assumes that you already have docker
+    installed and the required packages.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The playbook has mainly two roles for setting up `vuls` using Docker containers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`vuls_containers_download`'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`vuls_database_download`'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Pulling the Docker containers locally using the `docker_image` module:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then downloading the CVE and OVAL databases for the required operating systems
+    and distributions versions:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The global variables file looks as follows. We can add more `redhat_oval_versions`,
+    such as `5`. The `nvd_database_years` will download the CVE database up until
+    the end of 2017:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot is the Ansible playbook execution for vuls setup:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a8393a43-938e-4c3f-af12-0711aef5cb8b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Vuls setup playbook in action
+  prefs: []
+  type: TYPE_NORMAL
+- en: Vuls scanning playbook
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now, it''s time to perform the scanning and reporting using the `vuls` Docker
+    containers. The following playbook contains simple steps to perform the `vuls`
+    scan against virtual machines and containers, and send the report to slack and
+    web:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following file is the configuration file for `vuls` to perform the scanning.
+    This holds the configuration for slack alerting and also the server to perform
+    scanning. This can be configured very effectively as required using `vuls` documentation:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following screenshot is Ansible playbook execution for vuls scanning in
+    action:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/b9ee7989-87b9-49d2-80a1-7682070bfaa7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Vuls scanning playbook in action
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once the reporting container has executed, based on the configuration options, `vuls`
+    will notify the issues to the respective slack channel:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/0bc2665a-9572-4911-93ec-7eac35721b0e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We can also visit the web UI interface of the `vuls` server IP address to see
+    the detailed results in tabular and portable format. This is very useful to manage
+    large amount of servers and patches at scale:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/9a9e5c82-cfb7-4b9a-828e-5dceda00315c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We can also get deeper by digging into the issues, severity, operating system,
+    and so on in the report:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/80fa4ebb-c50f-408a-b00c-31b1b8d6eadf.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: This can be part of the CI/CD life cycle as an infrastructure code and then
+    we can run this as a scheduled scan using Ansible Tower or Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scheduled scans for file integrity checks, host-level monitoring using Ansible
+    for various compliance initiatives
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'One of the many advantages of being able to execute commands on the host using
+    Ansible is the ability to get internal system information, such as:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: File hashes
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Network connections
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: List of running processes
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It can act as a lightweight **Host-Based Intrusion Detection System** (**HIDS**).
+    While this may not eliminate the case for a purpose-built HIDS in many cases,
+    we can execute the same kind of security tasks using a tool such as Facebook's
+    `osquery` along with Ansible.
+  prefs: []
+  type: TYPE_NORMAL
+- en: osquery
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '`osquery` is an operating system instrumentation framework by Facebook and
+    written in C++, that supports Windows, Linux, OS X (macOS), and other operating
+    systems. It provides an interface to query an operating system using an SQL like
+    syntax. By using this, we can perform low-level activities such as running processes,
+    kernel configurations, network connections, and file integrity checks. Overall
+    it''s like a **host-based intrusion detection system** (**HIDS**) endpoint security.
+    It provides `osquery` as a service, system interactive shell, and so on. Hence
+    we can use this to perform centralized monitoring and security management solutions.
+    Read more about `osquery` at [https://osquery.io](https://osquery.io).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Here is a high-level overview of what `osquery` looks like:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/5343db14-1311-45d2-8872-0baac58e339c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: osquery getting a list of users with groups and other information using a SQL
+    query
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following playbook is to set up and configure the `osquery` agent in your
+    Linux servers to monitor and look for vulnerabilities, file integrity monitoring,
+    and many other compliance activities, and then log them for sending to a centralized
+    logging monitoring system:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following  `fim.conf` code snippet is the pack for file integrity monitoring
+    and it monitors for file events in the `/home`, `/etc`, and `/tmp` directories
+    every 300 seconds. It uses **Secure Hash Algorithm** (**SHA**) checksum to validate
+    the changes. This can be used to find out whether attackers add their own SSH
+    keys or audit log changes against system configuration changes for compliance
+    and other activities:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: The following configuration is used by the `osquery` daemon to perform checks
+    and monitoring based on specified options, packs, and custom queries. We are also
+    using different packs (that contain multiple queries) to look for different monitoring
+    and configuration checks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`osquery`, by default, has multiple packs for incident response, vulnerability
+    management, compliance, rootkit, hardware monitoring, and so on. Read more at [https://osquery.io/schema/packs](https://osquery.io/schema/packs).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following code snippet is the `osquery` service configuration. This can
+    be modified as required to monitor and log by `osquery` service:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: The reference tutorial can be followed at [https://www.digitalocean.com/community/tutorials/how-to-monitor-your-system-security-with-osquery-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-monitor-your-system-security-with-osquery-on-ubuntu-16-04).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The playbook can be executed to set up the `osquery` configuration in Linux
+    servers to set up and log the events generated by the `osquery` agent:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/b665501d-8b25-4672-9a83-7c54ce7211b5.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: osquery setup playbook in action
+  prefs: []
+  type: TYPE_NORMAL
+- en: The goal is not just setting up `osquery`, we can use the logs to build a centralized
+    real-time monitoring system using our Elastic stack. We can use the Filebeat agent
+    to forward these logs to our Elastic stack and we can view them and build a centralized
+    dashboard for alerting and monitoring.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following is an example of the logs generated by `osquery`, we can see
+    that the `authorized_keys` file is getting modified by the Ubuntu user at November
+    22nd 2017,23:59:21.000:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/2cde3ca0-ebbd-4e3b-9ff0-b7fe54a3a8f5.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: This idea can be extended for building some automated defences by taking actions
+    against attacks by using automated Ansible playbooks for known actions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The world is moving toward containers and this kind of monitoring gives us a
+    look at low-level things such as kernel security checks, and file integrity checks
+    on host level. When attackers try to bypass containers and get access to hosts
+    to escalate privileges, we can detect and defend them using this kind of setup.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Containers are rapidly changing the world of developers and operations teams.
+    The rate of change is accelerating, and in this new world, security automation
+    gets to play a front and center role. By leveraging our knowledge of using Ansible
+    for scripting play-by-play commands along with excellent tools such as Archore
+    and `osquery`, we can measure, analyze, and benchmark our containers for security.
+    This allows us to build end-to-end automatic processes of securing, scanning and
+    remediating containers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will look at a specialized use case for security automation.
+    We will look at how can we improve the tasks around malware analysis by automating
+    certain parts of it. We will especially focus on lightweight dynamic analysis
+    workflow integrating Cuckoo sandbox, one of the most popular malware analysis
+    tools out there.
+  prefs: []
+  type: TYPE_NORMAL
