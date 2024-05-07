@@ -3,6 +3,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自动化取证收集和恶意软件分析的实验室设置
 - en: Malware is one of the biggest challenges faced by the security community. It
     impacts everyone who gets to interact with information systems. While there is
     a massive effort required in keeping computers safe from malware for operational
@@ -11,6 +12,7 @@
   id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 恶意软件是安全社区面临的最大挑战之一。它影响着所有与信息系统互动的人。尽管在保护操作系统免受恶意软件侵害方面需要付出大量努力，但在恶意软件防御方面的大部分工作都是关于理解它们的来源和能力。
 - en: This is the part where Ansible can be used for automation and enabling experts
     who do malware analysis. In this chapter, we will look at various workflows which
     are all for classification, analysis of malware using tools like Cuckoo Sandbox,
@@ -20,11 +22,14 @@
   id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是 Ansible 可以用于自动化和启用恶意软件分析专家的部分。在本章中，我们将研究各种工作流程，这些工作流程都是为了使用像 Cuckoo Sandbox
+    等工具对恶意软件进行分类和分析。此外，我们还将研究为隔离环境创建 Ansible Playbooks 的各种用途，以及用于收集和存储取证工件的安全备份。
 - en: Creating Ansible playbooks for labs for isolated environments
   id: totrans-3
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为隔离环境创建 Ansible Playbooks
 - en: We will start by using VirusTotal and move on to Cuckoo with a Windows virtual
     machine in an isolated network. Another important aspect of malware analysis is
     the ability to collaborate and share threats using the **Malware Information Sharing
@@ -33,11 +38,14 @@
   id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将从使用 VirusTotal 开始，并转向具有 Windows 虚拟机的隔离网络中的 Cuckoo。恶意软件分析的另一个重要方面是能够使用**恶意软件信息共享平台**（**MISP**）共享威胁。我们还设置了
+    Viper（二进制管理和分析框架）来执行分析。
 - en: Collecting file and domain malware identification and classification
   id: totrans-5
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 收集文件和域名恶意软件识别和分类
 - en: One of the initial phases of malware analysis is identification and classification.
     The most popular source is using VirusTotal to scan and get the results of the
     malware samples, domain information, and so on. It has a very rich API and a lot
@@ -49,16 +57,22 @@
   id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: 恶意软件分析的最初阶段之一是识别和分类。最流行的来源之一是使用 VirusTotal 进行扫描并获取恶意软件样本、域名信息等的结果。它拥有非常丰富的 API，并且许多人编写了利用该
+    API 进行自动扫描的自定义应用程序，使用 API 密钥来识别恶意软件类型。以下示例是在系统中设置 VirusTotal 工具、针对 VirusTotal
+    API 扫描恶意软件样本，并识别其是否真的是恶意软件。它通常使用 60 多个杀毒扫描器和工具进行检查，并提供详细信息。
 - en: VirusTotal  API tool set up
   id: totrans-7
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 VirusTotal API 工具
 - en: 'The following playbook will set up the VirusTotal API tool ([https://github.com/doomedraven/VirusTotalApi](https://github.com/doomedraven/VirusTotalApi)),
     which is officially supported in the VirusTotal page itself:'
   id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 playbook 将设置 VirusTotal API 工具（[https://github.com/doomedraven/VirusTotalApi](https://github.com/doomedraven/VirusTotalApi)），它在
+    VirusTotal 页面本身得到了官方支持：
 - en: '[PRE0]'
   id: totrans-9
   prefs: []
@@ -69,15 +83,18 @@
   id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: Playbook 的执行将下载存储库并设置 VirusTotal API 工具，这将使我们准备好扫描恶意软件样本：
 - en: '![](img/8ac588de-ea81-47b6-bc36-ca873f7ea3bb.png)'
   id: totrans-11
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8ac588de-ea81-47b6-bc36-ca873f7ea3bb.png)'
 - en: VirusTotal API scan for malware samples
   id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用于恶意软件样本的 VirusTotal API 扫描
 - en: 'Once we have the setup ready, it is as simple as using the Ansible playbook
     to run a scan for the list of malware samples. The following playbook will find
     and copy the local malware samples to a remote system and scan them recursively
@@ -86,6 +103,8 @@
   id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦我们准备好设置，使用 Ansible playbook 运行扫描一系列恶意软件样本就像使用 Ansible playbook 一样简单。以下 playbook
+    将查找并将本地恶意软件样本复制到远程系统，并对其进行递归扫描并返回结果。完成扫描后，它将从远程系统中删除样本：
 - en: '[PRE1]'
   id: totrans-14
   prefs: []
@@ -97,6 +116,7 @@
   id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 VirusTotal API 对恶意软件样本进行扫描的结果如下。它返回恶意软件扫描报告的哈希值和指针，以获取详细结果：
 - en: '![](img/2aa46276-21d0-4017-becf-af14138a51ea.png)'
   id: totrans-16
   prefs: []
@@ -277,6 +297,7 @@
   id: totrans-46
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/84ad3515-6fee-42d1-b791-ee43d3e4de9e.png)'
 - en: 'Then, we have to add the Python file path to the system startups using the `regedit`
     command. This can be done by navigating to `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Current\Version\Run`.
     Then, add the new string in the registry editor right side, with name Cuckoo and
@@ -284,67 +305,82 @@
   id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: '然后，我们必须使用`regedit`命令将 Python 文件路径添加到系统启动项中。这可以通过导航到`HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Current\Version\Run`来完成。然后，在注册表编辑器的右侧添加新的字符串，名称为
+    Cuckoo，并在值部分中提供`agent.py`文件的完整路径： '
 - en: '![](img/42a0f513-4974-44d3-a3c2-9cc746144a44.png)'
   id: totrans-48
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/42a0f513-4974-44d3-a3c2-9cc746144a44.png)'
 - en: Now, we can take a snapshot and update the configurations in the Cuckoo host.
     Once this is done, we are ready to start the Cuckoo server and web server.
   id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们可以拍摄快照并更新 Cuckoo 主机中的配置。完成后，我们准备启动 Cuckoo 服务器和 Web 服务器。
 - en: 'The following screenshot is the home page of the Cuckoo web server. Once we
     submit the malware sample, then we can click on analyze to start:'
   id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是 Cuckoo Web 服务器的首页。一旦我们提交了恶意软件样本，我们就可以点击“分析”开始：
 - en: '![](img/5d4f710c-39ff-4224-bed2-61bb91846267.png)'
   id: totrans-51
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5d4f710c-39ff-4224-bed2-61bb91846267.png)'
 - en: 'Then, it will take some time to perform the analysis with the VirtualBox Windows
     VM. This will perform the analysis based on the option you selected:'
   id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，将花费一些时间使用 VirtualBox Windows 虚拟机执行分析。这将根据您选择的选项执行分析：
 - en: '![](img/e1912ee3-c858-4672-8df9-7ff6e3a1c45e.png)'
   id: totrans-53
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e1912ee3-c858-4672-8df9-7ff6e3a1c45e.png)'
 - en: 'Then, it will give complete detailed information about the sample. It includes
     submitted file checksum, runtime execution screenshot while Cuckoo performing
     analysis and other information:'
   id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，它将提供有关样本的完整详细信息。其中包括已提交文件的校验和、Cuckoo 执行分析时的运行时执行截图和其他信息：
 - en: '![](img/fed7a78b-f2a3-4678-9838-091acf127c6f.png)'
   id: totrans-55
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/fed7a78b-f2a3-4678-9838-091acf127c6f.png)'
 - en: 'The following screenshot is the behavioral analysis of the malware sample,
     which includes a detailed analysis of the process tree. The left-side menu contains
     different options such as dropped files, memory dump analysis, and packet analysis:'
   id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的截图是恶意软件样本的行为分析，其中包括进程树的详细分析。左侧菜单包含不同的选项，如放置文件、内存转储分析和数据包分析：
 - en: '![](img/f00c00b8-c0ca-482e-bd63-c7464dddbcfb.png)'
   id: totrans-57
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f00c00b8-c0ca-482e-bd63-c7464dddbcfb.png)'
 - en: Learn more about Cuckoo usage in the Cuckoo documentation at [http://docs.cuckoosandbox.org/en/latest/usage](http://docs.cuckoosandbox.org/en/latest/usage).
   id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Cuckoo 文档中了解更多有关 Cuckoo 使用的信息：[http://docs.cuckoosandbox.org/en/latest/usage](http://docs.cuckoosandbox.org/en/latest/usage)。
 - en: Submitting samples and reporting using Ansible playbook
   id: totrans-59
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible playbook 提交样本和报告
 - en: 'The following playbook will perform the analysis of the given malware sample
     files in a local system path and return the reports to using Ansible playbook:'
   id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 playbook 将在本地系统路径中执行给定恶意软件样本文件的分析，并将报告返回给 使用 Ansible playbook：
 - en: '[PRE9]'
   id: totrans-61
   prefs: []
@@ -355,34 +391,41 @@
   id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的截图将恶意样本复制到 Cuckoo 分析系统，并使用 Ansible playbook 将这些文件提交进行自动化分析：
 - en: '![](img/a0985b27-d3e9-4a7d-aef7-1d311eace559.png)'
   id: totrans-63
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a0985b27-d3e9-4a7d-aef7-1d311eace559.png)'
 - en: 'The preceding screenshot copies the local binaries into the remote Cuckoo host
     and submits them for analysis using the Cuckoo submit feature:'
   id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 上面的截图将本地二进制文件复制到远程 Cuckoo 主机，并使用 Cuckoo 提交功能提交它们进行分析：
 - en: '![](img/b942741d-1183-457c-b81e-c7ee688627a1.png)'
   id: totrans-65
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b942741d-1183-457c-b81e-c7ee688627a1.png)'
 - en: The preceding screenshot is the report of analysis submitted by our Cuckoo scan
     submission using Ansible Playbook.
   id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 上述截图是我们的 Cuckoo 扫描提交使用 Ansible Playbook 提交的分析报告。
 - en: Setting up Cuckoo using Docker containers
   id: totrans-67
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Docker 容器设置 Cuckoo
 - en: 'This will allows us to simplify the Cuckoo setup using Docker containers. The
     following commands will allow us to set up the Cuckoo Sandbox using Docker containers:'
   id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将允许我们使用 Docker 容器简化 Cuckoo 的设置。以下命令将允许我们使用 Docker 容器设置 Cuckoo 沙箱：
 - en: '[PRE10]'
   id: totrans-69
   prefs: []
@@ -393,10 +436,12 @@
   id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载 Docker 容器并配置它们以协同工作需要一些时间。安装完成后，我们可以使用`http://localhost`访问 Cuckoo：
 - en: '![](img/3956ed3e-db8d-40a1-a9cb-bc7b01e43ea9.png)'
   id: totrans-71
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3956ed3e-db8d-40a1-a9cb-bc7b01e43ea9.png)'
 - en: Now, we can submit the malware samples or suspicious files to Cuckoo to perform
     an analysis using the tool set and it will return with a detailed analysis. We
     can also choose what analysis to perform by selecting the configuration options

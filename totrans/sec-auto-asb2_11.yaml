@@ -1,785 +1,1203 @@
 - en: Ansible Security Best Practices, References, and Further Reading
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible 安全最佳实践、参考资料和深入阅读
 - en: Last chapter. We have finally got here. Time to reflect on what we have learned
     together. Time to list where you should head from here. Most importantly, there
     are a few topics that will enhance your experience of working with Ansible.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 上一章。我们终于到达了这里。是时候反思我们一起学到了什么了。是时候列出你应该从哪里开始了。最重要的是，有一些主题将增强您使用 Ansible 的体验。
 - en: 'Some of the topics we''ll cover in this chapter are as follows:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章中我们将涵盖的一些主题如下：
 - en: Working with Ansible Vault and why you should be storing all your secrets inside
     the vault
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Ansible Vault 以及为什么应该将所有机密信息存储在 vault 中
 - en: Using Ansible Galaxy for sharing playbooks and roles
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Ansible Galaxy 分享 playbooks 和角色
 - en: Securing the master controller
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 保护主控制器
 - en: Additional references
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 附加参考资料
 - en: Looking forward to what's new and upcoming in Ansible 2.5
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 期待 Ansible 2.5 中的新功能和即将推出的内容。
 - en: Working with Ansible Vault
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible Vault
 - en: Ansible Vault is a command line utility, by default installed along with Ansible.
     It allows us to encrypt secrets such as keys, credentials, passwords, and so on
     to include in our playbooks. By doing this, we can also use these encrypted files
     to share with others as they contain password protection to access the encrypted
     data. We can use this feature to encrypt our variables, templates, and files inside
     our playbooks.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Vault 是一个命令行实用程序，默认与 Ansible 一起安装。它允许我们加密诸如密钥、凭据、密码等机密信息以包含在我们的 playbooks
+    中。通过这样做，我们还可以使用这些加密文件与他人共享，因为它们包含密码保护以访问加密数据。我们可以使用此功能在我们的 playbooks 中加密变量、模板和文件。
 - en: Ansible version 2.3 supports encrypting single variables using an Ansible single
     encrypted variable with the `!vault`  tag. We will see some examples of how we
     will use this in our playbooks in next section.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 版本 2.3 支持使用 Ansible 单个加密变量以及带有 `!vault` 标签的 Ansible 单个加密变量来加密单个变量。我们将在下一节中看到一些示例，了解我们将如何在
+    playbooks 中使用它。
 - en: Read more about Ansible Vault at [https://docs.ansible.com/ansible/latest/vault.html](https://docs.ansible.com/ansible/latest/vault.html).
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 [https://docs.ansible.com/ansible/latest/vault.html](https://docs.ansible.com/ansible/latest/vault.html)
+    中了解更多关于 Ansible Vault 的信息。
 - en: As this is a very simple and powerful way to store and manage secret data, it's
     really important to use Ansible Vault to store all the secret information in our
     playbooks.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于这是一种非常简单而强大的存储和管理机密数据的方式，因此在我们的 playbooks 中使用 Ansible Vault 存储所有机密信息非常重要。
 - en: Some of the really good use cases include how we can use these playbooks without
     changing our version control systems, CI/CD integration pipelines, and so on.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 一些非常好的用例包括我们如何在不更改版本控制系统、CI/CD 集成管道等情况下使用这些 playbooks。
 - en: How to use Ansible Vault with variables and files
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 如何在变量和文件中使用 Ansible Vault
 - en: The following examples demonstrate how we can use secrets in our playbook variable
     files.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下示例演示了如何在我们的 playbook 变量文件中使用机密。
 - en: Let's take an example of installing MySQL server in an Ubuntu operating system
     using the following playbook. As per the Ansible documentation, it's easy and
     better to store Vault variables and normal variables differently.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们以在 Ubuntu 操作系统中安装 MySQL 服务器为例，使用以下 playbook。根据 Ansible 文档，最好将 Vault 变量和普通变量分开存储。
 - en: 'The following code snippet is the high-level file structure for installing
     MySQL server with the root password:'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段是安装 MySQL 服务器的高级文件结构，包括根密码：
 - en: '[PRE0]'
+  id: totrans-18
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Now we can see that the `mysqlsetup` role contains the following tasks that
     require the `mysql_root_password` variable, which contains the root password for
     the MySQL server:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以看到 `mysqlsetup` 角色包含以下任务，需要 `mysql_root_password` 变量，该变量包含 MySQL 服务器的根密码：
 - en: '[PRE1]'
+  id: totrans-20
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Now, if we see the `group_vars/main.yml` file, the content looks as shown in
     the codeblock. It contains the secrets variable to use in the playbook, called `mysql_root_password`:'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，如果我们查看 `group_vars/main.yml` 文件，其内容如下所示。它包含用于 playbook 中的 secrets 变量，称为 `mysql_root_password`：
 - en: '[PRE2]'
+  id: totrans-22
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'To encrypt the vault file, we will use the following command and it then prompts
     for the password to protect:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 要加密 vault 文件，我们将使用以下命令，然后提示输入密码进行保护：
 - en: '[PRE3]'
+  id: totrans-24
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Now, if we see the vault content it looks like the following, with `AES256`
     encryption using the given password:'
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，如果我们查看 vault 内容，它看起来如下，使用给定密码进行 `AES256` 加密：
 - en: '[PRE4]'
+  id: totrans-26
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Now, to execute the playbook run the following command, it will prompt for
     the vault password:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，要执行 playbook，请运行以下命令，它将提示输入 vault 密码：
 - en: '[PRE5]'
+  id: totrans-28
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: The following screenshot shows that we provided the Vault password while executing
     the Ansible Playbook
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图显示我们在执行 Ansible Playbook 时提供了 Vault 密码。
 - en: '![](img/8c2b8831-0a42-4232-9faf-85a298ee345b.png)'
+  id: totrans-30
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8c2b8831-0a42-4232-9faf-85a298ee345b.png)'
 - en: We can also pass the `ansible-vault` password file with playbook execution by
     specifying flag, it helps in our continuous integration and pipeline platforms.
+  id: totrans-31
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们还可以通过指定标志在 playbook 执行中传递 `ansible-vault` 密码文件，这有助于我们的持续集成和流水线平台。
 - en: 'The following file contains the password which used to encrypt the `mysql.yml`
     file:'
+  id: totrans-32
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 以下文件包含用于加密 `mysql.yml` 文件的密码：
 - en: '[PRE6]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: Make sure to give proper permissions for this file, so others cannot access
     this file using `chmod`. Also, it's good practice to add this file to your `.gitignore`,
     so it will not be version controlled when pushing playbooks.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 确保为此文件提供适当的权限，以便其他人无法使用 `chmod` 访问该文件。另外，将该文件添加到你的 `.gitignore` 中是一个好习惯，这样在推送
+    playbook 时不会进行版本控制。
 - en: Vault password file can be an executable script, which can retrieve data stored
     somewhere securely rather than having to keep the key in plain text on disk and
     relying on file permissions to keep it safe.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 保险库密码文件可以是可执行脚本，它可以检索存储在安全位置的数据，而不必在磁盘上以明文形式保存密钥，并依赖文件权限来保护它。
 - en: 'To pass the vault password file through the command line, use the following
     command when executing playbooks:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 要通过命令行传递保险库密码文件，请在执行 playbook 时使用以下命令：
 - en: '[PRE7]'
+  id: totrans-37
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: We can also use system environment variables such as `ANSIBLE_VAULT_PASSWORD_FILE=~/.vaultpassword`
     and Ansible will use this while executing playbooks.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以使用系统环境变量，例如 `ANSIBLE_VAULT_PASSWORD_FILE=~/.vaultpassword`，Ansible 在执行
+    playbook 时会使用它。
 - en: 'We can use `ansible-vault` for multiple operations, such as creating a file
     using `create` argument. This encrypts the content of the file by default. It
     will also open the default text editor to edit the file as well:'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用 `ansible-vault` 进行多个操作，例如使用 `create` 参数创建文件。这默认情况下会加密文件的内容。它还将打开默认文本编辑器来编辑文件：
 - en: '[PRE8]'
+  id: totrans-40
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: We can use `view` command to see the vault encrypted information in plain text.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用 `view` 命令来查看明文中的保险库加密信息。
 - en: '[PRE9]'
+  id: totrans-42
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'To change the content, we can use the `edit` sub command in `ansible-vault`:'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 要更改内容，我们可以使用 `ansible-vault` 中的 `edit` 子命令
 - en: '[PRE10]'
+  id: totrans-44
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: We can also decrypt the secret information using the following command
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以使用以下命令解密秘密信息
 - en: '[PRE11]'
+  id: totrans-46
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'To change the vault password for key rotation, we can use the `rekey` option:'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 要更改密钥轮换的保险库密码，我们可以使用 `rekey` 选项：
 - en: '[PRE12]'
+  id: totrans-48
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Ansible Vault single encrypted variable
+  id: totrans-49
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible Vault 单个加密变量
 - en: This feature is available from Ansible version 2.3\. It allows us to use vaulted
     variables with the `!vault` tag in YAML files; we will see a simple example and
     use case for this.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 此功能可从 Ansible 版本 2.3 开始使用。它允许我们在 YAML 文件中使用带有 `!vault` 标记的保险库变量；我们将看到一个简单的示例和用例。
 - en: The following playbook is used to perform reverse IP lookups using the `ViewDNS`
     API.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 playbook 用于使用 `ViewDNS` API 执行反向 IP 查找。
 - en: 'We want to secure `api_key` as it contains sensitive information. We use the  `ansible-vault
     encrypt_string` command to perform this encryption. Here, we used `echo` with
     the `-n` flag to remove the new line:'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们想要保护 `api_key`，因为它包含敏感信息。我们使用 `ansible-vault encrypt_string` 命令执行此加密。在这里，我们使用了
+    `echo` 与 `-n` 标志来删除换行符：
 - en: '[PRE13]'
+  id: totrans-53
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: '![](img/ed750de2-f087-4e59-9f34-e80548233fc6.png)'
+  id: totrans-54
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ed750de2-f087-4e59-9f34-e80548233fc6.png)'
 - en: 'Then we can place the variable, as shown in the following code block, inside
     the playbook variables and execute the playbook as normal, using `ansible-playbook`
     with the `--ask-vault-pass` option:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们可以像以下代码块中所示，将变量放在 playbook 变量中，并使用 `ansible-playbook` 普通执行 playbook，使用
+    `--ask-vault-pass` 选项：
 - en: '[PRE14]'
+  id: totrans-56
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Then, playbook being executed will be automatically decrypted after we provide
     it with the given password.
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，在我们提供给它指定的密码后，将自动解密执行的 playbook。
 - en: The screenshot below shows the playbook executing after prompting for the vault
     password.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的截图显示了在提示输入保险库密码后执行 playbook。
 - en: '![](img/f776e949-4511-4722-a59c-941e88215c39.png)'
+  id: totrans-59
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f776e949-4511-4722-a59c-941e88215c39.png)'
 - en: Read more about `encrypt_string` options at [https://docs.ansible.com/ansible/2.4/vault.html#use-encrypt-string-to-create-encrypted-variables-to-embed-in-yaml](https://docs.ansible.com/ansible/2.4/vault.html#use-encrypt-string-to-create-encrypted-variables-to-embed-in-yaml).
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 [https://docs.ansible.com/ansible/2.4/vault.html#use-encrypt-string-to-create-encrypted-variables-to-embed-in-yaml](https://docs.ansible.com/ansible/2.4/vault.html#use-encrypt-string-to-create-encrypted-variables-to-embed-in-yaml)
+    阅读有关 `encrypt_string` 选项的更多信息。
 - en: Ansible Vault usage in Ansible Tower
+  id: totrans-61
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible Tower 中的 Ansible Vault 使用
 - en: Ansible Tower is already integrated with Ansible Vault.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Tower 已经与 Ansible Vault 集成。
 - en: The following screenshot refers to creating new credentials in Ansible Tower.
     Also we can add Vault Password, this enables users to use a more secure way of
     storing secrets and retrieving them
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的截图指的是在 Ansible Tower 中创建新凭据。我们还可以添加 Vault 密码，这样用户就可以使用更安全的方式存储和检索密钥。
 - en: '![](img/0f27e1dd-3ce7-443d-99e8-77205adba336.png)'
+  id: totrans-64
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0f27e1dd-3ce7-443d-99e8-77205adba336.png)'
 - en: Setting up and using Ansible Galaxy
+  id: totrans-65
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置和使用 Ansible Galaxy
 - en: Ansible Galaxy, also known as Galaxy, is an official centralized hub for finding,
     sharing, and reusing Ansible roles. This allows the community to share and collaborate
     on Ansible playbooks, and allows new users to quickly get started with using Ansible.
     To share our custom-written roles with the community, we can publish them to Ansible
     Galaxy using GitHub authentication.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Galaxy，也称为 Galaxy，是一个官方集中式中心，用于查找、共享和重用 Ansible 角色。这允许社区分享和合作使用 Ansible
+    playbook，并允许新用户快速开始使用 Ansible。要与社区共享我们自定义编写的角色，我们可以使用 GitHub 认证将它们发布到 Ansible
+    Galaxy。
 - en: 'These roles can be accessed at [https://galaxy.ansible.com](https://galaxy.ansible.com)
     as well as using a command-line tool called `ansible-galaxy`, which is installed
     with Ansible:'
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些角色也可以在 [https://galaxy.ansible.com](https://galaxy.ansible.com) 上访问，也可以使用一个名为
+    `ansible-galaxy` 的命令行工具进行访问，该工具随 Ansible 一起安装：
 - en: '![](img/4dd06c08-4454-49e5-8430-d2ede35d1d2a.png)'
+  id: totrans-68
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4dd06c08-4454-49e5-8430-d2ede35d1d2a.png)'
 - en: We can find roles using different parameters such as Author, Platform, Tag,
     and so on. This allows users to understand whether this role works for their distribution
     and version, which Ansible version is required, and other information.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用不同的参数（如作者、平台、标签等）查找角色。这使用户能够了解此角色是否适用于其分发和版本，需要哪个 Ansible 版本以及其他信息。
 - en: 'The following screenshot shows how we can use `ansible-galaxy` CLI to perform
     different operations, such as searching and installing:'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的截图展示了如何使用 `ansible-galaxy` CLI 执行不同的操作，比如搜索和安装：
 - en: '![](img/06b0930a-7f1f-4b45-aebb-1d05b34b01cf.png)'
+  id: totrans-71
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/06b0930a-7f1f-4b45-aebb-1d05b34b01cf.png)'
 - en: Read more about Ansible Galaxy from docs at [http://docs.ansible.com/ansible/latest/galaxy.html](http://docs.ansible.com/ansible/latest/galaxy.html).
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 从文档中阅读有关 Ansible Galaxy 的更多信息 [http://docs.ansible.com/ansible/latest/galaxy.html](http://docs.ansible.com/ansible/latest/galaxy.html)。
 - en: Learn more about Galaxy usage at [https://galaxy.ansible.com/intro](https://galaxy.ansible.com/intro).
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 了解更多有关 Galaxy 使用的信息，请访问 [https://galaxy.ansible.com/intro](https://galaxy.ansible.com/intro)。
 - en: Using Ansible Galaxy roles
+  id: totrans-74
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible Galaxy 角色
 - en: 'To download a role from the Ansible Galaxy website, we can run the following
     command, where `username` and `role_name` are the options:'
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 要从 Ansible Galaxy 网站下载角色，我们可以运行以下命令，其中 `username` 和 `role_name` 是选项：
 - en: '[PRE15]'
+  id: totrans-76
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'The following command will download the `docker_ubuntu` role by user `angstwad`:'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的命令将由用户 `angstwad` 下载 `docker_ubuntu` 角色：
 - en: '[PRE16]'
+  id: totrans-78
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'To use this role to install Docker on Ubuntu is as simple as including this
     role in our playbook and executing it:'
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在 Ubuntu 上使用此角色安装 Docker，只需在我们的 playbook 中包含此角色并执行它即可：
 - en: '[PRE17]'
+  id: totrans-80
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'We can install or include roles direct from GitHub by specifying the GitHub
     URL. This allows the use of private version control systems as local inventories
     of playbook roles:'
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以通过指定 GitHub URL 直接从 GitHub 安装或包含角色。这允许使用私有版本控制系统作为 playbook 角色的本地清单：
 - en: '[PRE18]'
+  id: totrans-82
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Publishing our role to Ansible Galaxy
+  id: totrans-83
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 将我们的角色发布到 Ansible Galaxy
 - en: To publish our own roles to Ansible Galaxy, we need to have a GitHub account,
     which will be used to authenticate Ansible Galaxy, and the version control repository
     in GitHub will be the place to store our roles.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 要将我们自己的角色发布到 Ansible Galaxy，我们需要一个 GitHub 账户，该账户将用于验证 Ansible Galaxy，GitHub
+    中的版本控制存储库将是存储我们角色的地方。
 - en: 'The following steps are used to create and share a new role in Ansible Galaxy:'
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下步骤用于在 Ansible Galaxy 中创建和共享新角色：
 - en: 'First, create a new repository in GitHub and clone it locally using the following
     command:'
+  id: totrans-86
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 首先，在 GitHub 中创建一个新存储库，然后使用以下命令将其克隆到本地：
 - en: '[PRE19]'
+  id: totrans-87
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'Then we can create a role structure using the `ansible-galaxy` command to create
     the structure:'
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 然后，我们可以使用 `ansible-galaxy` 命令创建角色结构：
 - en: '[PRE20]'
+  id: totrans-89
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'Now, we can add tasks and other steps in the same way as we created them previously.
     The following are some good practices from Ansible Galaxy itself ([https://galaxy.ansible.com/intro#good](https://galaxy.ansible.com/intro#good)):'
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，我们可以像之前创建它们一样添加任务和其他步骤。以下是 Ansible Galaxy 自身的一些良好实践（[https://galaxy.ansible.com/intro#good](https://galaxy.ansible.com/intro#good)）：
 - en: Provide clear documentation in`README.md`.
+  id: totrans-91
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `README.md` 中提供清晰的文档。
 - en: Give accurate information in `meta/main.yml`.
+  id: totrans-92
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `meta/main.yml` 中提供准确的信息。
 - en: Include dependencies in `meta/main.yml`.
+  id: totrans-93
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `meta/main.yml` 中包含依赖项。
 - en: Prefix variable names with the role name.
+  id: totrans-94
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以角色名为变量名加上前缀。
 - en: Integrate your roles with Travis CI.
+  id: totrans-95
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将您的角色与 Travis CI 集成。
 - en: 'The meta file contains the information that will be used to publish the role
     in Ansible Galaxy; we can modify it as required. Here is an example:'
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 元文件包含将在 Ansible Galaxy 中发布角色所使用的信息；我们可以根据需要修改它。以下是一个示例：
 - en: '[PRE21]'
+  id: totrans-97
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Then we can push the role to GitHub and import it to Ansible Galaxy by adding
     a new role in the portal:'
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 然后，我们可以将角色推送到 GitHub，并通过在门户中添加新角色来导入到 Ansible Galaxy 中：
 - en: '![](img/6b360bb5-23e8-412b-9829-4d25990532d2.png)'
+  id: totrans-99
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6b360bb5-23e8-412b-9829-4d25990532d2.png)'
 - en: Refer to http://docs.ansible.com/ansible/latest/playbooks_reuse.html for how
     to write reusable roles and more details about writing community roles.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关如何编写可重用角色以及有关编写社区角色的更多详细信息，请参阅 [http://docs.ansible.com/ansible/latest/playbooks_reuse.html](http://docs.ansible.com/ansible/latest/playbooks_reuse.html)。
 - en: Ansible Galaxy local setup
+  id: totrans-101
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible Galaxy 本地设置
 - en: To set up Ansible Galaxy locally, we have different methods. Most of the installations
     use containers behind the scenes. The following steps describe how to install
     an Ansible Galaxy local setup using `docker` and `docker-compose`.
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在本地设置 Ansible Galaxy，我们有不同的方法。大多数安装在幕后使用容器。以下步骤描述了如何使用 `docker` 和 `docker-compose`
+    安装 Ansible Galaxy 本地设置。
 - en: 'Before proceeding, we need the following prerequisites:'
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 在继续之前，我们需要以下先决条件：
 - en: Ansible 2.4+
+  id: totrans-104
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ansible 2.4+
 - en: Docker
+  id: totrans-105
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Docker
 - en: The `docker-py` Python module
+  id: totrans-106
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`docker-py` Python 模块'
 - en: The `docker-compose` Python module
+  id: totrans-107
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`docker-compose` Python 模块'
 - en: GNU make
+  id: totrans-108
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: GNU make
 - en: Git
+  id: totrans-109
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Git
 - en: 'We can clone the `galaxy` repository by running the following `git` command,
     which will clone the entire galaxy repository maintained by Ansible:'
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以通过运行以下 `git` 命令来克隆 `galaxy` 存储库，该存储库由 Ansible 维护：
 - en: '[PRE22]'
+  id: totrans-111
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'Change the required variables in the galaxy playbook; by default it will assume
     that the installation is in localhost. Also, update the passwords and other variables
     inside `inventory` file:'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 galaxy playbook 中更改所需的变量；默认情况下，它将假定安装在 localhost 上。还要在 `inventory` 文件中更新密码和其他变量：
 - en: Then execute the following command to start the Ansible playbook setup to start
     the local Ansible Galaxy
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后执行以下命令启动 Ansible playbook 设置以启动本地 Ansible Galaxy
 - en: '[PRE23]'
+  id: totrans-114
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: This will take a while, as it has to download multiple Docker containers locally
     and set up the integration between them using `docker-compose`.
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将花费一些时间，因为它必须在本地下载多个 Docker 容器并使用 `docker-compose` 设置它们之间的集成。
 - en: 'Once playbook execution has completed, we can see the following output about
     running Docker containers. It still takes some time to do database migrations
     and start the web server application:'
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦 Playbook 执行完成，我们可以看到有关运行 Docker 容器的以下输出。执行数据库迁移和启动 Web 服务器应用程序仍需要一些时间：
 - en: '![](img/2b51ed16-33ff-4012-991b-de32877cf62d.png)'
+  id: totrans-117
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/2b51ed16-33ff-4012-991b-de32877cf62d.png)'
 - en: 'Then once the setup is completed, we can navigate to `http://localhost` to
     see the web interface:'
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装完成后，我们可以导航到 `http://localhost` 查看 web 界面：
 - en: '![](img/be1b5fdf-0e22-4a1c-a6a0-59bb5dc91f96.png)'
+  id: totrans-119
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/be1b5fdf-0e22-4a1c-a6a0-59bb5dc91f96.png)'
 - en: Read more about Ansible Galaxy local setup and other options for authentication
     and deployment at [https://github.com/ansible/galaxy/blob/develop/INSTALL.md](https://github.com/ansible/galaxy/blob/develop/INSTALL.md).
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 请阅读更多关于 Ansible Galaxy 本地设置以及其他身份验证和部署选项的信息，请访问 [https://github.com/ansible/galaxy/blob/develop/INSTALL.md](https://github.com/ansible/galaxy/blob/develop/INSTALL.md)。
 - en: Ansible controller machine security
+  id: totrans-121
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible 控制器机器安全性
 - en: The controller machine for Ansible requires SSH and Python to be installed and
     configured. Ansible has a very low attack surface. In January 2017, multiple security
     issues were found by a company called Computest.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 控制器机器需要安装和配置 SSH 和 Python。Ansible 的攻击面非常低。在 2017 年 1 月，一家名为 Computest
+    的公司发现了多个安全问题。
 - en: Read more about what they found at [https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt](https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt).
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 请阅读更多关于他们在 [https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt](https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt)
+    发现的信息。
 - en: This vulnerability was dubbed *owning the farm*, since compromising the controller
     would imply that all the nodes could potentially be compromised.
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 此漏洞被称为“拥有农场”，因为攻击控制器将意味着所有节点可能被攻击。
 - en: The controller machine should be a hardened server and treated with all the
     seriousness that it deserves. In the vulnerability that was disclosed, if a node
     gets compromised attackers could leverage that to attack and gain access to the
     controller. Once they have access, the could extend their control over all the
     other nodes being managed by the controller.
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: 控制器机器应该是一个经过加固的服务器，并且应该被认真对待。在已经公开的漏洞中，如果一个节点被攻击者利用，攻击者可以利用它来攻击并访问控制器。一旦他们获得访问权限，他们可以扩展他们对控制器管理的所有其他节点的控制。
 - en: Since the attack surface is already very limited, the best we can do is ensure
     that the server stays secure and hardened.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于攻击面已经非常有限，我们能做的最好的事情就是确保服务器保持安全和加固。
 - en: 'Two projects worth following and investigating are:'
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 有两个值得关注和调查的项目：
 - en: https://docs.openstack.org/ansible-hardening/latest/getting-started.html#usage
+  id: totrans-128
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://docs.openstack.org/ansible-hardening/latest/getting-started.html#usage](https://docs.openstack.org/ansible-hardening/latest/getting-started.html#usage)'
 - en: https://github.com/dev-sec/ansible-os-hardening
+  id: totrans-129
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://github.com/dev-sec/ansible-os-hardening](https://github.com/dev-sec/ansible-os-hardening)'
 - en: Explanation of Ansible OS hardening playbook
+  id: totrans-130
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 解释 Ansible 操作系统加固剧本
 - en: We have seen multiple playbooks and guidelines for following different standards in
     [Chapter 7](8fe755f4-a411-4f82-b2e7-b650c1b1d60f.xhtml), *Security Hardening for
     Applications and Networks*. This can be completely customized based on your environment,
     but following certain guidelines will ensure it's well protected.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经看到了多个剧本和指南，用于遵循不同标准在 [第 7 章](8fe755f4-a411-4f82-b2e7-b650c1b1d60f.xhtml)中，*应用程序和网络的安全加固*。这可以根据您的环境完全定制，但是遵循某些准则将确保其得到良好的保护。
 - en: The following playbook is created by DevSec for Linux baselines. It covers most
     of the required hardening checks based on multiple standards, which includes Ubuntu
     Security Features, NSA Guide to Secure Configuration, ArchLinux System Hardening
     and other. This can be improved if required by adding more tasks (or) roles.
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下剧本是由 DevSec 创建的 Linux 基线。它涵盖了大多数所需的加固检查，基于多个标准，包括 Ubuntu 安全特性，NSA 安全配置指南，ArchLinux
+    系统加固等。如果需要，可以通过添加更多任务（或）角色来改进。
 - en: Ansible OS Hardening Playbook covers
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 操作系统加固剧本涵盖
 - en: Configures package management, that is, allows only signed packages
+  id: totrans-134
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置软件包管理，即只允许签名软件包
 - en: Removes packages with known issues
+  id: totrans-135
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 移除已知问题的软件包
 - en: Configures `pam` and the `pam_limits` module
+  id: totrans-136
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置 `pam` 和 `pam_limits` 模块
 - en: Shadow password suite configuration
+  id: totrans-137
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Shadow 密码套件配置
 - en: Configures system path permissions
+  id: totrans-138
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置系统路径权限
 - en: Disables core dumps through soft limits
+  id: totrans-139
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过软限制禁用核心转储
 - en: Restricts root logins to system console
+  id: totrans-140
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 限制 root 登录到系统控制台
 - en: Sets SUIDs
+  id: totrans-141
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 设置 SUIDs
 - en: Configures kernel parameters through `sysctl`
+  id: totrans-142
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 `sysctl` 配置内核参数
 - en: 'The following command is to download the `os-hardening` role from Ansible Galaxy:'
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下命令是从 Ansible Galaxy 下载 `os-hardening` 角色：
 - en: '[PRE24]'
+  id: totrans-144
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: '![](img/ad9fd2aa-e466-43ec-805d-52c8947b9096.png)'
+  id: totrans-145
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ad9fd2aa-e466-43ec-805d-52c8947b9096.png)'
 - en: 'Then call that role in your playbook and execute it to perform the baseline
     hardening, and also change the variables as required. Refer to [https://galaxy.ansible.com/dev-sec/os-hardening](https://galaxy.ansible.com/dev-sec/os-hardening)
     for more detailed options:'
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后在您的剧本中调用该角色并执行它来执行基线加固，并根据需要更改变量。有关更详细的选项，请参阅[https://galaxy.ansible.com/dev-sec/os-hardening](https://galaxy.ansible.com/dev-sec/os-hardening)：
 - en: '[PRE25]'
+  id: totrans-147
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'The following screenshot refers to the playbook execution, with a list of checks
     it is performing on the Ansible controller machine:'
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是剧本执行的参考，列出了它在 Ansible 控制器机器上执行的一系列检查：
 - en: '![](img/c7639d3f-641f-430c-adf8-8818d0892621.png)'
+  id: totrans-149
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c7639d3f-641f-430c-adf8-8818d0892621.png)'
 - en: 'The following is the checks to minimize the system access by updating the configuration
     parameters in the system:'
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是通过更新系统中的配置参数来最小化系统访问的检查：
 - en: '![](img/a8b81e39-aabb-48d1-a212-4edf38e73de9.png)'
+  id: totrans-151
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a8b81e39-aabb-48d1-a212-4edf38e73de9.png)'
 - en: 'The following screenshot refers to upgrading the password hashing algorithm,
     updating the `suid` and guide for the superuser binaries:'
+  id: totrans-152
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是升级密码哈希算法、更新 `suid` 和超级用户二进制文件指南的参考：
 - en: '![](img/c060feb3-0cea-4230-a68e-9b314373093d.png)'
+  id: totrans-153
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c060feb3-0cea-4230-a68e-9b314373093d.png)'
 - en: To know more checks what this playbook executes visit [https://github.com/dev-sec/ansible-os-hardening/blob/master/tasks/main.yml](https://github.com/dev-sec/ansible-os-hardening/blob/master/tasks/main.yml).
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 要了解此剧本执行的更多检查，请访问[https://github.com/dev-sec/ansible-os-hardening/blob/master/tasks/main.yml](https://github.com/dev-sec/ansible-os-hardening/blob/master/tasks/main.yml)。
 - en: Best practices and reference playbook projects
+  id: totrans-155
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 最佳实践和参考剧本项目
 - en: Ansible is powerful and flexible. People use it in many different ways, and
     one of the ways we can understand how to use it for security automation is to
     keep track of and read playbooks created for specific use cases.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 强大且灵活。人们以许多不同的方式使用它，了解如何将其用于安全自动化的其中一种方式是追踪并阅读为特定用例创建的 playbooks。
 - en: Projects such as Algo, DebOps, and OpenStack are large Ansible playbook projects
     that are well maintained and secure by default.
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 诸如 Algo、DebOps 和 OpenStack 等项目是大型 Ansible playbook 项目，默认情况下受到良好维护和保护。
 - en: DebOps – your Debian-based data center in a box
+  id: totrans-158
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: DebOps – 基于 Debian 的一站式数据中心
 - en: DebOps ([https://debops.org](https://debops.org)) is a project created by Maciej
     Delmanowski. It contains a collection of various Ansible playbooks that can be
     used for Debian and Ubuntu hosts. This project has more than 128 Ansible roles,
     which are customized for production use cases and work with multiple environments.
+  id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: DebOps ([https://debops.org](https://debops.org)) 是由 Maciej Delmanowski 创建的项目。它包含各种用于
+    Debian 和 Ubuntu 主机的 Ansible playbooks 集合。这个项目有超过 128 个 Ansible 角色，针对生产用例进行了定制，并与多个环境配合使用。
 - en: 'We can see a list of available playbook services at [https://github.com/debops/debops-playbooks](https://github.com/debops/debops-playbooks):'
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以在 [https://github.com/debops/debops-playbooks](https://github.com/debops/debops-playbooks)
+    看到可用的 playbooks 服务列表：
 - en: '![](img/283f0954-ca5a-4974-be58-a9282c049c5c.png)'
+  id: totrans-161
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/283f0954-ca5a-4974-be58-a9282c049c5c.png)'
 - en: Setting up the DebOps controller
+  id: totrans-162
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 DebOps 控制器
 - en: 'There are two different ways we can quickly get started with a DebOps setup:'
+  id: totrans-163
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以通过两种不同的方式快速开始使用 DebOps 设置：
 - en: Vagrant setup
+  id: totrans-164
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Vagrant 设置
 - en: Docker setup
+  id: totrans-165
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Docker 设置
 - en: 'Run the following command to start the Docker container created by DebOps:'
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行以下命令以启动由 DebOps 创建的 Docker 容器：
 - en: '[PRE26]'
+  id: totrans-167
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: We can create and execute different roles to perform different actions using
     DebOps playbooks. Refer to the main documentation at [https://docs.debops.org/en/latest/index.html](https://docs.debops.org/en/latest/index.html).
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以通过 DebOps playbooks 创建和执行不同的角色来执行不同的操作。请参考主要文档在 [https://docs.debops.org/en/latest/index.html](https://docs.debops.org/en/latest/index.html)。
 - en: Algo – set up a personal IPSEC VPN in the cloud
+  id: totrans-169
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Algo – 在云中设置个人 IPSEC VPN
 - en: Algo from Trail of Bits provides Ansible roles and scripts to automate the installation
     of a personal IPSEC VPN.
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: Trail of Bits 的 Algo 提供了 Ansible 角色和脚本，以自动化个人 IPSEC VPN 的安装。
 - en: By running the Ansible playbooks, you get a complete hardened VPN server, and
     deployments to all major cloud providers are already configured ([https://github.com/trailofbits/algo/blob/master/docs/deploy-from-ansible.md](https://github.com/trailofbits/algo/blob/master/docs/deploy-from-ansible.md)).
+  id: totrans-171
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过运行 Ansible playbooks，您可以获得一个完整的加固 VPN 服务器，并且已经配置了所有主要云提供商的部署（[https://github.com/trailofbits/algo/blob/master/docs/deploy-from-ansible.md](https://github.com/trailofbits/algo/blob/master/docs/deploy-from-ansible.md)）。
 - en: OpenStack-Ansible
+  id: totrans-172
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: OpenStack-Ansible
 - en: OpenStack-Ansible is the official project for deploying and configuring OpenStack
     using Ansible playbooks.
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: OpenStack-Ansible 是使用 Ansible playbooks 部署和配置 OpenStack 的官方项目。
 - en: Start here for OpenStack-Ansible: [https://github.com/openstack/openstack-ansible](https://github.com/openstack/openstack-ansible).
+  id: totrans-174
   prefs: []
   type: TYPE_NORMAL
+  zh: '从这里开始了解 OpenStack-Ansible: [https://github.com/openstack/openstack-ansible](https://github.com/openstack/openstack-ansible)。'
 - en: Not only does this project use Ansible playbooks extensively, but their security
     documentation is also worth reading and emulating. The best part is that all of
     the security configuration is declarative security codified in Ansible playbooks.
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个项目不仅广泛使用 Ansible playbooks，而且他们的安全文档值得阅读和效仿。最好的部分是所有的安全配置都是在 Ansible playbooks
+    中以声明性方式编码的安全性。
 - en: Documentation on this project is available at [https://docs.openstack.org/project-deploy-guide/openstack-ansible/latest/app-security.html](https://docs.openstack.org/project-deploy-guide/openstack-ansible/latest/app-security.html).
+  id: totrans-176
   prefs: []
   type: TYPE_NORMAL
+  zh: 此项目的文档可在 [https://docs.openstack.org/project-deploy-guide/openstack-ansible/latest/app-security.html](https://docs.openstack.org/project-deploy-guide/openstack-ansible/latest/app-security.html)
+    上找到。
 - en: Additional references
+  id: totrans-177
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 其他参考文献
 - en: 'Some good online references and links for Ansible that we found during our
     research for this book  are:'
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在为这本书进行研究时找到的一些很好的关于 Ansible 的在线参考文献和链接有：
 - en: '**Streisand**: Automated installation and configuration of anti-censorship
     software'
+  id: totrans-179
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Streisand**：自动安装和配置反审查软件'
 - en: '**Sovereign**: Maintain your own private cloud using Ansible playbooks'
+  id: totrans-180
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Sovereign**：使用 Ansible playbooks 维护您自己的私有云'
 - en: '**AWX**: Open source version of Ansible Tower'
+  id: totrans-181
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**AWX**：Ansible Tower 的开源版本'
 - en: Streisand – automated installation and configuration of anti-censorship software
+  id: totrans-182
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Streisand – 自动安装和配置反审查软件
 - en: Using Ansible playbooks, Streisand can set up a cloud server full of software
     to bypass internet restrictions and online censorship. Tools that are set up include
     IPSEC-based VPN, OpenVPN, OpenConnect, Tor, and WireGuard.
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Ansible playbooks，Streisand 可以设置一个充满软件的云服务器，以规避互联网限制和在线审查。设置的工具包括基于 IPSEC
+    的 VPN、OpenVPN、OpenConnect、Tor 和 WireGuard。
 - en: Get started with Streisand at [https://github.com/StreisandEffect/streisand](https://github.com/StreisandEffect/streisand).
+  id: totrans-184
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里开始使用 Streisand：[https://github.com/StreisandEffect/streisand](https://github.com/StreisandEffect/streisand).
 - en: Sovereign – maintain your own private cloud using Ansible playbooks
+  id: totrans-185
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Sovereign – 使用 Ansible playbooks 维护您自己的私有云
 - en: Using Ansible playbooks, Sovereign sets up your own private cloud with open
     source software. This puts you in control of your data with services including
     email, calendar, file sync, RSS reader, Git hosting, read it later, and chat.
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Ansible playbooks，Sovereign 使用开源软件设置了你自己的私有云。这使你能够控制你的数据，服务包括电子邮件、日历、文件同步、RSS
+    阅读器、Git 托管、稍后阅读和聊天。
 - en: Get started with Sovereign at [https://github.com/sovereign/sovereign](https://github.com/sovereign/sovereign).
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里开始使用 Sovereign：[https://github.com/sovereign/sovereign](https://github.com/sovereign/sovereign).
 - en: AWX – open source version of Ansible Tower
+  id: totrans-188
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: AWX – Ansible Tower 的开源版本
 - en: AWX provides a web-based user interface, REST API, and task engine built on
     top of Ansible. AWX can be used with the tower-CLI tool and client library.
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: AWX 提供了基于 web 的用户界面、REST API 和建立在 Ansible 之上的任务引擎。AWX 可以与 tower-CLI 工具和客户端库一起使用。
 - en: Get started with AWX here: [https://github.com/ansible/awx](https://github.com/ansible/awx).
+  id: totrans-190
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里开始使用 AWX：[https://github.com/ansible/awx](https://github.com/ansible/awx).
 - en: Get started with tower-cli here: [https://github.com/ansible/tower-cli/](https://github.com/ansible/tower-cli/).
+  id: totrans-191
   prefs: []
   type: TYPE_NORMAL
+  zh: 从这里开始使用 tower-cli：[https://github.com/ansible/tower-cli/](https://github.com/ansible/tower-cli/).
 - en: Coming soon to Ansible 2.5
+  id: totrans-192
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 即将推出的 Ansible 2.5
 - en: 'Ansible version 2.5 is expected to be released in March 2018\. There are no
     major changes from the current stable release of 2.4.2\. Since the software world
     is always a moving target, a good place to keep track of what may or may not change
     is to follow the roadmap and porting guide:'
+  id: totrans-193
   prefs: []
   type: TYPE_NORMAL
+  zh: 预计 Ansible 版本 2.5 将于 2018 年 3 月发布。与当前稳定版本 2.4.2 相比，没有主要变化。由于软件世界总是一个不断变化的目标，跟踪可能会发生的变化或不发生的变化的好地方是遵循路线图和移植指南：
 - en: '**Ansible 2.5 Porting Guide** (https://docs.ansible.com/ansible/devel/porting_guide_2.5.html)'
+  id: totrans-194
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Ansible 2.5 移植指南** (https://docs.ansible.com/ansible/devel/porting_guide_2.5.html)'
 - en: '**Ansible 2.5 roadmap** (https://github.com/ansible/ansible/blob/devel/CHANGELOG.md#2.5)'
+  id: totrans-195
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Ansible 2.5 路线图** (https://github.com/ansible/ansible/blob/devel/CHANGELOG.md#2.5)'
 - en: Summary
+  id: totrans-196
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概要
 - en: In this chapter, we covered how to work with Ansible Vault, using the hosted
     Ansible Galaxy site and even self-hosting it. We also discussed on a need for keeping
     the controller node safe and secure.
+  id: totrans-197
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们介绍了如何使用 Ansible Vault，在托管的 Ansible Galaxy 网站上使用它，甚至自行托管它。我们还讨论了保持控制节点安全的必要性。
 - en: Apart from these topics, we also looked at some of the most comprehensive software
     projects that use Ansible in a variety of ways. In all these projects, Ansible
     is the centrepiece of their orchestration and provisioning of software and related
@@ -788,9 +1206,14 @@
     is being used for automation, especially around security workloads. We also looked
     at what is coming in the next year in terms of Ansible 2.5, and concluded that
     so far nothing we have covered will break when it does become stable.
+  id: totrans-198
   prefs: []
   type: TYPE_NORMAL
+  zh: 除了这些主题，我们还查看了一些以各种方式使用 Ansible 的最全面的软件项目。在所有这些项目中，Ansible 是它们编排和提供软件及相关服务的核心。突出所有这些项目的主要思想是扩展本书的主题，同时让你了解
+    Ansible 在自动化领域，特别是在安全工作负载方面的使用方式之多。我们还看了下一年即将发布的 Ansible 2.5 中会有什么内容，并得出结论，即到目前为止，我们介绍的任何内容在它稳定后都不会发生变化。
 - en: We are looking forward to seeing what kinds of security automation workflows
     all of you are going to build after taking this journey with us.
+  id: totrans-199
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们期待着看到在与我们共同走过这段旅程后，大家将构建出怎样的安全自动化工作流。

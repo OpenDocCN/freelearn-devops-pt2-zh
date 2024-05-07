@@ -1,855 +1,1303 @@
 - en: Writing an Ansible Module for Security Testing
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为安全测试编写 Ansible 模块
 - en: Ansible primarily works by pushing small bits of code to the nodes it connects
     to. These codes/programs are what we know as Ansible modules. Typically in the
     case of a Linux host these are copied over SSH, executed, and then removed from
     the node.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 主要通过将小块代码推送到其连接的节点来工作。这些代码/程序就是我们所知的 Ansible 模块。通常在 Linux 主机的情况下，这些代码通过
+    SSH 复制，执行，然后从节点中删除。
 - en: 'As stated in the Ansible Developer Guide (the best resource for all things
     Ansible-related):'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如 Ansible 开发人员指南中所述（这是所有与 Ansible 相关事物的最佳资源）：
 - en: '"Ansible modules can be written in any language that can return JSON."'
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: '"Ansible 模块可以用任何可以返回 JSON 的语言编写。"'
 - en: Modules can be used by the Ansible command-line, in a playbook, or by the Ansible
     API. There are already hundreds of modules that ship with Ansible version 2.4.x.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 模块可以由 Ansible 命令行，在 playbook 中或通过 Ansible API 使用。Ansible 版本 2.4.x 已经内置了数百个模块。
 - en: Have a look at the module index on the Ansible documentation site: [http://docs.ansible.com/ansible/latest/modules_by_category.html](http://docs.ansible.com/ansible/latest/modules_by_category.html).
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 查看 Ansible 文档网站上的模块索引：[http://docs.ansible.com/ansible/latest/modules_by_category.html](http://docs.ansible.com/ansible/latest/modules_by_category.html)。
 - en: Currently, there are over 20 categories of modules with categories such as cloud,
     storage, Remote Management, and Windows.
+  id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前，模块有 20 多个类别，包括云、存储、远程管理和 Windows 等类别。
 - en: Sometimes in spite of all the modules out there, you may need to write your
     own. This chapter will take you through writing a module that you can use with
     your Ansible playbooks.
+  id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: 有时候，尽管有了所有这些模块，您可能仍然需要编写自己的模块。本章将带您编写一个可以与 Ansible playbook 一起使用的模块。
 - en: Ansible has an extremely detailed development guide ([http://docs.ansible.com/ansible/latest/dev_guide/index.html](http://docs.ansible.com/ansible/latest/dev_guide/index.html))
     that is the best place to start if you are planning to contribute your modules
     to be shipped with Ansible.
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 有一个非常详细的开发指南（[http://docs.ansible.com/ansible/latest/dev_guide/index.html](http://docs.ansible.com/ansible/latest/dev_guide/index.html)），如果您计划贡献您的模块以与
+    Ansible 一起发布，这是开始的最佳位置。
 - en: This chapter is not at all meant to replace that. Consider that if you plan
     to write modules for your internal use and you are not fussed about distributing
     them, this chapter offers you a simple-to-follow path where we will end up with
     a working module for enabling security automation, which has been our goal throughout.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章完全不打算取代它。考虑到，如果您计划为内部使用编写模块，并且您不介意分发它们，那么本章为您提供了一个简单易行的路径，我们最终将获得一个可用的模块，用于启用安全自动化，这一直是我们的目标。
 - en: 'We will look at the following:'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将研究以下内容：
 - en: How to set up the development environment
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如何设置开发环境
 - en: Writing an Ansible hello world module to understand the basics
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 编写一个 Ansible hello world 模块以了解基础知识
 - en: Where to seek further help
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 寻求进一步帮助的地方
 - en: Defining a security problem statement
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 定义一个安全问题陈述
 - en: Addressing that problem by writing a module of our own
+  id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过编写我们自己的模块来解决这个问题
 - en: 'Along with that, we will try to understand and attempt to answer the following
     questions:'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 除此之外，我们将尝试理解并试图回答以下问题：
 - en: What are the good use cases for modules?
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 模块的良好使用案例是什么？
 - en: When does it make sense to use roles?
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 何时使用角色才有意义？
 - en: How do modules differ from plugins?
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 模块与插件有何不同？
 - en: Let's get started with a simple hello world module.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从一个简单的 hello world 模块开始。
 - en: Getting started with a hello world Ansible module
+  id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 开始使用一个简单的 hello world Ansible 模块
 - en: We will pass one argument to our custom module and show if we have success or
     failure for the module executing based on that.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将向自定义模块传递一个参数，并根据此参数的执行情况显示模块执行成功或失败。
 - en: 'Since all of this is new to us, we will look at the following things:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于这一切对我们来说都是新的，我们将查看以下内容：
 - en: The source code of the hello world module
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: hello world 模块的源代码
 - en: The output of that module for both success and failure
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 该模块的成功和失败输出
 - en: The command that we will use to invoke it
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将用来调用它的命令
 - en: Before we get started, all of this is based on the Ansible Developer Guide!
     The following code is in Python.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们开始之前，所有这些都基于 Ansible 开发人员指南！以下代码是用 Python 编写的。
 - en: Code
+  id: totrans-28
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 代码
 - en: 'We use Python for many scripting tasks, but we are not experts in it. But we
     believe this code is simple enough to understand:'
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在许多脚本任务中使用 Python，但我们并不是专家。但我们相信这段代码足够简单易懂：
 - en: '[PRE0]'
+  id: totrans-30
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: We are importing some modules.
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们正在导入一些模块。
 - en: The second part is just how we need to declare the arguments we will accept
     for the module.
+  id: totrans-32
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 第二部分只是我们需要声明模块将接受的参数。
 - en: In our code, we can refer to the arguments the way we have taken the value of
     the `answer` variable.
+  id: totrans-33
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在我们的代码中，我们可以引用参数的方式就像我们取得了 `answer` 变量的值一样。
 - en: Based on the answer, if it is `no`, we indicate failure.
+  id: totrans-34
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 基于答案，如果是 `no`，我们表示失败。
 - en: If the answer is `yes`, we indicate success.
+  id: totrans-35
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果答案是 `yes`，我们表示成功。
 - en: 'Let''s see what the output of this looks like if we provide answer as `yes`:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看如果我们提供答案为 `yes` 时的输出是什么样子：
 - en: '[PRE1]'
+  id: totrans-37
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'And if the answer is `no`:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果答案是 `no`：
 - en: '[PRE2]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: The main difference in the output is the indication of either the `SUCCESS`
     or `FAILED` status and the message that we provided.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出中的主要区别是指示的 `SUCCESS` 或 `FAILED` 状态以及我们提供的消息。
 - en: 'Since we haven''t set up the development environment so far, we set an environment
     variable for this command:'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于到目前为止我们还没有设置开发环境，所以我们为此命令设置了一个环境变量：
 - en: '`ANSIBLE_LIBRARY=.` indicates that search the module to be executed in the
     current directory'
+  id: totrans-42
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`ANSIBLE_LIBRARY=.` 表示在当前目录中搜索要执行的模块'
 - en: With `-m`, we call our module
+  id: totrans-43
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 `-m`，我们调用我们的模块
 - en: With `-a`, we pass the module argument, which in this case is answered with
     possible values of `yes` or `no`
+  id: totrans-44
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 `-a`，我们传递模块参数，在这种情况下是可能值为 `yes` 或 `no`
 - en: We end with the host that we want to run the module on, which is local for this
     example
+  id: totrans-45
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们以我们要在其上运行模块的主机结束，对于此示例，它是本地的
 - en: While Ansible is written in Python, please note that the modules can be written
     in any language capable of returning messages in JSON. A great starting point
     for Rubyists is the Ansible for Rubyists ([https://github.com/ansible/ansible-for-rubyists](https://github.com/ansible/ansible-for-rubyists))
     repository on Github. Chapter 5 of *Learning Ansible* by Packt has covered this
     as well.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管 Ansible 是用 Python 编写的，请注意模块可以用任何能够返回 JSON 消息的语言编写。对于 Ruby 程序员来说，一个很好的起点是
+    Github 上的 Ansible for Rubyists ([https://github.com/ansible/ansible-for-rubyists](https://github.com/ansible/ansible-for-rubyists))
+    仓库。Packt 出版的《Learning Ansible》第 5 章也涵盖了这一点。
 - en: Setting up the development environment
+  id: totrans-47
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置开发环境
 - en: The primary requirement for Ansible 2.4 is Python 2.6 or higher and Python 3.5
     or higher. If you have either of them installed, we can follow the simple steps
     to get the development environment going.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 2.4 的主要要求是 Python 2.6 或更高版本和 Python 3.5 或更高版本。如果你安装了其中之一，我们可以按照简单的步骤进行开发环境设置。
 - en: 'From the Ansible Developer Guide:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 来自 Ansible 开发者指南：
 - en: Clone the Ansible repository: `$ git clone https://github.com/ansible/ansible.git`
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 克隆 Ansible 仓库：`$ git clone https://github.com/ansible/ansible.git`
 - en: Change the directory into the repository root directory: `$ cd ansible`
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 切换到仓库根目录：`$ cd ansible`
 - en: Create a virtual environment: `$ python3 -m venv venv (or for Python 2 $ virtualenv
     venv`
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建虚拟环境：`$ python3 -m venv venv`（或对于 Python 2 `$ virtualenv venv`
 - en: 'Note, this requires you to install the `virtualenv` package: `$ pip install
     virtualenv`'
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 注意，这需要你安装 `virtualenv` 包：`$ pip install virtualenv`
 - en: Activate the virtual environment: `$ . venv/bin/activate`
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 激活虚拟环境：`$ . venv/bin/activate`
 - en: Install the development requirements: `$ pip install -r requirements.txt`
+  id: totrans-55
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装开发要求：`$ pip install -r requirements.txt`
 - en: Run the environment setup script for each new dev shell process: `$ . hacking/env-setup`
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对每个新的 dev shell 进程运行环境设置脚本：`$ . hacking/env-setup`
 - en: You should end up with a `venv` prompt at this point. Here is a simple playbook
     to set up the development environment.
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 此时你应该得到一个 `venv` 提示符。以下是设置开发环境的一个简单 Playbook。
 - en: 'The following playbook will set up the developer environment by installing
     and setting up the virtual environment:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 Playbook 将通过安装和设置虚拟环境来设置开发环境：
 - en: '[PRE3]'
+  id: totrans-59
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'The following screenshot shows the playbook execution of the developer environment
     setup for writing your own Ansible modules using the Python virtual environment:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下屏幕截图显示了使用 Python 虚拟环境编写自己的 Ansible 模块设置开发环境的 Playbook 执行：
 - en: '![](img/af498854-8518-42d4-a369-b6ce26748db6.png)'
+  id: totrans-61
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/af498854-8518-42d4-a369-b6ce26748db6.png)'
 - en: Planning and what to keep in mind
+  id: totrans-62
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 计划和需要注意的事项
 - en: The Ansible Developer Guide has a section on how should you develop a module
     ([http://docs.ansible.com/ansible/latest/dev_guide/developing_modules.html#should-you-develop-a-module](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules.html#should-you-develop-a-module)).
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 开发者指南中有一个关于如何开发模块的部分 ([http://docs.ansible.com/ansible/latest/dev_guide/developing_modules.html#should-you-develop-a-module](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules.html#should-you-develop-a-module)).
 - en: In the section, they have multiple points on what to keep in mind before going
     ahead and developing a module.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 在该部分中，他们有多个关于继续开发模块前需要注意的要点。
 - en: Does a similar module already exist? It's always a good idea to check the current
     modules to see whether what you plan to build has been done before. The good news
     is, so far nobody has built an **Open Web Application Security Project** (**OWASP**)
     **Zed Attack Proxy** (**ZAP**) module.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 是否已经存在类似的模块？检查当前的模块是否已经做了你计划构建的事情总是一个好主意。好消息是，到目前为止还没有人建立一个**开放式 Web 应用程序安全项目**（**OWASP**）**Zed
+    Attack Proxy**（**ZAP**）模块。
 - en: Has someone already worked on a similar *Pull Request? *Again, maybe the module
     hasn't been published but that doesn't mean that folks are not working on it already.
     The document provides three convenient links to check if a similar PR is already
     in place.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 是否有人已经在类似的 *Pull Request* 上工作？再次强调，也许这个模块还没有发布，但这并不意味着人们还没有在上面工作。文档提供了三个方便的链接，以检查是否已经有类似的
+    PR 存在。
 - en: Additionally, it asks if rather than a module, we should look at an action plugin
     or role. The main reason we think it makes sense for us to develop the module
     is the fact that it will run on the nodes. ZAP provides an API endpoint if it
     is already running and we intend for our module to make it easy for us to run
     ZAP scans on hosted ZAP instances.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 另外，它询问是否应该查看一个动作插件或角色，而不是一个模块。我们认为开发模块对我们来说是有道理的主要原因是它将在节点上运行。如果 ZAP 已经在运行，ZAP
+    提供了一个 API 端点，我们打算让我们的模块可以方便地在托管的 ZAP 实例上运行 ZAP 扫描。
 - en: 'So, this is the plan for now:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 所以，现在的计划是：
 - en: Create a module that will connect to a hosted ZAP instance.
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个模块，将连接到托管的 ZAP 实例。
 - en: 'Provide the module with two main pieces of information:'
+  id: totrans-70
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为模块提供两个主要信息：
 - en: IP address of the hosted ZAP
+  id: totrans-71
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 托管 ZAP 的 IP 地址
 - en: Target URL for scanning
+  id: totrans-72
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 扫描目标 URL
 - en: By calling the module, we will have a task for scanning the target application.
+  id: totrans-73
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过调用该模块，我们将有一个任务来扫描目标应用程序。
 - en: OWASP ZAP module
+  id: totrans-74
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: OWASP ZAP 模块
 - en: OWASP ZAP has an API that we can use. Additionally, there is a Python module
     for consuming the API. We will try and use that to learn how to write our own
     Ansible modules.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP 有一个我们可以使用的 API。此外，有一个用于消费 API 的 Python 模块。我们将尝试使用它来学习如何编写自己的 Ansible
+    模块。
 - en: Create ZAP using Docker
+  id: totrans-76
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Docker 创建 ZAP
 - en: 'For our development, let''s use a Docker container to get ZAP going. Since
     we plan to use the API, we will run the container in headless mode:'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于我们的开发，让我们使用一个 Docker 容器来启动 ZAP。由于我们计划使用 API，我们将在无头模式下运行容器：
 - en: '[PRE4]'
+  id: totrans-78
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Explanation of the command
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 命令的解释
 - en: While we are doing dev, we can disable the API key: `-config api.disablekey=true`
+  id: totrans-80
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 当我们进行开发时，我们可以禁用 API 密钥：`-config api.disablekey=true`
 - en: Allow access to the API from any IP: `-config api.addrs.addr.name=.* -config
     api.addrs.addr.regex=true`
+  id: totrans-81
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 允许从任何 IP 访问 API：`-config api.addrs.addr.name=.* -config api.addrs.addr.regex=true`
 - en: Listen to port `8080`
+  id: totrans-82
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 监听端口 `8080`
 - en: 'If everything worked fine, you will see the following output:'
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一切正常，你将看到以下输出：
 - en: '**![](img/0d732a52-b810-4d6a-8556-1d7b093f9cb6.png)**'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: '**![](img/0d732a52-b810-4d6a-8556-1d7b093f9cb6.png)**'
 - en: Creating a vulnerable application
+  id: totrans-85
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建一个易受攻击的应用程序
 - en: For a vulnerable application, we can host one of our own but let's use the same
     online vulnerable application we used for the OWASP ZAP + Jenkins integration
     in [Chapter 5](5674486e-84e0-49b5-b1b2-e8455a0a1ea0.xhtml), *Automating* *Web
     Application Security Testing Using OWASP ZAP - *[http://testphp.vulnweb.com/](http://testphp.vulnweb.com/)
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于一个易受攻击的应用程序，我们可以托管一个自己的，但让我们使用同一个在线易受攻击的应用程序，我们在 [第 5 章](5674486e-84e0-49b5-b1b2-e8455a0a1ea0.xhtml)
+    中用于 OWASP ZAP + Jenkins 集成的：*自动化* *Web 应用程序安全测试使用 OWASP ZAP - *[http://testphp.vulnweb.com/](http://testphp.vulnweb.com/)
 - en: Ansible module template
+  id: totrans-87
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible 模块模板
 - en: We will take the sample code given in the module development guide to get started: [http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#new-module-development](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#new-module-development).
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用模块开发指南中给出的示例代码来开始：[http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#new-module-development](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#new-module-development)。
 - en: 'This template has a well-commented code and it is written in a manner that
     makes it easy for us to get started. The code is divided into the following parts:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个模板有一个注释齐全的代码，写得让我们很容易开始。代码分为以下几部分：
 - en: Metadata
+  id: totrans-90
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 元数据
 - en: Documenting the module
+  id: totrans-91
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 文档化模块
 - en: Functions we will be using
+  id: totrans-92
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将要使用的函数
 - en: Metadata
+  id: totrans-93
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 元数据
 - en: 'This section contains the information about the modules:'
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个部分包含有关模块的信息：
 - en: '[PRE5]'
+  id: totrans-95
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: This module isn't supported officially, hence the use of `community`.
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个模块没有官方支持，因此使用了 `community`。
 - en: Documenting the module
+  id: totrans-97
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 文档化模块
 - en: The module documentation is generated from the module code itself. The `DOCUMENTATION`
     docstring is compulsory for the modules to be created now.
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 模块文档是从模块代码本身生成的。 现在创建的模块必须有 `DOCUMENTATION` 文档字符串。
 - en: The easiest way to get started is to look at this example: [https://github.com/ansible/ansible/blob/devel/examples/DOCUMENTATION.yml](https://github.com/ansible/ansible/blob/devel/examples/DOCUMENTATION.yml).
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 开始的最简单方法是查看此示例：[https://github.com/ansible/ansible/blob/devel/examples/DOCUMENTATION.yml](https://github.com/ansible/ansible/blob/devel/examples/DOCUMENTATION.yml)。
 - en: 'The list of fields required here are:'
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 此处所需的字段清单为：
 - en: '`module`: Module name'
+  id: totrans-101
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`module`：模块名称'
 - en: '`short_description`: Short description'
+  id: totrans-102
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`short_description`：简短描述'
 - en: '`description`: Description'
+  id: totrans-103
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`description`：描述'
 - en: '`version_added`: Indicated by `X.Y`'
+  id: totrans-104
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`version_added`：由 `X.Y` 指示'
 - en: '`author`: Your name and twitter/GitHub username'
+  id: totrans-105
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`author`：您的姓名和 Twitter/GitHub 用户名'
 - en: '`options`: Each of the options supported by the module'
+  id: totrans-106
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`options`：模块支持的每个选项'
 - en: '`notes`: Anything else that a module user should be aware of'
+  id: totrans-107
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`notes`：模块用户应该注意的任何其他事项'
 - en: '`requirements`: We list additional package requirements'
+  id: totrans-108
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`requirements`：我们列出额外的包要求'
 - en: For more details about the fields, visit [http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html#fields](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html#fields).
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关字段的更多详细信息，请访问[http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html#fields](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html#fields)。
 - en: Source code template
+  id: totrans-110
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 源代码模板
 - en: Here are some snippets of the source code that we will work with to write our
     module. We have already discussed the metadata and documentation parts. We also
     need to write docstrings for examples and what the module will be returning.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有一些我们将用来编写模块的源代码片段。我们已经讨论了元数据和文档部分。我们还需要为示例和模块将返回的内容编写文档字符串。
 - en: 'Our imports—we can import all the modules we need for our module here:'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们的导入模块 - 我们可以在这里导入构建模块所需的所有模块：
 - en: '[PRE6]'
+  id: totrans-113
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'The main code block—inside the function `run_module` we work and do the following:'
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 主要代码块 - 在函数 `run_module` 中，我们进行以下工作：
 - en: Define all the arguments we need for the module to work.
+  id: totrans-115
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 定义模块正常工作所需的所有参数。
 - en: Initialize the results dictionary.
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 初始化结果字典。
 - en: 'Create the `AnsibleModule` object and pass it common attributes that we may
     need:'
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建 `AnsibleModule` 对象并传递可能需要的公共属性：
 - en: '[PRE7]'
+  id: totrans-118
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Working with exceptions and results:'
+  id: totrans-119
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 处理异常和结果：
 - en: '[PRE8]'
+  id: totrans-120
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Just remember the following:'
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 只需记住以下几点：
 - en: If we hit any kind of errors or exceptions, we invoke the `fail_json` function
     of the `AnsibleModule` object
+  id: totrans-122
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果遇到任何错误或异常，我们调用 `AnsibleModule` 对象的 `fail_json` 函数
 - en: If everything worked out well, we invoke the `exit_json` function of the same
     object
+  id: totrans-123
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果一切顺利，我们调用相同对象的 `exit_json` 函数
 - en: 'Invoking our function completes the code:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 调用我们的功能完成代码：
 - en: '[PRE9]'
+  id: totrans-125
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'At this point, we have the following things in place and we are ready for the
     next steps:'
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前，我们已经准备好了以下工作，并准备进行下一步：
 - en: '| Template of the module code | Ready |'
+  id: totrans-127
   prefs: []
   type: TYPE_TB
+  zh: '| 模块代码模板 | 就绪 |'
 - en: '| Vulnerable application that we need to scan (target) | Ready |'
+  id: totrans-128
   prefs: []
   type: TYPE_TB
+  zh: '| 我们需要扫描的易受攻击应用程序（目标）| 就绪 |'
 - en: '| OWASP ZAP Proxy with API enabled and running in headless mode (host and port)
     | Ready |'
+  id: totrans-129
   prefs: []
   type: TYPE_TB
+  zh: '| 启用 API 并在无头模式下运行的 OWASP ZAP 代理（主机和端口）| 就绪 |'
 - en: '| OWASP ZAP Python API code that we can refer to | Pending |'
+  id: totrans-130
   prefs: []
   type: TYPE_TB
+  zh: '| 我们可以参考的 OWASP ZAP Python API 代码 | 待定 |'
 - en: We want to focus on writing the Ansible module rather than spending time learning
     the complete OWASP ZAP API. While we recommend that you do, it's fine to wait
     until you have gotten the module working.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们希望专注于编写 Ansible 模块，而不是花时间学习完整的 OWASP ZAP API。虽然我们建议您这样做，但等到模块正常工作后再学习也可以。
 - en: OWASP ZAP Python API sample script
+  id: totrans-132
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: OWASP ZAP Python API 示例脚本
 - en: OWASP ZAP Python API package comes with a very handy script that is complete
     in terms of code for spidering and doing an active scan of a web application.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP Python API 包带有一个非常实用的脚本，完整涵盖了对 Web 应用程序进行爬行和主动扫描的代码。
 - en: Download the code to study it from [https://github.com/zaproxy/zaproxy/wiki/ApiPython#an-example-python-script](https://github.com/zaproxy/zaproxy/wiki/ApiPython#an-example-python-script).
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 从[https://github.com/zaproxy/zaproxy/wiki/ApiPython#an-example-python-script](https://github.com/zaproxy/zaproxy/wiki/ApiPython#an-example-python-script)下载代码进行学习。
 - en: 'Here are some snippets from sample code that we are interested in at this point. Import
     the Python API client for OWASP ZAP. This is installed using `pip install python-owasp-zap-v2.4`:'
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里有一些我们目前感兴趣的样本代码片段。 导入用于 OWASP ZAP 的 Python API 客户端。 这通过 `pip install python-owasp-zap-v2.4`
+    安装：
 - en: '[PRE10]'
+  id: totrans-136
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Now, we connect to the ZAP instance API endpoint. We can provide the host and
     port for the OWASP ZAP instance as an argument to our module:'
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们连接到ZAP实例API端点。我们可以将主机和端口提供给我们模块的OWASP ZAP实例作为参数：
 - en: '[PRE11]'
+  id: totrans-138
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Provide the host/IP address of the website that we want to scan:'
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 提供我们想要扫描的网站的主机/IP地址：
 - en: '[PRE12]'
+  id: totrans-140
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: This code is a great starter template for us to use in our module.
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 此代码是我们在模块中使用的一个很好的起始模板。
 - en: Here, we are ready with OWASP ZAP Python API code that we can refer to.
+  id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，我们准备好了可以参考的OWASP ZAP Python API代码。
 - en: 'Connect to the ZAP instance. At this point, we copied the important bits of
     code that:'
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 连接到ZAP实例。此时，我们复制了代码的重要部分，即：
 - en: Connect to the target.
+  id: totrans-144
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 连接到目标。
 - en: Initiate spidering and the active security scan.
+  id: totrans-145
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动爬虫和主动安全扫描。
 - en: But we quickly ran into an error. We were returning a string during an exception,
     which obviously wasn't in the JSON format as required by Ansible.
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 但是我们很快遇到了一个错误。在异常期间我们返回了一个字符串，这显然不符合Ansible所需的JSON格式。
 - en: This resulted in an error which didn't have enough information for us to take
     action
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 这导致了一个错误，我们没有足够的信息来采取行动
 - en: '![](img/e219ede6-f722-42bf-8e27-51d241f642c9.png)'
+  id: totrans-148
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e219ede6-f722-42bf-8e27-51d241f642c9.png)'
 - en: Ansible modules should only return JSON, otherwise you may see cryptic errors
     such as above
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible模块应该只返回JSON，否则您可能会看到像上面那样的难以理解的错误
 - en: A quick reading of conventions, best practices, and pitfalls at [http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls)
     explained the issue to us.
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 在[http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls)中快速阅读惯例、最佳实践和陷阱为我们解释了问题。
 - en: We strongly recommend that you go through this guide if you face any issues
     during your module writing: [http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls).
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您在编写模块过程中遇到任何问题，我们强烈建议您阅读本指南：[http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls](http://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html#conventions-best-practices-and-pitfalls)。
 - en: Use the OWASP ZAP API documentation to learn more: [https://github.com/zaproxy/zaproxy/wiki/ApiGen_Index](https://github.com/zaproxy/zaproxy/wiki/ApiGen_Index).
+  id: totrans-152
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用OWASP ZAP API文档来了解更多信息：[https://github.com/zaproxy/zaproxy/wiki/ApiGen_Index](https://github.com/zaproxy/zaproxy/wiki/ApiGen_Index)。
 - en: Complete code listing
+  id: totrans-153
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 完整的代码清单
 - en: 'This code is also available on GitHub ([https://github.com/appsecco/ansible-module-owasp-zap](https://github.com/appsecco/ansible-module-owasp-zap)).
     All comments, metadata, and documentation doctstrings have been removed from this
     listing:'
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 此代码也可以在GitHub上找到（[https://github.com/appsecco/ansible-module-owasp-zap](https://github.com/appsecco/ansible-module-owasp-zap)）。所有注释、元数据和文档字符串都已从此列表中删除：
 - en: '[PRE13]'
+  id: totrans-155
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: Depending on the website being spidered and scanned, this can take some time
     to finish. At the end of its execution, you will have the scanning results in
     `results['output']`.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据被爬取和扫描的网站不同，这可能需要一些时间来完成。在执行结束时，您将在`results['output']`中获得扫描结果。
 - en: Running the module
+  id: totrans-157
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行模块
 - en: 'The choices we have for running the module are as follows:'
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们运行模块的选择如下：
 - en: We copy it to the standard path of Ansible library.
+  id: totrans-159
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们将其复制到Ansible库的标准路径。
 - en: We provide a path to Ansible library whenever we have our module file.
+  id: totrans-160
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每当我们有我们的模块文件时，我们都会提供一个路径到Ansible库。
 - en: Run this file through a playbook.
+  id: totrans-161
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过playbook运行此文件。
 - en: 'The following command will invoke our module for us to test and see the results:'
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下命令将调用我们的模块以供我们测试并查看结果：
 - en: '[PRE14]'
+  id: totrans-163
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Explanation of the command
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 命令的解释
 - en: '`ansible` command line'
+  id: totrans-165
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`ansible`命令行'
 - en: '`-m` to give the module name, which is `owasp_zap_test_module`'
+  id: totrans-166
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`-m`用于提供模块名称，即`owasp_zap_test_module`'
 - en: It will run on `localhost`
+  id: totrans-167
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它将在`localhost`上运行
 - en: '`-a` allows us to pass the `host` and `target` module arguments'
+  id: totrans-168
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`-a`允许我们传递`host`和`target`模块参数'
 - en: '`-vvv` is for the verbosity of output'
+  id: totrans-169
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`-vvv` 用于输出的详细程度。'
 - en: Playbook for the module
+  id: totrans-170
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 模块的playbook
 - en: 'Here is a simple playbook to test whether everything is working:'
+  id: totrans-171
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是一个简单的playbook，用于测试一切是否正常运行：
 - en: '[PRE15]'
+  id: totrans-172
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Execute the playbook with this command:'
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用此命令执行playbook：
 - en: '[PRE16]'
+  id: totrans-174
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: '![](img/260d3644-61a1-49df-8b52-50b8310868ba.png)'
+  id: totrans-175
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/260d3644-61a1-49df-8b52-50b8310868ba.png)'
 - en: An important thing to remember is that just because we have a working module
     doesn't mean that the good folks at Ansible will automatically accept our module
     to ship with their next version of the software. A lot of additional work is required
     for our module to be ready to be used by everyone.
+  id: totrans-176
   prefs: []
   type: TYPE_NORMAL
+  zh: 重要的一点要记住的是，仅仅因为我们有一个可用的模块，并不意味着Ansible的优秀工程师们会自动接受我们的模块并将其随软件的下一个版本一起发布。我们的模块要能够被所有人使用，还需要进行大量的额外工作。
 - en: As usual, the best guide for this is the developer guide mentioned earlier in
     this chapter.
+  id: totrans-177
   prefs: []
   type: TYPE_NORMAL
+  zh: 通常，最好的指南是本章前面提到的开发人员指南。
 - en: One of the easy things to add to our module would be the ability to send the
     API key as an argument. Most ZAP instances that are being used for regular scanning
     will already have this configured. Additionally, this key can be protected by
     the Ansible vault when stored in the playbook.
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们的模块中可以添加的一个简单的功能是能够将API密钥作为参数发送。大多数用于常规扫描的ZAP实例已经配置了这个。此外，当在playbook中存储时，此密钥可以由Ansible
+    vault保护。
 - en: Adding an API key as an argument
+  id: totrans-179
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 添加API密钥作为参数
 - en: 'Just by making the following changes, we will be able to add `apikey` as an
     argument:'
+  id: totrans-180
   prefs: []
   type: TYPE_NORMAL
+  zh: 只需做出以下更改，我们就能够将`apikey`添加为一个参数：
 - en: First, we add this to the `module_args` dictionary on lines 76-78: `apikey=dict(type='str',required=False,default=None)`
+  id: totrans-181
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 首先，我们将其添加到第76-78行的`module_args`字典中：`apikey=dict(type='str',required=False,default=None)`
 - en: Then we check whether `module.params['apikey']` is set to a value of `None`
+  id: totrans-182
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 然后，我们检查 `module.params['apikey']` 是否设置为`None`的值
 - en: If it is not, set it to `apikey = module.params['apikey']`
+  id: totrans-183
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果不是，将其设置为 `apikey = module.params['apikey']`
 - en: Now, if the module is used with the Ansible command-line tool, pass it along
     with the `target` and `host`, and if it is used in the playbook, pass it there
+  id: totrans-184
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 现在，如果模块与Ansible命令行工具一起使用，请将其与 `target` 和 `host` 一起传递，如果在playbook中使用，请在那里传递
 - en: Adding scan type as an argument
+  id: totrans-185
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 将扫描类型添加为参数
 - en: If you have followed so far, you may realize that the scan that we ran is an
     active scan. The scanner sends attack traffic against the target in an active
     scan.
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你迄今为止一直在跟进，你可能意识到我们运行的扫描是一个主动扫描。扫描器会对目标发送攻击流量进行主动扫描。
 - en: Due to that fact, sometimes if the website is large, it may take a long time
     to finish.
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于这个事实，有时如果网站很大，完成可能需要很长时间。
 - en: More information about active scans can be found at [https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsAscan](https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsAscan).
+  id: totrans-188
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关主动扫描的更多信息，请访问[https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsAscan](https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsAscan)。
 - en: 'We would like to add an argument for being able to provide the type of scan
     to run. So far we have two types:'
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们希望添加一个参数，以便能够提供要运行的扫描类型。到目前为止，我们有两种类型：
 - en: '**Active**: Sends attack traffic'
+  id: totrans-190
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**主动**：发送攻击流量'
 - en: '**Passive**: Parses all the site files downloaded during the spidering phase'
+  id: totrans-191
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**被动扫描**：在蜘蛛爬取阶段下载的所有站点文件都会被解析'
 - en: 'We start by adding this as part of the `module_args`:'
+  id: totrans-192
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们首先将其作为`module_args`的一部分添加：
 - en: '[PRE17]'
+  id: totrans-193
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: The newly added line is in bold to highlight the change. Notice that we have
     defined the default value now and this argument is only allowed two choices currently.
     So if nothing is set, we do the faster, less invasive, passive scan.
+  id: totrans-194
   prefs: []
   type: TYPE_NORMAL
+  zh: 新添加的行已加粗以突出显示更改。请注意，我们现在定义了默认值，并且当前只允许这个参数有两个选择。因此，如果未设置任何值，则执行更快、更少侵入性的被动扫描。
 - en: 'We need to get the value of module param into a variable called `scantype`:'
+  id: totrans-195
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们需要将模块参数的值放入名为`scantype`的变量中：
 - en: '[PRE18]'
+  id: totrans-196
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'The logic changes to accommodate two possible values now:'
+  id: totrans-197
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在逻辑改变以适应两个可能的值：
 - en: '[PRE19]'
+  id: totrans-198
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'If `scantype` is set and the value is `active`, only then does it go ahead
     and do an active scan. This improvement makes our module more flexible:'
+  id: totrans-199
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果`scantype`已设置且值为`active`，那么它才会进行主动扫描。这个改进使我们的模块更加灵活：
 - en: '[PRE20]'
+  id: totrans-200
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: Using Ansible as a Python module
+  id: totrans-201
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Ansible作为Python模块
 - en: Using Ansible directly in your Python code is a powerful way of interacting
     with it. Please note that with Ansible 2.0 and newer, this is not the simplest
     of way of doing that.
+  id: totrans-202
   prefs: []
   type: TYPE_NORMAL
+  zh: 直接在您的Python代码中使用Ansible是一种与其交互的强大方式。请注意，使用Ansible 2.0及更高版本时，这并不是最简单的方法。
 - en: Before we proceed we should let you know what the core Ansible team thinks about
     using the Python API directly
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 在继续之前，我们应该告诉你核心Ansible团队对直接使用Python API的看法
 - en: From http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html
+  id: totrans-204
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html
 - en: Please note that while we make this API available it is not intended for direct
     consumption, it is here for the support of the Ansible command line tools. We
     try not to make breaking changes but we reserve the right to do so at any time
     if it makes sense for the Ansible toolset.
+  id: totrans-205
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，虽然我们提供了此 API，但它不适用于直接使用，它在这里是为了支持 Ansible 命令行工具。我们尽量不会进行破坏性更改，但如果对 Ansible
+    工具集有意义，我们保留随时进行更改的权利。
 - en: The following documentation is provided for those that still want to use the
     API directly, but be mindful this is not something the Ansible team supports.
+  id: totrans-206
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下文档提供给那些仍然希望直接使用 API 的人，但请注意，这不是 Ansible 团队支持的内容。
 - en: 'The following code is from the Ansible Developer Guide documentation: [http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html](http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html):'
+  id: totrans-207
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码来自 Ansible 开发者指南文档：[http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html](http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html)：
 - en: '[PRE21]'
+  id: totrans-208
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Once all the initial work is done, this is how a task will be executed:'
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦所有的初始工作都完成了，任务将会这样执行：
 - en: '[PRE22]'
+  id: totrans-210
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'Before Ansible 2.0, the whole process was a lot easier. But this code doesn''t
     work anymore:'
+  id: totrans-211
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Ansible 2.0 之前，整个过程要简单得多。但是这段代码现在不再适用了：
 - en: '[PRE23]'
+  id: totrans-212
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: Summary
+  id: totrans-213
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: In this chapter, we created a working Ansible module for security automation.
     We started by creating a sort of hello world module that didn't do much, but helped
     us understand the layout of what a module file could look like. We followed the
     instructions as per the Ansible developer guide on how to set up an environment
     for being able to do module development. We articulated our requirement from the
     module and picked OWASP ZAP as a possible candidate for creating the module.
+  id: totrans-214
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这一章中，我们创建了一个用于安全自动化的工作中的 Ansible 模块。我们首先创建了一个类似于 hello world 的模块，虽然功能不多，但帮助我们理解了一个模块文件可能是什么样子的布局。我们按照
+    Ansible 开发者指南的说明设置了一个能够进行模块开发的环境。我们阐述了我们对模块的需求，并选择了 OWASP ZAP 作为创建模块的可能候选者。
 - en: Using the training wheels, such as the template from the developer docks, we
     created the module and we saw how to use it using Ansible CLI or a playbook. We
     added a couple more options to the original code so that we could make the module
     more useful and flexible. Now we have an OWASP ZAP Ansible module that can connect
     to any hosted OWASP ZAP that allows access with the API key and executes a passive
     or active scan on the target.
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用开发者文档中的模板等辅助工具，我们创建了该模块，并学习了如何使用 Ansible CLI 或 playbook 使用它。我们在原始代码中添加了几个选项，以使模块更加实用和灵活。现在我们有了一个能够连接到任何允许使用
+    API 密钥访问并在目标上执行被动或主动扫描的 OWASP ZAP Ansible 模块。
 - en: This is the penultimate chapter of the book. In the next chapter, we will look
     at additional references, security of our secrets using Ansible Vault, and some
     world-class references of security automation already enabled using Ansible.
+  id: totrans-216
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是本书的倒数第二章。在下一章中，我们将查看额外的参考资料，使用 Ansible Vault 保护我们的机密信息，以及一些已经使用 Ansible 实现的世界级安全自动化的参考资料。
