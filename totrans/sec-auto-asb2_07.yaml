@@ -181,6 +181,7 @@
   id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些 CIS 基准通常以 PDF 文档的形式表达，任何想了解他们的系统与 CIS 专家对其安全性的看法相比有多安全的人都可以获得。
 - en: CIS is a not-for-profit organization with not-for-profit standards for internet
     security, and are a recognized global standard and best practices for securing
     IT systems and data against attacks. CIS Benchmarks are the only consensus-based,
@@ -189,109 +190,132 @@
   id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: CIS 是一个非营利性组织，为互联网安全制定了非营利性标准，并被认可为全球标准和最佳实践，用于保护 IT 系统和数据免受攻击。CIS 基准是唯一由政府、企业、行业和学术界开发并接受的基于共识的最佳实践安全配置指南。更多信息，请访问
+    [https://www.cisecurity.org/cis-benchmarks](https://www.cisecurity.org/cis-benchmarks)。
 - en: STIG is related to the configuration of information systems by US Government's
     department named **DISA**.
   id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: STIG 与美国政府部门**DISA**的信息系统配置相关。
 - en: The STIGs contain technical guidance to **lock down** information systems/software
     that might otherwise be vulnerable to a malicious computer attack. For more information,
     visit [https://iase.disa.mil/stigs/Pages/index.aspx](https://iase.disa.mil/stigs/Pages/index.aspx).
   id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: STIGs 包含了技术指导，用于**锁定**可能易受恶意计算机攻击影响的信息系统/软件。更多信息，请访问 [https://iase.disa.mil/stigs/Pages/index.aspx](https://iase.disa.mil/stigs/Pages/index.aspx)。
 - en: NIST maintains a checklist program that are expressed in files that follows
     the **Security Content Automation Protocol** (**SCAP**). Software tools can read
     these files to automate the configuration changes and audit running configurations.
   id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: NIST 维护一个以符合**安全内容自动化协议**（**SCAP**）的文件形式表达的检查表程序。软件工具可以读取这些文件以自动化配置更改和审计运行配置。
 - en: SCAP enables validated security tools to automatically perform configuration
     checking using SCAP-expressed NCP checklists. For more information, visit [https://www.nist.gov/programs-projects/national-checklist-program](https://www.nist.gov/programs-projects/national-checklist-program).
   id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: SCAP 使得验证过的安全工具可以使用 SCAP 表达的 NCP 检查表来自动执行配置检查。更多信息请访问 [https://www.nist.gov/programs-projects/national-checklist-program](https://www.nist.gov/programs-projects/national-checklist-program)。
 - en: Operating system hardening for baseline using an Ansible playbook
   id: totrans-33
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible 剧本对基线进行操作系统加固
 - en: Till now, we have created multiple playbooks to perform certain operations.
     Now, we will see how we can use existing playbooks from the community (**Ansible
     Galaxy**).
   id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们已经创建了多个剧本来执行某些操作。现在，我们将看到如何使用社区提供的现有剧本（**Ansible Galaxy**）。
 - en: Hardening Framework is a project by Deutsche Telekom to manage thousands of
     servers for security, compliance, and maintenance. The goal of this project is
     to create a common layer for hardening operating systems and services easily.
   id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: Hardening Framework 是德国电信的一个项目，用于管理成千上万台服务器的安全性、合规性和维护。该项目的目标是创建一个通用的层，以便轻松地加固操作系统和服务。
 - en: If your organization is using chef or puppet tools as configuration management
     tools, the concepts are completely the same. You can find related cookbooks and
     details at [http://dev-sec.io](http://dev-sec.io).
   id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你的组织使用 chef 或 puppet 工具作为配置管理工具，那么这些概念完全相同。你可以在 [http://dev-sec.io](http://dev-sec.io)
+    找到相关的菜谱和详细信息。
 - en: The following playbook provides multiple security configurations, standards,
     and ways to protect operating system against different attacks and security vulnerabilities.
   id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下的剧本提供了多种安全配置、标准以及保护操作系统免受不同攻击和安全漏洞的方法。
 - en: 'Some of the tasks it will perform include the following:'
   id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 它将执行的一些任务包括以下内容：
 - en: Configures package management, for example, allows only signed packages
   id: totrans-39
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置软件包管理，例如，只允许签名软件包
 - en: Remove packages with known issues
   id: totrans-40
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 删除已知问题的软件包
 - en: Configures `pam` and `pam_limits` modules
   id: totrans-41
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置 `pam` 和 `pam_limits` 模块
 - en: Shadow password suite configuration
   id: totrans-42
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Shadow 密码套件配置
 - en: Configures system path permissions
   id: totrans-43
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置系统路径权限
 - en: Disable core dumps via soft limits
   id: totrans-44
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过软限制禁用核心转储
 - en: Restrict root logins to system console
   id: totrans-45
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 限制 root 登录到系统控制台
 - en: Set SUIDs
   id: totrans-46
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 设置 SUIDs
 - en: Configures kernel parameters via `sysctl`
   id: totrans-47
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 `sysctl` 配置内核参数
 - en: 'Downloading and executing Ansible playbooks from galaxy is as simple as follows:'
   id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 galaxy 下载和执行 Ansible 剧本就像下面这样简单：
 - en: '[PRE0]'
   id: totrans-49
   prefs: []
@@ -301,10 +325,12 @@
   id: totrans-50
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5028b574-37de-4f45-aa1b-185c6ec6f696.png)'
 - en: The dev-sec.os-hardening playbook in execution
   id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 在执行中的 dev-sec.os-hardening 剧本
 - en: The preceding playbook will detect the operating system and perform hardening steps
     based on the different guidelines. This can be configured as required by updating
     the default variables values. Refer to [https://github.com/dev-sec/ansible-os-hardening](https://github.com/dev-sec/ansible-os-hardening)
@@ -312,11 +338,14 @@
   id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面的 playbook 将检测操作系统，并根据不同的指南执行加固步骤。可以通过更新默认变量值来配置此内容。有关 playbook 的更多详细信息，请参阅
+    [https://github.com/dev-sec/ansible-os-hardening](https://github.com/dev-sec/ansible-os-hardening)。
 - en: STIGs Ansible role for automated security hardening for Linux hosts
   id: totrans-53
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用于 Linux 主机的自动化安全加固的 STIGs Ansible 角色
 - en: OpenStack has an awesome project named **ansible-hardening** ([https://github.com/openstack/ansible-hardening](https://github.com/openstack/ansible-hardening)),
     which applies the security configuration changes as per the STIGs standards. More
     details about the STIGs benchmarks for Unix/Linux operating systems can be found
@@ -324,113 +353,137 @@
   id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: OpenStack 有一个名为 **ansible-hardening** 的令人敬畏的项目（[https://github.com/openstack/ansible-hardening](https://github.com/openstack/ansible-hardening)），它根据
+    STIGs 标准应用安全配置更改。有关 Unix/Linux 操作系统的 STIGs 基准的更多详细信息，请访问 [https://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx](https://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx)。
 - en: 'It performs security hardening for the following domains:'
   id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 它为以下领域执行安全强化：
 - en: '`accounts`: User account security controls'
   id: totrans-56
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`accounts`: 用户帐户安全控制'
 - en: '`aide`: Advanced Intrusion Detection Environment'
   id: totrans-57
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`aide`: 高级入侵检测环境'
 - en: '`auditd`: Audit daemon'
   id: totrans-58
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`auditd`: 审计守护程序'
 - en: '`auth`: Authentication'
   id: totrans-59
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`auth`: 认证'
 - en: '`file_perms`: Filesystem permissions'
   id: totrans-60
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`file_perms`: 文件系统权限'
 - en: '`graphical`: Graphical login security controls'
   id: totrans-61
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`graphical`: 图形化登录安全控制'
 - en: '`kernel`: Kernel parameters'
   id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`kernel`: 内核参数'
 - en: '`lsm`: Linux Security Modules'
   id: totrans-63
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`lsm`: Linux 安全模块'
 - en: '`misc`: Miscellaneous security controls'
   id: totrans-64
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`misc`: 杂项安全控制'
 - en: '`packages`: Package managers'
   id: totrans-65
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`packages`: 软件包管理器'
 - en: '`sshd`: SSH daemon'
   id: totrans-66
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`sshd`: SSH 守护程序'
 - en: The `ansible-hardening` playbook supports multiple Linux operating systems
   id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: '`ansible-hardening` playbook 支持多个 Linux 操作系统'
 - en: CentOS 7
   id: totrans-68
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: CentOS 7
 - en: Debian jessie
   id: totrans-69
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Debian jessie
 - en: Fedora 26
   id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Fedora 26
 - en: openSUSE Leap 42.2 and 42.3
   id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: openSUSE Leap 42.2 和 42.3
 - en: Red Hat Enterprise Linux 7
   id: totrans-72
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Red Hat Enterprise Linux 7
 - en: SUSE Linux Enterprise 12 (experimental)
   id: totrans-73
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: SUSE Linux Enterprise 12（实验性）
 - en: Ubuntu 16.04
   id: totrans-74
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ubuntu 16.04
 - en: For more details about the project and documentation, see [https://docs.openstack.org/ansible-hardening/latest](https://docs.openstack.org/ansible-hardening/latest).
   id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关项目和文档的更多详细信息，请参阅 [https://docs.openstack.org/ansible-hardening/latest](https://docs.openstack.org/ansible-hardening/latest)。
 - en: 'Download the role from the GitHub repository itself using `ansible-galaxy`
     as follows:'
   id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 `ansible-galaxy` 从 GitHub 存储库本身下载角色，如下所示：
 - en: '[PRE1]'
   id: totrans-77
   prefs: []
@@ -441,6 +494,7 @@
   id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: playbook 如下所示。与以前的 playbook 类似，可以通过更改默认变量值来配置它所需的内容：
 - en: '[PRE2]'
   id: totrans-79
   prefs: []
@@ -450,25 +504,30 @@
   id: totrans-80
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4b142365-4106-401d-9773-a6f0b7908a38.png)'
 - en: An Ansible-hardening playbook in execution CentOS-7 for STIGs checklist
   id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个在 CentOS-7 上执行的 Ansible-hardening playbook 用于 STIGs checklist
 - en: The preceding playbook is executing on a CentOS-7 server against the STIG checklist.
   id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面的 playbook 在 CentOS-7 服务器上执行，用于执行 STIG checklist。
 - en: Continuous security scans and reports for OpenSCAP using Ansible Tower
   id: totrans-83
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible Tower 进行 OpenSCAP 的持续安全扫描和报告
 - en: OpenSCAP is a set of security tools, policies, and standards to perform security
     compliance checks against the systems by following SCAP. SCAP is the U.S. standard
     maintained by NIST.
   id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: OpenSCAP 是一组安全工具、策略和标准，通过遵循 SCAP 对系统执行安全合规性检查。SCAP 是由 NIST 维护的美国标准。
 - en: The SCAP scanner application reads a SCAP security policy and checks whether
     the system is compliant with it. It goes through all of the rules defined in the
     policy one by one and reports whether each rule is fulfilled. If all checks pass,
@@ -476,30 +535,36 @@
   id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: SCAP 扫描器应用程序读取 SCAP 安全策略，并检查系统是否符合该策略。它逐个检查策略中定义的所有规则，并报告每个规则是否得到满足。如果所有检查都通过，则系统符合安全策略。
 - en: 'OpenSCAP follows these steps to perform scanning on your system:'
   id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: OpenSCAP 按照以下步骤对系统进行扫描：
 - en: Install SCAP Workbench or OpenSCAP Base (for more information, visit [https://www.open-scap.org](https://www.open-scap.org))
   id: totrans-87
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 SCAP Workbench 或 OpenSCAP Base（有关更多信息，请访问 [https://www.open-scap.org](https://www.open-scap.org)）
 - en: Choose a policy
   id: totrans-88
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 选择一个策略
 - en: Adjust your settings
   id: totrans-89
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 调整您的设置
 - en: Evaluate the system
   id: totrans-90
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 评估系统
 - en: The following playbook will install `openscap-scanner` and `scap-security-guide`
     software to perform checks. Then, it will perform the scan as per the given profile
     and policy using the `oscap` tool.
@@ -1424,63 +1489,77 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 更多关于nmap的选项和文档信息可以在[https://nmap.org/book/man.html](https://nmap.org/book/man.html)找到。
 - en: '![](img/4df18006-8ab5-47eb-88a0-a1cc62216722.png)'
   id: totrans-239
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4df18006-8ab5-47eb-88a0-a1cc62216722.png)'
 - en: Nmap basic port scan playbook execution
   id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: Nmap基本端口扫描playbook执行
 - en: 'The output of playbook for running a basic Nmap scan is:'
   id: totrans-241
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行基本Nmap扫描的playbook的输出为：
 - en: '![](img/989d0d43-98ad-47c5-ae25-b416d93178d2.png)'
   id: totrans-242
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/989d0d43-98ad-47c5-ae25-b416d93178d2.png)'
 - en: 'Figure: Playbook scan output in 3 different formats'
   id: totrans-243
   prefs: []
   type: TYPE_NORMAL
+  zh: 图：playbook以三种不同的格式进行扫描输出
 - en: 'The playbook after executing has created three reports of the format Nmap supports:'
   id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行playbook后，生成了Nmap支持的三种格式的报告：
 - en: '![](img/df624100-27d6-491f-b672-156233fac84e.png)'
   id: totrans-245
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/df624100-27d6-491f-b672-156233fac84e.png)'
 - en: 'Figure: Playbook scan output in nmap format'
   id: totrans-246
   prefs: []
   type: TYPE_NORMAL
+  zh: 图：nmap格式的playbook扫描输出
 - en: By seeing the output of the `.nmap` file, we can easily see exactly what was
     found by the Nmap scan.
   id: totrans-247
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过查看`.nmap`文件的输出，我们可以轻松地看到Nmap扫描发现了什么。
 - en: Nmap NSE scanning playbook
   id: totrans-248
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Nmap NSE扫描playbook
 - en: The following playbook will perform enumeration of directories used by popular
     web applications and servers using `http-enum` and finds options that are supported
     by an HTTP server using `http-methods` using Nmap scripts.
   id: totrans-249
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下playbook将使用Nmap脚本执行对常用Web应用和服务器使用的目录进行枚举，并使用Nmap脚本查找HTTP服务器支持的选项。
 - en: More about Nmap NSE can be found at [https://nmap.org/book/nse.html](https://nmap.org/book/nse.html).
   id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多关于Nmap NSE的信息可以在[https://nmap.org/book/nse.html](https://nmap.org/book/nse.html)找到。
 - en: 'The following playbook will perform `http-enum` and `http-methods` scans against `scanme.nmap.org` of
     ports `80` and `443`:'
   id: totrans-251
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下的playbook将对`scanme.nmap.org`的端口`80`和`443`进行`http-enum`和`http-methods`扫描：
 - en: '[PRE11]'
   id: totrans-252
   prefs: []
@@ -1491,26 +1570,32 @@
   id: totrans-253
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下的playbook将使用Ansible playbook执行Nmap NSE脚本进行HTTP枚举和方法检查：
 - en: '![](img/67c6aaed-144e-4da1-8d9e-375f137206e8.png)'
   id: totrans-254
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/67c6aaed-144e-4da1-8d9e-375f137206e8.png)'
 - en: Nmap NSE Playbook execution
   id: totrans-255
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行Nmap NSE playbook
 - en: 'The output of the playbook when we run a simple NSE script is as follows:'
   id: totrans-256
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行简单的NSE脚本时，playbook的输出如下所示：
 - en: '![](img/5c7335fd-6631-409d-b556-4b70fd465b0c.png)'
   id: totrans-257
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5c7335fd-6631-409d-b556-4b70fd465b0c.png)'
 - en: Nmap NSE scans output in .nmap format
   id: totrans-258
   prefs: []
   type: TYPE_NORMAL
+  zh: Nmap NSE扫描的.nmap格式输出
 - en: The `http-enum` script runs additional tests against network ports where web
     servers are detected. In the preceding screenshot, we can see that two folders
     were discovered by the script and additionally all HTTP methods that are supported
@@ -1518,11 +1603,13 @@
   id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: '`http-enum`脚本在检测到网络端口上有Web服务器时会运行额外的测试。在前面的截图中，我们可以看到脚本发现了两个文件夹，并且还枚举了所有支持的HTTP方法。'
 - en: AWS security audit using Scout2
   id: totrans-260
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Scout2进行AWS安全审计
 - en: Scout2 is an open source AWS security auditing tool and it is used to assess
     AWS environments security posture using AWS Python API. The scan output will be
     stored in JSON format, and the final results of the Scout2 will be produced as
@@ -1532,16 +1619,20 @@
   id: totrans-261
   prefs: []
   type: TYPE_NORMAL
+  zh: Scout2是一款开源的AWS安全审计工具，它使用AWS Python API来评估AWS环境的安全状况。扫描输出将以JSON格式存储，并且Scout2的最终结果将以简单的HTML网站的形式呈现，其中包含了关于AWS云安全状况的详细信息。它根据现有的规则集和测试用例执行扫描和审核，并且可以根据我们的自定义脚本和场景进行扩展。
 - en: More details about the tool can be found at [https://github.com/nccgroup/Scout2](https://github.com/nccgroup/Scout2).
     This tool requires AWS IAM credentials to perform the scan; refer to [https://github.com/nccgroup/AWS-recipes/blob/master/IAM-Policies/Scout2-Default.json](https://github.com/nccgroup/AWS-recipes/blob/master/IAM-Policies/Scout2-Default.json) for
     user policy creation.
   id: totrans-262
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多关于该工具的详细信息可以在[https://github.com/nccgroup/Scout2](https://github.com/nccgroup/Scout2)找到。此工具需要AWS
+    IAM凭证来执行扫描；请参考[https://github.com/nccgroup/AWS-recipes/blob/master/IAM-Policies/Scout2-Default.json](https://github.com/nccgroup/AWS-recipes/blob/master/IAM-Policies/Scout2-Default.json)以创建用户策略。
 - en: 'Installing AWS Scout2 is very simple using the following playbook:'
   id: totrans-263
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用以下playbook安装AWS Scout2非常简单：
 - en: '[PRE12]'
   id: totrans-264
   prefs: []
@@ -1552,6 +1643,7 @@
   id: totrans-265
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置了多个规则来进行审核，以下代码片段是IAM密码策略规则的示例：
 - en: '[PRE13]'
   id: totrans-266
   prefs: []
@@ -1562,6 +1654,7 @@
   id: totrans-267
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下的playbook会执行AWS Scout2扫描，并以HTML格式返回报告：
 - en: '[PRE14]'
   id: totrans-268
   prefs: []
@@ -1571,66 +1664,79 @@
   id: totrans-269
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/60a83305-4ff1-438f-822a-74f940a6fb42.png)'
 - en: AWS Scout2 report high-level overview
   id: totrans-270
   prefs: []
   type: TYPE_NORMAL
+  zh: AWS Scout2 报告高级概览
 - en: 'The preceding screenshot is of a high-level report, and the detailed report
     is as follows:'
   id: totrans-271
   prefs: []
   type: TYPE_NORMAL
+  zh: 上述屏幕截图是高级报告，详细报告如下：
 - en: '![](img/53cb544d-e62c-451b-a7fc-f18b511df56f.png)'
   id: totrans-272
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/53cb544d-e62c-451b-a7fc-f18b511df56f.png)'
 - en: AWS Scout2 report detailed results for IAM section
   id: totrans-273
   prefs: []
   type: TYPE_NORMAL
+  zh: AWS Scout2 报告 IAM 部分的详细结果
 - en: Automation security audit checks for applications using Ansible
   id: totrans-274
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible 对应用程序进行自动化安全审计检查
 - en: Modern applications can get pretty complex fairly quickly. Having the ability
     to run automation to do security tasks is almost a mandatory requirement.
   id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 现代应用程序很快就会变得非常复杂。拥有运行自动化执行安全任务的能力几乎是一个强制性要求。
 - en: 'The different types of application security scanning we can do can range from
     the following:'
   id: totrans-276
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以进行的不同类型的应用程序安全扫描包括以下内容：
 - en: Run CI/CD scanning against the source code (for example, RIPS and brakeman).
   id: totrans-277
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对源代码运行 CI/CD 扫描（例如，RIPS 和 brakeman）。
 - en: Dependency checking scanners (for example, OWASP dependency checker and snyk.io
     ([https://snyk.io/](https://snyk.io/))).
   id: totrans-278
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 依赖项检查扫描器（例如，OWASP 依赖项检查器和 snyk.io ([https://snyk.io/](https://snyk.io/))）。
 - en: Once deployed then run the web application scanner (for example, Nikto, Arachni,
     and w3af).
   id: totrans-279
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦部署，然后运行 Web 应用程序扫描器（例如，Nikto、Arachni 和 w3af）。
 - en: Framework-specific security scanners (for example, WPScan and Droopscan) and
     many other.
   id: totrans-280
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 针对特定框架的安全扫描器（例如，WPScan 和 Droopscan）以及许多其他。
 - en: Source code analysis scanners
   id: totrans-281
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 源代码分析扫描器
 - en: This is one of the first and common way to minimize the security risk while
     applications going to production. Source code analysis scanner also known as **Static
     Application Security Testing** (**SAST**) will help to find security issues by
@@ -1641,6 +1747,7 @@
   id: totrans-282
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是在应用程序即将投入生产时最早和常见的减少安全风险的方式之一。源代码分析扫描器，也称为**静态应用程序安全测试**（**SAST**），将通过分析应用程序的源代码来帮助发现安全问题。这种工具和测试方法允许开发人员在**持续集成/持续交付**（**CI/CD**）的过程中反复自动地扫描其代码以查找安全漏洞。
 - en: There are multiple stages we can introduce these tools to effectively identify
     security vulnerabilities like integrated with IDE (code editors such as Eclipse,
     Visual Studio Code, and so on) and integrating in CI/CD process tools (Jenkins,
@@ -1648,6 +1755,8 @@
   id: totrans-283
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以引入这些工具的多个阶段来有效地识别安全漏洞，比如与 IDE 集成（诸如 Eclipse、Visual Studio Code 等代码编辑器）以及与
+    CI/CD 过程工具集成（Jenkins、Travis CI 等）。
 - en: Source code analysis is kind of white box testing and looking through code.
     This kind of testing methodology may not find 100% coverage of security vulnerabilities,
     and it requires manual testing as well. For example, finding logical vulnerabilities
@@ -1655,6 +1764,7 @@
   id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 源代码分析是一种白盒测试，它查看代码。这种测试方法可能无法发现 100% 的安全漏洞覆盖率，而且还需要手动测试。例如，要找到逻辑漏洞，需要某种用户交互，如动态功能。
 - en: There are many open source and commercial tools available in the market to perform
     static code analysis. Also, some of the tools are specific to the technology and
     frameworks you are using. For example, if you are scanning PHP code, then RIPS
@@ -1665,26 +1775,33 @@
   id: totrans-285
   prefs: []
   type: TYPE_NORMAL
+  zh: 在市场上有许多开源和商业工具可用于执行静态代码分析。此外，一些工具是针对您使用的技术和框架的。例如，如果您正在扫描 PHP 代码，则使用 RIPS ([http://rips-scanner.sourceforge.net/](http://rips-scanner.sourceforge.net/))；如果是
+    Ruby on Rails 代码，则使用 Brakeman ([https://brakemanscanner.org/](https://brakemanscanner.org/))；如果是
+    Python，则使用 Bandit ([https://wiki.openstack.org/wiki/Security/Projects/Bandit](https://wiki.openstack.org/wiki/Security/Projects/Bandit))；依此类推。
 - en: For more reference, visit [https://www.owasp.org/index.php/Source_Code_Analysis_Tools](https://www.owasp.org/index.php/Source_Code_Analysis_Tools).
   id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多参考，请访问 [https://www.owasp.org/index.php/Source_Code_Analysis_Tools](https://www.owasp.org/index.php/Source_Code_Analysis_Tools)。
 - en: Brakeman scanner – Rails security scanner
   id: totrans-287
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Brakeman 扫描器 - Rails 安全扫描器
 - en: Brakeman is an open source tool to do a static security analysis of Ruby on
     Rails applications. This can be applied at any stage of development and deployment
     process that includes staging, QA, production, and so on.
   id: totrans-288
   prefs: []
   type: TYPE_NORMAL
+  zh: Brakeman 是一个开源工具，用于对 Ruby on Rails 应用程序进行静态安全分析。 这可以应用于开发和部署流程的任何阶段，包括分期、QA、生产等。
 - en: 'A simple playbook to execute Brakeman against our application looks like the
     following:'
   id: totrans-289
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于执行 Brakeman 对我们应用程序的简单 playbook 如下：
 - en: '[PRE15]'
   id: totrans-290
   prefs: []
@@ -1694,43 +1811,54 @@
   id: totrans-291
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/2865649a-ab00-4757-910c-a2e05334a084.png)'
 - en: Brakeman Playbook in Action against Rails goat project
   id: totrans-292
   prefs: []
   type: TYPE_NORMAL
+  zh: Brakeman Playbook 在 Rails goat 项目中的操作
 - en: 'Brakeman report overview is:'
   id: totrans-293
   prefs: []
   type: TYPE_NORMAL
+  zh: Brakeman 报告的概述是：
 - en: '![](img/003978d9-edb3-4a74-aa8a-f5bedb3839c9.png)'
   id: totrans-294
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/003978d9-edb3-4a74-aa8a-f5bedb3839c9.png)'
 - en: Brakeman report overview at high level
   id: totrans-295
   prefs: []
   type: TYPE_NORMAL
+  zh: Brakeman 报告的高级概述
 - en: 'Here is Brakeman report in detail:'
   id: totrans-296
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是 Brakeman 报告的详细情况：
 - en: '![](img/dced611e-8391-495e-be04-8d2da8b55735.png)'
   id: totrans-297
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dced611e-8391-495e-be04-8d2da8b55735.png)'
 - en: This is the detailed report with code and issue-level.
   id: totrans-298
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是一个包含代码和问题级别的详细报告。
 - en: Reference about the Brakeman tool and options can be found at [https://brakemanscanner.org](https://brakemanscanner.org).
   id: totrans-299
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关 Brakeman 工具和选项的参考信息可在 [https://brakemanscanner.org](https://brakemanscanner.org)
+    找到。
 - en: Dependency-checking scanners
   id: totrans-300
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 依赖检查扫描器
 - en: Most of the developers use third-party libraries while developing applications,
     and it's very common to see using open source plugins and modules inside their
     code. Many of the open source projects might be vulnerable to known attacks such
@@ -1740,42 +1868,51 @@
   id: totrans-301
   prefs: []
   type: TYPE_NORMAL
+  zh: 大多数开发人员在开发应用程序时使用第三方库，使用开源插件和模块在其代码中非常常见。 许多开源项目可能容易受到已知攻击的影响，如跨站脚本和 SQL 注入。
+    如果开发人员不知道所使用库中存在的漏洞，那么他们的整个应用程序就会因为使用了糟糕的库而变得容易受到攻击。
 - en: So dependency checks will allow us to find using components with known vulnerabilities
     (OWASP A9) issues in application code by scanning the libraries against the CVE
     and NIST vulnerability database.
   id: totrans-302
   prefs: []
   type: TYPE_NORMAL
+  zh: 因此，依赖性检查将允许我们通过扫描库来查找应用程序代码中存在的已知漏洞（OWASP A9）问题，并与 CVE 和 NIST 漏洞数据库进行比较。
 - en: 'There are multiple projects out there in the market for performing these checks,
     and some of them includes the following:'
   id: totrans-303
   prefs: []
   type: TYPE_NORMAL
+  zh: 市场上有多个项目可用于执行这些检查，其中一些包括以下内容：
 - en: OWASP Dependency-Check
   id: totrans-304
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: OWASP Dependency-Check
 - en: Snyk.io ([https://snyk.io/](https://snyk.io/))
   id: totrans-305
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Snyk.io ([https://snyk.io/](https://snyk.io/))
 - en: Retire.js
   id: totrans-306
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Retire.js
 - en: '[:] SourceClear and many other'
   id: totrans-307
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[:] SourceClear 以及许多其他'
 - en: OWASP Dependency-Check
   id: totrans-308
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: OWASP Dependency-Check
 - en: OWASP Dependency-Check is an open source tool to perform checks for known vulnerabilities
     in Java and .NET applications primarily. It also supports other platforms such
     as Node.js and Python as an experiment analyzer. This can also produce false positives
@@ -1783,20 +1920,25 @@
   id: totrans-309
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP Dependency-Check 是一个开源工具，主要用于检查 Java 和 .NET 应用程序中已知的漏洞。 它还支持其他平台，如 Node.js
+    和 Python 作为实验分析器。 这也可能产生误报，并可以根据需要进行配置以调整扫描。
 - en: This tool can also be run in multiple ways such as CLI, build tools (Ant, Gradle,
     Maven, and so on) and CI/CD (Jenkins) process.
   id: totrans-310
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个工具也可以以多种方式运行，比如 CLI、构建工具（Ant、Gradle、Maven 等）和 CI/CD（Jenkins）流程。
 - en: More details about the project can be found at [https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check).
   id: totrans-311
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关项目的更多详细信息，请访问 [https://www.owasp.org/index.php/OWASP_Dependency_Check](https://www.owasp.org/index.php/OWASP_Dependency_Check)。
 - en: 'The following code snippet is to set up and perform a scan using OWASP Dependency-Check
     tool on vulnerable Java project:'
   id: totrans-312
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段用于在易受攻击的 Java 项目上设置和使用 OWASP Dependency-Check 工具进行扫描：
 - en: '[PRE16]'
   id: totrans-313
   prefs: []
@@ -1806,84 +1948,102 @@
   id: totrans-314
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e4476850-3332-45ce-9ee3-3c272a573afa.png)'
 - en: OWASP Dependency-Check scan against Bodgeit project using Ansible playbook
   id: totrans-315
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Ansible playbook 对 Bodgeit 项目执行 OWASP Dependency-Check 扫描
 - en: 'OWASP Dependency-Check report in high level:'
   id: totrans-316
   prefs: []
   type: TYPE_NORMAL
+  zh: 高级 OWASP Dependency-Check 报告：
 - en: '![](img/26012f79-ee08-4889-a214-e1fb44da9902.png)'
   id: totrans-317
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/26012f79-ee08-4889-a214-e1fb44da9902.png)'
 - en: High-level report of OWASP Dependency-Check tool
   id: totrans-318
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP Dependency-Check 工具的高级报告
 - en: 'Here is a detailed report with vulnerability, fixes, and the references:'
   id: totrans-319
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是一个包含漏洞、修复措施和参考资料的详细报告：
 - en: '![](img/f31ce711-3c95-44a5-bb3c-2c0d5686a704.png)'
   id: totrans-320
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f31ce711-3c95-44a5-bb3c-2c0d5686a704.png)'
 - en: A detailed report with vulnerability, fixes, and reference
   id: totrans-321
   prefs: []
   type: TYPE_NORMAL
+  zh: 包含漏洞、修复措施和参考资料的详细报告
 - en: 'The report format looks like the following at high level:'
   id: totrans-322
   prefs: []
   type: TYPE_NORMAL
+  zh: 高级报告格式如下：
 - en: '**Dependency**: The file name of the dependency scanned'
   id: totrans-323
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**依赖项**：扫描的依赖项的文件名'
 - en: '**CPE**: Any Common Platform Enumeration identifiers found'
   id: totrans-324
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**CPE**：发现的任何通用平台枚举标识符'
 - en: '**GAV**: The Maven Group, Artifact, and Version (GAV)'
   id: totrans-325
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**GAV**: Maven 组、Artifact 和版本（GAV）'
 - en: '**Highest severity**: The highest severity of any associated CVEs'
   id: totrans-326
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**最高严重性**：任何相关 CVE 的最高严重性'
 - en: '**CVE count**: The number of associated CVEs'
   id: totrans-327
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**CVE 数量**：相关 CVE 的数量'
 - en: '**CPE confidence**: A ranking of how confident Dependency-check is that the
     CPE was identified correctly'
   id: totrans-328
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**CPE 确信度**：Dependency-check 确定已正确识别 CPE 的可信度排名'
 - en: '**Evidence count**: The quantity of data extracted from the dependency that
     was used to identify CPE'
   id: totrans-329
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**证据数量**：从用于识别 CPE 的依赖项中提取的数据量'
 - en: More detailed documentation can be found at [https://jeremylong.github.io/DependencyCheck](https://jeremylong.github.io/DependencyCheck).
   id: totrans-330
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以在[https://jeremylong.github.io/DependencyCheck](https://jeremylong.github.io/DependencyCheck)找到更详细的文档。
 - en: Running web application security scanners
   id: totrans-331
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行 Web 应用程序安全扫描器
 - en: This is the phase where the application went live to QA, stage, (or) Production.
     Then, we wanted to perform security scans like an attacker (black box view). At
     this stage, an application will have all the dynamic functionalities and server
@@ -1891,11 +2051,13 @@
   id: totrans-332
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是应用程序上线到 QA、阶段（或）生产环境的阶段。然后，我们希望像攻击者一样执行安全扫描（黑盒视图）。在此阶段，应用程序将应用所有动态功能和服务器配置。
 - en: These scanner results tell us how good the server configured and any other application
     security issues before releasing the replica copy into the production.
   id: totrans-333
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些扫描器的结果告诉我们服务器配置得有多好以及在将复制品发布到生产环境之前是否存在任何其他应用程序安全问题。
 - en: At this stage, most of the scanners just work at a certain level only. And we
     need to put some manual testing using human brain to find logical vulnerabilities
     and other security vulnerabilities that can't be detected by security scanners
@@ -1903,71 +2065,85 @@
   id: totrans-334
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个阶段，大多数扫描器只能在某个特定水平上工作。我们需要通过人脑进行一些手动测试，以发现逻辑漏洞和其他安全漏洞，这些漏洞无法被安全扫描器和工具检测到。
 - en: 'As we have seen in other sections, there are many tools in the market to do
     these jobs for you in both open source and commercial world. Some of them includes
     the following:'
   id: totrans-335
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们在其他部分中所看到的，市场上有许多工具可以代替您执行这些工作，无论是开源还是商业。其中一些包括以下内容：
 - en: Nikto
   id: totrans-336
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Nikto
 - en: Arachni
   id: totrans-337
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Arachni
 - en: w3af
   id: totrans-338
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: w3af
 - en: Acunetix and many other
   id: totrans-339
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Acunetix 和许多其他工具
 - en: Nikto – web server scanner
   id: totrans-340
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Nikto - web 服务器扫描器
 - en: Nikto is an open source web server assessment tool written in Perl to perform
     security configuration checks and web server and application scanning using its
     checklist of items to scan.
   id: totrans-341
   prefs: []
   type: TYPE_NORMAL
+  zh: Nikto 是一个用 Perl 编写的开源 Web 服务器评估工具，用于执行安全配置检查和 Web 服务器和应用程序扫描，使用其要扫描的条目清单。
 - en: 'Some of the checks Nikto does includes the following:'
   id: totrans-342
   prefs: []
   type: TYPE_NORMAL
+  zh: Nikto 进行的一些检查包括以下内容：
 - en: Server and software misconfigurations
   id: totrans-343
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 服务器和软件配置错误
 - en: Default files and programs
   id: totrans-344
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 默认文件和程序
 - en: Insecure files and programs
   id: totrans-345
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 不安全的文件和程序
 - en: Outdated servers and programs
   id: totrans-346
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 过时的服务器和程序
 - en: 'Nikto setup and execution Ansible playbook looks like the following:'
   id: totrans-347
   prefs: []
   type: TYPE_NORMAL
+  zh: Nikto 设置和执行 Ansible playbook 如下所示：
 - en: '[PRE17]'
   id: totrans-348
   prefs: []
@@ -1977,31 +2153,38 @@
   id: totrans-349
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d482f296-8b37-4235-9a8a-36009a47f6ed.png)'
 - en: Nikto Playbook in action
   id: totrans-350
   prefs: []
   type: TYPE_NORMAL
+  zh: Nikto Playbook 实例
 - en: 'Playbook to download, install, and run Nikto with report output is:'
   id: totrans-351
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于下载、安装和运行带有报告输出的 Nikto 的 Playbook 如下：
 - en: '![](img/621f521f-71d4-4152-accf-fd3095f16a92.png)'
   id: totrans-352
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/621f521f-71d4-4152-accf-fd3095f16a92.png)'
 - en: Nikto HTML scan report
   id: totrans-353
   prefs: []
   type: TYPE_NORMAL
+  zh: Nikto HTML 扫描报告
 - en: Read more about Nikto options and documentation at [https://cirt.net/Nikto2.](https://cirt.net/Nikto2)
   id: totrans-354
   prefs: []
   type: TYPE_NORMAL
+  zh: 了解更多关于 Nikto 选项和文档的信息：[https://cirt.net/Nikto2.](https://cirt.net/Nikto2)
 - en: Framework-specific security scanners
   id: totrans-355
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 特定框架的安全扫描器
 - en: This kind of check and scanning is to perform against specific to framework,
     CMS, and platforms. It allows to get more detailed results by validating against
     multiple security test cases and checks. Again, there are multiple tools and scanners
@@ -2009,82 +2192,100 @@
   id: totrans-356
   prefs: []
   type: TYPE_NORMAL
+  zh: 这种类型的检查和扫描是针对特定的框架、CMS 和平台进行的。它允许通过对多个安全测试案例和检查进行验证来获得更详细的结果。同样，在开源和商业世界中有多种工具和扫描器可用。
 - en: 'Some of the examples includes the following:'
   id: totrans-357
   prefs: []
   type: TYPE_NORMAL
+  zh: 一些示例包括以下内容：
 - en: Scanning against WordPress CMS using WPScan: [https://github.com/wpscanteam/wpscan](https://github.com/wpscanteam/wpscan)
   id: totrans-358
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 WPScan 对 WordPress CMS 进行扫描：[https://github.com/wpscanteam/wpscan](https://github.com/wpscanteam/wpscan)
 - en: 'Scanning against JavaScript libraries using Retire.js: [https://retirejs.github.io/retire.js](https://retirejs.github.io/retire.js)'
   id: totrans-359
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Retire.js 对 JavaScript 库进行扫描：[https://retirejs.github.io/retire.js](https://retirejs.github.io/retire.js)
 - en: Scanning against Drupal CMS using Droopescan - [https://github.com/droope/droopescan](https://github.com/droope/droopescan) and
     many others
   id: totrans-360
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Droopescan 扫描针对 Drupal CMS - [https://github.com/droope/droopescan](https://github.com/droope/droopescan)
+    和其他许多工具
 - en: WordPress vulnerability scanner – WPScan
   id: totrans-361
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: WordPress 漏洞扫描器 – WPScan
 - en: WPScan is black box WordPress vulnerability scanner written in Ruby to perform
     security scanning and vulnerability checks against WordPress CMS using WPScan
     vulnerability database ([https://wpvulndb.com](https://wpvulndb.com)).
   id: totrans-362
   prefs: []
   type: TYPE_NORMAL
+  zh: WPScan 是一个用 Ruby 编写的黑盒 WordPress 漏洞扫描器，用于针对 WordPress CMS 使用 WPScan 漏洞数据库 ([https://wpvulndb.com](https://wpvulndb.com))
+    进行安全扫描和漏洞检查。
 - en: 'Some of the checks it does includes but not limited to are as follows:'
   id: totrans-363
   prefs: []
   type: TYPE_NORMAL
+  zh: 它执行的一些检查包括但不限于以下内容：
 - en: WordPress core
   id: totrans-364
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: WordPress 核心
 - en: WordPress plugins and themes
   id: totrans-365
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: WordPress 插件和主题
 - en: Old software known vulnerabilities
   id: totrans-366
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 已知的旧软件漏洞
 - en: Username, attachment enumeration
   id: totrans-367
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用户名，附件枚举
 - en: Brute force attacks
   id: totrans-368
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 暴力破解攻击
 - en: Security misconfiguration and many other
   id: totrans-369
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安全配置错误等等
 - en: The following playbook will perform WPScan as per the given domain and produces
     the scan report with list of issues and references.
   id: totrans-370
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 Playbook 将根据给定的域执行 WPScan，并生成带有问题列表和参考信息的扫描报告。
 - en: 'Update the `domain_name` and `output_dir` values as required in the playbook.
     Also, the following playbook assumes that you already have Docker installed in
     the system:'
   id: totrans-371
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据需要更新 Playbook 中的`domain_name`和`output_dir`值。此外，以下 Playbook 假定您已在系统中安装了 Docker：
 - en: '[PRE18]'
   id: totrans-372
   prefs: []
@@ -2094,23 +2295,28 @@
   id: totrans-373
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3207c05c-05d2-4aac-bc3b-19c3f926a006.png)'
 - en: WPScan Ansible playbook execution
   id: totrans-374
   prefs: []
   type: TYPE_NORMAL
+  zh: WPScan Ansible playbook 执行
 - en: 'Playbook output of downloading, executing, and storing the scan results for
     WPScan:'
   id: totrans-375
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载、执行和存储 WPScan 扫描结果的 Playbook 输出：
 - en: '![](img/dc1ae916-dded-4e76-8f3a-6396427b5ccf.png)'
   id: totrans-376
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dc1ae916-dded-4e76-8f3a-6396427b5ccf.png)'
 - en: WPScan output report with issue details and references
   id: totrans-377
   prefs: []
   type: TYPE_NORMAL
+  zh: 带有问题详情和参考信息的 WPScan 输出报告
 - en: These scans can be integrated into our CI/CD pipeline and execute once the deployment
     completed to validate against the security checks and configuration checks. Also,
     this scan can be customized as required based on the WPScan; refer to the WPScan
@@ -2118,66 +2324,80 @@
   id: totrans-378
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些扫描可以集成到我们的 CI/CD 管道中，并在部署完成后执行以验证安全检查和配置检查。此外，根据需要可以根据 WPScan 定制此扫描；有关更多参考，请参阅
+    WPScan 文档 [https://github.com/wpscanteam/wpscan](https://github.com/wpscanteam/wpscan)。
 - en: Automated patching approaches using Ansible
   id: totrans-379
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible 的自动修补方法
 - en: 'Patching and updating is a task that everyone who has to manage production
     systems has to deal with. There are two approaches that we will look are as follows:'
   id: totrans-380
   prefs: []
   type: TYPE_NORMAL
+  zh: 补丁和更新是每个必须管理生产系统的人都必须处理的任务。我们将看到的两种方法如下：
 - en: Rolling updates
   id: totrans-381
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 滚动更新
 - en: BlueGreen deployments
   id: totrans-382
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 蓝绿部署
 - en: Rolling updates
   id: totrans-383
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 滚动更新
 - en: Imagine that we have five web servers behind a load balancer. What we would
     like to do is a zero downtime upgrade of our web application. Using certain keywords
     available in Ansible, we can make this happen.
   id: totrans-384
   prefs: []
   type: TYPE_NORMAL
+  zh: 想象一下我们在负载均衡器后面有五台 web 服务器。我们想要做的是对我们的 Web 应用进行零停机升级。使用 Ansible 中提供的某些关键字，我们可以实现这一点。
 - en: 'In our example, we want to achieve the following:'
   id: totrans-385
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们的示例中，我们希望实现以下目标：
 - en: Tell the load balancer that web server node is down
   id: totrans-386
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 告诉负载均衡器 web 服务器节点已经宕机
 - en: Bring down the web server on that node
   id: totrans-387
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将该节点上的 web 服务器关闭
 - en: Copy the updated application files to that node
   id: totrans-388
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将更新后的应用程序文件复制到该节点
 - en: Bring up the web server on that node
   id: totrans-389
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在该节点上启动 web 服务器
 - en: 'The first keyword for us to look at is `serial`. Let''s see this example from
     Ansible documentation:'
   id: totrans-390
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们首先要查看的关键字是`serial`。让我们从 Ansible 文档中看一个例子：
 - en: '[PRE19]'
   id: totrans-391
   prefs: []
@@ -2187,6 +2407,7 @@
   id: totrans-392
   prefs: []
   type: TYPE_NORMAL
+  zh: 该示例来自 [http://docs.ansible.com/ansible/latest/playbooks_delegation.html#rolling-update-batch-size](http://docs.ansible.com/ansible/latest/playbooks_delegation.html#rolling-update-batch-size)。
 - en: This ensures that the execution of the playbook is done serially rather than
     in parallel. So the steps we listed previously can be done for one node at a time.
     The load balancer distributes traffic to the website on running nodes, and we
@@ -2194,11 +2415,13 @@
   id: totrans-393
   prefs: []
   type: TYPE_NORMAL
+  zh: 这确保了 Playbook 的执行是串行而不是并行进行的。因此，我们先前列出的步骤可以逐个节点完成。负载均衡器将流量分发到正在运行的节点上的网站，并且我们实现了滚动更新。
 - en: 'Apart from giving a number to serial, we can also use percentage. Therefore,
     the example becomes as follows:'
   id: totrans-394
   prefs: []
   type: TYPE_NORMAL
+  zh: 除了给 serial 一个数字之外，我们还可以使用百分比。因此，示例变为以下形式：
 - en: '[PRE20]'
   id: totrans-395
   prefs: []
@@ -2208,12 +2431,14 @@
   id: totrans-396
   prefs: []
   type: TYPE_NORMAL
+  zh: 示例来自 [http://docs.ansible.com/ansible/latest/playbooks_delegation.html#rolling-update-batch-size](http://docs.ansible.com/ansible/latest/playbooks_delegation.html#rolling-update-batch-size)。
 - en: We can choose to provide a percentage value or numeric value to serial. In this
     case the the play will run against 1, then 20% of the remaining nodes and finally
     all the remaining ones.
   id: totrans-397
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以选择为serial提供百分比值或数字值。在这种情况下，play将针对1个节点运行，然后是剩余节点的20%，最后是所有剩余节点。
 - en: '[PRE21]'
   id: totrans-398
   prefs: []
@@ -2223,19 +2448,23 @@
   id: totrans-399
   prefs: []
   type: TYPE_NORMAL
+  zh: 示例来自 [http://docs.ansible.com/ansible/latest/playbooks_delegation.html#rolling-update-batch-size](http://docs.ansible.com/ansible/latest/playbooks_delegation.html#rolling-update-batch-size)。
 - en: A great example for this way of doing updates is given in the following link
   id: totrans-400
   prefs: []
   type: TYPE_NORMAL
+  zh: 这种更新方式的一个很好的示例在下面的链接中给出
 - en: '*Episode #47 - Zero-downtime Deployments with Ansible*: [https://sysadmincasts.com/episodes/47-zero-downtime-deployments-with-ansible-part-4-4](https://sysadmincasts.com/episodes/47-zero-downtime-deployments-with-ansible-part-4-4)'
   id: totrans-401
   prefs: []
   type: TYPE_NORMAL
+  zh: '*第47集 - 使用Ansible进行零停机部署*：[https://sysadmincasts.com/episodes/47-zero-downtime-deployments-with-ansible-part-4-4](https://sysadmincasts.com/episodes/47-zero-downtime-deployments-with-ansible-part-4-4)'
 - en: BlueGreen deployments
   id: totrans-402
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 蓝绿部署
 - en: The concept of BlueGreen is attributed to Martin Fowler. A good reference is
     this article [http://martinfowler.com/bliki/BlueGreenDeployment.html](http://martinfowler.com/bliki/BlueGreenDeployment.html) on
     it. The idea is to consider our current live production workload as blue. Now
@@ -2245,6 +2474,7 @@
   id: totrans-403
   prefs: []
   type: TYPE_NORMAL
+  zh: 蓝绿的概念归功于马丁·福勒。一个很好的参考是这篇文章 [http://martinfowler.com/bliki/BlueGreenDeployment.html](http://martinfowler.com/bliki/BlueGreenDeployment.html)。其想法是将我们当前的生产工作负载视为蓝色。现在我们想要做的是升级应用程序。因此，在相同的负载均衡器后面启动蓝色的副本。基础设施的副本具有更新的应用程序。
 - en: 'Once it is up and running, the load balancer configuration is switched from
     current blue to point to green. Blue keeps running in case there are any operational
     issues. Once we are happy with the progress, we can tear down the older host. The
@@ -2252,32 +2482,39 @@
   id: totrans-404
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦它启动并运行，负载均衡器配置将从当前的蓝色切换到指向绿色。蓝色保持运行，以防有任何操作问题。一旦我们对进展满意，就可以关闭旧主机。下面的playbook以非常简单的方式演示了这一点：
 - en: The first playbook brings up three hosts. Two web servers running nginx behind
     a load balancer
   id: totrans-405
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 第一个playbook启动三个主机。两个运行nginx的Web服务器在负载均衡器后面
 - en: The second playbook switches what is live (blue) to green
   id: totrans-406
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 第二个playbook将当前正在运行的内容（蓝色）切换为绿色
 - en: BlueGreen deployment setup playbook
   id: totrans-407
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 蓝绿部署设置playbook
 - en: The following playbook will set up three nodes, which includes load balancer
     and two web server nodes. Follow https://www.upcloud.com/support/haproxy-load-balancer-ubuntu
     to create a playbook.
   id: totrans-408
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下playbook将设置三个节点，包括负载均衡器和两个Web服务器节点。请参阅 [https://www.upcloud.com/support/haproxy-load-balancer-ubuntu](https://www.upcloud.com/support/haproxy-load-balancer-ubuntu)
+    创建一个playbook。
 - en: 'The following snippet is the `inventory` file:'
   id: totrans-409
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的代码片段是 `inventory` 文件：
 - en: '[PRE22]'
   id: totrans-410
   prefs: []
@@ -2288,6 +2525,7 @@
   id: totrans-411
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，`main.yml` playbook文件如下所示，描述了在哪些节点上执行哪些角色和流程：
 - en: '[PRE23]'
   id: totrans-412
   prefs: []
@@ -2298,6 +2536,7 @@
   id: totrans-413
   prefs: []
   type: TYPE_NORMAL
+  zh: 每个角色都有其自己的功能要执行；以下是在所有节点上执行的常见角色：
 - en: '[PRE24]'
   id: totrans-414
   prefs: []
@@ -2308,6 +2547,7 @@
   id: totrans-415
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，代理服务器角色如下所示，用于设置和配置 `haproxy` 服务器：
 - en: '[PRE25]'
   id: totrans-416
   prefs: []
@@ -2320,6 +2560,8 @@
   id: totrans-417
   prefs: []
   type: TYPE_NORMAL
+  zh: '`haproxy.cfg.j2` 如下所示，其中包含执行设置所需的所有配置。根据我们想要添加（或）移除的配置，可以进行改进，如SSL/TLS证书和暴露
+    `haproxy` 统计信息等：'
 - en: '[PRE26]'
   id: totrans-418
   prefs: []
@@ -2331,6 +2573,7 @@
   id: totrans-419
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的代码片段将服务器添加为负载均衡器的一部分，并在用户请求时提供服务。我们也可以添加多个服务器。`haproxy`还支持L7和L4负载平衡：
 - en: '[PRE27]'
   id: totrans-420
   prefs: []
@@ -2341,6 +2584,7 @@
   id: totrans-421
   prefs: []
   type: TYPE_NORMAL
+  zh: Web服务器是非常简单的nginx服务器设置，用于安装并将服务添加到启动过程中：
 - en: '[PRE28]'
   id: totrans-422
   prefs: []
@@ -2351,6 +2595,7 @@
   id: totrans-423
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，以下代码片段分别是`blue`和`green`服务器的代码：
 - en: '[PRE29]'
   id: totrans-424
   prefs: []
@@ -2361,35 +2606,42 @@
   id: totrans-425
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是整个设置的 playbook 执行的参考截图：
 - en: '![](img/20124216-1607-4579-8648-cb4427a6716c.png)'
   id: totrans-426
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/20124216-1607-4579-8648-cb4427a6716c.png)'
 - en: 'Once the playbook is completed, we can check the production site at our load
     balancer IP address to see the blue deployment:'
   id: totrans-427
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦 playbook 完成，我们就可以在负载均衡器 IP 地址上检查生产站点，查看蓝色部署：
 - en: '![](img/16ae76c4-6cda-480d-85b3-e17b0d2a0748.png)'
   id: totrans-428
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/16ae76c4-6cda-480d-85b3-e17b0d2a0748.png)'
 - en: BlueGreen deployment update playbook
   id: totrans-429
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: BlueGreen 部署更新 playbook
 - en: Now, the developer has updated the code (or) server is patched for some security
     vulnerabilities. We want to deploy the new version of production site with green
     deployment.
   id: totrans-430
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，开发人员已经更新了代码（或者）服务器已经修补了一些安全漏洞。我们希望使用绿色部署部署生产站点的新版本。
 - en: 'The playbook looks very simple as follows, it will update the configuration
     and reloads the `haproxy` service to serve the new production deployment:'
   id: totrans-431
   prefs: []
   type: TYPE_NORMAL
+  zh: playbook 看起来非常简单，如下所示，它将更新配置并重新加载 `haproxy` 服务以服务新的生产部署：
 - en: '[PRE30]'
   id: totrans-432
   prefs: []
@@ -2399,26 +2651,31 @@
   id: totrans-433
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/419d233e-30b5-4776-9c71-f330f26771f9.png)'
 - en: 'Then, we can check our production site again to see the update deployment by
     navigating to the load balancer IP:'
   id: totrans-434
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们可以再次检查我们的生产站点，通过导航到负载均衡器 IP 地址来查看更新的部署：
 - en: '![](img/b323f803-2c55-43cc-be61-d81a8179856b.png)'
   id: totrans-435
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b323f803-2c55-43cc-be61-d81a8179856b.png)'
 - en: Now, we can see that our production site is running the new updated deployment.
     There are multiple advanced options available in HAProxy to perform different
     kind of updates and can be configurable as required.
   id: totrans-436
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们可以看到我们的生产站点正在运行新的更新部署。HAProxy 中有多个高级选项可用于执行不同类型的更新，并且可以根据需要进行配置。
 - en: Summary
   id: totrans-437
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: This chapter touched upon various use cases for application and network security.
     By combining various tools with the power of Ansible playbooks, we created powerful
     workflows for security automation in this space. Based on requirements, you may
@@ -2430,6 +2687,8 @@
   id: totrans-438
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章涉及了应用程序和网络安全的各种用例。通过将各种工具与 Ansible playbook 的强大功能相结合，我们在这个领域创建了强大的安全自动化工作流程。根据需求，您可以使用基准来启用安全默认值或定期检查合规性并满足审计要求。我们研究了允许我们对
+    AWS 云执行相同操作的工具。从应用程序安全扫描器到以安全配置驱动的软件更新和补丁方法，我们尝试涵盖一系列任务，这些任务通过 Ansible 自动化变得强大。
 - en: In the next chapter, we will focus on one of the most exciting emerging areas
     of IT and operations, that is, containers. Docker being synonymous with containers
     has become a widely deployed technology for developers, system administrators,
@@ -2438,3 +2697,5 @@
   id: totrans-439
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将专注于 IT 和运维中最激动人心的新兴领域之一，即容器。Docker 作为容器的代名词，已经成为开发人员、系统管理员广泛部署的技术，也是现代软件开发和部署流程的核心组成部分。让我们探索
+    Ansible 与 Docker 容器配合使用的秘密。

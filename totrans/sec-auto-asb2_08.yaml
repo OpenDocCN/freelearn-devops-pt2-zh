@@ -1,591 +1,898 @@
 - en: Continuous Security Scanning for Docker Containers
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Docker 容器的持续安全扫描
 - en: Docker containers are the new way developers package applications. The best feature
     of containers is the fact that they contain the code, runtime, system libraries,
     and all the settings that are required for the application to work. Due to the
     ease of use and deployment, more and more applications are getting deployed in
     containers for production use.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker 容器是开发人员打包应用程序的新方法。容器最好的特性是它们包含了代码、运行时、系统库以及应用程序工作所需的所有设置。由于易于使用和部署，越来越多的应用程序正在以容器形式部署用于生产。
 - en: With so many moving parts, it becomes imperative that we have the capability
     to continuously scan Docker containers for security issues. In this chapter, we
     will look at various ways of doing just that. Starting with the familiar CIS benchmark
     scripts invoked using Ansible, we will move on to clair-scanner, which is a great
     tool to scan for existing vulnerabilities and integrates well with your existing
     CI/CD workflow, if you need.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于有这么多的活动部分，我们迫切需要有能力持续扫描 Docker 容器以寻找安全问题。在本章中，我们将看到各种做到这一点的方法。从使用 Ansible
+    调用的熟悉的 CIS 基准脚本开始，我们将转向 clair-scanner，这是一个用于扫描现有漏洞并与现有的 CI/CD 工作流程很好地集成的工具，如果需要的话。
 - en: 'In detail, we will explore the following topics in this chapter:'
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将详细探讨以下主题：
 - en: Understanding continuous security concepts
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 理解持续安全的概念
 - en: Automating vulnerability assessments of Docker containers using Ansible
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Ansible 自动化 Docker 容器的漏洞评估
 - en: Scheduled scans using Ansible Tower for Docker security
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Ansible Tower 对 Docker 安全进行定期扫描
 - en: Scheduled scans using Ansible Tower for operating systems and kernel security
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Ansible Tower 对操作系统和内核安全进行定期扫描
 - en: Scheduled scans for file integrity checks, host level monitoring using Ansible
     for various compliance initiatives
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Ansible 进行文件完整性检查和主机级监控的定期扫描，以满足各种合规性要求
 - en: Understanding continuous security concepts
+  id: totrans-9
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 理解持续安全的概念
 - en: One of the key approaches to emerge out of DevOps is the idea of immutable infrastructure.
     It means that every time there needs to be a runtime change, either in application
     code or configuration, the containers are built and deployed again and the existing
     running ones are torn down.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: DevOps 中出现的一个关键方法是不可变基础设施的概念。这意味着每当需要进行运行时更改，无论是应用程序代码还是配置，都会重新构建和部署容器，并且会销毁现有的运行容器。
 - en: Since that allows for predictability, resilience, and simplifies deployment
     choices at runtime, it is no surprise that many operations teams are moving toward
     it. With that comes the question of when these containers should be tested for
     security and compliance. By embracing the process of continuous security scanning
     and monitoring, as discussed in this chapter, you can automate for a variety of
     workloads and workflows.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于这样可以实现可预测性、弹性，并简化运行时的部署选择，因此毫无疑问，许多运维团队正在朝着这个方向发展。伴随而来的问题是这些容器应该何时进行安全和合规性测试。通过接受本章讨论的持续安全扫描和监控的流程，您可以自动化各种工作负载和工作流程。
 - en: Automating vulnerability assessments of Docker containers using Ansible
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible 自动化 Docker 容器的漏洞评估
 - en: Containers are everywhere. Let's look at some of the techniques and tools to
     perform scans and assess the Docker containers and environments using Ansible.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 容器无处不在。让我们看一些使用 Ansible 进行扫描和评估 Docker 容器和环境的技术和工具。
 - en: 'There are many different ways of evaluating the security of containers. In
     this chapter, we will look at some of them and how they can be used with Ansible:'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 评估容器安全有许多不同的方法。在本章中，我们将看一些方法以及它们如何与 Ansible 结合使用：
 - en: '| **Tool** | **Description** |'
+  id: totrans-15
   prefs: []
   type: TYPE_TB
+  zh: '| **工具** | **描述** |'
 - en: '| Docker Bench | A security shell script to perform checks based on CIS |'
+  id: totrans-16
   prefs: []
   type: TYPE_TB
+  zh: '| Docker Bench | 基于 CIS 进行检查的安全 Shell 脚本 |'
 - en: '| Clair | A tool to perform vulnerability analysis based on the CVE database
     |'
+  id: totrans-17
   prefs: []
   type: TYPE_TB
+  zh: '| Clair | 基于 CVE 数据库进行漏洞分析的工具 |'
 - en: '| Anchore | A tool to perform security evaluation and make runtime policy decisions
     |'
+  id: totrans-18
   prefs: []
   type: TYPE_TB
+  zh: '| Anchore | 用于执行安全评估并做出运行时策略决策的工具 |'
 - en: '| `vuls` | An agent-less vulnerability scanner with CVE, OVAL database |'
+  id: totrans-19
   prefs: []
   type: TYPE_TB
+  zh: '| `vuls` | 一种无需代理的漏洞扫描器，具有 CVE、OVAL 数据库 |'
 - en: '| `osquery` | OS instrumentation framework for OS analytics to do HIDS-type
     activities |'
+  id: totrans-20
   prefs: []
   type: TYPE_TB
+  zh: '| `osquery` | 用于进行 OS 分析的 OS 仪表化框架，以执行 HIDS 类型的活动 |'
 - en: Docker Bench for Security
+  id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Docker 安全检查
 - en: '**Docker Bench for Security** is a shell script to perform multiple checks
     against the Docker container environment. It will give a more detailed view of
     the security configuration based on CIS benchmarks. This script supports most
     of the Unix operating systems as it was built based on the POSIX 2004 compliant.'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Docker 安全工作台**是一个 shell 脚本，用于对 Docker 容器环境进行多项检查。它将根据 CIS 基准提供更详细的安全配置视图。由于它是基于符合
+    POSIX 2004 标准构建的，所以该脚本支持大多数 Unix 操作系统。'
 - en: More details about the tool information can be found at [https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security).
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关工具信息的更多详细信息，请访问[https://github.com/docker/docker-bench-security](https://github.com/docker/docker-bench-security)。
 - en: 'The following are the high-level areas of checks this script will perform:'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是此脚本将执行的检查的高级区域：
 - en: Host configuration
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 主机
 - en: Docker daemon configuration and files
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Docker 守护程序配置和文件
 - en: Docker container images
+  id: totrans-27
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Docker 容器映像
 - en: Docker runtime
+  id: totrans-28
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Docker 运行时
 - en: Docker security operations
+  id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Docker 安全操作
 - en: Docker swarm configuration
+  id: totrans-30
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Docker 集群配置
 - en: 'The following playbook will perform a Docker bench security scan against the
     Docker environment and return a detailed report:'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 Playbook 将针对 Docker 环境执行 Docker 安全检查，并返回详细的报告：
 - en: '[PRE0]'
+  id: totrans-32
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Docker bench security Ansible playbook in action:'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker 安全检查 Ansible Playbook 的执行：
 - en: '![](img/66d4e4e4-d03c-4e8d-add9-ab0a391a6fd0.png)'
+  id: totrans-34
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/66d4e4e4-d03c-4e8d-add9-ab0a391a6fd0.png)'
 - en: Docker bench security Ansible playbook in action
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker 安全检查 Ansible Playbook 的执行
 - en: 'The output of the playbook will download and scan the containers based on the
     CIS benchmark and store the results in a `log` file, the output of which can be
     seen here:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: Playbook 的输出将下载并扫描基于 CIS 基准的容器，并将结果存储在`log`文件中，其输出可以在此处看到：
 - en: '![](img/85657f30-7178-4c75-91ac-c19f140c2278.png)'
+  id: totrans-37
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/85657f30-7178-4c75-91ac-c19f140c2278.png)'
 - en: Detailed Docker bench security analysis report
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 详细的 Docker 安全检查分析报告
 - en: Clair
+  id: totrans-39
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Clair
 - en: Clair allows us to perform static vulnerability analysis against containers
     by checking with the existing vulnerability database. It allows us to perform
     vulnerability analysis checks against our Docker container images using the Clair
     database. More details about Clair can be found at [https://github.com/coreos/clair](https://github.com/coreos/clair).
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: Clair 允许我们通过与现有漏洞数据库进行检查来对容器执行静态漏洞分析。它允许我们使用 Clair 数据库对我们的 Docker 容器映像执行漏洞分析检查。有关
+    Clair 的更多详细信息，请访问[https://github.com/coreos/clair](https://github.com/coreos/clair)。
 - en: Setting up Clair itself is really difficult and scanning using the API with
     Docker images makes more difficult. Here comes clair-scanner, it makes really
     simple to set up and perform scans using the REST API.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置 Clair 本身真的很困难，并且使用 Docker 映像的 API 进行扫描会使得情况更加复杂。这就是 clair-scanner 的用武之地，它使得通过
+    REST API 进行设置和执行扫描变得非常简单。
 - en: Read more about clair-scanner at  [https://github.com/arminc/clair-scanner](https://github.com/arminc/clair-scanner).
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 请在[https://github.com/arminc/clair-scanner](https://github.com/arminc/clair-scanner)中阅读更多关于
+    clair-scanner 的信息。
 - en: Clair-scanner can trigger a simple scan against a container based on certain
     events, to check for existing vulnerabilities. Furthermore, this report can be
     forwarded to perform the team responsible for fixes and so on.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: Clair-scanner 可以根据某些事件触发对容器进行简单扫描，以检查现有的漏洞。此外，该报告可以转发给负责修复等工作的团队。
 - en: 'The following playbook will set up the required Docker containers and configuration
     to perform clair-scanning. It assumes that the target system has Docker and the
     required libraries installed:'
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 Playbook 将设置所需的 Docker 容器和配置以执行 clair-scanning。它假设目标系统已安装了 Docker 和所需的库：
 - en: '[PRE1]'
+  id: totrans-45
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: The following screenshot is the execution of clair-scanner setup with Docker
     Containers using Ansible
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图展示了使用 Ansible 设置 clair-scanner 与 Docker 容器的执行。
 - en: '![](img/95c063eb-a6c0-476b-be4a-243423ab9cf1.png)'
+  id: totrans-47
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/95c063eb-a6c0-476b-be4a-243423ab9cf1.png)'
 - en: Setting up clair-scanner with Docker containers using Ansible
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Ansible 设置 clair-scanner 与 Docker 容器
 - en: It will take a while to download and setup the CVE database after playbook execution.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 在执行 Playbook 后，下载和设置 CVE 数据库将需要一段时间。
 - en: 'The following playbook will be used to run clair-scanner to perform an analysis
     on the containers by making an API request to the server:'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 Playbook 将用于运行 clair-scanner，通过向服务器发出 API 请求对容器进行分析：
 - en: '[PRE2]'
+  id: totrans-51
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: The following screenshot is the clair-scanner in action for the requested docker
     images. As you can see fatal error, so when it found any issues with docker image
     it returns error and we can handle it using `ignore_errors`.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图展示了针对请求的 Docker 映像执行 clair-scanner 的情况。正如您所看到的致命错误，所以当它发现 Docker 映像存在任何问题时，它会返回错误，我们可以使用`ignore_errors`来处理它。
 - en: '![](img/20f95437-597d-406e-adcb-317ba4134f1e.png)'
+  id: totrans-53
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/20f95437-597d-406e-adcb-317ba4134f1e.png)'
 - en: Clair-scanner execution in action
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: Clair-scanner 执行过程
 - en: 'Here is the output of the playbook running clair-scanner and the output of
     the report in JSON format:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是运行 clair-scanner 的 playbook 输出以及 JSON 格式的报告输出：
 - en: '![](img/604c7d53-1ed1-47e0-af85-ae15e4f5b234.png)'
+  id: totrans-56
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/604c7d53-1ed1-47e0-af85-ae15e4f5b234.png)'
 - en: The output of the report includes vulnerability CVE and severity
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 报告的输出包括漏洞 CVE 和严重程度
 - en: Scheduled scans using Ansible Tower for Docker security
+  id: totrans-58
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible Tower 进行定期扫描 Docker 安全性
 - en: 'Continuous security processes are all about the loop of planning, doing, measuring,
     and acting:'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续安全性流程涉及计划、执行、测量和行动的循环：
 - en: '![](img/d055e059-aaaf-4d38-a2f1-11c37f25eebb.png)'
+  id: totrans-60
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d055e059-aaaf-4d38-a2f1-11c37f25eebb.png)'
 - en: The Deming Cycle from Wikimedia Commons
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 来自维基共享的 Deming 循环
 - en: By following standard checklists and benchmarks and using Ansible to execute
     them on containers, we can check for security issues and act on them. Anchore
     is an analysis and inspection platform for containers.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过遵循标准的检查表和基准，并使用 Ansible 在容器上执行它们，我们可以检查安全问题并对其采取行动。Anchore 是一个用于容器的分析和检查平台。
 - en: Anchore – open container compliance platform
+  id: totrans-63
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Anchore - 开放式容器合规性平台
 - en: Anchore is one of the most popular tools and services to perform analysis, inspection,
     and certification of container images. It provides multiple services and platforms
     to set up, the most stable and powerful way is to set up the local service using
     Anchore Engine, which can be accessed via the REST API. In the following documentation,
     we will see how to set up the service using Anchore Engine and how we can use
     this REST API to perform continuous security scanning and analysis of Docker containers.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: Anchore 是执行容器镜像分析、检查和认证的最流行的工具和服务之一。它提供多个服务和平台进行设置，最稳定和强大的方式是使用 Anchore Engine
+    设置本地服务，可以通过 REST API 访问。在以下文档中，我们将看到如何使用 Anchore Engine 设置服务以及如何使用这个 REST API
+    执行 Docker 容器的持续安全扫描和分析。
 - en: 'The following items are high level operations Anchore can perform:'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是 Anchore 可执行的高级操作：
 - en: Policy evaluation operations
+  id: totrans-66
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 策略评估操作
 - en: Image operations
+  id: totrans-67
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 图像操作
 - en: Policy operations
+  id: totrans-68
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 策略操作
 - en: Registry operations
+  id: totrans-69
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 注册操作
 - en: Subscription operations
+  id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 订阅操作
 - en: System operations
+  id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 系统操作
 - en: Read more about the Anchore Engine service at [https://github.com/anchore/anchore-engine](https://github.com/anchore/anchore-engine).
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 在[https://github.com/anchore/anchore-engine](https://github.com/anchore/anchore-engine)了解更多关于
+    Anchore 引擎服务的信息。
 - en: Anchore Engine service setup
+  id: totrans-73
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Anchore 引擎服务
 - en: 'The following playbook will set up the Anchore Engine service, which contains
     the engine container as well as the `postgres` to store database information.
     The `admin_password` variable is the admin user password to  access the REST API
     of Anchore:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 playbook 将设置 Anchore 引擎服务，其中包含引擎容器以及用于存储数据库信息的 `postgres`。`admin_password`
+    变量是访问 Anchore REST API 的管理员用户密码：
 - en: '[PRE3]'
+  id: totrans-75
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'The following screenshot is the Ansible playbook execution of Anchore engine
     service setup:'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是执行 Anchore 引擎服务设置的 Ansible playbook 执行过程：
 - en: '![](img/3f6352ba-e5ba-4be6-b7c1-b026e4dcb6b8.png)'
+  id: totrans-77
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3f6352ba-e5ba-4be6-b7c1-b026e4dcb6b8.png)'
 - en: Anchore Engine service setup using Ansible playbook
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Ansible playbook 设置 Anchore 引擎服务
 - en: Anchore CLI scanner
+  id: totrans-79
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Anchore CLI 扫描器
 - en: Now that we have the Anchore Engine service REST API with access details, we
     can use this to perform the scanning of container images in any host. The following
     steps are the Ansible Tower setup to perform continuous scanning of container
     images for vulnerabilities.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经拥有了 Anchore 引擎服务的 REST API 访问详情，我们可以利用这一点在任何主机上执行容器镜像的扫描。以下步骤是配置 Ansible
+    Tower 来执行持续的容器镜像漏洞扫描。
 - en: 'The playbook for scanning a container image is shown as follows:'
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于扫描容器镜像的 playbook 如下所示：
 - en: '[PRE4]'
+  id: totrans-82
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: The options to perform  `anchore-cli` can be customized as required, please
     refer to the documentation at [https://github.com/anchore/anchore-cli](https://github.com/anchore/anchore-cli).
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以根据需要自定义执行 `anchore-cli` 的选项，请参阅[https://github.com/anchore/anchore-cli](https://github.com/anchore/anchore-cli)的文档。
 - en: 'Now, we have to create the new project in Ansible Tower to add the playbook. 
     Then we can select the playbook source from version control, or required source
     with details:'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们必须在 Ansible Tower 中创建新项目以添加 playbook。然后我们可以从版本控制中选择 playbook 源，或者提供详细信息：
 - en: '![](img/1e8d0847-5d4b-4f7b-9466-3a7d25722f83.png)'
+  id: totrans-85
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1e8d0847-5d4b-4f7b-9466-3a7d25722f83.png'
 - en: 'Then we have to create a new job template to provide the options for executing
     the playbook using Ansible Tower:'
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后我们必须创建一个新的作业模板来提供使用 Ansible Tower 执行 playbook 的选项：
 - en: '![](img/454e5c03-dfb4-4682-841d-0ef7042430b0.png)'
+  id: totrans-87
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/454e5c03-dfb4-4682-841d-0ef7042430b0.png)'
 - en: 'We can also pass variables via Ansible Tower UI. As you can see, we are passing
     some secrets and we will see how we can leverage Ansible Vault to store and use
     them securely:'
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们也可以通过 Ansible Tower UI 传递变量。正如您所见，我们正在传递一些秘密，我们将看到如何利用 Ansible Vault 安全存储和使用它们：
 - en: '![](img/e8279541-428b-42f8-9679-85fbbfa0dde3.png)'
+  id: totrans-89
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e8279541-428b-42f8-9679-85fbbfa0dde3.png)'
 - en: 'We can also schedule this playbook to run weekly or monthly, as required. Also
     note this can be customized based on use cases:'
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以按需安排此 Playbook 每周或每月运行，根据需要进行设置。还请注意，这可以根据用例进行定制：
 - en: '![](img/9e26ee66-df77-4747-8c18-dea06decca55.png)'
+  id: totrans-91
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/9e26ee66-df77-4747-8c18-dea06decca55.png)'
 - en: 'Then we can also perform on-demand scans by launching the job. The following
     screenshot is the reference for the `ubuntu:latest` Docker image vulnerabilities
     with CVE details and list of packages vulnerable:'
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们还可以通过启动作业执行按需扫描。以下截图是关于 `ubuntu:latest` Docker 镜像漏洞的参考，其中包含 CVE 详细信息和易受攻击的软件包列表：
 - en: '![](img/56b8d6fb-affd-4517-92e1-a1fe9d2b1596.png)'
+  id: totrans-93
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/56b8d6fb-affd-4517-92e1-a1fe9d2b1596.png)'
 - en: Scheduled scans using Ansible Tower for operating systems and kernel security
+  id: totrans-94
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible Tower 定期扫描操作系统和内核安全
 - en: 'Continuous security scanning requires us to manage it in a software like Ansible
     Tower. While most of the discussed tools can be used for scanning and maintaining
     a benchmark for security, we should think about the entire process of the incident
     response and threat detection workflow:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续的安全扫描要求我们在类似 Ansible Tower 的软件中进行管理。虽然大多数讨论的工具都可用于扫描和维护安全基准，但我们应考虑事故响应和威胁检测工作流程的整个过程：
 - en: Preparation
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Detection and analysis
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检测和分析
 - en: Containment, eradication, and recovery
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 遏制、根除和恢复
 - en: Post-incident activity
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 事后活动
 - en: Setting up all such scanners is our preparation. Using the output of these scanners
     gives us the ability to detect and analyze. Both containment and recovery are
     beyond the scope of such tools. For the process of recovery and post-incident
     activity, you may want to consider playbooks that can trash the current infrastructure
     and recreate it as it is.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置所有这些扫描器是我们的准备工作。使用这些扫描器的输出使我们能够进行检测和分析。遏制和恢复都超出了这些工具的范围。对于恢复和事后活动的流程，您可能需要考虑可以销毁当前基础架构并按原样重新创建的
+    Playbook。
 - en: 'As part of our preparation, it may be useful to get familiar with the following
     terms as you will see them being used repeatedly in the world of vulnerability
     scanners and vulnerability management tools:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 作为准备的一部分，熟悉以下术语可能很有用，因为您会在漏洞扫描器和漏洞管理工具的世界中反复看到它们的使用：
 - en: '| **Term** | **Full form (if any)** | **Description of the term** |'
+  id: totrans-102
   prefs: []
   type: TYPE_TB
+  zh: '| **术语** | **全称（如果有）** | **术语描述** |'
 - en: '| CVE | Common Vulnerabilities and Exposures | It is a list of cybersecurity vulnerability
     identifiers. Usage typically includes CVE IDs. |'
+  id: totrans-103
   prefs: []
   type: TYPE_TB
+  zh: '| CVE | 通用漏洞和暴露 | 这是一个网络安全漏洞标识符列表。通常使用 CVE ID。 |'
 - en: '| OVAL | Open Vulnerability and Assessment Language | A language for finding
     out and naming vulnerabilities and configuration issues in computer systems. |'
+  id: totrans-104
   prefs: []
   type: TYPE_TB
+  zh: '| OVAL | 开放式漏洞和评估语言 | 用于发现和命名计算机系统中的漏洞和配置问题的语言。 |'
 - en: '| CWE | Common Weakness Enumeration | A common list of software security weaknesses.
     |'
+  id: totrans-105
   prefs: []
   type: TYPE_TB
+  zh: '| CWE | 通用弱点枚举 | 软件安全弱点的通用列表。 |'
 - en: '| NVD | National Vulnerability Database | A US government vulnerability management
     database available for public use in XML format. |'
+  id: totrans-106
   prefs: []
   type: TYPE_TB
+  zh: '| NVD | 国家漏洞数据库 | 美国政府的漏洞管理数据库，以 XML 格式公开供公众使用。 |'
 - en: Vuls – vulnerability scanner
+  id: totrans-107
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Vuls - 漏洞扫描器
 - en: '**Vuls** is an agent-less scanner written in golang. It supports a different
     variety of Linux operating systems. It performs the complete end-to-end security
     system administrative tasks such as scanning for security vulnerabilities and
     security software updates. It analyzes the system for required security vulnerabilities,
     performs security risk analysis based on the CVE score, sends notifications via
     Slack and email, and also provides a simple web report with historical data.'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Vuls** 是一个用 golang 编写的无代理扫描器。它支持各种不同的 Linux 操作系统。它执行完整的端到端安全系统管理任务，如扫描安全漏洞和安全软件更新。它根据
+    CVE 分数对系统进行所需的安全漏洞分析，通过 Slack 和电子邮件发送通知，并提供具有历史数据的简单 Web 报告。'
 - en: Read more about vuls at [https://github.com/future-architect/vuls](https://github.com/future-architect/vuls).
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 [https://github.com/future-architect/vuls](https://github.com/future-architect/vuls)
+    了解更多关于 vuls 的信息。
 - en: Vuls setup playbook
+  id: totrans-110
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Vuls 设置 Playbook
 - en: The following playbook is used to set up `vuls` in an Ubuntu 16.04 system using
     Docker containers. The following playbook assumes that you already have docker
     installed and the required packages.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下playbook用于在Ubuntu 16.04系统上使用Docker容器设置`vuls`。 以下playbook假定您已经安装了docker和所需的软件包。
 - en: The playbook has mainly two roles for setting up `vuls` using Docker containers.
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: playbook主要有两个角色，用于使用Docker容器设置`vuls`。
 - en: '`vuls_containers_download`'
+  id: totrans-113
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`vuls_containers_download`'
 - en: '`vuls_database_download`'
+  id: totrans-114
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`vuls_database_download`'
 - en: '[PRE5]'
+  id: totrans-115
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'Pulling the Docker containers locally using the `docker_image` module:'
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用`docker_image`模块在本地拉取Docker容器：
 - en: '[PRE6]'
+  id: totrans-117
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Then downloading the CVE and OVAL databases for the required operating systems
     and distributions versions:'
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后下载所需操作系统和分发版本的CVE和OVAL数据库：
 - en: '[PRE7]'
+  id: totrans-119
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'The global variables file looks as follows. We can add more `redhat_oval_versions`,
     such as `5`. The `nvd_database_years` will download the CVE database up until
     the end of 2017:'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 全局变量文件如下所示。 我们可以添加更多`redhat_oval_versions`，例如`5`。 `nvd_database_years`将下载CVE数据库直到2017年底：
 - en: '[PRE8]'
+  id: totrans-121
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'The following screenshot is the Ansible playbook execution for vuls setup:'
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下屏幕截图是用于vuls设置的Ansible playbook执行示例：
 - en: '![](img/a8393a43-938e-4c3f-af12-0711aef5cb8b.png)'
+  id: totrans-123
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a8393a43-938e-4c3f-af12-0711aef5cb8b.png)'
 - en: Vuls setup playbook in action
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: Vuls设置playbook生效
 - en: Vuls scanning playbook
+  id: totrans-125
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Vuls扫描playbook
 - en: 'Now, it''s time to perform the scanning and reporting using the `vuls` Docker
     containers. The following playbook contains simple steps to perform the `vuls`
     scan against virtual machines and containers, and send the report to slack and
     web:'
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，是时候使用`vuls` Docker容器执行扫描和报告了。 以下playbook包含了执行针对虚拟机和容器的`vuls`扫描以及将报告发送到slack和web的简单步骤：
 - en: '[PRE9]'
+  id: totrans-127
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'The following file is the configuration file for `vuls` to perform the scanning.
     This holds the configuration for slack alerting and also the server to perform
     scanning. This can be configured very effectively as required using `vuls` documentation:'
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下文件是`vuls`执行扫描的配置文件。 这保存了slack警报的配置以及执行扫描的服务器。 可以根据`vuls`文档非常有效地进行配置：
 - en: '[PRE10]'
+  id: totrans-129
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'The following screenshot is Ansible playbook execution for vuls scanning in
     action:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下屏幕截图是用于vuls扫描的Ansible playbook执行示例：
 - en: '![](img/b9ee7989-87b9-49d2-80a1-7682070bfaa7.png)'
+  id: totrans-131
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b9ee7989-87b9-49d2-80a1-7682070bfaa7.png)'
 - en: Vuls scanning playbook in action
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: Vuls扫描playbook生效
 - en: 'Once the reporting container has executed, based on the configuration options, `vuls`
     will notify the issues to the respective slack channel:'
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦报告容器执行完毕，根据配置选项，`vuls`将问题通知到相应的slack频道：
 - en: '![](img/0bc2665a-9572-4911-93ec-7eac35721b0e.png)'
+  id: totrans-134
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0bc2665a-9572-4911-93ec-7eac35721b0e.png)'
 - en: 'We can also visit the web UI interface of the `vuls` server IP address to see
     the detailed results in tabular and portable format. This is very useful to manage
     large amount of servers and patches at scale:'
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以访问`vuls`服务器IP地址的Web UI界面，以查看表格和便携格式的详细结果。 这对于管理大量服务器和规模化补丁非常有用：
 - en: '![](img/9a9e5c82-cfb7-4b9a-828e-5dceda00315c.png)'
+  id: totrans-136
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/9a9e5c82-cfb7-4b9a-828e-5dceda00315c.png)'
 - en: 'We can also get deeper by digging into the issues, severity, operating system,
     and so on in the report:'
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以通过报告深入了解问题、严重性、操作系统等：
 - en: '![](img/80fa4ebb-c50f-408a-b00c-31b1b8d6eadf.png)'
+  id: totrans-138
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/80fa4ebb-c50f-408a-b00c-31b1b8d6eadf.png)'
 - en: This can be part of the CI/CD life cycle as an infrastructure code and then
     we can run this as a scheduled scan using Ansible Tower or Jenkins.
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 这可以作为基础架构代码的CI/CD生命周期的一部分，然后我们可以使用Ansible Tower或Jenkins作为计划扫描运行它。
 - en: Scheduled scans for file integrity checks, host-level monitoring using Ansible
     for various compliance initiatives
+  id: totrans-140
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为各种合规性倡议进行文件完整性检查和主机级监视的计划扫描
 - en: 'One of the many advantages of being able to execute commands on the host using
     Ansible is the ability to get internal system information, such as:'
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用Ansible在主机上执行命令的许多优点之一是能够获取内部系统信息，例如：
 - en: File hashes
+  id: totrans-142
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 文件哈希值
 - en: Network connections
+  id: totrans-143
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 网络连接
 - en: List of running processes
+  id: totrans-144
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 正在运行的进程列表
 - en: It can act as a lightweight **Host-Based Intrusion Detection System** (**HIDS**).
     While this may not eliminate the case for a purpose-built HIDS in many cases,
     we can execute the same kind of security tasks using a tool such as Facebook's
     `osquery` along with Ansible.
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 它可以作为轻量级**主机入侵检测系统**（**HIDS**）。虽然在许多情况下这可能不能完全替代专门设计的HIDS，但我们可以使用像Facebook的`osquery`这样的工具与Ansible一起执行相同类型的安全任务。
 - en: osquery
+  id: totrans-146
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: osquery
 - en: '`osquery` is an operating system instrumentation framework by Facebook and
     written in C++, that supports Windows, Linux, OS X (macOS), and other operating
     systems. It provides an interface to query an operating system using an SQL like
@@ -595,96 +902,140 @@
     It provides `osquery` as a service, system interactive shell, and so on. Hence
     we can use this to perform centralized monitoring and security management solutions.
     Read more about `osquery` at [https://osquery.io](https://osquery.io).'
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: '`osquery`是Facebook开发的操作系统仪表化框架，用C++编写，支持Windows、Linux、OS X（macOS）和其他操作系统。它提供了使用类似SQL语法的接口来查询操作系统的功能。通过使用这个，我们可以执行诸如运行进程、内核配置、网络连接和文件完整性检查等低级活动。总的来说，它就像一个**主机入侵检测系统**（**HIDS**）端点安全。它提供`osquery`作为服务、系统交互shell等。因此我们可以使用它来执行集中监控和安全管理解决方案。更多关于`osquery`的信息请访问[https://osquery.io](https://osquery.io)。'
 - en: 'Here is a high-level overview of what `osquery` looks like:'
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里是对`osquery`的高层次概述：
 - en: '![](img/5343db14-1311-45d2-8872-0baac58e339c.png)'
+  id: totrans-149
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5343db14-1311-45d2-8872-0baac58e339c.png)'
 - en: osquery getting a list of users with groups and other information using a SQL
     query
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用SQL查询获取用户列表及其组和其他信息的`osquery`
 - en: 'The following playbook is to set up and configure the `osquery` agent in your
     Linux servers to monitor and look for vulnerabilities, file integrity monitoring,
     and many other compliance activities, and then log them for sending to a centralized
     logging monitoring system:'
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下操作手册是为了在Linux服务器上设置和配置`osquery`代理，以监视和查找漏洞、文件完整性监控和许多其他合规性活动，然后将它们记录下来发送到集中日志监控系统：
 - en: '[PRE11]'
+  id: totrans-152
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'The following  `fim.conf` code snippet is the pack for file integrity monitoring
     and it monitors for file events in the `/home`, `/etc`, and `/tmp` directories
     every 300 seconds. It uses **Secure Hash Algorithm** (**SHA**) checksum to validate
     the changes. This can be used to find out whether attackers add their own SSH
     keys or audit log changes against system configuration changes for compliance
     and other activities:'
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下`fim.conf`代码片段是用于文件完整性监控的包，它每300秒监视`/home`、`/etc`和`/tmp`目录中的文件事件。它使用**安全哈希算法**（**SHA**）校验来验证更改。这可用于查找攻击者是否添加了自己的SSH密钥或对系统配置更改进行合规性和其他活动的审核日志更改：
 - en: '[PRE12]'
+  id: totrans-154
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: The following configuration is used by the `osquery` daemon to perform checks
     and monitoring based on specified options, packs, and custom queries. We are also
     using different packs (that contain multiple queries) to look for different monitoring
     and configuration checks.
+  id: totrans-155
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下配置由`osquery`守护程序使用，以基于指定选项、包和自定义查询执行检查和监控。我们还使用不同的包（包含多个查询）来查找不同的监控和配置检查。
 - en: '`osquery`, by default, has multiple packs for incident response, vulnerability
     management, compliance, rootkit, hardware monitoring, and so on. Read more at [https://osquery.io/schema/packs](https://osquery.io/schema/packs).'
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，`osquery`具有多个包，用于事件响应、漏洞管理、合规性、rootkit、硬件监控等。更多详情请访问[https://osquery.io/schema/packs](https://osquery.io/schema/packs)。
 - en: 'The following code snippet is the `osquery` service configuration. This can
     be modified as required to monitor and log by `osquery` service:'
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段是`osquery`服务配置。根据需要可以进行修改以监视和记录`osquery`服务：
 - en: '[PRE13]'
+  id: totrans-158
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: The reference tutorial can be followed at [https://www.digitalocean.com/community/tutorials/how-to-monitor-your-system-security-with-osquery-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-monitor-your-system-security-with-osquery-on-ubuntu-16-04).
+  id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: 参考教程可在[https://www.digitalocean.com/community/tutorials/how-to-monitor-your-system-security-with-osquery-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-monitor-your-system-security-with-osquery-on-ubuntu-16-04)处查看。
 - en: 'The playbook can be executed to set up the `osquery` configuration in Linux
     servers to set up and log the events generated by the `osquery` agent:'
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 可以执行该操作手册来设置Linux服务器上的`osquery`配置，以设置和记录`osquery`代理生成的事件：
 - en: '![](img/b665501d-8b25-4672-9a83-7c54ce7211b5.png)'
+  id: totrans-161
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b665501d-8b25-4672-9a83-7c54ce7211b5.png)'
 - en: osquery setup playbook in action
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: '`osquery`设置操作手册在执行中'
 - en: The goal is not just setting up `osquery`, we can use the logs to build a centralized
     real-time monitoring system using our Elastic stack. We can use the Filebeat agent
     to forward these logs to our Elastic stack and we can view them and build a centralized
     dashboard for alerting and monitoring.
+  id: totrans-163
   prefs: []
   type: TYPE_NORMAL
+  zh: 目标不仅仅是设置`osquery`，我们可以使用日志来构建一个使用我们的Elastic堆栈的集中式实时监控系统。我们可以使用Filebeat代理将这些日志转发到我们的Elastic堆栈，然后我们可以查看它们并构建一个用于警报和监控的集中式仪表板。
 - en: 'The following is an example of the logs generated by `osquery`, we can see
     that the `authorized_keys` file is getting modified by the Ubuntu user at November
     22nd 2017,23:59:21.000:'
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是`osquery`生成的日志的示例，我们可以看到`authorized_keys`文件在2017年11月22日23:59:21.000被Ubuntu用户修改：
 - en: '![](img/2cde3ca0-ebbd-4e3b-9ff0-b7fe54a3a8f5.png)'
+  id: totrans-165
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/2cde3ca0-ebbd-4e3b-9ff0-b7fe54a3a8f5.png)'
 - en: This idea can be extended for building some automated defences by taking actions
     against attacks by using automated Ansible playbooks for known actions.
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个想法可以通过利用自动化Ansible playbooks对已知行动采取行动来构建一些自动化防御措施。
 - en: The world is moving toward containers and this kind of monitoring gives us a
     look at low-level things such as kernel security checks, and file integrity checks
     on host level. When attackers try to bypass containers and get access to hosts
     to escalate privileges, we can detect and defend them using this kind of setup.
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: 世界正在向容器迈进，这种监控方法可以让我们看到诸如内核安全检查和主机级文件完整性检查等底层事物。当攻击者试图绕过容器并访问主机以提升权限时，我们可以使用这种设置来检测并防御它们。
 - en: Summary
+  id: totrans-168
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: Containers are rapidly changing the world of developers and operations teams.
     The rate of change is accelerating, and in this new world, security automation
     gets to play a front and center role. By leveraging our knowledge of using Ansible
@@ -692,12 +1043,16 @@
     and `osquery`, we can measure, analyze, and benchmark our containers for security.
     This allows us to build end-to-end automatic processes of securing, scanning and
     remediating containers.
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 容器正在迅速改变开发人员和运维团队的世界。变化的速度正在加快，在这个新世界中，安全自动化将起到重要作用。通过利用我们使用Ansible编写逐条命令的知识以及优秀的工具，如Archore和`osquery`，我们可以测量、分析和基准我们的容器的安全性。这使我们能够构建端到端的自动化流程，以确保、扫描和修复容器。
 - en: In the next chapter, we will look at a specialized use case for security automation.
     We will look at how can we improve the tasks around malware analysis by automating
     certain parts of it. We will especially focus on lightweight dynamic analysis
     workflow integrating Cuckoo sandbox, one of the most popular malware analysis
     tools out there.
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将探讨安全自动化的专用用例。我们将研究如何通过自动化部分任务来改进恶意软件分析。我们将特别关注集成了Cuckoo沙箱的轻量级动态分析工作流程，Cuckoo沙箱是当前最流行的恶意软件分析工具之一。

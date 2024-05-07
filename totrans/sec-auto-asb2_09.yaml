@@ -1,4 +1,5 @@
 - en: Automating Lab Setups for Forensics Collection and Malware Analysis
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -7,6 +8,7 @@
     a massive effort required in keeping computers safe from malware for operational
     systems, a big chunk of work in malware defenses is about understanding where
     they come from and what they are capable of.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
 - en: This is the part where Ansible can be used for automation and enabling experts
@@ -15,9 +17,11 @@
     and more. Also, we will be looking into creating Ansible playbooks for labs for
     isolated environments and for collection and storage with secure backup of forensic
     artifacts.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
 - en: Creating Ansible playbooks for labs for isolated environments
+  id: totrans-3
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -26,9 +30,11 @@
     the ability to collaborate and share threats using the **Malware Information Sharing
     Platform** (**MISP**). We also setup Viper (binary management and analysis framework)
     to perform the analysis.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
 - en: Collecting file and domain malware identification and classification
+  id: totrans-5
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -40,27 +46,35 @@
     is to set up the VirusTotal tool in the system, scan the malware samples against
     the VirusTotal API, and identify whether or not it's really malware. It generally
     checks using more than 60 antivirus scanners and tools and provides detailed information.
+  id: totrans-6
   prefs: []
   type: TYPE_NORMAL
 - en: VirusTotal  API tool set up
+  id: totrans-7
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'The following playbook will set up the VirusTotal API tool ([https://github.com/doomedraven/VirusTotalApi](https://github.com/doomedraven/VirusTotalApi)),
     which is officially supported in the VirusTotal page itself:'
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE0]'
+  id: totrans-9
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'The playbook execution will download the repository and set up the VirusTotal
     API tool and this will get us ready for scanning the malware samples:'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/8ac588de-ea81-47b6-bc36-ca873f7ea3bb.png)'
+  id: totrans-11
   prefs: []
   type: TYPE_IMG
 - en: VirusTotal API scan for malware samples
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -69,474 +83,692 @@
     and copy the local malware samples to a remote system and scan them recursively
     and return the results. Once the scan has been completed, it will remove the samples
     from the remote system:'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE1]'
+  id: totrans-14
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'The results of the malware sample scan using the VirusTotal API looks like
     this. It returns the hashes and pointers to the VirusTotal API scan report for
     detailed results:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/2aa46276-21d0-4017-becf-af14138a51ea.png)'
+  id: totrans-16
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/2aa46276-21d0-4017-becf-af14138a51ea.png)'
 - en: Setting up the Cuckoo Sandbox environment
+  id: totrans-17
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 部署布谷鸟沙箱环境
 - en: '**Cuckoo Sandbox** is one of the most popular open source automated malware
     analysis systems. It has a lot of integrations to perform the malware analysis
     of suspicious files. Its setup requirements include dependencies, and other software
     such as VirtualBox, yara, ssdeep, and volatility. Also, the VM analysis is Windows
     and it requires some prerequisites to perform the analysis.'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: '**布谷鸟沙箱**是最流行的开源自动化恶意软件分析系统之一。它有很多集成来执行可疑文件的恶意软件分析。其设置要求包括依赖项和其他软件，如VirtualBox、yara、ssdeep和volatility。此外，VM分析是Windows，需要一些先决条件才能进行分析。'
 - en: Read more about Cuckoo Sandbox at [https://cuckoosandbox.org](https://cuckoosandbox.org).
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 阅读更多有关布谷鸟沙箱的信息，请访问[https://cuckoosandbox.org](https://cuckoosandbox.org)。
 - en: Setting up the Cuckoo host
+  id: totrans-20
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置Cuckoo主机
 - en: The following Ansible Playbook will set up the host operating system and dependencies
     required for Cuckoo Sandbox to work. This has different roles to install all the
     required packages in the Ubuntu operating system.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下Ansible Playbook将设置主机操作系统和Cuckoo Sandbox工作所需的依赖关系。这有不同的角色以安装Ubuntu操作系统中的所有必需软件包。
 - en: 'The following roles are included to set up the host system:'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下角色包括设置主机系统：
 - en: '[PRE2]'
+  id: totrans-23
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'The dependencies role has lot of `apt` packages that have to be installed to
     perform other installations. Then we will set up capabilities for the `tcpdump`
     package, so Cuckoo can access them for analysis:'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 依赖关系角色具有很多必须安装的`apt`软件包以执行其他安装。然后，我们将为`tcpdump`软件包设置功能，以便Cuckoo可以访问它们进行分析：
 - en: '[PRE3]'
+  id: totrans-25
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Then we will install the VirtualBox, so the VM analysis can be installed in
     VirtualBox. Cuckoo uses the VirtualBox API to interact with VM analysis to perform
     operations:'
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后我们将安装VirtualBox，以便VM分析可以安装在VirtualBox中。Cuckoo使用VirtualBox API与VM分析进行交互以执行操作：
 - en: '[PRE4]'
+  id: totrans-27
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'After that, we will install some additional packages and tools for Cuckoo to
     use in the analysis:'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 之后，我们将安装一些额外的软件包和工具供Cuckoo在分析中使用：
 - en: '[PRE5]'
+  id: totrans-29
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'The custom scripts have the build scripts to install the `yara` and `ssdeep`
     packages:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 自定义脚本具有安装`yara`和`ssdeep`软件包的构建脚本：
 - en: '[PRE6]'
+  id: totrans-31
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Finally, we will install the Cuckoo and other required settings, such as creating
     users, to the `vboxusers` group. The configuration files are taken from templates,
     so these will be modified based on the VM analysis environment:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们将安装Cuckoo和其他必需的设置，例如将用户创建到`vboxusers`组。配置文件取自模板，因此这些将根据VM分析环境进行修改：
 - en: '[PRE7]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'The following playbook will copy the configurations and start the Cuckoo and
     web server to perform the Cuckoo analysis:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下playbook将复制配置并启动Cuckoo和Web服务器以执行Cuckoo分析：
 - en: '[PRE8]'
+  id: totrans-35
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: Setting up Cuckoo guest
+  id: totrans-36
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置Cuckoo Guest
 - en: Most of the settings will need to be performed in the Windows operating system.
     The following guide will help you set up the Windows Guest VM for Cuckoo analysis.
     Refer to [https://cuckoo.sh/docs/installation/guest/index.html](https://cuckoo.sh/docs/installation/guest/index.html).
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 大多数设置将需要在Windows操作系统中执行。以下指南将帮助您为Cuckoo分析设置Windows Guest VM。请参阅[https://cuckoo.sh/docs/installation/guest/index.html](https://cuckoo.sh/docs/installation/guest/index.html)。
 - en: 'The following screenshots are the reference that the first adapter is the Host-only
     Adapter:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是参考，第一个适配器是Host-only适配器：
 - en: '![](img/23aa5335-c165-4eb2-8df1-fb25cac7e27d.png)'
+  id: totrans-39
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/23aa5335-c165-4eb2-8df1-fb25cac7e27d.png)'
 - en: 'And the second adapter is the NAT:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 第二个适配器是NAT：
 - en: '![](img/4589cb15-147a-4cdb-8dd6-f7ae6b67bea9.png)'
+  id: totrans-41
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4589cb15-147a-4cdb-8dd6-f7ae6b67bea9.png)'
 - en: 'Once the Windows VM starts, we need to install the VirtualBox guest addition
     tools. This allows Cuckoo to perform analysis using a command-line utility called
     VBoxManage:'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦Windows VM启动，我们需要安装VirtualBox Guest Addition工具。这允许Cuckoo使用名为VBoxManage的命令行实用程序执行分析：
 - en: '![](img/d669e0d8-d604-4501-ba2f-41363b6bf086.png)'
+  id: totrans-43
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d669e0d8-d604-4501-ba2f-41363b6bf086.png)'
 - en: Next, we have to install Python locally to start the Cuckoo agent locally, we
     can install Python from the official Python website: [https://www.python.org/downloads/release/python-2714](https://www.python.org/downloads/release/python-2714).
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，我们必须在本地安装Python以启动本地Cuckoo代理，我们可以从官方Python网站安装Python：[https://www.python.org/downloads/release/python-2714](https://www.python.org/downloads/release/python-2714)。
 - en: 'Now download the agent from the Cuckoo host, it will be available in the Cuckoo
     working directory in the `agent` folder. We need to keep this in the Windows VM
     for the Cuckoo server to interact with:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在从布谷鸟主机下载代理，在Cuckoo工作目录中的`agent`文件夹中可用。我们需要将其保留在Windows VM中，以便Cuckoo服务器与之交互：
 - en: '![](img/84ad3515-6fee-42d1-b791-ee43d3e4de9e.png)'
+  id: totrans-46
   prefs: []
   type: TYPE_IMG
 - en: 'Then, we have to add the Python file path to the system startups using the `regedit`
     command. This can be done by navigating to `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Current\Version\Run`.
     Then, add the new string in the registry editor right side, with name Cuckoo and
     give the full path for the `agent.py` file in the value section:'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/42a0f513-4974-44d3-a3c2-9cc746144a44.png)'
+  id: totrans-48
   prefs: []
   type: TYPE_IMG
 - en: Now, we can take a snapshot and update the configurations in the Cuckoo host.
     Once this is done, we are ready to start the Cuckoo server and web server.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
 - en: 'The following screenshot is the home page of the Cuckoo web server. Once we
     submit the malware sample, then we can click on analyze to start:'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/5d4f710c-39ff-4224-bed2-61bb91846267.png)'
+  id: totrans-51
   prefs: []
   type: TYPE_IMG
 - en: 'Then, it will take some time to perform the analysis with the VirtualBox Windows
     VM. This will perform the analysis based on the option you selected:'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/e1912ee3-c858-4672-8df9-7ff6e3a1c45e.png)'
+  id: totrans-53
   prefs: []
   type: TYPE_IMG
 - en: 'Then, it will give complete detailed information about the sample. It includes
     submitted file checksum, runtime execution screenshot while Cuckoo performing
     analysis and other information:'
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/fed7a78b-f2a3-4678-9838-091acf127c6f.png)'
+  id: totrans-55
   prefs: []
   type: TYPE_IMG
 - en: 'The following screenshot is the behavioral analysis of the malware sample,
     which includes a detailed analysis of the process tree. The left-side menu contains
     different options such as dropped files, memory dump analysis, and packet analysis:'
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/f00c00b8-c0ca-482e-bd63-c7464dddbcfb.png)'
+  id: totrans-57
   prefs: []
   type: TYPE_IMG
 - en: Learn more about Cuckoo usage in the Cuckoo documentation at [http://docs.cuckoosandbox.org/en/latest/usage](http://docs.cuckoosandbox.org/en/latest/usage).
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
 - en: Submitting samples and reporting using Ansible playbook
+  id: totrans-59
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'The following playbook will perform the analysis of the given malware sample
     files in a local system path and return the reports to using Ansible playbook:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE9]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'The following screenshot copies the malware samples to a Cuckoo analysis system
     and submits these files for automated analysis using Ansible playbook:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/a0985b27-d3e9-4a7d-aef7-1d311eace559.png)'
+  id: totrans-63
   prefs: []
   type: TYPE_IMG
 - en: 'The preceding screenshot copies the local binaries into the remote Cuckoo host
     and submits them for analysis using the Cuckoo submit feature:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/b942741d-1183-457c-b81e-c7ee688627a1.png)'
+  id: totrans-65
   prefs: []
   type: TYPE_IMG
 - en: The preceding screenshot is the report of analysis submitted by our Cuckoo scan
     submission using Ansible Playbook.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
 - en: Setting up Cuckoo using Docker containers
+  id: totrans-67
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'This will allows us to simplify the Cuckoo setup using Docker containers. The
     following commands will allow us to set up the Cuckoo Sandbox using Docker containers:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE10]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'It takes a while to download the Docker containers and configure them to work
     together. Once the installation is complete, we can access Cuckoo using `http://localhost`:'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
 - en: '![](img/3956ed3e-db8d-40a1-a9cb-bc7b01e43ea9.png)'
+  id: totrans-71
   prefs: []
   type: TYPE_IMG
 - en: Now, we can submit the malware samples or suspicious files to Cuckoo to perform
     an analysis using the tool set and it will return with a detailed analysis. We
     can also choose what analysis to perform by selecting the configuration options
     before submitting the sample.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们可以将恶意软件样本或可疑文件提交给 Cuckoo 进行分析，使用工具集进行分析，它将返回详细的分析结果。在提交样本之前，我们还可以通过选择配置选项来选择进行哪些分析。
 - en: Setting up MISP and Threat Sharing
+  id: totrans-73
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 MISP 和威胁共享
 - en: '**Malware Information Sharing Platform (MISP)** is an open source threat-sharing
     platform ([http://www.misp-project.org](http://www.misp-project.org)). It allows
     us to exchange **Indicators of Compromise** (**IOCs**) about **Advanced Persistent
     Threat** (**APT**) and targeted attacks within the known community and organizations.
     By doing this, we can gain more knowledge about different attacks and threats
     and it''s easy for organizations to defend against such attacks.'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: '**恶意软件信息共享平台（MISP）**是一个开源的威胁共享平台（[http://www.misp-project.org](http://www.misp-project.org)）。它允许我们在已知的社区和组织内交换关于**高级持续威胁（APT）**和有针对性攻击的**威胁指标（IOCs）**。通过这样做，我们可以更多地了解不同的攻击和威胁，组织可以更容易地防御这些攻击。'
 - en: The simplest way to get started with this platform is to use their customized
     VM by the **Computer Incident Response Center Luxembourg** (**CIRCL**), which
     includes the latest release of the complete setup. This VM is customized to work
     in different environments.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用**卢森堡计算机事件响应中心**（**CIRCL**）定制的虚拟机是开始使用这个平台的最简单方法，其中包括完整设置的最新版本。这个虚拟机经过定制，适用于不同的环境。
 - en: The VM and training materials can be found at [https://www.circl.lu/services/misp-training-materials](https://www.circl.lu/services/misp-training-materials).
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: VM 和培训材料可在 [https://www.circl.lu/services/misp-training-materials](https://www.circl.lu/services/misp-training-materials)
+    找到。
 - en: Setting up MISP using Ansible playbook
+  id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible playbook 设置 MISP
 - en: 'We can also set up using the Ansible playbooks. Based on our customized use,
     there are multiple playbooks available in the community:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们也可以使用 Ansible playbooks 进行设置。根据我们的定制使用，社区中有多个可用的 playbooks：
 - en: '[https://github.com/juju4/Ansible-MISP](https://github.com/juju4/Ansible-MISP)'
+  id: totrans-79
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://github.com/juju4/Ansible-MISP](https://github.com/juju4/Ansible-MISP)'
 - en: '[https://github.com/StamusNetworks/Ansible-misp](https://github.com/StamusNetworks/Ansible-misp)'
+  id: totrans-80
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[https://github.com/StamusNetworks/Ansible-misp](https://github.com/StamusNetworks/Ansible-misp)'
 - en: 'Setting up MISP using existing Ansible playbooks is as simple as cloning the
     repository and updating the variables for required changes and configurations.
     Make sure to update the variables before executing the playbook:'
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用现有的 Ansible playbooks 设置 MISP 就像克隆存储库并更新所需更改和配置的变量一样简单。在执行 playbook 之前，请确保更新变量：
 - en: '[PRE11]'
+  id: totrans-82
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: MISP web user interface
+  id: totrans-83
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: MISP Web 用户界面
 - en: 'The following is the MISP virtual machine web interface. Here are the default
     credentials for the MISP VM:'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是 MISP 虚拟机的 Web 界面。以下是 MISP 虚拟机的默认凭据：
 - en: '[PRE12]'
+  id: totrans-85
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'The following screenshot is the home page of **Malware Information Sharing
     Platform** (**MISP**) with login panel:'
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是**恶意软件信息共享平台**（**MISP**）的主页，带有登录面板：
 - en: '![](img/e83ca3e2-9b9f-4e7e-8266-2f15311fbee6.png)'
+  id: totrans-87
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e83ca3e2-9b9f-4e7e-8266-2f15311fbee6.png)'
 - en: 'The following screenshot is the home screen for the MISP platform web interface,
     it contains options to share the IOCs, add organisations, and perform access control,
     among other features:'
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是 MISP 平台网页界面的主界面，包含了共享 IOCs、添加组织和执行访问控制等功能选项：
 - en: '![](img/724103e4-ddba-4dfc-8195-08e1fc8da6bf.png)'
+  id: totrans-89
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/724103e4-ddba-4dfc-8195-08e1fc8da6bf.png)'
 - en: Read more about MISP using their documentation to learn different features available
     in MISP at [https://www.circl.lu/doc/misp/](https://www.circl.lu/doc/misp/).
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过阅读 MISP 的文档了解不同的功能，可在 [https://www.circl.lu/doc/misp/](https://www.circl.lu/doc/misp/)
+    找到更多信息。
 - en: Setting up Viper - binary management and analysis framework
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Viper - 二进制管理和分析框架
 - en: '**Viper** ([http://viper.li](http://viper.li)) is a framework dedicated to
     malware and exploit researchers. It provides a simple solution to easily organize
     collections of malware and exploit samples. It provides both a CLI and web interface
     for researchers to perform analysis on binary files and malware samples.'
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Viper**（[http://viper.li](http://viper.li)）是一个专为恶意软件和漏洞研究人员设计的框架。它提供了一个简单的解决方案，可以轻松地组织恶意软件和漏洞样本的集合。它为研究人员提供了
+    CLI 和 Web 界面，用于对二进制文件和恶意软件样本进行分析。'
 - en: 'The following playbook will set up the entire Viper framework. It has two roles,
     one is to set up the dependencies required to run the Viper framework, and the
     other is the main setup:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下playbook将设置整个Viper框架。 它有两个角色，一个是设置运行Viper框架所需的依赖项，另一个是主要设置：
 - en: '[PRE13]'
+  id: totrans-94
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'The following snippet is to set up the dependencies and other required packages:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段是用于设置依赖项和其他所需软件包的：
 - en: '[PRE14]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'Here, we are using a custom shell script for setting up  `ssdeep`, which has
     to perform compilation and build:'
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，我们正在使用自定义shell脚本来设置`ssdeep`，它必须执行编译和构建：
 - en: '[PRE15]'
+  id: totrans-98
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'The set up role will install the Viper packages, required dependencies, and
     it will start the web server to access the Viper web user interface:'
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置角色将安装Viper软件包，所需的依赖项，并将启动web服务器以访问Viper web用户界面：
 - en: '[PRE16]'
+  id: totrans-100
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'The following screenshot refers to the playbook execution of the Viper framework
     setup. and it returns the web interface URL to access:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图指的是Viper框架设置的playbook执行。并返回web界面URL以进行访问：
 - en: '![](img/8fa9f79e-ba57-4e72-b49f-506b86b25e3c.png)'
+  id: totrans-102
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8fa9f79e-ba57-4e72-b49f-506b86b25e3c.png)'
 - en: 'If we navigate to `http://192.18.33.22:9090`, we can see the web interface
     with a lot of options to use this framework:'
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们导航到`http://192.18.33.22:9090`，我们可以看到具有许多选项的web界面以使用此框架：
 - en: '![](img/daa31818-eebe-4a20-85e3-941154de6423.png)'
+  id: totrans-104
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/daa31818-eebe-4a20-85e3-941154de6423.png)'
 - en: 'The following screenshot is the output of the sample malware we analyzed. This
     Viper framework also has module support with YARA ruleset, VirusTotal API, and
     other modules to perform a deep analysis based on the use case:'
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是我们分析的示例恶意软件的输出。此Viper框架还具有YARA规则集，VirusTotal API和其他模块的模块支持，可以根据用例执行深度分析：
 - en: '![](img/2808eb26-b1dd-42fc-92de-906acba6584e.png)'
+  id: totrans-106
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/2808eb26-b1dd-42fc-92de-906acba6584e.png)'
 - en: Creating Ansible playbooks for collection and storage with secure backup of
     forensic artifacts
+  id: totrans-107
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为收集和存储创建Ansible playbook，同时安全备份取证工件
 - en: 'Ansible is an apt replacement for all kinds of bash scripts. Typically, for
     most activities that require analysis, we follow a set pattern:'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible是各种bash脚本的合适替代品。通常，对于大多数需要分析的活动，我们遵循一套固定模式：
 - en: Collect logs from running processes into files with a path we already know
+  id: totrans-109
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 收集正在运行的进程的日志到已知路径的文件中
 - en: Copy the content from these log files periodically to a secure storage locally
     or accessible remotely over SSH or a network file share
+  id: totrans-110
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 定期将这些日志文件的内容复制到本地安全存储区或通过SSH或网络文件共享远程访问
 - en: Once copied successfully, rotate the logs
+  id: totrans-111
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 成功复制后，旋转日志
 - en: Since there is a bit of network activity involved, our bash scripts are usually
     written to be fault tolerant with regard to network connections and become complex
     very soon. Ansible playbooks can be used to do all of that while being simple
     to read for everyone.
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于涉及一些网络活动，我们的bash脚本通常编写为在网络连接方面具有容错性并很快变得复杂。 Ansible playbook可以用于执行所有这些操作，同时对每个人都很容易阅读。
 - en: Collecting log artifacts for incident response
+  id: totrans-113
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 收集用于事件响应的日志工件
 - en: 'The key phase in incident response is **log analysis**. The following playbook
     will collect the logs from all the hosts and store it locally. This allows responders
     to perform the further analysis:'
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 事件响应中的关键阶段是**日志分析**。以下playbook将收集所有主机的日志并将其存储到本地。这使得响应者可以进行进一步分析：
 - en: '[PRE17]'
+  id: totrans-115
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'The following playbook execution will collect a list of logs in specified locations
     in remote hosts using Ansible modules and store them in the local system. The
     output of the logs from the playbook looks like this:'
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下playbook执行将使用Ansible模块在远程主机中的指定位置收集日志列表，并将其存储在本地系统中。 playbook的日志输出如下：
 - en: '![](img/009d900e-d9dd-456e-8c0d-3ad27595a725.png)'
+  id: totrans-117
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/009d900e-d9dd-456e-8c0d-3ad27595a725.png)'
 - en: Secure backups for data collection
+  id: totrans-118
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 数据收集的安全备份
 - en: When collecting multiple sets of data from servers, it's important to store
     them securely with encrypted backups. This can be achieved by backing up the data
     to storage services such as S3.
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 当从服务器中收集多组数据时，将其安全地存储并进行加密备份至关重要。这可以通过将数据备份到S3等存储服务来实现。
 - en: 'The following Ansible playbook allows us to install and copy the collected
     data to the AWS S3 service with encryption enabled:'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下Ansible playbook允许我们安装并将收集的数据复制到启用了加密的AWS S3服务中：
 - en: '[PRE18]'
+  id: totrans-121
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'The configuration file looks like the following for the `s3cmd` configuration:'
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: '`s3cmd`配置的配置文件如下所示：'
 - en: '[PRE19]'
+  id: totrans-123
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'The following screenshot is the Ansible playbook execution of uploading the
     data to S3 bucket:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是上传数据到S3存储桶的Ansible playbook执行：
 - en: '![](img/ea83bd32-edb8-4955-b8e5-888bc36e5f1c.png)'
+  id: totrans-125
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ea83bd32-edb8-4955-b8e5-888bc36e5f1c.png)'
 - en: The preceding screenshot shows the Ansible playbook installing `s3cmd`, creating
     the new bucket called `secretforensicsdatausingAnsible`, and copying the local
     log data to the remote S3 bucket.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面的屏幕截图显示了 Ansible 播放书安装`S3cmd`，创建了名为`secretforensicsdatausingAnsible`的新桶，并将本地日志数据复制到远程
+    S3 存储桶。
 - en: '![](img/11e06805-87c5-4129-a36d-942dfb4d18e0.png)'
+  id: totrans-127
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/11e06805-87c5-4129-a36d-942dfb4d18e0.png)'
 - en: The preceding screenshot is the outcome of the playbook. We can see that the
     logs are successfully uploaded into the `secretforensicsdatausingAnsible` S3 bucket
     in AWS S3.
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面的屏幕截图是播放书的结果。我们可以看到日志已成功上传到 AWS S3 中的`secretforensicsdatausingAnsible` S3
+    存储桶中。
 - en: Summary
+  id: totrans-129
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: Being able to automate various workflows required for malware analysis allows
     us to scale the number of malware being analyzed and the resources required for
     doing such large-scale analysis. This is one way to address the deluge of malware
     that gets released every day on the internet and create useful defenses against
     them.
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 能够自动化用于恶意软件分析的各种工作流程，使我们能够扩展分析恶意软件的数量以及进行此类大规模分析所需的资源。这是解决每天在互联网上释放的恶意软件洪流并创建有用的防御措施的一种方式。
 - en: In the next chapter, we move on to creating an Ansible module for security testing.
     We will take baby steps at creating the module right from understanding the basics
     to utilizing and consuming the API of OWASP ZAP for scanning websites. By the
     end of the chapter, you will have a complete module that can be used with the
     Ansible CLI or Ansible playbook.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将继续创建一个用于安全测试的 Ansible 模块。我们将从理解基础知识开始，逐步学习创建模块，并利用 OWASP ZAP 的 API
+    来扫描网站。到本章结束时，您将拥有一个完整的模块，可用于 Ansible CLI 或 Ansible 播放书。
