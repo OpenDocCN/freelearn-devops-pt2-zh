@@ -3,6 +3,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Nessus 进行漏洞扫描
 - en: 'Scanning for vulnerabilities is one of the best understood periodic activities
     security teams take up on their computers. There are well-documented strategies and
     best practices for doing regular scanning for vulnerabilities in computers, networks,
@@ -10,57 +11,68 @@
   id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 漏洞扫描是安全团队在其计算机上进行的最为了解的定期活动之一。对于定期对计算机、网络、操作系统软件和应用软件进行漏洞扫描，都有充分记录的策略和最佳实践：
 - en: Basic network scans
   id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基本网络扫描
 - en: Credentials patch audit
   id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 凭证补丁审核
 - en: Correlating system information with known vulnerabilities
   id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将系统信息与已知漏洞相关联
 - en: With networked systems, this type of scanning is usually executed from a connected
     host that has the right kind of permissions to scan for security issues.
   id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于网络系统，这种类型的扫描通常是从具有适当权限的连接主机执行的，以便扫描安全问题。
 - en: 'One of the most popular vulnerability scanning tools is Nessus. Nessus started
     as a network vulnerability scanning tool, but now incorporates features such as
     the following:'
   id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: 最流行的漏洞扫描工具之一是 Nessus。Nessus 最初是一个网络漏洞扫描工具，但现在还包括以下功能：
 - en: Port scanning
   id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 端口扫描
 - en: Network vulnerability scanning
   id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 网络漏洞扫描
 - en: Web application-specific scanning
   id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Web 应用程序特定扫描
 - en: Host-based vulnerability scanning
   id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于主机的漏洞扫描
 - en: Introduction to Nessus
   id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Nessus 简介
 - en: The vulnerability database that Nessus has is its main advantage. While the
     techniques to understanding which service is running and what version of the software
     is running the service are known to us, answering the question, "Does this service
@@ -71,59 +83,72 @@
   id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: Nessus 拥有的漏洞数据库是其主要优势。虽然我们知道了理解哪个服务正在运行以及正在运行该服务的软件版本的技术，但回答“此服务是否有已知漏洞”这个问题是重要的。除了定期更新的漏洞数据库外，Nessus
+    还具有有关应用程序中发现的默认凭据、默认路径和位置的信息。所有这些都在易于使用的 CLI 或基于 Web 的工具中进行了优化。
 - en: Before diving into how we are going to set up Nessus to perform vulnerability
     scanning and network scanning against our infrastructure, let's see why we have
     to set it up and what it will give us in return.
   id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 在深入研究我们将如何设置 Nessus 来执行对基础架构进行漏洞扫描和网络扫描之前，让我们看看为什么我们必须设置它以及它将给我们带来什么回报。
 - en: 'In this chapter, we will focus on doing vulnerability scanning using Nessus.
     We will try out the standard activities required for that and see what steps are
     needed to automate them using Ansible:'
   id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将专注于使用 Nessus 进行漏洞扫描。我们将尝试执行所需的标准活动，并查看使用 Ansible 自动化这些活动需要哪些步骤：
 - en: Installing Nessus using a playbook.
   id: totrans-15
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 playbook 安装 Nessus。
 - en: Configuring Nessus.
   id: totrans-16
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 配置 Nessus。
 - en: Running a scan.
   id: totrans-17
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行扫描。
 - en: Running a scan using AutoNessus.
   id: totrans-18
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 AutoNessus 运行扫描。
 - en: Installing the Nessus REST API Python client.
   id: totrans-19
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装 Nessus REST API Python 客户端。
 - en: Downloading a report using the API.
   id: totrans-20
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 API 下载报告。
 - en: Installing Nessus for vulnerability assessments
   id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为漏洞评估安装 Nessus
 - en: 'First, get the URL to download the Nessus from [https://www.tenable.com/products/nessus/select-your-operating-system](https://www.tenable.com/products/nessus/select-your-operating-system),
     then select the Ubuntu operating system, and then run the following playbook role
     against the server on which you want to set up Nessus:'
   id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，获取从 [https://www.tenable.com/products/nessus/select-your-operating-system](https://www.tenable.com/products/nessus/select-your-operating-system)
+    下载 Nessus 的 URL，然后选择 Ubuntu 操作系统，然后对要设置 Nessus 的服务器运行以下 playbook 角色：
 - en: '[PRE0]'
   id: totrans-23
   prefs: []
@@ -134,167 +159,201 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 Nessus 进行漏洞扫描
 - en: 'Perform the following steps to configure Nessus for vulnerability scanning:'
   id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行以下步骤配置 Nessus 进行漏洞扫描：
 - en: 'We have to navigate to `https://NESSUSSERVERIP:8834` to confirm and start the
     service:'
   id: totrans-26
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们必须导航至 `https://NESSUSSERVERIP:8834` 以确认并启动服务：
 - en: '![](img/58f0611c-b54f-47c9-b416-201868d9f18d.png)'
   id: totrans-27
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/58f0611c-b54f-47c9-b416-201868d9f18d.png)'
 - en: 'As we can see it returns with an SSL error and we need to accept the SSL error
     and confirm the security exception  and continue with the  installation:'
   id: totrans-28
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如我们所见，它返回一个 SSL 错误，我们需要接受 SSL 错误并确认安全异常，并继续安装：
 - en: '![](img/9e9d232d-e5e2-48f8-8060-25eeefe4f598.png)'
   id: totrans-29
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/9e9d232d-e5e2-48f8-8060-25eeefe4f598.png)'
 - en: 'Click on Confirm Security Exception and continue to proceed with the installation
     steps:'
   id: totrans-30
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击确认安全异常并继续执行安装步骤：
 - en: '![](img/05f639e6-42e8-4e60-8814-bce45662c200.png)'
   id: totrans-31
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/05f639e6-42e8-4e60-8814-bce45662c200.png)'
 - en: 'Click on Continue and provide the details of the user, this user has full administrator
     access:'
   id: totrans-32
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击继续并提供用户详细信息，该用户具有完整的管理员访问权限：
 - en: '![](img/39159020-7ba3-45c3-8cbb-a0e3d9774fa9.png)'
   id: totrans-33
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/39159020-7ba3-45c3-8cbb-a0e3d9774fa9.png)'
 - en: 'Then finally, we have to provide the registration code (Activation Code), which
     can be obtained from registering at [https://www.tenable.com/products/nessus-home](https://www.tenable.com/products/nessus-home):'
   id: totrans-34
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 最后，我们必须提供注册码（激活码），这可以从注册页面获取：[https://www.tenable.com/products/nessus-home](https://www.tenable.com/products/nessus-home)：
 - en: '![](img/1c521cde-a718-4cc2-86bb-f428947ceb38.png)'
   id: totrans-35
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1c521cde-a718-4cc2-86bb-f428947ceb38.png)'
 - en: 'Now it will install the required plugins. It will take a while to install,
     and once it is done we can log in to use the application:'
   id: totrans-36
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，它将安装所需的插件。安装需要一段时间，一旦完成，我们就可以登录使用应用程序：
 - en: '![](img/950ca2ed-e42c-424e-8391-569a9769336c.png)'
   id: totrans-37
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/950ca2ed-e42c-424e-8391-569a9769336c.png)'
 - en: 'Now, we have successfully set up the Nessus vulnerability scanner:'
   id: totrans-38
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，我们已成功设置了Nessus漏洞扫描器：
 - en: '![](img/5c30874c-1cea-4cf6-bdbb-a7ee1a91710a.png)'
   id: totrans-39
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5c30874c-1cea-4cf6-bdbb-a7ee1a91710a.png)'
 - en: Executing scans against a network
   id: totrans-40
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 对网络执行扫描
 - en: Now, it's time to perform some vulnerability scanning using Nessus.
   id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，是时候使用Nessus执行一些漏洞扫描了。
 - en: Basic network scanning
   id: totrans-42
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 基本网络扫描
 - en: Nessus has a wide variety of scans, some of them are free and some of them will
     be available only in a paid version. So, we can also customize the scanning if
     required.
   id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: Nessus有各种各样的扫描，其中一些是免费的，一些只在付费版本中才可用。因此，我们也可以根据需要定制扫描。
 - en: 'The following are the list of templates currently available:'
   id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面是当前可用模板的列表：
 - en: '![](img/7c0480ef-e84c-4cc9-acd5-5b320d09c298.png)'
   id: totrans-45
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7c0480ef-e84c-4cc9-acd5-5b320d09c298.png)'
 - en: 'We can start with a basic network scan to see what''s happening in the network.
     This scan will perform a basic full system scan for the given hosts:'
   id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们可以从基本网络扫描开始，以查看网络中发生了什么。此扫描将为给定的主机执行基本的全系统扫描：
 - en: '![](img/409b6465-6b43-4954-8b7c-1c3486b04318.png)'
   id: totrans-47
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/409b6465-6b43-4954-8b7c-1c3486b04318.png)'
 - en: As you can see in the preceding screenshot, we have to mention the scan name
     and targets. Targets are just the hosts we want.
   id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 正如您在前面的截图中所看到的，我们必须提到扫描名称和目标。目标只是我们想要的主机。
 - en: Targets can be given in different formats, such as `192.168.33.1` for a single
     host, `192.168.33.1-10` for a range of hosts, and also we can upload the target
     file from our computer.
   id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 目标可以以不同格式给出，例如`192.168.33.1`表示单个主机，`192.168.33.1-10`表示主机范围，我们还可以从计算机上载入目标文件。
 - en: 'Choosing the New Scan / Basic Network Scan for analysis using Nessus:'
   id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择New Scan / Basic Network Scan以使用Nessus进行分析：
 - en: '![](img/9f4d07b9-7b4d-42f4-b7a1-1bb418bf6ba2.png)'
   id: totrans-51
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/9f4d07b9-7b4d-42f4-b7a1-1bb418bf6ba2.png)'
 - en: 'We can also customize the scan type. For example, we can perform a common ports
     scan which will scan known ports, we can also perform a full port scan if required:'
   id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们也可以定制扫描类型。例如，我们可以执行常用端口扫描，该扫描将扫描已知端口，如果需要，我们还可以执行完整端口扫描：
 - en: '![](img/cc73d7c7-efc2-416a-98e9-4e3a3a5d681a.png)'
   id: totrans-53
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/cc73d7c7-efc2-416a-98e9-4e3a3a5d681a.png)'
 - en: 'Then, similarly, we can specify to perform a different type of web application
     scan, as mentioned previously:'
   id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 然后，类似地，我们可以指定执行不同类型的Web应用程序扫描，如前所述：
 - en: '![](img/dd3d24d9-5e2c-4092-b5e2-42089281c460.png)'
   id: totrans-55
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dd3d24d9-5e2c-4092-b5e2-42089281c460.png)'
 - en: 'The reporting also can be customized as per the requirements using the available
     options:'
   id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 报告也可以根据要求使用可用选项进行定制：
 - en: '![](img/6e06cc24-e150-4017-9425-5261b0d4bdf1.png)'
   id: totrans-57
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6e06cc24-e150-4017-9425-5261b0d4bdf1.png)'
 - en: 'The preceding options are very important while scanning critical infrastructure.
     These options are to ensure we are not producing a lot of traffic and network
     bandwidth in the target network. Nessus allows us to customize as per the use
@@ -303,10 +362,12 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在扫描关键基础设施时，前述选项非常重要。这些选项旨在确保我们不会在目标网络中产生大量流量和网络带宽。Nessus允许我们根据使用情况和需求进行定制：
 - en: '![](img/f7701c34-6ddb-4b4c-b14a-b782f56aa34e.png)'
   id: totrans-59
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f7701c34-6ddb-4b4c-b14a-b782f56aa34e.png)'
 - en: The preceding screenshot represents whether we already have existing credentials
     for any service and if it requires scanning, we can mention them here. Nessus
     will use these credentials to authenticate while scanning and this gives better
@@ -315,26 +376,32 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前面的截图表示我们是否已经为任何服务拥有现有凭据，以及如果需要扫描，我们可以在此处提及它们。 Nessus在扫描时将使用这些凭据进行身份验证，这样可以获得更好的结果。
+    Nessus支持多种类型的身份验证服务！[](img/29a03e0e-e307-4f19-bea6-4171f3bd1250.png)
 - en: 'Scans can be scheduled if required, or are available on-demand. We can click
     the Launch button (play icon) to start a scan with given configuration parameters:'
   id: totrans-61
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果需要，可以安排扫描，或者根据需要提供。 我们可以点击“启动”按钮（播放图标）以使用给定的配置参数开始扫描：
 - en: '![](img/e7c5a15d-2c0a-43dd-ac42-e17770097d3d.png)'
   id: totrans-62
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/e7c5a15d-2c0a-43dd-ac42-e17770097d3d.png)'
 - en: 'Scan results are available via a dashboard based on host, vulnerabilities,
     severity level, and so on:'
   id: totrans-63
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 扫描结果可以通过基于主机、漏洞、严重程度等的仪表板进行查看：
 - en: '![](img/5551dcfc-62c8-4065-9bce-ecfab5adf708.png)'
   id: totrans-64
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/5551dcfc-62c8-4065-9bce-ecfab5adf708.png)'
 - en: The preceding screenshot shows how Nessus will produce detailed results of the
     existing vulnerabilities with sample **Proof of Concept** (**POC**) or command output
     as well. It also provides a detailed summary of the fix, vulnerability, and references.
@@ -342,50 +409,60 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述截图显示了Nessus将如何生成现有漏洞的详细结果，包括样本**概念证明**（**POC**）或命令输出。 它还提供了修复、漏洞和参考的详细摘要。
 - en: Running a scan using AutoNessus
   id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用AutoNessus运行扫描
 - en: 'With the AutoNessus script, we can do the following:'
   id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用AutoNessus脚本，我们可以执行以下操作：
 - en: List scans
   id: totrans-68
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 列出扫描
 - en: List scan policies
   id: totrans-69
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 列出扫描策略
 - en: Do actions on scans such as start, stop, pause, and resume
   id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对扫描执行操作，如启动、停止、暂停和恢复
 - en: The best part of AutoNessus is that since this is a command-line tool, it can
     easily become part of scheduled tasks and other automation workflows.
   id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: AutoNessus的最佳部分在于，由于这是一个命令行工具，因此可以轻松地成为定期任务和其他自动化工作流的一部分。
 - en: Download AutoNessus from [https://github.com/redteamsecurity/AutoNessus](https://github.com/redteamsecurity/AutoNessus).
   id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 从[https://github.com/redteamsecurity/AutoNessus](https://github.com/redteamsecurity/AutoNessus)下载AutoNessus。
 - en: Setting up AutoNessus
   id: totrans-73
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置AutoNessus
 - en: 'The following code is the Ansible playbook snippet to set up AutoNessus and
     configure it to use Nessus using credentials. This playbook will allow the setup
     of the `autoNessus` tool in the path and we can use it as a simple system tool:'
   id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码是用于设置AutoNessus并配置其使用凭据的Ansible playbook片段。 此playbook将允许在路径中设置`autoNessus`工具，并且我们可以将其用作简单的系统工具：
 - en: '[PRE1]'
   id: totrans-75
   prefs: []
@@ -396,33 +473,39 @@
   id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: '`no_log: True`将在Ansible输出的日志控制台中对输出进行审查。 当我们在playbooks中使用密码和密钥时，这将非常有用。'
 - en: Running scans using AutoNessus
   id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用AutoNessus运行扫描
 - en: The following playbook code snippets can be used to perform scans on demand
     as well as ones that are scheduled. This can also be used in Ansible Tower, Jenkins,
     or Rundeck.
   id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下的playbook代码片段可用于按需执行扫描以及定期执行的扫描。 这也可以在Ansible Tower、Jenkins或Rundeck中使用。
 - en: Before running the automated scans using AutoNessus, we have to create them
     in the Nessus portal with required customization, and we can use these automated
     playbooks to perform tasks on top of it.
   id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 在使用AutoNessus进行自动化扫描之前，我们必须在Nessus门户中创建所需的自定义扫描，并且我们可以使用这些自动化playbook来执行任务。
 - en: Listing current available scans and IDs
   id: totrans-80
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 列出当前可用的扫描和ID
 - en: 'The following snippet will return the currently available scans and returns
     the IDs with information:'
   id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段将返回当前可用的扫描并返回带有信息的ID：
 - en: '[PRE2]'
   id: totrans-82
   prefs: []
@@ -432,20 +515,24 @@
   id: totrans-83
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/338129f1-3b05-4a74-a585-7da56724ac9f.png)'
 - en: Ansible output returning list of available scans with IDs information
   id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible输出返回可用扫描和ID信息的列表
 - en: Starting a specified scan using scan ID
   id: totrans-85
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用扫描ID启动指定的扫描
 - en: 'The following snippet will start the specified scan based on `scan_id` and
     returns the status information:'
   id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段将基于`scan_id`启动指定的扫描并返回状态信息：
 - en: '[PRE3]'
   id: totrans-87
   prefs: []
@@ -455,40 +542,48 @@
   id: totrans-88
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/b61ac39e-739b-412d-b327-f8b79a6386f0.png)'
 - en: Ansible output returning scan status after starting
   id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 启动后，Ansible输出返回扫描状态
 - en: Similarly, we can perform pause, resume, stop, list policies, and so on. Using
     the AutoNessus program, these playbooks are available. This can be improved by
     advancing the Nessus API scripts.
   id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 同样，我们可以执行暂停、恢复、停止、列出策略等操作。 使用AutoNessus程序，这些playbook是可用的。 这可以通过改进Nessus API脚本来改进。
 - en: Storing results
   id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 存储结果
 - en: 'We can also get a detailed view of the vulnerability, solutions, and risk information
     related to vulnerability:'
   id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以获取与漏洞相关的详细信息、解决方案和风险信息：
 - en: '![](img/464e437d-420b-4252-acfb-d12eb22e96b9.png)'
   id: totrans-93
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/464e437d-420b-4252-acfb-d12eb22e96b9.png)'
 - en: 'The entire report can be exported into multiple formats, such as HTML, CSV,
     and Nessus. This helps to give more a detailed structure of vulnerabilities found,
     solutions with risk rating, and other references:'
   id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 整个报告可以导出为多种格式，如HTML、CSV和Nessus。 这有助于提供更详细的漏洞结构，带有风险评级的解决方案以及其他参考资料：
 - en: '![](img/1394cf57-2ed3-46d2-9eb7-d56c14a12b9e.png)'
   id: totrans-95
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1394cf57-2ed3-46d2-9eb7-d56c14a12b9e.png)'
 - en: The output report can be customized based on the audience, if it goes to the
     technical team, we can list all the vulnerabilities and remediation. For example,
     if management wants to get the report, we can only get the executive summary of
@@ -496,60 +591,73 @@
   id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据受众可以定制输出报告，如果发送给技术团队，我们可以列出所有漏洞和补救措施。例如，如果管理层想要报告，我们可以只得到问题的执行摘要。
 - en: Reports can be sent by email as well using notification options in Nessus configuration.
   id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: 报告也可以通过 Nessus 配置中的通知选项通过电子邮件发送。
 - en: 'The following screenshots are the detailed reports from the exported HTML format
     of the recent basic network scan. This can be used to analyze and fix the vulnerabilities
     based on hosts:'
   id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图是最近基本网络扫描的导出 HTML 格式的详细报告。这可以用来分析和修复基于主机的漏洞：
 - en: '![](img/fcb0d48c-a86a-482b-9cbf-8faeefa42019.png)'
   id: totrans-99
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/fcb0d48c-a86a-482b-9cbf-8faeefa42019.png)'
 - en: 'We can see vulnerabilities categorized by hosts previously. We can see each
     vulnerability in detail in the following screenshot:'
   id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以看到之前按主机分类的漏洞。我们可以在以下截图中详细查看每个漏洞：
 - en: '![](img/bc0712be-d4ce-45ce-a0e1-4e5b095aa853.png)'
   id: totrans-101
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/bc0712be-d4ce-45ce-a0e1-4e5b095aa853.png)'
 - en: Installing the Nessus REST API Python client
   id: totrans-102
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Nessus REST API Python 客户端
 - en: Official API documentation can be obtained by connecting to your Nessus server
     under `8834/nessus6-api.html`.
   id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 官方 API 文档可以通过连接到您的 Nessus 服务器下的 `8834/nessus6-api.html` 获取。
 - en: 'To perform any operations using the Nessus REST API, we have to obtain the
     API keys from the portal. This can be found in user settings. Please make sure
     to save these keys:'
   id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使用 Nessus REST API 执行任何操作，我们必须从门户获取 API 密钥。这可以在用户设置中找到。请务必保存这些密钥：
 - en: '![](img/40071468-ac97-4b5f-9882-1c83c8be5799.png)'
   id: totrans-105
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/40071468-ac97-4b5f-9882-1c83c8be5799.png)'
 - en: Downloading reports using the Nessus REST API
   id: totrans-106
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Nessus REST API 下载报告
 - en: 'The following playbook will use the Nessus REST API to perform export requests
     for the report for the given `scan_id`. It will automate the whole process using
     a simple playbook. This will return the HTML output of the report:'
   id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 playbook 将使用 Nessus REST API 执行对给定 `scan_id` 报告的导出请求。它将使用一个简单的 playbook 自动化整个过程。这将返回报告的
+    HTML 输出：
 - en: '[PRE4]'
   id: totrans-108
   prefs: []
@@ -559,59 +667,72 @@
   id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Nessus REST API  [https://cloud.tenable.com/api#/overview](https://cloud.tenable.com/api#/overview)
+    阅读更多。
 - en: 'An Ansible playbook for automatic report generation using Nessus REST API:'
   id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Nessus REST API 进行自动报告生成的 Ansible playbook：
 - en: '![](img/204f4904-7160-4058-89f6-8156a1173196.png)'
   id: totrans-111
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/204f4904-7160-4058-89f6-8156a1173196.png)'
 - en: Ansible playbook for automatic report generation and export using Nessus REST
     API
   id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 Nessus REST API 进行自动报告生成和导出的 Ansible playbook
 - en: Nessus configuration
   id: totrans-113
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Nessus 配置
 - en: 'Nessus allows us to create different users with role-based authentication to
     perform scans and review with different access levels:'
   id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: Nessus 允许我们创建具有基于角色的认证的不同用户来执行扫描和以不同访问级别审查：
 - en: '![](img/f4d85881-e0fa-4b97-bbc4-2b36ea92f5a5.png)'
   id: totrans-115
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f4d85881-e0fa-4b97-bbc4-2b36ea92f5a5.png)'
 - en: 'The following screenshot shows how to create a new user with a role to perform
     the Nessus activities:'
   id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 下图显示了如何创建一个具有执行 Nessus 活动权限的新用户的过程：
 - en: '![](img/4ede2d78-3967-4f06-b2c3-1720b479f9d3.png)'
   id: totrans-117
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4ede2d78-3967-4f06-b2c3-1720b479f9d3.png)'
 - en: Summary
   id: totrans-118
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: Security teams and IT teams rely on tools for vulnerability scanning, management,
     remediation, and continuous security processes. Nessus, by being one of the most
     popular and useful tools, was an automatic choice for the authors to try and automate.
   id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 安全团队和 IT 团队依赖工具进行漏洞扫描、管理、补救和持续安全流程。由于 Nessus 是最流行和最有用的工具之一，它是作者尝试自动化的自动选择。
 - en: In this chapter, we looked at the main activities of vulnerability scanning,
     such as being able to install and deploy the tool, initiate a scan, and download
     a report.
   id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们看了漏洞扫描的主要活动，如能够安装和部署工具，启动扫描和下载报告。
 - en: In the next chapter, we will delve deeper into system security and hardening.
     We will look at various open security initiatives and benchmarking projects such
     as STIG, OpenSCAP, and **Center for Internet Security** (**CIS**). We will learn
