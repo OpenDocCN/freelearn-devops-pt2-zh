@@ -1,0 +1,26 @@
+- en: 'Section 4: Deploying an Application with Ansible'
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This section explains how to manage Windows nodes from Ansible and how to leverage
+    Ansible Galaxy and Ansible Tower to maximize your productivity.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This section contains the following chapters:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 10](403a4637-9873-4ee7-bb32-9cc53aa1ca8e.xhtml), *Introducing Ansible
+    for Enterprises*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 11](c98f3821-61a9-4823-96b7-ac8e3309412a.xhtml), *Getting Started
+    with AWX*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 12](dd2bea83-4519-4f23-9ca2-13afa9224a11.xhtml), *Working with AWX
+    Users, Permissions, and Organizations*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL

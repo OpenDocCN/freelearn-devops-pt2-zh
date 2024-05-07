@@ -1,0 +1,26 @@
+- en: 'Section 3: Deploying an Application with Ansible'
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This section explains how to debug and test Ansible to ensure that your playbooks
+    will always work. You will also learn how to manage multiple tiers, multiple environments,
+    and multiple deployments with Ansible.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This section contains the following chapters:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 7](9ed0a9f7-acec-46a5-8a0a-e8bff446d182.xhtml), *Creating a Custom
+    Module*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 8](c5a73aea-8705-43dd-888a-f635e93e40b2.xhtml), *Debugging and Error
+    Handling*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 9](0dff9ffa-3121-48cd-80b5-d59a14310f09.xhtml), *Complex Environments*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL

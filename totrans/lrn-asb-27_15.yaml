@@ -1,0 +1,476 @@
+- en: Getting Started with AWX
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: As we have seen in the previous chapters, Ansible is a very powerful tool. This
+    is not enough to make it ubiquitous. In fact, for it to become ubiquitous, a tool
+    needs to be easy to use at any user level and easy to integrate in various ways
+    with existing environments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible Inc recognized this and created a tool called Ansible Tower, which was
+    basically a Web UI and API set around Ansible. Ansible Tower was a closed source
+    tool, which was also the main source of revenue for the company. When Red Hat
+    announced that it had acquired Ansible, its management also committed to making
+    Ansible Tower open source. A couple of years later, Red Hat open sourced Ansible
+    Tower, creating the AWX project, which is now the upstream of Ansible Tower, in
+    the same way Fedora is the upstream of Red Hat Enterprise Linux.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Before AWX, other Web UIs and API sets were developed in the open source community,
+    such as Semaphore. AWX and Ansible Tower are not the only Web UI and API sets
+    for Ansible today, but they are the more actively developed solutions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In this chapter, we are going to see how to set up AWX and learn how to use
+    it. More specifically, we are going to discuss the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up AWX
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Understanding what an AWX project is and how to leverage it
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Understanding what an AWX inventory is and how it differs from an Ansible inventory
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Understanding what an AWX job template is and how to create one
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Understanding what an AWX job is and how to execute your first job
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Technical requirements
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: For this chapter, you will need a machine that can run `ansible` and  `docker`
+    and has `docker-py` installed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up AWX
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Unlike Ansible, installing AWX involves more than a single command, but it's
+    still fairly quick and easy.
+  prefs: []
+  type: TYPE_NORMAL
+- en: First of all, you need to install `ansible`, `docker`, and `docker-py`. After
+    this, you need to give permission to the desired user to run Docker. Lastly, you
+    need to download AWX Git repo and execute an `ansible` playbook.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Ansible, Docker, and Docker-py in Fedora
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Let''s begin by installing `docker`, `ansible`, and `docker-py` packages in
+    Fedora:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To start and enable the Docker service use the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: Now that we've installed `ansible`, `docker`, and `docker-py`, let's move on
+    to granting user access to Docker.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Giving the current user permission to use Docker in Fedora
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To ensure that the current user can use Docker (by default, Fedora only allows
+    root to use it), you need to create a new Docker group, assign the current user
+    to it, and restart Docker:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Since the groups are assigned only at the beginning of the session, you would
+    need to restart your session, but we can force Linux to add your new group to
+    your current session, by executing the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: Now that we have all the prerequisites ready, we can move to the real AWX installation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing AWX
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The first thing that we need is to check out the `git` repository by executing
+    the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'As soon as Git has completed its task, we can change the directory to the one
+    containing the installer and run it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: This will install AWX in Docker containers and default configurations. You can
+    tweak the configurations (before running the last command) by changing the `inventory`
+    file, in the same folder.
+  prefs: []
+  type: TYPE_NORMAL
+- en: When the installation process is completed, you can open your browser and point
+    to `https://localhost` and log in using the `admin` username with the `password`
+    password.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'After the login, you should see a page that resemble the following one:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/0e4ea5a6-e787-40d6-8c22-bc548d9693bf.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Having set up AWX, you will now be able to execute Ansible playbooks without
+    using the Ansible CLI anymore. To start this, we will firstly need a project,
+    so let's see how to set it up.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating new AWX projects
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: AWX assumes that you save your playbooks somewhere, and to be able to use them
+    in AWX, we need to create a project.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A project is basically the AWX placeholder for a repository containing Ansible
+    resources (roles and playbooks).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'When you go in the Projects section, in the left-hand menu bar, you''ll see
+    something like the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/43d1f1ec-f54e-4d38-b918-bc59a206129f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: As you can see, a Demo Project is already in place (the installer created it
+    for us!) and it is backed by a Git repository.
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the left-hand side of the project name, a white circle is present, and represents
+    that the specific project has never been pulled. If a green circle were present,
+    it would mean that the project has been pulled successfully. A pulsing green circle
+    means that a pull is in progress, while a red stop sign means that something went
+    wrong.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the same line of the project, there are three buttons:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Get SCM last revision**: To fetch the current latest revision of the code'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Duplicate**: To create a duplicate of the project'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Delete**: To delete the project'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: In the top right-hand part of the card, you can notice a green plus button.
+    This is the button that allows us to add more projects.
+  prefs: []
+  type: TYPE_NORMAL
+- en: By selecting it, a new NEW PROJECT card appears on top of the Projects card,
+    where you can add the new project.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The NEW PROJECT card will look like the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d2e61be9-d1c9-4660-9f76-e145fe46429e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'It''s asking for information about the project you are going to create:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'NAME: This is the display name of your project. This is for human-usage, so
+    make it human-sensible!'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'DESCRIPTION: An additional display (still for humans) to make sense of the
+    project goals.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'ORGANIZATION: The organization that is going to own the project. This will
+    be covered in the next chapter. For now, let''s leave the default.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'SCM TYPE: The type of SCM that your code is contained in. At the moment of
+    writing, the supported options are: Manual, Git, Mercurial, Subversion, and Red
+    Hat Insights.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Based on the SCM type you chose, more fields will appear, such as the SCM URL,
+    and the SCM branch.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: When you complete all the mandatory fields, you can save and see that a new
+    project has been added.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Using AWX inventories
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: AWX inventories are the equivalent of Ansible inventories in the AWX world.
+    Since AWX is a graphical tool, inventories are not stored as files (as done in
+    Ansible) but will be manageable with the AWX user interface. Not being tied to
+    a file also gives more flexibility to AWX inventories compared to Ansible inventories.
+  prefs: []
+  type: TYPE_NORMAL
+- en: AWX has different ways to manage the inventories.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can reach this by clicking the Inventories item on the left-hand menu,
+    and you''ll find something similar to this:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/8c479b7f-f596-44a3-afea-49ea888b23d2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: As for the projects, AWX comes with a demo inventory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Looking from left to right, we can find the following columns:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A cloud symbol – for inventory synchronization status
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The usual circle to show the status (okay or failed)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The inventory NAME
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The inventory TYPE
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The ORGANIZATION that owns the inventory
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The edit symbol
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The duplicate symbol
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The delete symbol
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: As before, the green + button will allow you to create a new item. By clicking
+    it, it will ask you if you want to create an inventory or a smart inventory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We can select the Inventories option for now, and it will allow you to add a
+    name and an organization (the only two mandatory options) as well as other non-mandatory
+    options. As soon as you save, you'll be able to add hosts, groups, and permissions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you prefer not to specify the hosts, groups, variables, and so on by hand,
+    there is a Sources tabs for you.
+  prefs: []
+  type: TYPE_NORMAL
+- en: By clicking the + on the Sources tab, you'll be able to add a source from a
+    list of available types or with a custom script.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The available sources types at the time of writing are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Sourced from a project**: Basically, it will import an Ansible core inventory
+    file from a repository.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Amazon EC2**: It will use the AWS API to discover all the EC2 machines and
+    their characteristics running in your environment.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Google Compute Engine (GCE)**: It will use the Google API to discover all
+    GCE machines and their characteristics running in your environment.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Microsoft Azure Resource Manager**: It will use the Azure API to discover
+    all machines and their characteristics running in your environment.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**VMWare vCenter**: It will use the VMWare API to discover all machines and
+    their characteristics managed by your vCenter.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Red Hat Satellite 6**: It will use the satellite API to discover all machines
+    and their characteristics managed by your satellite'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Red Hat CloudForms**: It will use CloudForms API to discover all machines
+    and their characteristics managed by it.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**OpenStack**: It will use the OpenStack API to discover all machines and their
+    characteristics running on your OpenStack environment.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Red Hat Virtualization**: It will use the RHEV API to discover all machines
+    and their characteristics running on it.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Ansible Tower**: It will use another Ansible Tower/AWX installation API to
+    discover all machines and their characteristics managed by it.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Custom script**: It will use a script that you uploaded in the *Inventory
+    Scripts* section.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'We have seen now how to set up an AWX Inventory, which is going to be needed
+    for the next part: setting up an AWX job template.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Understanding AWX job templates
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In AWX, we have the concept of a job template, which is basically a wrapper
+    around a playbook.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To manage the job templates, you have to go to the Templates section from the
+    left menu, and you''ll find something like the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/f17c3464-51a2-4a32-82ea-51888f89b563.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Looking at the table containing the job templates, we will find the following
+    things:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The job template name
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The template type (AWX supports also workflow templates, which are templates
+    for groups of job templates)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The rocket button
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The duplicate button
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The delete button
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: By clicking the rocket button, we can execute it. Doing so will automatically
+    bring you into a different view, which we will discover in the next section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Using AWX jobs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: AWX jobs are executions of AWX jobs templates, in the same way as Ansible runs
+    are executions of Ansible playbooks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'When you launch a job, you''ll see a window just like the following one:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/e7d34166-9649-45fb-9c3a-de4dc0956bed.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: This is the AWX version of the output of Ansible, when run on the command line.
+  prefs: []
+  type: TYPE_NORMAL
+- en: After a few seconds, in the right-hand grey box a very familiar output will
+    start to pop out, since it's exactly the same `stdout` of Ansible, just redirected
+    there.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If later you click on Jobs on the left menu bar, you will find yourself on
+    a different screen, listing all previously run jobs:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a1c73c44-3175-4b24-bc2b-f7d7773e834d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: As you can notice, we have two jobs that have been executed, while we've only
+    executed the Demo Job Template. This is because the Demo Project has been pulled
+    before and due to the Demo Job Template execution. This allows the operator to
+    be always comfortable to run a job, knowing that it will always be the latest
+    version available in the SCM to be executed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, you have learned to set up AWX on Fedora and you've learned
+    to use AWX projects, inventories, jobs templates, and jobs. As you can imagine
+    by the number of options, flags, and items present in AWX, this is just the tip
+    of the iceberg and does not intend to be a full explanation of it, since a dedicated
+    book would be needed for that.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the following chapter, we are going to discuss a little bit about AWX users,
+    users permissions, and organizations.
+  prefs: []
+  type: TYPE_NORMAL

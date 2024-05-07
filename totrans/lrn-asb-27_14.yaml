@@ -1,0 +1,387 @@
+- en: Introducing Ansible for Enterprises
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the previous chapter, we saw how Ansible works and how to leverage it. We
+    have gone through this whole book—up until now—on the assumptions that we were
+    targeting Unix machines, that we were going to write all of our playbooks ourselves,
+    and that the Ansible CLI was what were looking for. We will now move away from
+    those assumptions to see how we can go beyond typical Ansible usage.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In this chapter, we''ll explore the following topics:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible on Windows
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Ansible Galaxy
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Ansible Tower
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Technical requirements
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Aside from Ansible itself, to be able to follow the examples in this chapter
+    on your machine, you will need a Windows box.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible on Windows
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible version 1.7 started being able to manage Windows machines with a few
+    basic modules. After the acquisition of Ansible by Red Hat, a lot of effort was
+    put into this task by Microsoft and many other companies and people. By the time
+    of the 2.1 release, Ansible's ability to manage Windows machines was close to
+    being complete. Some modules have been extended to work seamlessly on Unix and
+    Windows, while in other cases, the Windows logic was so different from Unix that
+    new modules needed to be created.
+  prefs: []
+  type: TYPE_NORMAL
+- en: At the time of writing, using Windows as a control machine is not supported,
+    though some users have tweaked the code and their environment to make it work.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The connection from the control machine to Windows machines is not made over
+    SSH; instead, it''s made over **Windows Remote Management** (**WinRM**). You can
+    visit Microsoft''s website for a detailed explanation and implementation: [http://msdn.microsoft.com/en-us/library/aa384426(v=vs.85).aspx](https://docs.microsoft.com/en-in/windows/desktop/WinRM/portal).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On the control machine, once you''ve installed Ansible, it''s important that
+    you install WinRM. You can do so via `pip` with the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: You may need to use `sudo` or the `root` account to execute this command.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On each of the remote Windows machines, you need to install PowerShell version
+    3.0 or higher. Ansible provides a couple of helpful scripts to set it up:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: WinRM ([https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1](https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: PowerShell 3.0 upgrade ([https://github.com/cchurch/ansible/blob/devel/examples/scripts/upgrade_to_ps3.ps1](https://github.com/cchurch/ansible/blob/devel/examples/scripts/upgrade_to_ps3.ps1))
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: You will also need to allow port `5986` via the firewall, as this is the default
+    WinRM connection port, and make sure it is accessible from the command center.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To make sure you can access the service remotely, run a `curl` command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: If basic authentication works, you can start running commands. Once the setup
+    is done, you're ready to start running Ansible! Let's run the equivalent of the
+    Windows version of the `Hello, world!` program in Ansible by running `win_ping`.
+    In order to do this, let's set up our credentials file.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This can be done using `ansible-vault`, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'As we''ve already seen, `ansible-vault` will ask you to set `password`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'At this point, we can add the variables we need:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Let''s set up our `inventory` file, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Followed by this, let''s run `win_ping`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Ansible will ask us for `Vault password` and then print the result of the run,
+    as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: We have now seen how we can connect to a remote machine. Now, you can manage
+    Windows machines in the same way that you can manage Unix machines. The only thing
+    to be aware of is that, due to the huge differences between the Windows OS and
+    Unix systems, not every Ansible module will work properly. For this reason, many
+    Unix modules have been rewritten from scratch to have similar behaviors to the
+    Unix modules, but with completely different implementations. A list of those modules
+    can be found at [https://docs.ansible.com/ansible/latest/modules/list_of_windows_modules.html](https://docs.ansible.com/ansible/latest/modules/list_of_windows_modules.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible Galaxy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ansible Galaxy is a free website where you can download Ansible roles that have
+    been developed by the community and kick-start your automation within minutes.
+    You can share or review community roles so that others can easily find the most
+    trusted roles on Ansible Galaxy. You can start using Ansible Galaxy by simply
+    signing up with social media applications such as Twitter, Google, and GitHub
+    or by creating a new account on the Ansible Galaxy website at [https://galaxy.ansible.com/](https://galaxy.ansible.com/)
+    and downloading the required roles using the `ansible-galaxy` command, which ships
+    with Ansible version 1.4.2 and higher.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In case you want to host your own local Ansible Galaxy instance, you can do
+    so by fetching the code from [https://github.com/ansible/galaxy](https://github.com/ansible/galaxy).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To download an Ansible role from Ansible Galaxy, use the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You can also specify a version, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'If you don''t specify a version, then the `ansible-galaxy` command will download
+    the latest available version. You can install multiple roles in two ways; firstly,
+    by passing multiple role names separated by a space, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Secondly, you can do so by specifying role names in a file and passing that
+    filename to the `-r/--role-file` option. For instance, you could create the `requirements.txt`
+    file with the following content:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You could then install roles by passing the filename to the `ansible-galaxy`
+    command, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Let''s see how we can use `ansible-galaxy` to download a role for Apache HTTPd:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You''ll see output similar to the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The preceding `ansible-galaxy` command will download the Apache HTTPd role
+    to the `~/.ansible/roles` directory. You can now directly use the preceding role
+    in your playbook and create the `playbooks/galaxy.yaml` file with the following
+    content:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'As you can see, we created a simple playbook with a `geerlingguy.apache` role.
+    We can now test it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'This should give us the following output:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: As you may have noticed, many steps were skipped due to the fact that this role
+    is designed to work on many different Linux distributions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Now that you know how to leverage Ansible Galaxy roles, you can spend less time
+    rewriting code that someone already wrote and spend more time writing the parts
+    that are specific to your architecture and give you more value.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Pushing a role to Ansible Galaxy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Since Ansible Galaxy is a community-driven effort, you can also add your own
+    roles to it. Before we can start the process of publishing it, we will need to
+    prepare it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Ansible gives us a tool to bootstrap a new Galaxy Role from a template. To
+    leverage it, we can run the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: This will create the `ansible-role-test` folder, along with all of the usual
+    folders an Ansible Role usually has.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The only file that is going to be new to you is `meta/main.yaml`, which, even
+    though it is possible to use without Ansible Galaxy, contains a lot of information
+    about the role that's readable by Ansible Galaxy.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The main information that''s available in this file that you will probably
+    need to set accordingly to your needs are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`author`: Your name.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`description`: Put a description of the role here.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`company`: Put the name of the company you work for here (or delete the line).'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`license`: Set the license that your module will have. Some suggested licenses
+    are BSD (which is also the default), MIT, GPLv2, GPLv3, Apache, and CC-BY.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`min_ansible_version`: Set the minimum version of Ansible that you''ve tested
+    the role with.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`galaxy_tags`: In this section, put the platforms and versions your module
+    is written for.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`dependencies`: List the roles that are required to execute your role.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To proceed with the publication, you need to log in to Galaxy using a GitHub
+    account, and then you can go to My Content to start adding a content.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'After you press Add Content, a window will appear that will show you the repositories
+    that you can choose from, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/f3ddb72c-f36a-4ced-b4e3-5786e4c73e33.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: After selecting the right repository and then clicking the OK button, Ansible
+    Galaxy will start to import the given role.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'If you go back to the My Content page a few minutes after doing this, you''ll
+    see your roles and their status, like so:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/42d74864-d05d-4170-a2a9-c41880b7b8bc.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: You can now use the role in the same way as other people would have done. Remember
+    to update it when changes are needed!
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible Tower and AWX
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Ansible Tower is a web-based GUI that was developed by Red Hat. Ansible Tower
+    provides you with an easy-to-use dashboard where you can manage your nodes and
+    role-based authentication to control access to your Ansible Tower dashboard. The
+    biggest features of Ansible Tower are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**LDAP/AD integration**: You can import (and give privileges to) users based
+    on the result of LDAP/AD queries that Ansible Tower performs on your LDAP/AD server.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Role-based access control**: It limits the users to only run the playbooks
+    they are authorized to run and/or target only a limited amount of hosts.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**REST API**: All Ansible Tower capabilities are exposed via a REST API.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Job scheduling**: Ansible Tower allows us to schedule jobs (playbook execution).'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Graphical inventory management**: Ansible Tower manages the inventory in
+    a more dynamic way than Ansible.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Dashboard**: Ansible Tower allows us to see the situation of all current
+    and previous job executions.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Logging**: Ansible Tower logs all the results of every job execution to be
+    able to go back and check if needed.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: During the acquisition of Ansible Inc. by Red Hat, it was promised that Ansible
+    Tower would have become open source. In 2017, this happened, and it came back
+    with the name AWX.
+  prefs: []
+  type: TYPE_NORMAL
+- en: AWX and Ansible Tower are commonly used in the Enterprise version due to the
+    very handy features it provides to the Ansible ecosystem. We are going to discuss
+    these in more detail in the chapters that follow.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we have seen how to move Ansible outside the Unix world by
+    looking at how to control Windows hosts. We then moved to Ansible Galaxy, where
+    you can find many roles written by other people that you can simply reuse. Lastly,
+    we touched on Ansible Tower, which is an open source incarnation of AWX. In the
+    upcoming chapters, we are going to discuss more about AWX, from the installation
+    process to running your first job.
+  prefs: []
+  type: TYPE_NORMAL

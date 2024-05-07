@@ -1,0 +1,31 @@
+- en: 'Section 2: Deploying Playbooks in a Production Environment'
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This section will help you to create deployments that have multiple phases and
+    multiple machines. It will also explain how Ansible can be integrated with various
+    cloud offerings and how it can simplify your life by managing the cloud for you.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This section contains the following chapters:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 3](a3cea92c-92a2-4dd2-a666-a57b53f052dd.xhtml), *Scaling to Multiple
+    Hosts*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 4](99cce790-a03d-4810-b707-83e05bb45043.xhtml), *Handling Complex
+    Deployment*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 5](9bd9ae64-df2b-4dd0-b43e-da6da4553943.xhtml), *Going Cloud*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 6](d2d5f311-222c-4d51-a562-d003ee85e228.xhtml), *Getting Notification
+    from Ansible*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL

@@ -1,0 +1,21 @@
+- en: 'Section 1: Creating a Web Server Using Ansible'
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This section will help you create simple playbooks that will allow you to automate
+    some simple tasks that you already perform on a daily basis.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This section contains the following chapters:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 1](e86ebe8b-5935-4297-b86a-4394704a144b.xhtml), *Getting Started with
+    Ansible*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[Chapter 2](05b28bdf-0c30-48a7-a385-cfe1361de545.xhtml), *Automating Simple
+    Tasks*'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL

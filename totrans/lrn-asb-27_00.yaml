@@ -1,0 +1,233 @@
+- en: Preface
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The information technology sector is a fast-moving sector that always tries
+    to accelerate. To keep up with this, companies need to be able to move quickly
+    and iterate frequently. Until a few years back, this was mainly true for software,
+    but now we start to see the necessity of developing infrastructure at a similar
+    speed. Going forward, we will need to change the infrastructure we run our software
+    on at the speed of the software itself.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this scenario, many technologies, such as software-defined everything (storage,
+    network, and compute, for example), will be key, but those technologies need to
+    be managed in an equally scalable way, and that way will involve using Ansible
+    and similar products.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ansible is highly relevant today, since, unlike competing products, it is agentless,
+    allowing for faster deployments, more security, and better auditability.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Who this book is for
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The book is for developers and sysadmins who want to automate their organization’s
+    infrastructure using Ansible 2\. No prior knowledge of Ansible is required.
+  prefs: []
+  type: TYPE_NORMAL
+- en: What this book covers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '[Chapter 1](e86ebe8b-5935-4297-b86a-4394704a144b.xhtml), *Getting Started with
+    Ansible*, explains how to install Ansible.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 2](05b28bdf-0c30-48a7-a385-cfe1361de545.xhtml), *Automating Simple
+    Tasks*, explains how to create simple playbooks that will allow you to automate
+    some simple tasks that you already perform on a daily basis.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 3](a3cea92c-92a2-4dd2-a666-a57b53f052dd.xhtml), *Scaling to Multiple
+    Hosts*, explains how to handle multiple hosts in Ansible in an easy-to-scale way.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 4](99cce790-a03d-4810-b707-83e05bb45043.xhtml), *Handling Complex
+    Deployment*, explains how to create deployments that have multiple phases, as
+    well as multiple machines.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 5](9bd9ae64-df2b-4dd0-b43e-da6da4553943.xhtml), *Going Cloud*, explains
+    how Ansible can integrate with various cloud offerings, and how it can simplify
+    your life, managing the cloud for you.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 6](d2d5f311-222c-4d51-a562-d003ee85e228.xhtml), *Getting Notification
+    from Ansible*, explains how to set up Ansible to return valuable information to
+    you and other stakeholders.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 7](9ed0a9f7-acec-46a5-8a0a-e8bff446d182.xhtml), *Creating a Custom
+    Module*, explains how to create a custom module to leverage the freedom Ansible
+    gives you.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 8](c5a73aea-8705-43dd-888a-f635e93e40b2.xhtml), *Debugging and Error
+    Handling*, explains how to debug and test Ansible to ensure that your playbooks
+    will always work.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 9](0dff9ffa-3121-48cd-80b5-d59a14310f09.xhtml), *Complex Environments,*
+    explains how to manage multiple tiers, environments, and deployments with Ansible.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 10](403a4637-9873-4ee7-bb32-9cc53aa1ca8e.xhtml), *Introducing Ansible
+    for Enterprises*, explains how to manage Windows nodes from Ansible, as well as
+    how to leverage Ansible Galaxy to maximize your productivity.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 11](c98f3821-61a9-4823-96b7-ac8e3309412a.xhtml), *Getting Started
+    with AWX*, explains what AWX is and how you can start using it.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 12](dd2bea83-4519-4f23-9ca2-13afa9224a11.xhtml), *Working with AWX
+    Users, Permissions, and Organizations*, explains how AWX users and permissions
+    management works.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: To get the most out of this book
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book assumes a basic knowledge of the UNIX shell, as well as basic networking
+    knowledge.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Download the example code files
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: You can download the example code files for this book from your account at [www.packt.com](http://www.packt.com).
+    If you purchased this book elsewhere, you can visit [www.packt.com/support](http://www.packt.com/support)
+    and register to have the files emailed directly to you.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can download the code files by following these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in or register at [www.packt.com](http://www.packt.com).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the SUPPORT tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on Code Downloads & Errata.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter the name of the book in the Search box and follow the onscreen instructions.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once the file is downloaded, please make sure that you unzip or extract the
+    folder using the latest version of:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: WinRAR/7-Zip for Windows
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Zipeg/iZip/UnRarX for Mac
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 7-Zip/PeaZip for Linux
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The code bundle for the book is also hosted on GitHub at [https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition). In
+    case there's an update to the code, it will be updated on the existing GitHub
+    repository.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We also have other code bundles from our rich catalog of books and videos available
+    at **[https://github.com/PacktPublishing/](https://github.com/PacktPublishing/)**.
+    Check them out!
+  prefs: []
+  type: TYPE_NORMAL
+- en: Conventions used
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: There are a number of text conventions used throughout this book.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`CodeInText`: Indicates code words in text, database table names, folder names,
+    filenames, file extensions, pathnames, dummy URLs, user input, and Twitter handles.
+    Here is an example: "The `sudo` command is a well known, but is often used in
+    its more dangerous form."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A block of code is set as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'When we wish to draw your attention to a particular part of a code block, the
+    relevant lines or items are set in bold:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Any command-line input or output is written as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: Warnings or important notes appear like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tips and tricks appear like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Get in touch
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Feedback from our readers is always welcome.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**General feedback**: If you have questions about any aspect of this book,
+    mention the book title in the subject of your message and email us at `customercare@packtpub.com`.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Errata**: Although we have taken every care to ensure the accuracy of our
+    content, mistakes do happen. If you have found a mistake in this book, we would
+    be grateful if you would report this to us. Please visit [www.packt.com/submit-errata](http://www.packt.com/submit-errata),
+    selecting your book, clicking on the Errata Submission Form link, and entering
+    the details.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Piracy**: If you come across any illegal copies of our works in any form
+    on the Internet, we would be grateful if you would provide us with the location
+    address or website name. Please contact us at `copyright@packt.com` with a link
+    to the material.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**If you are interested in becoming an author**: If there is a topic that you
+    have expertise in and you are interested in either writing or contributing to
+    a book, please visit [authors.packtpub.com](http://authors.packtpub.com/).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reviews
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Please leave a review. Once you have read and used this book, why not leave
+    a review on the site that you purchased it from? Potential readers can then see
+    and use your unbiased opinion to make purchase decisions, we at Packt can understand
+    what you think about our products, and our authors can see your feedback on their
+    book. Thank you!
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information about Packt, please visit [packt.com](http://www.packt.com/).
+  prefs: []
+  type: TYPE_NORMAL

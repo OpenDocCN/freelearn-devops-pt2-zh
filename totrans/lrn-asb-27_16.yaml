@@ -1,0 +1,231 @@
+- en: Working with AWX Users, Permissions, and Organizations
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: While reading the previous chapter, you probably asked yourself questions about
+    the security of AWX.
+  prefs: []
+  type: TYPE_NORMAL
+- en: AWX is very powerful and, to be so powerful, it needs a lot of access to target
+    machines, which means that it can become a potentially weak link in the security
+    chain.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In this chapter, we are going to discuss a little bit about AWX users, permissions,
+    and organizations; namely, we are going to cover the following topics:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: AWX users and permissions
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: AWX organizations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Technical requirements
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: To fulfill this chapter, we will only need AWX, which we set up in the previous
+    chapter.
+  prefs: []
+  type: TYPE_NORMAL
+- en: AWX users and permissions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: First of all, if you remember the first time you opened AWX, you will remember
+    that you had to input a username and password.
+  prefs: []
+  type: TYPE_NORMAL
+- en: As you can surely imagine, those were default credentials, but you can create
+    all of the users that your organization needs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To do so, you can go to the Users section in the left-hand side menu, as shown
+    in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/7822cc10-cb41-4c6e-85f8-2cdbb396510d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: As you might expect, the admin user is present, and it is the only present user.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We can create other users by clicking the green button with the + symbol on
+    it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'When we create a new user, the following fields are requested:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**First name**: This is the user''s first name.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Last name**: The user''s last name.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Organization**: The organization that the user belongs to (we will speak
+    more about this later in this chapter).'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Email**: This is the user''s email.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Username**: This is the user''s username. This will be used for logins and
+    it will pop up in the user interface.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Password**: This is the user''s password.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Confirm password**: Re-type the password to ensure that no typos slipped
+    in.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**User type**: A user can be a normal user, a system auditor, or a system administrator.
+    By default, normal users don''t have access to anything, if not explicitly granted.
+    System auditors can see everything in the whole system, but only in read-only
+    mode. System administrators have full read-write access to the whole system.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'After you have created a user as a normal user, you can go to Templates. If
+    you go into the Edit mode for `Demo Job Template`, you''ll notice a Permissions section,
+    where you can see and set the users that are able to see and operate on this job
+    template. You should see something like what''s shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/e3c5dc3e-7ca2-4c72-a811-e11f3ed7061c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'By clicking on the green button with the + symbol, a modal will appear where
+    you can select (or search) for the user that you want to enable, and you can choose
+    the access level, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/3f453db8-f42e-4cfd-a2fb-624915b4ff7f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'AWX allows you to choose between three different levels of access:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Admin**: This kind of user is able to see the job template and the past jobs
+    that were created with it, execute the job template in the future, and edit the
+    job template.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Execute**: This kind of user is able to see the job template and the past
+    jobs that were created with it and execute the job template in the future, but
+    not to edit the job template.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Read**: This kind of user is able to see the job template and the past jobs
+    that were created with it, but is not to execute it nor change it.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: In the same way job templates can be made visible, usable, and manageable by
+    users, all of the other kinds of objects present in AWX can have permissions as
+    well.
+  prefs: []
+  type: TYPE_NORMAL
+- en: As you might imagine, if you start to have tens of jobs and tens of users, you'll
+    spend a lot of time managing permissions. To help you with this, AWX provides
+    the concept of teams.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Teams are manageable in the Team item of the left-hand side menu, and are basically
+    just groups of users so that you can move from a **Discretionary Access Control**
+    (**DAC**) approach to a **Role-Based Access Control** (**RBAC**) approach, which
+    is much quicker to keep up to date with regarding organizational changes and needs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: By using users, teams, and permissions, you'll be able to decide who is able
+    to do what at a very granular level.
+  prefs: []
+  type: TYPE_NORMAL
+- en: AWX organizations
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In more complex organizations, is often common that many people belonging to
+    very different teams and business units share the same AWX installation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In those cases, it can make sense to have different AWX organizations set up.
+    This allows for easier permissions and the delegation of some permission management
+    from the core system administrators team to organization administrations. Also,
+    organizations allow for vertical permissions on the organization resources, such
+    as inventory administrator (that is, the automatic administrator of all inventories
+    owned by the organization) or project admin (that is, the automatic administrator
+    of all projects owned by the organization), aside from the organization-wide roles
+    (such as organization administrator and organization auditor).
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you are in a company that has multiple websites, you could decide to cluster
+    all websites in the same AWX organization (if they are managed by the same people,
+    for instance, the "web group"), or you could decide to split them into multiple
+    AWX organizations, one for each website.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The advantages that are brought by these organizations are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Easier permission management
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Ability of the team manager (that is, the "web group" manager or the single
+    website manager) to on-board and off-board members as time goes by
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Easier and quicker audits, since only the permissions related to the specific
+    organization will need to be vetted, instead of all permissions in Tower
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Due to those advantages, I always suggest that you think about how to use an
+    AWX organization in AWX.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Also, in my experience, I've always noticed that the more similar the AWX organization's
+    structure is to the company structure, the better it is, since it's going to feel
+    natural to all users. On the other hand, if you try to force an AWX organization's
+    structure that is completely different from the company structure, this will feel
+    alien, will slow down the adoption of AWX, and, in same cases, can even determine
+    the failure of the platform.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this book, we started from some very basic concepts of automation by comparing
+    Ansible to the other common options such as manual procedures, bash scripting,
+    Puppet and Chef are available. We then moved on and looked at how to write YAML
+    files, since this is the format that''s used by Ansible, and how to install Ansible.
+    We then moved on and created our first Ansible-driven installation (a basic couple
+    of HTTP servers backed by a database server). We then added features to leverage
+    Ansible''s features, such as variables, templates, and task delegation. Then,
+    we moved on and saw how Ansible can help you in cloud environments such as AWS,
+    Digital Ocean, and Azure. We then moved on to analyze how Ansible can be used
+    to trigger notifications, as well as in various deployment scenarios. We closed
+    with an overview of the official Ansible graphical interface: AWX/Ansible Tower.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Thanks to this content, you should now be able to automate all of the possible
+    scenarios you'll encounter in your Ansible usage.
+  prefs: []
+  type: TYPE_NORMAL
