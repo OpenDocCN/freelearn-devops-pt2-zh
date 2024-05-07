@@ -1,966 +1,1381 @@
 - en: Chapter 7. Exploring Plugins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第7章 探索插件
 - en: 'In this chapter, we will cover the following recipes:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下内容：
 - en: Personalizing Jenkins
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 个性化 Jenkins
 - en: Testing and then promoting builds
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 测试然后推广构建
 - en: Having fun with pinning JSGames
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 享受固定 JSGames
 - en: Looking at the GUI samples plugin
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 查看 GUI 样本插件
 - en: Changing the help of the FileSystem SCM plugin
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 更改 FileSystem SCM 插件的帮助信息
 - en: Adding a banner to job descriptions
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 向作业描述添加横幅
 - en: Creating a RootAction plugin
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建一个 RootAction 插件
 - en: Exporting data
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 导出数据
 - en: Triggering events on startup
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在启动时触发事件
 - en: Using Groovy hook scripts and triggering events on startup
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Groovy 钩子脚本并在启动时触发事件
 - en: Triggering events when web content changes
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 当 Web 内容发生变化时触发事件
 - en: Reviewing three ListView plugins
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 回顾三个 ListView 插件
 - en: Creating my first ListView plugin
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建我的第一个 ListView 插件
 - en: Introduction
+  id: totrans-15
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍
 - en: 'This chapter has two purposes: the first is to show a number of interesting
     plugins, the second is to briefly review how plugins work. If you are not a programmer,
     feel free to skip the "how plugins work" discussion.'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章有两个目的：第一个是展示一些有趣的插件，第二个是简要回顾插件的工作原理。如果你不是程序员，可以跳过关于"插件工作原理"讨论。
 - en: When I started writing this book, there were over 300 Jenkins plugins available,
     at the time of writing this page, there are more than 1,000\. It is likely that
     there are plugins already available that meet your needs. Jenkins is not only
     a Continuous Integration server, it is also a platform to create extra functionality.
     Once a few concepts are learned, a programmer can adapt available plugins to an
     organization's needs.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我开始撰写这本书时，有超过300个Jenkins插件可用，撰写本页时已超过1,000个。很可能已经有插件满足你的需求。Jenkins 不仅是一个持续集成服务器，也是一个创建额外功能的平台。一旦掌握了一些概念，程序员可以调整现有插件以适应组织的需求。
 - en: If you see a feature that is missing, it is normally easier to adapt an existing
     one than to write one from scratch. If you are thinking of adapting then the plugin
     tutorial ([https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial](https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial))
     is a good starting point. The tutorial has relevant background information on
     the infrastructure you use daily.
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你发现缺少某个功能，通常更容易修改现有的功能，而不是从头开始编写一个。如果你想要适应的话，插件教程（[https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial](https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial)）是一个很好的起点。该教程提供了你日常使用的基础架构相关背景信息。
 - en: 'There is a large amount of information available on plugins. Here are some
     key points:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件中有大量信息可供了解。以下是一些关键点：
 - en: There are many plugins already, and more will be developed. To keep up with
     these changes, you will need to regularly review the available section of the
     Jenkins plugin manager.
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 已有许多插件，还会有更多的开发。为跟上这些变化，你需要定期审查Jenkins插件管理器中可用的部分。
 - en: '**Work with the community**: If you centrally commit your improvements then
     they become visible to a wider audience. Under the careful watch of the community,
     the code is more likely to be reviewed and further improved.'
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**与社区合作**：如果你将改进集中提交，那么它们将对更广泛的观众可见。在社区的仔细关注下，代码更有可能被审查和进一步改进。'
 - en: '**Don''t reinvent the wheel**: With so many plugins, in the majority of situations,
     it is easier to adapt an already existing plugin than to write from scratch.'
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**不要重复造轮子**：有了这么多插件，在大多数情况下，修改已存在的插件比从头开始编写要容易。'
 - en: '**Pinning a plugin** occurs when you cannot update the plugin to a new version
     through the Jenkins plugin manager. Pinning helps to maintain a stable Jenkins
     environment.'
+  id: totrans-23
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**固定插件**是指当无法通过Jenkins插件管理器更新插件到新版本时发生。固定有助于维护稳定的Jenkins环境。'
 - en: Most plugin workflows are easy to understand. However, as the number of plugins
     you use expands, the likelihood of an inadvertent configuration error increases.
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 大多数插件工作流程易于理解。然而，随着你使用的插件数量增多，无意中配置错误的可能性也增加。
 - en: The Jenkins Maven Plugin allows you to run a test Jenkins server from within
     a Maven build without risk.
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins Maven 插件允许你在 Maven 构建中运行一个测试 Jenkins 服务器，而无需风险。
 - en: '**Conventions save effort**: The location of files in plugins matters. For
     example, you can find the description of a plugin displayed in Jenkins at the
     file location `/src/main/resources/index.jelly`. By keeping to Jenkins conventions,
     the amount of source code you write is minimized and the readability improved.'
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**规范节约精力**：插件中文件的位置很重要。例如，你可以在Jenkins中找到插件的描述显示在文件位置`/src/main/resources/index.jelly`中。遵循Jenkins的约定，你编写的源代码量将被最小化，可读性将提高。'
 - en: 'The three frameworks that are regularly used in Jenkins are:'
+  id: totrans-27
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在Jenkins中常用的三个框架是：
 - en: '**Jelly** for the creation of the GUI'
+  id: totrans-28
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Jelly**用于创建GUI'
 - en: '**Stapler** to bind of the Java classes to the URL space'
+  id: totrans-29
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Stapler**将Java类绑定到URL空间'
 - en: '**XStream** for the persistence of configurations into XML'
+  id: totrans-30
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**XStream**用于将配置持久化为XML'
 - en: Note
+  id: totrans-31
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Source code for a number of plugins mentioned in this chapter is in subversion.
     After the time of writing, if any of the code is moved, it is likely to have moved
     to the Jenkins GitHub repository ([https://github.com/jenkinsci](https://github.com/jenkinsci)).
     The convention for plugin developers is to leave a `README` file in the old subversion
     repository listing the new Git location.
+  id: totrans-32
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 本章中提到的一些插件的源代码在Subversion中。在撰写本文时，如果有代码被移动，很可能已经转移到Jenkins的GitHub存储库（[https://github.com/jenkinsci](https://github.com/jenkinsci)）。插件开发者的约定是在旧的Subversion存储库中留下一个`README`文件，列出新的Git位置。
 - en: Personalizing Jenkins
+  id: totrans-33
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 个性化Jenkins
 - en: 'This recipe highlights two plugins that improve the user experience: the Green
     Balls plugin and the Favorite plugin.'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 本教程重点介绍了两个改善用户体验的插件：Green Balls插件和Favorite插件。
 - en: Jenkins has a wide international audience. At times, there can be subtle cultural
     differences expressed in the way Jenkins looks. One example is that when a build
     succeeds, a blue ball is shown as the icon. However, many naturally associate
     the green from traffic lights with the signal to carry on.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins拥有广泛的国际受众。有时，在Jenkins外观表达方式上可能会有微妙的文化差异。一个例子是，当一个构建成功时，蓝色的圆球被显示为图标。然而，许多人自然地将交通灯中的绿色与继续前进的信号联系在一起。
 - en: The Favorite plugin allows you to select your favorite projects and display
     an icon in a view to highlight your picks.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: Favorite插件允许你选择你喜欢的项目并在视图中显示一个图标以突出显示你的选择。
 - en: Getting ready
+  id: totrans-37
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备好了
 - en: Install the Green Balls and Favorite plugins ([https://wiki.jenkins-ci.org/display/JENKINS/Green+Balls](https://wiki.jenkins-ci.org/display/JENKINS/Green+Balls),
     [https://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin)).
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装Green Balls和Favorite插件（[https://wiki.jenkins-ci.org/display/JENKINS/Green+Balls](https://wiki.jenkins-ci.org/display/JENKINS/Green+Balls),
+    [https://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin)）。
 - en: How to do it...
+  id: totrans-39
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何做...
 - en: Create an empty new free-style job `named ch7.plugin.favourite`.
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个空的新自由风格作业，命名为`ch7.plugin.favourite`。
 - en: Build the job a number of times, reviewing the build history. You will now see
     green balls instead of the usual blue, as shown in the following screenshot:![How
     to do it...](img/0082OS_07_02.jpg)
+  id: totrans-41
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 多次构建该作业，查看构建历史。现在你会看到绿色的球而不是通常的蓝色，如下面的屏幕截图所示:![如何做...](img/0082OS_07_02.jpg)
 - en: Return to the main page.
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 返回到主页。
 - en: To create a new view, click on the **+** icon.
+  id: totrans-43
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要创建一个新的视图，请单击**+**图标。
 - en: Fill in **FAV** for the name.
+  id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 填写**FAV**作为名称。
 - en: Check **List View**.
+  id: totrans-45
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查**列表视图**。
 - en: Under the **Job Filters** section, check **Use a regular expression to include
     jobs into the view**. Add `.*` for the **Regular expression**.
+  id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**作业过滤器**部分，选择**使用正则表达式将作业包含到视图中**。为**正则表达式**添加`.*`。
 - en: In the **Columns** section, make sure you have three columns **Name**, **Status**,
     and **Favorite**, as shown in the following screenshot:![How to do it...](img/0082OS_07_03.jpg)
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**列**部分，请确保您有三列**名称**、**状态**和**收藏夹**，如下面的屏幕截图所示:![如何做...](img/0082OS_07_03.jpg)
 - en: Click on **OK**.
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**。
 - en: You will find yourself in the **FAV** view. By clicking on the star icon, you
     can select/deselect your favorite projects, as shown in the following screenshot:![How
     to do it...](img/0082OS_07_04.jpg)
+  id: totrans-49
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将会进入**FAV**视图。通过点击星形图标，你可以选择/取消选择你喜欢的项目，如下面的屏幕截图所示:![如何做...](img/0082OS_07_04.jpg)
 - en: How it works...
+  id: totrans-50
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它如何运作...
 - en: The Green Balls plugin works as advertised. The Favorite plugin allows you to
     select which project interests you the most and display that as a favorites icon.
     This reminds you that the project needs some immediate action.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: Green Balls插件表现如宣传的那样。Favorite插件允许你选择最感兴趣的项目并将其显示为收藏夹图标。这提醒你项目需要一些即时行动。
 - en: Note
+  id: totrans-52
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'If you are interested in working with the community, then these plugins are
     examples that you could add extra features to. You can find the official guide
     to contributing here: [https://wiki.jenkins-ci.org/display/JENKINS/Beginners+Guide+to+Contributing](https://wiki.jenkins-ci.org/display/JENKINS/Beginners+Guide+to+Contributing)'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你对与社区合作感兴趣，那么这些插件是你可以增加额外功能的示例。你可以在这里找到官方的参与指南：[https://wiki.jenkins-ci.org/display/JENKINS/Beginners+Guide+to+Contributing](https://wiki.jenkins-ci.org/display/JENKINS/Beginners+Guide+to+Contributing)
 - en: There's more...
+  id: totrans-54
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: The opposite of a favorite project, at least temporarily, is a project whose
     build has failed. The Claim plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin))
     allows individual developers to claim a failed build. This enables the mapping
     of workflow to individual responsibility.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
 - en: Once the Claims plugin is installed, you will be able to find in the **Post-Build
     Actions** section of a job a tick box for **Allow broken build claiming**. Once
     enabled, if a build fails you can claim a specific build, adding a note about
     your motivation.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
 - en: '![There''s more...](img/0082OS_07_05.jpg)'
+  id: totrans-57
   prefs: []
   type: TYPE_IMG
 - en: 'On the Jenkins home page, there is now a link to a log that keeps a summary
     of all the claimed builds. A project manager can now read a quick overview of
     issues. The log is a direct link to the team members that are dealing with current
     issues, as shown in the following screenshot:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
 - en: '![There''s more...](img/0082OS_07_05a.jpg)'
+  id: totrans-59
   prefs: []
   type: TYPE_IMG
 - en: The Favorite plugin is elegant in its simplicity. In the next recipe, testing
     and then promoting will signal that further incorporation of complex workflows
     is allowed.
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
 - en: See also
+  id: totrans-61
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *Testing and then promoting builds* recipe
+  id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Fun with pinning JSGames* recipe
+  id: totrans-63
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Testing and then promoting builds
+  id: totrans-64
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: You do not want the QA team to review an application until it has been automatically
     tested. To achieve this, you can use the promotion plugin.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
 - en: Promotion is a visual signal in Jenkins. An icon is set next to a specific build
     to remind the team to perform an action.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
 - en: The difference between promotion and the Favorite plugin mentioned in the preceding
     recipe is that promotion can be triggered automatically, based on a variety of
     automated actions. These actions include the running of scripts or the verification
     of the status of other up or downstream jobs.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
 - en: In this recipe, you will be writing two simple jobs. The first job will trigger
     the second job; if the second job is successful, then the first job will be promoted.
     This is the core of a realistic QA process, the testing job promoting the packaging
     job.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-69
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Install the Promoted Builds plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Plugin)).
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-71
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Create a free-style job named `ch7.plugin.promote_action`.
+  id: totrans-72
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Run this job and verify that it succeeds.
+  id: totrans-73
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Create a free-style job named `ch7.plugin.to_be_promoted`.
+  id: totrans-74
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Near the top of the configuration page, check **Promote builds when...**.
+  id: totrans-75
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Fill in the following details:'
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '**Name**: Verified by automatic functional testing'
+  id: totrans-77
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: Select **Green star** for the **Icon**
+  id: totrans-78
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: Check **When the following downstream projects build successfully**
+  id: totrans-79
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**Job names**: `ch7.plugin.promote_action`'
+  id: totrans-80
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '![How to do it...](img/0082OS_07_07.jpg)'
+  id: totrans-81
   prefs:
   - PREF_IND
   type: TYPE_IMG
 - en: In the **Post-build Action** section check **Build other projects**.
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Fill in for **projects to build** `ch7.plugin.promote_action`.
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Tick **Trigger only if build is stable**.
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **Save**.
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Build the job.
+  id: totrans-86
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建作业。
 - en: Click on the **Promotion Status** link, as shown in the following screenshot:![How
     to do it...](img/0082OS_07_08.jpg)
+  id: totrans-87
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**推广状态**链接，如下图所示：![如何实现...](img/0082OS_07_08.jpg)
 - en: Review the build report.![How to do it...](img/0082OS_07_09.jpg)
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看构建报告。![如何实现...](img/0082OS_07_09.jpg)
 - en: How it works...
+  id: totrans-89
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Promoted Builds is similar to the Favorite plugin, but with automation of workflow.
     You can promote depending on job(s) triggered by the creation of artifacts. This
     is typical workflow when you want a job tested for baseline quality before being
     picked up and reviewed.
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 推广构建类似于 Favorite 插件，但具有工作流自动化。您可以根据由构件创建触发的作业来推广。这是典型的工作流程，当您希望作业在被拾起和审查之前经过基线质量测试时。
 - en: The plugin has enough configuration options to make it malleable to most workflows.
     Another example, for a typical development, acceptance, and production infrastructure,
     is that you do not want an artifact to be deployed to production before development
     and acceptance have also been promoted. The way to configure this is to have a
     series of jobs, with the last promotion to production depending on the promotion
     of upstream development and acceptance jobs.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 该插件具有足够的配置选项，使其适应大多数工作流程。另一个示例是，对于典型的开发、验收和生产基础设施，您不希望在开发和验收被推广之前将构件部署到生产环境。配置此方法是具有一系列作业，最后一个推广到生产取决于上游开发和验收作业的推广。
 - en: Note
+  id: totrans-92
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: If you want to add human intervention, then check **Only when manually approved**
     in the jobs configuration and add a list of approvers.
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您想要添加人工干预，那么在作业配置中检查**仅在手动批准时**并添加批准者名单。
 - en: There's more...
+  id: totrans-94
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: If you are relying on human intervention and have no automatic tests, consider
     using the simplified promoted Builds plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Simple+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Simple+Plugin)).
     As its name suggests, the plugin simplifies the configuration and works well with
     a large subset of QA workflows. Simplifying the configuration makes it easier
     to explain, allowing use by a wider audience.
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您依赖于人工干预且没有自动测试，请考虑使用简化的推广构建插件([https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Simple+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Promoted+Builds+Simple+Plugin))。正如其名称所示，该插件简化了配置，并且可以很好地与大多数
+    QA 工作流配合使用。简化配置使得更容易解释，使更广泛的受众可以使用。
 - en: 'You can configure the different types of promotion within the main Jenkins
     configuration page, as shown in the following screenshot:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在主 Jenkins 配置页面中配置不同类型的推广，如下图所示：
 - en: '![There''s more...](img/0082OS_07_10.jpg)'
+  id: totrans-97
   prefs: []
   type: TYPE_IMG
+  zh: '![还有更多...](img/0082OS_07_10.jpg)'
 - en: Note
+  id: totrans-98
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: Use the **Automatically Keep** feature wisely. The option tells Jenkins to keep
     the artifacts from the build for all time. If used as part of an incremental build
     process, you will end up consuming a lot of disk space.
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 明智地使用**自动保存**功能。此选项告诉 Jenkins 保留构建的所有构件。如果作为增量构建过程的一部分使用，将最终占用大量磁盘空间。
 - en: The plugin allows you to elevate promotions. There is a simple choice available
     through a link on the left-hand side of the build. This feature allows you to
     add a series of players into the promotion process.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 该插件允许您提升推广。通过左侧构建上的链接可提供一个简单的选择。此功能允许您将一系列玩家添加到推广过程中。
 - en: Note
+  id: totrans-101
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注
 - en: When the final promotion occurs, for example to **GA** (**Generally Available**),
     the promotion is locked and can no longer be demoted.
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 当最终推广发生时，例如到**GA**（**一般可用**），推广将被锁定，不再能够被降级。
 - en: '![There''s more...](img/0082OS_07_11.jpg)'
+  id: totrans-103
   prefs: []
   type: TYPE_IMG
+  zh: '![还有更多...](img/0082OS_07_11.jpg)'
 - en: 'The ability of a user to promote depends on their permissions. For example,
     if you are using Matrix-based security, then you will need to update its table
     before you can see an extra option in the configuration page of the job, as shown
     in the following screenshot:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 用户推广的能力取决于其权限。例如，如果您使用基于矩阵的安全性，则需要在作业的配置页面中看到额外选项之前更新其表格，如下图所示：
 - en: '![There''s more...](img/0082OS_07_12.jpg)'
+  id: totrans-105
   prefs: []
   type: TYPE_IMG
+  zh: '![还有更多...](img/0082OS_07_12.jpg)'
 - en: See also
+  id: totrans-106
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Personalizing Jenkins* recipe
+  id: totrans-107
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*个性化 Jenkins* 教程'
 - en: Fun with pinning JSGames
+  id: totrans-108
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 与固定 JSGames 玩耍
 - en: This recipe shows you how to pin a Jenkins plugin. Pinning a plugin stops you
     from being able to update its version within the Jenkins plugin manager.
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 本教程向您展示如何固定 Jenkins 插件。固定插件将阻止您能够在 Jenkins 插件管理器内更新其版本。
 - en: Now that the boss has gone, life is not always about code quality. To reduce
     pressure, consider allowing your team access to relaxation with the JSGames plugin.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在老板走了，生活并不总是关于代码质量。为了减轻压力，考虑让你的团队通过 JSGames 插件放松。
 - en: Getting ready
+  id: totrans-111
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Install the JSGames plugin ([https://wiki.jenkins-ci.org/display/JENKINS/JSGames+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JSGames+Plugin)).
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 JSGames 插件 ([https://wiki.jenkins-ci.org/display/JENKINS/JSGames+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JSGames+Plugin))。
 - en: How to do it...
+  id: totrans-113
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'Check out and review the tag **jsgames-0.2** under a directory of your choice
     with the commands:'
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检查并回顾你选择的目录下的标签 **jsgames-0.2**，命令如下：
 - en: '[PRE0]'
+  id: totrans-115
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Review the front page of Jenkins; you will see a link to JS Games, as shown:![How
     to do it...](img/0082OS_07_13.jpg)
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看 Jenkins 的首页；你会看到一个指向 JS Games 的链接，如下所示：![如何操作...](img/0082OS_07_13.jpg)
 - en: Click on the link and you will have the choice of two games, **Mario Kart**
     and **Tetris**:![How to do it...](img/0082OS_07_14.jpg)
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击链接，你将可以选择两个游戏，**马里奥卡丁车**和**俄罗斯方块**：![如何操作...](img/0082OS_07_14.jpg)
 - en: As a Jenkins administrator, visit the **Manage Plugins** section and then click
     on the installed tab (`http://localhost:8080/pluginManager/installed`). Notice
     that the JSGames plugin is not pinned.
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 作为 Jenkins 管理员，访问**管理插件**部分，然后点击已安装选项卡 (`http://localhost:8080/pluginManager/installed`)。注意
+    JSGames 插件没有被固定。
 - en: 'From the command line, list the contents of the plugin directory (`JENKINS_HOME/plugin`),
     for example:'
+  id: totrans-119
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行，列出插件目录 (`JENKINS_HOME/plugin`) 的内容，例如：
 - en: '[PRE1]'
+  id: totrans-120
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'The output will be similar to:'
+  id: totrans-121
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 输出将类似于：
 - en: '[PRE2]'
+  id: totrans-122
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'In the plugins directory, create a file named `jsgames.jpi.pinned`, for example:'
+  id: totrans-123
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在插件目录中，创建一个名为 `jsgames.jpi.pinned` 的文件，例如：
 - en: '[PRE3]'
+  id: totrans-124
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: In your web browser, refresh the installed plugin page. You will now see that
     the `jsgames` plugin is pinned:![How to do it...](img/0082OS_07_15.jpg)
+  id: totrans-125
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在你的网络浏览器中，刷新已安装插件页面。现在你会看到 `jsgames` 插件被固定了：![如何操作...](img/0082OS_07_15.jpg)
 - en: How it works...
+  id: totrans-126
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 它是如何工作的...
 - en: Pinning a plugin stops a Jenkins administrator from updating to a new version
     of a plugin. To pin a plugin, you need to create a file in the plugins directory
     with the same name as the plugin, ending with the extension pinned. See [https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins](https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins).
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 固定一个插件会阻止 Jenkins 管理员更新插件的新版本。要固定一个插件，你需要在插件目录中创建一个与插件同名的文件，以 pinned 为扩展名结尾。参见
+    [https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins](https://wiki.jenkins-ci.org/display/JENKINS/Pinned+Plugins)。
 - en: A new version of Jenkins is released roughly every week with bug fixes and feature
     updates. This leads to delivering improvements quickly to market, but at times
     it also leads to failures. Pinning a plugin prevents a plugin from being accidentally
     updated until you have had time to access the stability and value of the newer
     version. Pinning is a tool to maintain production server stability.
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 的新版本大约每周发布一次，包含 bug 修复和功能更新。这导致改进快速地进入市场，但有时也会导致失败。将插件固定可以防止插件在你评估新版本的稳定性和价值之前被意外更新。固定是保持生产服务器稳定的工具。
 - en: There's more...
+  id: totrans-129
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: 'The source code includes a top-level `pom.xml` file to control the Maven build
     process. By convention, the four main source code areas are:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 源代码包括一个顶级 `pom.xml` 文件来控制 Maven 构建过程。按照惯例，四个主要的源代码区域是：
 - en: '`src/test`: This contains the code that tests during the build. For JSGames
     there are a bunch of JUnit tests.'
+  id: totrans-131
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`src/test`：这包含构建过程中的测试代码。对于 JSGames，有一堆 JUnit 测试。'
 - en: '`src/main/java`: This is the location of the Java code. Jenkins uses Stapler
     ([https://wiki.jenkins-ci.org/display/JENKINS/Architecture](https://wiki.jenkins-ci.org/display/JENKINS/Architecture))
     to map data between the Java objects in this directory and the views Jenkins finds
     in the directories under `src/main/resources`.'
+  id: totrans-132
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`src/main/java`：这是 Java 代码的位置。Jenkins 使用 Stapler ([https://wiki.jenkins-ci.org/display/JENKINS/Architecture](https://wiki.jenkins-ci.org/display/JENKINS/Architecture))
+    将此目录中的 Java 对象与 Jenkins 在 `src/main/resources` 下找到的视图相映射。'
 - en: '`src/main/resources`: This is the location of the view for the plugin. You
     use the GUI associated with the plugin when you interact in Jenkins, for example
     the link to JS Games. The view is defined using Jelly tags.'
+  id: totrans-133
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`src/main/resources`：这是插件的视图位置。当你在 Jenkins 中进行交互时，例如 JS Games 的链接，你会使用与插件相关联的
+    GUI。视图是使用 Jelly 标记定义的。'
 - en: '`src/main/webapp`: This is the location of resources such as images, style
     sheets, and JavaScript. The location maps to URL space. `/src/main/webapp` maps
     to the URL `/plugin/name_of_plugin`. For example, the location `/src/main/webapp/tetris/resources/tetris.js`
     maps to the URL `/plugin/jsgames/tetris/resources/tetris.js`.'
+  id: totrans-134
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`src/main/webapp`：这是资源的位置，如图像、样式表和JavaScript。该位置映射到URL空间。`/src/main/webapp`映射到URL
+    `/plugin/name_of_plugin`。例如，位置`/src/main/webapp/tetris/resources/tetris.js`映射到URL
+    `/plugin/jsgames/tetris/resources/tetris.js`。'
 - en: See also
+  id: totrans-135
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 参见
 - en: The *Creating a RootAction plugin* recipe
+  id: totrans-136
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*创建RootAction插件*的步骤'
 - en: Looking at the GUI samples plugin
+  id: totrans-137
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 查看GUI示例插件
 - en: This recipe describes how to run a Jenkins test server through Maven. In the
     test server, you will get to see the example GUI plugin. The GUI plugin demonstrates
     a number of tag elements that you can use later in your own plugins.
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: 本篇描述如何通过Maven运行Jenkins测试服务器。在测试服务器中，你将看到示例GUI插件。GUI插件展示了许多标签元素，稍后你可以在自己的插件中使用。
 - en: Getting ready
+  id: totrans-139
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: Create a directory to keep the results of this recipe.
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个目录来保存本篇的结果。
 - en: How to do it...
+  id: totrans-141
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 如何操作...
 - en: 'In the recipe directory, add the following content in the `pom.xml` file:'
+  id: totrans-142
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在recipe目录中，在`pom.xml`文件中添加以下内容：
 - en: '[PRE4]'
+  id: totrans-143
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'From the command line, run `mvn hpi:run`. If you have a default Jenkins running
     on port `8080`, then you will see an error message similar to:'
+  id: totrans-144
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行运行`mvn hpi:run`。如果你在端口`8080`上有一个默认的Jenkins运行，那么你将看到类似于以下的错误消息：
 - en: '[PRE5]'
+  id: totrans-145
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: If the server is still running, press *Ctrl* + *C*.
+  id: totrans-146
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果服务器仍在运行，按下*Ctrl* + *C*。
 - en: 'To run on port `8090` type the command:'
+  id: totrans-147
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要在端口`8090`上运行，请输入以下命令：
 - en: '[PRE6]'
+  id: totrans-148
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'The server will now run and generates a **SEVERE** error from the console:'
+  id: totrans-149
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 服务器现在正在运行，并从控制台生成一个**SEVERE**错误：
 - en: '[PRE7]'
+  id: totrans-150
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: Visit `localhost:8090/jenkins`. At the bottom of the page, review the version
     number of Jenkins, as shown in the following screenshot:![How to do it...](img/0082OS_07_16.jpg)
+  id: totrans-151
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问`localhost:8090/jenkins`。在页面底部，查看Jenkins的版本号，如下截图所示：![如何操作...](img/0082OS_07_16.jpg)
 - en: Install the UI Samples plugin through the plugin manager (`http://localhost:8090/pluginManager/available`).
+  id: totrans-152
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过插件管理器（`http://localhost:8090/pluginManager/available`）安装UI示例插件。
 - en: On the front page, click on the **UI Samples** link:![How to do it...](img/0082OS_07_17.jpg)
+  id: totrans-153
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在首页上，点击**UI示例**链接：![如何操作...](img/0082OS_07_17.jpg)
 - en: Review the various types of examples mentioned such as AutoCompleteTextBox (`http://localhost:8090/ui-samples/AutoCompleteTextBox/`).
+  id: totrans-154
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看所提及的各种示例类型，例如AutoCompleteTextBox（`http://localhost:8090/ui-samples/AutoCompleteTextBox/`）。
 - en: How it works...
+  id: totrans-155
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: For development purposes, the ability to run a test server from Maven is great.
     You can change your code, compile, package, and then view on a local instance
     of Jenkins without worrying about configuring or damaging a real server. You do
     not have to worry too much about security because the test server only runs as
     long as you are testing.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于开发目的，从Maven运行测试服务器的能力非常棒。你可以修改代码，编译，打包，然后在本地Jenkins实例上查看，而无需担心配置或破坏真实服务器。你不必太担心安全性，因为测试服务器只在测试期间运行。
 - en: The goal `hpi:run` tries to package and then deploy a plugin called Startup.
     However, the package is not available so it logs a complaint and then faithfully
     runs a Jenkins server. The version number of the Jenkins server is the same as
     the version number defined in the `pom.xml` `<version>` tag within the `<parent>`
     tag.
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 目标`hpi:run`尝试打包并部署一个名为Startup的插件。但是，由于包不可用，它会记录一个投诉，并忠实地运行一个Jenkins服务器。Jenkins服务器的版本号与`pom.xml`中定义的`<parent>`标签内的`<version>`标签相同。
 - en: To avoid hitting the same port as your local instance of Jenkins, you set the
     `jetty.port` `option.`
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了避免与本地Jenkins实例使用相同的端口，你设置了`jetty.port`选项。
 - en: Once running, visiting the GUI example plugin shows examples of creating various
     GUI elements in Jelly. These elements will come in handy later for programming
     your own plugins. The Jelly files used in plugins sit under the `/src/main/resources`
     directory. Jenkins uses Stapler to bind any relevant classes found in `src/main/java`.
+  id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦运行，访问GUI示例插件会展示如何在Jelly中创建各种GUI元素的示例。这些元素稍后在编程自己的插件时会派上用场。插件中使用的Jelly文件位于`/src/main/resources`目录下。Jenkins使用Stapler将在`src/main/java`中找到的任何相关类绑定起来。
 - en: You can find the Jenkins workspace in the `work` folder. Any configuration changes
     you make on the test server are persisted here. To have a fresh start, you will
     need to delete the directory by hand.
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在`work`文件夹中找到Jenkins的工作空间。你在测试服务器上所做的任何配置更改都将保留在这里。为了重新开始，你需要手动删除该目录。
 - en: 'For all the recipes in this chapter, we will pin Jenkins Version 1.584\. The
     reason for this is twofold:'
+  id: totrans-161
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于本章中的所有配方，我们将固定 Jenkins 版本为 1.584。原因有两个：
 - en: The dependencies take a lot of space. The Jenkins war file and test war file
     take about up 120 MB of your local Maven repository. Multiply this number by the
     number of versions of Jenkins used and you can quickly fill up gigabytes of storage
     space.
+  id: totrans-162
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 依赖项占用了大量空间。Jenkins war 文件和测试 war 文件大约占用本地 Maven 存储库的 120 MB。将此数字乘以使用的 Jenkins
+    版本数量，您很快就会填满几 GB 的存储空间。
 - en: Holding at a specific Jenkins version stabilizes the recipes.
+  id: totrans-163
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将 Jenkins 版本固定在特定版本可以稳定配方。
 - en: Feel free to update to the newest and greatest Jenkins version, as the examples
     in this chapter should still work. In case of difficulties, you can always return
     to the known safe number.
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 欢迎更新到最新版本的 Jenkins，因为本章中的示例应该仍然适用。如果遇到困难，您可以随时返回已知的安全版本号。
 - en: There's more...
+  id: totrans-165
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 更多内容...
 - en: Behind the scenes, Maven does a lot of heavy lifting. The `pom.xml` file defines
     the repository [http://repo.jenkins-ci.org/public/](http://repo.jenkins-ci.org/public/)
     to pull in the dependencies. It calls Version 1.584 of `org.jenkins-ci.plugins.plugin`.
     The version number is in sync with the version number of Jenkins that Maven runs.
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: 在幕后，Maven 做了大量的繁重工作。`pom.xml` 文件定义了 [http://repo.jenkins-ci.org/public/](http://repo.jenkins-ci.org/public/)
+    存储库以获取依赖项。它调用版本 1.584 的 `org.jenkins-ci.plugins.plugin`。版本号与 Maven 运行的 Jenkins
+    版本号同步。
 - en: To discover which version numbers are acceptable, visit [http://repo.jenkins-ci.org/public/org/jenkins-ci/plugins/plugin/](http://repo.jenkins-ci.org/public/org/jenkins-ci/plugins/plugin/).
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: 要发现可接受的版本号，请访问 [http://repo.jenkins-ci.org/public/org/jenkins-ci/plugins/plugin/](http://repo.jenkins-ci.org/public/org/jenkins-ci/plugins/plugin/)。
 - en: The details of the Jenkins server and any extra plugins included can be found
     relative to the preceding URL in `1.584/plugin-1.584.pom`. The UI Samples plugin
     version is also pegged at Version 1.584
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 服务器的详细信息以及包含的任何额外插件可以在 `1.584/plugin-1.584.pom` 相对于前述 URL 找到。UI Samples
+    插件版本也固定在版本 1.584。
 - en: The official page and the most up-to-date information on plugin building can
     be found at [https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial](https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial).
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 官方页面和插件构建的最新信息可以在 [https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial](https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial)
+    找到。
 - en: See also
+  id: totrans-170
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 参见
 - en: The *Changing the help of the FileSystem SCM plugin* recipe
+  id: totrans-171
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*更改 FileSystem SCM 插件的帮助* 配方'
 - en: Changing the help of the FileSystem SCM plugin
+  id: totrans-172
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更改 FileSystem SCM 插件的帮助
 - en: This recipe reviews the inner workings of the FileSystem SCM plugin. The plugin
     allows you to place code in a local directory and have it picked up in a build.
     As an example, you will change the text in the plugins help file.
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: 本配方审查了 FileSystem SCM 插件的内部工作原理。该插件允许您将代码放在本地目录中，并在构建中被检索到。例如，您将更改插件帮助文件中的文本。
 - en: Getting ready
+  id: totrans-174
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备工作
 - en: 'Create a directory ready for the code in this recipe. In the newly created
     directory, download the source of the plugin:'
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个准备接受本配方代码的目录。在新创建的目录中，下载插件的源码：
 - en: '[PRE8]'
+  id: totrans-176
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: How to do it...
+  id: totrans-177
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作方法...
 - en: 'Review the tag information and then check out the newest stable tag:'
+  id: totrans-178
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看标签信息，然后检出最新的稳定标签：
 - en: '[PRE9]'
+  id: totrans-179
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'In the top-level directory, edit the `pom.xml` file, changing the version under
     `<parent>` to `1.584`:'
+  id: totrans-180
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在顶级目录中，编辑 `pom.xml` 文件，在 `<parent>` 下更改版本为 `1.584`：
 - en: '[PRE10]'
+  id: totrans-181
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Replace the repositories and `pluginRepositories` stanza with the following
     code:'
+  id: totrans-182
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 用以下代码替换存储库和 `pluginRepositories` 部分：
 - en: '[PRE11]'
+  id: totrans-183
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Replace the content of `src/main/webapp/help-clearWorkspace.html` with the
     following code:'
+  id: totrans-184
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 `src/main/webapp/help-clearWorkspace.html` 的内容替换为以下代码：
 - en: '[PRE12]'
+  id: totrans-185
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'Run `mvn clean install`. The unit tests fail with the output:'
+  id: totrans-186
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 `mvn clean install`。单元测试失败，输出为：
 - en: '[PRE13]'
+  id: totrans-187
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: Skip the failing tests by running `mvn clean package -Dmaven.test.skip=true`
     The plugin is now packaged.
+  id: totrans-188
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 `mvn clean package -Dmaven.test.skip=true` 来跳过失败的测试。插件现在已经打包完毕。
 - en: 'Upload the plugin to `./target/filesystem_scm.hpi` in the **Advanced** section
     of your plugin manager (`http://localhost:8080/pluginManager/advanced`):'
+  id: totrans-189
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 将插件上传到插件管理器的 **高级** 部分 (`http://localhost:8080/pluginManager/advanced`) 的 `./target/filesystem_scm.hpi`
+    中：
 - en: '![How to do it...](img/0082OS_07_18.jpg)'
+  id: totrans-190
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![操作方法...](img/0082OS_07_18.jpg)'
 - en: Restart the Jenkins server.
+  id: totrans-191
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重新启动 Jenkins 服务器。
 - en: Log in to Jenkins and visit the list of installed plugins (`http://localhost:8080/pluginManager/installed`).
+  id: totrans-192
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录 Jenkins 并访问已安装插件的列表 (`http://localhost:8080/pluginManager/installed`)。
 - en: Create a Maven job named `ch7.plugins.filesystem_scm`.
+  id: totrans-193
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个名为 `ch7.plugins.filesystem_scm` 的 Maven 作业。
 - en: Under the **Source Code Management** section you now have a section called **File
     System**.
+  id: totrans-194
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源码管理**部分下，您现在有一个名为**文件系统**的部分。
 - en: Click on the **Help** icon for **Clear Workspace**. You will see your custom
     message, as shown in the following screenshot:![How to do it...](img/0082OS_07_19.jpg)
+  id: totrans-195
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**帮助**图标获取**清理工作区**的相关信息。如下截图所示：![操作步骤...](img/0082OS_07_19.jpg)
 - en: To delete the plugin, remove the `jpi` file and the expanded directory from
     under `JENKINS_HOME/plugins`.
+  id: totrans-196
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要删除插件，请删除 `jpi` 文件和位于 `JENKINS_HOME/plugins` 下的扩展目录。
 - en: Restart Jenkins.
+  id: totrans-197
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重启 Jenkins。
 - en: How it works...
+  id: totrans-198
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: Congratulations, you have updated the SCM plugin.
+  id: totrans-199
   prefs: []
   type: TYPE_NORMAL
+  zh: 恭喜，你已经更新了 SCM 插件。
 - en: First, you modified the plugin's `pom.xml` file, updating the version of the
     test Jenkins server and pointing at the right repository for Maven to download
     artifacts. Next, you modified its help file.
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，您修改了插件的 `pom.xml` 文件，更新了测试 Jenkins 服务器的版本，并指向了 Maven 下载工件的正确存储库。接下来，您修改了其帮助文件。
 - en: For each Java class, you can configure its GUI representation through an associated
     `config.jelly` file. The mapping is from `src/main/java/package_path/classname.java`.
+  id: totrans-201
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于每个 Java 类，您都可以通过关联的 `config.jelly` 文件配置其 GUI 表示。映射来自 `src/main/java/package_path/classname.java`。
 - en: to `src/main/resources/package_path/classname/config.jelly`.
+  id: totrans-202
   prefs: []
   type: TYPE_NORMAL
+  zh: 到 `src/main/resources/package_path/classname/config.jelly`。
 - en: For example, `src/main/resources/hudson/plugins/filestem_scm/FSSCM/config.jelly`
     configures the Jenkins GUI for `src/main/java/hudson/plugins/filesystem_scm/FSSCM.java`.
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，`src/main/resources/hudson/plugins/filestem_scm/FSSCM/config.jelly` 配置了 `src/main/java/hudson/plugins/filesystem_s_c_m/FSSCM.java`
+    的 Jenkins GUI。
 - en: 'The location of the help files is defined in `config.jelly` with the attribute
     `help` in the `entry` Jelly tag:'
+  id: totrans-204
   prefs: []
   type: TYPE_NORMAL
+  zh: 帮助文件的位置在 `config.jelly` 中的 `entry` Jelly 标记的 `help` 属性中定义：
 - en: '[PRE14]'
+  id: totrans-205
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: The `src/main/webapps` directory provides a stable Jenkins URL `/plugin/name_of_plugin`
     for static content such as images, style sheets, and JavaScript files. This is
     why the help files are stored here. Modifying `help-clearWorkspace.html` updates
     the help pointed to by the `entry` tab.
+  id: totrans-206
   prefs: []
   type: TYPE_NORMAL
+  zh: '`src/main/webapps` 目录为静态内容（如图像、样式表和 JavaScript 文件）提供了一个稳定的 Jenkins URL `/plugin/name_of_plugin`。这就是为什么帮助文件存储在这里。修改
+    `help-clearWorkspace.html` 会更新 `entry` 标签指向的帮助。'
 - en: The variable `${scm.clearworkspace}` is a reference to the value of the `clearWorkspace`
     member in the `FSSCM` instance.
+  id: totrans-207
   prefs: []
   type: TYPE_NORMAL
+  zh: 变量 `${scm.clearworkspace}` 是对 `FSSCM` 实例中 `clearWorkspace` 成员的引用。
 - en: There's more...
+  id: totrans-208
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多...
 - en: Plugins generally ship with two types of Jelly file, `global.jelly` and `config.jelly`.
     The `config.jelly` files generate the configuration elements seen when configuring
     jobs. The `global.jelly` files are rendered in the main Jenkins configuration
     page.
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件通常包含两种类型的 Jelly 文件，即 `global.jelly` 和 `config.jelly`。`config.jelly` 文件生成配置作业时看到的配置元素。`global.jelly`
+    文件在主 Jenkins 配置页面中呈现。
 - en: Data is persisted in XML files using the XStream framework. You can find the
     data for job configuration under the working area of Jenkins within `/jobs/job_name/plugin_name.xml`
     and for the global plugin configuration under `./work/name_of_plugin.xml`.
+  id: totrans-210
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 XStream 框架将数据持久化为 XML 文件。您可以在 Jenkins 工作区的 `/jobs/job_name/plugin_name.xml`
+    下找到作业配置的数据，以及在 `./work/name_of_plugin.xml` 下找到全局插件配置的数据。
 - en: See also
+  id: totrans-211
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Looking at the GUI samples plugin* recipe
+  id: totrans-212
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*查看 GUI 示例插件*的配方'
 - en: Adding a banner to job descriptions
+  id: totrans-213
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 向作业描述添加横幅
 - en: Consider a scenario. Your company has a public-facing Jenkins instance. The
     owner does not want project owners to write un-escaped tagging in the descriptions
     of projects. This poses too much of a security issue. However, the owner does
@@ -970,168 +1385,222 @@
     the *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe in
     [Chapter 2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*)
     performs the escaping of the description.
+  id: totrans-214
   prefs: []
   type: TYPE_NORMAL
+  zh: 想象一个场景。您的公司有一个面向公众的 Jenkins 实例。所有者不希望项目所有者在项目描述中写入未转义的标记。这会带来太多安全问题。但是，所有者确实希望在每个描述的底部放置公司横幅。在管理层开始购买不必要的建议之前，您有
+    15 分钟来解决这个问题。在前五分钟内，您确定转义标记插件（请参阅[第二章](ch02.html "第二章。增强安全性")中的*查找 Jenkins 中的
+    500 错误和 XSS 攻击*配方，*增强安全性*）执行了描述的转义。
 - en: This recipe shows you how to modify the Markup plugin to add a banner to all
     descriptions.
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
+  zh: 此配方向您展示如何修改 Markup 插件以向所有描述添加横幅。
 - en: Getting ready
+  id: totrans-216
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: 'Assuming you are testing locally, create a directory for your project. In your
     newly created directory, check out the `escape-markup-plugin-0.1` tag of the escaped-markup-plugin:'
+  id: totrans-217
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE15]'
+  id: totrans-218
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: How to do it...
+  id: totrans-219
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Visit the local copy of the plugin source code, list the possible tags, and
     check out a stable version of the plugin:'
+  id: totrans-220
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE16]'
+  id: totrans-221
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: In the top-level directory of the project, try to create the plugin by using
     the command `mvn install`. The build fails.
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Change the Jenkins plugin version in the `pom.xml` file from `1.408` to `1.58`:'
+  id: totrans-223
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE17]'
+  id: totrans-224
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'Replace the `repositories` and `pluginRepositories` stanza with the following
     code:'
+  id: totrans-225
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE18]'
+  id: totrans-226
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Build the plugin with `mvn install`. The build will succeed. You can now find
     the plugin at `target/escaped-markup-plugin.hpi`.
+  id: totrans-227
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Install the plugin by visiting the **Advanced** tab under the plugin manager
     (`http://localhost:8080/pluginManager/advanced`).
+  id: totrans-228
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: In the **Upload Plugin** section, upload the `escaped-markup-plugin.hpi` file.
+  id: totrans-229
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Restart the server, for example:'
+  id: totrans-230
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE19]'
+  id: totrans-231
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: Visit the Jenkins security configuration page (`http://localhost:8080/configureSecurity`)
     and review the **Markup Formatters**.
+  id: totrans-232
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Replace `src/main/resources/index.jelly` with the following code:'
+  id: totrans-233
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE20]'
+  id: totrans-234
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'Replace the class definition of `src/main/java/org/jenkinsci/plugins/escapedmarkup/EscapedMarkupFormatter.java`
     with the following code:'
+  id: totrans-235
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE21]'
+  id: totrans-236
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: Build with `mvn install`. The build fails due to failed tests (which is a good
     thing).
+  id: totrans-237
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Build again using the following command, this time skipping the tests:'
+  id: totrans-238
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE22]'
+  id: totrans-239
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'Stop Jenkins, as shown:'
+  id: totrans-240
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE23]'
+  id: totrans-241
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'Delete the escaped markup plugin from the Jenkins plugin directory and the
     expanded version in the same directory, for example:'
+  id: totrans-242
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE24]'
+  id: totrans-243
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: Copy the plugin `target/escaped-markup-plugin.hpi` to the Jenkins plugin directory.
+  id: totrans-244
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Restart Jenkins.
+  id: totrans-245
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Visit the installed plugins page: `http://localhost:8080/pluginManager/installed`.
     You will now see an updated description of the plugin, as shown in the following
     screenshot:![How to do it...](img/0082OS_07_20.jpg)'
+  id: totrans-246
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'In Jenkins, as an administrator, visit the configure page: `http://localhost:8080/configureSecurity`.'
+  id: totrans-247
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: For **Markup Formatter** choose **Escaped HTML with BANNER**, as shown in the
     following screenshot:![How to do it...](img/0082OS_07_21.jpg)
+  id: totrans-248
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **Save**.
+  id: totrans-249
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Create a new job named `ch7.plugin.escape`.
+  id: totrans-250
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Within the job's main page, you will now see the banner:![How to do it...](img/0082OS_07_22.jpg)
+  id: totrans-251
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How it works...
+  id: totrans-252
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
@@ -1139,10 +1608,12 @@
     cannot be injected. The use of the plugin was explained in the *Finding 500 errors
     and XSS attacks in Jenkins through fuzzing* recipe in [Chapter 2](ch02.html "Chapter 2. Enhancing
     Security"), *Enhancing Security*.
+  id: totrans-253
   prefs: []
   type: TYPE_NORMAL
 - en: In this recipe, we adapted the plugin to escape a projects description and then
     add a banner. The banner contains arbitrary HTML.
+  id: totrans-254
   prefs: []
   type: TYPE_NORMAL
 - en: First, you compiled and uploaded the markup plugin. Then you modified the source
@@ -1151,46 +1622,64 @@
     `mvn hpi:run` goal to run Jenkins through Maven. There are multiple ways to deploy,
     including dumping the plugin directly into the Jenkins plugin directory. Whichever
     of the deployment methods you decide to use is a matter of taste.
+  id: totrans-255
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，您编译并上传了Markup插件。然后修改源代码以在作业描述末尾包含横幅。该插件重新部署到一个用于审查的牺牲测试实例上。您也可以使用`mvn hpi:run`目标通过Maven运行Jenkins。有多种部署方法，包括直接将插件转储到Jenkins插件目录中。决定使用哪种部署方法取决于个人喜好。
 - en: The description of the plugin rendered is defined in `src/main/resources/index.jelly`.
     You updated the file to accurately describe the new banner feature.
+  id: totrans-256
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件渲染的描述在`src/main/resources/index.jelly`中定义。您更新了文件以准确描述新的横幅功能。
 - en: In Jenkins, extension points are Java interfaces or abstract classes that model
     part of the functionality of Jenkins. Jenkins has a wealth of extension points
     ([https://wiki.jenkins-ci.org/display/JENKINS/Extension+points](https://wiki.jenkins-ci.org/display/JENKINS/Extension+points)).
     You can even make your own ([https://wiki.jenkins-ci.org/display/JENKINS/Defining+a+new+extension+point](https://wiki.jenkins-ci.org/display/JENKINS/Defining+a+new+extension+point)).
+  id: totrans-257
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Jenkins中，扩展点是模拟Jenkins功能的Java接口或抽象类。Jenkins拥有丰富的扩展点（[https://wiki.jenkins-ci.org/display/JENKINS/Extension+points](https://wiki.jenkins-ci.org/display/JENKINS/Extension+points)）。您甚至可以制作自己的（[https://wiki.jenkins-ci.org/display/JENKINS/Defining+a+new+extension+point](https://wiki.jenkins-ci.org/display/JENKINS/Defining+a+new+extension+point)）。
 - en: The markup plugin had minimal changes made to it to suit our purposes. We extended
     the `MarkupFormatter` extension point.
+  id: totrans-258
   prefs: []
   type: TYPE_NORMAL
+  zh: Markdown插件进行了最小的更改以满足我们的需求。我们扩展了`MarkupFormatter`扩展点。
 - en: Jenkins uses annotations. The `@Override` annotation tells the compiler to override
     the method. In this case we overrode the `translate` method and used a utility
     class to filter the `markup` string using a Jenkins utility method. At the end
     the resulting string plus the banner string was added and passed to the Java writer.
     The writer was then passed back to the calling method.
+  id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins使用注解。`@Override`注解告诉编译器重写该方法。在这种情况下，我们重写了`translate`方法，并使用一个实用类来使用Jenkins实用方法过滤`markup`字符串。最终，结果字符串加上横幅字符串被添加并传递给Java写入器。然后将写入器传递回调用方法。
 - en: The text inside the `selectbox` (see step 19) of the plugin is defined in the
     `getDisplayName()` method of the `DescriptorImpl` class.
+  id: totrans-260
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件的`selectbox`中的文本（见第19步）是在`DescriptorImpl`类的`getDisplayName()`方法中定义的。
 - en: Note
+  id: totrans-261
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Writing a new plugin and understanding the Jenkins object model takes more effort
     than copying a plugin that works and then tweaking it. The amount of code changes
     needed to add the banner feature to an already existing plugin was minimal.
+  id: totrans-262
   prefs: []
   type: TYPE_NORMAL
+  zh: 编写新的插件并理解 Jenkins 的对象模型需要比复制一个可以工作的插件然后进行微调要付出更多的努力。向已经存在的插件添加横幅功能所需的代码更改量很小。
 - en: There's more...
+  id: totrans-263
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 还有更多……
 - en: 'There is a lot of documentation available for Jenkins. However, for the hardcore
     programmer, the best source of details is reviewing the code, the JavaDoc that
     you can find starting at: [http://javadoc.jenkins-ci.org/](http://javadoc.jenkins-ci.org/),
@@ -1201,234 +1690,303 @@
     is lag between when a feature is added and when it is documented. In this situation,
     the code needs to be self-documenting. Code completion in combination with a well-written
     JavaDoc eases a developer''s learning curve.'
+  id: totrans-264
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins有大量的文档可用。然而，对于技术宅程序员来说，最详细的信息源是审阅代码、在IDE（如Eclipse）中查找的JavaDoc以及代码补全功能。如果将Jenkins插件项目作为Maven项目导入Eclipse，则最新版本的Eclipse会为您解决依赖关系，从而在编辑文件时启用代码补全功能。在Jenkins这样一个快速发展的项目中，有时会出现添加功能和文档之间存在的滞后情况。在这种情况下，代码需要是自说明的。代码补全结合良好编写的JavaDoc可以减轻开发人员的学习曲线。
 - en: 'The next screenshot shows code completion at work for Jenkins within the Eclipse
     IDE:'
+  id: totrans-265
   prefs: []
   type: TYPE_NORMAL
+  zh: 下一张屏幕截图展示了在Eclipse IDE中运行Jenkins时代码补全的工作：
 - en: '![There''s more...](img/0082OS_07_23.jpg)'
+  id: totrans-266
   prefs: []
   type: TYPE_IMG
+  zh: '![还有更多……](img/0082OS_07_23.jpg)'
 - en: See also
+  id: totrans-267
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 另请参阅
 - en: The *Finding 500 errors and XSS attacks in Jenkins through fuzzing* recipe in
     [Chapter 2](ch02.html "Chapter 2. Enhancing Security"), *Enhancing Security*
+  id: totrans-268
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Changing the help of the FileSystem SCM plugin* recipe
+  id: totrans-269
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Creating a RootAction plugin* recipe
+  id: totrans-270
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Creating a RootAction plugin
+  id: totrans-271
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'Before building your own plugin, it is worth seeing if you can adapt another.
     In the *Fun with pinning JSGames* recipe, the plugin created a link on the front
     page, as shown in the following screenshot:'
+  id: totrans-272
   prefs: []
   type: TYPE_NORMAL
 - en: '![Creating a RootAction plugin](img/0082OS_07_13.jpg)'
+  id: totrans-273
   prefs: []
   type: TYPE_IMG
 - en: In this recipe, we will use elements of the plugin to create a link on the Jenkins
     home page.
+  id: totrans-274
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-275
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Create a directory locally to store your source code.
+  id: totrans-276
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-277
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Create a copy of the `pom.xml` file from the *Looking at the GUI samples plugin*
     recipe, replacing:'
+  id: totrans-278
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE25]'
+  id: totrans-279
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'with the following:'
+  id: totrans-280
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
 - en: '[PRE26]'
+  id: totrans-281
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: Create the directories `src/main/java/jenkins/plugins/rootaction`, `src/main/resources`,
     and `src/main/webapp`.
+  id: totrans-282
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'In `src/main/java/jenkins/plugins/rootaction` add the file `MyRootAction.java`
     with the contents:'
+  id: totrans-283
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE27]'
+  id: totrans-284
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'In the `src/main/webapp` directory, add a `png` file named `myicon.png`. For
     an example image see: [http://www.iconfinder.com/icondetails/46509/32/youtube_icon](http://www.iconfinder.com/icondetails/46509/32/youtube_icon).'
+  id: totrans-285
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Add the file `src/main/resources/index.jelly` with the following content:'
+  id: totrans-286
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE28]'
+  id: totrans-287
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'In the top-level directory, run the command:'
+  id: totrans-288
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE29]'
+  id: totrans-289
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'Visit the main page: `http://localhost:8090/jenkins`:![How to do it...](img/0082OS_07_25.jpg)'
+  id: totrans-290
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on the **Root Action Example** link. Your browser is now sent to the main
     website of the University of Amsterdam ([http://www.uva.nl](http://www.uva.nl)).
+  id: totrans-291
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Review the Jenkins installed plugin page (`http://localhost:8090/pluginManager/installed`).
+  id: totrans-292
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How it works...
+  id: totrans-293
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: You implemented the `RootAction` extension point. It is used to add links to
     the main menu in Jenkins.
+  id: totrans-294
   prefs: []
   type: TYPE_NORMAL
 - en: The extension point is easy to extend. The link name is defined in the `getDisplayName`
     method, the location of an icon in the `getIconFileName` method, and the URL to
     link to in `getUrlName`.
+  id: totrans-295
   prefs: []
   type: TYPE_NORMAL
 - en: There's more...
+  id: totrans-296
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Conventions save programming effort. By convention, the description of the
     plugin is defined in `src/main/resources/index.jelly` and the link name in the
     `pom.xml` file under the `<name>` tag next to the `<packaging>` tag, for example:'
+  id: totrans-297
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE30]'
+  id: totrans-298
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: The location of the details in the Jenkins wiki is calculated as a fixed URL
     ([http://wiki.jenkins-ci.org/display/JENKINS/](http://wiki.jenkins-ci.org/display/JENKINS/))
     with the plugin name after that URL, and the spaces in the name replaced with
     **+** symbols. This is true for this plugin as well, which has the link generated
     `http://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Root+Action+Plugin`.
+  id: totrans-299
   prefs: []
   type: TYPE_NORMAL
 - en: '![There''s more...](img/0082OS_07_26.jpg)'
+  id: totrans-300
   prefs: []
   type: TYPE_IMG
 - en: See also
+  id: totrans-301
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *Fun with pinning JSGames* recipe
+  id: totrans-302
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Exporting data
+  id: totrans-303
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: The Job Exporter plugin creates a property file with a list of project-related
     properties. This is handy glue for when you want Jenkins to pass information from
     one job to another.
+  id: totrans-304
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-305
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Install the Job Exporter plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Job+Exporter+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Job+Exporter+Plugin)).
+  id: totrans-306
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-307
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Download the source code of a known version number:'
+  id: totrans-308
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE31]'
+  id: totrans-309
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: Create a free-style job named `ch7.plugins.job_export`.
+  id: totrans-310
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: In the **Build** section, add a build step **Export Runtime Parameters**.
+  id: totrans-311
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **Save**.
+  id: totrans-312
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Run the job.
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'In the build history for the job within the console output you will see output
     similar to:'
+  id: totrans-314
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE32]'
+  id: totrans-315
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: 'Reviewing the newly created properties file, you will see text similar to:'
+  id: totrans-316
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE33]'
+  id: totrans-317
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: How it works...
+  id: totrans-318
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The Job Exporter plugin gives Jenkins the ability to export job-related information
     into a properties file that can be picked up later for reuse by other jobs.
+  id: totrans-319
   prefs: []
   type: TYPE_NORMAL
 - en: Reviewing the code in `src/main/java/com/meyling/hudson/plugin/job_exporter/ExporterBuilder.java`
@@ -1438,134 +1996,172 @@
     the `build.getBuiltOnStr()` method returns a string that contains the name of
     the node that the build is running on. The plugin uses a number of these methods
     to discover information that is later outputted to a properties file.
+  id: totrans-320
   prefs: []
   type: TYPE_NORMAL
 - en: There's more...
+  id: totrans-321
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'While reviewing plugin code, you can find interesting tricks ready for reuse
     in your own plugin. The plugin discovered the environment variables by using the
     method:'
+  id: totrans-322
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE34]'
+  id: totrans-323
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: In this method, `EnvVars` is of the class `hudson.EnvVars` ([http://javadoc.jenkins-ci.org/hudson/EnvVars.html](http://javadoc.jenkins-ci.org/hudson/EnvVars.html)).
     `EnvVars` even has a method to get environment variables from remote Jenkins nodes.
+  id: totrans-324
   prefs: []
   type: TYPE_NORMAL
 - en: You can also find a list of all environment variables defined for Jenkins in
     the **Jenkins Management** area under **System Info** (`http://localhost:8080/systemInfo`).
+  id: totrans-325
   prefs: []
   type: TYPE_NORMAL
 - en: See also
+  id: totrans-326
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *My first ListView plugin* recipe
+  id: totrans-327
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Triggering events on startup
+  id: totrans-328
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: Often when a server starts up, you will want to have clean up actions performed,
     for example, running a job that sends an e-mail to all of the Jenkins admins warning
     them of the start-up event. You can achieve this with the Startup Trigger plugin.
+  id: totrans-329
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-330
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Install the Startup Trigger plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger](https://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger)).
+  id: totrans-331
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-332
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Download the source code:'
+  id: totrans-333
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE35]'
+  id: totrans-334
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: Create a free-style job named `ch7.plugin.startup`.
+  id: totrans-335
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: In the section **Build Triggers**, check **Build when job nodes start**.
+  id: totrans-336
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **Save**.
+  id: totrans-337
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Restart Jenkins.
+  id: totrans-338
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Return to the project page, where you will notice that a job has been triggered.
+  id: totrans-339
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Review the build history console output. You will see output similar to:'
+  id: totrans-340
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE36]'
+  id: totrans-341
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: How it works...
+  id: totrans-342
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The Startup Trigger plugin runs a job at startup. This is useful for administrative
     tasks such as reviewing the file system. It is also concise in its design.
+  id: totrans-343
   prefs: []
   type: TYPE_NORMAL
 - en: The Startup Trigger plugin extends `hudson.triggers.Trigger` in the Java class
     `/src/main/java/org/jvnet/hudson/plugins/triggers/startup/HudsonStartupTrigger`
     and overrides the method `start`, which is later called on during Jenkins startup.
+  id: totrans-344
   prefs: []
   type: TYPE_NORMAL
 - en: The `start` method calls the parent start method, and if it is not a new instance,
     it will call the method `project.scheduleBuild` that then starts the build.
+  id: totrans-345
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE37]'
+  id: totrans-346
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: 'The cause of the startup is defined in `HudsonStartupCause` that itself extends
     `hudson.model.Cause`. The plugin overrides the method `getShortDescription()`,
     returning the string `Started due to Hudson startup`. The string is output to
     the console as part of the logging:'
+  id: totrans-347
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE38]'
+  id: totrans-348
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: See also
+  id: totrans-349
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *Triggering events when web content changes* recipe
+  id: totrans-350
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Groovy hook scripts and triggering events on startup* recipe
+  id: totrans-351
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Groovy hook scripts and triggering events on startup
+  id: totrans-352
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -1573,76 +2169,96 @@
     startup code. An alternative approach is to place the Groovy script `init.groovy`
     in the Jenkins home directory. Your Jenkins instance then runs the Groovy script
     on startup.
+  id: totrans-353
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-354
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Visit the **Scriptler** website [http://scriptlerweb.appspot.com/catalog/list](http://scriptlerweb.appspot.com/catalog/list)
     and review the currently available Groovy scripts.
+  id: totrans-355
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-356
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Visit [http://scriptlerweb.appspot.com/script/show/256001](http://scriptlerweb.appspot.com/script/show/256001)
     and review the installed plugin list script.
+  id: totrans-357
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'In your Jenkins home directory create the following `init.groovy` script, as
     shown in the following code:'
+  id: totrans-358
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE39]'
+  id: totrans-359
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE39]'
 - en: 'Restart your Jenkins instance:'
+  id: totrans-360
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE40]'
+  id: totrans-361
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE40]'
 - en: 'Review the log file found at `/var/log/jenkins/jenkins.log`. The output will
     be similar to the following (note that for the sake of brevity, every second line
     of timestamps has been removed):'
+  id: totrans-362
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE41]'
+  id: totrans-363
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE41]'
 - en: Visit `http://localhost:8080/systemInfo` and compare the log file with the system
     info displayed in Jenkins, as shown in the following screenshot:![How to do it...](img/0082OS_07_01.jpg)
+  id: totrans-364
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How it works...
+  id: totrans-365
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Jenkins looks for Groovy scripts to run on startup. Acceptable locations are
     mentioned here ([https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Hook+Script](https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Hook+Script))
     and include:'
+  id: totrans-366
   prefs: []
   type: TYPE_NORMAL
 - en: '`$JENKINS_HOME/init.groovy`'
+  id: totrans-367
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`$JENKINS_HOME/init.groovy.d/*.groovy` (files run in their lexical order)'
+  id: totrans-368
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Jenkins runs the code from `init.groovy`. It uses the standard `java.util.logging`
     framework that we initialized with the line `def logger = LogManager.getLogManager().getLogger("")`.
+  id: totrans-369
   prefs: []
   type: TYPE_NORMAL
 - en: It is advisable to use a logging framework rather than plain old `println` statements.
@@ -1650,36 +2266,47 @@
     With little effort, this allows you to change the location of the output (file
     system, syslog server, and so on.), format, filter, rotate, and so on. For more
     details of the logger framework, review [http://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html](http://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html).
+  id: totrans-370
   prefs: []
   type: TYPE_NORMAL
 - en: The logger can report at various levels; you can then filter the results. In
     this example, you used the `info` level as we are not shouting about problems.
+  id: totrans-371
   prefs: []
   type: TYPE_NORMAL
 - en: 'First, the script iterated through the environment variables:'
+  id: totrans-372
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE42]'
+  id: totrans-373
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE42]'
 - en: 'Next, you used a slightly altered version of the Scriptler example to list
     all the active plugins in Jenkins, as shown in the following code:'
+  id: totrans-374
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE43]'
+  id: totrans-375
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE43]'
 - en: Finally, we visually compared with the **System Info** page, which also displays
     the same environmental details.
+  id: totrans-376
   prefs: []
   type: TYPE_NORMAL
 - en: There's more...
+  id: totrans-377
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: If you wish to analyze system information to support debugging, install the
     Support Core plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Support+Core+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Support+Core+Plugin)).
     Once installed, you will be able to configure it at the URL `http://localhost:8080/support/`.
+  id: totrans-378
   prefs: []
   type: TYPE_NORMAL
 - en: 'Clicking on the **Generate bundle** button will download the support data archive
@@ -1687,35 +2314,45 @@
     place the ZIP file under the directory `$JENKINS_HOME/support`. The information
     is stored in multiple text files. For example, the file `support/plugins/active`
     lists the current version of all active plugins:'
+  id: totrans-379
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE44]'
+  id: totrans-380
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE44]'
 - en: 'The following screenshots shows the **Support** page:'
+  id: totrans-381
   prefs: []
   type: TYPE_NORMAL
 - en: '![There''s more...](img/0082OS_07_27.jpg)'
+  id: totrans-382
   prefs: []
   type: TYPE_IMG
 - en: See also
+  id: totrans-383
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *Triggering events on startup* recipe
+  id: totrans-384
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Triggering events when web content changes* recipe
+  id: totrans-385
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Triggering events when web content changes
+  id: totrans-386
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: In this recipe, the URL trigger plugin will trigger a build if a web page changes
     its content.
+  id: totrans-387
   prefs: []
   type: TYPE_NORMAL
 - en: Jenkins is deployed to varied infrastructures. There will be times when standard
@@ -1723,9 +2360,11 @@
     technologies. In most situations, the system to which you want to connect has
     its own web interface. If the application does not, then you can still set up
     a web page that changes when the application needs a reaction from Jenkins.
+  id: totrans-388
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-389
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
@@ -1733,64 +2372,80 @@
     This will automatically install the URLTrigger plugin and a number of other plugins
     that monitor the changes between two checks, for example by running a local script,
     Groovy code, or monitoring a file or folder change.
+  id: totrans-390
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-391
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Create a new free-style job named `ch7.plugin.url`.
+  id: totrans-392
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: In the **Build Triggers** section, check the **[URLTrigger] - Poll with a URL**
     tick box.
+  id: totrans-393
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **Add URL to monitor**.
+  id: totrans-394
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: For **URL** add `http://localhost:8080`.
+  id: totrans-395
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Check **Inspect URL content**.
+  id: totrans-396
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Select from **Add a content nature** the value **Monitor a change of the content**,
     as shown in the following screenshot:![How to do it...](img/0082OS_07_28.jpg)
+  id: totrans-397
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Add a **schedule** for once a minute.
+  id: totrans-398
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **Save**.
+  id: totrans-399
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: On the right-hand side, click on the link **URLTrigger Log**:![How to do it...](img/0082OS_07_29.jpg)
+  id: totrans-400
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'You will now see the log information update once a minute, with content similar
     to the following e-mail:'
+  id: totrans-401
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
 - en: '[PRE45]'
+  id: totrans-402
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE45]'
 - en: Delete the job as we don't want to poll `http://localhost:8080` every minute.
+  id: totrans-403
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How it works...
+  id: totrans-404
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
@@ -1798,147 +2453,184 @@
     once a minute, download, and compare for changes. A schedule of once a minute
     is aggressive; consider using time intervals that are similar to those on your
     SCM repositories, such as once every 5 minutes.
+  id: totrans-405
   prefs: []
   type: TYPE_NORMAL
 - en: As there were subtle differences in each page returned, the trigger was activated.
     This was verified by looking in the **URLTrigger Log**.
+  id: totrans-406
   prefs: []
   type: TYPE_NORMAL
 - en: The URLTrigger plugin can also be used for JSON and text or XML responses.
+  id: totrans-407
   prefs: []
   type: TYPE_NORMAL
 - en: There's more...
+  id: totrans-408
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Part of the URI schema points to your local file system ([http://en.wikipedia.org/wiki/File_URI_scheme](http://en.wikipedia.org/wiki/File_URI_scheme)).
     You get to see examples of this when you load a local file into your web browser,
     as shown in the following screenshot:'
+  id: totrans-409
   prefs: []
   type: TYPE_NORMAL
 - en: '![There''s more...](img/0082OS_07_29a.jpg)'
+  id: totrans-410
   prefs: []
   type: TYPE_IMG
 - en: 'Changes in the local file system cannot be monitored by this plugin. If you
     reconfigure the job to point at the location `file:///`, you will get the following
     error message:'
+  id: totrans-411
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE46]'
+  id: totrans-412
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE46]'
 - en: You will have to use the File System SCM plugin instead.
+  id: totrans-413
   prefs: []
   type: TYPE_NORMAL
 - en: See also
+  id: totrans-414
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *Triggering events on startup* recipe
+  id: totrans-415
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Reviewing three ListView plugins
+  id: totrans-416
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: The information radiated out by the front page of Jenkins is important. The
     initial perception of the quality of your projects is likely to be judged by this
     initial encounter.
+  id: totrans-417
   prefs: []
   type: TYPE_NORMAL
 - en: 'In this recipe, we will review the **Last Success**, **Last Failure**, and
     **Last Duration** columns that you can add to the list view, as shown in the following
     screenshot:'
+  id: totrans-418
   prefs: []
   type: TYPE_NORMAL
 - en: '![Reviewing three ListView plugins](img/0082OS_07_30.jpg)'
+  id: totrans-419
   prefs: []
   type: TYPE_IMG
 - en: In the next recipe, you will be shown how to write a plugin for your own column
     in the list view.
+  id: totrans-420
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-421
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Install the List View Columns plugins; Last Failure Version Column plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Last+Failure+Version+Column+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Last+Failure+Version+Column+Plugin));
     Last Success Description Column plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Description+Column+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Description+Column+Plugin));
     and the Last Success Version Column plugin ([https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Version+Column+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Last+Success+Version+Column+Plugin)).
+  id: totrans-422
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-423
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Install the source code locally in a directory of choice:'
+  id: totrans-424
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE47]'
+  id: totrans-425
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE47]'
 - en: In Jenkins, create a new free-style job named `ch7.plugin.lastview`. No further
     configuration is necessary.
+  id: totrans-426
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: On the main page, click on the **+** tab next to the **All** tab, as shown in
     the following screenshot:![How to do it...](img/0082OS_07_31.jpg)
+  id: totrans-427
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Create a **List View** named `LAST`.
+  id: totrans-428
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Under **Job Filters** | **Jobs** check the **ch7.plugin.lastview** tick box:![How
     to do it...](img/0082OS_07_32.jpg)
+  id: totrans-429
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **OK**. You are returned to the main page with the **LAST** list view
     shown:![How to do it...](img/0082OS_07_33.jpg)
+  id: totrans-430
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Press the **Build** icon to run the `ch7.plugin.lastview` job:![How to do it...](img/0082OS_07_34.jpg)
+  id: totrans-431
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Refresh your page. The **Last Success Version** column now has data with a link
     to the builds history.
+  id: totrans-432
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: In the **Last Success Description** column, click on the **N/A** link.
+  id: totrans-433
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: On the right-hand side, click on **Add description**.
+  id: totrans-434
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Add the description for the build: **This is my great description**.'
+  id: totrans-435
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Click on **Submit**.
+  id: totrans-436
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Return to the **LAST** list view by clicking on **LAST** in the breadcrumb displayed
     at the top of the page, as shown in the following screenshot:![How to do it...](img/0082OS_07_35.jpg)
+  id: totrans-437
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: The **Last Success Description** column is now populated:![How to do it...](img/0082OS_07_36.jpg)
+  id: totrans-438
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How it works...
+  id: totrans-439
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
@@ -1949,16 +2641,20 @@
     casual viewer an overview of the last significant action in the project without
     delving down into the source code. This saves a significant amount of clicking
     about:'
+  id: totrans-440
   prefs: []
   type: TYPE_NORMAL
 - en: '![How it works...](img/0082OS_07_37.jpg)'
+  id: totrans-441
   prefs: []
   type: TYPE_IMG
 - en: There's more...
+  id: totrans-442
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'There is a healthy supply of ListView plugins, these include:'
+  id: totrans-443
   prefs: []
   type: TYPE_NORMAL
 - en: '**The Extra Columns plugin**: This adds options for counting the number of
@@ -1966,51 +2662,61 @@
     an **enable/disable project** button, and a project description button. Each one
     of these new columns allows you to better understand the state of the project
     or perform actions more efficiently.'
+  id: totrans-444
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**The Cron Column plugin**: This displays the scheduled triggers in the project
     and whether they are enabled or disabled. This is useful if you want to compare
     system monitoring information from the Melody plugin.'
+  id: totrans-445
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**The Emma Coverage** plugin: This displays code coverage results reported
     by the Emma plugin. This is especially useful if your organization has an in-house
     style guide, where the code needs to reach a specific level of code coverage.'
+  id: totrans-446
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**The Progress Bar plugin**: This displays a progress bar for running jobs.
     This adds a feeling of activity to the front page.'
+  id: totrans-447
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: See also
+  id: totrans-448
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *Creating my first ListView plugin* recipe
+  id: totrans-449
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Efficient use of views* recipe in [Chapter 4](ch04.html "Chapter 4. Communicating
     Through Jenkins"), *Communicating Through Jenkins*
+  id: totrans-450
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Saving screen space with the Dashboard View plugin* recipe in [Chapter
     4](ch04.html "Chapter 4. Communicating Through Jenkins"), *Communicating Through
     Jenkins*
+  id: totrans-451
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The *Monitoring via JavaMelody* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
     Jenkins"), *Maintaining Jenkins*
+  id: totrans-452
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Creating my first ListView plugin
+  id: totrans-453
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -2018,97 +2724,128 @@
     allows you to add an extra column to the standard list view with comments. The
     code for the content of the column is a placeholder, just waiting for you to replace
     it with your own brilliant experiments.
+  id: totrans-454
   prefs: []
   type: TYPE_NORMAL
 - en: Getting ready
+  id: totrans-455
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: Create a directory ready for the code.
+  id: totrans-456
   prefs: []
   type: TYPE_NORMAL
 - en: How to do it...
+  id: totrans-457
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'Create a top-level `pom.xml` file with the content as follows:'
+  id: totrans-458
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE48]'
+  id: totrans-459
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE48]'
 - en: Create the directory `src/main/java/jenkins/plugins/comments`.
+  id: totrans-460
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'In the comments directory, add `CommentsColumn.java` with the following content:'
+  id: totrans-461
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE49]'
+  id: totrans-462
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE49]'
 - en: Create the directory `src/main/resources/jenkins/plugins/comments/CommentsColumn`.
+  id: totrans-463
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'In the `CommentsColumn` directory, add `column.jelly` with the following content:'
+  id: totrans-464
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE50]'
+  id: totrans-465
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE50]'
 - en: 'In the `CommentsColumn` directory, add `columnHeader.jelly` with the following
     content:'
+  id: totrans-466
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE51]'
+  id: totrans-467
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE51]'
 - en: 'In the `CommentsColumn` directory, add `columnHeader.properties` with the following
     content:'
+  id: totrans-468
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE52]'
+  id: totrans-469
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE52]'
 - en: 'In the `CommentsColumn` directory, add `columnHeader_an.properties` with the
     following content:'
+  id: totrans-470
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE53]'
+  id: totrans-471
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE53]'
 - en: 'In the `src/main/resources` directory, add the plugin description file `index.jelly`
     with the following content:'
+  id: totrans-472
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE54]'
+  id: totrans-473
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE54]'
 - en: 'In the top-level directory, run the following command:'
+  id: totrans-474
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE55]'
+  id: totrans-475
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE55]'
 - en: 'Visit the Jenkins job creation page: `http://localhost:8090/jenkins/view/All/newJob`.
     Create a new free-style job named `ch7.plugin.l`.'
+  id: totrans-476
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
@@ -2117,85 +2854,108 @@
     preferred language of your web browser to **Aragonese [an]**, then the column
     will now be called **My Fake Column [an]**, as shown in the following screenshot:![How
     to do it...](img/0082OS_07_38.jpg)
+  id: totrans-477
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'In the default Firefox browser for Ubuntu, you can change the preferred language
     under the **Edit/Preferences** content tab, in the **Languages** section, as shown
     in the following screenshot:'
+  id: totrans-478
   prefs: []
   type: TYPE_NORMAL
 - en: '![How to do it...](img/0082OS_07_39.jpg)'
+  id: totrans-479
   prefs: []
   type: TYPE_IMG
 - en: How it works...
+  id: totrans-480
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'In this recipe, a basic ListView plugin was created with the following structure:'
+  id: totrans-481
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE56]'
+  id: totrans-482
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE56]'
 - en: The one Java file included in the plugin is `CommentsColumn.java` under `/src/main/java/jenkins/plugins/comments`.
     The class extends the `ListViewColumn` extension point.
+  id: totrans-483
   prefs: []
   type: TYPE_NORMAL
 - en: The method `getFakeComment` expects an input of the type `Job` and returns a
     string. This method is used to populate the entries in the column.
+  id: totrans-484
   prefs: []
   type: TYPE_NORMAL
 - en: The GUI in the ListView is defined under `/src/main/resources/packagename/Classname/`.
     You can find the GUI for `/src/main/java/jenkins/plugins/comments/CommentsColumn.java`
     mapped to the `/src/main/resources/Jenkins/plugins/comments/CommentsColumn` directory.
     In this directory, there are two Jelly files `columnHeader.jelly` and `column.jelly`.
+  id: totrans-485
   prefs: []
   type: TYPE_NORMAL
 - en: 'As the name suggests, `columnHeader.jelly` renders the header of the column
     in ListView. Its contents are as follows:'
+  id: totrans-486
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE57]'
+  id: totrans-487
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE57]'
 - en: '`FAKE Comment` is defined in `columnHeader.properties`. The `%` sign tells
     Jelly to look in different property files, depending on the value of the language
     settings returned by the web browser. In this recipe, we set the web browser''s
     language value to `an`, and this translates to looking for the `columnHeader_an.properties`
     file first. If the web browser returns a language that does not have its own property
     file, then Jelly defaults to `columnHeader.properties`.'
+  id: totrans-488
   prefs: []
   type: TYPE_NORMAL
 - en: '`columns.jelly` has the following content:'
+  id: totrans-489
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE58]'
+  id: totrans-490
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE58]'
 - en: '`it.getFakeComment` calls the method `getFakeComment` on an instance of the
     `CommentsColumn` class. It is the default name for the instance of the object.
     The type of object returned is defined by convention, the file structure /`src/main/resources/Jenkins/plugins/comments/CommentsColumn`.'
+  id: totrans-491
   prefs: []
   type: TYPE_NORMAL
 - en: The returned string is placed in the variable `comment` and then displayed inside
     a `<td>` tag.
+  id: totrans-492
   prefs: []
   type: TYPE_NORMAL
 - en: Note
+  id: totrans-493
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
 - en: If you are curious about the Jelly tags available in Jenkins, then review [https://wiki.jenkins-ci.org/display/JENKINS/Understanding+Jelly+Tags](https://wiki.jenkins-ci.org/display/JENKINS/Understanding+Jelly+Tags).
+  id: totrans-494
   prefs: []
   type: TYPE_NORMAL
 - en: There's more...
+  id: totrans-495
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'If you want to participate in the community, then the Governance page is a
     necessary read ([https://wiki.jenkins-ci.org/display/JENKINS/Governance+Document](https://wiki.jenkins-ci.org/display/JENKINS/Governance+Document)).
     On the subject of licensing, the page states:'
+  id: totrans-496
   prefs: []
   type: TYPE_NORMAL
 - en: '*The core is entirely in the MIT license, so is the most infrastructure code
@@ -2203,25 +2963,32 @@
     to use the same MIT license, to simplify the story for users, but plugins are
     free to choose their own licenses, so long as it''s a OSI-approved open source
     license.*'
+  id: totrans-497
   prefs: []
   type: TYPE_NORMAL
 - en: You can find the list of approved OSI licenses at [http://opensource.org/licenses/alphabetical](http://opensource.org/licenses/alphabetical).
+  id: totrans-498
   prefs: []
   type: TYPE_NORMAL
 - en: 'The majority of plugins have a `LICENSE.txt` file in their top-level directory
     with an MIT license ([http://en.wikipedia.org/wiki/MIT_License](http://en.wikipedia.org/wiki/MIT_License)).
     As an example, review [https://github.com/jenkinsci/lastfailureversioncolumn-plugin/blob/master/LICENSE.txt](https://github.com/jenkinsci/lastfailureversioncolumn-plugin/blob/master/LICENSE.txt).
     Its structure is similar to the following:'
+  id: totrans-499
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE59]'
+  id: totrans-500
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE59]'
 - en: See also
+  id: totrans-501
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: The *Reviewing three ListView plugins* recipe
+  id: totrans-502
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
