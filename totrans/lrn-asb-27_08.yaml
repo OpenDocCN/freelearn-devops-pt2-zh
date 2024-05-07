@@ -1,4 +1,5 @@
 - en: Getting Notification from Ansible
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -6,6 +7,7 @@
     ensuring that everything is in order. This is a very nice feature that not only
     assures you that nothing has changed the configurations on your server, but also
     that new configurations will be applied in a short time.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
 - en: Due to these reasons, many people run their `master.yaml` file once a day. When
@@ -15,6 +17,7 @@
     your application, you may want to send an IRC message (or other kinds of group
     chat messages) to your development team channel, so that they are all informed
     of the status of your system.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
 - en: Other times, you want Ansible to notify Nagios that it's going to break something,
@@ -22,36 +25,45 @@
     to your system administrators. In this chapter, we are going to look at multiple
     ways to help you to set up Ansible Playbooks that can both work with your monitoring
     system and eventually send notifications.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
 - en: 'In this chapter, we''ll explore the following topics:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
 - en: Email notifications
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Ansible XMPP/Jabber
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Slack and Rocket chat
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Sending a message to an IRC channel (community information and contributing)
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Amazon Simple Notification Service
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Nagios
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Technical requirements
+  id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -62,12 +74,15 @@
     to another. You might find that a module that is more suitable for your environment
     is present and functions in a very similar way. For a full list of Ansible notification
     modules, you can refer to [https://docs.ansible.com/ansible/latest/modules/list_of_notification_modules.html](https://docs.ansible.com/ansible/latest/modules/list_of_notification_modules.html).
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
 - en: You can download all of the files from this book's GitHub repository at: [https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter06](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter06).
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
 - en: Sending emails with Ansible
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -75,6 +90,7 @@
     an Ansible Playbook performs. This can be either because it's important that this
     user knows about it, or because there is an automated system that has to be notified
     in order to (not) start some procedure.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
 - en: 'The easiest and most common way of alerting people is to send emails. Ansible
@@ -85,11 +101,14 @@
     is the case, you can notify the responsible user that Ansible has done its job
     and it''s time for them to perform their duty. Let''s use the `mail` module to
     notify your users with a very simple playbook called `uptime_and_email.yaml`:'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE0]'
+  id: totrans-17
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'The preceding playbook firstly reads the current machine uptime, issuing the
     `uptime` command, and then sends it via email to the `me@fale.io` email address.
     To send the email, we clearly need some additional information, such as the SMTP
@@ -98,36 +117,44 @@
     can generate the emails in a similar way in very long and complex playbooks. If
     we focus on the `mail` task a little bit, we can see that we are using it with
     the following data:'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
 - en: An email server to be used to send the email (also with login information, which
     is required for this server)
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The receiver email address
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The email subject
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The email body
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Other interesting parameters that the `mail` module supports are the following:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
 - en: 'The `attach` parameter: This is used to add attachments to the email that will
     be generated. This is very useful when, for instance, you want to send a log via
     an email.'
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'The `port` parameter: This is used to specify which port is used by the email
     server.'
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -138,32 +165,43 @@
     Ansible, therefore, will always send emails with both subject and body, and if
     the body is empty, it will use the `subject` string both in the subject and in
     the body.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
 - en: 'We can now proceed to execute the script to validate its functionality with
     the following command:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE1]'
+  id: totrans-28
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: This playbook might not work on some machines, since the `-p` parameter of `uptime`
     is Linux-specific and might not work on other POSIX operating systems, such as
     macOS.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
 - en: 'By running the previous playbook, we will have a result similar to the following:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE2]'
+  id: totrans-31
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'Also, as expected, Ansible has sent me an email with the following content:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE3]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: This module can be used in many different ways. An example of a real-world case
     that I've seen is a playbook that was created to automate a piece of a very complex,
     but sequential process, where multiple people were involved. Each person had a
@@ -175,164 +213,226 @@
     generally carried out the email notification manually. When we started to automate
     that procedure, we did it for one specific piece and no one noticed that that
     part was automated.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 该模块可以以许多不同的方式使用。我见过一个实际案例，那就是为了自动化一个非常复杂但顺序流程的一部分，涉及多个人员。每个人在流程的特定点必须开始他们的工作，而链中的下一个人在前一个人完成他们的工作之前不能开始他们的工作。保持该过程运作的关键在于每个人手动向链中的下一个人发送电子邮件，通知他们他们自己的部分已经完成，因此接收者需要开始他们在流程中的工作。在我们开始自动化该程序之前，人们通常手动进行电子邮件通知，但当我们开始自动化该程序的一部分时，没有人注意到该部分已经自动化。
 - en: Having such long processes tracked via email is not the best way to handle them
     since errors are easy to make, potentially losing track of the process. Also,
     those kind of complex and sequential processes tend to be very slow, but it's
     widely used in organizations and often you cannot change it.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于这样的复杂、顺序流程，通过电子邮件进行跟踪并不是处理它们的最好方式，因为错误很容易犯，可能导致跟踪丢失。此外，此类复杂顺序流程往往非常缓慢，但它们在组织中被广泛使用，通常您无法进行更改。
 - en: There are cases where the process needs to send notifications in a more real-time
     way than emails, so XMPP could be a good way to do it.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 有些情况下，流程需要以比电子邮件更实时的方式发送通知，因此 XMPP 是一个好的选择。
 - en: XMPP
+  id: totrans-37
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: XMPP
 - en: Emails are slow, unreliable, and often people do not react to them immediately.
     There are cases where you want to send a real-time message to one of your users.
     Many organizations rely on XMPP/Jabber for their internal chat system and the
     great thing is that Ansible is able to directly send messages to XMPP/Jabber users
     and conference rooms.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 电子邮件速度慢，不可靠，并且人们通常不会立即对其做出反应。在某些情况下，您希望向您的用户发送实时消息。许多组织依赖 XMPP/Jabber 作为其内部聊天系统，而美妙的事情是
+    Ansible 能够直接向 XMPP/Jabber 用户和会议室发送消息。
 - en: 'Let''s tweak the previous example to send uptime information to a user in the
     `uptime_and_xmpp_user.yaml` file:'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们修改之前的示例，在 `uptime_and_xmpp_user.yaml` 文件中发送可靠性信息给某个用户：
 - en: '[PRE4]'
+  id: totrans-40
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: If you want to use the Ansible `jabber` task, you will need to have the `xmpppy`
     library installed on the system that will perform the task. One way to install
     it is by using your package manager. For instance, on Fedora you can just execute
     `sudo dnf install -y python2-xmpp` and it will be installed. You can also use
     `pip install xmpppy`.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您想要使用 Ansible 的 `jabber` 任务，需要在执行该任务的系统上安装 `xmpppy` 库。其中一种安装方法是使用您的软件包管理器。例如，在
+    Fedora 上，您只需执行 `sudo dnf install -y python2-xmpp` 即可进行安装。您也可以使用 `pip install xmpppy`
+    进行安装。
 - en: The first task is exactly the same as we had in the previous section, while
     the second one has small differences. As you can see, the `jabber` module is very
     similar to the `mail` module and requires similar parameters. In the XMPP case,
     we don't need to specify the server host and port, since that information is automatically
     gathered by XMPP from the DNS. In cases where we would need to use a different
     server host or port, we can use, respectively, the `host` and `port` parameters.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 第一个任务与前一节完全相同，而第二个任务则有一些细微的差别。正如您所看到的，`jabber` 模块非常类似于 `mail` 模块，并且需要类似的参数。在
+    XMPP 的情况下，我们不需要指定服务器主机和端口，因为 XMPP 会从 DNS 自动收集该信息。在需要使用不同服务器主机或端口的情况下，我们可以分别使用
+    `host` 和 `port` 参数。
 - en: 'We can now proceed to execute the script to validate its functionality with
     the following command:'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们可以使用以下命令执行该脚本以验证其功能：
 - en: '[PRE5]'
+  id: totrans-44
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'We will have a result similar to the following:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将得到类似于以下的结果：
 - en: '[PRE6]'
+  id: totrans-46
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'In cases where we want to send a message to a conference room instead of a
     single user, it is enough to change the receiver in the  `to` parameter, by adding
     the associated conference room instead:'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于我们想要发消息到会议室而不是单个用户的情况，只需要将接收者在 `to` 参数中更改为与会议室相应的接收者即可。
 - en: '[PRE7]'
+  id: totrans-48
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: Except for the receiver change and the addition of `(mailto:sysop@conference.fale.io)/ansiblebot`
     which identifies the chat handle to use (`ansiblebot`, in this case), XMPP handles
     users and conference rooms in the same way, so it's very easy to switch from one
     to the other.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
 - en: Although XMPP is fairly popular, not every company uses it. Another collaboration
     platform that Ansible can send messages to is Slack.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
 - en: Slack
+  id: totrans-51
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: In the last few years, many new chat and collaboration platforms have appeared.
     One of the most used ones is Slack. Slack is a cloud-based team collaboration
     tool, and this allows even easier integration with Ansible than XMPP.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
 - en: 'Let''s put the following lines in the `uptime_and_slack.yaml` file:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE8]'
+  id: totrans-54
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: As we discussed, this module has an even simpler syntax than the XMPP one. In
     fact, it only needs to know the token (which you can generate on the Slack website),
     the channel to send the message to, and the message itself.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
 - en: Since version 1.8 of Ansible, the new version of the Slack token is required,
     for instance, `G522SJP14/D563DW213/7Qws484asdWD4w12Md3avf4FeD`.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
 - en: 'Run the playbook with the following:'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE9]'
+  id: totrans-58
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'This results in the following output:'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE10]'
+  id: totrans-60
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Since Slack''s goal is to make communications more efficient, it allows us
     to tweak multiple aspects of the message. The most interesting points, from my
     point of view, are the following:'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
 - en: '`color`: This allows you to specify a color bar to be put at the beginning
     of the message to identify the following states:'
+  id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Good: green bar'
+  id: totrans-63
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Normal: no bar'
+  id: totrans-64
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Warning: yellow bar'
+  id: totrans-65
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Danger: red bar'
+  id: totrans-66
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`icon_url`: This allows you to change the user image for that message.'
+  id: totrans-67
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'For example, the following code would send a message with a warning color and
     a custom user image:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE11]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: Since not every company is comfortable with Slack being able to see their private
     conversations, there are alternatives, such as Rocket Chat.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
 - en: Rocket Chat
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -342,39 +442,52 @@
     of Slack, as well as the majority of its interface. Being open source, every company
     can install it on-premises and manage it in a way that is compliant with their
     IT rules.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
 - en: 'As Rocket Chat''s goal is to be a drop-in replacement for Slack, from our point
     of view, very few changes need to be done. In fact, we can create the `uptime_and_rocket.yaml` file
     with the following content:'
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE12]'
+  id: totrans-74
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: As you can see, the only lines that changed are the sixth and seventh, where
     the word `slack` has been replaced by `rocketchat`. Also, we need to add the domain
     field specifying where our installation of Rocket Chat is located.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
 - en: 'Run the code with the following command:'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE13]'
+  id: totrans-77
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'This results in the following output:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE14]'
+  id: totrans-79
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Another way to self-host a company's conversations is by using IRC, a very old
     but still commonly used protocol. Ansible is also able to send messages using
     it.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
 - en: Internet Relay Chat
+  id: totrans-81
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -384,72 +497,94 @@
     an Ansible perspective, IRC is a pretty straightforward module and we can use
     it, as shown in the following example (to be put in the `uptime_and_irc.yaml`
     file):'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE15]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: You need the `socket` Python library installed to use the Ansible IRC module.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
 - en: 'In the IRC module, the following fields are required:'
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
 - en: '`channel`: This is to specify in which channel your message will be delivered.'
+  id: totrans-86
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`msg`: This is the message you want to send.'
+  id: totrans-87
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Other configurations you will usually specify are:'
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
 - en: '`server`: Select `server` to connect to, if not `localhost`.'
+  id: totrans-89
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`port`: Select `port` to connect to, if not `6667`.'
+  id: totrans-90
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`color`: This to specify the message `color`, if not `black`.'
+  id: totrans-91
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`nick`: This to specify the `nick` sending the message, if not `ansible`.'
+  id: totrans-92
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`use_ssl`: Use SSL and TLS security.'
+  id: totrans-93
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`style`: This is if you want to send your message with bold, italic, underline,
     or reverse style.'
+  id: totrans-94
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Run the code with the following command:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE16]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'This results in the following output:'
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE17]'
+  id: totrans-98
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: We have seen many different communication systems that are probably in place
     in your company or project, but those are usually used for a human-to-human or
     a machine-to-human communication. Machine-to-machine communication usually uses
     different systems, such as Amazon SNS.
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
 - en: Amazon Simple Notification Service
+  id: totrans-100
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -459,43 +594,53 @@
     notification service will then take care of delivering them. **Amazon Simple Notification
     Service** (**SNS**) is not the only notification service available, but it''s
     probably the most used. SNS has the following components:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
 - en: '**Messages**: Messages generated by publishers identified by a UUID'
+  id: totrans-102
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**Publishers**: Programs generating messages'
+  id: totrans-103
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**Topics**: Named groups of messages, which can be thought of in a similar
     way to chat channels or rooms'
+  id: totrans-104
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**Subscribers**: Clients that will receive all messages published in the topics
     they have subscribed to'
+  id: totrans-105
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'So in our case, we will have, specifically, the following:'
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
 - en: '**Messages**: Ansible notifications'
+  id: totrans-107
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**Publishers**: Ansible itself'
+  id: totrans-108
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**Topics**: Probably different topics to group messages based on the system
     and/or the kind of notification (for example, storage, networking, or computing)'
+  id: totrans-109
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '**Subscribers**: The people in your team that have to be notified'
+  id: totrans-110
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -505,107 +650,135 @@
     topic rules, and eventually you can change them dynamically to ensure that the
     messages are sent in the best way possible for any situation. The five ways SNS
     can send messages, at the moment, are as follows:'
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
 - en: Amazon **Lambda** functions (serverless functions written in Python, Java, and
     JavaScript)
+  id: totrans-112
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Amazon **Simple Queue Service** (**SQS**) (a message queuing system)
+  id: totrans-113
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Email
+  id: totrans-114
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: HTTP(S) call
+  id: totrans-115
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: SMS
+  id: totrans-116
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Let''s see how we can send SNS messages with Ansible. To do so, we can create
     a file called `uptime_and_sns.yaml` with the following content:'
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE18]'
+  id: totrans-118
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: In this example, we are using the `msg` key to set the message that will be
     sent, `topic` to choose the most appropriate topic, and `subject` will be used
     as the subject for email deliveries. There are many other options you can set.
     Mainly, they are useful for sending different messages using different delivery
     methods.
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
 - en: 'For instance, it would make sense to send a short message via SMS (in the end,
     the first **S** in **SMS** means **short**) and longer and more detailed messages
     via emails. To do so, the SNS module provides us with the following delivery-specific
     options:'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
 - en: '`email`'
+  id: totrans-121
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`http`'
+  id: totrans-122
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`https`'
+  id: totrans-123
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`sms`'
+  id: totrans-124
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`sqs`'
+  id: totrans-125
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'As we have seen in previous chapter, AWS modules require credentials, and we
     can set them up in multiple ways. The three AWS-specific parameters that are needed
     to run this module are:'
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
 - en: '`aws_access_key`: This is the AWS access key; if not specified, the environmental
     variable, `aws_access_key`, will be considered or the content of `~/.aws/credentials`.'
+  id: totrans-127
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`aws_secret_key`: This is the AWS secret key; if not specified, the environmental
     variable, `aws_secret_key`, will be considered or the content of `~/.aws/credentials`.'
+  id: totrans-128
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`region`: This is the AWS region to use; if not specified, the environmental
     variable, `ec2_region`, will be considered or the content of `~/.aws/config`.'
+  id: totrans-129
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Run the code with the following command:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE19]'
+  id: totrans-131
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'This will result in the following output:'
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE20]'
+  id: totrans-133
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: There are cases where we want to notify a monitoring system so that it will
     not trigger any alarm due to Ansible actions. A common example of such a system
     is Nagios.
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
 - en: Nagios
+  id: totrans-135
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -620,6 +793,7 @@
     inappropriate times. To avoid this, Ansible is able to notify Nagios beforehand,
     so that Nagios does not send notifications in that time window, even if some services
     are down (for instance, because they are rebooted) or other checks fail.'
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
 - en: 'In this example, we are going to stop a service, wait for five minutes, and
@@ -629,71 +803,96 @@
     the service in a warning state before raising a critical state. We are going to
     create the `long_restart_service.yaml` file, which will trigger the Nagios critical
     state:'
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE21]'
+  id: totrans-138
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Run the code with the following command:'
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE22]'
+  id: totrans-140
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'This should trigger a Nagios alert and result in the following output:'
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE23]'
+  id: totrans-142
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: If no Nagios alert has been triggered, either your Nagios installation does
     not track that service or five minutes is not enough to make it raise a critical
     state. To check, you should get in contact to the person or the team that manages
     your Nagios installation, since Nagios allows full configuration to a point where
     it's very hard to predict how Nagios will behave without knowing its configuration.
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
 - en: 'We can now create a very similar playbook that will ensure that Nagios will
     not send any alerts. We are going to create a file called `long_restart_service_no_alert.yaml`
     with the following content (the full code is available on GitHub):'
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE24]'
+  id: totrans-145
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: As you can see, we have added two tasks. The first is to inform Nagios not to
     send alerts for the HTTPd service on the given host, and the second is to inform
     Nagios to start sending alerts for the service again. Even if you do not specify
     the service and therefore all alerts on that host are silenced, my advice is to
     disable only the alert you are going to break so that Nagios is still able to
     work normally on the majority of your infrastructure.
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
 - en: If the playbook run fails before reaching the re-enablement of the alerts, your
     alerts will stay *disabled*.
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
 - en: This module's goal is to toggle the Nagios alerts as well as schedule downtime,
     and from Ansible 2.2, this module can also unschedule downtimes.
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
 - en: 'Run the code with the following command:'
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE25]'
+  id: totrans-150
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'This should trigger a Nagios alert and result in the following output (the
     full code output is available on GitHub):'
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将触发 Nagios 警报，并导致以下输出（完整的代码输出可在 GitHub 上获得）：
 - en: '[PRE26]'
+  id: totrans-152
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: To use the Nagios module, you need to delegate the action to your Nagios server
     using the `delegate_to` parameter, as shown in the example.
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使用 Nagios 模块，您需要使用 `delegate_to` 参数将操作委托给 Nagios 服务器，如示例所示。
 - en: Sometimes, what you want to achieve with a Nagios integration is exactly the
     opposite. In fact, you are not interested in muting it, but you want Nagios to
     handle your test results. A common case is if you want to leverage your Nagios
@@ -701,20 +900,31 @@
     we can use the Nagios `nsca` utility, integrating it into our playbooks. Ansible
     does not yet have a specific module for managing it, but you can always run it
     using the command module, leveraging the `send_nsca` CLI program.
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 有时，与 Nagios 集成要实现的目标完全相反。事实上，你并不想把它静音，而是想让 Nagios 处理你的测试结果。一个常见的情况是，如果您想利用您的
+    Nagios 配置通知您的管理员一个任务的输出。为此，我们可以使用 Nagios 的 `nsca` 工具，将其集成到我们的 playbook 中。Ansible
+    还没有一个管理它的特定模块，但您可以使用命令模块来运行它，利用 `send_nsca` CLI 程序。
 - en: Summary
+  id: totrans-155
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: In this chapter, we have seen how we can teach Ansible to send notifications
     to other systems and people. You learned to send notifications through a variety
     of systems, including email and messaging services, such as Slack. Finally, you
     learned how to prevent Nagios from sending unwanted notifications about system
     health during periods when you are operating it.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们已经学习了如何让 Ansible 发送通知到其他系统和人员。您学会了通过电子邮件和消息服务（如 Slack）发送通知的方法。最后，你学会了如何在你运行
+    Nagios 时防止它发送关于系统健康状况的不必要通知。
 - en: In the next chapter, we will learn how to create a module so that you can extend
     Ansible to perform any kind of task.
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将学习如何创建一个模块，以便您可以扩展 Ansible 来执行任何类型的任务。
