@@ -3,105 +3,126 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自动化简单任务
 - en: As mentioned in the previous chapter, Ansible can be used to both create and
     manage a whole infrastructure, as well as be integrated into an infrastructure
     that is already working.
   id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 如前一章所述，Ansible 可用于创建和管理整个基础架构，也可集成到已经运行的基础架构中。
 - en: 'In this chapter, we will cover the following topics:'
   id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下主题：
 - en: YAML
   id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: YAML
 - en: Working with Playbook
   id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 Playbook
 - en: Ansible velocity
   id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ansible 速度
 - en: Variables in Playbook
   id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Playbook 中的变量
 - en: Creating the Ansible User
   id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建 Ansible 用户
 - en: Configuring a basic server
   id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置基本服务器
 - en: Installing and configuring a web server
   id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装和配置 Web 服务器
 - en: Publishing a website
   id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 发布网站
 - en: Jinja2 templates
   id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jinja2 模板
 - en: First, we will talk about **YAML Ain't Markup Language** (**YAML**), a human-readable
     data serialization language that is widely used in Ansible.
   id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，我们将讨论**YAML Ain't Markup Language**（**YAML**），这是一种人类可读的数据序列化语言，广泛用于 Ansible。
 - en: Technical Requirement
   id: totrans-13
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 技术要求
 - en: You can  download all the files from this book's GitHub repository at: [https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter02](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter02).
   id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从本书的 GitHub 存储库下载所有文件：[https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter02](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter02)。
 - en: YAML
   id: totrans-15
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: YAML
 - en: 'YAML, like many other data serialization languages (such as JSON), has very
     few, basic concepts:'
   id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: YAML，像许多其他数据序列化语言（如 JSON）一样，有着极少的基本概念：
 - en: Declarations
   id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 声明
 - en: Lists
   id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 列表
 - en: Associative arrays
   id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 关联数组
 - en: 'A declaration is very similar to a variable in any other language, which is
     as follows:'
   id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 声明与任何其他语言中的变量非常相似，如下所示：
 - en: '[PRE0]'
   id: totrans-21
   prefs: []
@@ -111,6 +132,7 @@
   id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 要创建列表，我们将使用`-`：
 - en: '[PRE1]'
   id: totrans-23
   prefs: []
@@ -122,6 +144,7 @@
   id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: YAML 使用缩进来在逻辑上将父项与子项分隔开来。因此，如果我们想创建关联数组（也称为对象），我们只需要添加一个缩进：
 - en: '[PRE2]'
   id: totrans-25
   prefs: []
@@ -131,6 +154,7 @@
   id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 显然，我们可以将它们混合在一起，如下所示：
 - en: '[PRE3]'
   id: totrans-27
   prefs: []
@@ -141,22 +165,26 @@
   id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些是 YAML 的基础知识。YAML 可以做得更多，但目前这些就足够了。
 - en: Hello Ansible
   id: totrans-29
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 你好 Ansible
 - en: As we have seen in the previous chapter, it is possible to use Ansible to automate
     simple tasks that you probably already perform daily.
   id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们在前一章中看到的，可以使用 Ansible 自动化您可能每天已经执行的简单任务。
 - en: 'Let''s start by checking whether or not a remote machine is reachable; in other
     words, let''s start by pinging a machine. The simplest way to do this is to run
     the following:'
   id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从检查远程机器是否可达开始；换句话说，让我们从对机器进行 ping 开始。这样做的最简单方法是运行以下命令：
 - en: '[PRE4]'
   id: totrans-32
   prefs: []
@@ -168,15 +196,19 @@
   id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，`HOST`是您拥有 SSH 访问权限的机器的 IP 地址、**Fully Qualified Domain Name**（**FQDN**）或别名（您可以使用像我们在上一章中看到的
+    **Vagrant** 主机）。
 - en: After `HOST`, the comma is mandatory, because otherwise, it would not be seen
     as a list, but as a string.
   id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 在`HOST`之后，逗号是必需的，因为否则，它不会被视为列表，而是视为字符串。
 - en: 'In this case, we have performed it against a virtual machine on our system:'
   id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这种情况下，我们执行了针对我们系统上的虚拟机：
 - en: '[PRE5]'
   id: totrans-36
   prefs: []
@@ -186,6 +218,7 @@
   id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该收到类似这样的结果：
 - en: '[PRE6]'
   id: totrans-38
   prefs: []
@@ -196,6 +229,7 @@
   id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们看看我们做了什么以及为什么。让我们从 Ansible 帮助开始。要查询它，我们可以使用以下命令：
 - en: '[PRE7]'
   id: totrans-40
   prefs: []
@@ -206,6 +240,7 @@
   id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了更容易阅读，我们已删除了与我们未使用的选项相关的所有输出：
 - en: '[PRE8]'
   id: totrans-42
   prefs: []
@@ -215,31 +250,37 @@
   id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 所以，我们所做的是：
 - en: We invoked Ansible.
   id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们调用了 Ansible。
 - en: We instructed Ansible to run on all hosts.
   id: totrans-45
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们指示 Ansible 在所有主机上运行。
 - en: We specified our inventory (also known as the list of the hosts).
   id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们指定了我们的清单（也称为主机列表）。
 - en: We specified the module we wanted to run (`ping`).
   id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们指定了要运行的模块（`ping`）。
 - en: 'Now that we can ping the server, let''s try `echo hello ansible!`, as shown
     in the following command:'
   id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以 ping 服务器，让我们尝试`echo hello ansible!`，如下命令所示：
 - en: '[PRE9]'
   id: totrans-49
   prefs: []
@@ -249,6 +290,7 @@
   id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 你应该收到类似这样的结果：
 - en: '[PRE10]'
   id: totrans-51
   prefs: []
@@ -259,6 +301,7 @@
   id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此示例中，我们使用了一个额外的选项。让我们检查 Ansible 帮助以查看它的作用：
 - en: '[PRE11]'
   id: totrans-53
   prefs: []
@@ -1239,16 +1282,19 @@
   id: totrans-202
   prefs: []
   type: TYPE_NORMAL
+  zh: 为此，我们使用了`firewalld`模块。此模块将采用与`firewall-cmd`控制台非常相似的参数。您将需要指定要通过防火墙的服务，是否要立即应用此规则以及是否要将规则设置为永久性规则，以便在重新启动后规则仍然存在。
 - en: You can specify the service name (such as `ssh`) using the `service` parameter,
     or you can specify the port (such as `22/tcp`) using the `port` parameter.
   id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以使用`service`参数指定服务名称（如`ssh`），也可以使用`port`参数指定端口（如`22/tcp`）。
 - en: 'Now that we have installed FirewallD and we are sure that our SSH connection
     will survive, we can enable it as we do any other service:'
   id: totrans-204
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经安装了FirewallD，并且确保我们的SSH连接将存活，我们可以像对待其他任何服务一样启用它：
 - en: '[PRE59]'
   id: totrans-205
   prefs: []
@@ -1259,11 +1305,13 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 添加自定义MOTD。
 - en: To add the MOTD, we will need a template that will be the same for all servers,
     and a task to use the template.
   id: totrans-207
   prefs: []
   type: TYPE_NORMAL
+  zh: 要添加MOTD，我们将需要一个模板，该模板将对所有服务器都相同，并且一个任务来使用该模板。
 - en: 'I find it very useful to add a MOTD to every server. It''s even more useful
     if you use Ansible, because you can use it to warn your users that changes to
     the system could be overwritten by Ansible. My usual template is called `motd`,
@@ -1271,6 +1319,7 @@
   id: totrans-208
   prefs: []
   type: TYPE_NORMAL
+  zh: 我发现为每个服务器添加MOTD非常有用。如果你使用Ansible，那就更有用了，因为你可以用它来警告用户系统的更改可能会被Ansible覆盖。我通常的模板叫做`motd`，内容如下：
 - en: '[PRE60]'
   id: totrans-209
   prefs: []
@@ -1283,6 +1332,7 @@
   id: totrans-210
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是一个`jinja2`模板，它允许我们使用在playbooks中设置的每个变量。这也允许我们使用后面将在本章中看到的复杂的条件和循环语法。为了从Ansible中的模板填充文件，我们将需要使用以下命令：
 - en: '[PRE61]'
   id: totrans-211
   prefs: []
@@ -1295,17 +1345,20 @@
   id: totrans-212
   prefs: []
   type: TYPE_NORMAL
+  zh: '`template`模块允许我们指定一个本地文件（`src`），该文件将被`jinja2`解释，并且此操作的输出将保存在远程机器上的特定路径（`dest`）中，将由特定用户（`owner`）和组（`group`）拥有，并且将具有特定的访问模式（`mode`）。'
 - en: Changing the hostname
   id: totrans-213
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更改主机名。
 - en: 'To keep things simple, I find it useful to set the hostname of a machine to
     something meaningful. To do so, we can use a very simple Ansible module called
     `hostname`:'
   id: totrans-214
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了保持简单，我发现将机器的主机名设置为有意义的内容很有用。为此，我们可以使用一个非常简单的Ansible模块叫做`hostname`：
 - en: '[PRE62]'
   id: totrans-215
   prefs: []
@@ -1316,11 +1369,13 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 复审并运行playbook。
 - en: 'Putting everything together, we now have the following playbook (called `common_tasks.yaml`
     for simplicity):'
   id: totrans-217
   prefs: []
   type: TYPE_NORMAL
+  zh: 把所有事情都放在一起，我们现在有了以下playbook（为简单起见称为`common_tasks.yaml`）：
 - en: '[PRE63]'
   id: totrans-218
   prefs: []
@@ -1330,6 +1385,7 @@
   id: totrans-219
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于这个`playbook`相当复杂，我们可以运行以下命令：
 - en: '[PRE64]'
   id: totrans-220
   prefs: []
@@ -1341,6 +1397,7 @@
   id: totrans-221
   prefs: []
   type: TYPE_NORMAL
+  zh: 这要求Ansible以更简洁的形式打印所有任务，以便我们可以快速查看`playbook`执行的任务。输出应该类似于以下内容：
 - en: '[PRE65]'
   id: totrans-222
   prefs: []
@@ -1350,6 +1407,7 @@
   id: totrans-223
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以使用以下命令运行`playbook`：
 - en: '[PRE66]'
   id: totrans-224
   prefs: []
@@ -1359,6 +1417,7 @@
   id: totrans-225
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将收到以下输出。完整的代码输出可在GitHub上找到。
 - en: '[PRE67]'
   id: totrans-226
   prefs: []
@@ -1369,6 +1428,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装和配置web服务器。
 - en: Now that we have made some generic changes to the operating system, let's move
     on to actually creating a web server. We are splitting those two phases so that
     we can share the first phase between every machine and apply the second only to
@@ -1376,11 +1436,13 @@
   id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经对操作系统进行了一些通用更改，让我们继续实际创建web服务器。我们将这两个阶段拆分开来，以便我们可以在每台机器之间共享第一个阶段，并仅将第二个应用于Web服务器。
 - en: 'For this second phase, we will create a new playbook called `webserver.yaml`
     with the following content:'
   id: totrans-229
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于这个第二阶段，我们将创建一个名为`webserver.yaml`的新playbook，内容如下：
 - en: '[PRE68]'
   id: totrans-230
   prefs: []
@@ -1392,6 +1454,7 @@
   id: totrans-231
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如您所看到的，前两个任务与本章开头示例中的任务相同，最后两个任务用于指示FirewallD允许`HTTP`和`HTTPS`流量通过。
 - en: 'Let''s run this script with the following:'
   id: totrans-232
   prefs: []
