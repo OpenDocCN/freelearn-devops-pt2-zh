@@ -1,4 +1,5 @@
 - en: Creating a Custom Module
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -7,6 +8,7 @@
     a module in Ansible is a piece of code that is transferred and executed onto your
     remote host every time you run an Ansible task (it can also run locally if you've
     used `local_action`).
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
 - en: From my experience, I've seen custom modules being written whenever a certain
@@ -21,6 +23,7 @@
     you the ability to write playbooks that are much simpler to read, and gives your
     code better reusability, since you create the module once and can use it everywhere
     in your roles and playbooks.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
 - en: The arguments that you pass to a module, provided they are in a **key-value**
@@ -29,28 +32,35 @@
     running), whether it passed or failed, and a message for the user – and they both
     have to be in JSON format. If you adhere to this simple rule, you can customize
     your module as much as you want!
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
 - en: 'In this chapter, we will cover the following topics:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
 - en: Python modules
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Bash modules
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Ruby modules
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Testing modules
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Prerequisite
+  id: totrans-9
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -66,6 +76,7 @@
     find a module for almost anything that you might need. However, there are always
     exceptions, and this is where the power to extend Ansible's functionality, by
     adding custom modules comes in.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
 - en: Chef provides **Lightweight Resources and Providers** (**LWRPs**) to perform
@@ -76,32 +87,40 @@
     module, as there is out-of-the-box support to parse arguments; almost all ***nix**
     systems have Python installed by default and Ansible itself is written in Python.
     In this chapter, we will also learn how to write modules in other languages.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
 - en: 'To make your custom modules available to Ansible, you can do one of the following:'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
 - en: Specify the path to your custom module in the `ANSIBLE_LIBRARY` environment
     variable.
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Use the `--module-path` command-line option.
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Drop the modules in the `library` directory in your Ansible top-level directory
     and add `library=library` in the `[default]` section of your `ansible.cfg` file.
+  id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: You can download all the files from this book's GitHub repository at [https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter07](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter07).
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
 - en: Now that we have this background information, let's take a look at some code!
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
 - en: Using Python to write modules
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -118,20 +137,26 @@
     before creating the module. The first example creates a module named `check_user`.
     To do this, we will need to create the `check_user.py` file in the `library` folder
     within the Ansible top-level directory. The full code is available on GitHub:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE0]'
+  id: totrans-20
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'The preceding custom module, `check_user`, will check whether a user exists
     on a host. The module expects a user argument from Ansible. Let''s break down
     the preceding module and see what it does. We first declare the Python interpreter and
     import the libraries that are required to parse the arguments:'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE1]'
+  id: totrans-22
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Using the `sys` library, we then parse the arguments, which are passed in a
     file by Ansible. The arguments are in the `param1=value1 param2=value2` format,
     where `param1` and `param2` are the parameters, and `value1` and `value2` are
@@ -144,32 +169,42 @@
     "gid=1000"]`, and then loop over this list to create a dictionary. This dictionary
     will be `{"user": "foo", "gid": 1000}`; this is performed using the following
     lines:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE2]'
+  id: totrans-24
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: We separate the arguments based on a whitespace character, because this is the
     standard, followed by core Ansible modules. You can use any separator instead
     of whitespace, but we encourage you to maintain uniformity.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
 - en: 'Once we have the user argument, we then check whether this user exists on the
     host, as follows:'
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE3]'
+  id: totrans-27
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'We use the `pwd` library to check the `passwd` file for the user. For the sake
     of simplicity, we use two variables: one to store the success or failure message
     and the other to store the message for the user. Finally, we use the variables
     created in the `try-catch` block to check whether the module succeeded or failed:'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE4]'
+  id: totrans-29
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'If the module succeeds, then it will exit the execution with an exit code of
     `0` (`exit(0)`); otherwise, it will exit with a non-zero code. Ansible will look
     for the failed variable and, if it is set to `True`, it will exit unless you have
@@ -177,28 +212,38 @@
     You can use customized modules like any other core module of Ansible. To test
     the custom module, we will need a playbook, so let''s create the `playbooks/check_user.yaml` file
     using the following code:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE5]'
+  id: totrans-31
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'As you can see, we used the `check_user` module like any other core module.
     Ansible will execute this module onto the remote host by copying the module to
     the remote host with the arguments in a separate file. Let''s see how this playbook
     runs with the following code:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE6]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'We should receive the following output:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE7]'
+  id: totrans-35
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: As expected, since we have the `root` user, but not `this_user_does_not_exists`,
     it passed the first check, but failed at the second.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
 - en: 'Ansible also provides a Python library to parse user arguments and handle errors
@@ -206,25 +251,34 @@
     to make your code shorter, faster, and less prone to error. To do so, let''s create
     a file called `library/check_user_py2.py` with the following code. The full code
     is available on GitHub:'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE8]'
+  id: totrans-38
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Let''s break down the preceding module and see how it works, as follows:'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE9]'
+  id: totrans-40
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'As you can see, we do not import `sys`, `shlex`, and `json`; we are no longer
     using them since all the operations that required them are now done by the Ansible
     `module_utils` module:'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE10]'
+  id: totrans-42
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Previously, we performed a lot of processing on the argument file to get the
     final user arguments. Ansible makes it easy by providing an `AnsibleModule` class,
     which does all the processing on its own and provides us with the final arguments.
@@ -234,43 +288,59 @@
     the arguments through the `module.params` dictionary by calling the `get` method
     on `module.params`. The logic to check users on the remote host will remain the
     same, but the error handling and return aspect will change as follows:'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE11]'
+  id: totrans-44
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: One of the advantages of using the `AnsibleModule` object is that you have a
     very nice facility to handle returning values to the playbook. We will go into
     more depth in the next section.
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
 - en: We could have condensed the logic for checking users and the return aspect,
     but we kept them divided for readability.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
 - en: 'To verify that everything works as expected, we can create a new playbook in
     `playbooks/check_user_py2.yaml` with the following code:'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE12]'
+  id: totrans-48
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'You can run it with the following code:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE13]'
+  id: totrans-50
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'Then, we should receive the following output:'
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE14]'
+  id: totrans-52
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: This output is consistent with our expectations.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
 - en: Working with exit_json and fail_json
+  id: totrans-54
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -281,200 +351,294 @@
     to `stdout`. For example, apart from the message, you might also want to print
     the `uid` and `gid` parameters of the user. You can do this by passing these variables
     to the `exit_json` method, separated by a comma.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
 - en: 'Let''s take a look at how you can return multiple values to `stdout`, as demonstrated
     in the following code, placed in  `library/check_user_id.py`. The full code is
     available on GitHub:'
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE15]'
+  id: totrans-57
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'As you can see, we return the `uid` and `gid` parameters of the user, along
     with the message, `msg`. You can have multiple values and Ansible will print all
     of them in  dictionary format. Create a playbook in `playbooks/check_user_id.yaml`
     with the following content:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE16]'
+  id: totrans-59
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'You can run it with the following code:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE17]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'We should receive the following output:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE18]'
+  id: totrans-63
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Here, we completed the working of both methods, which, in turn, helped us to
     find a quicker way to handle success and failure in Ansible while passing parameters
     to the user.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
 - en: Testing Python modules
+  id: totrans-65
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'As you have seen, you can test your modules by creating very simple playbooks
     to run them.  To do so, we''ll need to clone the Ansible official repository (if
     you haven''t done so yet):'
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE19]'
+  id: totrans-67
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'Next, source an environmental file, as follows:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，像下面这样来源一个环境文件：
 - en: '[PRE20]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'We can now use the `test-module` utility to run the script by passing the filename
     as a command-line argument:'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以使用`test-module`工具通过将文件名作为命令行参数来运行脚本：
 - en: '[PRE21]'
+  id: totrans-71
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'The result will be similar to the following output:'
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 结果将类似于以下输出：
 - en: '[PRE22]'
+  id: totrans-73
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: It's also easy to execute the script directly if you have not used `AnsibleModule`.
     This is because this module requires a lot of Ansible-specific variables, so it's
     more complicated to "simulate" an Ansible run than to actually run Ansible itself.
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你没有使用`AnsibleModule`，直接执行脚本也很容易。这是因为该模块需要很多 Ansible 特定的变量，所以"模拟" Ansible 运行比实际运行
+    Ansible 本身更复杂。
 - en: Using bash modules
+  id: totrans-75
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 bash 模块
 - en: Bash modules in Ansible are no different to any other bash scripts, except in
     the way that they print the data on `stdout`. Bash modules can be as straightforward
     as checking whether a process is running on the remote host, to running some more
     complex commands.
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 中的 Bash 模块与任何其他 bash 脚本没有任何区别，唯一不同之处在于它们将数据打印在`stdout`上。Bash 模块可以是非常简单的，比如检查远程主机上是否有进程正在运行，也可以是运行一些更复杂的命令。
 - en: As previously stated, the general recommendation is to use Python for modules.
     In my opinion, the second-best choice (only for very easy modules) is the `bash`
     module, due to its simplicity and user base.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 如前所述，一般推荐使用 Python 编写模块。在我看来，第二选择（仅适用于非常简单的模块）是`bash` 模块，因为它简单易用，用户基础广泛。
 - en: 'Let''s create a `library/kill_java.sh` file with the following content:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们创建一个名为`library/kill_java.sh`的文件，并包含以下内容：
 - en: '[PRE23]'
+  id: totrans-79
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'The preceding `bash` module will take the `service_name` argument and forcefully
     kill all of the Java processes that belong to that service. As you know, Ansible
     passes the argument file to the module. We then source the argument file using
     the `$1` source. This will actually set the environment variable with the name, `service_name`.
     We then access this variable using `$service_name`, as follows:'
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 前述的`bash`模块将使用`service_name`参数并强制终止所有属于该服务的 Java 进程。正如你所知，Ansible将参数文件传递给模块。然后我们使用`$1` source
+    来来源参数文件。这将实际上设置一个名为`service_name`的环境变量。然后我们使用`$service_name`来访问这个变量，如下所示：
 - en: '[PRE24]'
+  id: totrans-81
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'We then check to see if we obtained any `PIDS` for the service and run a loop
     over it to forcefully kill all of the Java processes that match `service_name`.
     Once they''re killed, we exit the module with `failed=False` and a message with
     an exit code of `0`, as you can see in the following code:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后我们检查我们是否得到了该服务的 `PIDS`，并遍历这些 `PIDS` 来强制终止所有与 `service_name` 匹配的 Java 进程。一旦它们被终止，我们通过`failed=False`退出模块，并且附上一个退出码为`0`的消息，如下所示：
 - en: '[PRE25]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'If we do not find any running processes for the service, we will still exit
     the module with an exit code of `0`, because terminating the Ansible run might
     not make sense:'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们没有找到该服务的正在运行的进程，我们仍将以退出码`0`退出模块，因为终止 Ansible 运行可能没有意义：
 - en: '[PRE26]'
+  id: totrans-85
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: You can also terminate the Ansible run by printing `failed=True` with an exit
     code of `1`.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 你也可以通过打印`failed=True`并将退出码设置为`1`来终止 Ansible 运行。
 - en: 'Ansible allows you to return a key-value output if the language itself doesn''t
     support JSON. This makes Ansible more developer and sysadmin-friendly, and allows
     custom modules to be written in any language of your choice. Let''s test the `bash`
     module by passing the arguments file to the module. We can now create an arguments
     file in `/tmp/arguments` that has the `service_name` parameter set to `jenkins`,
     as follows:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果语言本身不支持 JSON，则 Ansible 允许返回键值输出。这使得 Ansible 更加友好于开发人员和系统管理员，并允许以您选择的任何语言编写自定义模块。让我们通过将参数文件传递给模块来测试`bash`模块。现在我们可以在`/tmp/arguments`中创建一个参数文件，将`service_name`参数设置为`jenkins`，如下所示：
 - en: '[PRE27]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'Now, you can run the module like any other bash script. Let''s see what happens
     when we run it with the following code:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，你可以像运行任何其他 bash 脚本一样运行模块。让我们看看当我们用以下代码运行时会发生什么：
 - en: '[PRE28]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'We should receive the following output:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该收到以下输出：
 - en: '[PRE29]'
+  id: totrans-92
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: As expected, the module did not fail even though there was no Jenkins process
     running on the localhost.
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 如预期，即使本地主机上没有运行 Jenkins 进程，模块也没有失败。
 - en: If you receive the `jps command does not exists` error instead of the mentioned
     output, your machine is probably missing Java. If so, you can install it by following
     the instructions for your operating system at [https://www.java.com/en/download/help/download_options.xml](https://www.java.com/en/download/help/download_options.xml).
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你收到 `jps command does not exists` 错误而不是上述输出，那么你的机器可能缺少 Java。如果是这样，你可以按照操作系统的说明安装它：[https://www.java.com/en/download/help/download_options.xml](https://www.java.com/en/download/help/download_options.xml)。
 - en: Using Ruby modules
+  id: totrans-95
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ruby 模块
 - en: 'Writing modules in Ruby is as easy as writing a module in Python or bash. You
     just need to take care of the arguments, errors, return statements, and, of course,
     know basic Ruby! Let''s create the `library/rsync.rb` file with the following
     code. The full code is available on GitHub:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Ruby 中编写模块与在 Python 或 bash 中编写模块一样简单。您只需要注意参数、错误、返回语句，当然还需要了解基本的 Ruby！让我们创建`library/rsync.rb`文件，其中包含以下代码。完整代码可在
+    GitHub 上找到：
 - en: '[PRE30]'
+  id: totrans-97
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: In the preceding module, we first process the user arguments, then copy the
     file using the `rsync` library, and finally, return the output.
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 在前述模块中，我们首先处理用户参数，然后使用`rsync`库复制文件，最后返回输出。
 - en: 'To be able to use this, you need to ensure that the `rsync` library for Ruby
     is present on your system. To do so, you can execute the following command:'
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使用这个功能，您需要确保系统上存在用于 Ruby 的`rsync`库。为此，您可以执行以下命令：
 - en: '[PRE31]'
+  id: totrans-100
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: Let's break down the preceding code and see how it works.
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们逐步分解上述代码，看看它是如何工作的。
 - en: 'We first write a method, `print_message`, which will print the output in a
     JSON format. By doing this, we can reuse the same code in multiple places. Remember,
     the output of your module should contain `failed=true` if you want the Ansible
     run to fail; otherwise, Ansible will think that the module succeeded and will
     continue with the next task. The output that is obtained is as follows:'
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们首先编写一个名为`print_message`的方法，该方法将以 JSON 格式打印输出。通过这样做，我们可以在多个地方重用相同的代码。请记住，如果要使
+    Ansible 运行失败，则您的模块的输出应包含`failed=true`；否则，Ansible 将认为模块成功并将继续进行下一个任务。获得的输出如下所示：
 - en: '[PRE32]'
+  id: totrans-103
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: 'We then process the argument file, which contains a key-value pair separated
     by a whitespace character. This is similar to what we did with the Python module
     earlier, where we took care of parsing out the arguments. We also perform some
@@ -485,51 +649,79 @@
     you deem important. For example, if one of your parameters is a `date` parameter,
     then you''d need to verify that the input is actually the right date. Consider
     the following piece of code, which shows the discussed parameters:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后我们处理参数文件，其中包含由空格字符分隔的键值对。这类似于我们之前使用 Python 模块时所做的，我们负责解析参数。我们还执行一些检查，以确保用户没有漏掉任何必需的参数。在这种情况下，我们检查是否已指定了`src`和`dest`参数，并在未提供参数时打印一条消息。进一步的检查可能包括参数的格式和类型。您可以添加这些检查和您认为重要的任何其他检查。例如，如果您的参数之一是`date`参数，则需要验证输入是否确实是正确的日期。考虑以下代码片段，其中显示了讨论过的参数：
 - en: '[PRE33]'
+  id: totrans-105
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: 'Once we have the required arguments, we will go ahead and copy the file using
     the `rsync` library, as follows:'
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦我们拥有了必需的参数，我们将使用`rsync`库复制文件，如下所示：
 - en: '[PRE34]'
+  id: totrans-107
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: 'Finally, we check if the `rsync` task passed or failed, and then call the `print_message`
     function to print the output on `stdout`, as follows:'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们检查`rsync`任务是通过还是失败，然后调用`print_message`函数将输出打印在`stdout`上，如下所示：
 - en: '[PRE35]'
+  id: totrans-109
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: 'You can test your Ruby module by simply passing the arguments file to the module.
     To do so, we can create the `/tmp/arguments` file with the following content:'
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过简单地将参数文件传递给模块来测试您的 Ruby 模块。为此，我们可以创建`/tmp/arguments`文件，并包含以下内容：
 - en: '[PRE36]'
+  id: totrans-111
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: 'Let''s now run the module, as follows:'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们运行模块，如下所示：
 - en: '[PRE37]'
+  id: totrans-113
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: 'We will receive the following output:'
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将收到以下输出：
 - en: '[PRE38]'
+  id: totrans-115
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: We will leave the `serverspec` testing for you to complete.
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将留下`serverspec`测试由您完成。
 - en: Testing modules
+  id: totrans-117
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 测试模块
 - en: Testing is often undervalued because of the lack of understanding of its purpose
     and the benefits that it can bring to a business. Testing modules are as important
     as testing any other part of the Ansible playbook, because a small change in a
@@ -538,10 +730,12 @@
     and write an integration test using Python's `nose` test framework. Unit tests
     are also encouraged, but for our scenario, where we check whether a user exists
     remotely, an integration test makes more sense.
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
 - en: '`nose` is a Python test framework; you can find out more information about
     this test framework at [https://nose.readthedocs.org/en/latest/](https://nose.readthedocs.org/en/latest/).'
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
 - en: 'To `test` the module, we convert our previous module into a Python class so
@@ -549,28 +743,37 @@
     of the module. The following code shows the `library/check_user_py3.py` restructured
     module, which will check whether a user exists on a remote host. The full code
     is available on GitHub:'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE39]'
+  id: totrans-121
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE39]'
 - en: 'As you can see in the preceding code, we created a class named `User`. We instantiated
     the class and called the `check_if_user_exists` method to check whether the user
     actually exists on the remote machine. It''s time to write an integration test
     now. We assume that you have the `nose` package installed on your system. If not,
     don''t worry! You can still install the package using the following command:'
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE40]'
+  id: totrans-123
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE40]'
 - en: 'Let''s now write the integration test file in `library/test_check_user_py3.py`,
     as follows:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE41]'
+  id: totrans-125
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE41]'
 - en: In the preceding integration test, we import the `nose` package and our `check_user` module.
     We call the `User` class by passing the user that we want to check. We then check
     whether the user exists on the remote host by calling the `check_if_user_exists()`
@@ -580,36 +783,48 @@
     the same file by having multiple methods whose names start with `test_`; for example,
     the `test_check_user_positive()` and `test_check_user_negative()` methods. `nose`
     tests will take all the methods that start with `test_` and execute them.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
 - en: As you can see, we actually created two tests for just one function. This is
     a key part of tests. Always try cases where you know it will work, but also, do
     not forget to test cases where you expect it to fail.
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
 - en: 'We can now test whether it works by running `nose` with the following code:'
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE42]'
+  id: totrans-129
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE42]'
 - en: 'You should receive an output that is similar to the following code block:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE43]'
+  id: totrans-131
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE43]'
 - en: As you can see, the test passed because the `root` user existed on the host,
     while the `this_user_does_not_exists` user did not.
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
 - en: We use the `-v` option with `nose` tests for the **verbose** mode.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
 - en: For more complicated modules, we recommend that you write unit tests and integration
     tests. You might be wondering why we didn't use `serverspec` to test the module.
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于更复杂的模块，我们建议您编写单元测试和集成测试。您可能会想知道为什么我们没有使用 `serverspec` 来测试模块。
 - en: We still recommend running `serverspec` tests for functional testing as part
     of playbooks; however, for unit and integration tests, it's recommended to use
     well-known frameworks. Similarly, if you write Ruby modules, we recommend that
@@ -617,23 +832,34 @@
     module has multiple parameters with multiple combinations, then you will write
     more tests to test each scenario. Finally, we recommend that you run all these
     tests as part of your CI system, be it Jenkins, Travis, or any other system.
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们仍然建议将 `serverspec` 测试作为 playbook 的功能测试的一部分进行运行；然而，对于单元测试和集成测试，建议使用知名框架。同样，如果您编写了
+    Ruby 模块，我们建议您使用诸如 `rspec` 等框架为其编写测试。如果您的自定义 Ansible 模块具有多个参数和多个组合，则您将编写更多的测试来测试每个场景。最后，我们建议您将所有这些测试作为您的
+    CI 系统的一部分运行，无论是 Jenkins、Travis 还是其他任何系统。
 - en: Summary
+  id: totrans-136
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: With this, we come to the end of this rather small but important chapter, which
     focused on how you can extend Ansible by writing your own custom modules. You
     learned how to use Python, bash, and Ruby in order to write your modules. We've
     also learned how to write integration tests for modules so that they can be integrated
     into your CI system. In the future, hopefully, extending your Ansible functionality
     by using modules will be much easier!
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 到此，我们结束了这一小而重要的章节，重点介绍了如何通过编写自定义模块来扩展 Ansible。您学会了如何使用 Python、bash 和 Ruby 来编写自己的模块。我们还学习了如何为模块编写集成测试，以便将其集成到您的
+    CI 系统中。希望未来通过使用模块来扩展 Ansible 的功能将会更加容易！
 - en: In the next chapter, we will step into the world of provisioning, deployment,
     and orchestration, and look at how Ansible solves our infrastructure problems
     when we provision new instances or want to deploy software updates to various
     instances in our environments. We promise that this journey will be fun!
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将进入供应、部署和编排的世界，看看当我们为环境中的各种实例提供新的实例或者想要将软件更新部署到各种实例时，Ansible 如何解决我们的基础设施问题。我们承诺这段旅程将会很有趣！

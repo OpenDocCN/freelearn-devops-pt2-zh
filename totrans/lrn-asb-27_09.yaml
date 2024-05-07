@@ -1,26 +1,38 @@
 - en: 'Section 3: Deploying an Application with Ansible'
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第3节：使用 Ansible 部署应用
 - en: This section explains how to debug and test Ansible to ensure that your playbooks
     will always work. You will also learn how to manage multiple tiers, multiple environments,
     and multiple deployments with Ansible.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节将解释如何调试和测试 Ansible 以确保您的 Playbook 总是正常工作。您还将学习如何使用 Ansible 管理多个层、多个环境和多个部署。
 - en: 'This section contains the following chapters:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节包括以下章节：
 - en: '[Chapter 7](9ed0a9f7-acec-46a5-8a0a-e8bff446d182.xhtml), *Creating a Custom
     Module*'
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第7章](9ed0a9f7-acec-46a5-8a0a-e8bff446d182.xhtml)，*创建自定义模块*'
 - en: '[Chapter 8](c5a73aea-8705-43dd-888a-f635e93e40b2.xhtml), *Debugging and Error
     Handling*'
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第8章](c5a73aea-8705-43dd-888a-f635e93e40b2.xhtml)，*调试和错误处理*'
 - en: '[Chapter 9](0dff9ffa-3121-48cd-80b5-d59a14310f09.xhtml), *Complex Environments*'
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第9章](0dff9ffa-3121-48cd-80b5-d59a14310f09.xhtml)，*复杂环境*'
