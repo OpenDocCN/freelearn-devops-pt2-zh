@@ -1488,6 +1488,7 @@
   id: totrans-225
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Vault还提供了加密已经存在的文件的功能。如果您想要在受信任的机器上（例如，您自己的本地机器）上以明文形式开发所有文件以提高效率，然后在之后加密所有敏感文件，这将特别有用。为此，您可以执行以下操作：
 - en: '[PRE57]'
   id: totrans-226
   prefs: []
@@ -1497,6 +1498,7 @@
   id: totrans-227
   prefs: []
   type: TYPE_NORMAL
+  zh: 您现在可以检查`secret.yaml`文件是否再次加密。
 - en: The last option of the Ansible Vault is very important since it's a `rekey`
     function. This function will allow you to change the encryption key in a single
     command. You could perform the same operation with two commands (decrypt the `secret.yaml`
@@ -1506,12 +1508,14 @@
   id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Vault的最后一个选项非常重要，因为它是一个`rekey`功能。此功能将允许您在单个命令中更改加密密钥。您可以使用两个命令执行相同的操作（使用**旧密钥**解密`secret.yaml`文件，然后使用**新密钥**加密它），但能够在单个步骤中执行此操作具有重大优势，因为文件以明文形式存储在磁盘上的任何时刻都不会被存储。
 - en: 'To do so, we need a file containing the new password (in our case, the file
     called `.newpassword` and containing the `ansible2` string), and you need to execute
     the following command:'
   id: totrans-229
   prefs: []
   type: TYPE_NORMAL
+  zh: 为此，我们需要一个包含新密码的文件（在我们的情况下，文件名为`.newpassword`，包含字符串`ansible2`），并且您需要执行以下命令：
 - en: '[PRE58]'
   id: totrans-230
   prefs: []
@@ -1522,6 +1526,7 @@
   id: totrans-231
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在可以使用`cat`命令查看`secret.yaml`文件，我们将看到以下输出：
 - en: '[PRE59]'
   id: totrans-232
   prefs: []
@@ -1531,16 +1536,19 @@
   id: totrans-233
   prefs: []
   type: TYPE_NORMAL
+  zh: 这与我们以前的非常不同。
 - en: Vaults and playbooks
   id: totrans-234
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 保险库和播放脚本
 - en: 'You can also use vaults with `ansible-playbook`. You''ll need to decrypt the
     file on-the-fly using a command such as the following:'
   id: totrans-235
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还可以使用`ansible-playbook`与保险库。您需要使用如下命令动态解密文件：
 - en: '[PRE60]'
   id: totrans-236
   prefs: []
@@ -1553,6 +1561,7 @@
   id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: 还有另一个选项允许您使用脚本解密文件，该脚本然后可以查找其他源并解密文件。这也可以是提供更多安全性的有用选项。但是，请确保`get_password.py`脚本具有可执行权限：
 - en: '[PRE61]'
   id: totrans-238
   prefs: []
@@ -1565,6 +1574,7 @@
   id: totrans-239
   prefs: []
   type: TYPE_NORMAL
+  zh: 在结束本章之前，我想稍微谈谈密码文件。此文件需要存在于执行playbooks的机器上，在位置和权限方面，以便由执行playbook的用户可读取。您可以在启动时创建`.password`文件。
 - en: The `.` character in the `.password` filename is to make sure that the file
     is hidden by default when you look for it. This is not directly a security measure,
     but it could help mitigate cases where an attacker does not know exactly what
@@ -1572,21 +1582,25 @@
   id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: '`.password`文件名中的`.`字符是为了确保文件默认隐藏在查找时。这不直接是一项安全措施，但它可能有助于减轻攻击者不知道他们正在寻找什么的情况。'
 - en: The `.password` file content should be a password or key that is secure and
     accessible only to folks who have permission to run Ansible playbooks.
   id: totrans-241
   prefs: []
   type: TYPE_NORMAL
+  zh: '`.password`文件内容应该是一个安全且只能由具有运行Ansible playbooks权限的人员访问的密码或密钥。'
 - en: Finally, make sure that you're not encrypting every file that's available! Ansible
     Vault should be used only for important information that needs to be secure.
   id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，请确保您没有加密每个可用的文件！ Ansible Vault应仅用于需要安全的重要信息。
 - en: Encrypting user passwords
   id: totrans-243
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 加密用户密码
 - en: Ansible Vault takes care of passwords that are checked in and helps you to handle
     them while running Ansible playbooks or commands. However, when Ansible plays
     are run, at times, you might need your users to enter passwords. You also want
@@ -1595,101 +1609,121 @@
   id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Vault负责检查已检入的密码，并在运行Ansible playbooks或命令时帮助您处理它们。但是，在运行Ansible play时，有时您可能需要用户输入密码。您还希望确保这些密码不会出现在详尽的Ansible日志（默认`/var/log/ansible.log`位置）或`stdout`上。
 - en: 'Ansible uses `Passlib`, which is a password-hashing library for Python, to
     handle encryption for prompted passwords. You can use any of the following algorithms
     supported by `Passlib`:'
   id: totrans-245
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 使用 `Passlib`，这是一个用于 Python 的密码哈希库，用于处理提示密码的加密。您可以使用 `Passlib` 支持的以下任何算法：
 - en: '`des_crypt`: DES crypt'
   id: totrans-246
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`des_crypt`: DES 加密'
 - en: '`bsdi_crypt`: BSDi crypt'
   id: totrans-247
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`bsdi_crypt`: BSDi 加密'
 - en: '`bigcrypt`: BigCrypt'
   id: totrans-248
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`bigcrypt`: BigCrypt'
 - en: '`crypt16`: Crypt16'
   id: totrans-249
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`crypt16`: Crypt16'
 - en: '`md5_crypt`: MD5 crypt'
   id: totrans-250
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`md5_crypt`: MD5 加密'
 - en: '`bcrypt`: BCrypt'
   id: totrans-251
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`bcrypt`: BCrypt'
 - en: '`sha1_crypt`: SHA-1 crypt'
   id: totrans-252
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`sha1_crypt`: SHA-1 加密'
 - en: '`sun_md5_crypt`: Sun MD5 crypt'
   id: totrans-253
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`sun_md5_crypt`: Sun MD5 加密'
 - en: '`sha256_crypt`: SHA-256 crypt'
   id: totrans-254
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`sha256_crypt`: SHA-256 加密'
 - en: '`sha512_crypt`: SHA-512 crypt'
   id: totrans-255
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`sha512_crypt`: SHA-512 加密'
 - en: '`apr_md5_crypt`: Apache''s MD5-crypt variant'
   id: totrans-256
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`apr_md5_crypt`: Apache 的 MD5-crypt 变体'
 - en: '`phpass`: PHPass portable hash'
   id: totrans-257
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`phpass`: PHPass 可移植哈希'
 - en: '`pbkdf2_digest`: Generic PBKDF2 hashes'
   id: totrans-258
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`pbkdf2_digest`: 通用 PBKDF2 哈希'
 - en: '`cta_pbkdf2_sha1`: Cryptacular''s PBKDF2 hash'
   id: totrans-259
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`cta_pbkdf2_sha1`: Cryptacular 的 PBKDF2 哈希'
 - en: '`dlitz_pbkdf2_sha1`: Dwayne Litzenberger''s PBKDF2 hash'
   id: totrans-260
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`dlitz_pbkdf2_sha1`: Dwayne Litzenberger 的 PBKDF2 哈希'
 - en: '`scram`: SCRAM hash'
   id: totrans-261
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`scram`: SCRAM 哈希'
 - en: '`bsd_nthash`: FreeBSD''s MCF-compatible `nthash` encoding'
   id: totrans-262
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`bsd_nthash`: FreeBSD 的 MCF 兼容 `nthash` 编码'
 - en: 'Let''s now see how encryption works with a variable prompt:'
   id: totrans-263
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们看看如何使用变量提示进行加密：
 - en: '[PRE62]'
   id: totrans-264
   prefs: []
@@ -1699,15 +1733,18 @@
   id: totrans-265
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述代码片段中，`vars_prompt` 用于提示用户输入一些数据。
 - en: This will prompt the user for the password, similarly to how SSH does it.
   id: totrans-266
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将提示用户输入密码，类似于 SSH 的方式。
 - en: 'The `name` key indicates the actual variable name where Ansible will store
     the user password, as shown in the following command:'
   id: totrans-267
   prefs: []
   type: TYPE_NORMAL
+  zh: '`name` 键指示 Ansible 将存储用户密码的实际变量名，如下所示：'
 - en: '[PRE63]'
   id: totrans-268
   prefs: []
@@ -1717,6 +1754,7 @@
   id: totrans-269
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们使用 `prompt` 键提示用户输入密码，如下所示：
 - en: '[PRE64]'
   id: totrans-270
   prefs: []
@@ -1728,6 +1766,8 @@
   id: totrans-271
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们通过使用 `private` 键显式要求 Ansible 隐藏密码不输出到 `stdout`；这与 Unix 系统上的任何其他密码提示相似。`private`
+    键的访问方式如下所示：
 - en: '[PRE65]'
   id: totrans-272
   prefs: []
@@ -1737,6 +1777,7 @@
   id: totrans-273
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在此处使用 `md5_crypt` 算法，并使用 `7` 作为盐的大小：
 - en: '[PRE66]'
   id: totrans-274
   prefs: []
@@ -1746,6 +1787,7 @@
   id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，Ansible 将提示两次密码并比较两个密码：
 - en: '[PRE67]'
   id: totrans-276
   prefs: []
@@ -1756,6 +1798,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 隐藏密码
 - en: 'Ansible, by default, filters output that contains the `login_password` key,
     the `password` key, and the `user:pass` format. For example, if you are passing
     a password in your module using `login_password` or the `password` key, then Ansible
@@ -1764,6 +1807,9 @@
   id: totrans-278
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，Ansible 过滤包含 `login_password` 键、`password` 键和 `user:pass` 格式的输出。例如，如果您正在使用
+    `login_password` 或 `password` 键传递密码，则 Ansible 将使用 `VALUE_HIDDEN` 替换您的密码。现在让我们看看如何使用
+    `password` 键隐藏密码：
 - en: '[PRE68]'
   id: totrans-279
   prefs: []
@@ -1774,12 +1820,14 @@
   id: totrans-280
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述 `shell` 任务中，我们使用 `password` 键来传递密码。这将使 Ansible 能够隐藏它在 `stdout` 和其日志文件中。
 - en: 'Now, when you run the preceding task in the *verbose* mode, you should not
     see your `mypass` password; instead Ansible, with `VALUE_HIDDEN`, will replace
     it as follows:'
   id: totrans-281
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，当您以*详细*模式运行上述任务时，您不应该看到您的 `mypass` 密码；相反，Ansible 将使用 `VALUE_HIDDEN` 替换它，如下所示：
 - en: '[PRE69]'
   id: totrans-282
   prefs: []
@@ -1790,6 +1838,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 `no_log`
 - en: Ansible will hide your passwords only if you are using a specific set of keys.
     However, this might not be the case every time; moreover, you might also want
     to hide some other confidential data. The `no_log` feature of Ansible will hide
@@ -1798,15 +1847,19 @@
   id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 只有在使用特定的键时，Ansible 才会隐藏您的密码。然而，这可能并非每次都是这样；此外，您可能还想隐藏其他一些机密数据。Ansible 的 `no_log`
+    功能将隐藏整个任务，防止其记录到 `syslog` 文件中。它仍将在 `stdout` 上打印您的任务，并记录到其他 Ansible 日志文件中。
 - en: At the time of writing this book, Ansible did not support hiding tasks from
     `stdout` using `no_log`.
   id: totrans-285
   prefs: []
   type: TYPE_NORMAL
+  zh: 在撰写本书时，Ansible 不支持使用 `no_log` 从 `stdout` 隐藏任务。
 - en: 'Let''s now see how you can hide an entire task with `no_log`:'
   id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们看看如何使用 `no_log` 隐藏整个任务：
 - en: '[PRE70]'
   id: totrans-287
   prefs: []
@@ -1817,11 +1870,13 @@
   id: totrans-288
   prefs: []
   type: TYPE_NORMAL
+  zh: '通过将 `no_log: True` 传递给您的任务，Ansible 将防止整个任务被记录到 `syslog` 中。'
 - en: Summary
   id: totrans-289
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概要
 - en: In this chapter, we have seen a very large number of Ansible features. We started
     with `local_actions` for performing operations on a machine, and then we moved
     on to delegation for performing the task on a third machine. We then moved on
