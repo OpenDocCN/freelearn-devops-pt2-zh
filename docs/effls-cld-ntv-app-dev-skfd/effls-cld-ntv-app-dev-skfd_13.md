@@ -1,4 +1,4 @@
-# 第十章：*第十章*：探索 Skaffold 替代方案、最佳实践和陷阱
+# 第十章：探索 Skaffold 替代方案、最佳实践和陷阱
 
 在上一章中，您了解了如何使用 GitHub Actions 和 Skaffold 为 Spring Boot 应用程序创建 CI/CD 流水线。在本章中，我们将首先看看市场上提供类似功能的其他工具。我们将了解开发人员在使用 Skaffold 开发云原生 Kubernetes 应用程序时可以遵循的技巧和诀窍。最后，我们将了解开发人员通常可以避免的 Skaffold 陷阱。
 

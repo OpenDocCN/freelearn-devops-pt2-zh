@@ -1,4 +1,4 @@
-# 第四章：*第四章*：Ansible 和 Windows-不仅仅适用于 Linux
+# 第四章：Ansible 和 Windows-不仅仅适用于 Linux
 
 大量的工作都是在 Linux 操作系统上进行的；事实上，本书的前两版完全围绕在 Linux 中使用 Ansible 展开。然而，大多数环境并不是这样的，至少会有一些微软 Windows 服务器和桌面机器。自本书的第三版出版以来，Ansible 已经进行了大量工作，创建了一个真正强大的跨平台自动化工具，它在 Linux 数据中心和 Windows 数据中心同样得心应手。当然，Windows 和 Linux 主机的操作方式存在根本差异，因此并不奇怪，Ansible 在 Linux 上自动化任务的方式与在 Windows 上自动化任务的方式之间存在一些根本差异。
 

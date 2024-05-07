@@ -1,4 +1,4 @@
-# 第九章：*第九章*：使用 Skaffold 创建一个生产就绪的 CI/CD 流水线
+# 第九章：使用 Skaffold 创建一个生产就绪的 CI/CD 流水线
 
 在上一章中，我们学习了如何使用 Skaffold 将 Spring Boot 应用部署到 Google Cloud Platform。在本章中，重点将介绍 GitHub Actions 及其相关概念。我们还将演示如何使用 Skaffold 和 GitHub Actions 创建一个生产就绪的 Spring Boot 应用的**持续集成（CI）**和**持续部署（CD）**流水线。在最后一节中，我们将熟悉 GitOps 概念，并学习如何使用 Argo CD 和 Skaffold 为 Kubernetes 应用创建持续交付流水线。
 
