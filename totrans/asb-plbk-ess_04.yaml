@@ -1,40 +1,50 @@
 - en: Chapter 3. Separating Code and Data – Variables, Facts, and Templates
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: In the previous chapter, we looked at how to write a role to provide modularity
     and abstraction. While doing so, we created the configuration file and copied
     the file over to the destination host using Ansible's copy module.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
 - en: 'In this chapter, we will cover the following concepts:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
 - en: How do you separate data from code?
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: What are Jinja2 templates? How are these created?
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: What are variables? How and where are they used?
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: What are system facts? How are they discovered?
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: What are the different types of variables?
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: What is a variable merge order? What are its precedence rules?
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Static content explosion
+  id: totrans-9
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -50,17 +60,21 @@
     that takes dynamic inputs, which are specific to the host it''s running on? This
     is exactly what templates are for and, as depicted in the following diagram, a
     single template could replace a multitude of static files:'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
 - en: '![Static content explosion](img/B03800_03_01.jpg)'
+  id: totrans-11
   prefs: []
   type: TYPE_IMG
 - en: Before we define what a template is, let's begin by understanding how to separate
     code from data and how this would help us solve the problem of static content
     explosion.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
 - en: Separating code and data
+  id: totrans-13
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -71,36 +85,45 @@
     at all times, no matter who installs and configures them. What is not constant
     are the values those parameters take. That''s what is specific to our organization.
     So, for this, we would decide the following:'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
 - en: Which port should Nginx run on?
+  id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Which user should own the web server process?
+  id: totrans-16
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Where should the log files go?
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: How many worker processes should be run?
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Our organization-specific policies may also require us to pass different values
     to these parameters based on the environment or geography the hosts run in.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
 - en: 'Ansible splits these in to two parts:'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
 - en: The code that is generic
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The data that is specific to an organization
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -113,34 +136,42 @@
     or even on GitHub, fueling the growth of tools, such as Ansible. Instead of reinventing
     the wheel, you can download the code that someone else has written, customize
     it, fill in the data specific to the code, and get the work done.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
 - en: 'Now, how is this code separate from the data? The answer is that Ansible has
     two primitives:'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
 - en: Jinja templates (code)
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The variables (data)
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'The following diagram explains how the resulting file is generated from templates
     and variables:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
 - en: '![Separating code and data](img/B03800_03_02.jpg)'
+  id: totrans-28
   prefs: []
   type: TYPE_IMG
 - en: Templates provide placeholders in place of parameter values, which are then
     defined in variables. Variables can then be fed in from various places, including
     roles, playbooks, inventories, and even from the command line when you launch
     Ansible. Let's now understand templates and variables in detail.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
 - en: Jinja2 templates
+  id: totrans-30
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -149,28 +180,35 @@
     for most users, just like other Python-based configuration management systems,
     such as **Fabric** and **SaltStack**. The name Jinja originated from the Japanese
     word for temple, which is similar in phonetics to the word template.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
 - en: 'Some of the important features of Jinja2 are:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
 - en: It is fast and compiled just in time with the Python byte code
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: It has an optional sandboxed environment
+  id: totrans-34
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: It is easy to debug
+  id: totrans-35
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: It supports template inheritance
+  id: totrans-36
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The template formation
+  id: totrans-37
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
@@ -179,27 +217,34 @@
     mostly replaced by values at runtime, creating a text file, which is then copied
     to the destination host. The following are the two types of tags that Jinja2 templates
     accept:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
 - en: '`{{ }}` embeds variables inside a template and prints its value in the resulting
     file. This is the most common use of a template.'
+  id: totrans-39
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'For example:'
+  id: totrans-40
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
 - en: '[PRE0]'
+  id: totrans-41
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: '`{% %}` embeds statements of code inside a template, for example, for a loop,
     it embeds the if-else statements, which are evaluated at runtime but are not printed.'
+  id: totrans-42
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Facts and variables
+  id: totrans-43
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -209,223 +254,305 @@
     the same rules apply to the usage of facts and variables. Facts are a type of
     variable; the differentiating factor here is the origin of the two. Facts are
     automatically available and discovered at runtime, and variables are user-defined.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经看过了 Jinja2 模板提供的代码，让我们来理解数据来自何处，然后在运行时嵌入到模板中。数据可以来自事实或变量。当涉及到 Jinja2 模板时，相同的规则适用于事实和变量的使用。事实是一种变量；这里的区别因素是两者的来源。事实在运行时自动可用并发现，而变量是用户定义的。
 - en: Automatic variables – facts
+  id: totrans-45
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 自动变量 - 事实
 - en: 'A lot of data in our systems is automatically discovered and made available
     to Ansible by the managed hosts during the handshake process. This data is very
     useful and tells us everything about that system, such as:'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们系统中的许多数据是在握手过程中由托管主机自动发现和提供给 Ansible 的。这些数据非常有用，告诉我们关于该系统的一切，例如：
 - en: The hostname, network interface, and IP address
+  id: totrans-47
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 主机名、网络接口和 IP 地址
 - en: The system architecture
+  id: totrans-48
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 系统架构
 - en: The operating system
+  id: totrans-49
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 操作系统
 - en: The disk drives
+  id: totrans-50
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 磁盘驱动器
 - en: The processor used and amount of memory
+  id: totrans-51
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用的处理器和内存量
 - en: Whether it is a VM; if yes, is it a virtualization/cloud provider?
+  id: totrans-52
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 是否是虚拟机；如果是，是虚拟化/云提供商吗？
 - en: Tip
+  id: totrans-53
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: Facts are collected at the very beginning of an Ansible run. Remember the line
     in the output that says **GATHERING FACTS *********? That's exactly when this
     happens.
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 事实是在 Ansible 运行的最开始收集的。记住输出中的那行说 **GATHERING FACTS ********* 吗？这正是发生这种情况的时候。
 - en: 'You can find facts about any system by running the following command followed
     by a shortened output:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过运行以下命令然后跟一个简短的输出来查找有关任何系统的事实：
 - en: '[PRE1]'
+  id: totrans-56
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'The preceding output is in Ansible''s own format and uses its core setup module.
     Akin to the setup module, there is another module by the name `facter`, which
     discovers and displays facts in the format discovered with Puppet, another configuration
     management system. The following is an example of how to use the `facter` module
     to discover facts for the same host:'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 上述输出是以 Ansible 自己的格式并使用其核心设置模块。类似于设置模块，还有另一个名为 `facter` 的模块，它发现并显示与 Puppet 发现的格式相同的事实，另一个配置管理系统。以下是如何使用
+    `facter` 模块为同一主机发现事实的示例：
 - en: '[PRE2]'
+  id: totrans-58
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: While using the `facter` module, a point that you need to note is that this
     module is not a core module and comes as part of extra modules. Extras modules
     are a subset of the Ansible module, which is used less frequently and is less
     popular in comparison with the core modules. Moreover, to use the `facter` module,
     you require the "`facter`" and "`ruby-json`" packages preinstalled on the target
     host.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 在使用 `facter` 模块时，您需要注意的一点是，该模块不是核心模块，而是作为额外模块的一部分提供的。额外模块是 Ansible 模块的一个子集，它的使用频率较低，与核心模块相比较不流行。此外，要使用
+    `facter` 模块，您需要在目标主机上预安装 "`facter`" 和 "`ruby-json`" 包。
 - en: User-defined variables
+  id: totrans-60
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 用户定义的变量
 - en: 'We looked at facts, which are automatically available, and the amount of data
     that is discovered is overwhelming. However, it does not provide us with every
     attribute of our infrastructure that we need. For example, Ansible can not discover:'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们看了自动可用的事实，并且发现的数据量是压倒性的。然而，它并不能为我们提供我们需要的基础设施的每个属性。例如，Ansible 无法发现：
 - en: Which port we want our web server to listen to
+  id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们想让我们的 Web 服务器监听哪个端口
 - en: Which user should own a process
+  id: totrans-63
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 哪个用户应该拥有一个进程
 - en: Which system the users need to create, with which authorization rules
+  id: totrans-64
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用户需要创建的系统，以及授权规则
 - en: All this data is external to a system profile and is to be provided by us, the
     users. It's user-defined for sure, but how and where should we define it? That's
     what we are going to look at next.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 所有这些数据都是外部的系统概要，并由我们，用户，提供。这肯定是用户定义的，但我们应该如何在哪里定义它？这就是我们接下来要看的。
 - en: Where to define a variable
+  id: totrans-66
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 在哪里定义一个变量
 - en: Where a variable can be defined from is a complex phenomenon, as Ansible offers
     abundant choices in this regard. This also offers a lot of flexibility to users
     to configure portions of their infrastructures divergently. For example, all Linux
     hosts in a production environment should use local package repositories or web
     servers in staging and should run on the port 8080\. All this without changing
     the code, and driven by data alone is done, by variables.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
 - en: 'The following are the places from where Ansible accepts variables:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
 - en: The `default` directory inside a role
+  id: totrans-69
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Inventory variables
+  id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The `host_vars` and `group_vars` parameters defined in separate directories
+  id: totrans-71
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: The `host/group vars` parameter defined in an inventory file
+  id: totrans-72
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: Variables in playbooks and role parameters
+  id: totrans-73
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The `vars` directory inside a role and variables defined inside a play
+  id: totrans-74
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Extra variables provided with the `-e` option at runtime
+  id: totrans-75
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: How to define a variable
+  id: totrans-76
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
 - en: After looking at where to define the variable from, we will start looking at
     how to define it at various places.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
 - en: 'Here are some simple rules you can use to form a valid Ansible variable:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
 - en: A variable should always start with a letter
+  id: totrans-79
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'It can contain:'
+  id: totrans-80
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Letters
+  id: totrans-81
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: Numbers
+  id: totrans-82
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: Underscores
+  id: totrans-83
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'Let''s take a look at the following table:'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
 - en: '| Valid variable | Invalid variable |'
+  id: totrans-85
   prefs: []
   type: TYPE_TB
 - en: '| --- | --- |'
+  id: totrans-86
   prefs: []
   type: TYPE_TB
 - en: '| `app_port` | `app-port` |'
+  id: totrans-87
   prefs: []
   type: TYPE_TB
 - en: '| `userid_5` | `5userid` |'
+  id: totrans-88
   prefs: []
   type: TYPE_TB
 - en: '| `logdir` | `log.dir` |'
+  id: totrans-89
   prefs: []
   type: TYPE_TB
 - en: We looked at the precedence rules and now we know that there are multiple places
     where you can define variables. Irrespective of the precedence levels, all use
     the same syntax to define a variable.
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
 - en: 'To define a simple variable in a key-value pair format, use, `var: value`,
     for example:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE3]'
+  id: totrans-92
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'A dictionary or hash can be defined as Nginx:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE4]'
+  id: totrans-94
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'An array could be defined as:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE5]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Templating the Nginx configurations
+  id: totrans-97
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -433,171 +560,240 @@
     our Nginx role to be data driven. We will start templating the `default.conf`
     file for Nginx that we created earlier. The approach toward converting a file
     into a template would be as follows:'
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
 - en: 'Create the directories required to hold templates and default variables inside
     a role:'
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE6]'
+  id: totrans-100
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Always start with the actual configuration file, our end result of this process,
     to know all of the parameters it would take. Then, work backwards. For example,
     the configuration for the `default.conf` file on our system is as follows:'
+  id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE7]'
+  id: totrans-102
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Identify the configuration parameters that you would like to generate dynamically,
     remove the values for those parameters, note them down separately, and replace
     them with template variables:'
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE8]'
+  id: totrans-104
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'If the values for any of the configuration parameters are supposed to be sourced
     from facts, typically system parameters or topology information, such as the hostname,
     IP address, and so on, then find out the relevant facts with the help of the following
     command:'
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'For example:'
+  id: totrans-106
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
 - en: '[PRE9]'
+  id: totrans-107
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'To find out the hostname of the system:'
+  id: totrans-108
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
 - en: '[PRE10]'
+  id: totrans-109
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Use the discovered fact inside the template instead of a user-defined variable.
     For example:'
+  id: totrans-110
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: '[PRE11]'
+  id: totrans-111
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Save the resulting file inside the template''s directory, ideally with the
     `.j2` extension. For example, for `roles/nginx/templates/default.conf.j2`, the
     resulting file becomes:'
+  id: totrans-112
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将结果文件保存在模板目录中，最好使用`.j2`扩展名。例如，对于`roles/nginx/templates/default.conf.j2`，结果文件如下所示：
 - en: '[PRE12]'
+  id: totrans-113
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'Create `roles/nginx/defaults/main.yml` and store the sane defaults as follows:'
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建`roles/nginx/defaults/main.yml`并将默认值存储如下：
 - en: '[PRE13]'
+  id: totrans-115
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: Once the template has been created, change the task in the `configure.yml` file
     to use the template instead of the copy module:![Templating the Nginx configurations](img/B03800_03_04.jpg)
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦模板创建完成，将`configure.yml`文件中的任务更改为使用模板而不是复制模块:![模板化 Nginx 配置](img/B03800_03_04.jpg)
 - en: 'Finally, it''s time to remove the static file we used earlier with the copy
     module:'
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 最后，到了删除我们之前使用复制模块的静态文件的时候：
 - en: '[PRE14]'
+  id: totrans-118
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'Then it''s time to run the Ansible playbook:'
+  id: totrans-119
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 然后是运行 Ansible playbook 的时间：
 - en: '[PRE15]'
+  id: totrans-120
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Let''s take a look at the following screenshot:'
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们来看一下以下的屏幕截图：
 - en: '![Templating the Nginx configurations](img/B03800_03_05.jpg)'
+  id: totrans-122
   prefs: []
   type: TYPE_IMG
+  zh: '![模板化 Nginx 配置](img/B03800_03_05.jpg)'
 - en: 'Let''s analyze what happened during this run:'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们分析此次运行中发生的情况：
 - en: We changed the configuration task to use the template instead of the copy module,
     which is reflected in the screenshot when a task shows its changed status
+  id: totrans-124
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将配置任务更改为使用模板而不是复制模块，这在任务显示其更改状态时在屏幕截图中反映出来。
 - en: Since the task has been updated, a notification gets triggered, which calls
     the handler to restart the service
+  id: totrans-125
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 由于任务已更新，会触发通知，该通知调用处理程序以重新启动服务。
 - en: 'Our code tree for the Nginx role looks like the following after we make this
     change:'
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们的 Nginx 角色的代码树在进行此更改后如下所示：
 - en: '![Templating the Nginx configurations](img/B03800_03_06.jpg)'
+  id: totrans-127
   prefs: []
   type: TYPE_IMG
+  zh: '![模板化 Nginx 配置](img/B03800_03_06.jpg)'
 - en: Adding another layer – the MySQL role
+  id: totrans-128
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 添加另一个层——MySQL 角色。
 - en: So far, we have been focusing on the single tier of our infrastructure, that
     is, the web server layer. Writing code for just one tier is not a lot of fun.
     Being a cool DevOps team, we will create a multi-tier infrastructure with database,
     web server, and then, a load balancer. We will start creating the MySQL role next,
     apply everything that we have learnt so far, and extend that knowledge with a
     few new concepts.
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们一直关注基础架构的单个层，即 web 服务器层。仅为一个层编写代码并不有趣。作为一个酷炫的 DevOps 团队，我们将创建一个具有数据库、web
+    服务器和负载均衡器的多层基础架构。接下来，我们将开始创建 MySQL 角色，应用到目前为止学到的所有知识，并扩展这些知识以涵盖一些新概念。
 - en: 'Here is our specification for the MySQL role:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是我们的 MySQL 角色规范：
 - en: It should install the MySQL server package
+  id: totrans-131
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它应该安装 MySQL 服务器包。
 - en: It should configure '`my.cnf`', which is the main configuration for the MySQL
     server
+  id: totrans-132
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它应该配置 '`my.cnf`'，这是 MySQL 服务器的主配置。
 - en: It should start the MySQL server daemon
+  id: totrans-133
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它应该启动 MySQL 服务器守护进程。
 - en: It should support Ubuntu 12.04 as well as CentOS/RedHat Enterprise 6.x
+  id: totrans-134
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它应该支持 Ubuntu 12.04 以及 CentOS/RedHat Enterprise 6.x。
 - en: Creating the scaffolding for the roles with Ansible-Galaxy
+  id: totrans-135
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 使用 Ansible-Galaxy 创建角色的脚手架。
 - en: So far, we have been doing all the hard work to understand and create the directory
     structure required by the roles. However, to make our lives easier, Ansible ships
     with a tool called **Ansible-Galaxy**, which should help us initialize a role
@@ -605,92 +801,137 @@
     Ansible-Galaxy actually does more than that. It's a utility to connect to the
     repository of the freely available Ansible roles hosted at [http://galaxy.ansible.com](http://galaxy.ansible.com).
     This is similar to the way we use **CPAN** or **RubyGems**.
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们一直在努力理解和创建角色所需的目录结构。然而，为了让我们的工作更轻松，Ansible 提供了一个叫做**Ansible-Galaxy**的工具，它可以帮助我们自动创建脚手架并遵循最佳实践。实际上，Ansible-Galaxy的功能不仅仅是如此。它还是一个连接到[http://galaxy.ansible.com](http://galaxy.ansible.com)上免费可用的
+    Ansible 角色仓库的实用工具。这类似于我们使用**CPAN**或**RubyGems**的方式。
 - en: 'Let''s start by initializing the MySQL role with Ansible-Galaxy using the following
     command:'
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们首先使用以下命令使用 Ansible-Galaxy 对 MySQL 角色进行初始化：
 - en: '[PRE16]'
+  id: totrans-138
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'Here, the following is the analysis of the preceding command:'
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，以下是对前面命令的分析：
 - en: '`init`: This is the subcommand given to Ansible-Galaxy to create the scaffolding'
+  id: totrans-140
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`init`：这是传递给 Ansible-Galaxy 的子命令，用于创建脚手架。'
 - en: '`--init-path` or `-p`: These provide the path to the roles directory, under
     which the directory structure is created'
+  id: totrans-141
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`--init-path`或`-p`：这些提供了角色目录路径，在该路径下创建目录结构。'
 - en: '`mysql`: This is the name of the role'
+  id: totrans-142
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`mysql`：这是角色的名称。'
 - en: 'Let''s take a look at the following screenshot:'
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们来看一下以下的屏幕截图：
 - en: '![Creating the scaffolding for the roles with Ansible-Galaxy](img/B03800_03_07.jpg)'
+  id: totrans-144
   prefs: []
   type: TYPE_IMG
+  zh: '![使用Ansible-Galaxy创建角色的支架](img/B03800_03_07.jpg)'
 - en: The preceding diagram shows the directory layout created after you initialize
     the role with Ansible-Galaxy, which creates an empty role with a structure suitable
     for upload on to Galaxy. It also initializes the necessary components, including
     tasks, handlers, vars, and meta files with placeholders.
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 在使用Ansible-Galaxy初始化角色后创建的目录布局如上图所示，它创建了一个空角色，具有适用于Galaxy上传的结构。它还初始化了必要的组件，包括任务、处理程序、变量和带有占位符的元文件。
 - en: Adding metadata to the role
+  id: totrans-146
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 向角色添加元数据
 - en: 'We used the `meta` file earlier to specify the dependency on another role.
     In addition to specifying the dependencies, meta files can specify much more data
     for the roles, such as:'
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们之前使用`meta`文件指定了对另一个角色的依赖关系。除了指定依赖关系外，元文件还可以为角色指定更多数据，例如：
 - en: The author and company information
+  id: totrans-148
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 作者和公司信息
 - en: The supported OS and platforms
+  id: totrans-149
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 支持的操作系统和平台
 - en: A brief description of what a role does
+  id: totrans-150
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 角色功能的简要描述
 - en: The Ansible versions supported
+  id: totrans-151
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 支持的Ansible版本
 - en: The category of software that this role attempts to automate
+  id: totrans-152
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 这个角色试图自动化的软件类别
 - en: The licensing information
+  id: totrans-153
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 许可信息
 - en: 'Let''s update all this data by editing `roles/meta/main.yml`:'
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们通过编辑`roles/meta/main.yml`来更新所有这些数据：
 - en: '[PRE17]'
+  id: totrans-155
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: In the preceding snippet, we added metadata to the role, such as the author
     and company details, a brief description of what a role does, its compatibility
     with Ansible versions, the supported platforms, the category the role belongs
     to, and so on.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上面的片段中，我们向角色添加了元数据，如作者和公司详细信息，角色功能的简要描述，与Ansible版本的兼容性，支持的平台，角色所属的类别等等。
 - en: Using variables in tasks and handlers
+  id: totrans-157
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 在任务和处理程序中使用变量
 - en: 'You have learnt how to use variables in templates. That''s not all the code
     there is used to define the variables. In addition to templates, we can also use
     variables inside tasks, plays, and so on. This time around, we have also committed
@@ -699,259 +940,373 @@
     and not platform-independent resources (package). We will have to create OS-specific
     task files and call them selectively based on the OS they are going to run on.
     Here''s how we do so:'
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 你已经学会了如何在模板中使用变量。那不是用来定义变量的全部代码。除了模板之外，我们还可以在任务、剧本等中使用变量。这一次，我们还承诺提供一个支持多平台的角色，支持Ubuntu和RedHat。与**Chef**和**Puppet**不同，Ansible使用特定于操作系统的模块（例如，`apt`和`yum`），而不是平台无关的资源（软件包）。我们将不得不创建特定于操作系统的任务文件，并根据它们将它们选择性地调用。我们是这样做的：
 - en: 'We will find a fact that will determine the OS platform/family. We have a couple
     of options here:'
+  id: totrans-159
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将找到一个事实，确定操作系统平台/系列。这里我们有几个选项：
 - en: '`ansible_distribution`'
+  id: totrans-160
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`ansible_distribution`'
 - en: '`ansible_os_family`'
+  id: totrans-161
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`ansible_os_family`'
 - en: RedHat, CentOS, and Amazon Linux are all based on `rpm` and have similar behavior.
     The same goes for Ubuntu and Debian operating systems, which are part of the same
     platform family. Hence, we choose to use the `ansible_os_family` fact, which will
     give us wider support.
+  id: totrans-162
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: RedHat、CentOS和Amazon Linux都基于`rpm`，行为类似。Ubuntu和Debian操作系统也是同一平台系列的一部分。因此，我们选择使用`ansible_os_family`事实，这将为我们提供更广泛的支持。
 - en: 'We will define variables from two places in the roles:'
+  id: totrans-163
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将在角色中的两个地方定义变量：
 - en: From the default `vars` file with the sane defaults for Debian.
+  id: totrans-164
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 从适用于Debian的默认`vars`文件中获取合理的默认值。
 - en: From the variables specific to `os_family` if not Debian.
+  id: totrans-165
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果不是Debian的特定于`os_family`的变量。
 - en: We will also create OS-specific task files, since we may need to call different
     modules (`apt` versus `yum`) and additional tasks that are specific to that OS.
+  id: totrans-166
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们还将创建特定于操作系统的任务文件，因为我们可能需要调用不同的模块（`apt`与`yum`）和特定于该操作系统的额外任务。
 - en: For handlers and tasks, we will use variables to provide OS-specific names (for
     example, MySQL versus mysqld, for service).
+  id: totrans-167
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对于处理程序和任务，我们将使用变量提供特定于操作系统的名称（例如，MySQL与mysqld，用于服务）。
 - en: Finally, we will create the `main.yml` file, which will selectively include
     host-specific vars as well as task files by checking the value of this fact.
+  id: totrans-168
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 最后，我们将创建`main.yml`文件，通过检查这个事实的值来选择性地包含特定于主机的变量以及任务文件。
 - en: Creating variables
+  id: totrans-169
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 创建变量
 - en: 'We will begin with the creation of variables. Let''s set up the sane defaults
     for Debian/Ubuntu inside the `/mysql/defaults/main.yml` file:'
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将从创建变量开始。让我们在`/mysql/defaults/main.yml`文件中为Debian/Ubuntu设置合理的默认值：
 - en: '[PRE18]'
+  id: totrans-171
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Then it will run on RedHat/CentOS machines, however, we will need to override
     a few of these variables to configure the RedHat-specific parameters.
+  id: totrans-172
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后它将在 RedHat/CentOS 机器上运行，但是我们需要覆盖一些变量，以配置特定于 RedHat 的参数。
 - en: Note
+  id: totrans-173
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意事项
 - en: Note that the filename should match the exact name (RedHat) that is returned
     by the `ansible_os_family` fact with the correct case.
+  id: totrans-174
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，文件名应与 `ansible_os_family` fact 返回的确切名称（即 RedHat）完全匹配，并正确使用大小写。
 - en: 'We will create and edit the `roles/mysql/vars/RedHat.yml` file, as follows:'
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将创建并编辑 `roles/mysql/vars/RedHat.yml` 文件，如下所示：
 - en: '[PRE19]'
+  id: totrans-176
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'Finally, we will create the `group_vars` fact with one variable to override
     our default settings. You have learnt that you can specify variables in the `inventory`
     files, the `group_vars` and the `host_vars` facts. We will start using the `group_vars`
     fact for now. You could either create these in your inventory file or create a
     separate directory for it with the name `group_vars`. We are going to take the
     second approach, which is recommended:'
+  id: totrans-177
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们将创建 `group_vars` fact 并提供一个变量来覆盖默认设置。您已经学到了可以在 `inventory` 文件、`group_vars`
+    和 `host_vars` facts 中指定变量。我们现在将开始使用 `group_vars` fact。您可以在库存文件中创建这些，也可以创建一个名为
+    `group_vars` 的单独目录。我们将采用第二种方法，这是推荐的方法：
 - en: '[PRE20]'
+  id: totrans-178
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'Edit the `group_vars`/`all` file and add the following line:'
+  id: totrans-179
   prefs: []
   type: TYPE_NORMAL
+  zh: 编辑 `group_vars`/`all` 文件并添加以下行：
 - en: '[PRE21]'
+  id: totrans-180
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: Creating tasks
+  id: totrans-181
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 创建任务
 - en: 'It''s now time to create tasks. Following the best practices, we will split
     tasks into multiple files and use include statements, just like we did for Nginx.
     Let''s start by creating the default `main.yml` file inside `roles/mysql/tasks`,
     as follows:'
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在是创建任务的时候了。遵循最佳实践，我们将任务分解成多个文件，并使用包括语句，就像我们为 Nginx 所做的那样。现在我们将在 `roles/mysql/tasks`
+    内创建默认的 `main.yml` 文件，如下所示：
 - en: '[PRE22]'
+  id: totrans-183
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'We saw the `include` statements earlier. What''s new here is the `include_vars`
     fact and the use of the `ansible_os_family` fact. If you notice:'
+  id: totrans-184
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们早先已经看到了 `include` 语句。这里新增的内容是使用了 `include_vars` fact 并使用了 `ansible_os_family`
+    fact。如果您注意到：
 - en: We are using the `ansible_os_family` fact here with the `include_vars` fact
     to determine whether to include OS-specific variables when the OS family is not
     Debian. Why not for the Debian system? That's because we are already specifying
     Debian-specific configurations in the `default` file. The `include_vars` fact
     works well with the preceding conditionals.
+  id: totrans-185
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们使用了 `ansible_os_family` fact 和 `include_vars` fact，在不是 Debian 系统的情况下来确定是否包含特定于操作系统的变量。为什么不适用于
+    Debian 系统？因为我们已在 `default` 文件中指定了特定于 Debian 的配置。`include_vars` fact 与前面的条件语句配合得很好。
 - en: We are also calling OS-specific installation scripts using the `when` condition.
     We have included two scripts for now to support the Debian and RedHat families.
     However, later on, we could just extend the scripts by adding more `install_<os_family>.yml`
     scripts to support additional platforms.
+  id: totrans-186
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们还使用 `when` 条件调用特定于操作系统的安装脚本。我们目前已包含支持 Debian 和 RedHat 家族的两个脚本。但是，稍后我们可以通过添加更多
+    `install_<os_family>.yml` 脚本来扩展脚本，以支持其他平台。
 - en: 'Now, let''s create the install tasks for Debian and RedHat:'
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们创建适用于 Debian 和 RedHat 的安装任务：
 - en: '[PRE23]'
+  id: totrans-188
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'Then edit the file, as follows:'
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后如下编辑文件：
 - en: '[PRE24]'
+  id: totrans-190
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'After running the preceding command, edit the file as follows:'
+  id: totrans-191
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行前面的命令后，将文件编辑如下所示：
 - en: '[PRE25]'
+  id: totrans-192
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'In the preceding example, we used the `apt` and `yum` modules, respectively,
     for Debian- and RedHat-based systems. Following the best practices, we will write
     a data-driven role by providing the package name using a variable `mysql_pkg`.
     This variable is set based on the platform it runs on. Let''s take a look at the
     following steps:'
+  id: totrans-193
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上一示例中，我们在基于 Debian 和 RedHat 的系统分别使用了 `apt` 和 `yum` 模块。遵循最佳实践，我们将编写数据驱动的角色，使用变量
+    `mysql_pkg` 提供软件包名称。该变量根据其运行的平台设置。我们来看看以下步骤：
 - en: 'The next step is to create a task to configure MySQL. Since we know that every
     configuration file should be a template, we will create one for the `my.cnf` file,
     the default configuration file for the MySQL server:'
+  id: totrans-194
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 下一步是创建用于配置 MySQL 的任务。由于我们知道每个配置文件应该是一个模板，我们将为 `my.cnf` 文件创建一个模板，即 MySQL 服务器的默认配置文件：
 - en: '[PRE26]'
+  id: totrans-195
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: 'Then edit the file, as follows:'
+  id: totrans-196
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 然后如下编辑文件：
 - en: '[PRE27]'
+  id: totrans-197
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: We created a template with the `.j2` extension since it's a Jinja2 template.
     It's not a must, but a recommended practice.
+  id: totrans-198
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们创建了一个模板，使用了 `.j2` 扩展名，因为它是 Jinja2 模板。这不是必须的，但建议这样做。
 - en: All configuration parameters come from variables in the `{{var}}` format. This
     is a recommended practice for managing a configuration file. We could let the
     attribute precedence decide where the values comes from.
+  id: totrans-199
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Tip
+  id: totrans-200
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
 - en: It's good practice to add a notice to every file being managed by Ansible. This
     will avoid possible manual updates or ad hoc changes.
+  id: totrans-201
   prefs: []
   type: TYPE_NORMAL
 - en: 'We will write a task that will manage this template, and copy over the resulting
     file to the desired path on the host:'
+  id: totrans-202
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE28]'
+  id: totrans-203
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'We have a common configuration file template; however, the path to copy this
     varies from platform to platform, also based on the flavor of MySQL that you plan
     to use. Here, we are using a MySQL distribution that comes with the Ubuntu and
     CentOS repositories by default, and we will set the `mysql_cnfpath` path from
     the role variables, as follows:'
+  id: totrans-204
   prefs: []
   type: TYPE_NORMAL
 - en: 'On Ubuntu/Debian, use the command: `mysql_cnfpath = /etc/mysql/my.cnf`'
+  id: totrans-205
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'On RedHat/CentOS, use the command: `mysql_cnfpath = /etc/my.cnf`'
+  id: totrans-206
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Also, we are sending the notification to the MySQL service restart handler.
     This will make sure that if there are any changes to the configuration file, the
     service will automatically be restarted.
+  id: totrans-207
   prefs: []
   type: TYPE_NORMAL
 - en: 'To manage a service, we will create a service task and handler:'
+  id: totrans-208
   prefs: []
   type: TYPE_NORMAL
 - en: 'The task:'
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE29]'
+  id: totrans-210
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'Then edit the file, as follows:'
+  id: totrans-211
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE30]'
+  id: totrans-212
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'The handler:'
+  id: totrans-213
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE31]'
+  id: totrans-214
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: 'After running the preceding commands, edit the file as follows:'
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE32]'
+  id: totrans-216
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: Here, the task and handler are similar to the Nginx service, so nothing much
     needs to be described. The only change is that we are using the `mysql_service`
     variable to decide the service name to start, or restart, the service.
+  id: totrans-217
   prefs: []
   type: TYPE_NORMAL
 - en: Using variables in playbooks
+  id: totrans-218
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
@@ -960,71 +1315,95 @@
     This is typically useful when you have defaults in the role and you'd like to
     override some configuration parameters specific to your setup. That way, roles
     are still generic and sharable, and do not contain organization-specific data.
+  id: totrans-219
   prefs: []
   type: TYPE_NORMAL
 - en: 'We are going to create a playbook to manage our databases and then we will
     include it in the site-wide playbook, as follows:'
+  id: totrans-220
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE33]'
+  id: totrans-221
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: 'Then edit the file, as follows:'
+  id: totrans-222
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE34]'
+  id: totrans-223
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: 'Here, we assume that the host''s inventory contains a host group by the name
     `db`. In our example, we have two `db` servers, one running on Ubuntu, the other
     running on CentOS. This is added as:'
+  id: totrans-224
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE35]'
+  id: totrans-225
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: In the preceding playbook, we used a parameterized role, which overrides one
     variable, that is, `mysql_bind`. The value is set from a multilevel fact.
+  id: totrans-226
   prefs: []
   type: TYPE_NORMAL
 - en: 'Let''s take a look at the following screenshot:'
+  id: totrans-227
   prefs: []
   type: TYPE_NORMAL
 - en: '![Using variables in playbooks](img/B03800_03_08.jpg)'
+  id: totrans-228
   prefs: []
   type: TYPE_IMG
 - en: A multilevel fact can also be specified as `ansible_eth1["ipv4"]["address"]`
     and both the formats are valid. Parameterized roles are also useful when we want
     to create multiple instances of the role, for example, virtual hosts and WordPress
     instances running on different ports.
+  id: totrans-229
   prefs: []
   type: TYPE_NORMAL
 - en: 'Let''s now include this playbook in the top-level `site.yml` file using the
     `include` statement:'
+  id: totrans-230
   prefs: []
   type: TYPE_NORMAL
 - en: 'Edit the `site.yml` file as follows:'
+  id: totrans-231
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE36]'
+  id: totrans-232
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: Applying a MySQL role to the DB servers
+  id: totrans-233
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
 - en: 'We are all set to configure our database servers. Let''s go ahead and apply
     the newly created role to all the `db` servers we have in the inventory:'
+  id: totrans-234
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE37]'
+  id: totrans-235
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: 'The following image contains the snippet of the output which is only relevant
     to the database play:'
+  id: totrans-236
   prefs: []
   type: TYPE_NORMAL
 - en: '![Applying a MySQL role to the DB servers](img/B03800_03_09.jpg)'
+  id: totrans-237
   prefs: []
   type: TYPE_IMG
 - en: We have explained the Ansible run in the previous chapters, when we created
@@ -1033,13 +1412,16 @@
     `ansible_os_family` fact and call variables specific to the OS. In our case, we
     have one Ubuntu and CentOS host each, and both of them call for the `RedHat.yml`
     file when it runs on the CentOS host alone.
+  id: totrans-238
   prefs: []
   type: TYPE_NORMAL
 - en: What will be really interesting here is to find out what happened to our configuration
     files on each platform and which variables took precedence.
+  id: totrans-239
   prefs: []
   type: TYPE_NORMAL
 - en: Variable precedence
+  id: totrans-240
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -1047,19 +1429,24 @@
     same variable from different places (for example, defaults, vars, and inventory).
     Let's now analyze the output of the templates to understand what happened with
     all those variables.
+  id: totrans-241
   prefs: []
   type: TYPE_NORMAL
 - en: 'The following is the figure showing the `my.cnf` file on Ubuntu:'
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
 - en: '![Variable precedence](img/B03800_03_11.jpg)'
+  id: totrans-243
   prefs: []
   type: TYPE_IMG
 - en: 'The following is the analysis of the screenshot:'
+  id: totrans-244
   prefs: []
   type: TYPE_NORMAL
 - en: The file has a notice in the comments section. This can deter admins from making
     manual changes to the file.
+  id: totrans-245
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -1067,109 +1454,134 @@
     is our default family of operating systems and we already have sane defaults set
     for it. Similarly, for other operating system platforms, we are setting variable
     defaults from the `vars` directory in a role.
+  id: totrans-246
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Even though the `bind_address` parameter is specified in the defaults and `group_vars`,
     it takes a value from the playbook's role parameter, which has a higher precedence
     over the other two levels.
+  id: totrans-247
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'The following diagram explains what happens when there are variables defined
     at various levels. All of them are merged at runtime. If the same variables are
     defined in more than one place, the precedence rules apply:'
+  id: totrans-248
   prefs: []
   type: TYPE_NORMAL
 - en: '![Variable precedence](img/B03800_03_10.jpg)'
+  id: totrans-249
   prefs: []
   type: TYPE_IMG
 - en: 'To understand the precedence rules, let''s look at what happened on our CentOS
     host. The following is the `my.cnf` file created on CentOS:'
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
 - en: '![Variable precedence](img/B03800_03_12.jpg)'
+  id: totrans-251
   prefs: []
   type: TYPE_IMG
 - en: 'As seen in the preceding figure, in the case of CentOS, we see some interesting
     results:'
+  id: totrans-252
   prefs: []
   type: TYPE_NORMAL
 - en: The values for **user**, **pid**, **datadir**, and **port** come from the defaults.
     We have looked at the merge order. If the variables are not identical, they are
     merged to create the final configuration.
+  id: totrans-253
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The value for a socket comes from vars as that's the only place it has been
     defined. Nevertheless, we want this socket to be constant for the RedHat-based
     system, hence, we specified it in the vars directory of the role.
+  id: totrans-254
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'The `bind_address` parameter comes from the vars directory again. This is interesting
     as we have the `mysql_bind` variable defined at the following locations:'
+  id: totrans-255
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`Default` in a role'
+  id: totrans-256
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`group_vars`'
+  id: totrans-257
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`playbook`'
+  id: totrans-258
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`vars` in a role'
+  id: totrans-259
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'The following figure depicts the precedence rules when we define the same variable
     more than once:'
+  id: totrans-260
   prefs: []
   type: TYPE_NORMAL
 - en: '![Variable precedence](img/B03800_03_03.jpg)'
+  id: totrans-261
   prefs: []
   type: TYPE_IMG
 - en: Since our role defines the `bind_address` parameter in the `vars` directory,
     it takes precedence over the rest.
+  id: totrans-262
   prefs: []
   type: TYPE_NORMAL
 - en: There is a way to override a role parameter using extra variables or the `-e`
     switch while running Ansible. This is the supreme level of precedence for a variable
     that Ansible manages.
+  id: totrans-263
   prefs: []
   type: TYPE_NORMAL
 - en: 'For example:'
+  id: totrans-264
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE38]'
+  id: totrans-265
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE38]'
 - en: In the preceding launch command, we used the `-e` switch, which will override
     all the other variable levels and make sure that the MySQL server is bound to
     `127.0.0.1`.
+  id: totrans-266
   prefs: []
   type: TYPE_NORMAL
 - en: The best practices for variable usage
+  id: totrans-267
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'Overwhelming, eh? Do not worry. We will give you the recommendations on the
     best practices while using variables:'
+  id: totrans-268
   prefs: []
   type: TYPE_NORMAL
 - en: Start with defaults in a role. This has the lowest precedence of all. This is
     also a good place to provide the sane defaults of your application, which can
     be later overridden from various places.
+  id: totrans-269
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -1180,30 +1592,36 @@
     all the hosts for all groups. It's a good practice to put the variables common
     for all groups in "`all`" (`group_vars/all`), which can then be overridden by
     more specific groups.
+  id: totrans-270
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: If there are host-specific exceptions, use `hosts_vars`, for example, `host_vars/specialhost.example.org`.
+  id: totrans-271
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'If you would like to separate variables in different files, create directories
     named after the hosts and put the variable files inside it. All files inside those
     directories will be evaluated:'
+  id: totrans-272
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`group_vars/asia/web`'
+  id: totrans-273
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`host_vars/specialhost/nginx`'
+  id: totrans-274
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
 - en: '`host_vars/specialhost/mysql`'
+  id: totrans-275
   prefs:
   - PREF_IND
   - PREF_UL
@@ -1211,80 +1629,98 @@
 - en: If you would like to keep your roles generic and sharable, use defaults in the
     roles and then specify organization-specific variables from playbooks. These can
     be specified as role parameters.
+  id: totrans-276
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: If you would like role variables to always take precedence over inventory variables
     and playbooks, specify them in the `vars` directory inside a role. This is useful
     for providing role constants for specific platforms.
+  id: totrans-277
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Finally, if you would like to override any of the preceding variables and provide
     some data during runtime, provide an extra variable with Ansible commands using
     the `-e` option.
+  id: totrans-278
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: 'By now, our tree for the MySQL role and DB playbook should look like the following
     figure:'
+  id: totrans-279
   prefs: []
   type: TYPE_NORMAL
 - en: '![The best practices for variable usage](img/B03800_03_13.jpg)'
+  id: totrans-280
   prefs: []
   type: TYPE_IMG
 - en: Review questions
+  id: totrans-281
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'Do you think you''ve understood the chapter well enough? Try answering the
     following questions to test your understanding:'
+  id: totrans-282
   prefs: []
   type: TYPE_NORMAL
 - en: How are Jinja2 templates different from static files?
+  id: totrans-283
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: What are facts? How are they discovered?
+  id: totrans-284
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: What is the difference between `{{ }}` and `{% %}` in the context of Jinja2
     templates?
+  id: totrans-285
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Can you use a variable anywhere apart from templates? If yes, where?
+  id: totrans-286
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: If you define a variable `foo` in the `vars` directory in a role and the same
     variable in the `hosts_var` file, which of these will take precedence?
+  id: totrans-287
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How do you write Ansible roles that are supported on multiple platforms?
+  id: totrans-288
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Where can you specify the author and licensing information in a role?
+  id: totrans-289
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How do you provide variables while launching an Ansible-playbook command?
+  id: totrans-290
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Which command would you use to create a directory structure required by the
     roles automatically?
+  id: totrans-291
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How do you override a variable specified in the `vars` directory of a role?
+  id: totrans-292
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Summary
+  id: totrans-293
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -1296,10 +1732,12 @@
     what system facts are and how they are discovered and used. You learnt how variables
     can be specified from more than one place, how they are merged, and the precedence
     rules. Finally, you learnt about the best practices for using variables.
+  id: totrans-294
   prefs: []
   type: TYPE_NORMAL
 - en: In the next chapter, we will work with custom commands and scripts, understand
     what registered variables are, and deploy a sample WordPress application using
     all this information.
+  id: totrans-295
   prefs: []
   type: TYPE_NORMAL
