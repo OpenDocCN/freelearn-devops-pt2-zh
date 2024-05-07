@@ -3,6 +3,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建自定义模块
 - en: This chapter will focus on how to write and test custom modules. We've already
     discussed how modules work and how to use them within your tasks. To quickly recap,
     a module in Ansible is a piece of code that is transferred and executed onto your
@@ -11,6 +12,7 @@
   id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将重点介绍如何编写和测试自定义模块。我们已经讨论了模块的工作原理以及如何在任务中使用它们。为了快速回顾，Ansible中的一个模块是每次运行Ansible任务时传输和执行到你的远程主机上的代码片段（如果你使用了`local_action`，它也可以在本地运行）。
 - en: From my experience, I've seen custom modules being written whenever a certain
     functionality needs to be exposed as a first-class task. The same functionality
     can be achieved without the module, but it will require a series of tasks with
@@ -26,6 +28,7 @@
   id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 从我的经验来看，每当需要将某个特定功能暴露为一流任务时，就会编写自定义模块。虽然可以通过现有模块执行相同的功能，但为了实现最终目标，可能需要一系列任务（有时还包括命令和shell模块）。例如，假设你想通过**预启动执行环境**（**PXE**）配置服务器。没有自定义模块，你可能会使用一些shell或命令任务来完成这个任务。然而，通过自定义模块，你只需将所需参数传递给它，业务逻辑将嵌入到自定义模块中，以执行PXE启动。这使你能够编写更简单易读的playbook，并提供了更好的可重用性，因为你只需创建一次模块，就可以在角色和playbook中的任何地方使用它。
 - en: The arguments that you pass to a module, provided they are in a **key-value**
     format, will be forwarded in a separate file along with the module. Ansible expects
     at least two variables in your module output (that is, the result of the module
@@ -35,35 +38,43 @@
   id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 你传递给模块的参数（只要它们以**键值**格式提供）将与模块一起在一个单独的文件中转发。Ansible期望你的模块输出至少有两个变量（即，模块运行的结果），无论它是通过还是失败的，以及用户的消息
+    - 它们都必须以JSON格式提供。如果你遵循这个简单的规则，你可以根据自己的需要定制你的模块！
 - en: 'In this chapter, we will cover the following topics:'
   id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将涵盖以下主题：
 - en: Python modules
   id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Python模块
 - en: Bash modules
   id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Bash模块
 - en: Ruby modules
   id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ruby模块
 - en: Testing modules
   id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 测试模块
 - en: Prerequisite
   id: totrans-9
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: When you choose a particular technology or tool, you generally start with what
     it offers. You slowly understand the philosophy then went into building the tool
     and what problems it helps you solve. However, you only truly feel comfortable
@@ -79,6 +90,8 @@
   id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 当你选择特定的技术或工具时，通常从它提供的内容开始。你慢慢地了解哲学，然后开始构建工具以及它帮助你解决的问题。然而，只有当你深入了解它的工作原理时，你才真正感到舒适和掌控。在某个阶段，为了充分利用工具的全部功能，你将不得不以适合你特定需求的方式定制它。随着时间的推移，那些提供了方便的方式来插入新功能的工具会留下来，而那些没有的则会从市场上消失。Ansible也是类似的情况。Ansible
+    playbook中的所有任务都是某种类型的模块，并且它加载了数百个模块。你几乎可以找到任何你可能需要的模块。然而，总会有例外，这就是通过添加自定义模块来扩展Ansible功能的力量所在。
 - en: Chef provides **Lightweight Resources and Providers** (**LWRPs**) to perform
     this activity and Ansible allows you to extend its functionality using custom
     modules. With Ansible, you can write the module in any language of your choice
@@ -90,40 +103,48 @@
   id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: Chef提供了**轻量级资源和提供者**（**LWRPs**）来执行此操作，而Ansible允许您使用自定义模块扩展其功能。使用Ansible，您可以使用您选择的任何语言编写模块（前提是您有该语言的解释器），而在Chef中，模块必须是Ruby编写的。Ansible开发人员建议对于任何复杂模块都使用Python，因为有内置支持来解析参数；几乎所有的***nix**系统默认都安装了Python，并且Ansible本身也是用Python编写的。在本章中，我们还将学习如何使用其他语言编写模块。
 - en: 'To make your custom modules available to Ansible, you can do one of the following:'
   id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使自定义模块可用于 Ansible，您可以执行以下操作之一：
 - en: Specify the path to your custom module in the `ANSIBLE_LIBRARY` environment
     variable.
   id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在`ANSIBLE_LIBRARY`环境变量中指定自定义模块的路径。
 - en: Use the `--module-path` command-line option.
   id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用`--module-path`命令行选项。
 - en: Drop the modules in the `library` directory in your Ansible top-level directory
     and add `library=library` in the `[default]` section of your `ansible.cfg` file.
   id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将模块放在您的Ansible顶层目录中的`library`目录中，并在`ansible.cfg`文件的`[default]`部分中添加`library=library`。
 - en: You can download all the files from this book's GitHub repository at [https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter07](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter07).
   id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从本书的GitHub存储库中下载所有文件，网址为[https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter07](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter07)。
 - en: Now that we have this background information, let's take a look at some code!
   id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经了解了这些背景信息，让我们来看一些代码吧！
 - en: Using Python to write modules
   id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Python编写模块
 - en: 'Ansible allows users to write modules in any language. Writing the module in
     Python, however, has its own advantages. You can take advantage of Ansible''s
     libraries to shorten your code – an advantage that is not available for modules
@@ -140,6 +161,7 @@
   id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible允许用户使用任何语言编写模块。但是，使用Python编写模块具有自己的优势。您可以利用Ansible的库来缩短您的代码 - 这是其他语言编写的模块所不具备的优势。借助Ansible库的帮助，解析用户参数、处理错误并返回所需值变得更加容易。此外，由于Ansible是用Python编写的，因此您将在整个Ansible代码库中使用相同的语言，使审查更加容易，可维护性更高。我们将看到两个自定义Python模块的示例，一个使用Ansible库，一个不使用，以便让您了解自定义模块的工作原理。在创建模块之前，请确保按照前一节中提到的方式组织您的目录结构。第一个示例创建了一个名为`check_user`的模块。为此，我们需要在Ansible顶层目录中的`library`文件夹中创建`check_user.py`文件。完整的代码可以在GitHub上找到：
 - en: '[PRE0]'
   id: totrans-20
   prefs: []
@@ -152,6 +174,8 @@
   id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 先前的自定义模块`check_user`，将检查用户是否存在于主机上。该模块期望来自 Ansible 的用户参数。让我们分解前面的模块，看看它的作用。我们首先声明
+    Python 解释器，并导入解析参数所需的库：
 - en: '[PRE1]'
   id: totrans-22
   prefs: []
@@ -172,6 +196,9 @@
   id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: '使用`sys`库，然后解析由Ansible在文件中传递的参数。参数的格式为`param1=value1 param2=value2`，其中`param1`和`param2`是参数，`value1`和`value2`是参数的值。有多种方式可以拆分参数并创建字典，我们选择了一种简单的方式来执行操作。我们首先通过空格字符拆分参数创建参数列表，然后通过`=`字符拆分参数将键和值分开，并将其赋给Python字典。例如，如果您有一个字符串，如`user=foo
+    gid=1000`，那么您将首先创建一个列表，`["user=foo", "gid=1000"]`，然后循环遍历该列表以创建字典。此字典将是`{"user":
+    "foo", "gid": 1000}`；此操作使用以下行执行：'
 - en: '[PRE2]'
   id: totrans-24
   prefs: []
@@ -183,11 +210,13 @@
   id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们根据空格字符分隔参数，因为这是核心Ansible模块遵循的标准。您可以使用任何分隔符来代替空格，但我们建议您保持统一性。
 - en: 'Once we have the user argument, we then check whether this user exists on the
     host, as follows:'
   id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦我们有了用户参数，我们就会检查该用户是否存在于主机上，具体如下：
 - en: '[PRE3]'
   id: totrans-27
   prefs: []
@@ -200,6 +229,7 @@
   id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们使用`pwd`库来检查用户的`passwd`文件。为简单起见，我们使用两个变量：一个用于存储成功或失败的消息，另一个用于存储用户的消息。最后，我们使用`try-catch`块中创建的变量来检查模块是否成功或失败：
 - en: '[PRE4]'
   id: totrans-29
   prefs: []
@@ -215,6 +245,7 @@
   id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果模块成功，则会以`0`的退出代码（`exit(0)`）退出执行；否则，它将以非零代码退出。Ansible将查找失败的变量，如果它设置为`True`，则退出，除非您已明确要求Ansible使用`ignore_errors`参数忽略错误。您可以像使用Ansible的任何其他核心模块一样使用自定义模块。为了测试自定义模块，我们将需要一个playbook，所以让我们使用以下代码创建`playbooks/check_user.yaml`文件：
 - en: '[PRE5]'
   id: totrans-31
   prefs: []
@@ -227,6 +258,7 @@
   id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 如您所见，我们像使用任何其他核心模块一样使用了`check_user`模块。Ansible将通过将模块复制到远程主机并在单独的文件中使用参数执行该模块。让我们看看这个playbook如何运行，使用以下代码：
 - en: '[PRE6]'
   id: totrans-33
   prefs: []
@@ -236,6 +268,7 @@
   id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该收到以下输出：
 - en: '[PRE7]'
   id: totrans-35
   prefs: []
@@ -246,6 +279,7 @@
   id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 如预期，由于我们有`root`用户，但没有`this_user_does_not_exists`，它通过了第一个检查，但在第二个检查失败了。
 - en: 'Ansible also provides a Python library to parse user arguments and handle errors
     and returns. It''s time to explore how the Ansible Python library can be used
     to make your code shorter, faster, and less prone to error. To do so, let''s create
@@ -254,6 +288,7 @@
   id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible还提供了一个Python库来解析用户参数并处理错误和返回值。现在是时候探索Ansible Python库如何使您的代码更短、更快且更不容易出错了。为此，让我们创建一个名为`library/check_user_py2.py`的文件，其中包含以下代码。完整的代码可在GitHub上找到：
 - en: '[PRE8]'
   id: totrans-38
   prefs: []
@@ -263,6 +298,7 @@
   id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们分解前面的模块，看看它是如何工作的，具体如下：
 - en: '[PRE9]'
   id: totrans-40
   prefs: []
@@ -274,6 +310,7 @@
   id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 如您所见，我们不再导入`sys`，`shlex`和`json`； 我们不再使用它们，因为所有需要它们的操作现在都由Ansible的`module_utils`模块完成：
 - en: '[PRE10]'
   id: totrans-42
   prefs: []
@@ -291,6 +328,9 @@
   id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 以前，我们对参数文件进行了大量处理，以获取最终的用户参数。 Ansible通过提供一个`AnsibleModule`类来简化这个过程，该类自行处理所有处理并为我们提供最终参数。
+    `required=True`参数意味着该参数是必需的，如果未传递该参数，则执行将失败。 默认值`required`为`False`，这将允许用户跳过该参数。
+    然后，您可以通过在`module.params`字典上调用`module.params`上的`get`方法来访问参数的值。 远程主机上检查用户的逻辑将保持不变，但错误处理和返回方面将如下更改：
 - en: '[PRE11]'
   id: totrans-44
   prefs: []
@@ -302,16 +342,19 @@
   id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用`AnsibleModule`对象的一个优点是你有一个非常好的设施来处理返回值到playbook。 我们将在下一节中更深入地讨论。
 - en: We could have condensed the logic for checking users and the return aspect,
     but we kept them divided for readability.
   id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们本可以将检查用户和返回方面的逻辑压缩在一起，但我们将它们分开以提高可读性。
 - en: 'To verify that everything works as expected, we can create a new playbook in
     `playbooks/check_user_py2.yaml` with the following code:'
   id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 要验证一切是否按预期工作，我们可以在`playbooks/check_user_py2.yaml`中创建一个新的playbook，并使用以下代码：
 - en: '[PRE12]'
   id: totrans-48
   prefs: []
@@ -321,6 +364,7 @@
   id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以使用以下代码来运行它：
 - en: '[PRE13]'
   id: totrans-50
   prefs: []
@@ -330,6 +374,7 @@
   id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们应该收到以下输出：
 - en: '[PRE14]'
   id: totrans-52
   prefs: []
@@ -339,11 +384,13 @@
   id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个输出与我们的预期一致。
 - en: Working with exit_json and fail_json
   id: totrans-54
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用exit_json和fail_json
 - en: Ansible provides a faster and shorter method for handling success and failure
     through the `exit_json` and `fail_json` methods, respectively. You can directly
     pass a message to these methods and Ansible will take care of the rest. You can
@@ -354,12 +401,16 @@
   id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible通过`exit_json`和`fail_json`方法提供了更快和更短的处理成功和失败的方法，分别。 您可以直接将消息传递给这些方法，Ansible将处理剩余的部分。
+    您还可以将其他变量传递给这些方法，并且Ansible将这些变量打印到`stdout`。 例如，除了消息之外，您可能还想打印用户的`uid`和`gid`参数。
+    您可以通过将这些变量分隔符传递给`exit_json`方法来实现这一点。
 - en: 'Let''s take a look at how you can return multiple values to `stdout`, as demonstrated
     in the following code, placed in  `library/check_user_id.py`. The full code is
     available on GitHub:'
   id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看如何将多个值返回到`stdout`，如下面的代码所示，放置在`library/check_user_id.py`中。 完整的代码在GitHub上可用：
 - en: '[PRE15]'
   id: totrans-57
   prefs: []
@@ -372,6 +423,7 @@
   id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所见，我们返回了用户的`uid`和`gid`参数，以及消息`msg`。 你可以有多个值，Ansible将以字典格式打印所有这些值。 创建一个包含以下内容的playbook：`playbooks/check_user_id.yaml`：
 - en: '[PRE16]'
   id: totrans-59
   prefs: []
@@ -381,6 +433,7 @@
   id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以使用以下代码来运行它：
 - en: '[PRE17]'
   id: totrans-61
   prefs: []
@@ -390,6 +443,7 @@
   id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们应该收到以下输出：
 - en: '[PRE18]'
   id: totrans-63
   prefs: []
@@ -401,17 +455,20 @@
   id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，我们完成了两种方法的工作，这反过来又帮助我们找到了在Ansible中处理成功和失败的更快方式，同时向用户传递参数。
 - en: Testing Python modules
   id: totrans-65
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 测试Python模块
 - en: 'As you have seen, you can test your modules by creating very simple playbooks
     to run them.  To do so, we''ll need to clone the Ansible official repository (if
     you haven''t done so yet):'
   id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所见，你可以通过创建非常简单的playbooks来测试你的模块。 为此，我们需要克隆Ansible官方仓库（如果你还没有这样做）：
 - en: '[PRE19]'
   id: totrans-67
   prefs: []
@@ -733,11 +790,15 @@
   id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于对其目的和其为业务带来的好处的理解不足，测试经常被低估。测试模块与测试 Ansible playbook 的任何其他部分一样重要，因为模块中的微小更改可能会破坏整个
+    playbook。我们将以本章的 *使用 Python 编写模块* 部分中编写的 Python 模块为例，并使用 Python 的 `nose` 测试框架编写一个集成测试。虽然也鼓励进行单元测试，但对于我们的场景，即检查远程用户是否存在，集成测试更有意义。
 - en: '`nose` is a Python test framework; you can find out more information about
     this test framework at [https://nose.readthedocs.org/en/latest/](https://nose.readthedocs.org/en/latest/).'
   id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: '`nose` 是一个 Python 测试框架；您可以在 [https://nose.readthedocs.org/en/latest/](https://nose.readthedocs.org/en/latest/)
+    上找到有关该测试框架的更多信息。'
 - en: 'To `test` the module, we convert our previous module into a Python class so
     that we can directly import the class into our test, and run only the main logic
     of the module. The following code shows the `library/check_user_py3.py` restructured
@@ -746,6 +807,8 @@
   id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了对模块进行测试，我们将先前的模块转换为一个 Python 类，以便我们可以直接将该类导入到我们的测试中，并仅运行模块的主要逻辑。以下代码显示了重组的
+    `library/check_user_py3.py` 模块，该模块将检查远程主机上是否存在用户。完整代码可在 GitHub 上找到：
 - en: '[PRE39]'
   id: totrans-121
   prefs: []
@@ -759,6 +822,8 @@
   id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如您在上述代码中所见，我们创建了一个名为 `User` 的类。我们实例化了该类并调用了 `check_if_user_exists` 方法来检查用户是否实际存在于远程计算机上。现在是时候编写集成测试了。我们假设您已经在系统上安装了
+    `nose` 包。如果没有，不用担心！您仍然可以使用以下命令安装该包：
 - en: '[PRE40]'
   id: totrans-123
   prefs: []
@@ -769,6 +834,7 @@
   id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们在 `library/test_check_user_py3.py` 中编写集成测试文件，如下所示：
 - en: '[PRE41]'
   id: totrans-125
   prefs: []
@@ -786,16 +852,22 @@
   id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述集成测试中，我们导入了 `nose` 包和我们的 `check_user` 模块。我们通过传递我们想要检查的用户来调用 `User` 类。然后，我们通过调用
+    `check_if_user_exists()` 方法来检查用户是否存在于远程主机上。`nose` 方法 - `assert_true`、`assert_false`
+    和 `assert_equals` - 可以用于比较预期值与实际值。只有当 `assert` 方法通过时，测试也会通过。您可以通过具有以 `test_` 开头的多个方法来在同一个文件中拥有多个测试；例如，`test_check_user_positive()`
+    和 `test_check_user_negative()` 方法。`nose` 测试将获取所有以 `test_` 开头的方法并执行它们。
 - en: As you can see, we actually created two tests for just one function. This is
     a key part of tests. Always try cases where you know it will work, but also, do
     not forget to test cases where you expect it to fail.
   id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如您所见，我们实际上为一个函数创建了两个测试。这是测试的一个关键部分。始终尝试您知道会成功的情况，但也不要忘记测试您期望失败的情况。
 - en: 'We can now test whether it works by running `nose` with the following code:'
   id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以通过运行以下代码使用 `nose` 来测试它是否正常工作：
 - en: '[PRE42]'
   id: totrans-129
   prefs: []
@@ -805,6 +877,7 @@
   id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 您应该会收到类似以下代码块的输出：
 - en: '[PRE43]'
   id: totrans-131
   prefs: []
@@ -815,10 +888,12 @@
   id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如您所见，测试通过了，因为主机上存在 `root` 用户，而 `this_user_does_not_exists` 用户不存在。
 - en: We use the `-v` option with `nose` tests for the **verbose** mode.
   id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们使用 `nose` 测试的 `-v` 选项来启用 **详细模式**。
 - en: For more complicated modules, we recommend that you write unit tests and integration
     tests. You might be wondering why we didn't use `serverspec` to test the module.
   id: totrans-134

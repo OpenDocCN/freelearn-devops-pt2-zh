@@ -1,7 +1,9 @@
 - en: Debugging and Error Handling
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 调试和错误处理
 - en: 'Like software code, testing infrastructure code is an all-important task. There
     should ideally be no code floating around in production that has not been tested,
     especially when you have strict customer SLAs to meet, and this is true even for
@@ -12,58 +14,86 @@
     some of these into your **Continuous Integration** (**CI**) system that you have
     for Ansible to better test your playbooks. We''ll be looking at the following
     points:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 像软件代码一样，测试基础架构代码是一项非常重要的任务。在生产环境中最好没有未经测试的代码浮现，尤其是当您有严格的客户SLA需要满足时，即使对于基础架构也是如此。在本章中，我们将看到语法检查、在不将代码应用于机器上进行测试（no-op模式）以及用于playbook的功能测试，playbook是Ansible的核心，触发您想在远程主机上执行的各种任务。建议您将其中一些集成到您为Ansible设置的**持续集成**（**CI**）系统中，以更好地测试您的playbook。我们将看到以下要点：
 - en: Syntax checking
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 语法检查
 - en: Checking mode with and without `--diff`
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 带有和不带有`--diff`的检查模式
 - en: Functional testing
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 功能测试
 - en: 'As part of functional testing, we will be looking at the following:'
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 作为功能测试的一部分，我们将关注以下内容：
 - en: Assertions on the end state of the system
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对系统最终状态的断言
 - en: Testing with tags
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用标签进行测试
 - en: Using the `--syntax-check` option
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用`--syntax-check`选项
 - en: Using the `ANSIBLE_KEEP_REMOTE_FILES` and `ANSIBLE_DEBUG` flags
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用`ANSIBLE_KEEP_REMOTE_FILES`和`ANSIBLE_DEBUG`标志
 - en: We will then look at how to manage exceptions and how to voluntarily trigger
     an error.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们将看看如何处理异常以及如何自愿触发错误。
 - en: Technical requirements
+  id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 技术要求
 - en: For this chapter, there are no specific requirements except the usual ones,
     such as Ansible, Vagrant, and a shell.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '对于本章，除了常规要求外，没有特定要求，例如Ansible、Vagrant和一个shell。 '
 - en: You can download all of the files from this book's GitHub repository at [https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter08](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter08).
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从本书的GitHub存储库中下载所有文件，网址为[https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter08](https://github.com/PacktPublishing/Learning-Ansible-2.X-Third-Edition/tree/master/Chapter08)。
 - en: Syntax checking
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 语法检查
 - en: 'Whenever you run a playbook, Ansible first checks the syntax of the playbook
     file. If an error is encountered, Ansible will error out saying there was a syntax
     error and will not proceed unless you fix that error. This syntax checking is
@@ -73,37 +103,53 @@
     situations, Ansible provides a way to check your YAML syntax as you keep progressing
     with your playbook. For this example, we will need to create the `playbooks/setup_apache.yaml` file
     with the following content:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 每次运行playbook时，Ansible首先检查playbook文件的语法。如果遇到错误，Ansible会报告语法错误，并且不会继续，除非您修复了该错误。仅当运行`ansible-playbook`命令时才执行此语法检查。在编写大型playbook或包含任务文件时，可能很难修复所有错误；这可能会浪费更多时间。为了应对这种情况，Ansible提供了一种方式，让您随着playbook的编写进度来检查您的YAML语法。对于此示例，我们将需要创建名为`playbooks/setup_apache.yaml`的文件，并包含以下内容：
 - en: '[PRE0]'
+  id: totrans-16
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Now that we have our example file, we need to run it with the `--syntax-check`
     parameter; so, you will need to invoke Ansible as follows:'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们有了示例文件，我们需要用`--syntax-check`参数运行它；因此，您需要按照以下方式调用Ansible：
 - en: '[PRE1]'
+  id: totrans-18
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'The `ansible-playbook` command checked the YAML syntax of the `setup_apache.yml`
     playbook and showed that the syntax of the playbook was correct. Let''s look at
     the resulting errors from the invalid syntax in the playbook:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: '`ansible-playbook`命令检查了`setup_apache.yml` playbook的YAML语法，并显示了playbook的语法是正确的。让我们看看playbook中无效语法导致的结果错误：'
 - en: '[PRE2]'
+  id: totrans-20
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: The error shows that there is an indentation error in the `Enable Apache` task.
     Ansible also gives you the line number, column number, and the filename where
     this error is found (even if this is not a guarantee of the exact location of
     the error). This should definitely be one of the basic tests that you should run
     as part of your CI for Ansible.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 错误显示`Enable Apache`任务中存在缩进错误。Ansible还会提供错误的行号、列号和发现错误的文件名（即使这并不是确切错误位置的保证）。这肯定应该是您为Ansible的CI运行的基本测试之一。
 - en: The check mode
+  id: totrans-22
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 检查模式
 - en: The check mode (also known as the **dry-run** or **no-op mode**) will run your
     playbook in a no-operation mode—that is, it will not apply any changes to the
     remote host; instead, it will just show the changes that will be introduced when
@@ -112,160 +158,240 @@
     will have to be run in `/usr/lib/python2.7/site-packages/ansible/modules`, or
     where your Ansible module folder is (different paths could be possible based on
     the operating system you are using as well as the way you installed Ansible).
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 检查模式（也称为**dry-run**或**no-op模式**）将以无操作模式运行你的playbook - 也就是说，它不会将任何更改应用于远程主机;
+    相反，它只会显示运行任务时将引入的更改。检查模式是否实际启用取决于每个模块。有一些命令可能会引起你的兴趣。所有这些命令都必须在`/usr/lib/python2.7/site-packages/ansible/modules`或你的Ansible模块文件夹所在的位置运行（根据你使用的操作系统以及你安装Ansible的方式，可能存在不同的路径）。
 - en: 'To count the number of available modules on your installation, you can perform
     this command:'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 要计算安装的可用模块数量，你可以执行此命令：
 - en: '[PRE3]'
+  id: totrans-25
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: With Ansible 2.7.2, the result of this command is `2095`, since Ansible has
     that many modules.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用Ansible 2.7.2，此命令的结果是`2095`，因为Ansible有那么多模块。
 - en: 'If you want to see how many of these support the check mode, you can run the
     following code:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你想看看有多少支持检查模式的模块，你可以运行以下代码：
 - en: '[PRE4]'
+  id: totrans-28
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: With Ansible 2.7.2, the result of this command is `1239`.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用Ansible 2.7.2，此命令的结果是`1239`。
 - en: 'You might also find the following command useful for listing all modules that
     support the check mode:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可能还会发现以下命令对于列出支持检查模式的所有模块很有用：
 - en: '[PRE5]'
+  id: totrans-31
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'This helps you to test how your playbook will behave and check whether there
     may be any failures before running it on your production server. You run a playbook
     in the check mode by simply passing the `--check` option to your `ansible-playbook`
     command. Let''s see how the check mode works with the `setup_apache.yml` playbook,
     running the following code:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 这有助于你测试playbook的行为方式，并在将其运行在生产服务器之前检查是否可能存在任何故障。你只需简单地在`ansible-playbook`命令中传递`--check`选项来运行检查模式下的playbook。让我们看看检查模式如何与`setup_apache.yml`
+    playbook一起运行，运行以下代码：
 - en: '[PRE6]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'The result will be as follows:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 结果将如下所示：
 - en: '[PRE7]'
+  id: totrans-35
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'In the preceding run, instead of making the changes on the target host, Ansible
     highlighted all of the changes that would have occurred during the actual run.
     From the preceding run, you can find that the `httpd` service was already installed
     on the target host. Because of this, Ansible''s exit message for that task was
     OK:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述运行中，Ansible不会在目标主机上进行更改，而是会突出显示在实际运行期间将发生的所有更改。从上述运行中，你可以发现`httpd`服务已经安装在目标主机上。因此，Ansible对该任务的退出消息是OK：
 - en: '[PRE8]'
+  id: totrans-37
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'However, with the second task, it found that the `httpd` service was not running
     on the target host:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 但是，对于第二个任务，它发现`httpd`服务在目标主机上未运行：
 - en: '[PRE9]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: When you run the preceding playbook again without the check mode enabled, Ansible
     will make sure that the service state is running.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 当你再次运行上述的playbook时，如果没有启用检查模式，Ansible会确保服务状态正在运行。
 - en: Indicating differences between files using --diff
+  id: totrans-41
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用--diff指示文件之间的差异
 - en: 'In the check mode, you can use the `--diff` option to show the changes that
     would be applied to a file. To be able to see the `--diff` option in use, we need
     to create a `playbooks/setup_and_config_apache.yaml` playbook to match the following:'
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 在检查模式下，你可以使用`--diff`选项来显示将应用于文件的更改。为了能够看到`--diff`选项的使用，我们需要创建一个`playbooks/setup_and_config_apache.yaml`
+    playbook，以匹配以下内容：
 - en: '[PRE10]'
+  id: totrans-43
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: As you can see, we added a task that will ensure a certain state of the `/etc/httpd/conf.d/userdir.conf`
     file.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所看到的，我们添加了一个任务，将确保`/etc/httpd/conf.d/userdir.conf`文件处于特定状态。
 - en: 'We also need to create a template file placed in `templates/userdir.conf` with
     the following content (the full file is available on GitHub):'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还需要创建一个模板文件，放置在`templates/userdir.conf`中，并包含以下内容（完整文件可在GitHub上找到）：
 - en: '[PRE11]'
+  id: totrans-46
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: In this template, we only changed the `UserDir enabled` line, which, by default,
     is `UserDir disabled`.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此模板中，我们仅更改了`UserDir enabled`行，默认情况下为`UserDir disabled`。
 - en: The `--diff` option doesn't work with the `file` module; you will have to use
     the `template` module only.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: '`--diff`选项与`file`模块不兼容；你必须仅使用`template`模块。'
 - en: 'We can now test the result of this with the following command:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以使用以下命令测试此结果：
 - en: '[PRE12]'
+  id: totrans-50
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'As you can see, we are using the `--check` parameter that will ensure this
     will be a dry run. We will receive the following output:'
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所看到的，我们正在使用`--check`参数，确保这将是一个干运行。我们将收到以下输出：
 - en: '[PRE13]'
+  id: totrans-52
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: As we can see, Ansible compares the current file of the remote host with the
     source file; a line starting with `+` indicates that a line was added to the file,
     while `-` indicates that a line was removed.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以看到，Ansible 比较远程主机的当前文件与源文件；以 "+" 开头的行表示向文件中添加了一行，而 "-" 表示删除了一行。
 - en: You can also use `--diff` without the `--check` option, which will allow Ansible
     to make the specified changes and show the difference between two files.
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 你也可以使用 `--diff` 选项而不用 `--check`，这将允许 Ansible 进行指定的更改并显示两个文件之间的差异。
 - en: Using the `--diff` and `--check` modes together is a test step that can potentially
     be used as part of your CI tests to assert how many steps have changed as part
     of the run. Another case where you can use those features together is the part
     of the deployment process that checks what exactly will change when you run Ansible
     on that machine.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 CI 测试的一部分中，将 `--diff` 和 `--check` 模式一起使用作为测试步骤，可以断言有多少步骤在运行过程中发生了变化。另一个可以同时使用这些功能的情况是部署过程的一部分，用于检查运行
+    Ansible 时会发生什么变化。
 - en: There are also cases—which should not happen, but sometimes do—where you have
     not run a playbook on a machine for a very long time and you are worried that
     running it again will break something. Using those options together should help
     you to understand whether it was just worrying you or whether this is a real risk.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 有时候会出现这样的情况——尽管不应该出现，但有时候确实会出现——你在一台机器上很长一段时间没有运行 playbook，而你担心再次运行会破坏某些东西。使用这些选项可以帮助你了解到这只是你的担忧，还是一个真正的风险。
 - en: Functional testing in Ansible
+  id: totrans-57
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible 中的功能测试
 - en: Wikipedia says functional testing is a **quality assurance** (**QA**) process
     and a type of black-box testing that bases its test cases on the specifications
     of the software component under the test. Functions are tested by feeding them
     input and examining the output; the internal program structure is rarely considered.
     Functional testing is as important as code when it comes to infrastructure.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 维基百科称功能测试是一种**质量保证**（**QA**）过程和一种基于所测试软件组件的规格的黑盒测试。功能测试通过提供输入并检查输出来测试函数；内部程序结构很少被考虑。在基础设施方面，在代码方面同样重要。
 - en: From an infrastructure perspective, with respect to functional testing, we test
     output of our Ansible runs on the actual machines. Ansible provides multiple ways
     to perform the functional testing of your playbook; let's look at some of the
     most commonly used methods.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 从基础设施的角度来看，就功能测试而言，我们在实际机器上测试 Ansible 运行的输出。Ansible 提供了多种执行 playbook 的功能测试的方式，让我们来看看其中一些最常用的方法。
 - en: Functional testing using assert
+  id: totrans-60
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 `assert` 进行功能测试
 - en: The check mode will only work when you want to check whether a task will change
     anything on the host or not. This will not help when you want to check whether
     the output of your module is what you expected. For example, let's say you wrote
@@ -273,15 +399,22 @@
     might need to check the output of your module and see whether it matches the desired
     output or not. To perform such tests, Ansible provides a way to directly compare
     the output of a module with the desired output.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 仅当你想要检查任务是否会在主机上改变任何内容时，`check` 模式才会起作用。当你想检查你的模块的输出是否符合预期时，这并没有帮助。例如，假设你编写了一个模块来检查端口是开启还是关闭。为了测试这一点，你可能需要检查你的模块的输出，看它是否与期望的输出匹配。为了执行这样的测试，Ansible
+    提供了一种将模块的输出与期望的输出直接进行比较的方法。
 - en: 'Let''s see how this works by creating the `playbooks/assert_ls.yaml` file with
     the following content:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们通过创建 `playbooks/assert_ls.yaml` 文件，并使用以下内容来查看它是如何工作的：
 - en: '[PRE14]'
+  id: totrans-63
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'In the preceding playbook, we''re running the `ls` command on the target host
     and registering the output of that command in the `list_files` variable. Further
     to this, we ask Ansible to check whether the output of the `ls` command has the
@@ -289,35 +422,53 @@
     checks to verify whether or not the `stdout` value of a task meets the expected
     output of the user. Let''s run the preceding playbook to see what output Ansible
     returns, with the following command:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述 playbook 中，我们在目标主机上运行 `ls` 命令，并将该命令的输出记录在 `list_files` 变量中。接下来，我们要求 Ansible检查
+    `ls` 命令的输出是否具有期望的结果。我们使用 `assert` 模块来实现这一点，该模块使用某些条件检查来验证任务的 `stdout` 值是否符合用户的预期输出。让我们运行上述
+    playbook，看看 Ansible 返回什么输出，使用以下命令：
 - en: '[PRE15]'
+  id: totrans-65
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Since we don''t have the file, we will receive the following output:'
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于我们没有这个文件，所以我们会收到以下输出：
 - en: '[PRE16]'
+  id: totrans-67
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'If we re-run the playbook after we create the expected file, this will be the
     result:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们在创建预期的文件之后重新运行playbook，这将是结果：
 - en: '[PRE17]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: This time, the task passed with an OK message as `testfile.txt` was present
     in the `list_files` variable. Likewise, you can match multiple strings in a variable
     or multiple variables using the `and` and `or` operators. The assertion feature
     is quite powerful, and users who have written either unit or integration tests
     in their projects will be quite happy to see this feature!
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 这次，任务通过了OK信息，因为`testfile.txt`在`list_files `变量中存在。同样，你可以使用`and`和`or`运算符在变量中匹配多个字符串或多个变量。断言功能非常强大，编写过单元测试或集成测试的用户将非常高兴看到这个功能！
 - en: Testing with tags
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用标签进行测试
 - en: Tags are a great way to test a bunch of tasks without running an entire playbook.
     We can use tags to run actual tests on the nodes to verify the state that the
     user intended to be in the playbook. We can treat this as another way to run integration
@@ -326,63 +477,93 @@
     to test the state of your end systems. In this section, we'll first look at how
     to use `tags` in general, their features that can possibly help us, not just with
     testing but even for testing purposes.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 标签是一种在不运行整个playbook的情况下测试一堆任务的好方法。我们可以使用标签在节点上运行实际测试，以验证用户在playbook中所期望的状态。我们可以将其视为在实际框中运行Ansible的另一种方法来运行集成测试。标签测试方法可以在实际运行Ansible的机器上运行，并且主要在部署期间用于测试终端系统的状态。在本节中，我们首先看一下如何通用地使用`tags`，它们可能会帮助我们，不仅仅是用于测试，而且甚至是用于测试目的。
 - en: 'To add tags in your playbook, use the `tags` parameter followed by one or more
     tag names separated by commas or YAML lists. Let''s create a simple playbook in
     `playbooks/tags_example.yaml` to see how the tags work with the following content:'
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在playbook中添加标签，请使用`tags`参数，后面跟着一个或多个标签名称，用逗号或YAML列表分隔。让我们在`playbooks/tag_example.yaml`中创建一个简单的playbook，以查看标签如何与以下内容一起工作：
 - en: '[PRE18]'
+  id: totrans-74
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'If we now run the playbook, the file will be created and destroyed. We can
     see it running with the following:'
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果现在运行playbook，文件将被创建和销毁。我们可以看到它的运行情况：
 - en: '[PRE19]'
+  id: totrans-76
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'It will give us this output:'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 它会给我们这个输出：
 - en: '[PRE20]'
+  id: totrans-78
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: Since this is not an idempotent playbook, if we run it over and over, we will
     always see the same result, as the playbook will create and delete the file every
     time.
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于这不是一个幂等的playbook，如果我们反复运行它，我们将始终看到相同的结果，因为playbook将每次都创建和删除文件。
 - en: 'However, we added two tags: `file_present` and `file_absent`. You can now simply
     pass the `file_present` tag or the `file_absent` tag to only perform one of the
     actions, like in the following example:'
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 但是，我们添加了两个标签：`file_present`和`file_absent`。你现在可以仅传递`file_present `标签或`file_absent`标签以执行其中一个动作，就像以下示例中所示：
 - en: '[PRE21]'
+  id: totrans-81
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Thanks to the `-t file_present` part, only the tasks with the `file_present`
     tag will be executed; in fact, this will be the output:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于`-t file_present`部分，只有带有`file_present`标签的任务将被执行。事实上，这将是输出：
 - en: '[PRE22]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: You can also use tags to perform a set of tasks on the remote host, just like
     taking a server out of a load balancer and adding it back to the load balancer.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 你还可以使用标签在远程主机上执行一组任务，就像从负载均衡器中取出一个服务器并将其添加回负载均衡器。
 - en: You can also use the `--check` option with tags. By doing this, you can test
     your tasks without actually running them on your hosts. This allows you to test
     a bunch of individual tasks directly, instead of copying your tasks to a temporary
     playbook and running it from there.
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 你还可以将标签与`--check`选项一起使用。通过这样做，你可以在不实际在主机上运行任务的情况下测试你的任务。这使你能够直接测试一堆个别任务，而不必将任务复制到临时playbook并从那里运行。
 - en: Understanding the --skip-tags option
+  id: totrans-86
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 理解--skip-tags选项
 - en: 'Ansible also provides a way to skip some tags in a playbook. If you have a
     long playbook with multiple tags, such as 10, and you want to execute them all
     but one, then it would not be a good idea to pass nine tags to Ansible. The situation
@@ -390,125 +571,190 @@
     fails. To overcome such situations, Ansible provides a way to skip a couple of
     tags, instead of passing multiple tags, which should run. Its functioning is pretty
     straightforward, and can be triggered in the following way:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible还提供了一种跳过playbook中某些标签的方法。如果你有一个带有多个标签（例如10个）的长playbook，并且你想要执行它们中的全部，但不包括一个，那么向Ansible传递九个标签不是一个好主意。如果你忘了传递一个标签，`ansible-run`命令将失败，情况将变得更加困难。为了克服这种情况，Ansible提供了一种跳过几个标签而不是传递多个应该运行的标签的方法。它的工作方式非常简单，可以按以下方式触发：
 - en: '[PRE23]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'The output will be something like this:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出将类似于以下内容：
 - en: '[PRE24]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: As you can see, all tasks have been executed except the one with the `file_present`
     tag.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所见，除了具有 `file_present` 标签的任务之外，所有任务都已执行。
 - en: Understanding debugging commands
+  id: totrans-92
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 理解调试命令
 - en: Ansible allows us to use two very powerful variables to help us to debug.
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 允许我们使用两个非常强大的变量来帮助我们调试。
 - en: The `ANSIBLE_KEEP_REMOTE_FILES` variable allows us to tell Ansible to keep the
     files it creates on remote machines so that we can go back and debug them.
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: '`ANSIBLE_KEEP_REMOTE_FILES` 变量允许我们告诉 Ansible 保留它在远程机器上创建的文件，以便我们可以回过头来调试它们。'
 - en: The `ANSIBLE_DEBUG` variable allows us to tell Ansible to print all debug content
     to the shell. The debug output is often overkill, but it might help with some
     very complex-to-solve issues.
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: '`ANSIBLE_DEBUG` 变量允许我们告诉 Ansible 将所有调试内容打印到 shell。调试输出通常过多，但对于某些非常复杂的问题可能有所帮助。'
 - en: We have seen how to find problems in your playbooks. Sometimes, you know that
     a specific step can fail, but it's OK. In this case, we should manage the exception
     properly. Let's look at how to do so.
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经看到如何在你的 playbook 中查找问题。有时，你知道特定步骤可能会失败，但没关系。在这种情况下，我们应该适当地管理异常。让我们看看如何做到这一点。
 - en: Managing exceptions
+  id: totrans-97
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 管理异常
 - en: 'There are many cases where, for one reason or another, you want your playbook
     and roles to carry on in case one or more tasks fail. A typical example of this
     could be that you want to check whether software is installed or not. Let''s look
     at the following example to install Java 11 if, and only if, Java 8 is not installed.
     In the `roles/java/tasks/main.yaml` file, we are going to enter the following
     code:'
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 有很多情况下，出于各种原因，你希望你的 playbook 和角色在一个或多个任务失败的情况下继续执行。一个典型的例子是你想检查软件是否安装。让我们看一个以下示例，在只有当
+    Java 8 未安装时才安装 Java 11。在 `roles/java/tasks/main.yaml` 文件中，我们将输入以下代码：
 - en: '[PRE25]'
+  id: totrans-99
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: Before going forward with the other parts that are needed to execute this role,
     I'd like to spend a few words on the various parts of the role task list, since
     there are many new things.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 在继续执行此角色所需的其他部分之前，我想在角色任务列表的各个部分上花几句话，因为有很多新东西。
 - en: 'In this task, we will execute an `rpm` command:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此任务中，我们将执行一个 `rpm` 命令：
 - en: '[PRE26]'
+  id: totrans-102
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: 'This code can have two possible output:'
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 此代码可能有两种可能的输出：
 - en: Fail
+  id: totrans-104
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 失败
 - en: Return the complete name of the JDK package
+  id: totrans-105
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 返回 JDK 软件包的完整名称
 - en: Since we want only to check whether the package exists or not and then to go
     forward, we register the output (the *fifth* line) and ignore eventual failures
     (the *sixth* line).
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于我们只想检查软件包是否存在，然后继续执行，我们会记录输出（第五行），并忽略可能的失败（第六行）。
 - en: 'When it fails, it means that `Java8` is not installed, and therefore we can
     proceed to install `Java11`:'
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 当它失败时，意味着 `Java8` 未安装，因此我们可以继续安装 `Java11`：
 - en: '[PRE27]'
+  id: totrans-108
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'After we create the role, we will need the `hosts` file containing the host
     machine; in my case, it will be the following:'
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建角色后，我们将需要包含主机机器的 `hosts` 文件；在我的情况下，它将如下所示：
 - en: '[PRE28]'
+  id: totrans-110
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'We will also need a playbook to apply the role, placed in `playbooks/hosts/j01.fale.io.yaml`
     and with the following content:'
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还需要一个用于应用角色的 playbook，放置在 `playbooks/hosts/j01.fale.io.yaml` 中，内容如下：
 - en: '[PRE29]'
+  id: totrans-112
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'We can now execute it with the following:'
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以用以下命令执行它：
 - en: '[PRE30]'
+  id: totrans-114
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'We will get the following result:'
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将得到以下结果：
 - en: '[PRE31]'
+  id: totrans-116
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: As you can see, the installation check failed since Java was not installed on
     the machine, and for this reason, the other task has been executed as expected.
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你所见，安装检查失败，因为机器上未安装 Java，因此其他任务已按预期执行。
 - en: Trigger failure
+  id: totrans-118
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 触发失败
 - en: There are cases when you want to trigger a failure directly. This can happen
     for multiple reasons, even if there are disadvantages in doing so since, when
     you trigger the failure, the playbook will be brutally interrupted and this could
@@ -518,47 +764,68 @@
     (for instance, the version/branch to deploy) set. In this case, you can check
     that the expected variable is correctly configured before starting to run the
     operations to ensure that everything will work as expected later on.
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 有些情况下，您希望直接触发一个失败。这可能发生在多种原因下，即使这样做有一些不利之处，因为当您触发失败时，Playbook 将被强行中断，如果您不小心的话，这可能会导致机器处于不一致的状态。我曾亲眼见过一个情况非常适用的场景，那就是当您运行一个不是幂等的
+    Playbook 时（例如，构建一个应用的新版本），您需要一个变量（例如，要部署的版本/分支）设置。在这种情况下，您可以在开始运行操作之前检查预期的变量是否正确配置，以确保以后的一切都能正常运行。
 - en: 'Let''s put the following code in `playbooks/maven_build.yaml`:'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们将以下代码放入`playbooks/maven_build.yaml`中：
 - en: '[PRE32]'
+  id: totrans-121
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: As you can see, we expect the user to add `--extra-vars "version=$[TAG/BRANCH]"`
     in the script-calling command. We could have put a branch to use by default, but
     this is too risky because the user may lose focus and forget to add the right
     branch name themselves, which would lead to compiling (and deploying) the wrong
     version of the application. The `fail` module also allows us to specify a message
     that will be displayed to the user.
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 如您所见，我们期望用户在调用脚本的命令中添加`--extra-vars "version=$[TAG/BRANCH]"`。我们本可以设置一个默认要使用的分支，但这样做太冒险，因为用户可能分心并忘记自己添加正确的分支名称，这将导致编译（和部署）错误的应用程序版本。`fail`模块还允许我们指定将显示给用户的消息。
 - en: I think that the `fail` task is far more useful in playbooks that are run manually
     since, when a playbook is automatically run, managing the exception is often better
     than failing.
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 我认为，在手动运行 Playbook 时，`fail`任务要比失败更加有用，因为自动运行 Playbook 时，管理异常通常比直接失败更好。
 - en: Using the `fail` module, you will be able to quit from playbooks as soon as
     a problem is detected.
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用`fail`模块，一旦发现问题，您就可以退出 Playbooks。
 - en: Summary
+  id: totrans-125
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: In this chapter, we have seen how to debug Ansible playbooks using syntax checking,
     the checking mode with and without `--diff`, and functional testing.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们已经学习了如何使用语法检查、带有和不带`--diff`的检查模式以及功能测试来调试 Ansible Playbooks。
 - en: As part of functional testing, we have seen how to perform assertions on the
     end state of the system, how to leverage tags for testing as well as how to use
     the `--syntax-check` option and the `ANSIBLE_KEEP_REMOTE_FILES` and `ANSIBLE_DEBUG`
     flags. Then, we moved to the management of failures, and, lastly, we saw how to
     trigger failures intentionally.
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 作为功能测试的一部分，我们已经看到如何对系统的最终状态进行断言，如何利用标签进行测试，以及如何使用`--syntax-check`选项和`ANSIBLE_KEEP_REMOTE_FILES`和`ANSIBLE_DEBUG`标志。然后，我们转向了失败的管理，最后，我们学习了如何故意触发失败。
 - en: In the next chapter, we will discuss multi-tier environments as well as deployment
     methodologies.
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将讨论多层环境以及部署方法论。
