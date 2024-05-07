@@ -1,168 +1,244 @@
 - en: Working with AWX Users, Permissions, and Organizations
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 与AWX用户、权限和组织一起工作
 - en: While reading the previous chapter, you probably asked yourself questions about
     the security of AWX.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在阅读上一章节时，您可能会对AWX的安全性产生疑问。
 - en: AWX is very powerful and, to be so powerful, it needs a lot of access to target
     machines, which means that it can become a potentially weak link in the security
     chain.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: AWX非常强大，并且要如此强大，它需要对目标机器有很多访问权限，这意味着它可能成为安全链中的一个潜在弱点。
 - en: 'In this chapter, we are going to discuss a little bit about AWX users, permissions,
     and organizations; namely, we are going to cover the following topics:'
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将讨论一些AWX用户、权限和组织的问题；具体来说，我们将涵盖以下主题：
 - en: AWX users and permissions
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: AWX用户和权限
 - en: AWX organizations
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: AWX组织
 - en: Technical requirements
+  id: totrans-6
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 技术要求
 - en: To fulfill this chapter, we will only need AWX, which we set up in the previous
     chapter.
+  id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了完成本章，我们只需要AWX，这是我们在上一章中设置的。
 - en: AWX users and permissions
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: AWX用户和权限
 - en: First of all, if you remember the first time you opened AWX, you will remember
     that you had to input a username and password.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，如果您还记得第一次打开AWX时，您将记得您必须输入用户名和密码。
 - en: As you can surely imagine, those were default credentials, but you can create
     all of the users that your organization needs.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 当然你可以想象，那些是默认凭据，但您可以创建组织所需的所有用户。
 - en: 'To do so, you can go to the Users section in the left-hand side menu, as shown
     in the following screenshot:'
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 为此，您可以转到左侧菜单中的用户部分，如下屏幕截图所示：
 - en: '![](img/7822cc10-cb41-4c6e-85f8-2cdbb396510d.png)'
+  id: totrans-12
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7822cc10-cb41-4c6e-85f8-2cdbb396510d.png)'
 - en: As you might expect, the admin user is present, and it is the only present user.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如您可能期望的那样，管理员用户已存在，并且是唯一存在的用户。
 - en: We can create other users by clicking the green button with the + symbol on
     it.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以通过点击带有+ 符号绿色按钮来创建其他用户。
 - en: 'When we create a new user, the following fields are requested:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们创建新用户时，需要填写以下字段：
 - en: '**First name**: This is the user''s first name.'
+  id: totrans-16
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**名字**：这是用户的名字。'
 - en: '**Last name**: The user''s last name.'
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**姓氏**：用户的姓氏。'
 - en: '**Organization**: The organization that the user belongs to (we will speak
     more about this later in this chapter).'
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**组织**：用户所属的组织（我们稍后将在本章更多地讨论这个问题）。'
 - en: '**Email**: This is the user''s email.'
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**电子邮件**：这是用户的电子邮件。'
 - en: '**Username**: This is the user''s username. This will be used for logins and
     it will pop up in the user interface.'
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用户名**：这是用户的用户名。将用于登录，并将在用户界面中弹出。'
 - en: '**Password**: This is the user''s password.'
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**密码**：这是用户的密码。'
 - en: '**Confirm password**: Re-type the password to ensure that no typos slipped
     in.'
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**确认密码**：重新输入密码以确保没有拼写错误。'
 - en: '**User type**: A user can be a normal user, a system auditor, or a system administrator.
     By default, normal users don''t have access to anything, if not explicitly granted.
     System auditors can see everything in the whole system, but only in read-only
     mode. System administrators have full read-write access to the whole system.'
+  id: totrans-23
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**用户类型**：用户可以是普通用户、系统审计员或系统管理员。默认情况下，普通用户无法访问任何内容，除非明确授予权限。系统审计员可以以只读模式查看整个系统中的所有内容。系统管理员可以完全读写访问整个系统。'
 - en: 'After you have created a user as a normal user, you can go to Templates. If
     you go into the Edit mode for `Demo Job Template`, you''ll notice a Permissions section,
     where you can see and set the users that are able to see and operate on this job
     template. You should see something like what''s shown in the following screenshot:'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建了一个普通用户后，您可以转至模板。如果您进入`演示作业模板`的编辑模式，您会注意到一个权限部分，您可以在其中查看和设置能够查看和操作此作业模板的用户。您应该看到以下屏幕截图中显示的内容：
 - en: '![](img/e3c5dc3e-7ca2-4c72-a811-e11f3ed7061c.png)'
+  id: totrans-25
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e3c5dc3e-7ca2-4c72-a811-e11f3ed7061c.png)'
 - en: 'By clicking on the green button with the + symbol, a modal will appear where
     you can select (or search) for the user that you want to enable, and you can choose
     the access level, as shown in the following screenshot:'
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过点击带有+ 符号绿色按钮，将会出现一个模态框，您可以在其中选择（或搜索）要启用的用户，并选择访问级别，如下所示的屏幕截图：
 - en: '![](img/3f453db8-f42e-4cfd-a2fb-624915b4ff7f.png)'
+  id: totrans-27
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3f453db8-f42e-4cfd-a2fb-624915b4ff7f.png)'
 - en: 'AWX allows you to choose between three different levels of access:'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: AWX允许您在三种不同的访问级别之间进行选择：
 - en: '**Admin**: This kind of user is able to see the job template and the past jobs
     that were created with it, execute the job template in the future, and edit the
     job template.'
+  id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**管理员**：这种类型的用户能够查看作业模板和以前使用它创建的作业，执行将来的作业模板，以及编辑作业模板。'
 - en: '**Execute**: This kind of user is able to see the job template and the past
     jobs that were created with it and execute the job template in the future, but
     not to edit the job template.'
+  id: totrans-30
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**执行**：这种用户可以看到作业模板和以前使用它创建的作业，并在未来执行作业模板，但不能编辑作业模板。'
 - en: '**Read**: This kind of user is able to see the job template and the past jobs
     that were created with it, but is not to execute it nor change it.'
+  id: totrans-31
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**读取**：这种用户可以看到作业模板和以前使用它创建的作业，但不能执行它也不能更改它。'
 - en: In the same way job templates can be made visible, usable, and manageable by
     users, all of the other kinds of objects present in AWX can have permissions as
     well.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 类似于作业模板可以被用户看到、使用和管理，AWX 中的所有其他对象都可以有权限。
 - en: As you might imagine, if you start to have tens of jobs and tens of users, you'll
     spend a lot of time managing permissions. To help you with this, AWX provides
     the concept of teams.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 如您所想象的那样，如果您开始有数十个作业和数十个用户，您将花费大量时间来管理权限。为了帮助您，AWX 提供了团队的概念。
 - en: Teams are manageable in the Team item of the left-hand side menu, and are basically
     just groups of users so that you can move from a **Discretionary Access Control**
     (**DAC**) approach to a **Role-Based Access Control** (**RBAC**) approach, which
     is much quicker to keep up to date with regarding organizational changes and needs.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 团队可以在左侧菜单中的团队项中进行管理，基本上只是用户的分组，因此您可以从**自主访问控制**（**DAC**）方法转变为**基于角色的访问控制**（**RBAC**）方法，这样在组织变化和需求方面更快地跟上。
 - en: By using users, teams, and permissions, you'll be able to decide who is able
     to do what at a very granular level.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过使用用户、团队和权限，您将能够以非常精细的级别决定谁能够做什么。
 - en: AWX organizations
+  id: totrans-36
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: AWX 组织
 - en: In more complex organizations, is often common that many people belonging to
     very different teams and business units share the same AWX installation.
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 在更复杂的组织中，经常出现很多来自非常不同团队和业务单元的人共享同一个 AWX 安装的情况。
 - en: In those cases, it can make sense to have different AWX organizations set up.
     This allows for easier permissions and the delegation of some permission management
     from the core system administrators team to organization administrations. Also,
@@ -171,47 +247,67 @@
     owned by the organization) or project admin (that is, the automatic administrator
     of all projects owned by the organization), aside from the organization-wide roles
     (such as organization administrator and organization auditor).
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这些情况下，建立不同的 AWX 组织是有意义的。这可以更轻松地管理权限，并将一些权限管理委托给核心系统管理员团队之外的组织管理员。此外，组织允许垂直权限于组织资源，比如清单管理员（即，拥有该组织所有清单的自动管理员）或项目管理员（即，拥有该组织所有项目的自动管理员），除了组织范围的角色（比如组织管理员和组织审核员）。
 - en: If you are in a company that has multiple websites, you could decide to cluster
     all websites in the same AWX organization (if they are managed by the same people,
     for instance, the "web group"), or you could decide to split them into multiple
     AWX organizations, one for each website.
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您在一个有多个网站的公司，您可以决定将所有网站集群到同一个 AWX 组织中（如果它们是由同一批人管理的，比如，“web group”），或者您可以决定将它们分成多个
+    AWX 组织，每个网站一个。
 - en: 'The advantages that are brought by these organizations are as follows:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些组织带来的优势如下：
 - en: Easier permission management
+  id: totrans-41
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 更简单的权限管理
 - en: Ability of the team manager (that is, the "web group" manager or the single
     website manager) to on-board and off-board members as time goes by
+  id: totrans-42
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 团队经理（即，“web group” 管理员或单个网站管理员）能够随着时间推移招聘和解雇成员
 - en: Easier and quicker audits, since only the permissions related to the specific
     organization will need to be vetted, instead of all permissions in Tower
+  id: totrans-43
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 更容易和更快的审核，因为只需要审核与特定组织相关的权限，而不是 Tower 中的所有权限
 - en: Due to those advantages, I always suggest that you think about how to use an
     AWX organization in AWX.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 凭借这些优势，我总是建议您考虑如何在 AWX 中使用 AWX 组织。
 - en: Also, in my experience, I've always noticed that the more similar the AWX organization's
     structure is to the company structure, the better it is, since it's going to feel
     natural to all users. On the other hand, if you try to force an AWX organization's
     structure that is completely different from the company structure, this will feel
     alien, will slow down the adoption of AWX, and, in same cases, can even determine
     the failure of the platform.
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，根据我的经验，我始终注意到 AWX 组织结构与公司结构越相似，用户体验越好，因为对所有用户来说都会感觉自然。另一方面，如果你试图强行将 AWX 组织结构与公司结构完全不同，这将感觉陌生，会减慢
+    AWX 的采用速度，并且在某些情况下甚至可能导致平台失败。
 - en: Summary
+  id: totrans-46
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: 'In this book, we started from some very basic concepts of automation by comparing
     Ansible to the other common options such as manual procedures, bash scripting,
     Puppet and Chef are available. We then moved on and looked at how to write YAML
@@ -223,9 +319,17 @@
     Digital Ocean, and Azure. We then moved on to analyze how Ansible can be used
     to trigger notifications, as well as in various deployment scenarios. We closed
     with an overview of the official Ansible graphical interface: AWX/Ansible Tower.'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这本书中，我们从一些非常基本的自动化概念开始，通过将 Ansible 与其他常见选项如手动流程、bash 脚本、Puppet 和 Chef 进行比较。然后，我们看了如何编写
+    YAML 文件，因为这是 Ansible 使用的格式，以及如何安装 Ansible。然后，我们进行了第一个由 Ansible 驱动的安装（基本的一对 HTTP
+    服务器，支持数据库服务器）。然后，我们添加了利用 Ansible 特性的功能，例如变量、模板和任务委派。接着，我们看到了 Ansible 如何在 AWS、Digital
+    Ocean 和 Azure 等云环境中帮助您。然后，我们继续分析 Ansible 如何用于触发通知，以及在各种部署场景中的应用。最后，我们总结了官方 Ansible
+    图形界面的概述：AWX/Ansible Tower。
 - en: Thanks to this content, you should now be able to automate all of the possible
     scenarios you'll encounter in your Ansible usage.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过这个内容，现在你应该能够自动化你在使用 Ansible 过程中遇到的所有可能情景。

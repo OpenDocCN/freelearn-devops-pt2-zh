@@ -1,26 +1,38 @@
 - en: 'Section 4: Deploying an Application with Ansible'
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第4节：使用 Ansible 部署应用
 - en: This section explains how to manage Windows nodes from Ansible and how to leverage
     Ansible Galaxy and Ansible Tower to maximize your productivity.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节解释了如何从 Ansible 管理 Windows 节点以及如何利用 Ansible Galaxy 和 Ansible Tower 来最大化您的生产力。
 - en: 'This section contains the following chapters:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本节包含以下章节：
 - en: '[Chapter 10](403a4637-9873-4ee7-bb32-9cc53aa1ca8e.xhtml), *Introducing Ansible
     for Enterprises*'
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第10章](403a4637-9873-4ee7-bb32-9cc53aa1ca8e.xhtml)，*为企业介绍 Ansible*'
 - en: '[Chapter 11](c98f3821-61a9-4823-96b7-ac8e3309412a.xhtml), *Getting Started
     with AWX*'
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第11章](c98f3821-61a9-4823-96b7-ac8e3309412a.xhtml)，*开始使用 AWX*'
 - en: '[Chapter 12](dd2bea83-4519-4f23-9ca2-13afa9224a11.xhtml), *Working with AWX
     Users, Permissions, and Organizations*'
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第12章](dd2bea83-4519-4f23-9ca2-13afa9224a11.xhtml)，*与 AWX 用户、权限和组织合作*'

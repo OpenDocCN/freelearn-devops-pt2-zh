@@ -1,19 +1,25 @@
 - en: Preface
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 前言
 - en: In the past few years, the agile model of software development has seen a considerable
     amount of growth around the world. There is massive demand for a software delivery
     solution that is fast and flexible to frequent amendments, especially in the e-commerce
     sector. As a result, the Continuous Integration and Continuous Delivery methodologies
     are gaining popularity.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在过去的几年里，敏捷软件开发模式在全球范围内得到了相当大的增长。特别是在电子商务领域，对于一种快速灵活应对频繁修改的软件交付解决方案的需求非常巨大。因此，持续集成和持续交付方法越来越受欢迎。
 - en: Whether small or big, all types of project gain benefits, such as early issue
     detection, avoiding lousy code into production, and faster delivery, which leads
     to an increase in productivity.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 无论是小项目还是大项目，都会获得诸如早期问题检测、避免糟糕的代码进入生产以及更快的交付等好处，这导致了生产力的增加。
 - en: This book, *Learning Continuous Integration with Jenkins Second Edition*, serves
     as a step-by-step guide to setting up a Continuous Integration, Continuous Delivery,
     and Continuous Deployment system using hands-on examples. The book is 20% theory
@@ -23,178 +29,268 @@
     Continuous Integration and Continuous Delivery using Jenkins. There is also a
     small chapter on Continuous Deployment, which talks primarily about the difference
     between Continuous Delivery and Continuous Deployment.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书，*使用 Jenkins 学习持续集成第二版*，作为一个逐步指南，通过实际示例来设置持续集成、持续交付和持续部署系统。这本书是 20% 的理论和 80%
+    的实践。它首先解释了持续集成的概念及其在敏捷世界中的重要性，并专门有一整章介绍这个概念。用户随后学习如何配置和设置 Jenkins，然后实现使用 Jenkins
+    的持续集成和持续交付。还有一个关于持续部署的小章节，主要讨论持续交付和持续部署之间的区别。
 - en: What this book covers
+  id: totrans-4
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书内容
 - en: '[Chapter 1](3df4611b-5885-4a31-a8d3-626d50ffd3b7.xhtml), *Concepts of Continuous
     Integration*, gives an account of how some of the most popular and widely used
     software development methodologies gave rise to Continuous Integration. This is
     followed by a detailed explanation of the various requirements and best practices
     to achieve Continuous Integration.'
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第一章](3df4611b-5885-4a31-a8d3-626d50ffd3b7.xhtml)，*持续集成的概念*，介绍了一些最流行和广泛使用的软件开发方法如何催生了持续集成。接着详细解释了实现持续集成所需的各种要求和最佳实践。'
 - en: '[Chapter 2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml), *Installing Jenkins*,
     is a step-by-step guide all about installing Jenkins across various platforms,
     including Docker.'
+  id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第二章](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml)，*安装 Jenkins*，是一份关于在各种平台上安装
+    Jenkins 的分步指南，包括 Docker。'
 - en: '[Chapter 3](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml), *The New Jenkins*,
     provides an overview of how the new Jenkins 2.x looks and feels, with an in-depth
     explanation of its essential constituents. It also introduces readers to the new
     features added in Jenkins 2.x.'
+  id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第三章](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml)，*新 Jenkins*，提供了新 Jenkins
+    2.x 的外观和感觉概述，并深入解释了其重要组成部分。它还向读者介绍了 Jenkins 2.x 中新增的功能。'
 - en: '[Chapter 4](89cbc75b-c9e8-41b8-8657-aab37e6e7ad4.xhtml), *Configuring Jenkins*,
     focuses on accomplishing some basic Jenkins administration tasks.'
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第四章](89cbc75b-c9e8-41b8-8657-aab37e6e7ad4.xhtml)，*配置 Jenkins*，专注于完成一些基本的 Jenkins
+    管理任务。'
 - en: '[Chapter 5](9f74f9d8-e9cc-4406-b8f5-20661f4c8567.xhtml), *Distributed Builds*,
     explores how to implement a build farm using Docker. It also talks about adding
     standalone machines as Jenkins slaves.'
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第五章](9f74f9d8-e9cc-4406-b8f5-20661f4c8567.xhtml)，*分布式构建*，探讨了如何使用 Docker 实现构建农场，并讨论了将独立机器添加为
+    Jenkins 从属节点的方法。'
 - en: '[Chapter 6](d9c705fe-0f1b-4176-9e7c-a8ddd0c11eee.xhtml), *Installing SonarQube
     and Artifactory*, covers installing and configuring SonarQube and Artifactory
     for CI.'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第六章](d9c705fe-0f1b-4176-9e7c-a8ddd0c11eee.xhtml)，*安装 SonarQube 和 Artifactory*，涵盖了为持续集成安装和配置
+    SonarQube 和 Artifactory 的步骤。'
 - en: '[Chapter 7](0699eee2-c25d-468e-ba6a-741f9068abce.xhtml), *Continuous Integration
     Using Jenkins*, takes you through a Continuous Integration design and the means
     to achieve it using Jenkins, in collaboration with some other DevOps tools.'
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第七章](0699eee2-c25d-468e-ba6a-741f9068abce.xhtml)，*使用 Jenkins 进行持续集成*，带领你设计持续集成并使用
+    Jenkins 以及其他一些 DevOps 工具来实现它的步骤。'
 - en: '[Chapter 8](63e2ee14-6cef-4a87-bfc6-9c24e4576cb6.xhtml), *Continuous Delivery
     Using Jenkins*, outlines a Continuous Delivery design and the means to achieve
     it using Jenkins, in collaboration with some other DevOps tools.'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第 8 章](63e2ee14-6cef-4a87-bfc6-9c24e4576cb6.xhtml)，*使用 Jenkins 进行持续交付*，概述了持续交付的设计以及使用
+    Jenkins 与其他一些 DevOps 工具实现它的方法。'
 - en: '[Chapter 9](7ac8cc82-47b7-4571-b142-967a226b5f75.xhtml), *Continuous Deployment
     Using Jenkins*, explains the difference between Continuous Delivery and Continuous
     Deployment. It also features a step-by-step guide to implementing Continuous Deployment
     using Jenkins.'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第 9 章](7ac8cc82-47b7-4571-b142-967a226b5f75.xhtml)，*使用 Jenkins 进行持续部署*，解释了持续交付与持续部署之间的区别。它还提供了使用
+    Jenkins 实现持续部署的逐步指南。'
 - en: '[Appendix](b60e8632-7912-4d4a-825e-ae9a8546a510.xhtml), *Supporting Tools and
     Installation Guide*, takes you through the steps required to make your Jenkins
     server accessible over the internet and the installation guide for Git.'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: '[附录](b60e8632-7912-4d4a-825e-ae9a8546a510.xhtml)，*支持工具和安装指南*，介绍了使您的 Jenkins
+    服务器在互联网上可访问所需的步骤以及 Git 的安装指南。'
 - en: What you need for this book
+  id: totrans-15
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书所需的内容
 - en: 'To be able to follow everything described in the book, you will need a machine
     with the following configurations:'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 要能够理解本书中描述的所有内容，您需要一台具有以下配置的计算机：
 - en: '**Operating systems**:'
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**操作系统**：'
 - en: Windows 7/8/10
+  id: totrans-18
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Windows 7/8/10
 - en: Ubuntu 14 and later
+  id: totrans-19
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ubuntu 14 及更高版本
 - en: '**Hardware requirements**:'
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**硬件要求**：'
 - en: A machine with a minimum 4 GB memory and a multicore processor
+  id: totrans-21
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 至少拥有 4 GB 内存和多核处理器的计算机
 - en: '**Other requirements**:'
+  id: totrans-22
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**其他要求**：'
 - en: A GitHub account (public or private)
+  id: totrans-23
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: GitHub 账户（公共或私人）
 - en: Who this book is for
+  id: totrans-24
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书面向的读者
 - en: This book is aimed at readers with little or no previous experience with Agile
     or Continuous Integration and Continuous Delivery. It serves as a great starting
     point for anyone who is new to this field and would like to leverage the benefits
     of Continuous Integration and Continuous Delivery to increase productivity and
     reduce delivery time.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书旨在读者具有较少或没有敏捷或持续集成和持续交付方面的经验。对于任何新手想要利用持续集成和持续交付的好处以提高生产力并缩短交付时间的人来说，它都是一个很好的起点。
 - en: Build and release engineers, DevOps engineers, (Software Configuration Management) SCM
     engineers, developers, testers, and project managers can all benefit from this
     book.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建和发布工程师、DevOps 工程师、（软件配置管理）SCM 工程师、开发人员、测试人员和项目经理都可以从本书中受益。
 - en: Readers who are already using Jenkins for Continuous Integration can learn to
     take their project to the next level, which is Continuous Delivery.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 已经在使用 Jenkins 进行持续集成的读者可以学习如何将他们的项目提升到下一个级别，即持续交付。
 - en: The current edition of the book is a complete reboot of its predecessor. Readers
     of the first edition can take advantage of some of the new stuff discussed in
     the current edition, such as Pipeline as Code, Multibranch Pipelines, Jenkins
     Blue Ocean, distributed build farms using Docker, and more.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书的当前版本是其前任的完全重启。第一版读者可以利用当前版本讨论的一些新内容，例如 Pipeline as Code、Multibranch Pipelines、Jenkins
+    Blue Ocean、使用 Docker 的分布式构建农场等。
 - en: Conventions
+  id: totrans-29
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 约定
 - en: 'In this book, you will find a number of text styles that distinguish between
     different kinds of information. Here are some examples of these styles and an
     explanation of their meaning. Code words in text, database table names, folder
     names, filenames, file extensions, pathnames, dummy URLs, user input, and Twitter
     handles are shown as follows: "This will download a `.hpi` file on your system."'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，您将找到许多用于区分不同类型信息的文本样式。以下是其中一些样式的示例及其含义的解释。文本中的代码词、数据库表名、文件夹名、文件名、文件扩展名、路径名、虚拟
+    URL、用户输入和 Twitter 句柄显示如下：“这将在您的系统上下载一个`.hpi`文件。”
 - en: 'A block of code is set as follows:'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 代码块设置如下：
 - en: '[PRE0]'
+  id: totrans-32
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'When we wish to draw your attention to a particular part of a code block, the
     relevant lines or items are set in bold:'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们希望引起您对代码块的特定部分的注意时，相关行或项将加粗显示：
 - en: '[PRE1]'
+  id: totrans-34
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'The extra "**\**" used in some of the commands is used to only indicate that
     the command continues in the next line. Any command-line input or output is written
     as follows:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 在一些命令中使用的额外的“**\**”仅用于指示命令在下一行继续。任何命令行输入或输出都按以下方式编写：
 - en: '[PRE2]'
+  id: totrans-36
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: '**New terms** and **important words** are shown in bold. Words that you see
     on the screen, for example, in menus or dialog boxes, appear in the text like
     this: "From the Jenkins dashboard, click on the Manage Jenkins | Plugin Manager | Available tab."'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: '**新术语** 和 **重要单词** 以粗体显示。屏幕上看到的单词，例如在菜单或对话框中，会以如下方式出现在文本中：“从 Jenkins 仪表板上，点击 “Manage
+    Jenkins”|“Plugin Manager”|“Available” 选项卡。”'
 - en: Warnings or important notes appear like this.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 警告或重要提示呈现如下。
 - en: Tips and tricks appear like this.
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 提示和技巧呈现如下。
 - en: Reader feedback
+  id: totrans-40
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 读者反馈
 - en: Feedback from our readers is always welcome. Let us know what you think about
     this book-what you liked or disliked. Reader feedback is important for us as it
     helps us develop titles that you will really get the most out of. To send us general
@@ -202,90 +298,130 @@
     the subject of your message. If there is a topic that you have expertise in and
     you are interested in either writing or contributing to a book, see our author
     guide at [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: '我们始终欢迎读者的反馈。请告诉我们您对本书的看法-您喜欢或不喜欢的地方。读者反馈对我们很重要，因为它帮助我们开发让您真正受益的标题。要向我们发送一般反馈，只需发送电子邮件至`feedback@packtpub.com`，并在消息主题中提到书的标题。如果您对某个专题有专业知识，并有兴趣参与撰写或投稿书籍，请查看我们的作者指南，网址为[www.packtpub.com/authors](http://www.packtpub.com/authors)。 '
 - en: Customer support
+  id: totrans-42
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 客户支持
 - en: Now that you are the proud owner of a Packt book, we have a number of things
     to help you to get the most from your purchase.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 既然您是 Packt 书籍的自豪所有者，我们有许多措施可帮助您充分利用您的购买。
 - en: Downloading the example code
+  id: totrans-44
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载示例代码
 - en: 'You can download the example code files for this book from your account at
     [http://www.packtpub.com](http://www.packtpub.com). If you purchased this book
     elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
     and register to have the files emailed directly to you. You can download the code
     files by following these steps:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从您在 [http://www.packtpub.com](http://www.packtpub.com) 的账户下载本书的示例代码文件。如果您在其他地方购买了这本书，您可以访问[http://www.packtpub.com/support](http://www.packtpub.com/support)，注册后文件将直接发送到您的邮箱。按照以下步骤下载代码文件：
 - en: Log in or register to our website using your email address and password.
+  id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用您的电子邮件地址和密码登录或注册到我们的网站。
 - en: Hover the mouse pointer on the SUPPORT tab at the top.
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将鼠标指针悬停在顶部的“支持”标签上。
 - en: Click on Code Downloads & Errata.
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击“代码下载 & 勘误”。
 - en: Enter the name of the book in the Search box.
+  id: totrans-49
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在搜索框中输入书名。
 - en: Select the book for which you're looking to download the code files.
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择您想要下载代码文件的书籍。
 - en: Choose from the drop-down menu where you purchased this book from.
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从下拉菜单中选择您购买本书的位置。
 - en: Click on Code Download.
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击“代码下载”。
 - en: 'Once the file is downloaded, please make sure that you unzip or extract the
     folder using the latest version of:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载文件后，请确保使用最新版本的解压软件解压文件夹：
 - en: WinRAR / 7-Zip for Windows
+  id: totrans-54
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Windows 下的 WinRAR / 7-Zip
 - en: Zipeg / iZip / UnRarX for Mac
+  id: totrans-55
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Mac 下的 Zipeg / iZip / UnRarX
 - en: 7-Zip / PeaZip for Linux
+  id: totrans-56
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Linux 下的 7-Zip / PeaZip
 - en: The code bundle for the book is also hosted on GitHub at [https://github.com/PacktPublishing/Learning-Continuous-Integration-with-Jenkins-Second-Edition](https://github.com/PacktPublishing/Learning-Continuous-Integration-with-Jenkins-Second-Edition).
     We also have other code bundles from our rich catalog of books and videos available
     at [https://github.com/PacktPublishing/](https://github.com/PacktPublishing/).
     Check them out!
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书的代码包也托管在GitHub上，链接为[https://github.com/PacktPublishing/Learning-Continuous-Integration-with-Jenkins-Second-Edition](https://github.com/PacktPublishing/Learning-Continuous-Integration-with-Jenkins-Second-Edition)。我们还有其他丰富的图书和视频代码包可供下载，地址为[https://github.com/PacktPublishing/](https://github.com/PacktPublishing/)。赶紧去看看吧！
 - en: Downloading the color images of this book
+  id: totrans-58
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载本书的彩色图片
 - en: We also provide you with a PDF file that has color images of the screenshots/diagrams
     used in this book. The color images will help you better understand the changes
     in the output. You can download this file from [https://www.packtpub.com/sites/default/files/downloads/LearningContinuousIntegrationwithJenkinsSecondEdition_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/LearningContinuousIntegrationwithJenkinsSecondEdition_ColorImages.pdf).
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还为您提供了一个 PDF 文件，其中包含本书中使用的截图/图表的彩色图片。彩色图片将帮助您更好地理解输出中的变化。您可以从[https://www.packtpub.com/sites/default/files/downloads/LearningContinuousIntegrationwithJenkinsSecondEdition_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/LearningContinuousIntegrationwithJenkinsSecondEdition_ColorImages.pdf)下载此文件。
 - en: Errata
+  id: totrans-60
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 勘误
 - en: Although we have taken every care to ensure the accuracy of our content, mistakes
     do happen. If you find a mistake in one of our books-maybe a mistake in the text
     or the code-we would be grateful if you could report this to us. By doing so,
@@ -298,12 +434,18 @@
     submitted errata, go to [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
     and enter the name of the book in the search field. The required information will
     appear under the Errata section.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管我们已经尽一切努力确保内容的准确性，但错误还是会发生。如果你在我们的书中发现了错误——也许是文本或代码中的错误——我们将不胜感激地接受您的报告。通过这样做，你可以帮助其他读者避免困扰，也可以帮助我们改进后续版本的这本书。如果你发现任何勘误，请访问
+    [http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata)，选择你的书，点击勘误提交表格链接，并输入勘误的详细信息。一旦你的勘误被核实，你的提交将被接受，并将勘误上传到我们的网站，或者添加到该标题的现有勘误列表的勘误部分。要查看以前提交的勘误，请访问
+    [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)，并在搜索字段中输入书名。所需信息将出现在勘误部分下。
 - en: Piracy
+  id: totrans-62
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 盗版
 - en: Piracy of copyrighted material on the internet is an ongoing problem across
     all media. At Packt, we take the protection of our copyright and licenses very
     seriously. If you come across any illegal copies of our works in any form on the
@@ -311,13 +453,20 @@
     so that we can pursue a remedy. Please contact us at `copyright@packtpub.com`
     with a link to the suspected pirated material. We appreciate your help in protecting
     our authors and our ability to bring you valuable content.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 互联网上对受版权保护的材料的盗版是所有媒体持续存在的问题。在 Packt，我们非常重视对我们的版权和许可的保护。如果你在互联网上发现我们作品的任何形式的非法副本，请立即向我们提供位置地址或网站名称，以便我们采取措施。请通过
+    `copyright@packtpub.com` 联系我们，并附上可疑盗版材料的链接。感谢你帮助我们保护我们的作者和我们提供有价值内容的能力。
 - en: Questions
+  id: totrans-64
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 问题
 - en: If you have a problem with any aspect of this book, you can contact us at `questions@packtpub.com`,
     and we will do our best to address the problem.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你在阅读本书的过程中遇到任何问题，可以通过 `questions@packtpub.com` 联系我们，我们将尽力解决问题。

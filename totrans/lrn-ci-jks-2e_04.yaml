@@ -1,224 +1,337 @@
 - en: Configuring Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 Jenkins
 - en: 'In this chapter, we will learn how to perform some basic Jenkins administration
     tasks, as follows:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将学习如何执行一些基本的 Jenkins 管理任务，如下所示：
 - en: Updating/installing/uninstalling/downgrading Jenkins plugins
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 更新/安装/卸载/降级 Jenkins 插件
 - en: Installing Jenkins plugins manually
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 手动安装 Jenkins 插件
 - en: Performing Jenkins backup and restore
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 执行 Jenkins 备份和恢复
 - en: Upgrading Jenkins on various platforms (Windows/Linux/servlet)
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在各个平台（Windows/Linux/servlet）上升级 Jenkins
 - en: Upgrading Jenkins running inside a Docker container
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 升级运行在 Docker 容器中的 Jenkins
 - en: Creating and managing users in Jenkins
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中创建和管理用户
 - en: Learning various authentication methods in Jenkins
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中学习各种身份验证方法
 - en: Configuring various authorization methods in Jenkins
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中配置各种授权方法
 - en: Jenkins comes with a pile of items to configure. The more plugins you install,
     the more there is to configure. In this chapter, we will cover only the basic
     administrative tasks in Jenkins. We will learn more about the Jenkins configuration
     in the upcoming chapters, wherein we will try to add up more plugins to Jenkins
     in order to achieve **Continuous Integration** (**CI**) and **Continuous Delivery**
     (**CD**).
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 配置项繁多。 安装的插件越多，需要配置的就越多。 在本章中，我们将仅涵盖 Jenkins 中的基本管理任务。 我们将在接下来的章节中更多地了解
+    Jenkins 配置，在那里我们将尝试添加更多插件到 Jenkins 以实现**持续集成**（**CI**）和**持续交付**（**CD**）。
 - en: The Jenkins Plugin Manager
+  id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 插件管理器
 - en: Jenkins derives most of its power from plugins. Jenkins plugins are pieces of
     software that upon installation enhance the Jenkins functionality. A plugin that
     is installed inside Jenkins manifests itself as a parameter or a configurable
     item inside a Jenkins job or inside the Jenkins system configuration, or event
     as a step under the Snippet Generator (in case it's compatible with the *Declarative
     Pipeline syntax*).
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 的大部分功能来自插件。 Jenkins 插件是安装后增强 Jenkins 功能的软件片段。 在 Jenkins 中安装的插件表现为 Jenkins
+    作业内的参数或可配置项，或者作为*声明性流水线语法*的步骤下的一部分。
 - en: 'The following screenshot shows the Jenkins system configuration. It''s a setting
     to configure the SonarQube tool (a static code analysis tool). The respective
     configuration is available only after installing the Jenkins plugin for SonarQube:'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下截图显示了 Jenkins 系统配置。 这是配置 SonarQube 工具（一个静态代码分析工具）的设置。 只有安装了 SonarQube 的 Jenkins
+    插件后才能使用相应的配置：
 - en: '![](img/d3c961a3-4b8c-48a6-950b-d44df9021f26.png)'
+  id: totrans-14
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d3c961a3-4b8c-48a6-950b-d44df9021f26.png)'
 - en: SonarQube settings inside Jenkins system configuration
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 系统配置中的 SonarQube 设置
 - en: 'There is a special section inside Jenkins to manage plugins. In this section,
     we will learn how to manage plugins using the Jenkins Plugin Manager:'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中有一个特殊的部分来管理插件。 在本节中，我们将学习如何使用 Jenkins 插件管理器管理插件：
 - en: From the Jenkins dashboard click on **Manage Jenkins**.
+  id: totrans-17
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中单击**管理 Jenkins**。
 - en: Once on the Manage Jenkins page, click on **Manage Plugins**. You can also access
     the same Jenkins Plugin Manager page using the `<Jenkins URL>/pluginManager` link.
+  id: totrans-18
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 进入管理 Jenkins 页面后，单击**管理插件**。 您还可以使用`<Jenkins URL>/pluginManager`链接访问相同的 Jenkins
+    插件管理器页面。
 - en: 'You will see the following four tabs: Updates, Available, Installed, and Advanced.'
+  id: totrans-19
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将看到以下四个选项卡：更新、可用、已安装和高级。
 - en: Updating Jenkins plugins
+  id: totrans-20
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更新 Jenkins 插件
 - en: 'The **Updates** tab lists out all of the plugins that need an update, as shown
     in the following screenshot:'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: '**更新**选项卡列出了所有需要更新的插件，如下图所示：'
 - en: '![](img/30cbbc4e-258f-4614-90b7-86239c75ad5d.png)'
+  id: totrans-22
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/30cbbc4e-258f-4614-90b7-86239c75ad5d.png)'
 - en: Updating Jenkins plugins
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 更新 Jenkins 插件
 - en: To update a plugin, select it by clicking on its respective checkbox and click
     on the **Download now and install after restart** button.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 要更新插件，请通过单击相应复选框选择它，然后单击**立即下载并在重启后安装**按钮。
 - en: To update all plugins listed under the **Update** tab, click on **All** (available
     at the bottom of the page). This will select all the plugins. Then, click on the
     **Download now and install after restart** button to install the updates.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 要更新**更新**选项卡下列出的所有插件，请单击页面底部的**全部**。 这将选择所有插件。 然后，单击**立即下载并在重启后安装**按钮以安装更新。
 - en: On the **Updates** tab, at the bottom of the page, you will see a button named
     **Check now**. Click on it to refresh the list of plugins that are displayed under
     the **Updates** tab. This will check for plugin updates.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 在**更新**选项卡上，在页面底部，您会看到一个名为**立即检查**的按钮。 单击它以刷新在**更新**选项卡下显示的插件列表。 这将检查插件更新。
 - en: Installing a new Jenkins plugin
+  id: totrans-27
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装新的 Jenkins 插件
 - en: The **Available** tab lists all plugins available for Jenkins. Plugins that
     are installed on your Jenkins instance will not be listed here.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: '**可用**标签列出了所有可用于 Jenkins 的插件。已安装在你的 Jenkins 实例上的插件不会在这里列出。'
 - en: 'The following screenshot shows a list of available plugins for Jenkins:'
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的屏幕截图显示了 Jenkins 的可用插件列表：
 - en: '![](img/a78bf775-0f8f-459c-8aa8-3cdc49ce6843.png)'
+  id: totrans-30
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a78bf775-0f8f-459c-8aa8-3cdc49ce6843.png)'
 - en: The plugins are grouped based on their functionality
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件根据其功能分组
 - en: To install a plugin, select it by clicking on its respective checkbox. Then,
     at the bottom of the page click on either the **Install without restart** button
     (to install the plugin immediately) or on the **Download now and install after
     restart** button (the name is self-explanatory).
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 要安装插件，请通过点击其相应复选框来选择它。然后，在页面底部点击**立即安装**按钮（立即安装插件）或者**立即下载并在重启后安装**按钮（名字已经很清楚了）。
 - en: Just like the **Updates** tab, here too you will see a button named **Check
     now**. Clicking on it will refresh the list of plugins under the **Available**
     tab.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 就像**更新**标签一样，在这里你也会看到一个名为**立即检查**的按钮。点击它将刷新**可用**标签下的插件列表。
 - en: Uninstalling or downgrading a Jenkins plugin
+  id: totrans-34
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 卸载或降级 Jenkins 插件
 - en: The **Installed** tab lists all the plugins currently installed on your Jenkins
     instance. As shown in the following screenshot, you can see there is an option
     to uninstall a plugin as well as downgrade it.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: '**已安装**标签列出了当前安装在你的 Jenkins 实例上的所有插件。如下面的屏幕截图所示，你可以看到卸载插件以及降级插件的选项。'
 - en: 'You can always choose to downgrade a plugin, in the event your Jenkins instance
     becomes unstable or your CI/CD pipeline does not do well, after a plugin update:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你的 Jenkins 实例变得不稳定或 CI/CD 流水线在插件更新后没有良好表现，你可以选择降级插件：
 - en: '![](img/2418c781-8498-4498-b877-fa0743ad6873.png)'
+  id: totrans-37
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/2418c781-8498-4498-b877-fa0743ad6873.png)'
 - en: List of installed Jenkins plugin
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 已安装的 Jenkins 插件列表
 - en: Configuring proxy settings in Jenkins
+  id: totrans-39
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 Jenkins 的代理设置
 - en: 'Under the **Advanced** tab, you will see a section named HTTP Proxy Configuration.
     This is the place where you configure your proxy settings to allow Jenkins to
     fetch updates from the internet:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 在**高级**标签下，你将看到一个名为 HTTP 代理配置的部分。这是你配置代理设置以便 Jenkins 从互联网获取更新的地方：
 - en: '![](img/5948748e-4024-4099-9db2-7be2cb9e4899.png)'
+  id: totrans-41
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5948748e-4024-4099-9db2-7be2cb9e4899.png)'
 - en: HTTP Proxy Configuration settings
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: HTTP 代理配置设置
 - en: Leave these fields empty if your Jenkins server is not behind any firewall and
     has direct access to the internet.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你的 Jenkins 服务器没有在任何防火墙后面，并且可以直接访问互联网，那么请将这些字段留空。
 - en: Jenkins uses the HTTP Proxy Configuration details when you try to install or
     upgrade a Jenkins plugin. It also uses this information to update the list of
     Jenkins plugins available on the Update tab and the Available tab.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 当你尝试安装或升级 Jenkins 插件时，Jenkins 使用 HTTP 代理配置详细信息。它还使用这些信息来更新“更新”标签和“可用”标签中的 Jenkins
+    插件列表。
 - en: 'To test your proxy settings, do the following:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 要测试你的代理设置，请按照以下步骤进行：
 - en: Under the **HTTP Proxy Configuration** section, click on the **Advanced…** button.
+  id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**HTTP 代理配置**部分，点击**高级...**按钮。
 - en: Add a URL to the **Test URL** field and click on the **Validate Proxy** button.
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**测试 URL**字段中添加一个网址，并点击**验证代理**按钮。
 - en: 'You should see a message: Success, as shown in the following screenshot.'
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你应该看到一个消息：成功，如下面的屏幕截图所示。
 - en: 'Click on the **Submit** button to save the settings:'
+  id: totrans-49
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**提交**按钮保存设置：
 - en: '![](img/8351e74a-5ba7-49a7-9fd2-9f856ee465af.png)'
+  id: totrans-50
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8351e74a-5ba7-49a7-9fd2-9f856ee465af.png)'
 - en: Checking the proxy settings
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 检查代理设置
 - en: Manually installing a Jenkins plugin
+  id: totrans-52
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 手动安装 Jenkins 插件
 - en: Under the **Advanced** tab, just after the **HTTP Proxy Configuration** section,
     you will see another section named **Upload Plugin**. It provides you with the
     facility to install or upgrade a Jenkins plugin.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 在**高级**标签下，在**HTTP 代理配置**部分之后，你将看到另一个名为**上传插件**的部分。它提供了一个安装或升级 Jenkins 插件的功能。
 - en: This feature is helpful when your Jenkins instance does not have internet access
     and you are in need of a new plugin or you need to upgrade an existing plugin.
     Imagine a situation where you have a Jenkins instance running inside a local area
@@ -227,1355 +340,2039 @@
     plugin from the online Jenkins repository, and then you will transport it to the
     Jenkins master server using a removable media. And finally, you will use the **Upload
     Plugin** section to install the required Jenkins plugin.
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您的 Jenkins 实例无法访问互联网并且您需要一个新的插件或需要升级现有插件时，此功能非常有用。想象一下，您有一个运行在本地局域网内但无法访问互联网的
+    Jenkins 实例，或者我们可以说是 Jenkins 的在线插件仓库。在这种情况下，您将首先从在线 Jenkins 仓库下载所需的 Jenkins 插件，然后使用可移动介质将其传输到
+    Jenkins 主服务器，并最终使用**上传插件**部分来安装所需的 Jenkins 插件。
 - en: 'Let us try to install a plugin manually by following the given steps:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们尝试按照给定步骤手动安装插件：
 - en: 'From a machine that has access to the internet, open the website: [https://updates.jenkins-ci.org/download/plugins/](https://updates.jenkins-ci.org/download/plugins/).'
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从可以访问互联网的计算机上，打开网站：[https://updates.jenkins-ci.org/download/plugins/](https://updates.jenkins-ci.org/download/plugins/)。
 - en: 'The preceding site contains the list of all plugins available for Jenkins,
     as shown in the following screenshot:'
+  id: totrans-57
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述网站包含了所有可用于 Jenkins 的插件列表，如下面的屏幕截图所示：
 - en: '![](img/a2beda43-f4d7-4cf8-a7ca-a04e664ea5d7.png)'
+  id: totrans-58
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a2beda43-f4d7-4cf8-a7ca-a04e664ea5d7.png)'
 - en: Jenkins plugin index
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 插件索引
 - en: In the following example, we will install a plugin named `logstash`.
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在以下示例中，我们将安装一个名为`logstash`的插件。
 - en: On the index page, search for `logstash` and click on it.
+  id: totrans-61
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在索引页面上，搜索`logstash`并点击它。
 - en: 'You will see all available versions of the respective plugin. Click on the
     one that you need (I choose to install the latest):'
+  id: totrans-62
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将看到相应插件的所有可用版本。点击您需要的版本（我选择安装最新版本）：
 - en: '![](img/dd8ac73e-9be4-4e7b-8dc3-05eb011557aa.png)'
+  id: totrans-63
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dd8ac73e-9be4-4e7b-8dc3-05eb011557aa.png)'
 - en: List of versions available for a plugin
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件可用版本列表
 - en: This will download a `.hpi` file on your system.
+  id: totrans-65
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这将在您的系统上下载一个`.hpi`文件。
 - en: When you download a plugin, it is also important that you download its dependencies
     (other Jenkins plugins).
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 下载插件时，同样重要的是下载它的依赖项（其他 Jenkins 插件）。
 - en: All the dependencies (Jenkins plugins) must be installed before installing the
     desired plugin.
+  id: totrans-67
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 必须在安装所需插件之前安装所有依赖项（Jenkins 插件）。
 - en: Copy this `.hpi` file (`logstash.hpi`) to your Jenkins server or to any machine
     that has access to your Jenkins dashboard.
+  id: totrans-68
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将此`.hpi`文件（`logstash.hpi`）复制到您的 Jenkins 服务器或任何可以访问您的 Jenkins 仪表板的计算机上。
 - en: Now, log in to your Jenkins server. From the Jenkins dashboard, navigate to
     **Manage Jenkins** | **Manage Plugins** | **Advanced**.
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，请登录到您的 Jenkins 服务器。从 Jenkins 仪表板，导航到**管理 Jenkins** | **管理插件** | **高级**。
 - en: 'On the **Advanced** tab, under the **Upload Plugin** section, do the following
     (as shown in the following screenshot):'
+  id: totrans-70
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**高级**选项卡下的**上传插件**部分，执行以下操作（如下面的屏幕截图所示）：
 - en: Click on the Browse… button under the File field.
+  id: totrans-71
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击**文件**字段下的**浏览...**按钮。
 - en: From the resultant window, upload the downloaded `.hpi` file.
+  id: totrans-72
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从结果窗口中，上传已下载的`.hpi`文件。
 - en: 'Once done, click on the **Upload** button:'
+  id: totrans-73
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击**上传**按钮：
 - en: '![](img/f68e3f67-10c9-4109-a8c7-3db079818704.png)'
+  id: totrans-74
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f68e3f67-10c9-4109-a8c7-3db079818704.png)'
 - en: Manually uploading a Jenkins plugin
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 手动上传 Jenkins 插件
 - en: Jenkins will now proceed with the plugin installation.
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Jenkins 现在将继续进行插件安装。
 - en: Jenkins backup and restore
+  id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 备份和恢复
 - en: What happens if someone accidentally deletes important Jenkins configurations?
     Although this can be avoided using stringent user permissions that we will see
     in the *User Administration* section, imagine a situation where someone working
     on the Jenkins configuration wants to restore to a previous stable Jenkins configuration.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果有人意外删除了重要的 Jenkins 配置会发生什么？尽管可以通过我们将在*用户管理*部分中看到的严格的用户权限来避免这种情况，但想象一下这样一种情况：某人正在处理
+    Jenkins 配置，希望将其恢复到之前稳定的 Jenkins 配置。
 - en: From what we have learned so far, we know that the entire Jenkins configuration
     is stored under the Jenkins home directory. It is `C:\jenkins` (Windows), `/var/jenkins_home`
     (Apache Tomcat), `/var/lib/jenkins` (Linux). In the following section, we will
     learn how to back up and restore the Jenkins configuration using a plugin, the Periodic
     Backup plugin.
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 从我们目前了解的内容来看，我们知道整个 Jenkins 配置存储在 Jenkins 主目录下。它是`C:\jenkins`（Windows），`/var/jenkins_home`（Apache
+    Tomcat），`/var/lib/jenkins`（Linux）。在接下来的部分中，我们将学习如何使用插件来备份和恢复 Jenkins 配置，即周期性备份插件。
 - en: Installing the Periodic Backup plugin
+  id: totrans-80
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装周期性备份插件
 - en: 'Follow the given steps to install the Periodic Backup plugin:'
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤安装周期性备份插件：
 - en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Plugins**.
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板上，点击**管理 Jenkins** | **管理插件**。
 - en: On the **Plugin Manager** page, click on the **Available** tab.
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**插件管理器**页面上，点击**可用**选项卡。
 - en: 'Using the **Filter** option, search for `Periodic Backup`, as shown in the
     following screenshot:'
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用**过滤器**选项，搜索`周期性备份`，如下面的截图所示：
 - en: '![](img/1c0318be-9128-46d6-84b9-d3b385f2e707.png)'
+  id: totrans-85
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1c0318be-9128-46d6-84b9-d3b385f2e707.png)'
 - en: Installing the Periodic Backup plugin
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装周期性备份插件
 - en: From the list of items choose Periodic Backup and click on **Install without
     restart**. You only need Blue Ocean and nothing else.
+  id: totrans-87
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从项目列表中选择周期性备份并点击**无需重启安装**。你只需要蓝色海洋和其他什么都不需要。
 - en: Configuring the Periodic Backup plugin
+  id: totrans-88
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置周期性备份插件
 - en: 'We need to tell the Periodic Backup plugin what to back up, where to back up,
     and how frequent to back up before we even start using it. Follow the given steps:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们开始使用之前，我们需要告诉周期性备份插件要备份什么，备份到哪里以及备份频率是多少。按照以下步骤操作：
 - en: From the Jenkins dashboard go to **Manage Jenkins** | **Periodic Backup Manager**.
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板转到**管理 Jenkins** | **周期性备份管理器**。
 - en: 'When you access the Periodic Backup Manager for the first time you will see
     the following notification:'
+  id: totrans-91
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 当你第一次访问周期性备份管理器时，你会看到以下通知：
 - en: The Periodic Backup plugin has not been configured yet. Click here to configure
     it.
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 周期性备份插件尚未配置。点击这里进行配置。
 - en: Click on the **Click here to configure it** link.
+  id: totrans-93
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**单击此处进行配置**链接。
 - en: You will be taken to the Periodic Backup Manager page, and you will find quite
     a few options to configure. Let us see them one by one (as shown in the following
     screenshot).
+  id: totrans-94
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将被带到周期性备份管理器页面，并且你会发现很多配置选项。让我们逐一查看它们（如下面的截图所示）。
 - en: The Root Directory, `<your Jenkins home directory>`, is your Jenkins home directory.
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根目录，`<你的 Jenkins 主目录>`，是你的 Jenkins 主目录。
 - en: The Temporary Directory field should be a directory located on your Jenkins
     server machine. As the name says, this directory is used as a temporary location
     to perform archive/unarchive operations during the backup/restore process. It
     can be any directory and should be outside Jenkins home directory.
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**临时目录**字段应该是位于 Jenkins 服务器机器上的一个目录。正如其名称所示，该目录用作备份/恢复过程中执行归档/解档操作的临时位置。它可以是任何目录，并且应该位于
+    Jenkins 主目录之外。'
 - en: 'The Backup schedule (cron) field is where you define when or how frequent to
     make a backup. Do not leave this field empty. Note that the field accepts cron
     syntax. For example, to back up daily at midnight, use the following cron syntax
     without quotes: `0 0 * * *`.'
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**备份计划（cron）**字段是你定义何时或多频繁进行备份的地方。不要将此字段留空。请注意，该字段接受 cron 语法。例如，要每天午夜备份一次，请使用以下不带引号的
+    cron 语法：`0 0 * * *`。'
 - en: The Validate cron syntax button is to validate the cron that you have entered
     in the Backup schedule (cron) field.
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**验证 cron 语法**按钮用于验证你在**备份计划（cron）**字段中输入的 cron 语法是否正确。'
 - en: The Maximum backups in location field tells Jenkins not to store backups greater
     than the number described here.
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**位置中的最大备份数**字段告诉 Jenkins 不要存储大于此处描述的数量的备份。'
 - en: The Store no older than (days) field tells Jenkins to delete any backup that
     is older than this value.
+  id: totrans-100
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**存储时间不超过（天）**字段告诉 Jenkins 删除任何早于此值的备份。'
 - en: 'Under File Management Strategy, you have two options to choose from: ConfigOnly
     and FullBackup. If you choose the ConfigOnly option, Jenkins will back up all
     the `.xml` files from the Jenkins home directory and the `config.xml` files of
     all the jobs. But, if you choose FullBackup, then Jenkins will back up the whole
     Jenkins home directory.'
+  id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**文件管理策略**下，你有两个选择：仅配置（ConfigOnly）和完全备份（FullBackup）。如果你选择了仅配置选项，Jenkins 将备份
+    Jenkins 主目录中的所有`.xml`文件以及所有作业的`config.xml`文件。但是，如果选择完全备份，则 Jenkins 将备份整个 Jenkins
+    主目录。
 - en: Under Storage Strategy, you have three options to choose from: NullStorage,
     TarGzStorage, and ZipStorage (with multi-volume support). You can choose the one
     that suits your requirement.
+  id: totrans-102
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 存储策略 下，您有三个选择： NullStorage，TarGzStorage 和 ZipStorage（支持多卷）。您可以选择适合您需求的选项。
 - en: Under Backup Location, you can add multiple backup locations to store your backups.
     To do so, click on the **Add Location** button and choose LocalDirectory. Next,
     under the Backup directory path field, add the location where you want Jenkins
     to store the backup. Also, do not forget to check the **Enable this location**
     checkbox. You can choose multiple locations and enable all of them.
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 备份位置 下，您可以添加多个备份位置来存储您的备份。要这样做，请点击**添加位置**按钮并选择本地目录。接下来，在 备份目录路径 字段下，添加您希望
+    Jenkins 存储备份的位置。同时，不要忘记勾选**启用此位置**复选框。您可以选择多个位置并将它们全部启用。
 - en: '![](img/d0faaace-2f45-4a7b-8506-6ad8d2c20a45.png)'
+  id: totrans-104
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d0faaace-2f45-4a7b-8506-6ad8d2c20a45.png)'
 - en: Periodic Backup configurations
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 周期性备份配置
 - en: Creating a Jenkins backup
+  id: totrans-106
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建 Jenkins 备份
 - en: Now that we have configured the Periodic Backup plugin, let us run a backup
     to test our settings. To do so, on the Periodic Backup Manager page, click on
     the Backup Now! link available on the left-hand side menu.
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经配置了周期性备份插件，让我们运行一个备份以测试我们的设置。为此，请在周期性备份管理器页面上，点击左侧菜单中的立即备份！链接。
 - en: You will see the notification on the Periodic Backup Manager page while the
     backup is in progress as Creating backup….
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 在备份进行中，您将在周期性备份管理器页面上看到通知，显示为 Creating backup…。
 - en: 'Once the backup is complete, you will see it listed on the same page, as shown
     in the following screenshot:'
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦备份完成，您将在同一页面上看到它列在备份列表中，如下图所示：
 - en: '![](img/36f2c2eb-3c25-4f7e-b793-f30febb61293.png)'
+  id: totrans-110
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/36f2c2eb-3c25-4f7e-b793-f30febb61293.png)'
 - en: List of backup
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 备份列表
 - en: Restoring a Jenkins backup
+  id: totrans-112
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 恢复 Jenkins 备份
 - en: 'Let us now test restoring a Jenkins backup. But before we do that, let us make
     some configuration changes to see if the restore operation works. We will do this
     by making some configuration changes on the Configure System page:'
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们测试恢复 Jenkins 备份。但在我们这样做之前，让我们进行一些配置更改，以查看恢复操作是否有效。我们将通过在配置系统页面上进行一些配置更改来实现这一点：
 - en: From the Jenkins dashboard, click on **Manage Jenkins |Configure System**.
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板，点击**管理 Jenkins | 配置系统**。
 - en: On the **Configure System** page, change the values for the following fields.
+  id: totrans-115
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**配置系统**页面上，更改以下字段的值。
 - en: Change the value of the # of executors field from `2` to `5`.
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将 # of executors 字段的值从`2`更改为`5`。
 - en: Change the value of the Quiet period field from `5` to `10`.
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将安静期字段的值从`5`更改为`10`。
 - en: Click on the **Save** button at the bottom of the page.
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击页面底部的**保存**按钮。
 - en: Now, let us restore Jenkins to a point previous to the above changes.
+  id: totrans-119
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，让我们将 Jenkins 恢复到上述更改之前的状态。
 - en: From the Jenkins dashboard, click on **Manage Jenkins | Periodic Backup Manager**.
+  id: totrans-120
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板，点击**管理 Jenkins | 周期性备份管理器**。
 - en: On the resultant page, choose the backup that we created in the previous section
     and click on the **Restore selected backup** button.
+  id: totrans-121
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，选择我们在前一节中创建的备份，并点击**恢复选定的备份**按钮。
 - en: 'You will see the following message:'
+  id: totrans-122
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将看到以下消息：
 - en: Restoring backup…
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 恢复备份…
 - en: Refresh the page, and from the Jenkins dashboard click on **Manage Jenkins |
     Configure System**.
+  id: totrans-124
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 刷新页面，在 Jenkins 仪表板上点击**管理 Jenkins | 配置系统**。
 - en: You will find the value of the # of executors field as two and the Quiet period
     field as five.
+  id: totrans-125
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将会发现 # of executors 字段的值为两个，安静期字段的值为五。
 - en: Viewing the backup and restore logs
+  id: totrans-126
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 查看备份和恢复日志
 - en: 'You can see the whole log with respect to Jenkins backup and restore. To view
     the details logs, perform the following steps:'
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以查看关于 Jenkins 备份和恢复的完整日志。要查看详细日志，请执行以下步骤：
 - en: From the Jenkins dashboard, click on **Manage Jenkins | System Log**.
+  id: totrans-128
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板，点击**管理 Jenkins | 系统日志**。
 - en: On the Logs page, under the Log Recorders section, click on `org.jenkinsci.plugins.periodicbackup`.
+  id: totrans-129
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在日志页面，转至日志记录器部分，点击`org.jenkinsci.plugins.periodicbackup`。
 - en: 'You will find the complete log of the backup and the restore action performed
     here, as shown in the following screenshot:'
+  id: totrans-130
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将在此找到备份和恢复操作的完整日志，如下图所示：
 - en: '![](img/3eeb250d-f852-432e-8fb4-fb06b6166658.png)'
+  id: totrans-131
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3eeb250d-f852-432e-8fb4-fb06b6166658.png)'
 - en: Jenkins Periodic Backup log
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 周期性备份日志
 - en: Upgrading Jenkins
+  id: totrans-133
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 升级 Jenkins
 - en: 'There are two kinds of Jenkins releases: *LTS Release* and *Weekly Release*.
     The *Jenkins Weekly Release* contains new features and bug fixes, whereas the
     *LTS (Long Term Support)* *Release* are special releases that are considered stable
     over a period of 12 weeks. It''s recommended that you always choose an *LTS Release*
     for your Jenkins server:'
+  id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 有两种发布版本：*LTS 发布* 和 *每周发布*。 *Jenkins 每周发布* 包含新功能和错误修复，而 *LTS（长期支持）* *发布*
+    是特殊的发布版本，在 12 周的时间内被视为稳定。建议您始终为您的 Jenkins 服务器选择一个 *LTS 发布*：
 - en: '![](img/b70677e5-6337-4f2e-a625-8d5b7014741e.png)'
+  id: totrans-135
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b70677e5-6337-4f2e-a625-8d5b7014741e.png)'
 - en: Jenkins download page
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 下载页面
 - en: 'Jenkins by itself notifies you when there is a newer version available (provided
     your Jenkins server has access to the internet), as shown in the following screenshot:'
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 本身会在有新版本可用时通知您（前提是您的 Jenkins 服务器可以访问互联网），如下面的截图所示：
 - en: '![](img/5cf66ecb-2dc9-43fe-8457-18344b00f90d.png)'
+  id: totrans-138
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5cf66ecb-2dc9-43fe-8457-18344b00f90d.png)'
 - en: Jenkins notification about the availability of a new version
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 通知有新版本可用
 - en: Upgrading Jenkins running on Tomcat Server
+  id: totrans-140
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 升级运行在 Tomcat 服务器上的 Jenkins
 - en: 'In the following section, we will learn to update Jenkins running inside a
     servlet (Apache Tomcat). Follow the given steps:'
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，我们将学习如何更新运行在 servlet 内的 Jenkins（Apache Tomcat）。按照给定的步骤操作：
 - en: Log in to your Apache Tomcat server machine as the root user.
+  id: totrans-142
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以 root 用户身份登录到您的 Apache Tomcat 服务器机器。
 - en: 'Download the latest (LTS) version of `jenkins.war` under the `/tmp` directory
     using the following command:'
+  id: totrans-143
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令在 `/tmp` 目录下下载最新的（LTS）版本的 `jenkins.war`：
 - en: '[PRE0]'
+  id: totrans-144
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'To download a specific version of Jenkins (LTS), go to the following link:
     [http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/)
     and choose the desired version of Jenkins (for example, [http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war](http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war)).'
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 要下载特定版本的 Jenkins（LTS），请转到以下链接：[http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/)
+    并选择所需的 Jenkins 版本（例如，[http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war](http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war)）。
 - en: 'To download a specific version of Jenkins (Weekly), go to the following link:
     [http://mirrors.jenkins.io/war/](http://mirrors.jenkins.io/war/) and choose the
     desired version of Jenkins (for example, [http://mirrors.jenkins.io/war/2.78/jenkins.war](http://mirrors.jenkins.io/war/2.78/jenkins.war)).'
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 要下载特定版本的 Jenkins（每周发布），请转到以下链接：[http://mirrors.jenkins.io/war/](http://mirrors.jenkins.io/war/)
+    并选择所需的 Jenkins 版本（例如，[http://mirrors.jenkins.io/war/2.78/jenkins.war](http://mirrors.jenkins.io/war/2.78/jenkins.war)）。
 - en: Before we upgrade Jenkins, it is important that we take a backup of our `jenkins_home`
     directory. Refer to the* Creating a Jenkins backup* section.
+  id: totrans-147
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在我们升级 Jenkins 之前，重要的是我们备份我们的 `jenkins_home` 目录。请参考*创建 Jenkins 备份*部分。
 - en: Always run a backup of Jenkins before upgrading Jenkins.
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 在升级 Jenkins 之前始终运行 Jenkins 的备份。
 - en: 'Now, stop the `tomcat` service using the following command:'
+  id: totrans-149
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，使用以下命令停止 `tomcat` 服务：
 - en: '[PRE1]'
+  id: totrans-150
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Next, go to the location where the current `jenkins.war` file is present. In
     our case, it is `/opt/tomcat/webapps`:'
+  id: totrans-151
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，前往当前 `jenkins.war` 文件所在的位置。在我们的情况下，它是 `/opt/tomcat/webapps`：
 - en: '[PRE2]'
+  id: totrans-152
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: If you have chosen to use Tomcat Server solely to run Jenkins, you may find
     `ROOT.war` instead of `jenkins.war` under the `webapps` directory. Refer to the *Installing
     Jenkins alone on Apache Tomcat Server* section, from [Chapter 2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml), *Installing
     Jenkins.*
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您选择仅使用 Tomcat 服务器运行 Jenkins，则可能在 `webapps` 目录下找到 `ROOT.war` 而不是 `jenkins.war`。请参考*在
+    Apache Tomcat 服务器上独立安装 Jenkins*部分，来自[第 2 章](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml)，*安装
+    Jenkins*。
 - en: 'Take a backup of your existing `jenkins.war` or `ROOT.war` and place it somewhere
     outside the `webapps` directory (for example, the `/tmp` directory):'
+  id: totrans-154
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 备份您现有的 `jenkins.war` 或 `ROOT.war` 并将其放置在 `webapps` 目录之外的某个位置（例如，`/tmp` 目录）：
 - en: '[PRE3]'
+  id: totrans-155
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Or:'
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者：
 - en: '[PRE4]'
+  id: totrans-157
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Now, delete the current `jenkins.war` or `ROOT.war` file inside the webapps
     directory:'
+  id: totrans-158
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，在 webapps 目录内删除当前的 `jenkins.war` 或 `ROOT.war` 文件：
 - en: '[PRE5]'
+  id: totrans-159
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'Or:'
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者：
 - en: '[PRE6]'
+  id: totrans-161
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Next, move the new `jenkins.war` that you have downloaded from the `/tmp` directory
     to the `webapps` directory. If you are using Apache Tomcat Server solely for running
     Jenkins, then rename the `destination.war` file as `ROOT.war`:'
+  id: totrans-162
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，将您从 `/tmp` 目录下载的新的 `jenkins.war` 移动到 `webapps` 目录。如果您仅使用 Apache Tomcat 服务器运行
+    Jenkins，则将 `destination.war` 文件重命名为 `ROOT.war`：
 - en: '[PRE7]'
+  id: totrans-163
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Or:'
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者：
 - en: '[PRE8]'
+  id: totrans-165
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Now, start the Tomcat service using the following command:'
+  id: totrans-166
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，使用以下命令启动 Tomcat 服务：
 - en: '[PRE9]'
+  id: totrans-167
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Log in to your Jenkins instance. To confirm the Jenkins version, look at the
     bottom-right corner of your Jenkins dashboard, where you will find a new Jenkins
     version number.
+  id: totrans-168
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 Jenkins 实例。要确认 Jenkins 版本，请查看 Jenkins 仪表板的右下角，您将找到一个新的 Jenkins 版本号。
 - en: Upgrading standalone Jenkins running on Windows
+  id: totrans-169
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 升级运行在 Windows 上的独立 Jenkins
 - en: 'Upgrading a standalone Jenkins server on Windows is a simple task. Follow the
     given steps:'
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Windows 上升级独立 Jenkins 服务器是一个简单的任务。按照给定的步骤进行：
 - en: 'Download the latest `jenkins.war` from [https://jenkins.io/download/](https://jenkins.io/download/).
     Or, if you are looking for a particular Jenkins version that you want to upgrade
     to, then download it from the following link: [http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/).'
+  id: totrans-171
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从[https://jenkins.io/download/](https://jenkins.io/download/)下载最新的`jenkins.war`。或者，如果您正在寻找要升级到的特定
+    Jenkins 版本，则从以下链接下载：[http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/)。
 - en: Before we upgrade Jenkins it is important that we take a backup of our `jenkins_home`
     directory. Refer to the *Creating a Jenkins backup* section under the *Jenkins
     backup and restore* section.
+  id: totrans-172
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在我们升级 Jenkins 之前，重要的是我们备份我们的`jenkins_home`目录。参考*创建 Jenkins 备份*部分下的*Jenkins 备份和恢复*部分。
 - en: Always run a backup of Jenkins before upgrading Jenkins.
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: 在升级 Jenkins 之前始终运行 Jenkins 备份。
 - en: On a Jenkins standalone instance (running on a Windows machine), the `jenkins.war`
     file is present inside the `jenkins_home` directory. Hence, backing up the `jenkins_home`
     directory is enough.
+  id: totrans-174
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 独立实例（运行在 Windows 机器上）上，`jenkins.war`文件位于`jenkins_home`目录内。因此，备份`jenkins_home`目录就足够了。
 - en: Next, stop the Jenkins service. To do that, execute `services.msc` from Windows
     Run. This will open the Windows services page.
+  id: totrans-175
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，停止 Jenkins 服务。要执行此操作，请从 Windows 运行执行`services.msc`。这将打开 Windows 服务页面。
 - en: 'Search for the Jenkins service (usually named Jenkins). Stop the Jenkins service,
     as shown in the following screenshot:'
+  id: totrans-176
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 搜索 Jenkins 服务（通常命名为 Jenkins）。停止 Jenkins 服务，如下面的屏幕截图所示：
 - en: '![](img/35a27889-be95-47b7-bea9-5bb2bdd978fb.png)'
+  id: totrans-177
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/35a27889-be95-47b7-bea9-5bb2bdd978fb.png)'
 - en: Stopping a Jenkins service
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 停止 Jenkins 服务
 - en: 'Or, you can also stop the Jenkins service from the Windows Command Prompt (Run
     as administrator), using the following command:'
+  id: totrans-179
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 或者，您也可以使用以下命令从 Windows 命令提示符（以管理员身份运行）停止 Jenkins 服务：
 - en: '[PRE10]'
+  id: totrans-180
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'The output is as follows:'
+  id: totrans-181
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下：
 - en: '[PRE11]'
+  id: totrans-182
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: Next, replace the `jenkins.war` file, present under `C:\Program Files (x86)\Jenkins\`,
     with the newly downloaded `jenkins.war` file.
+  id: totrans-183
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，将位于`C:\Program Files (x86)\Jenkins\`下的`jenkins.war`文件替换为新下载的`jenkins.war`文件。
 - en: 'After replacing the `jenkins.war` file*,* start the Jenkins service from the
     services window, as shown in the following screenshot:'
+  id: totrans-184
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 替换`jenkins.war`文件后，从服务窗口启动 Jenkins 服务，如下面的屏幕截图所示：
 - en: '![](img/b683c11b-e08c-4f8d-b4c4-05119f8d0ef6.png)'
+  id: totrans-185
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b683c11b-e08c-4f8d-b4c4-05119f8d0ef6.png)'
 - en: Starting a Jenkins service
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: 启动 Jenkins 服务
 - en: 'Or, you can also start the Jenkins service from the Windows Command Prompt
     (Run as administrator), using the following command:'
+  id: totrans-187
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 或者，您也可以使用以下命令从 Windows 命令提示符（以管理员身份运行）启动 Jenkins 服务：
 - en: '[PRE12]'
+  id: totrans-188
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'The output is as follows:'
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下：
 - en: '[PRE13]'
+  id: totrans-190
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: Log in to your Jenkins instance. To confirm the Jenkins version, look at the
     bottom-right corner of your Jenkins dashboard, where you should see a new Jenkins
     version number.
+  id: totrans-191
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 Jenkins 实例。要确认 Jenkins 版本，请查看 Jenkins 仪表板的右下角，您应该看到一个新的 Jenkins 版本号。
 - en: Upgrading standalone Jenkins running on Ubuntu
+  id: totrans-192
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 升级运行在 Ubuntu 上的独立 Jenkins
 - en: 'In the following section, we will learn how to update Jenkins running on Ubuntu.
     Follow the given steps:'
+  id: totrans-193
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，我们将学习如何更新运行在 Ubuntu 上的 Jenkins。按照给定的步骤进行：
 - en: Log in to your Jenkins server machine as a root user.
+  id: totrans-194
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以 root 用户身份登录到您的 Jenkins 服务器机器。
 - en: 'Download the latest (LTS) version of `jenkins.war` under the `/tmp` directory,
     using the following command:'
+  id: totrans-195
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令在`/tmp`目录下下载最新的（LTS）版本`jenkins.war`文件：
 - en: '[PRE14]'
+  id: totrans-196
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'To download a specific version of Jenkins (LTS), go to the following link:
     [http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/)
     and choose the desired version of Jenkins (for example, [http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war](http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war)).'
+  id: totrans-197
   prefs: []
   type: TYPE_NORMAL
+  zh: 要下载特定版本的 Jenkins（LTS），请转到以下链接：[http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/)，并选择所需的
+    Jenkins 版本（例如，[http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war](http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war)）。
 - en: 'To download a specific version of Jenkins (Weekly), go to the following link:
     [http://mirrors.jenkins.io/war/](http://mirrors.jenkins.io/war/) and choose the
     desired version of Jenkins (for example, [http://mirrors.jenkins.io/war/2.78/jenkins.war](http://mirrors.jenkins.io/war/2.78/jenkins.war)).'
+  id: totrans-198
   prefs: []
   type: TYPE_NORMAL
+  zh: 要下载特定版本的 Jenkins（Weekly），请转到以下链接：[http://mirrors.jenkins.io/war/](http://mirrors.jenkins.io/war/)，然后选择所需版本的
+    Jenkins（例如，[http://mirrors.jenkins.io/war/2.78/jenkins.war](http://mirrors.jenkins.io/war/2.78/jenkins.war)）。
 - en: Before we upgrade Jenkins, it is important that we take a backup of our `jenkins_home`
     directory. Refer to the *Creating a Jenkins Backup* section under the *Jenkins
     backup and restore *section.
+  id: totrans-199
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在我们升级 Jenkins 之前，重要的是我们备份我们的`jenkins_home`目录。参考*Jenkins 备份和还原*部分下的*创建 Jenkins
+    备份*部分。
 - en: Always run a backup of Jenkins before upgrading Jenkins.
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: 在升级 Jenkins 之前，始终运行 Jenkins 备份。
 - en: 'Now, stop the `jenkins` service, using the following command:'
+  id: totrans-201
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，使用以下命令停止`jenkins`服务：
 - en: '[PRE15]'
+  id: totrans-202
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Next, go to the location where the current `jenkins.war` file is present. In
     our case, it is `/usr/share/jenkins/`:'
+  id: totrans-203
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，转到当前`jenkins.war`文件存在的位置。在我们的情况下，它是`/usr/share/jenkins/`：
 - en: '[PRE16]'
+  id: totrans-204
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'Take a backup of your existing `jenkins.war` and place it somewhere outside
     the `jenkins` directory (for example, the `/tmp` directory):'
+  id: totrans-205
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对您现有的`jenkins.war`进行备份，并将其放置在`jenkins`目录之外的某个地方（例如，`/tmp`目录）：
 - en: '[PRE17]'
+  id: totrans-206
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'Now, delete the current `jenkins.war` file inside the `jenkins` directory:'
+  id: totrans-207
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，删除`jenkins`目录中的当前`jenkins.war`文件：
 - en: '[PRE18]'
+  id: totrans-208
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'Next, move the new `jenkins.war` file that you have downloaded from the `/tmp`
     directory to the `jenkins` directory:'
+  id: totrans-209
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，将您从`/tmp`目录下载的新`jenkins.war`文件移动到`jenkins`目录：
 - en: '[PRE19]'
+  id: totrans-210
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'Now, start the `jenkins` service using the following command:'
+  id: totrans-211
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，使用以下命令启动`jenkins`服务：
 - en: '[PRE20]'
+  id: totrans-212
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: Log in to your Jenkins instance. To confirm the Jenkins version, look at the
     bottom-right corner of your Jenkins dashboard, where you will find a new Jenkins
     version number.
+  id: totrans-213
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 Jenkins 实例。要确认 Jenkins 版本，请查看 Jenkins 仪表板的右下角，您将找到一个新的 Jenkins 版本号。
 - en: Upgrading Jenkins running on a Docker container
+  id: totrans-214
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 升级运行在 Docker 容器上的 Jenkins
 - en: 'In the following section, we will learn how to update a Jenkins instance running
     inside a Docker container:'
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一节中，我们将学习如何更新运行在 Docker 容器内的 Jenkins 实例：
 - en: The following section is applicable only if you are running your Jenkins instance
     using a data volume for your `jenkins_home` directory. See the *Running Jenkins
     on Docker, Running a Jenkins container using a data volume* sections from the [Chapter
     2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml), *Installing Jenkins*.
+  id: totrans-216
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您正在使用数据卷为您的`jenkins_home`目录运行 Jenkins 实例，则以下部分适用。参见[第 2 章](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml)中的*在
+    Docker 上运行 Jenkins，使用数据卷运行 Jenkins 容器*部分，*安装 Jenkins*。
 - en: Log in to your Docker host machine.
+  id: totrans-217
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 Docker 主机机器。
 - en: 'Look for the running Jenkins container, using the following command:'
+  id: totrans-218
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令查找正在运行的 Jenkins 容器：
 - en: '[PRE21]'
+  id: totrans-219
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'The output is as follows:'
+  id: totrans-220
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下所示：
 - en: '[PRE22]'
+  id: totrans-221
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: You should get an output similar to the previous snippet. Note the Jenkins container
     name, in my example it is `jenkins_prod`.
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您应该会收到类似于先前片段的输出。注意 Jenkins 容器名称，在我的示例中是`jenkins_prod`。
 - en: 'We will stop and then delete the running Jenkins container using the following
     Docker commands. But, before you stop and delete your Jenkins instance, make sure
     that there is no job running on your Jenkins server:'
+  id: totrans-223
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们将使用以下 Docker 命令停止然后删除正在运行的 Jenkins 容器。但是，在您停止和删除 Jenkins 实例之前，请确保 Jenkins
+    服务器上没有作业在运行：
 - en: '[PRE23]'
+  id: totrans-224
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: 'List the available Docker images on your Docker host, using the following command.
     You can see we have a Jenkins Docker image: `jenkins/jenkins:lts`. However, that
     is no longer the latest:'
+  id: totrans-225
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令列出您的 Docker 主机上可用的 Docker 镜像。您可以看到我们有一个 Jenkins Docker 镜像：`jenkins/jenkins:lts`。但是，那已经不是最新的了：
 - en: '[PRE24]'
+  id: totrans-226
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'The output is as follows:'
+  id: totrans-227
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下所示：
 - en: '[PRE25]'
+  id: totrans-228
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'Download the latest Jenkins Docker image, using the following command:'
+  id: totrans-229
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令下载最新的 Jenkins Docker 镜像：
 - en: '[PRE26]'
+  id: totrans-230
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: The aforementioned command may take a while to download the Jenkins Docker image.
+  id: totrans-231
   prefs: []
   type: TYPE_NORMAL
+  zh: 上述命令可能需要一段时间来下载 Jenkins Docker 镜像。
 - en: At the time of writing this chapter, 2.73.1 was the latest Jenkins release (LTS).
     Choose the desired version of Jenkins by modifying the command.
+  id: totrans-232
   prefs: []
   type: TYPE_NORMAL
+  zh: 在编写本章时，2.73.1 是最新的 Jenkins 发布版本（LTS）。通过修改命令选择所需版本的 Jenkins。
 - en: 'Once the download is completed, execute the `sudo docker images` command again,
     as shown in the following segment. Note the new Jenkins Docker image. In my example,
     it is `jenkins/jenkins:2.73.1`:'
+  id: totrans-233
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 下载完成后，再次执行`sudo docker images`命令，如以下片段所示。注意新的 Jenkins Docker 镜像。在我的示例中，它是`jenkins/jenkins:2.73.1`：
 - en: '[PRE27]'
+  id: totrans-234
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'The output is as follows:'
+  id: totrans-235
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下所示：
 - en: '[PRE28]'
+  id: totrans-236
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'Now let us start a new Jenkins container using the newly downloaded Jenkins
     Docker image (we will reuse the old Jenkins container name):'
+  id: totrans-237
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在让我们使用新下载的 Jenkins Docker 镜像启动一个新的 Jenkins 容器（我们将重用旧的 Jenkins 容器名称）：
 - en: '[PRE29]'
+  id: totrans-238
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'The following table explains the Docker commands that we used before:'
+  id: totrans-239
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以下表格解释了我们之前使用的 Docker 命令：
 - en: '| `docker` | Used to invoke Docker utility. |'
+  id: totrans-240
   prefs: []
   type: TYPE_TB
+  zh: '| `docker` | 用于调用 Docker 实用程序。 |'
 - en: '| `run` | It''s a Docker command to run a container. |'
+  id: totrans-241
   prefs: []
   type: TYPE_TB
+  zh: '| `run` | 这是一个运行容器的 Docker 命令。 |'
 - en: '| `-d` | This option runs the container on the backend. |'
+  id: totrans-242
   prefs: []
   type: TYPE_TB
+  zh: '| `-d` | 此选项在后台运行容器。 |'
 - en: '| `--name` | This option gives a name to your container. |'
+  id: totrans-243
   prefs: []
   type: TYPE_TB
+  zh: '| `--name` | 此选项为容器命名。 |'
 - en: '| `-p` | This option is used to map a container''s port with the host. |'
+  id: totrans-244
   prefs: []
   type: TYPE_TB
+  zh: '| `-p` | 此选项用于将容器的端口映射到主机。 |'
 - en: '| `jenkins/jenkins:2.73.1` | The name of the Docker image and its version used
     to create a container. `jenkins/jenkins` is the Jenkins Docker image and `2.73.1`
     is a particular version of that image. |'
+  id: totrans-245
   prefs: []
   type: TYPE_TB
+  zh: '| `jenkins/jenkins:2.73.1` | 用于创建容器的 Docker 镜像及其版本的名称。`jenkins/jenkins` 是 Jenkins
+    Docker 镜像，`2.73.1` 是该镜像的特定版本。 |'
 - en: Log in to your Jenkins instance. You should see all your jobs/settings intact.
     To confirm the Jenkins version, look at the bottom-right corner of your Jenkins
     dashboard, where you will find a new Jenkins version number.
+  id: totrans-246
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 Jenkins 实例。您应该看到所有的作业/设置都完好无损。要确认 Jenkins 版本，请查看 Jenkins 仪表板的右下角，您将找到一个新的
+    Jenkins 版本号。
 - en: User administration
+  id: totrans-247
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用户管理
 - en: Let's see what Jenkins has to offer in the area of user administration. From
     the Jenkins dashboard, click on Manage Jenkins | Configure Global Security to
     access the Configure Global Security page.
+  id: totrans-248
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看 Jenkins 在用户管理领域提供了什么。从 Jenkins 仪表板中，点击“管理 Jenkins | 配置全局安全”以访问“配置全局安全”页面。
 - en: You can also access the Configure Global Security page by using the `<Jenkins
     URL>/configureSecurity/` link.
+  id: totrans-249
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还可以通过使用 `<Jenkins URL>/configureSecurity/` 链接访问“配置全局安全”页面。
 - en: In the following section, we will stick to the options that are related to user
     authentication and permissions. We will look at the other security options in
     the upcoming chapters.
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分，我们将坚持与用户身份验证和权限相关的选项。我们将在即将到来的章节中查看其他安全选项。
 - en: Enabling/disabling global security on Jenkins
+  id: totrans-251
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 启用/禁用 Jenkins 的全局安全
 - en: Once on the Configure Global Security page, you will see that the Enable security
     option is already enabled. The Enable security option should always be on; disabling
     it will make Jenkins accessible to anyone who has the Jenkins URL, with no restrictions
     of any kind.
+  id: totrans-252
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦进入“配置全局安全”页面，您会看到“启用安全性”选项已经启用。应始终将“启用安全性”选项设置为启用状态；禁用它将使 Jenkins 对于任何拥有 Jenkins
+    URL 的人都可访问，而不受任何限制。
 - en: Enabling/disabling computers to remember user credentials
+  id: totrans-253
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 启用/禁用计算机记住用户凭据
 - en: 'When users try to access Jenkins, they are offered an option to be remembered
     on their respective computers, as shown in the following screenshot:'
+  id: totrans-254
   prefs: []
   type: TYPE_NORMAL
+  zh: 当用户尝试访问 Jenkins 时，他们将被提供在他们各自的计算机上被记住的选项，如下截图所示：
 - en: '![](img/7904f347-7f7b-4906-bc12-5d42d721ac52.png)'
+  id: totrans-255
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7904f347-7f7b-4906-bc12-5d42d721ac52.png)'
 - en: Remember me on this computer option
+  id: totrans-256
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此计算机上记住我选项
 - en: This behavior is enabled by default. To disable this feature, tick the **Disable
     remember me** option available under the Configure Global Security page.
+  id: totrans-257
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个行为默认启用。要禁用此功能，请勾选“**禁用记住我**”选项，该选项位于“配置全局安全”页面下。
 - en: Authentication methods
+  id: totrans-258
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 身份验证方法
 - en: 'Jenkins offers a variety of authentication methods to choose from. The following
     is a list of available options:'
+  id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 提供了多种可供选择的身份验证方法。以下是可用选项的列表：
 - en: Delegate to servlet container
+  id: totrans-260
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 委派给 Servlet 容器
 - en: Jenkins' own user database
+  id: totrans-261
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 自己的用户数据库
 - en: LDAP
+  id: totrans-262
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: LDAP
 - en: Unix user/group database
+  id: totrans-263
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Unix 用户/组数据库
 - en: '![](img/1e461503-6663-4b58-b44d-02fa04fd0b2e.png)'
+  id: totrans-264
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1e461503-6663-4b58-b44d-02fa04fd0b2e.png)'
 - en: Jenkins' authentication methods
+  id: totrans-265
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 的身份验证方法
 - en: The Jenkins' own user database option is enabled by default. The initial users
     that we created during the Jenkins setup wizard are all stored under the Jenkins'
     own user database. There is no actual database of any kind, and all user information
     is saved as XML files. Let us take a quick look at each of the authentication
     methods.
+  id: totrans-266
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下启用了 Jenkins 自己的用户数据库选项。我们在 Jenkins 设置向导期间创建的初始用户都存储在 Jenkins 自己的用户数据库中。没有任何实际的数据库，所有用户信息都保存为
+    XML 文件。让我们快速查看每种身份验证方法。
 - en: Delegating to a servlet container
+  id: totrans-267
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 委派给 Servlet 容器
 - en: This option can be used only when you are running your Jenkins server from a
     servlet container, such as Apache Tomcat and so on. Enabling this option will
     allow Jenkins to authenticate users using the servlet containers’ realm.
+  id: totrans-268
   prefs: []
   type: TYPE_NORMAL
+  zh: 该选项仅在您从 servlet 容器（如 Apache Tomcat 等）运行 Jenkins 服务器时才能使用。启用此选项将允许 Jenkins 使用
+    servlet 容器的领域对用户进行身份验证。
 - en: For example, in the *Configure the Apache Tomcat Server* sub-section under the *Running
     Jenkins inside a servlet container* section from the  [Chapter 2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml),
     *Installing Jenkins*,we modified the `tomcat-user.xml` file to create users and
     access. That is an example of the `UserDatabaseRealm`.
+  id: totrans-269
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，在 [第 2 章](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml)的 *安装 Jenkins* 中 *在
+    servlet 容器中运行 Jenkins* 小节下的 *配置 Apache Tomcat 服务器* 子节中，我们修改了 `tomcat-user.xml`
+    文件以创建用户和访问。这是一个`UserDatabaseRealm`的示例。
 - en: That means, if your Jenkins server is running on Apache Tomcat server and you
     have configured the `UserDatabaseRealm`*,* then all users defined in the `tomcat-user.xml`
     file will be able to access Jenkins.
+  id: totrans-270
   prefs: []
   type: TYPE_NORMAL
+  zh: 这意味着，如果您的 Jenkins 服务器正在 Apache Tomcat 服务器上运行，并且您已配置了`UserDatabaseRealm`，那么在`tomcat-user.xml`文件中定义的所有用户都将能够访问
+    Jenkins。
 - en: 'Refer to the following website to see all types of realms supported by Apache
     Tomcat: [http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Standard_Realm_Implementations.](http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Standard_Realm_Implementations)'
+  id: totrans-271
   prefs: []
   type: TYPE_NORMAL
+  zh: 请参考以下网站，查看 Apache Tomcat 支持的所有领域类型：[http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Standard_Realm_Implementations.](http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Standard_Realm_Implementations)
 - en: Jenkins' own user database
+  id: totrans-272
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 的自有用户数据库
 - en: This option is enabled by default. Under this scheme, Jenkins stores all the
     user information inside XML files. This option is good for small organizations
     or if you are exploring Jenkins and are yet to make it a part of your organization.
+  id: totrans-273
   prefs: []
   type: TYPE_NORMAL
+  zh: 此选项默认启用。在此方案下，Jenkins 将所有用户信息存储在 XML 文件中。这个选项适用于小型组织或者如果您正在探索 Jenkins 并且尚未将其纳入组织。
 - en: There is also an option to allow users to sign up at the login page. To enable
     it, tick the **Allow users to sign up** option available under Jenkins' own user
     database.
+  id: totrans-274
   prefs: []
   type: TYPE_NORMAL
+  zh: 还有一个选项可以允许用户在登录页面注册。要启用它，请在 Jenkins 的自有用户数据库中选中**允许用户注册**选项。
 - en: 'This will enable a link named **Create an account** at the Jenkins login page,
     as shown in the following screenshot:'
+  id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将在 Jenkins 登录页面上启用一个名为**创建帐户**的链接，如下面的截图所示：
 - en: '![](img/6af0a744-f7f3-422d-81a9-4fca5744b0dc.png)'
+  id: totrans-276
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6af0a744-f7f3-422d-81a9-4fca5744b0dc.png)'
 - en: Allow user to sign up option
+  id: totrans-277
   prefs: []
   type: TYPE_NORMAL
+  zh: 允许用户注册选项
 - en: As a new user, when you click on the **Create an account** link you will be
     asked to fill in some basic details about yourself, such as username, password,
     email, full name, and so on. Once you are done filling in the necessary information
     you will be allowed to access Jenkins.
+  id: totrans-278
   prefs: []
   type: TYPE_NORMAL
+  zh: 作为新用户，当您点击**创建帐户**链接时，将要求您填写一些关于自己的基本信息，例如用户名、密码、电子邮件、全名等。一旦您填写完必要信息，就可以访问 Jenkins。
 - en: What you as a new user are allowed to see/do on Jenkins depends on the **Authorization**
     settings inside Jenkins. We will learn about the **Authorization** settings later
     in the current chapter.
+  id: totrans-279
   prefs: []
   type: TYPE_NORMAL
+  zh: 作为新用户，您在 Jenkins 上被允许看到/执行的操作取决于 Jenkins 内的**授权**设置。我们将在本章后面学习有关**授权**设置的更多信息。
 - en: LDAP
+  id: totrans-280
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: LDAP
 - en: This is one of the most widely used authentication methods in most organizations.
     If you do not see the **LDAP** option listed under the **Access Control** | **Security
     Realm** section, then check for the **LDAP plugin**.
+  id: totrans-281
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是大多数组织中最广泛使用的身份验证方法之一。如果在**访问控制** | **安全领域**部分下未看到**LDAP**选项，请检查**LDAP 插件**。
 - en: The following option, as shown in the following screenshot allows Jenkins to
     authenticate users using an LDAP server. Contact the IT administration team in
     your organization to provide the LDAP server details (if your organization uses
     LDAP).
+  id: totrans-282
   prefs: []
   type: TYPE_NORMAL
+  zh: 如下面的截图所示，以下选项允许 Jenkins 使用 LDAP 服务器对用户进行身份验证。请联系您组织中的 IT 管理团队提供 LDAP 服务器详细信息（如果您的组织使用
+    LDAP）。
 - en: '![](img/28a9fbb7-38a9-4ab6-94ce-24e63f8d1259.png)'
+  id: totrans-283
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/28a9fbb7-38a9-4ab6-94ce-24e63f8d1259.png)'
 - en: 'For more information about the LDAP configuration, refer to the LDAP plugin
     page: [https://wiki.jenkins.io/display/JENKINS/LDAP+Plugin](https://wiki.jenkins.io/display/JENKINS/LDAP+Plugin).'
+  id: totrans-284
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关 LDAP 配置的更多信息，请参阅 LDAP 插件页面：[https://wiki.jenkins.io/display/JENKINS/LDAP+Plugin](https://wiki.jenkins.io/display/JENKINS/LDAP+Plugin)。
 - en: Unix user/group database
+  id: totrans-285
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Unix 用户/组数据库
 - en: The following option works if Jenkins is installed on a Unix/Linux machine.
     When enabled, Jenkins delegates the authentication to the underlying OS. In other
     words, all users/groups that are configured on the underlying OS get access to
     Jenkins.
+  id: totrans-286
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果 Jenkins 安装在 Unix/Linux 机器上，则以下选项有效。当启用时，Jenkins 将权限委托给底层操作系统。换句话说，配置在底层操作系统上的所有用户/组都可以访问
+    Jenkins。
 - en: You need not configure anything inside Jenkins to make this option work. However,
     all users on the underlying OS should have access to the `/etc/shadow` file*.*
+  id: totrans-287
   prefs: []
   type: TYPE_NORMAL
+  zh: 您无需在 Jenkins 中配置任何内容即可使此选项生效。但是，底层操作系统上的所有用户都应该能够访问`/etc/shadow`文件*。*
 - en: 'Use the following command to make the `/etc/shadow` file accessible to all
     users:'
+  id: totrans-288
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用以下命令使`/etc/shadow`文件对所有用户可访问：
 - en: '[PRE30]'
+  id: totrans-289
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: Creating new users inside Jenkins
+  id: totrans-290
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中创建新用户
 - en: The following section is only applicable if you are using Jenkins' own user
     database as the Authentication method. Perform the following steps to manually
     add users to your Jenkins server.
+  id: totrans-291
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您使用 Jenkins 自己的用户数据库作为认证方法，则以下部分仅适用。执行以下步骤手动将用户添加到您的 Jenkins 服务器中。
 - en: From the Jenkins dashboard, click on **Manage Jenkins | Manage Users**.
+  id: totrans-292
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，单击**管理 Jenkins | 管理用户**。
 - en: On the **Manage Users** page, from the left-hand side menu, click on **Create
     User**.
+  id: totrans-293
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**管理用户**页面上，从左侧菜单中，单击**创建用户**。
 - en: 'On the resultant page, you will be asked to provide some basic information
     about the user, as shown in the following screenshot:'
+  id: totrans-294
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将被要求提供有关用户的一些基本信息，如下图所示：
 - en: '![](img/77dccbc9-a126-4781-9437-1f5b79ed21ef.png)'
+  id: totrans-295
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/77dccbc9-a126-4781-9437-1f5b79ed21ef.png)'
 - en: Creating a user in Jenkins
+  id: totrans-296
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中创建用户
 - en: Fill the fields with appropriate values and click on the **Create User** button.
+  id: totrans-297
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 填写相应值的字段，然后单击**创建用户**按钮。
 - en: The Manage Users link is only available if you are using Jenkins' own user database
     as the Authentication method.
+  id: totrans-298
   prefs: []
   type: TYPE_NORMAL
+  zh: 只有在使用 Jenkins 自己的用户数据库作为认证方法时，才会提供“管理用户”链接。
 - en: People page
+  id: totrans-299
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 人员页面
 - en: 'The People page displays all users that have access to the Jenkins server,
     as shown in the following screenshot:'
+  id: totrans-300
   prefs: []
   type: TYPE_NORMAL
+  zh: 人员页面显示所有可以访问 Jenkins 服务器的用户，如下图所示：
 - en: '![](img/d5c6bb50-da5d-4e75-926c-0411f5cdcb1f.png)'
+  id: totrans-301
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d5c6bb50-da5d-4e75-926c-0411f5cdcb1f.png)'
 - en: The Jenkins People page
+  id: totrans-302
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 人员页面
 - en: User information and settings in Jenkins
+  id: totrans-303
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 中的用户信息和设置
 - en: 'Click on any particular user ID or name (see the following screenshot) to get
     information about the respective user. You will be taken to the users'' Status
     page, as seen in the following screenshot:'
+  id: totrans-304
   prefs: []
   type: TYPE_NORMAL
+  zh: 单击任何特定用户 ID 或名称（参见下图）以获取有关相应用户的信息。您将被带到用户状态页面，如下图所示：
 - en: '![](img/ffa8caf4-1644-4929-863d-fcb6b34ed212.png)'
+  id: totrans-305
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ffa8caf4-1644-4929-863d-fcb6b34ed212.png)'
 - en: The users' Status page
+  id: totrans-306
   prefs: []
   type: TYPE_NORMAL
+  zh: 用户状态页面
 - en: 'On the users'' Status page you will see the following options on the left-hand
     side menu: **Status**, **Builds**, **Configure**, **My Views** and **Credentials**.
     Let us explore some of them in detail:'
+  id: totrans-307
   prefs: []
   type: TYPE_NORMAL
+  zh: 在用户的状态页面的左侧菜单中，您将看到以下选项：**状态**、**构建**、**配置**、**我的视图**和**凭据**。让我们详细探讨其中一些：
 - en: The **Builds** page will display information about all the Jenkins builds that
     were run by the current user.
+  id: totrans-308
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**构建**页面将显示由当前用户运行的所有 Jenkins 构建的信息。'
 - en: The **My Views** page will take you to the views that are accessible by the
     current user. If no views are configured for the current user, then the **My Views**
     page will show the default All view (Jenkins dashboard).
+  id: totrans-309
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**我的视图**页面将带您进入当前用户可以访问的视图。如果没有为当前用户配置视图，则**我的视图**页面将显示默认的全部视图（Jenkins 仪表板）。'
 - en: 'The Credentials link will take you to the **Credentials** page. However, the
     Credentials page will display additional information with respect to the current
     user, as shown in the following screenshot:'
+  id: totrans-310
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 凭据链接将带您进入**凭据**页面。但是，凭据页面将显示与当前用户相关的其他信息，如下图所示：
 - en: '![](img/8f5db5c3-8ee0-4fe7-bc64-46a7ffcaf1f8.png)'
+  id: totrans-311
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8f5db5c3-8ee0-4fe7-bc64-46a7ffcaf1f8.png)'
 - en: Jenkins credentials scoped to a user
+  id: totrans-312
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 凭据作用域限制为一个用户
 - en: Authorization methods
+  id: totrans-313
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 授权方法
 - en: 'Jenkins offers a variety of authorization methods to choose from. The following
     is a list of available options:'
+  id: totrans-314
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 提供了各种授权方法供选择。以下是可用选项的列表：
 - en: Anyone can do anything
+  id: totrans-315
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 任何人都可以做任何事情
 - en: Legacy mode
+  id: totrans-316
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 传统模式
 - en: Logged-in users can do anything
+  id: totrans-317
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 已登录用户可以做任何事情
 - en: Matrix-based
+  id: totrans-318
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于矩阵的
 - en: Project-based Matrix Authorization Strategy
+  id: totrans-319
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于项目的矩阵授权策略
 - en: The Logged-in users can do anything option is enabled by default. Let us take
     a quick look at each of the authorization methods.
+  id: totrans-320
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下启用了已登录用户可以做任何事情选项。让我们快速浏览一下每种授权方法。
 - en: To access the Jenkins Authorization settings, from the Jenkins dashboard navigate
     to **Manage Jenkins | Configure Global Security | Access Control**.
+  id: totrans-321
   prefs: []
   type: TYPE_NORMAL
+  zh: 要访问 Jenkins 授权设置，请从 Jenkins 仪表板导航到**管理 Jenkins | 配置全局安全 | 访问控制**。
 - en: Anyone can do anything
+  id: totrans-322
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 任何人都可以做任何事
 - en: When you choose this option, Jenkins does not perform any authorization. Anyone
     who has access to Jenkins gets full control, including anonymous users. This option
     is not recommended.
+  id: totrans-323
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您选择此选项时，Jenkins 不执行任何授权。任何具有对 Jenkins 的访问权限的人都可以获得完全控制权，包括匿名用户。不推荐此选项。
 - en: Legacy mode
+  id: totrans-324
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 兼容模式
 - en: When you choose this option, Jenkins behaves the way it used to be before release
     1.164\. In simple terms, Jenkins will look for a user named `Admin` (irrespective
     of the Authentication method you use)*.* This `Admin` user will be provided administrative
     privilege, and the rest of the users will be treated as anonymous users. This
     option is again not recommended.
+  id: totrans-325
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您选择此选项时，Jenkins 的行为方式与发布 1.164 版之前的方式相同。简单来说，Jenkins 将寻找一个名为`Admin`的用户（无论您使用的是什么身份验证方法）。这个`Admin`用户将被赋予管理员特权，而其余用户将被视为匿名用户。再次强调，不推荐此选项。
 - en: Logged-in users can do anything
+  id: totrans-326
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 已登录用户可以做任何事
 - en: This is the default authentication setting that Jenkins comes with when you
     install and set up a new Jenkins server. The name is self-explanatory, that is,
     logged-in users are administrators by default. Again, this option is not recommended.
+  id: totrans-327
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是您安装和设置新 Jenkins 服务器时 Jenkins 默认附带的身份验证设置。名称不言自明，即已登录用户默认为管理员。同样，不推荐此选项。
 - en: Under the Logged-in users can do anything field, there is an option named Allow
     anonymous read access (disabled by default). When this option is ticked (enabled),
     anyone who has access to the Jenkins URL will be straight away taken to the Jenkins
     dashboard with read-only access to all Jenkins jobs. However, you are required
     to log in in order to edit a Jenkins job or view Jenkins' configuration.
+  id: totrans-328
   prefs: []
   type: TYPE_NORMAL
+  zh: 在**已登录用户可以做任何事**字段下，有一个名为允许匿名读取访问的选项（默认情况下已禁用）。当选中（启用）此选项时，任何具有对 Jenkins URL
+    的访问权限的人都将直接进入 Jenkins 仪表板，具有对所有 Jenkins 作业的只读访问权限。但是，您需要登录才能编辑 Jenkins 作业或查看 Jenkins
+    的配置。
 - en: Matrix-based security
+  id: totrans-329
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 基于矩阵的安全性
 - en: 'This is one of the most widely used Authorization methods in Jenkins. Let us
     explore it in detail by performing the following steps:'
+  id: totrans-330
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是 Jenkins 中最广泛使用的授权方法之一。让我们通过以下步骤详细探讨它：
 - en: 'Enable the Matrix-based security authorization method by selecting it. You
     will be presented with the following matrix:'
+  id: totrans-331
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过选择它启用基于矩阵的安全授权方法。您将看到以下矩阵：
 - en: '![](img/c1df46a8-b178-4657-a133-727ebd636d54.png)'
+  id: totrans-332
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c1df46a8-b178-4657-a133-727ebd636d54.png)'
 - en: Matrix-based security configurations
+  id: totrans-333
   prefs: []
   type: TYPE_NORMAL
+  zh: 基于矩阵的安全配置
 - en: From the previous screenshot, you can see the columns represent various items
     in Jenkins and the rows represent various users. At the bottom of the matrix there
     is an option to add users.
+  id: totrans-334
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从前面的屏幕截图中，您可以看到列代表 Jenkins 中的各种项目，而行代表各种用户。在矩阵底部有一个选项可添加用户。
 - en: Let us add some users and provide them some permissions.
+  id: totrans-335
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 让我们添加一些用户并为他们提供一些权限。
 - en: To add a user, enter the exact username of the user in the **User/group to add**
     field, and click on the **Add** button.
+  id: totrans-336
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要添加用户，请在**要添加的用户/组**字段中输入用户的确切用户名，然后单击**添加**按钮。
 - en: 'You can see from the following screenshot that I have added four users (refer
     to the *People page* section to see the list of users that you can add in here).
     If you are using Jenkins'' own user database then create a few users (refer to
     the *Creating new users inside Jenkins* section):'
+  id: totrans-337
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您可以从以下屏幕截图中看到，我已添加了四个用户（请参阅*People page*部分以查看您可以在此处添加的用户列表）。如果您正在使用 Jenkins
+    的自己的用户数据库，则创建一些用户（请参阅*在 Jenkins 内部创建新用户*部分）：
 - en: '![](img/b880a897-95a6-4653-afef-83117295df5a.png)'
+  id: totrans-338
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b880a897-95a6-4653-afef-83117295df5a.png)'
 - en: Adding users to the matrix
+  id: totrans-339
   prefs: []
   type: TYPE_NORMAL
+  zh: 将用户添加到矩阵中
 - en: 'Now, let us give them some permissions by selecting the appropriate checkbox.
     You can see from the following screenshot that I have given full access to the
     user `jenkins_admin`. The users `jenkins_developer` and `jenkins_tester` have
     been given access to read and execute Jenkins jobs, and the `jenkins_user` user
     has been given only read access:'
+  id: totrans-340
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，让我们通过选择适当的复选框为它们授予权限。您可以从以下屏幕截图中看到，我已经给用户`jenkins_admin`完全访问权限。用户`jenkins_developer`和`jenkins_tester`已被授予读取和执行
+    Jenkins 作业的访问权限，而用户`jenkins_user`仅被授予读取权限：
 - en: '![](img/924c015c-dd88-45da-b66b-239d8c01f1e1.png)'
+  id: totrans-341
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/924c015c-dd88-45da-b66b-239d8c01f1e1.png)'
 - en: Providing permissions using the Matrix
+  id: totrans-342
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用矩阵提供权限
 - en: Leave the rest of the settings as they are and click on the Save button at the
     bottom of the page.
+  id: totrans-343
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余设置保持不变，然后单击页面底部的保存按钮。
 - en: To check the configuration, log in as each user and confirm what you see on
     the Jenkins dashboard.
+  id: totrans-344
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为了检查配置，请以每个用户的身份登录，并确认在Jenkins仪表板上看到的内容。
 - en: Project-based Matrix Authorization Strategy
+  id: totrans-345
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 基于项目的矩阵授权策略
 - en: In the previous section, we saw the matrix-based security authorization feature,
     which gave us a good amount of control over the users and permissions.
+  id: totrans-346
   prefs: []
   type: TYPE_NORMAL
+  zh: 在前一节中，我们看到了基于矩阵的安全授权功能，它使我们对用户和权限有了相当大的控制能力。
 - en: However, imagine a situation where your Jenkins server has grown to a point
     where it contains hundreds of Jenkins jobs and many users, and you want to control
     user permissions at the job level (project level).
+  id: totrans-347
   prefs: []
   type: TYPE_NORMAL
+  zh: 但是，想象一种情况，你的Jenkins服务器已经发展到包含数百个Jenkins作业和许多用户的阶段，并且你希望在作业级别（项目级别）上控制用户权限。
 - en: 'In such a case, we need the Project-based Matrix Authorization Strategy:'
+  id: totrans-348
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这种情况下，我们需要基于项目的矩阵授权策略：
 - en: '![](img/6ecdc314-dceb-4878-ac42-055baa7cf532.png)'
+  id: totrans-349
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6ecdc314-dceb-4878-ac42-055baa7cf532.png)'
 - en: User permission at job level
+  id: totrans-350
   prefs: []
   type: TYPE_NORMAL
+  zh: 作业级别的用户权限
 - en: 'Let us learn how to configure the Project-based Matrix Authorization Strategy.
     Perform the following steps:'
+  id: totrans-351
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们学习如何配置基于项目的矩阵授权策略。执行以下步骤：
 - en: To access the Jenkins Authorization settings, from the Jenkins dashboard navigate
     to **Manage Jenkins | Configure Global Security | Access Control**.
+  id: totrans-352
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要访问Jenkins授权设置，请从Jenkins仪表板导航到**管理Jenkins | 配置全局安全 | 访问控制**。
 - en: 'Select the Project-based Matrix Authorization Strategy option. You will be
     presented with the following matrix:'
+  id: totrans-353
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择基于项目的矩阵授权策略选项。你将看到以下矩阵：
 - en: '![](img/7bd98a77-5268-43d7-b7cd-513e7d68f99f.png)'
+  id: totrans-354
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7bd98a77-5268-43d7-b7cd-513e7d68f99f.png)'
 - en: Project-based Matrix Authorization Strategy configurations
+  id: totrans-355
   prefs: []
   type: TYPE_NORMAL
+  zh: 基于项目矩阵授权策略配置
 - en: For now, add a user and give it full permissions. To add a user, type the exact
     username of the user in the User/group to add field, and click on the **Add**
     button.
+  id: totrans-356
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，添加一个用户并给予其完全权限。要添加用户，请在“要添加的用户/组”字段中输入用户的完整用户名，然后单击“**添加**”按钮。
 - en: 'You can see from the following screenshot that I have added the user `jenkins_admin`
     with full permissions:'
+  id: totrans-357
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从以下屏幕截图中可以看到，我为用户`jenkins_admin`添加了完全权限：
 - en: '![](img/658d04c6-e015-4bd6-a911-3c0fc68b87ec.png)'
+  id: totrans-358
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/658d04c6-e015-4bd6-a911-3c0fc68b87ec.png)'
 - en: Adding users to the matrix
+  id: totrans-359
   prefs: []
   type: TYPE_NORMAL
+  zh: 将用户添加到矩阵中
 - en: Leave the rest of the settings as they are and click on the **Save** button
     at the bottom of the page.
+  id: totrans-360
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余设置保持不变，然后单击页面底部的**保存**按钮。
 - en: Next, from the Jenkins dashboard right-click on any of the Jenkins jobs and
     select **Configure**.
+  id: totrans-361
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，在Jenkins仪表板上右键单击任何一个Jenkins作业，然后选择**配置**。
 - en: Once on the Jobs Configuration page, scroll all the way down to the Enable project-based
     security option and enable it.
+  id: totrans-362
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在作业配置页面，向下滚动到启用基于项目的安全选项并启用它。
 - en: 'The moment you enable the project-based security, a matrix table will appear,
     as shown in the following screenshot:'
+  id: totrans-363
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 当你启用基于项目的安全性时，将出现一个矩阵表格，如以下屏幕截图所示：
 - en: '![](img/dd1355de-4c12-4620-a2a9-0f15078d3120.png)'
+  id: totrans-364
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dd1355de-4c12-4620-a2a9-0f15078d3120.png)'
 - en: Project-based security configurations inside Jenkins job
+  id: totrans-365
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins作业中的基于项目的安全配置
 - en: Let us add some users and provide them some permissions.
+  id: totrans-366
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 让我们添加一些用户并为他们分配权限。
 - en: To add a user, enter the exact username of the user in the User/group to add
     field, and click on the **Add** button.
+  id: totrans-367
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要添加用户，请在“要添加的用户/组”字段中输入用户的完整用户名，然后单击“**添加**”按钮。
 - en: 'You can see from the following screenshot that I have added the user `jenkins_developer`
     with some permissions:'
+  id: totrans-368
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从以下屏幕截图中可以看到，我给用户`jenkins_developer`添加了一些权限：
 - en: '![](img/f40c3688-14a8-4d28-8ea1-e518b87afeb8.png)'
+  id: totrans-369
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f40c3688-14a8-4d28-8ea1-e518b87afeb8.png)'
 - en: Providing permissions using the Matrix
+  id: totrans-370
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用矩阵提供权限
 - en: Once done, click on the **Save** button at the bottom of the page.
+  id: totrans-371
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，单击页面底部的**保存**按钮。
 - en: Now log in as the user that you have just given permissions to for the respective
     Jenkins job (in our example it is `jenkins_developer`).
+  id: totrans-372
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在以刚刚为相应的Jenkins作业赋予权限的用户登录（在我们的示例中为`jenkins_developer`）。
 - en: You will find that the user can only see the Jenkins job that it has permission
     to access.
+  id: totrans-373
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你会发现用户只能看到它具有访问权限的Jenkins作业。
 - en: Similarly, you can configure user permissions on each and every job that you
     create in Jenkins.
+  id: totrans-374
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 同样，你可以在Jenkins中为你创建的每个作业配置用户权限。
 - en: Summary
+  id: totrans-375
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概要
 - en: In this chapter, we saw how to configure some of the basic but important elements
     in Jenkins, all with the help of some practical examples. Jenkins upgrade, Jenkins
     backup, and Jenkins user management are some of the important things we learned
     in this chapter.
+  id: totrans-376
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们看到了如何通过一些实际示例来配置 Jenkins 中的一些基本但重要的元素。Jenkins 升级、Jenkins 备份和 Jenkins
+    用户管理是本章中我们学到的一些重要内容。
 - en: The next chapter is all about the Jenkins master-slave architecture and the
     Jenkins *Distributed Build System*.
+  id: totrans-377
   prefs: []
   type: TYPE_NORMAL
+  zh: 下一章将介绍 Jenkins 主从架构以及 Jenkins *分布式构建系统*。

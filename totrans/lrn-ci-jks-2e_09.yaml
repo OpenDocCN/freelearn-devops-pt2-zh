@@ -1,634 +1,950 @@
 - en: Continuous Deployment Using Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Jenkins 进行持续部署
 - en: This chapter begins by defining and explaining Continuous Deployment. We will
     also try to differentiate between Continuous Deployment and Continuous Delivery.
     Continuous Deployment is a simple, tweaked version of the Continuous Delivery
     pipeline. Hence, we won't be seeing any major Jenkins configuration changes or
     any new tools.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章首先定义和解释了持续部署。我们还将尝试区分持续部署和持续交付。持续部署是持续交付流水线的一个简单、微调版本。因此，我们不会看到任何主要的 Jenkins
+    配置更改或任何新工具。
 - en: 'The following topics will be covered in the chapter:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将涵盖以下主题：
 - en: Creating a production server
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建一个生产服务器
 - en: Installing a Jenkins slave on a production server
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在生产服务器上安装 Jenkins 从属节点
 - en: Creating a Jenkins Continuous Deployment pipeline
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建一个 Jenkins 持续部署流水线
 - en: Continuous Delivery in action
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 持续交付的实施
 - en: What is Continuous Deployment?
+  id: totrans-7
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 什么是持续部署？
 - en: The process of continuously deploying production-ready features into the production
     environment, or to the end user, is termed as **Continuous Deployment**.
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: 将生产就绪特性持续部署到生产环境或最终用户的过程称为**持续部署**。
 - en: Continuous Deployment in a holistic sense means, *the process of making production-ready
     features go live instantly without any intervention*. This includes building features
     in an agile manner, integrating and testing them continuously, and deploying them
     into the production environment without any breaks.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 从整体上看，持续部署意味着，*使生产就绪的特性立即上线，无需任何干预*。这包括以敏捷方式构建特性、持续集成和测试，并将其部署到生产环境中，而无需任何中断。
 - en: Continuous Deployment in a literal sense means, *the task of deploying any given
     package continuously in any given environment*. Therefore, the task of deploying
     packages into a testing server and a production server conveys the literal meaning
     of Continuous Deployment.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续部署从字面上讲意味着，*在任何给定环境中持续部署任何给定包的任务*。因此，将包部署到测试服务器和生产服务器的任务传达了持续部署的字面意义。
 - en: How Continuous Deployment is different from Continuous Delivery
+  id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 持续部署与持续交付的区别
 - en: First, the features are developed, and then they go through a cycle, or Continuous
     Integration, or through testing of all kinds. Anything that passes the various
     tests is considered as a production-ready feature. These production-ready features
     are then labeled in Artifactory (not shown in this book) or kept separately to
     segregate them from non-production ready features.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，特性被开发，然后它们经历一个循环，或持续集成，或各种测试。任何通过各种测试的东西都被视为生产就绪的特性。然后，这些生产就绪的特性被标记为 Artifactory（本书未显示）中的标签，或者被保持分开，以将它们与非生产就绪的特性区分开。
 - en: This is similar to the manufacturing production line. The raw product goes through
     phases of modifications and testing. Finally, the finished product is packaged
     and stored in the warehouses. From the warehouses, depending on the orders, it
     gets shipped to various places. The product doesn't get shipped immediately after
     it's packaged.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 这类似于制造生产线。原始产品经历修改和测试阶段。最终，成品被包装并存放在仓库中。根据订单，从仓库发货到各个地方。产品在包装后不会立即发货。
 - en: 'We can safely call this practice Continuous Delivery. The following illustration
     depicts the **Continuous Delivery** life cycle:'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以安全地称这种实践为持续交付。以下插图描述了**持续交付**的生命周期：
 - en: '![](img/00f3b49d-a8dc-401f-8462-5540e3faed4e.png)'
+  id: totrans-15
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/00f3b49d-a8dc-401f-8462-5540e3faed4e.png)'
 - en: Continuous Delivery pipeline
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续交付流水线
 - en: 'On the other hand, a **Continuous Deployment** life cycle looks somewhat as
     shown in the following illustration. The deployment phase is immediate without
     any break. The production-ready features are immediately deployed into production:'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一方面，**持续部署**的生命周期看起来有些如下所示。部署阶段是立即进行的，没有任何中断。生产就绪的特性立即部署到生产环境：
 - en: '![](img/6d1df560-8ff6-4bce-9cc9-fac015f8c960.png)'
+  id: totrans-18
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6d1df560-8ff6-4bce-9cc9-fac015f8c960.png)'
 - en: Continuous Deployment pipeline
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续部署流水线
 - en: Who needs Continuous Deployment?
+  id: totrans-20
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 谁需要持续部署？
 - en: 'One might have the following questions rolling in their minds: *how can I achieve
     Continuous Deployment in my organization*, *what could be the challenges*, *how
     much testing do I need to incorporate and automate?* The list goes on.'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 人们可能会心里想着以下几个问题：*我如何在我的组织中实现持续部署*，*可能会面临什么挑战*，*需要多少测试来进行并自动化*？问题不胜枚举。
 - en: However, technical challenges are one thing. What's more important to decide
     is whether we really need it. Do we really need Continuous Deployment?
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 然而，技术挑战只是一方面。更重要的是要决定我们是否真的需要它。我们真的需要持续部署吗？
 - en: The answer is, *not always and not in every case*. Since, from our definition
     of Continuous Deployment and our understanding from the previous topic, production-ready
     features get deployed instantly into the production environments.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 答案是，*并不总是以及不完全是每种情况*。因为从我们对持续部署的定义以及前一个主题的理解来看，生产可用的功能会立即部署到生产环境中。
 - en: In many organizations, it's the business that decides whether or not to make
     a feature live, or when to make a feature live. Therefore, think of Continuous
     Deployment as an option, and not a compulsion.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 在许多组织中，业务部门决定是否将一个功能上线，或何时上线一个功能。因此，将持续部署视为一个选项，而不是强制性的。
 - en: On the other hand, Continuous Delivery; which means creating production-ready
     features in a continuous way, should be the motto for any organization.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 另一方面，持续交付；这意味着以连续方式创建可供生产使用的功能，应该是任何组织的座右铭。
 - en: Creating a production server
+  id: totrans-26
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建一个生产服务器
 - en: In the following section, let us create a production server that will host our
     *hello world* application. We will later extend our Continuous Delivery pipeline
     to automatically deploy fully testing binary artifacts on our production server.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，让我们创建一个承载我们*hello world*应用程序的生产服务器。稍后我们将扩展我们的持续交付流程，自动在我们的生产服务器上部署完全测试的二进制文件。
 - en: In the following example, our production server is a simple Tomcat server. Let
     us create one using Vagrant.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 在以下示例中，我们的生产服务器是一个简单的Tomcat服务器。让我们使用Vagrant创建一个。
 - en: Installing Vagrant
+  id: totrans-29
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装Vagrant
 - en: 'In this section, we will install Vagrant on Ubuntu. Make sure you perform these
     steps as a `root` user or with an account having root privileges (`sudo` access):'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将在Ubuntu上安装Vagrant。请确保以`root`用户或具有root权限（`sudo`访问）的帐户执行这些步骤：
 - en: 'Open up a Terminal and type the following command to download Vagrant:'
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开终端并输入以下命令以下载 Vagrant：
 - en: '[PRE0]'
+  id: totrans-32
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Or, you can also download the latest Vagrant package from the Vagrant website
     at [https://www.vagrantup.com/downloads.html](https://www.vagrantup.com/downloads.html):'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者，你也可以从Vagrant网站上下载最新的Vagrant软件包：[https://www.vagrantup.com/downloads.html](https://www.vagrantup.com/downloads.html)。
 - en: '![](img/051e5837-2fba-4fb7-a108-9005364b8dc6.png)'
+  id: totrans-34
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/051e5837-2fba-4fb7-a108-9005364b8dc6.png)'
 - en: Vagrant download webpage
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: Vagrant下载网页
 - en: Use the latest version of Vagrant and VirtualBox available. Using an older version
     of Vagrant with a newer version of VirtualBox or vice versa may result in issues
     while creating VMs.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用可用的最新版本的Vagrant和VirtualBox。使用旧版本的Vagrant与新版本的VirtualBox或反之可能在创建VM时导致问题。
 - en: Once the download is complete, you should see a `.deb` file.
+  id: totrans-37
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 下载完成后，你应该会看到一个`.deb`文件。
 - en: 'Execute the following commands to install Vagrant using the downloaded package
     file. You may be prompted to provide a password:'
+  id: totrans-38
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令使用下载的软件包文件安装Vagrant。可能需要输入密码：
 - en: '[PRE1]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Once the installation is complete, check the installed version of Vagrant by
     executing the following command:'
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装完成后，通过执行以下命令检查已安装的Vagrant版本：
 - en: '[PRE2]'
+  id: totrans-41
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'You should see a similar output:'
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你应该会看到类似的输出：
 - en: '[PRE3]'
+  id: totrans-43
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Installing VirtualBox
+  id: totrans-44
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装VirtualBox
 - en: 'Vagrant needs Oracle VirtualBox to create virtual machines. However, it''s
     not limited to just Oracle VirtualBox, you can use VMware too. Follow the given
     steps to install VirtualBox on your machine:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: Vagrant需要Oracle VirtualBox来创建虚拟机。然而，并不仅限于Oracle VirtualBox，你也可以使用VMware。按照以下步骤在你的机器上安装VirtualBox：
 - en: To run Vagrant with either VMware or AWS, visit [https://www.vagrantup.com/docs/getting-started/providers.html](https://www.vagrantup.com/docs/getting-started/providers.html).
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使用VMware或AWS运行Vagrant，请访问[https://www.vagrantup.com/docs/getting-started/providers.html](https://www.vagrantup.com/docs/getting-started/providers.html)。
 - en: 'Add the following line to your `sources.list` file present inside the `/etc/apt`
     directory:'
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下行添加到`sources.list`文件中，该文件位于`/etc/apt`目录中：
 - en: '[PRE4]'
+  id: totrans-48
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: According to your Ubuntu distribution, replace `xenial` with `vivid`, `utopic`,
     `trusty`, `raring`, `quantal`, `precise`, `lucid`, `jessie`, `wheezy`, or `squeeze`.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据你的Ubuntu发行版，用`xenial`替换为`vivid`、`utopic`、`trusty`、`raring`、`quantal`、`precise`、`lucid`、`jessie`、`wheezy`或`squeeze`。
 - en: 'Download and register the keys using the following commands. You should expect
     a output: `OK` for both the commands.'
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令下载并注册密钥。你应该期望两个命令都输出：`OK`。
 - en: '[PRE5]'
+  id: totrans-51
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'To install VirtualBox, execute the following commands:'
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要安装VirtualBox，请执行以下命令：
 - en: '[PRE6]'
+  id: totrans-53
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Execute the following command to see the installed VirtualBox version:'
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令以查看已安装的VirtualBox版本：
 - en: '[PRE7]'
+  id: totrans-55
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'You should see a similar output:'
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您应该看到类似的输出：
 - en: '[PRE8]'
+  id: totrans-57
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Ubuntu/Debian users might want to install the `dkms` package to ensure that
     the VirtualBox host kernel modules (`vboxdrv`, `vboxnetflt`, and `vboxnetadp`)
     are properly updated if the Linux kernel version changes during the next `apt-get
     upgrade`. For Debian, it is available in Lenny backports and in the normal repository
     for Squeeze and later. The `dkms` package can be installed through the Synaptic
     package manager or through the following command:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: Ubuntu/Debian用户可能希望安装`dkms`软件包，以确保在下次`apt-get upgrade`期间Linux内核版本更改时，VirtualBox主机内核模块（`vboxdrv`、`vboxnetflt`和`vboxnetadp`）得到正确更新。对于Debian来说，它在Lenny
+    backports中可用，在Squeeze及更高版本的正常仓库中可用。可以通过Synaptic软件包管理器或通过以下命令安装`dkms`软件包：
 - en: '`**sudo apt-get install dkms**`'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: '`**sudo apt-get install dkms**`'
 - en: Creating a VM using Vagrant
+  id: totrans-60
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Vagrant创建一个虚拟机
 - en: In the following section, we will spawn up a VM that will act as our production
     server using Vagrant and VirtualBox.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，我们将使用Vagrant和VirtualBox生成一个将充当我们生产服务器的虚拟机。
 - en: Creating a Vagrantfile
+  id: totrans-62
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建一个Vagrantfile
 - en: 'We will create a Vagrantfile to describe our VM. Follow the given steps:'
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将创建一个Vagrantfile来描述我们的虚拟机。请按照以下步骤操作：
 - en: 'Create a new file named `Vagrantfile` using the following command:'
+  id: totrans-64
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令创建一个名为`Vagrantfile`的新文件：
 - en: '[PRE9]'
+  id: totrans-65
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'Paste the following code into the file:'
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下代码粘贴到文件中：
 - en: '[PRE10]'
+  id: totrans-67
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: Choose the IP address, memory, and number of CPUs accordingly.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据需要选择IP地址、内存和CPU数量。
 - en: Type *Ctrl* + *X*, and then *Y* to save the file.
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 键入*Ctrl* + *X*，然后 *Y* 保存文件。
 - en: Spawning a VM using Vagrant
+  id: totrans-70
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Vagrant生成一个虚拟机
 - en: 'In this section, we will create a VM using the `Vagrantfile` that we created
     just now:'
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将使用刚刚创建的`Vagrantfile`创建一个虚拟机：
 - en: 'Type the following command to spawn a VM using the preceding `Vagrantfile`:'
+  id: totrans-72
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 键入以下命令使用上述的`Vagrantfile`生成一个虚拟机：
 - en: '[PRE11]'
+  id: totrans-73
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'It will take a while for Vagrant to bring up the machine. Once it is done,
     execute the following command to log in to the new VM:'
+  id: totrans-74
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Vagrant将花费一些时间来启动机器。一旦完成，执行以下命令登录到新的虚拟机：
 - en: '[PRE12]'
+  id: totrans-75
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'The output is as follows:'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下：
 - en: '[PRE13]'
+  id: totrans-77
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'We are now inside the VM. We will upgrade our VM with all the necessary applications
     that we need to run our application:'
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们现在在虚拟机内。我们将升级我们的虚拟机，并安装我们运行应用程序所需的所有必要应用程序：
 - en: Java JDK (latest)
+  id: totrans-79
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Java JDK（最新版）
 - en: Apache Tomcat (8.5)
+  id: totrans-80
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Apache Tomcat（8.5）
 - en: A user account to log in to the Docker container
+  id: totrans-81
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个用于登录Docker容器的用户账户
 - en: Open SSH daemon—`sshd` (to accept SSH connections)
+  id: totrans-82
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 开启SSH守护进程—`sshd`（以接受SSH连接）
 - en: Curl
+  id: totrans-83
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Curl
 - en: 'Now, install all the required applications as you would do on any normal Ubuntu
     machine. Let''s begin with creating a `jenkins` user:'
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，按照您在任何正常Ubuntu机器上的操作方式安装所有必需的应用程序。让我们首先创建一个`jenkins`用户：
 - en: 'Execute the following command and follow the user creation steps:'
+  id: totrans-85
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令并按照用户创建步骤进行操作：
 - en: '[PRE14]'
+  id: totrans-86
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'The output is as follows:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 输出如下：
 - en: '[PRE15]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Check the new user using the switch user command:'
+  id: totrans-89
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用切换用户命令检查新用户：
 - en: '[PRE16]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: Switch back to the root user by typing `exit`.
+  id: totrans-91
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过键入`exit`切换回root用户。
 - en: 'Next, we will install the SSH server. Execute the following command in sequence
     (ignore if the `openssh-server` application and the `/var/run/sshd` directory
     path already exist):'
+  id: totrans-92
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，我们将安装SSH服务器。按顺序执行以下命令（如果`openssh-server`应用程序和`/var/run/sshd`目录路径已存在，则忽略）：
 - en: '[PRE17]'
+  id: totrans-93
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'Follow the given steps to install Java:'
+  id: totrans-94
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 跟随以下步骤安装Java：
 - en: 'Update the package index:'
+  id: totrans-95
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更新软件包索引：
 - en: '[PRE18]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'Next, install Java. The following command will install the JRE:'
+  id: totrans-97
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，安装Java。以下命令将安装JRE：
 - en: '[PRE19]'
+  id: totrans-98
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'The best way to install Tomcat 8.5 is to download the latest binary release,
     then configure it manually:'
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 安装Tomcat 8.5的最佳方法是下载最新的二进制发行版，然后手动配置它：
 - en: 'Move to the `/tmp` directory and download Apache Tomcat 8.5 using the following
     commands:'
+  id: totrans-100
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 切换到`/tmp`目录并使用以下命令下载Apache Tomcat 8.5：
 - en: '[PRE20]'
+  id: totrans-101
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'We will install Tomcat inside the `$HOME` directory. To do so, create a `tomcat`
     directory inside `$HOME`:'
+  id: totrans-102
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们将在`$HOME`目录下安装Tomcat。为此，请在`$HOME`内创建一个`tomcat`目录：
 - en: '[PRE21]'
+  id: totrans-103
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Then, extract the archive to it:'
+  id: totrans-104
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 然后，将存档文件解压缩到其中：
 - en: '[PRE22]'
+  id: totrans-105
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: Exit the VM by typing `exit` in the Terminal.
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在终端中键入`exit`退出虚拟机。
 - en: Adding production server credentials inside Jenkins
+  id: totrans-107
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在Jenkins内添加生产服务器凭据
 - en: In order to make Jenkins communicate with the production server, we need to
     add the account credentials inside Jenkins.
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了使Jenkins与生产服务器通信，我们需要在Jenkins内添加账户凭据。
 - en: 'We will do this using the Jenkins Credentials plugin. If you have followed
     the Jenkins setup wizard (discussed at the beginning of the chapter), you will
     find the Credentials feature on the Jenkins dashboard (see the left-hand side
     menu):'
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用Jenkins凭据插件来实现这一点。 如果您已经按照本章开头讨论的Jenkins设置向导进行操作，您将在Jenkins仪表板上找到凭据功能（请参阅左侧菜单）：
 - en: 'Follow the given steps:'
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤进行操作：
 - en: From the Jenkins dashboard, click on Credentials | System | Global credentials
     (unrestricted).
+  id: totrans-111
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板，单击凭据 | 系统 | 全局凭据（无限制）。
 - en: On the Global credentials (unrestricted) page, from the left-hand side menu,
     click on the Add Credentials link.
+  id: totrans-112
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在全局凭据（无限制）页面上，从左侧菜单中，单击添加凭据链接。
 - en: You will be presented with a bunch of fields to configure.
+  id: totrans-113
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将看到一堆字段供您配置。
 - en: Choose Username with password for the Kind field.
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于类型字段，选择用户名与密码。
 - en: Choose Global (Jenkins, nodes, items, all child items, etc) for the Scope field.
+  id: totrans-115
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为范围字段选择全局（Jenkins、节点、项目、所有子项目等）。
 - en: Add a username under the Username field.
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在用户名字段下添加一个用户名。
 - en: Add a password under the Password field.
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在密码字段下添加一个密码。
 - en: Give a unique ID to your credentials by typing a string under the ID field.
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过在ID字段下键入字符串为您的凭据分配一个唯一的ID。
 - en: Add a meaningful description under the Description field.
+  id: totrans-119
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在描述字段下添加一个有意义的描述。
 - en: 'Click on the Save button once done:'
+  id: totrans-120
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后单击保存按钮：
 - en: '![](img/4d6e00da-6cea-423c-aecd-b71b2ab777b4.png)'
+  id: totrans-121
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4d6e00da-6cea-423c-aecd-b71b2ab777b4.png)'
 - en: Adding credentials inside Jenkins
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Jenkins内添加凭据
 - en: Installing a Jenkins slave on a production server
+  id: totrans-123
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在生产服务器上安装Jenkins从节点
 - en: 'In this section, we will install a Jenkins slave on the production server.
     This will allow us to perform deployment on the production server. Execute the
     following steps:'
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将在生产服务器上安装一个Jenkins从节点。 这将允许我们在生产服务器上执行部署。 执行以下步骤：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Nodes.
+  id: totrans-125
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板，单击管理Jenkins | 管理节点。
 - en: Once on the Node Manager page, from the left-hand side menu click on New Node.
+  id: totrans-126
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦在节点管理器页面上，从左侧菜单中单击新建节点。
 - en: 'Give your new Jenkins slave node a name, as shown:'
+  id: totrans-127
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为您的新Jenkins从节点命名，如下所示：
 - en: '![](img/759518a8-0daf-4c5b-867a-a16c9da145bf.png)'
+  id: totrans-128
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/759518a8-0daf-4c5b-867a-a16c9da145bf'
 - en: Adding a new Jenkins slave
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 添加一个新的Jenkins从节点
 - en: On the resultant page, you will be presented with a large number of options.
     Let us see them one by one.
+  id: totrans-130
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将看到许多选项。让我们逐个看一下。
 - en: For the Remote root directory field, add the value `/home/jenkins`.
+  id: totrans-131
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于远程根目录字段，添加值`/home/jenkins`。
 - en: For the Labels field, add the value `production`.
+  id: totrans-132
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于标签字段，添加值为`production`。
 - en: For the Usage field, choose Use this node as much as possible.
+  id: totrans-133
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于用法字段，选择尽可能多地使用此节点。
 - en: For the Launch method field, choose the option Launch slave agents via SSH.
+  id: totrans-134
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于启动方法字段，选择通过SSH启动代理程序的选项。
 - en: Under the Host field, add the IP address of the production server.
+  id: totrans-135
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在主机字段下，添加生产服务器的IP地址。
 - en: Under the Credentials field, choose the credentials that we created in the previous
     section.
+  id: totrans-136
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在凭据字段下，选择我们在上一节中创建的凭据。
 - en: Leave the rest of the options as they are.
+  id: totrans-137
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余选项保持不变。
 - en: 'Once done, click on the Save button:'
+  id: totrans-138
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，单击保存按钮：
 - en: '![](img/00db7d51-f0f0-42fd-92bd-11ada1770bc6.png)'
+  id: totrans-139
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/00db7d51-f0f0-42fd-92bd-11ada1770bc6.png)'
 - en: Configuring the Jenkins slave
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置Jenkins从节点
 - en: Creating a Jenkins Continuous Deployment pipeline
+  id: totrans-141
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建Jenkins持续部署流水线
 - en: In the following section, we will extend our Continuous Delivery pipeline to
     perform deployment.
+  id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一节中，我们将扩展我们的持续交付流水线以执行部署。
 - en: A revisit to the pipeline code for CD
+  id: totrans-143
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 重温CD流水线代码
 - en: 'The following is the complete combined code that was part of the CD:'
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是作为CD一部分的完整组合代码：
 - en: '[PRE23]'
+  id: totrans-145
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: Pipeline code for a production Jenkins slave
+  id: totrans-146
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用于生产Jenkins从节点的流水线代码
 - en: 'First, let us create a node block for our Jenkins slave, production-server:'
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，让我们为我们的Jenkins从节点production-server创建一个节点块：
 - en: '[PRE24]'
+  id: totrans-148
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: Where `production` is the label for the Jenkins slave node, production-server.
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: 其中`production`是Jenkins从节点production-server的标签。
 - en: We would like to deploy the build artifacts to Tomcat on the production server
     on the `production` node.
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们希望将构建产物部署到生产服务器上的Tomcat上的`production`节点。
 - en: Let's write the pipeline code for it.
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们为其编写流水线代码。
 - en: Pipeline code to download binaries from Artifactory
+  id: totrans-152
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从Artifactory下载二进制文件的流水线代码
 - en: 'To download the build artifacts from Artifactory, we will use the File Specs.
     The File Specs code looks as follows:'
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: 要从Artifactory下载构建产物，我们将使用文件规范。文件规范代码如下所示：
 - en: '[PRE25]'
+  id: totrans-154
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'The following table describes the various parameters used:'
+  id: totrans-155
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下表描述了使用的各种参数：
 - en: '| **Parameters** | **Description** |'
+  id: totrans-156
   prefs: []
   type: TYPE_TB
+  zh: '| **参数** | **描述** |'
 - en: '| `pattern` | `[Mandatory]`Specifies the local filesystem path to artifacts
     that should be uploaded to Artifactory. You can specify multiple artifacts by
     using wildcards or a regular expression as designated by the `regexp` property.
@@ -637,8 +953,11 @@
     of the Jenkins Artifactory plugin and version 2.3.1 of the TeamCity Artifactory
     plugin, the pattern format has been simplified and uses the same file separator
     `/` for all operating systems, including Windows.  |'
+  id: totrans-157
   prefs: []
   type: TYPE_TB
+  zh: '| `pattern` | `[必填]`指定应上传到Artifactory的本地文件系统路径的工件。您可以使用通配符或由`regexp`属性指定的正则表达式指定多个工件。如果使用`regexp`，则需要使用反斜杠`\`转义表达式中使用的任何保留字符（例如`.`，`?`等）。从Jenkins
+    Artifactory插件的版本2.9.0和TeamCity Artifactory插件的版本2.3.1开始，模式格式已经简化，并且对于所有操作系统（包括Windows），都使用相同的文件分隔符`/`。'
 - en: '| `target` | `[Mandatory]`Specifies the target path in Artifactory in the following
     format: `[repository_name]/[repository_path]`If the pattern ends with a slash,
     for example, `repo-name/a/b/`, then `b` is assumed to be a folder in Artifactory
@@ -648,125 +967,187 @@
     replaced by corresponding tokens in the source path that are enclosed in parentheses. For
     more details, please refer to the *Using Placeholders* document at [https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders](https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders)**.**
     |'
+  id: totrans-158
   prefs: []
   type: TYPE_TB
+  zh: '| `target` | `[必填]`指定Artifactory中目标路径的格式如下：`[repository_name]/[repository_path]`如果模式以斜杠结尾，例如，`repo-name/a/b/`，那么假定`b`是Artifactory中的一个文件夹，并且文件被上传到其中。在`repo-name/a/b`的情况下，上传的文件在Artifactory中被重命名为`b`。为了灵活指定上传路径，您可以在源路径中的对应令牌周围包含占位符形式的`{1}，{2}，{3}...`，这些占位符会被替换为相应的标记。有关更多详细信息，请参阅[使用占位符](https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders)文档。'
 - en: '| `props` | `[Optional]` List of `key=value` pairs separated by a semi-colon
     (`;`) to be attached as properties to the uploaded properties. If any key can
     take several values, then each value is separated by a comma (`,`). For example,
     `key1=value1;key2=value21,value22;key3=value3`. |'
+  id: totrans-159
   prefs: []
   type: TYPE_TB
+  zh: '| `props` | `[可选]`以分号(`;`)分隔的`key=value`对列表，将其附加为上传的属性。如果任何键可以具有多个值，则每个值由逗号(`,`)分隔。例如，`key1=value1;key2=value21,value22;key3=value3`。'
 - en: '| `flat` | `[Default: true]`If `true`, artifacts are uploaded to the exact
     target path specified and their hierarchy in the source filesystem is ignored.
     If `false`, artifacts are uploaded to the target path while maintaining their
     filesystem hierarchy. |'
+  id: totrans-160
   prefs: []
   type: TYPE_TB
+  zh: '| `flat` | `[默认值：true]`如果为`true`，则工件将上传到指定的确切目标路径，并且源文件系统中的层次结构将被忽略。如果为`false`，则工件将上传到目标路径，同时保持其文件系统层次结构。'
 - en: '| `recursive` | `[Default: true]`If `true`, artifacts are also collected from
     subdirectories of the source directory for upload. If `false`, only artifacts
     specifically in the source directory are uploaded. |'
+  id: totrans-161
   prefs: []
   type: TYPE_TB
+  zh: '| `recursive` | `[默认值：true]`如果为`true`，则还从源目录的子目录中收集工件进行上传。如果为`false`，则仅上传源目录中明确指定的工件。'
 - en: '| `regexp` | `[Default: false]`If `true`, the command will interpret the pattern
     property, which describes the local filesystem path of artifacts to upload, as
     a regular expression. If `false`, the command will interpret the pattern property
     as a wildcard expression. |'
+  id: totrans-162
   prefs: []
   type: TYPE_TB
+  zh: '| `regexp` | `[默认值：false]`如果为`true`，则命令将解释模式属性（描述要上传的工件的本地文件系统路径）为正则表达式。如果为`false`，则命令将解释模式属性为通配符表达式。'
 - en: 'The following is the File Specs code that we will use in our pipeline:'
+  id: totrans-163
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是我们将在管道中使用的File Specs代码：
 - en: '[PRE26]'
+  id: totrans-164
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: 'Wrap the preceding step inside a `stage` called `Deploy to Prod`:'
+  id: totrans-165
   prefs: []
   type: TYPE_NORMAL
+  zh: 将前面的步骤包装在名为`Deploy to Prod`的`stage`内：
 - en: '[PRE27]'
+  id: totrans-166
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'Wrap the `Deploy to Prod` stage inside the `production` node block:'
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: 将`Deploy to Prod`阶段包装在`production`节点块内：
 - en: '[PRE28]'
+  id: totrans-168
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: Combined Continuous Deployment pipeline code
+  id: totrans-169
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 组合连续部署管道代码
 - en: 'The following is the combined Continuous Deployment pipeline code:'
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是组合的连续部署管道代码：
 - en: '[PRE29]'
+  id: totrans-171
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: Update the Jenkinsfile
+  id: totrans-172
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更新Jenkinsfile
 - en: 'A Jenkins Multibranch CD Pipeline utilizes a Jenkinsfile. In this section,
     we will update our existing Jenkinsfile. Follow the given steps:'
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins多分支CD Pipeline利用Jenkinsfile。在本节中，我们将更新现有的Jenkinsfile。按照给定的步骤进行操作：
 - en: Log in to your GitHub account.
+  id: totrans-174
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 GitHub 账户。
 - en: Navigate to the forked repository*.*
+  id: totrans-175
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到分叉出来的仓库。
 - en: Once on the repository page, click on the `Jenkinsfile`. Next, on the resultant
     page click on the Edit button to edit your `Jenkinsfile`.
+  id: totrans-176
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在仓库页面上，点击`Jenkinsfile`。接下来，在结果页面上点击编辑按钮以编辑您的`Jenkinsfile`。
 - en: 'Replace the existing content with the following code:'
+  id: totrans-177
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 用以下代码替换现有内容：
 - en: '[PRE30]'
+  id: totrans-178
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: Once done, Commit the new file by adding a meaningful comment.
+  id: totrans-179
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，通过添加一个有意义的注释来提交新文件。
 - en: Continuous Delivery in action
+  id: totrans-180
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 持续交付正在进行中
 - en: Make some changes to your GitHub code or just trigger the Jenkins pipeline from
     the Jenkins dashboard.
+  id: totrans-181
   prefs: []
   type: TYPE_NORMAL
+  zh: 对您的 GitHub 代码进行一些更改，或者只需从 Jenkins 仪表盘触发 Jenkins 流水线。
 - en: 'Log in to Jenkins, and from the Jenkins dashboard click on your Multibranch
     Pipeline. You should see something similar to the following screenshot:'
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 登录到 Jenkins，从 Jenkins 仪表盘点击您的多分支流水线。您应该会看到类似以下截图的内容：
 - en: '![](img/6849205d-4800-46d6-955d-82b98778ca11.png)'
+  id: totrans-183
   prefs: []
   type: TYPE_IMG
+  zh: '[图片](img/6849205d-4800-46d6-955d-82b98778ca11.png)'
 - en: Jenkins Continuous Deployment pipeline in action
+  id: totrans-184
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 中的持续部署流水线正在运行
 - en: Summary
+  id: totrans-185
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: This marks the end of Continuous Deployment. In this chapter, we learned how
     to achieve Continuous Deployment using Jenkins. Also, I hope the confusion between
     Continuous Delivery and Continuous Deployment is clear. There were no major setups
     or configurations in the chapter, as all the necessary things were achieved in
     the previous chapters while implementing Continuous Integration and Continuous
     Delivery.
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: 这标志着持续部署的结束。在这一章中，我们学习了如何使用 Jenkins 实现持续部署。同时，我希望您已经清楚了持续交付与持续部署之间的区别。本章没有涉及到主要的设置或配置，因为在之前的章节中实现持续集成和持续交付时已经完成了所有必要的工作。
 - en: I really hope this book serves as a means for you to go out there and experiment
     more with Jenkins.
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 我真诚地希望这本书可以让您走出去，更多地尝试 Jenkins。
 - en: Until next time, cheers!
+  id: totrans-188
   prefs: []
   type: TYPE_NORMAL
+  zh: 下次再见，加油！

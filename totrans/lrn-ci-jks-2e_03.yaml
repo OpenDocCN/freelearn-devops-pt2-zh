@@ -1,2310 +1,3397 @@
 - en: The New Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 新 Jenkins
 - en: 'In this chapter, we will look at some of the new features that are now part
     of the Jenkins 2.x release. After completing this chapter, you will have an understanding
     of the following:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将看一些现在是 Jenkins 2.x 发行版的一部分的新功能。完成本章后，你将了解以下内容：
 - en: The new Jenkins setup wizard
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 新的 Jenkins 设置向导
 - en: Jenkins pipeline as a code (Jenkins pipeline job)
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 作为代码的流水线（Jenkins 流水线作业）
 - en: Jenkins Stage view
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 阶段视图
 - en: Jenkins Declarative Pipeline syntax
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 声明式流水线语法
 - en: Jenkins Multibranch pipeline
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 多分支流水线
 - en: Jenkins pipeline syntax utility (Snippet Generator)
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 流水线语法工具（片段生成器）
 - en: Jenkins credentials
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins 凭据
 - en: Jenkinsfile
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkinsfile
 - en: Jenkins Blue Ocean
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins Blue Ocean
 - en: Creating a pipeline in Jenkins Blue Ocean
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins Blue Ocean 中创建流水线
 - en: The Jenkins setup wizard
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 设置向导
 - en: When you access Jenkins for the first time, you are presented with the Getting
     Started wizard. We have already been through this exercise in the previous chapter;
     nevertheless, in the following section, we will take a deeper look at some of
     its important sections.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 当你首次访问 Jenkins 时，会显示“入门向导”。我们已经在前一章节中完成了这个练习；尽管如此，在接下来的部分，我们将更深入地了解其中一些重要部分。
 - en: Prerequisites
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: 'Before we begin, make sure you have the following things ready:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们开始之前，请确保你已准备好以下内容：
 - en: A Jenkins server running on any of the platforms discussed in the previous chapter
     (Docker, standalone, cloud, VM, servlet container, and so on).
+  id: totrans-16
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在前一章节讨论的任何平台上运行的 Jenkins 服务器（Docker、独立、云、虚拟机、Servlet 容器等）。
 - en: Make sure your Jenkins server has access to the internet. This is necessary
     to download and install plugins.
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 确保你的 Jenkins 服务器可以访问互联网。这是下载和安装插件所必需的。
 - en: Unlocking Jenkins
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 解锁 Jenkins
 - en: 'When you access Jenkins for the first time, you are asked to unlock it using
     a secret initial admin password. This password is stored inside the file `initialAdminPassword`,
     which is located inside your `jenkins_home` directory. The file, along with its
     full path, is displayed on the Jenkins page, as shown in the following screenshot:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 当你首次访问 Jenkins 时，会要求你使用一个秘密的初始管理员密码解锁它。这个密码存储在 `initialAdminPassword` 文件中，该文件位于你的
+    `jenkins_home` 目录内。该文件及其完整路径显示在 Jenkins 页面上，如下截图所示：
 - en: '**On Windows**: You can find the file under `C:\Program Files (x86)\Jenkins\secrets`.
     If you have chosen to install Jenkins somewhere else, then look for the file under
     `<Jenkins installation directory>\secrets`.'
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**在 Windows 上**：你可以在 `C:\Program Files (x86)\Jenkins\secrets` 下找到该文件。如果你选择在其他位置安装
+    Jenkins，则在 `<Jenkins 安装目录>\secrets` 下寻找该文件。'
 - en: '**On Linux**: You can find the file under `/var/jenkins_home/secrets`:'
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**在 Linux 上**：你可以在 `/var/jenkins_home/secrets` 下找到该文件：'
 - en: '![](img/8a772edd-f225-4c4a-a8ff-729360dc0125.png)'
+  id: totrans-22
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8a772edd-f225-4c4a-a8ff-729360dc0125.png)'
 - en: Unlocking Jenkins
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 解锁 Jenkins
 - en: Get the password from the `initialAdminPassword` file, paste it under the Administrator
     password field, and click on Continue.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 `initialAdminPassword` 文件中获取密码，粘贴到管理员密码字段下，然后点击继续。
 - en: You can always log in to Jenkins using the password from the `intialAdminPassword`
     file and the username `admin`.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 你始终可以使用 `intialAdminPassword` 文件中的密码和用户名 `admin` 登录 Jenkins。
 - en: Customizing Jenkins
+  id: totrans-26
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自定义 Jenkins
 - en: 'Next, you are presented with two options to install the Jenkins plugins, as
     shown in the following screenshot:'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，会显示两个选项来安装 Jenkins 插件，如下截图所示：
 - en: '![](img/b79b0471-a5d9-4cad-99b5-9ddc0506d4a2.png)'
+  id: totrans-28
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b79b0471-a5d9-4cad-99b5-9ddc0506d4a2.png)'
 - en: Customizing Jenkins
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 自定义 Jenkins
 - en: Choosing Install suggested plugins will install all the generic plugins for
     Jenkins, like Git, Pipeline as Code, and so on (as suggested by the Jenkins community).
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择安装建议的插件将安装 Jenkins 的所有通用插件，如 Git、Pipeline as Code 等（由 Jenkins 社区建议）。
 - en: Choosing Select plugins to install will let you install the plugins of your
     choice.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择“选择要安装的插件”将允许你安装你选择的插件。
 - en: 'In the following section, we will go ahead and choose the option Select plugins
     to install. When you do, you should see the screen shown in the following screenshot.
     The following page will list some of the most popular plugins, although it''s
     not a complete list of Jenkins plugins. You will notice that the suggested plugin
     is already selected (ticked) by default:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分，我们将继续选择安装插件的选项。当你这样做时，你应该看到以下截图中显示的屏幕。以下页面将列出一些最受欢迎的插件，尽管这不是 Jenkins
+    插件的完整列表。你会注意到建议的插件已默认选中（打勾）：
 - en: '![](img/a72f15ab-db44-47c7-ae53-2dd78dc4cede.png)'
+  id: totrans-33
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a72f15ab-db44-47c7-ae53-2dd78dc4cede.png)'
 - en: Choosing plugins to install
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择要安装的插件
 - en: You can choose All, None, or the Suggested plugins.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以选择全部、无、或建议的插件。
 - en: 'Once you are done choosing plugins, click Install at the bottom of the page.
     The following screenshot shows the Jenkins plugin installation:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择完插件后，点击页面底部的安装按钮。以下截图显示了 Jenkins 插件安装：
 - en: '![](img/a28850e3-50a0-4695-894d-4e72883a215c.png)'
+  id: totrans-37
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a28850e3-50a0-4695-894d-4e72883a215c.png)'
 - en: Installing Jenkins plugins
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Jenkins 插件
 - en: Creating the first admin user
+  id: totrans-39
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建第一个管理员用户
 - en: 'Once the plugins are installed, you will be asked to create an administrator
     user account, as shown in the following screenshot. The following administrator
     account is different from the temporary administrator user account that was used
     at the beginning of the setup wizard (the initial admin account):'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装插件后，您将被要求创建管理员用户帐户，如下截图所示。以下管理员帐户与设置向导开始时使用的临时管理员用户帐户不同（初始管理员帐户）：
 - en: '![](img/c006f56d-abf5-48ac-9211-d912bdb16c23.png)'
+  id: totrans-41
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c006f56d-abf5-48ac-9211-d912bdb16c23.png)'
 - en: Creating your first Jenkins user
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建您的第一个 Jenkins 用户
 - en: Fill in the fields appropriately and click on the Save and Finish button. Alternatively,
     you can also choose to ignore creating a new administrator user and continue with
     the initial administrator user by clicking on Continue as admin.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 适当填写字段并点击“保存并完成”按钮。或者，您也可以选择忽略创建新的管理员用户，继续使用初始管理员用户，点击“继续作为管理员”。
 - en: Next, on the following page, you will be greeted with a message saying, Jenkins
     is ready! Your Jenkins setup is complete. Click on Start using Jenkins to proceed
     to the Jenkins dashboard.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 接下来，在下一页上，您将看到一条消息，上面写着“Jenkins 准备就绪！您的 Jenkins 设置已完成。”点击“开始使用 Jenkins”以进入 Jenkins
+    仪表板。
 - en: The new Jenkins pipeline job
+  id: totrans-45
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 新的 Jenkins 流水线任务
 - en: Those who are already familiar with Jenkins are well aware of the freestyle
     Jenkins job. The classic way of creating a pipeline in Jenkins is by using the
     *freestyle job*, wherein each CI stage is represented using a Jenkins job (freestyle).
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 那些已经熟悉 Jenkins 的人都很清楚 freestyle Jenkins 任务。在 Jenkins 中创建流水线的经典方法是使用 *freestyle
+    job*，其中每个 CI 阶段都使用 Jenkins 任务（freestyle）表示。
 - en: The Jenkins freestyle job is a web-based, GUI-propelled configuration. Any modification
     to the CI pipeline requires you to log in to Jenkins and reconfigure each of the
     Jenkins freestyle jobs.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins freestyle 任务是基于 Web 的、GUI 驱动的配置。对 CI 流水线的任何修改都需要您登录 Jenkins 并重新配置每个
+    Jenkins freestyle 任务。
 - en: The concept of **Pipeline as Code** rethinks the way we create a CI pipeline.
     The idea is to write the whole CI/CD pipeline as a code that offers some level
     of programming and that can be version controlled.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Pipeline as Code** 的概念重新思考了我们创建 CI 流水线的方式。其思想是将整个 CI/CD 流水线编写为一段代码，提供一定程度的编程，并且可以进行版本控制。'
 - en: 'The following are some of the advantages of taking the Pipeline as Code route:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是采用 Pipeline as Code 路线的一些优点：
 - en: It's programmable
+  id: totrans-50
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它是可编程的
 - en: All of your CI/CD pipeline configurations can be described using just a single
     file (Jenkinsfile)
+  id: totrans-51
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 所有的 CI/CD 流水线配置都可以使用一个文件（Jenkinsfile）描述。
 - en: It's version controllable, just like any other code
+  id: totrans-52
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它可以进行版本控制，就像任何其他代码一样
 - en: It comes with an option to define your pipeline using the Declarative Pipeline
     syntax, which is an easy and elegant way of coding your pipeline
+  id: totrans-53
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它提供了使用声明性流水线语法定义流水线的选项，这是一种简单而优雅的编码流水线的方式
 - en: Let's take a look at the Jenkins pipeline job. We will try to look and get the
     feel of it by creating a simple CI pipeline.
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们来看看 Jenkins 流水线任务。我们将通过创建一个简单的 CI 流水线来看一下它并感受一下。
 - en: Prerequisite
+  id: totrans-55
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: 'Before we begin, make sure you have the following things ready:'
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 在开始之前，请确保您准备好以下事项：
 - en: A Jenkins server running on any of the platforms discussed in the previous chapter
     (Docker, standalone, cloud, VM, servlet container, and so on).
+  id: totrans-57
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在前一章讨论的任何平台上运行 Jenkins 服务器（Docker、独立、云、虚拟机、Servlet 容器等）。
 - en: Make sure your Jenkins server has access to the internet. This is necessary
     to download and install plugins.
+  id: totrans-58
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 确保您的 Jenkins 服务器可以访问互联网。这是下载和安装插件所必需的。
 - en: Make sure your Jenkins server has all the suggested plugins installed. See the
     *Customizing Jenkins* section.
+  id: totrans-59
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 确保您的 Jenkins 服务器已安装所有建议的插件。请参阅 *Customizing Jenkins* 部分。
 - en: Creating a Jenkins pipeline job
+  id: totrans-60
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建 Jenkins 流水线任务
 - en: 'Follow the given steps to create a Jenkins pipeline job:'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤创建 Jenkins 流水线任务：
 - en: From the Jenkins dashboard, click on the New Item link.
+  id: totrans-62
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板上，点击“新建项目”链接。
 - en: On the resultant page, you will be presented with various types of Jenkins jobs
     to choose from.
+  id: totrans-63
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将看到各种类型的 Jenkins 任务供您选择。
 - en: Choose Pipeline, and give a name to your pipeline using the Enter an item name
     field.
+  id: totrans-64
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择管道，并使用`输入项目名称`字段为管道命名。
 - en: Once you are done, click on the OK button at the bottom of the page.
+  id: totrans-65
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击页面底部的确定按钮。
 - en: 'All kinds of Jenkins jobs (freestyle, pipeline, multibranch, and so on) now
     come with a featured tab, as shown in the following screenshot:'
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 所有种类的 Jenkins 作业（自由形式、管道、多分支等）现在都带有一个特色标签，如下图所示：
 - en: '![](img/a2812c0a-85ae-4326-a547-5628397a63e2.png)'
+  id: totrans-67
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a2812c0a-85ae-4326-a547-5628397a63e2.png)'
 - en: The new tab feature in Jenkins jobs
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 作业中的新标签功能
 - en: We will quickly navigate to the pipeline section by clicking on the Pipeline
     tab.
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过点击管道选项卡，快速导航到管道部分。
 - en: 'The following screenshot depicts the pipeline section. Let us see this section
     in detail:'
+  id: totrans-70
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以下截图描述了管道部分。让我们详细看看这个部分：
 - en: The Definition field gives you two options to choose from—Pipeline script and
     Pipeline script from SCM. If you choose the option Pipeline script, then you define
     your pipeline code inside the Script field. But, if you choose the option Pipeline
     script from SCM (not shown in the screenshot), then your pipeline script (Jenkinsfile)
     is automatically fetched from the Version Control System (We will explore this
     option in the upcoming section).
+  id: totrans-71
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`Definition`字段提供两个选择——管道脚本和来自SCM的管道脚本。如果选择管道脚本选项，那么在脚本字段内定义你的管道代码。但是，如果选择来自SCM的管道脚本选项（截图中未显示），那么你的管道脚本（Jenkinsfile）将自动从版本控制系统中提取（我们将在接下来的部分中探讨这个选项）。'
 - en: To get a short description about any of the options, you can click on the question
     mark icon.
+  id: totrans-72
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 要获取关于任何选项的简短描述，可以点击问号图标。
 - en: The Pipeline Syntax is a utility that helps you to convert GUI configurations
     into code. (We will explore this option in the upcoming section).
+  id: totrans-73
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 管道语法是一个实用工具，帮助你将 GUI 配置转换为代码。（我们将在接下来的部分中探讨这个选项）。
 - en: '![](img/7f7ae013-b35a-4166-89cd-e29aaee573dd.png)'
+  id: totrans-74
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7f7ae013-b35a-4166-89cd-e29aaee573dd.png)'
 - en: The pipeline section
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 管道部分
 - en: Now let us write some code inside the Script field to see how the pipeline works.
     We will try some of the example code provided by Jenkins.
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在让我们在脚本字段内编写一些代码，看看管道是如何工作的。我们将尝试一些 Jenkins 提供的示例代码。
 - en: 'To do so, click on the try sample Pipeline… field and choose the GitHub + Maven
     option, as shown in the following screenshot:'
+  id: totrans-77
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为此，点击`尝试示例管道…`字段，并选择 GitHub + Maven 选项，如下截图所示：
 - en: '![](img/30171bc2-e4c7-4125-b765-23a3a72c3c41.png)'
+  id: totrans-78
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/30171bc2-e4c7-4125-b765-23a3a72c3c41.png)'
 - en: Choosing a sample pipeline script
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择一个示例管道脚本。
 - en: This will fill the Script field with a sample code.
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这将在脚本字段中填充样本代码。
 - en: 'The code is shown as follows. It''s in the Declarative Pipeline syntax form:'
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 代码如下所示。它以声明性管道语法形式呈现：
 - en: '[PRE0]'
+  id: totrans-82
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Let us quickly scan through the pipeline script (we will explore more about
     Declarative Pipeline syntax in the upcoming section):'
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 让我们快速浏览一下管道脚本（我们将在接下来的部分中详细探讨声明性管道语法）：
 - en: The `node {}` is the main container which tells Jenkins to run the whole pipeline
     script on the Jenkins master.
+  id: totrans-84
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`node{}` 是告诉 Jenkins 在 Jenkins 主服务器上运行整个管道脚本的主要容器。'
 - en: 'Inside the `node {}` container, there are three more containers, shown as follows:'
+  id: totrans-85
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在`node{}`容器内部，还有三个更多的容器，如下所示：
 - en: '[PRE1]'
+  id: totrans-86
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: The `Preparation` stage will download the Maven source code from a GitHub repository
     and will tell Jenkins to use the M3 Maven tool that is defined in the global configuration
     (we need to do this before we run our pipeline).
+  id: totrans-87
   prefs:
   - PREF_OL
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`准备`阶段将从 GitHub 存储库下载 Maven 源代码，并告诉 Jenkins 使用在全局配置中定义的 M3 Maven 工具（在运行管道之前我们需要这样做）。'
 - en: The `Build` stage will build the Maven project.
+  id: totrans-88
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`构建`阶段将构建 Maven 项目。'
 - en: The `Results` stage will archive the build artifacts along with the JUnit testing
     results.
+  id: totrans-89
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`结果`阶段将存档构建产物以及 JUnit 测试结果。'
 - en: Save the changes made to the pipeline job by clicking on the Save button at
     the bottom of the page.
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击页面底部的保存按钮保存对管道作业的更改。
 - en: The Global Tool Configuration page
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 全局工具配置页面
 - en: 'Before we run the pipeline, it is important that we take a look at the Global
     Tool Configuration page in Jenkins. This is the place where you configure tools
     that you think will be used globally across all your pipelines: for example, Java,
     Maven, Git, and so on.'
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 在运行管道之前，重要的是我们查看 Jenkins 中的全局工具配置页面。这是你配置工具的地方，你认为这些工具将在所有管道中全局使用：例如 Java、Maven、Git等等。
 - en: Let's say you have multiple build agents (Jenkins slave agents) that build your
     Java code, and your build pipeline requires Java JDK, Maven, and Git. All you
     need to do is configure these tools inside the Global Tool Configuration, and
     Jenkins will automatically summon them while building your code on the build agents
     (Jenkins slave agents). There is no need for you to install these tools on any
     of the build agents.
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 假设您有多个构建代理（Jenkins 从代理），用于构建您的 Java 代码，并且您的构建流水线需要 Java JDK、Maven 和 Git。您只需在全局工具配置中配置这些工具，Jenkins
+    将在构建代理（Jenkins 从代理）上构建您的代码时自动调用它们。您无需在任何构建代理上安装这些工具。
 - en: 'Let us configure the Maven tool inside Global Tool Configuration to make our
     pipeline work. Follow the given steps:'
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们在全局工具配置中配置 Maven 工具，以使我们的流水线工作起来。按照以下步骤进行操作：
 - en: 'To access the Global Tool Configuration page, do any one of the following:'
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要访问全局工具配置页面，请执行以下操作之一：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Global Tool Configuration.
+  id: totrans-96
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，单击“管理 Jenkins” | “全局工具配置”。
 - en: Or paste the URL `http://<IP Address of your Jenkins server>:8080/configureTools/`
     in your browser.
+  id: totrans-97
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 或者，在浏览器中粘贴 URL `http://<您的 Jenkins 服务器的 IP 地址>:8080/configureTools/`。
 - en: 'Scroll all the way down to the Maven section and click on the Add Maven button.
     You will be presented with a list of options, as shown in the following screenshot.
     Fill the information in as follows:'
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到底部，找到 Maven 部分，然后单击“添加 Maven”按钮。然后，您将看到一系列选项，如下图所示。按照以下信息填写：
 - en: Provide a unique name for your Maven installation by filling the Name field.
     (Make it `M3` for our example pipeline to work.)
+  id: totrans-99
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过填写“名称”字段为您的 Maven 安装提供一个唯一的名称。（例如，我们的示例流水线中将其命名为 `M3`。）
 - en: 'The Install from Apache option will appear by default. This will make Jenkins
     download the Maven application from Apache:'
+  id: totrans-100
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 默认情况下将显示“从 Apache 安装”。这将使 Jenkins 从 Apache 下载 Maven 应用程序：
 - en: '![](img/e1607e85-369d-418e-94a3-399cd3dc06fc.png)'
+  id: totrans-101
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e1607e85-369d-418e-94a3-399cd3dc06fc.png)'
 - en: Configuring Maven inside the Global Tool Configuration
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 在“全局工具配置”中配置 Maven
 - en: Choose the latest Maven version using the Version field; I have chosen to use
     Maven 3.5.0, as shown in the previous screenshot.
+  id: totrans-103
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用“版本”字段选择最新的 Maven 版本；我选择使用 Maven 3.5.0，如前面的截图所示。
 - en: To choose a different installer first, delete the existing installer by clicking
     on the Delete Installer button. Next, click on the Add Installer drop-down menu
     and choose a different installer. The other options, apart from Install from Apache are, Run
     Batch Command, Run Shell Command, and Extract *.zip/*.tar.gz (not shown in the
     screenshot).
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，选择不同的安装程序，通过单击“删除安装程序”按钮删除现有的安装程序。接下来，单击“添加安装程序”下拉菜单，并选择不同的安装程序。除了从 Apache
+    安装之外，其他选项还有“运行批处理命令”、“运行 Shell 命令”和“提取 *.zip/*.tar.gz”（在截图中未显示）。
 - en: The Java tool is also needed to build the Maven project, but since we are building
     our code on Jenkins master (which already has Java JDK), we can skip installing
     the Java tool for now.
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建 Maven 项目还需要 Java 工具，但由于我们正在 Jenkins 主服务器上构建我们的代码（该服务器已安装了 Java JDK），因此我们现在可以跳过安装
+    Java 工具。
 - en: Once you are done with configuring Maven, scroll down to the bottom of the page
     and click on the Save button.
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 配置 Maven 完成后，滚动到页面底部，然后单击“保存”按钮。
 - en: Jenkins pipeline Stage View
+  id: totrans-107
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 流水线阶段视图
 - en: Jenkins *Stage View* is a new feature that comes as a part of release 2.x. It
     works only with Jenkins Pipeline and Jenkins Multibranch pipeline jobs.
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins *阶段视图* 是 2.x 版本的新功能。它仅适用于 Jenkins 流水线和 Jenkins 多分支流水线作业。
 - en: 'Jenkins Stage View lets you visualize the progress of various stages of your
     pipeline in real time. Let us see that in action by running our example pipeline:'
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 阶段视图可以实时可视化流水线各个阶段的进度。让我们通过运行示例流水线来看看它的运作情况：
 - en: On the Jenkins dashboard, under the All view tab, you will see your pipeline.
+  id: totrans-110
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 仪表板上，在“所有视图”选项卡下，您将看到您的流水线。
 - en: 'Click on the build trigger icon to run the pipeline, as shown in the following
     screenshot:'
+  id: totrans-111
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击构建触发图标来运行流水线，如下图所示：
 - en: '![](img/87a1a20e-2e55-474c-b8d1-9dfee98ea1a4.png)'
+  id: totrans-112
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/87a1a20e-2e55-474c-b8d1-9dfee98ea1a4.png)'
 - en: Viewing pipeline on the Jenkins dashboard
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 仪表板上查看流水线
 - en: To get to the Stage View, click on your pipeline name (which also happens to
     be a link to your pipeline project page).
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要进入“阶段视图”，请单击您的流水线名称（同时也是指向流水线项目页面的链接）。
 - en: 'Alternatively, you can mouse over your pipeline name to get a drop-down menu
     with a list of action items and links, as shown in the following screenshot:'
+  id: totrans-115
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 或者，您可以将鼠标悬停在流水线名称上，以获取包含一系列操作项和链接的下拉菜单，如下图所示：
 - en: '![](img/116beaf2-76f9-4a74-8e84-3c65d644f288.png)'
+  id: totrans-116
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/116beaf2-76f9-4a74-8e84-3c65d644f288.png)'
 - en: A view of the pipeline menu
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 流水线菜单的视图
 - en: 'The Stage View page will look something like the following screenshot:'
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 舞台视图页面将看起来像以下截图：
 - en: '![](img/522cf1f9-2c0f-436f-b373-b74eb20e6517.png)'
+  id: totrans-119
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/522cf1f9-2c0f-436f-b373-b74eb20e6517.png)'
 - en: The Stage View
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 舞台视图
 - en: 'To view the build logs of a particular stage, mouse over the color-coded status
     box, and you should see an option to view the logs. Clicking it will open up a
     small pop-up window displaying the logs, as shown in the following screenshot:'
+  id: totrans-121
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要查看特定阶段的构建日志，请将鼠标悬停在色彩编码的状态框上，您应该看到查看日志的选项。单击它将打开一个小弹出窗口显示日志，如下所示：
 - en: '![](img/e6abe66d-9f7f-45ed-9499-cd539bfc45db.png)'
+  id: totrans-122
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e6abe66d-9f7f-45ed-9499-cd539bfc45db.png)'
 - en: Jenkins individual stage logs
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 单个阶段日志
 - en: 'To view the complete build log, look for the Build History on the left-hand
     side. The Build History tab will list all the builds that have been run. Right-click
     on the desired build number and click Console Output:'
+  id: totrans-124
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要查看完整的构建日志，请在左侧查找“构建历史”。构建历史选项卡将列出所有已运行的构建。右键单击所需的构建编号，然后单击“控制台输出”：
 - en: '![](img/7ec8e5c8-9f21-4e0f-bb5e-eb2e9e2b1f81.png)'
+  id: totrans-125
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7ec8e5c8-9f21-4e0f-bb5e-eb2e9e2b1f81.png)'
 - en: Accessing the console output
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 访问控制台输出
 - en: Declarative Pipeline syntax
+  id: totrans-127
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 声明性流水线语法
 - en: In the previous section, we created a Jenkins pipeline to get a look at and
     feel for its various components. We utilized the pipeline script that followed
     a declarative syntax to define our pipeline.
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 在先前的部分中，我们创建了一个 Jenkins 流水线，以查看和感受其各种组件。我们利用了遵循声明性语法的流水线脚本来定义我们的流水线。
 - en: The Declarative Pipeline syntax is a more simplified and structured version
     of the Groovy syntax, the latter being more powerful due to its programmability.
     In this section, we will learn about the Declarative Pipeline syntax in a bit
     more detail. This is important because in the upcoming chapters we will be using
     the same to define our CI and CD pipelines.
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 声明性流水线语法是 Groovy 语法的更简化和结构化版本，后者由于其可编程性而更强大。在本节中，我们将更详细地了解声明性流水线语法。这很重要，因为在接下来的章节中，我们将使用相同的语法来定义我们的
+    CI 和 CD 流水线。
 - en: Basic structure of a Declarative Pipeline
+  id: totrans-130
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 声明性流水线的基本结构
 - en: In simple terms, a Declarative Pipeline is a collection of multiple `node` blocks
     (nodes), `stage` blocks (stages), directives, and steps. A single `node` block
     can have multiple `stage` blocks, and vice versa. We can also run multiple stages
     in parallel. Let's see each of them in detail.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 简而言之，声明性流水线是多个 `node` 块（节点）、`stage` 块（阶段）、指令和步骤的集合。一个 `node` 块可以有多个 `stage`
+    块，反之亦然。我们还可以并行运行多个阶段。让我们逐个详细了解各个部分。
 - en: The node block
+  id: totrans-132
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: '`node` 块'
 - en: 'A `node` block defines the Jenkins agent wherein its constituents (stage blocks,
     directives, and steps) should run. The `node` block structure looks like the following:'
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: '`node` 块定义了 Jenkins 代理，其中包括其组成部分（阶段块、指令和步骤）应运行在其中。`node` 块结构如下所示：'
 - en: '[PRE2]'
+  id: totrans-134
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'The following gives more information about the `node` block:'
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下提供了有关`node` 块的更多信息：
 - en: '**Defines**: The node where the `stage`, directives, or steps should run'
+  id: totrans-136
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**定义**：`stage`、指令或步骤应运行的节点'
 - en: '**Constituents**: Multiple `stage` blocks, directives, or steps'
+  id: totrans-137
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**组成部分**：多个 `stage` 块、指令或步骤'
 - en: '**Required**: Yes'
+  id: totrans-138
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**必需**：是'
 - en: '**Parameters**: Any, label'
+  id: totrans-139
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**参数**：任意、标签'
 - en: The stage block
+  id: totrans-140
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 阶段块
 - en: 'A `stage` block is a collection of closely related steps and directives that
     have a common objective. The `stage` block structure looks like the following:'
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: '`stage` 块是一组紧密相关的步骤和指令的集合，具有共同的目标。`stage` 块结构如下所示：'
 - en: '[PRE3]'
+  id: totrans-142
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'The following gives more information about the `stage` block:'
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下提供了有关 `stage` 块的更多信息：
 - en: '**Defines**: A collection of steps and directives'
+  id: totrans-144
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**定义**：一组步骤和指令'
 - en: '**Constituents**: Multiple `node` blocks, directives, or steps'
+  id: totrans-145
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**组成部分**：多个 `node` 块、指令或步骤'
 - en: '**Required**: Yes'
+  id: totrans-146
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**必需**：是'
 - en: '**Parameters**: A string that is the name of the stage (mandatory)'
+  id: totrans-147
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**参数**：阶段名称的字符串（必填）'
 - en: Directives
+  id: totrans-148
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 指令
 - en: 'The main purpose of directives is to assist the `node` block, `stage` block,
     and steps by providing them with any of the following elements: environments,
     options, parameters, triggers, tools.'
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: 指令的主要目的是通过提供以下任何元素来协助 `node` 块、`stage` 块和步骤：环境、选项、参数、触发器、工具。
 - en: 'The following gives more information about the `stage` block:'
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下提供了有关 `stage` 块的更多信息：
 - en: '**Defines**:  The node where the stage should run'
+  id: totrans-151
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**定义**：`stage` 应在其中运行的节点'
 - en: '**Constituents**: Environments, options, parameters, triggers, tools'
+  id: totrans-152
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**组成部分**：环境、选项、参数、触发器、工具'
 - en: '**Required**: No, but every CI/CD pipeline has it'
+  id: totrans-153
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**必需**：不，但每个 CI/CD 流水线都有它'
 - en: '**Parameters**: None'
+  id: totrans-154
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**参数**：无'
 - en: Steps
+  id: totrans-155
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 步骤
 - en: Steps are the fundamental elements that make up the Declarative Pipeline. A
     step could be a batch script or a shell script, or any other command that's executable.
     Steps have various purposes, such as cloning a repository, building code, running
     tests, uploading artifacts to the repository server, performing static code analysis,
     and so on. In the upcoming section, we will see how to generate steps using the
     Jenkins pipeline syntax utility.
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 步骤是构成声明式流水线的基本元素。步骤可以是批处理脚本、shell 脚本或任何其他可执行命令。步骤有各种用途，例如克隆存储库、构建代码、运行测试、将构件上传到存储库服务器、执行静态代码分析等。在接下来的部分中，我们将看到如何使用
+    Jenkins 管道语法工具生成步骤。
 - en: 'The following gives more information about the `stage` block:'
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下提供了关于`stage`块的更多信息：
 - en: '**Defines**:  It tells Jenkins what to do'
+  id: totrans-158
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**定义**: 它告诉 Jenkins 要做什么'
 - en: '**Constituents**: Commands, scripts, and so on. It''s the fundamental block
     of a pipeline'
+  id: totrans-159
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**构成**: 命令、脚本等。这是流水线的基本块'
 - en: '**Required**: No. But every CI/CD pipeline has it'
+  id: totrans-160
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**必需**：不，但每个 CI/CD 流水线都有它'
 - en: '**Parameters**: None'
+  id: totrans-161
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**参数**：无'
 - en: 'The following is the pipeline code that we used earlier. The `node` block,
     the `stage` blocks, the directives, and the steps are highlighted using comments
     (`//`). As you can see, there are three `stage` blocks inside the `node` block.
     A `node` block can have multiple `stage` blocks. In addition to that, each `stage`
     block contains multiple steps, and one of them also contains a directive:'
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是我们之前使用的管道代码。`node`块、`stage`块、指令和步骤都使用注释（`//`）进行了突出显示。正如你所见，`node`块内有三个`stage`块。一个`node`块可以有多个`stage`块。除此之外，每个`stage`块都包含多个步骤，其中一个还包含一个指令：
 - en: '[PRE4]'
+  id: totrans-163
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'In the preceding code, note the line: `node (''master'') {`. Here, the string `master`
     is a parameter (`label`) that tells Jenkins to use the Jenkins master for running
     the contents of the `node` block.'
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述代码中，请注意以下行：`node ('master') {`。这里，字符串`master`是一个参数（`label`），告诉 Jenkins 使用
+    Jenkins 主节点来运行`node`块的内容。
 - en: If you choose the parameter value as any, then all the stage nodes and their
     respective steps and directives will be executed on any one of the available Jenkins
     slave agents.
+  id: totrans-165
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您将参数值选择为任意，则所有阶段节点及其各自的步骤和指令将在任一可用 Jenkins 从属代理上执行。
 - en: We will learn more about the Declarative Pipeline in the upcoming chapters,
     wherein we will try to write a CI/CD pipeline using it.
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，我们将更多地了解声明式流水线，在那里我们将尝试使用它编写一个 CI/CD 流水线。
 - en: For more information about Declarative Pipeline syntax, refer to [https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections](https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections).
+  id: totrans-167
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关声明式流水线语法的更多信息，请参阅[https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections](https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections)。
 - en: To get a list of all the available steps that are compatible with the Declarative
     Pipeline, refer to [https://jenkins.io/doc/pipeline/steps/](https://jenkins.io/doc/pipeline/steps/)[.](https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections)
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: 要获取与声明式流水线兼容的所有可用步骤的列表，请参考[https://jenkins.io/doc/pipeline/steps/](https://jenkins.io/doc/pipeline/steps/)。
 - en: Jenkins pipeline syntax utility
+  id: totrans-169
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 管道语法工具
 - en: The Jenkins pipeline syntax utility is a quick and easy way to create pipeline
     code. The pipeline syntax utility is available inside the Jenkins pipeline job;
     see the screenshot: *The pipeline section* in the *Creating a Jenkins pipeline
     job* section.
+  id: totrans-170
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 管道语法工具是创建管道代码的一种快速简便的方法。管道语法工具可在 Jenkins 管道任务内部使用；参见*在创建 Jenkins 管道任务部分的*屏幕截图：*管道部分*。
 - en: In this section, we will recreate the pipeline that we created in the previous
     section, but this time using the pipeline syntax utility.
+  id: totrans-171
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将重新创建我们在上一节中创建的管道，但这次使用管道语法工具。
 - en: Prerequisite
+  id: totrans-172
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: 'Before we begin, make sure you have the following things ready:'
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们开始之前，请确保你准备好了以下事项：
 - en: The Maven tool configured inside the Global Tool Configuration page (refer to
     the *The Global Tool Configuration page* section)
+  id: totrans-174
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在全局工具配置页面配置的 Maven 工具（参见*全局工具配置页面*部分）
 - en: Install Pipeline Maven Integration Plugin
+  id: totrans-175
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 Pipeline Maven Integration Plugin
 - en: The Java tool is also needed to build the Maven project, but since we are building
     our code on Jenkins master (which already has Java JDK), we can skip installing
     the Java tool
+  id: totrans-176
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为构建 Maven 项目还需要 Java 工具，但由于我们在 Jenkins 主节点上构建我们的代码（该节点已经安装了 Java JDK），我们可以跳过安装
+    Java 工具
 - en: Installing the Pipeline Maven Integration Plugin
+  id: totrans-177
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装Pipeline Maven Integration插件
 - en: 'Follow the given steps to install the Pipeline Maven Integration Plugin. The
     following plugin will allow us to use the Maven tool inside our pipeline code:'
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤安装Pipeline Maven Integration插件。以下插件将允许我们在管道代码中使用Maven工具：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available tab.
+  id: totrans-179
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板中，单击“管理Jenkins”|“管理插件”|“可用”选项卡。
 - en: 'Type `Pipeline Maven Integration` inside the Filter field to search the respective
     plugin, as shown in the following screenshot:'
+  id: totrans-180
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“过滤器”字段中键入“Pipeline Maven Integration”以搜索相应的插件，如下截图所示：
 - en: '![](img/e0dc9e79-b757-4d80-ba9a-a2dde9275ed9.png)'
+  id: totrans-181
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e0dc9e79-b757-4d80-ba9a-a2dde9275ed9.png)'
 - en: The Plugin Manager page
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件管理器页面
 - en: Click on the checkbox to select the respective plugin, and then click on the
     Install without restart button to install it.
+  id: totrans-183
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击复选框以选择相应的插件，然后单击“无需重启安装”按钮进行安装。
 - en: Once you click on the Install without restart button, you will see the plugin
     getting installed, as shown in the following screenshot. Jenkins will first check
     for the network connection, after which it will install the dependencies, and
     lastly, it will install the plugin.
+  id: totrans-184
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“无需重启安装”按钮后，您将看到插件正在安装，如下截图所示。Jenkins将首先检查网络连接，然后安装依赖项，最后安装插件。
 - en: 'Some plugins might need a restart before they can be used. To do so, check
     the option, Restart Jenkins when installation is complete and no jobs are running:'
+  id: totrans-185
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 某些插件可能需要重启才能使用。要这样做，请检查选项“在安装完成且没有作业运行时重新启动Jenkins”：
 - en: '![](img/e725c942-5e2a-467f-8021-e4a130881ba2.png)'
+  id: totrans-186
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e725c942-5e2a-467f-8021-e4a130881ba2.png)'
 - en: Plugin installation in progress
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件安装中
 - en: Creating a Jenkins pipeline using the pipeline syntax utility
+  id: totrans-188
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用管道语法实用程序创建Jenkins管道
 - en: 'Follow the given steps to create a new Jenkins pipeline job:'
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤创建新的Jenkins管道作业：
 - en: From the Jenkins dashboard, click on the New Item link.
+  id: totrans-190
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板中，单击“新项目”链接。
 - en: On the resultant page, you will be presented with various types of Jenkins jobs
     to choose from.
+  id: totrans-191
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在生成的页面上，您将看到各种类型的Jenkins作业供选择。
 - en: Choose Pipeline, and give a name to your pipeline using the Enter an item name
     field.
+  id: totrans-192
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择管道，并使用“输入项目名称”字段为管道命名。
 - en: Once you are done, click on the OK button at the bottom of the page.
+  id: totrans-193
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，单击页面底部的“确定”按钮。
 - en: We will quickly navigate to the pipeline section by clicking on the Pipeline
     tab.
+  id: totrans-194
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们将通过单击“管道”选项卡快速导航到管道部分。
 - en: 'Under the Pipeline tab, click on the link named Pipeline Syntax. This will
     open up a new tab, as shown in the following screenshot:'
+  id: totrans-195
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“管道”选项卡下，单击名为“管道语法”的链接。这将打开一个新选项卡，如下截图所示：
 - en: '![](img/74eda867-bec6-4849-989a-41596806e3f2.png)'
+  id: totrans-196
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/74eda867-bec6-4849-989a-41596806e3f2.png)'
 - en: The Pipeline Syntax page
+  id: totrans-197
   prefs: []
   type: TYPE_NORMAL
+  zh: 管道语法页面
 - en: We will be using the following Snippet Generator to create pipeline code for
     various blocks and steps.
+  id: totrans-198
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们将使用以下片段生成器为各种块和步骤创建管道代码。
 - en: 'Let us first generate a code for a `node` block:'
+  id: totrans-199
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 首先让我们生成一个`node`块的代码：
 - en: 'On the Pipeline Syntax page, under the Steps section, choose node: Allocate
     node using the Sample Step field, as shown in the following screenshot.'
+  id: totrans-200
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在管道语法页面上，在“步骤”部分下，选择`node`：使用“示例步骤”字段分配节点，如下所示。
 - en: In the Label field, add a string `master`. By doing so we tell Jenkins to use
     the Jenkins master as the node of choice to execute our pipeline.
+  id: totrans-201
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“标签”字段中添加字符串`master`。这样做告诉Jenkins使用Jenkins主节点作为执行我们管道的首选节点。
 - en: Click on the Generate Pipeline Script button to generate the code.
+  id: totrans-202
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“生成管道脚本”按钮生成代码。
 - en: 'Copy the generated code and keep it aside on a text editor:'
+  id: totrans-203
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制生成的代码并将其保存在文本编辑器中：
 - en: '![](img/cc01527d-c048-4819-964c-d52ed9b33490.png)'
+  id: totrans-204
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/cc01527d-c048-4819-964c-d52ed9b33490.png)'
 - en: Generating code for the node block
+  id: totrans-205
   prefs: []
   type: TYPE_NORMAL
+  zh: 生成`node`块的代码
 - en: 'Now, let us create two `stage` blocks named `Preparation` and `Build`:'
+  id: totrans-206
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，让我们创建两个名为`Preparation`和`Build`的`stage`块：
 - en: 'On the Pipeline Syntax page, under the Steps section, choose stage: Stage using
     the Sample Step field, as shown in the following screenshot.'
+  id: totrans-207
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在管道语法页面上，在“步骤”部分下，选择`stage`：使用“示例步骤”字段，如下所示。
 - en: In the Stage Name field, add a string `Preparation`.
+  id: totrans-208
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“阶段名称”字段中添加字符串`Preparation`。
 - en: Click on the Generate Pipeline Script button to generate the code.
+  id: totrans-209
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“生成管道脚本”按钮生成代码。
 - en: 'Copy the generated code and paste it inside the `node` block that we generated
     earlier:'
+  id: totrans-210
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制生成的代码并将其粘贴到我们之前生成的`node`块中：
 - en: '![](img/89be1a2d-475d-46e3-b6b9-f507b6756641.png)'
+  id: totrans-211
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/89be1a2d-475d-46e3-b6b9-f507b6756641.png)'
 - en: Generating code for the stage block
+  id: totrans-212
   prefs: []
   type: TYPE_NORMAL
+  zh: 为阶段块生成代码
 - en: Similarly, repeat *step 9* to create a `stage` block named `Build`. Paste the
     generated code inside the `node` block and after the `Preparation` (the `stage`
     block).
+  id: totrans-213
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 类似地，重复*步骤 9*以创建一个名为 `构建` 的 `stage` 块。 将生成的代码粘贴到 `准备`（`stage` 块）之后的 `node` 块中。
 - en: 'Our pipeline code, so far, should look something like the following (without
     the `// some block` lines):'
+  id: totrans-214
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 到目前为止，我们的管道代码应该看起来像以下内容（不包括 `// some block` 行）：
 - en: '[PRE5]'
+  id: totrans-215
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'Let us now create a step to download the source code from GitHub:'
+  id: totrans-216
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在让我们创建一个步骤来从 GitHub 下载源代码：
 - en: 'On the Pipeline Syntax page, under the Steps section, choose git: Git using
     the Sample Step field, as shown in the following screenshot.'
+  id: totrans-217
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '在管道语法页面的步骤部分，在示例步骤字段下选择 git: 使用 Git 的步骤，如以下截图所示。'
 - en: 'In the Repository URL field, add the link to the example GitHub repository:
     `https://github.com/jglick/simple-maven-project-with-tests.git`.'
+  id: totrans-218
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Repository URL 字段中，添加示例 GitHub 仓库的链接：`https://github.com/jglick/simple-maven-project-with-tests.git`。
 - en: Leave the rest of the options as is.
+  id: totrans-219
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 其余选项保持不变。
 - en: Click on the Generate Pipeline Script button to generate the code.
+  id: totrans-220
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击生成管道脚本按钮生成代码。
 - en: 'Copy the generated code, and paste it into the `Preparation` (the `stage` block)
     that we generated earlier:'
+  id: totrans-221
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制生成的代码，并将其粘贴到我们之前生成的 `准备`（`stage` 块）中：
 - en: '![](img/044110f3-342c-495a-bc73-239692bb3861.png)'
+  id: totrans-222
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/044110f3-342c-495a-bc73-239692bb3861.png)'
 - en: Generating code for the Git step
+  id: totrans-223
   prefs: []
   type: TYPE_NORMAL
+  zh: 为 Git 步骤生成代码
 - en: 'Next, let us generate a directive that will tell Jenkins to use the M3 Maven
     tool that we have configured inside the Global Tool Configuration:'
+  id: totrans-224
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，让我们生成一个指令，告诉 Jenkins 使用我们在全局工具配置中配置的 M3 Maven 工具：
 - en: 'On the Pipeline Syntax page, under the Steps section, choose withMaven: Provide
     Maven environment using the Sample Step field, as shown in the following screenshot.'
+  id: totrans-225
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '在管道语法页面的步骤部分，在示例步骤字段下选择 withMaven: 使用 Maven 环境 的步骤，如以下截图所示。'
 - en: In the Maven field, choose `M3`, which is the Maven tool that we have configured
     inside the Global Tool Configuration.
+  id: totrans-226
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Maven 字段中，选择 `M3`，这是我们在全局工具配置中配置的 Maven 工具。
 - en: Leave the rest of the options as is.
+  id: totrans-227
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 其余选项保持不变。
 - en: Click on the Generate Pipeline Script button to generate the code.
+  id: totrans-228
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击生成管道脚本按钮生成代码。
 - en: 'Copy the generated code and paste it into the `Build` (the `stage` block) that
     we generated earlier:'
+  id: totrans-229
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制生成的代码，并将其粘贴到我们之前生成的 `构建`（`stage` 块）中：
 - en: '![](img/e9fff868-cfb0-4208-87e6-cc922892cd65.png)'
+  id: totrans-230
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e9fff868-cfb0-4208-87e6-cc922892cd65.png)'
 - en: Generating code for the withMaven directive
+  id: totrans-231
   prefs: []
   type: TYPE_NORMAL
+  zh: 为 withMaven 指令生成代码
 - en: 'Lastly, generate a pipeline code for our Maven build command:'
+  id: totrans-232
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 最后，为我们的 Maven 构建命令生成一个管道代码：
 - en: 'On the Pipeline Syntax page, under the Steps section, choose sh: Shell Script
     using the Sample Step field, as shown in the following screenshot. This is a step
     to create a shell script.'
+  id: totrans-233
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '在管道语法页面的步骤部分，在示例步骤字段下选择 sh: 使用 Shell 脚本 的步骤，如以下截图所示。 这是创建 Shell 脚本的步骤。'
 - en: In the Shell Script field, type `mvn -Dmaven.test.failure.ignore clean package`,
     which is the Maven command to build, test, and package the code. This will be
     the content of our shell script.
+  id: totrans-234
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Shell 脚本字段中，键入 `mvn -Dmaven.test.failure.ignore clean package`，这是构建、测试和打包代码的
+    Maven 命令。 这将是我们的 Shell 脚本的内容。
 - en: Click on the Generate Pipeline Script button to generate the code.
+  id: totrans-235
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击生成管道脚本按钮生成代码。
 - en: 'Copy the generated code and paste it into the `withMaven` (directive) that
     we generated earlier:'
+  id: totrans-236
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制生成的代码，并将其粘贴到我们之前生成的 `withMaven`（指令）中：
 - en: '![](img/542c5aa3-1b45-4499-a082-36084c5439b1.png)'
+  id: totrans-237
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/542c5aa3-1b45-4499-a082-36084c5439b1.png)'
 - en: Generating code for the maven build
+  id: totrans-238
   prefs: []
   type: TYPE_NORMAL
+  zh: 为 Maven 构建生成代码
 - en: 'Our final pipeline script should look something like the following (without
     the `// some block` lines):'
+  id: totrans-239
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们最终的管道脚本应该看起来像以下内容（不包括 `// some block` 行）：
 - en: '[PRE6]'
+  id: totrans-240
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: Now switch to the pipeline job configuration page.
+  id: totrans-241
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在切换到管道作业配置页面。
 - en: Scroll to the Pipeline section and paste the preceding pipeline code inside
     the Script field.
+  id: totrans-242
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到管道部分，并将上述管道代码粘贴到脚本字段中。
 - en: Click on the Save button at the bottom of the page.
+  id: totrans-243
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击页面底部的保存按钮。
 - en: We will see more examples in the upcoming chapters when we try to create a CI/CD
     pipeline using the Declarative Pipeline syntax, utilizing the pipeline syntax
     utility.
+  id: totrans-244
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，当我们尝试使用声明性管道语法创建 CI/CD 管道时，我们将看到更多示例，利用管道语法工具。
 - en: Multibranch pipeline
+  id: totrans-245
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 多分支管道
 - en: In this section, we will learn about the multibranch pipeline job in Jenkins.
     This is one of the new features added to Jenkins release 2.x.
+  id: totrans-246
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将了解 Jenkins 中的多分支管道作业。 这是 Jenkins 发布 2.x 版本中添加的新功能之一。
 - en: 'The Multibranch pipeline allows you to automatically create a pipeline for
     each branch on your source control repository. This is depicted in the following
     screenshot. A Multibranch pipeline works using a **Jenkinsfile** that is stored
     along with your source code inside a version control repository. A **Jenkinsfile**
     is nothing but a pipeline script that defines your CI pipeline:'
+  id: totrans-247
   prefs: []
   type: TYPE_NORMAL
+  zh: 多分支管道允许你自动为源代码仓库上的每个分支创建一个管道。如下截图所示。多分支管道使用存储在版本控制仓库中与你的源代码一起的 **Jenkinsfile**
+    进行工作。**Jenkinsfile** 只是定义了你的 CI 管道的管道脚本：
 - en: '![](img/d2f51380-f683-4e9f-8807-0eaf756fcbd7.png)'
+  id: totrans-248
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d2f51380-f683-4e9f-8807-0eaf756fcbd7.png)'
 - en: Auto-generated pipeline for a new branch
+  id: totrans-249
   prefs: []
   type: TYPE_NORMAL
+  zh: 为新分支自动生成管道
 - en: 'In addition to that, the Multibranch pipeline is designed to trigger a build
     whenever there is a new code change on any of the branches on your Git/GitHub
     repository. This is depicted in the following screenshot:'
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 除此之外，多分支管道设计用于在 Git/GitHub 仓库的任何分支上有新的代码更改时触发构建。如下截图所示：
 - en: '![](img/d2fdbec6-baaa-4e51-b6f1-795ee8ff8af7.png)'
+  id: totrans-251
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d2fdbec6-baaa-4e51-b6f1-795ee8ff8af7.png)'
 - en: Usage of multibranch pipeline for continuous integration
+  id: totrans-252
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用多分支管道进行持续集成
 - en: Prerequisite
+  id: totrans-253
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: 'Before we begin, make sure you have the following things ready:'
+  id: totrans-254
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们开始之前，请确保你已准备好以下内容：
 - en: The Maven tool configured inside the Global Tool Configuration page (refer to
     the section: *The Global Tool Configuration page*).
+  id: totrans-255
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置在全局工具配置页面中的 Maven 工具（参考：*全局工具配置页面*）。
 - en: Install Pipeline Maven Integration Plugin.
+  id: totrans-256
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 Pipeline Maven Integration 插件。
 - en: The Java tool is also needed to build the Maven project, but since we are building
     our code on Jenkins master (which already has Java JDK), we can skip installing
     the Java tool.
+  id: totrans-257
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为了构建 Maven 项目还需要 Java 工具，但由于我们正在 Jenkins 主节点上构建我们的代码（它已经安装了 Java JDK），我们可以跳过安装
+    Java 工具。
 - en: Install GitHub plugin (already installed if you have chosen to install the recommended
     plugins during the Jenkins setup wizard).
+  id: totrans-258
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 GitHub 插件（如果你在 Jenkins 设置向导中选择安装了推荐的插件，则已安装）。
 - en: Make sure your Jenkins URL is accessible from the internet. If you are using
     a staging or a development environment to perform this exercise, and your Jenkins
     server doesn't have a domain name, your Jenkins server might not be accessible
     from the internet. To make your Jenkins URL accessible over the internet, refer
     to the *Exposing your local server to the internet* section in the [Appendix](b60e8632-7912-4d4a-825e-ae9a8546a510.xhtml),
     *Supporting Tools and Installation Guide*.
+  id: totrans-259
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 确保你的 Jenkins URL 可以从互联网访问。如果你正在使用一个临时或者开发环境来进行这个练习，并且你的 Jenkins 服务器没有域名，那么你的
+    Jenkins 服务器可能无法从互联网访问。要使你的 Jenkins URL 在互联网上可访问，参考附录中的 *将你的本地服务器暴露在互联网上* 部分，*支持工具和安装指南*。
 - en: Adding GitHub credentials inside Jenkins
+  id: totrans-260
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中添加 GitHub 凭据
 - en: In order to make Jenkins communicate with GitHub, we need to add GitHub account
     credentials inside Jenkins. We will do this using the Jenkins Credentials Plugin.
     If you have followed the Jenkins setup wizard (discussed at the beginning of the
     chapter), you will find the Credentials feature on the Jenkins dashboard (see
     the left-hand side menu).
+  id: totrans-261
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了使 Jenkins 与 GitHub 通信，我们需要在 Jenkins 中添加 GitHub 账户凭据。我们将使用 Jenkins 凭据插件来完成这个任务。如果你已经按照本章开始时讨论的
+    Jenkins 设置向导的步骤进行操作，你会在 Jenkins 仪表板上找到凭据功能（请参阅左侧菜单）。
 - en: 'Follow the given steps to add the GitHub credentials inside Jenkins:'
+  id: totrans-262
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤将 GitHub 凭据添加到 Jenkins 中：
 - en: From the Jenkins dashboard, click on Credentials | System | Global credentials
     (unrestricted).
+  id: totrans-263
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板，点击凭据 | 系统 | 全局凭据（无限制）。
 - en: On the Global credentials (unrestricted) page, from the left-hand side menu,
     click on the Add Credentials link.
+  id: totrans-264
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在全局凭据（无限制）页面上，从左侧菜单中点击添加凭据链接。
 - en: 'You will be presented with a bunch of fields to configure (see the following
     screenshot):'
+  id: totrans-265
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将看到一堆字段需要配置（参见下面的截图）：
 - en: Choose Username with password for the Kind field.
+  id: totrans-266
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Kind 字段中选择用户名与密码。
 - en: Choose Global (Jenkins, nodes, items, all child items, etc) for the Scope field.
+  id: totrans-267
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Scope 字段中选择 Global（Jenkins、节点、项目、所有子项目等）。
 - en: Add your GitHub username to the Username field.
+  id: totrans-268
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将你的 GitHub 用户名添加到用户名字段。
 - en: Add your GitHub password to the Password field.
+  id: totrans-269
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将你的 GitHub 密码添加到密码字段。
 - en: Give a unique ID to your credentials by typing a string in the ID field.
+  id: totrans-270
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过在 ID 字段中输入一个字符串给你的凭据添加一个唯一的 ID。
 - en: Add some meaningful description to the Description field.
+  id: totrans-271
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在描述字段中添加一些有意义的描述。
 - en: 'Click on the Save button once done:'
+  id: totrans-272
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后点击保存按钮：
 - en: '![](img/ab96cc1d-13fe-418d-860d-318c863d1a6c.png)'
+  id: totrans-273
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ab96cc1d-13fe-418d-860d-318c863d1a6c.png)'
 - en: Adding GitHub credentials inside Jenkins
+  id: totrans-274
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中添加 GitHub 凭据
 - en: And that's how you save credentials inside Jenkins. We will use these GitHub
     credentials shortly.
+  id: totrans-275
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这就是您如何在 Jenkins 中保存凭据。我们马上就会用到这些 GitHub 凭据。
 - en: Configuring Webhooks on GitHub from Jenkins
+  id: totrans-276
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中配置 GitHub 的 Webhooks
 - en: Now that we have saved GitHub account credentials inside Jenkins, let's configure
     Jenkins to talk to GitHub. We will do this by configuring the GitHub settings
     inside the Jenkins configuration.
+  id: totrans-277
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经在 Jenkins 中保存了 GitHub 帐户凭据，让我们配置 Jenkins 以与 GitHub 进行通信。我们将通过在 Jenkins
+    配置中配置 GitHub 设置来实现这一点。
 - en: 'Carefully follow the given steps to configure GitHub settings inside Jenkins:'
+  id: totrans-278
   prefs: []
   type: TYPE_NORMAL
+  zh: 仔细遵循给定的步骤，在 Jenkins 中配置 GitHub 设置：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  id: totrans-279
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板上，点击“管理 Jenkins” | “配置系统”。
 - en: On the resultant Jenkins configuration page, scroll all the way down to the
     GitHub section.
+  id: totrans-280
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果 Jenkins 配置页面上，向下滚动到 GitHub 部分。
 - en: Under the GitHub section, click on the Add GitHub Server button and choose GitHub
     Servers from the available drop-down list. Doing so will display a bunch of options
     for you to configure.
+  id: totrans-281
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 GitHub 部分下，点击“添加 GitHub 服务器”按钮，然后从可用的下拉列表中选择 GitHub 服务器。这样做会显示一系列选项供您配置。
 - en: 'Let us configure them one by one, as follows:'
+  id: totrans-282
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 让我们逐一配置它们，如下所示：
 - en: Give your GitHub server a name by adding a string to the Name field.
+  id: totrans-283
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过向 Name 字段添加字符串来为您的 GitHub 服务器命名。
 - en: Under the API URL field, add `https://api.github.com` (default value) if you
     are using a public GitHub account. Otherwise, if you are using GitHub Enterprise,
     then specify its respective API endpoint.
+  id: totrans-284
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 API URL 字段下，如果您使用的是公共 GitHub 帐户，请添加`https://api.github.com`（默认值）。否则，如果您使用的是
+    GitHub Enterprise，则指定其相应的 API 终端点。
 - en: 'Make sure the Manage hooks option is checked:'
+  id: totrans-285
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保已选中“管理钩子”选项：
 - en: '![](img/407bb3e5-3b11-4c33-8364-c5f27b796175.png)'
+  id: totrans-286
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/407bb3e5-3b11-4c33-8364-c5f27b796175.png)'
 - en: Configuring the GitHub server
+  id: totrans-287
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置 GitHub 服务器
 - en: Click on the Advanced… button (you will see two of them; click on the second
     one). Doing so will display a few more fields to configure.
+  id: totrans-288
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击高级按钮（你会看到两个按钮；点击第二个）。这样做会显示一些更多的字段来配置。
 - en: Under the Additional actions field, click on Manage additional GitHub actions
     and choose Convert login and password to token from the available list (you will
     see only one option to choose).
+  id: totrans-289
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“附加操作”字段下，点击“管理其他 GitHub 操作”，然后从可用列表中选择“将登录名和密码转换为令牌”（您只会看到一个选择）。
 - en: This will further disclose new fields to configure.
+  id: totrans-290
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这将进一步揭示新的字段以进行配置。
 - en: 'Select the From credentials option (active by default). Using the Credentials field,
     choose the GitHub credentials that we created in the previous section (`ID: github_credentials`).'
+  id: totrans-291
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '选择“来自凭据”选项（默认情况下处于活动状态）。使用凭据字段，选择我们在上一节中创建的 GitHub 凭据（`ID: github_credentials`）。'
 - en: 'Next, click on the Create token credentials button. This will generate a new
     personal access token on your GitHub account:'
+  id: totrans-292
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，点击“创建令牌凭据”按钮。这将在您的 GitHub 帐户上生成一个新的个人访问令牌：
 - en: '![](img/31cab72b-5fe6-4a14-9f59-f4d729a712ea.png)'
+  id: totrans-293
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/31cab72b-5fe6-4a14-9f59-f4d729a712ea.png)'
 - en: Converting GitHub credentials to a token
+  id: totrans-294
   prefs: []
   type: TYPE_NORMAL
+  zh: 将 GitHub 凭据转换为令牌
 - en: 'To view your personal access token on GitHub, log in to your GitHub account
     and navigate to Settings | Developer settings | Personal access tokens:'
+  id: totrans-295
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要查看您在 GitHub 上的个人访问令牌，请登录到您的 GitHub 帐户，然后导航到设置 | 开发人员设置 | 个人访问令牌：
 - en: '![](img/8b88000f-8f24-4110-9184-e875520405de.png)'
+  id: totrans-296
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8b88000f-8f24-4110-9184-e875520405de.png)'
 - en: Personal access token on GitHub
+  id: totrans-297
   prefs: []
   type: TYPE_NORMAL
+  zh: GitHub 上的个人访问令牌
 - en: Once done, click on the Save button at the bottom of the Jenkins configuration
     page.
+  id: totrans-298
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击 Jenkins 配置页面底部的保存按钮。
 - en: An entry of the respective personal access token will also be added inside the
     Jenkins credentials. To view it, navigate to Jenkins dashboard | Credentials |
     System | `api.github.com`, and you should see a credential entry of the Kind secret
     text.
+  id: totrans-299
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 同时在 Jenkins 凭据中还将添加相应个人访问令牌的条目。要查看它，请导航到 Jenkins 仪表板 | 凭据 | 系统 | `api.github.com`，然后您应该会看到一条
+    Kind 为 secret text 的凭据条目。
 - en: 'We are not yet done with our GitHub configuration inside Jenkins. Follow the
     remaining steps as follows:'
+  id: totrans-300
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们在 Jenkins 中的 GitHub 配置还没有完成。按照以下剩余步骤进行：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  id: totrans-301
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板上，点击“管理 Jenkins” | “配置系统”。
 - en: Scroll all the way down to the GitHub section.
+  id: totrans-302
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 向下滚动到 GitHub 部分。
 - en: Using the Credentials field, choose the newly generated credentials of the Kind
     secret text (the personal access token entry inside Jenkins).
+  id: totrans-303
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用凭据字段，选择新生成的凭据的密钥类型（Jenkins 中的个人访问令牌条目）。
 - en: Now, click on the Test connection button to test our connection between Jenkins
     and GitHub.
+  id: totrans-304
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，点击测试连接按钮来测试 Jenkins 和 GitHub 之间的连接。
 - en: 'Once done, click on the Save button at the bottom of your Jenkins configuration
     page:'
+  id: totrans-305
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，在你的 Jenkins 配置页面底部点击保存按钮：
 - en: '![](img/dc71186f-4385-417c-a19b-c75ca5c3ba4d.png)'
+  id: totrans-306
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dc71186f-4385-417c-a19b-c75ca5c3ba4d.png)'
 - en: Testing the connection between Jenkins and GitHub
+  id: totrans-307
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试 Jenkins 和 GitHub 之间的连接
 - en: We are now done with configuring GitHub settings inside Jenkins.
+  id: totrans-308
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们现在已经完成了在 Jenkins 中配置 GitHub 设置的步骤。
 - en: Create a new repository on GitHub
+  id: totrans-309
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 GitHub 上创建一个新仓库
 - en: In this section, we will create a new repository on GitHub. Make sure you have
     Git installed on the machine that you will use to perform the steps mentioned
     in the following section (refer to the *Installing Git on Windows/Linux* section
     in the [Appendix](b60e8632-7912-4d4a-825e-ae9a8546a510.xhtml), *Supporting Tools
     and Installation Guide*).
+  id: totrans-310
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个部分，我们将在 GitHub 上创建一个新的仓库。确保你已经在执行以下步骤的机器上安装了 Git（参考 [附录](b60e8632-7912-4d4a-825e-ae9a8546a510.xhtml)
+    中的 *在 Windows/Linux 上安装 Git* 部分，*支持工具和安装指南*）。
 - en: 'Follow the given steps to create a repository on GitHub:'
+  id: totrans-311
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤在 GitHub 上创建一个仓库：
 - en: Log in to your GitHub account.
+  id: totrans-312
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录你的 GitHub 账户。
 - en: To keep things simple, we will reuse the source code from the repository at [https://github.com/jglick/simple-maven-project-with-tests.git](https://github.com/jglick/simple-maven-project-with-tests.git).
     This is the repository that we have been using to create a Jenkins pipeline.
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为了保持简单，我们将重用仓库中的源代码 [https://github.com/jglick/simple-maven-project-with-tests.git](https://github.com/jglick/simple-maven-project-with-tests.git)。这是我们一直在使用的用于创建
+    Jenkins 管道的仓库。
 - en: 'The easiest way to reuse a GitHub repository is to fork it. To do so, just
     access the above repository from your internet browser and click on the Fork button,
     as shown in the following screenshot:'
+  id: totrans-314
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重新使用 GitHub 仓库的最简单方法是分叉它。要这样做，只需从你的互联网浏览器访问上述仓库，然后点击分叉按钮，如下截图所示：
 - en: '![](img/dcdbf242-72bd-4929-a677-3c9b47c1511f.png)'
+  id: totrans-315
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dcdbf242-72bd-4929-a677-3c9b47c1511f.png)'
 - en: Forking a GitHub project
+  id: totrans-316
   prefs: []
   type: TYPE_NORMAL
+  zh: 分叉一个 GitHub 项目
 - en: Once done, a replica of the preceding repository will be visible on your GitHub
     account.
+  id: totrans-317
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，你的 GitHub 账户上将会看到上述仓库的复制品。
 - en: Using a Jenkinsfile
+  id: totrans-318
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Jenkinsfile
 - en: 'Jenkins multibranch pipeline utilizes Jenkinsfile. In the following section,
     we will learn how to create a Jenkinsfile. We will reuse the example pipeline
     script that we created in the previous section to create our Jenkinsfile. Follow
     the given steps:'
+  id: totrans-319
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 多分支管道利用 Jenkinsfile。在接下来的部分中，我们将学习如何创建 Jenkinsfile。我们将重用我们在上一部分创建的示例管道脚本来创建我们的
+    Jenkinsfile。按照给定的步骤：
 - en: Log in to your GitHub account.
+  id: totrans-320
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录你的 GitHub 账户。
 - en: Navigate to the forked repository `simple-maven-project-with-tests`.
+  id: totrans-321
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 导航到分叉后的仓库 `simple-maven-project-with-tests`。
 - en: 'Once on the repository page, click on the Create new file button to create
     a new empty file that will be our Jenkinsfile, as shown in the following screenshot:'
+  id: totrans-322
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 进入仓库页面后，点击创建新文件按钮来创建一个新的空文件，这将成为我们的 Jenkinsfile，如下截图所示：
 - en: '![](img/cf8502d2-a1d9-4b0e-8315-570ea32d2fcc.png)'
+  id: totrans-323
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/cf8502d2-a1d9-4b0e-8315-570ea32d2fcc.png)'
 - en: Creating a new file on GitHub
+  id: totrans-324
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GitHub 上创建一个新文件
 - en: 'Name your new file `Jenkinsfile` by filling the empty text box, as shown in
     the following screenshot:'
+  id: totrans-325
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过填写空文本框，命名你的新文件为 `Jenkinsfile`，如下截图所示：
 - en: '![](img/06937fdb-4d28-4e9c-85c3-bed014c2ade2.png)'
+  id: totrans-326
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/06937fdb-4d28-4e9c-85c3-bed014c2ade2.png)'
 - en: Naming your new file on GitHub
+  id: totrans-327
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GitHub 上命名你的新文件
 - en: 'Add the following code to your `Jenkinsfile`:'
+  id: totrans-328
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下代码添加到你的 `Jenkinsfile` 中：
 - en: '[PRE7]'
+  id: totrans-329
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Once done, commit the new file by adding a meaningful comment, as shown in
     the following screenshot:'
+  id: totrans-330
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，通过添加有意义的评论来提交新文件，如下截图所示：
 - en: '![](img/7dd6182e-ff2a-4851-bd85-3fe1f7a95f5d.png)'
+  id: totrans-331
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7dd6182e-ff2a-4851-bd85-3fe1f7a95f5d.png)'
 - en: Committing your new file on GitHub
+  id: totrans-332
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GitHub 上提交你的新文件
 - en: Creating a Multibranch pipeline in Jenkins
+  id: totrans-333
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中创建一个多分支管道
 - en: 'Follow the given steps to create a new Jenkins pipeline job:'
+  id: totrans-334
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤创建一个新的 Jenkins 管道作业：
 - en: From the Jenkins dashboard, click on the New Item link.
+  id: totrans-335
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，点击新项目链接。
 - en: On the resultant page, you will be presented with various types of Jenkins jobs
     to choose from.
+  id: totrans-336
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在生成的页面上，你将看到各种类型的 Jenkins 作业供选择。
 - en: Choose Multibranch Pipeline, and give a name to your pipeline using the Enter
     an item name field.
+  id: totrans-337
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择多分支管道，并使用输入项目名称字段为你的管道命名。
 - en: Once you are done, click on the OK button at the bottom of the page.
+  id: totrans-338
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击页面底部的 OK 按钮。
 - en: Scroll to the section Branch Sources. This is the place where we configure the
     GitHub repository that we want to use.
+  id: totrans-339
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到分支源部分。这是我们配置要使用的 GitHub 仓库的地方。
 - en: 'Click on the Add Source button and choose GitHub. You will be presented with
     a list of fields to configure. Let us see them one by one (see the following screenshot):'
+  id: totrans-340
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击添加源按钮并选择 GitHub。你将被呈现一个配置字段列表。让我们一个接一个地看看它们（见下面的截图）：
 - en: For the Credentials field, choose the GitHub account credentials (Kind as Username
     with Password) that we created in the previous section.
+  id: totrans-341
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于凭证字段，选择我们在前一节创建的 GitHub 账户凭据（类型为用户名和密码）。
 - en: Under the Owner field, specify the name of your GitHub organization or GitHub
     user account.
+  id: totrans-342
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在所有者字段下，指定你的 GitHub 组织或 GitHub 用户账户的名称。
 - en: The moment you do so, the Repository field will list all the repositories that
     are on your GitHub account.
+  id: totrans-343
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦你这样做了，仓库字段将列出你 GitHub 账户上的所有仓库。
 - en: Choose `simple-maven-project-with-tests` under the Repository field.
+  id: totrans-344
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在仓库字段下选择 `simple-maven-project-with-tests`。
 - en: 'Leave the rest of the options at their default values:'
+  id: totrans-345
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余选项保留为默认值：
 - en: '![](img/16eb4ab3-f25c-45ed-b5ef-1c31886e807c.png)'
+  id: totrans-346
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/16eb4ab3-f25c-45ed-b5ef-1c31886e807c.png)'
 - en: Configuring the multibranch pipeline
+  id: totrans-347
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置多分支流水线
 - en: Scroll all the way down and click on the Save button.
+  id: totrans-348
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到底部并点击保存按钮。
 - en: Re-register the Webhooks
+  id: totrans-349
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 重新注册 Webhooks
 - en: 'Before we proceed, let us re-register the Webhooks for all our Jenkins pipelines:'
+  id: totrans-350
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们继续之前，让我们重新注册所有 Jenkins 流水线的 Webhooks：
 - en: To do so, from the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  id: totrans-351
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要这样做，请从 Jenkins 仪表盘上点击 管理 Jenkins | 配置系统。
 - en: On the Jenkins configuration page, scroll all the way down to the GitHub section.
+  id: totrans-352
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 配置页面上，向下滚动到 GitHub 部分。
 - en: Under the GitHub section, click on the Advanced… button (you will see two of
     them; click on the second one).
+  id: totrans-353
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 GitHub 部分，点击高级…按钮（你会看到两个，点击第二个）。
 - en: This will display a few more fields and options. Click on the Re-register hooks
     for all jobs button.
+  id: totrans-354
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这将显示一些额外的字段和选项。点击重新注册所有作业的钩子按钮。
 - en: 'The preceding action will create new Webhooks for our multibranch pipeline
     on the respective repository inside your GitHub account. Do the following to view
     the Webhooks on GitHub:'
+  id: totrans-355
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前述操作将在你的 GitHub 账户内的相应仓库上为我们的多分支流水线创建新的 Webhooks。按以下步骤查看 GitHub 上的 Webhooks：
 - en: Log in to your GitHub account.
+  id: totrans-356
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到你的 GitHub 账户。
 - en: Go to your GitHub repository, `simple-maven-project-with-tests` in our case.
+  id: totrans-357
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到你的 GitHub 仓库，我们这里是 `simple-maven-project-with-tests`。
 - en: 'Click on the repository Settings, as shown in the following screenshot:'
+  id: totrans-358
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击仓库设置，如下截图所示：
 - en: '![](img/5cc912af-7a37-47d9-bbac-4a0d8dcda61e.png)'
+  id: totrans-359
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5cc912af-7a37-47d9-bbac-4a0d8dcda61e.png)'
 - en: Repository Settings
+  id: totrans-360
   prefs: []
   type: TYPE_NORMAL
+  zh: 仓库设置
 - en: 'On the Repository Settings page, click on Webhooks from the left-hand side
     menu. You should see the Webhooks for your Jenkins server, as shown in the following
     screenshot:'
+  id: totrans-361
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在仓库设置页面，从左侧菜单中点击 Webhooks。你应该看到你的 Jenkins 服务器的 Webhooks，如下截图所示：
 - en: '![](img/276529b2-d674-4ed9-a73f-68b62a1e3197.png)'
+  id: totrans-362
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/276529b2-d674-4ed9-a73f-68b62a1e3197.png)'
 - en: Webhooks on GitHub repository
+  id: totrans-363
   prefs: []
   type: TYPE_NORMAL
+  zh: GitHub 仓库上的 Webhooks
 - en: Jenkins Multibranch pipeline in action
+  id: totrans-364
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 多分支流水线运行中
 - en: 'Follow the given steps:'
+  id: totrans-365
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤：
 - en: From the Jenkins dashboard, click on your Multibranch pipeline.
+  id: totrans-366
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表盘上，点击你的多分支流水线。
 - en: 'On your Jenkins Multibranch pipeline page, from the left-hand side menu, click
     on the Scan Repository Now link. This will scan the repository for branches with
     Jenkinsfile, and will immediately run a pipeline for every branch that has got
     a Jenkinsfile, as shown in the following screenshot:'
+  id: totrans-367
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在你的 Jenkins 多分支流水线页面上，从左侧菜单中点击 扫描仓库现在 链接。这将扫描具有 Jenkinsfile 的分支的仓库，并将立即为每个具有
+    Jenkinsfile 的分支运行一个流水线，如下截图所示：
 - en: '![](img/04880dcc-7390-4e9e-850a-b00ff65e51ee.png)'
+  id: totrans-368
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/04880dcc-7390-4e9e-850a-b00ff65e51ee.png)'
 - en: Pipeline for the master branch
+  id: totrans-369
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于主分支的流水线
 - en: 'On your Multibranch pipeline page, from the left-hand side menu, click on Scan
     Repository Log. You will see something like that which is shown as follows. Notice
     the highlighted code. You can see that the `master` branch met the criteria, as
     it had a Jenkinsfile and a pipeline was secluded for it. There was no pipeline
     scheduled for the testing branch since there was no Jenkinsfile on it:'
+  id: totrans-370
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在您的多分支流水线页面上，从左侧菜单中，点击"Scan Repository Log"。您将看到类似于以下所示的内容。注意高亮显示的代码。您可以看到`master`分支符合标准，因为它有一个Jenkinsfile，为其安排了一个流水线。由于测试分支上没有Jenkinsfile，因此没有为其安排流水线：
 - en: '[PRE8]'
+  id: totrans-371
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: You need not always scan the repository. The GitHub Webhooks is configured to
     trigger a pipeline automatically whenever there is a push or a new branch on your
     GitHub repository. Remember, a Jenkinsfile should also be present on the respective
     branch to tell Jenkins what it needs to do when it finds a change in the repository.
+  id: totrans-372
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您不需要始终扫描存储库。GitHub Webhooks已配置为在GitHub存储库上进行推送或创建新分支时自动触发流水线。请记住，各个分支上也应该存在Jenkinsfile，以告诉Jenkins在发现存储库变化时需要执行什么操作。
 - en: Creating a new feature branch to test the multibranch pipeline
+  id: totrans-373
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建一个新的特性分支来测试多分支流水线
 - en: 'Let us now create a feature branch out of the master branch and see if Jenkins
     can run a pipeline for it:'
+  id: totrans-374
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们从主分支创建一个特性分支，并查看Jenkins是否能够为其运行一个流水线：
 - en: To do so, log in to your GitHub account.
+  id: totrans-375
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为此，请登录到您的GitHub帐户。
 - en: Go to your respective GitHub repository; in our case it's `simple-maven-project-with-tests`.
+  id: totrans-376
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到您的GitHub仓库; 在我们的情况下是`simple-maven-project-with-tests`。
 - en: 'Click on the Branch: master button and type a name for your new branch in the
     empty text box. Next, click on the Create branch: feature option to create a new
     branch named feature, as shown in the following screenshot:'
+  id: totrans-377
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '点击"Branch: master"按钮，在空文本框中输入一个新分支的名称。接下来，点击"Create branch: feature"选项来创建一个名为feature的新分支，如下面的截图所示：'
 - en: '![](img/ee2f6d60-778f-4fa8-b432-bcbea4c1d48f.png)'
+  id: totrans-378
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ee2f6d60-778f-4fa8-b432-bcbea4c1d48f.png)'
 - en: Creating a feature branch
+  id: totrans-379
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个特性分支
 - en: 'This should immediately trigger a pipeline inside Jenkins for our new feature
     branch:'
+  id: totrans-380
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这应该会立即在Jenkins中触发一个用于我们的新特性分支的流水线：
 - en: '![](img/5fe7c47e-611e-420e-9ce7-307594a00458.png)'
+  id: totrans-381
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5fe7c47e-611e-420e-9ce7-307594a00458.png)'
 - en: Pipeline for the new feature branch
+  id: totrans-382
   prefs: []
   type: TYPE_NORMAL
+  zh: 新特性分支的流水线
 - en: Jenkins Blue Ocean
+  id: totrans-383
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins蓝色海洋
 - en: 'The Jenkins Blue Ocean is a completely new way of interacting with Jenkins.
     It''s more of a UI sidekick to the main Jenkins application. The following are
     some the features of Jenkins Blue Ocean:'
+  id: totrans-384
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins Blue Ocean是与Jenkins交互的全新方式。它更像是主要Jenkins应用程序的UI助手。以下是Jenkins Blue Ocean的一些特性：
 - en: Improved visualizations
+  id: totrans-385
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 改进的可视化效果
 - en: Pipeline editor
+  id: totrans-386
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 流水线编辑器
 - en: Personalization
+  id: totrans-387
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 个性化
 - en: Quick and easy pipeline setup wizard for Git and GitHub
+  id: totrans-388
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用于Git和GitHub的快速简易流水线设置向导
 - en: The pipelines that you create using your classic Jenkins interface can be visualized
     in the new Jenkins Blue Ocean, and vice versa. As I said earlier, Jenkins Blue
     Ocean is a UI sidekick to the main Jenkins application.
+  id: totrans-389
   prefs: []
   type: TYPE_NORMAL
+  zh: 您使用经典Jenkins界面创建的流水线可以在新的Jenkins蓝色海洋中进行可视化，反之亦然。正如我之前所说，Jenkins蓝色海洋是主要Jenkins应用程序的UI助手。
 - en: In the following section, we will visualize the Jenkins pipelines that we created
     in the previous section in Blue Ocean. We will also create a new pipeline, just
     to get a look at and feel for the new Jenkins Blue Ocean interface.
+  id: totrans-390
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，我们将在Blue Ocean中可视化我们在上一部分中创建的Jenkins流水线。我们还将创建一个新的流水线，只是为了看看并感受一下新的Jenkins
+    Blue Ocean界面。
 - en: Installing the Jenkins Blue Ocean plugin
+  id: totrans-391
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装Jenkins蓝色海洋插件
 - en: 'In order to use the Jenkins Blue Ocean plugin, we need to install the Blue
     Ocean plugin for Jenkins. Follow the given steps:'
+  id: totrans-392
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了使用Jenkins蓝色海洋插件，我们需要为Jenkins安装Blue Ocean插件。按照以下步骤操作：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins.
+  id: totrans-393
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板，点击"Manage Jenkins | Manage Plugins"。
 - en: On the Plugin Manager page, click on the Available tab.
+  id: totrans-394
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在插件管理器页面上，点击"Available"选项卡。
 - en: 'Using the Filter option, search for `Blue Ocean`, as shown in the following
     screenshot:'
+  id: totrans-395
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用过滤选项，搜索`Blue Ocean`，如下面的截图所示：
 - en: '![](img/caac1ef5-8704-4f73-b1ff-78fe35e852a7.png)'
+  id: totrans-396
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/caac1ef5-8704-4f73-b1ff-78fe35e852a7.png)'
 - en: Installing the Jenkins Blue Ocean plugin
+  id: totrans-397
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装Jenkins蓝色海洋插件
 - en: From the list of items, choose Blue Ocean and click on Install without restart.
     You only need Blue Ocean and nothing else.
+  id: totrans-398
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从项目列表中选择Blue Ocean并点击"Install without restart"。你只需要Blue Ocean而不需要其他东西。
 - en: The dependency list for Blue Ocean is big, so you will see a lot of stuff getting
     installed along with the Blue Ocean plugin on the Installing Plugins/Upgrades
     page.
+  id: totrans-399
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Blue Ocean 的依赖列表很长，因此您将在安装插件/升级页面上看到许多与 Blue Ocean 插件一起安装的东西。
 - en: View your regular Jenkins pipeline in Blue Ocean
+  id: totrans-400
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Blue Ocean 中查看您的常规 Jenkins 流水线。
 - en: 'In this section, we will try to visualize our existing Jenkins pipelines that
     we have created in the previous sections:'
+  id: totrans-401
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将尝试可视化我们在前几节中创建的现有 Jenkins 流水线：
 - en: On the Jenkins dashboard, you should now see a new link on the left-hand side
     menu with the name Open Blue Ocean.
+  id: totrans-402
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 仪表板上，您现在应该看到左侧菜单上有一个名为“打开蓝色海洋”的新链接。
 - en: 'Click on the Open Blue Ocean link to go to the Jenkins Blue Ocean dashboard.
     The following is what you should see (refer to the following screenshot):'
+  id: totrans-403
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“打开蓝色海洋”链接以转到 Jenkins Blue Ocean 仪表板。 您应该看到以下内容（请参阅以下屏幕截图）：
 - en: The Administration link will take you to the Manage Jenkins page.
+  id: totrans-404
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 管理链接将带您进入“管理 Jenkins”页面。
 - en: The Pipelines link will take you to the Jenkins Blue Ocean dashboard that you
     are seeing now.
+  id: totrans-405
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Pipelines 链接将带您进入您当前看到的 Jenkins Blue Ocean 仪表板。
 - en: The icon (arrow within a square) will take you to the classic Jenkins dashboard.
+  id: totrans-406
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 图标（方形内的箭头）将带您进入经典 Jenkins 仪表板。
 - en: The New Pipeline button will open up the pipeline creation wizard for Git- and
     GitHub-based projects.
+  id: totrans-407
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 新建流水线按钮将打开基于 Git 和 GitHub 的项目的流水线创建向导。
 - en: 'A list of pipelines (highlighted as **e**):'
+  id: totrans-408
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 流水线列表（**e**高亮显示）：
 - en: '![](img/1cb007db-8457-4c84-b1b4-b087b367e199.jpg)'
+  id: totrans-409
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/1cb007db-8457-4c84-b1b4-b087b367e199.jpg)'
 - en: The Jenkins Blue Ocean dashboard
+  id: totrans-410
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 蓝色海洋仪表板
 - en: 'Let us have a look at our multibranch pipeline. Click on your multibranch pipeline
     from the Jenkins Blue Ocean dashboard. Doing so will open up the respective multibranch
     pipeline page, as shown in the following screenshot:'
+  id: totrans-411
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 让我们来看看我们的多分支流水线。 从 Jenkins Blue Ocean 仪表板中点击您的多分支流水线。 这样做将打开相应的多分支流水线页面，如下所示：
 - en: The button (highlighted as **a**) will take you to the pipeline configuration
     page.
+  id: totrans-412
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按钮（**a**高亮显示）将带您进入流水线配置页面。
 - en: The Activity tab will list all the current and past pipelines.
+  id: totrans-413
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 活动标签将列出所有当前和过去的流水线。
 - en: The Branches tab will show you an aggregate view of the pipelines for each branch.
+  id: totrans-414
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 分支标签将为您显示每个分支的流水线的汇总视图。
 - en: The Pull Requests tab will list all the open pull requests on your branches.
+  id: totrans-415
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Pull Requests 标签将列出分支上所有开放的拉取请求。
 - en: 'The button (highlighted as **e**) is used to rerun the pipeline:'
+  id: totrans-416
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按钮（**e**高亮显示）用于重新运行流水线：
 - en: '![](img/90868ba9-9b9d-47ac-aadc-2823937899c6.png)'
+  id: totrans-417
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/90868ba9-9b9d-47ac-aadc-2823937899c6.png)'
 - en: Multibranch pipeline in Blue Ocean
+  id: totrans-418
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Blue Ocean 中的多分支流水线。
 - en: 'Now let us see the individual build page. To do so, from the Jenkins pipeline
     page (see the preceding screenshot), click on any of the builds, and you will
     be taken to the build page of the respective pipeline, as shown in the following
     screenshot:'
+  id: totrans-419
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在让我们看看个别的构建页面。 要这样做，请从 Jenkins 流水线页面（请参阅前面的屏幕截图）中单击任何构建，然后您将进入相应流水线的构建页面，如下所示：
 - en: The Changes tab will list the code changes that triggered the build.
+  id: totrans-420
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Changes 标签将列出触发构建的代码更改。
 - en: The Artifacts tab will list all the artifacts that are generated by the build.
+  id: totrans-421
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Artifacts 标签将列出构建生成的所有工件。
 - en: The button (highlighted as **c**) will rerun your build.
+  id: totrans-422
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按钮（**c**高亮显示）将重新运行您的构建。
 - en: The section (highlighted as **d**) displays some metrics about your build.
+  id: totrans-423
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 此部分（**d**高亮显示）显示有关您的构建的一些指标。
 - en: This Stage View (highlighted as **e**) will list all the sequential and parallel
     stages.
+  id: totrans-424
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 此阶段视图（**e**高亮显示）将列出所有顺序和并行阶段。
 - en: The Steps Results section will show you all the steps of a particular stage
     that you have selected (in the following screenshot, I have selected the stage
     Results).
+  id: totrans-425
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 步骤结果部分将向您显示您选择的特定阶段的所有步骤（在下面的屏幕截图中，我选择了阶段“结果”）。
 - en: 'Each listed step (highlighted as **g**) can be expanded and its log  can be
     viewed:'
+  id: totrans-426
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每个列出的步骤（**g**高亮显示）都可以展开并查看其日志：
 - en: '![](img/858f6f25-7150-457a-a1ca-8c8718c4196c.png)'
+  id: totrans-427
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/858f6f25-7150-457a-a1ca-8c8718c4196c.png)'
 - en: Build page in Blue Ocean
+  id: totrans-428
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Blue Ocean 中的构建页面
 - en: This was a short overview of how your Jenkins pipeline (the one that you created
     using the classic Jenkins UI) should look in Blue Ocean. It has demonstrated pretty
     much everything. However, I encourage readers to keep exploring.
+  id: totrans-429
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是您的 Jenkins 流水线在 Blue Ocean 中的简短概述（使用经典 Jenkins UI 创建的流水线）。 它几乎展示了所有内容。 但是，我鼓励读者继续探索。
 - en: Creating a pipeline in Blue Ocean
+  id: totrans-430
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Blue Ocean 中创建流水线。
 - en: 'In this section, we will see how to create a new pipeline from the Jenkins
     Blue Ocean dashboard. We will look at the new pipeline creation wizard in Blue
     Ocean. Before you begin make the following things ready:'
+  id: totrans-431
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这一部分中，我们将看到如何从 Jenkins 蓝色海洋仪表板创建一个新的流水线。我们将查看 Blue Ocean 中的新流水线创建向导。在开始之前，请准备好以下事项：
 - en: 'Fork the following repository: [https://github.com/nikhilpathania/hello-world-example.git](https://github.com/nikhilpathania/hello-world-example.git)
     into your GitHub account. We will be using it in the example described in the
     following section'
+  id: totrans-432
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Fork 以下存储库：[https://github.com/nikhilpathania/hello-world-example.git](https://github.com/nikhilpathania/hello-world-example.git)
+    到您的 GitHub 帐户中。我们将在接下来描述的示例中使用它
 - en: Install the JUnit plugin ([https://plugins.jenkins.io/junit](https://plugins.jenkins.io/junit))
     for Jenkins
+  id: totrans-433
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为 Jenkins 安装 JUnit 插件（[https://plugins.jenkins.io/junit](https://plugins.jenkins.io/junit)）
 - en: 'Follow the given steps:'
+  id: totrans-434
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤：
 - en: 'From the Jenkins Blue Ocean dashboard, click on the New Pipeline button. Jenkins
     will ask you to choose between Git and GitHub. For our current exercise, we will
     choose GitHub:'
+  id: totrans-435
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 蓝色海洋仪表板中，点击新的流水线按钮。Jenkins 将要求您在 Git 和 GitHub 之间进行选择。对于我们当前的练习，我们将选择
+    GitHub：
 - en: '![](img/be77336b-9115-4a4a-8d4e-17c57c49749a.png)'
+  id: totrans-436
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/be77336b-9115-4a4a-8d4e-17c57c49749a.png)'
 - en: Choosing between Git and GitHub repositories
+  id: totrans-437
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Git 和 GitHub 仓库之间进行选择
 - en: 'Next, Jenkins will ask you to provide the GitHub access token for your GitHub
     account. Click on the Create an access key here link to create a new one:'
+  id: totrans-438
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，Jenkins 将要求您为您的 GitHub 帐户提供 GitHub 访问令牌。点击这里创建一个访问密钥的链接以创建一个新的访问密钥：
 - en: '![](img/5ff0eeed-f4d9-4898-bebd-70a21507e379.png)'
+  id: totrans-439
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5ff0eeed-f4d9-4898-bebd-70a21507e379.png)'
 - en: GitHub access token field
+  id: totrans-440
   prefs: []
   type: TYPE_NORMAL
+  zh: GitHub 访问令牌字段
 - en: In a new tab, you will be asked to log in to your GitHub account.
+  id: totrans-441
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在一个新的选项卡中，系统会要求您登录到您的 GitHub 帐户。
 - en: Once you log in, you will be taken directly to the GitHub settings page to create
     a New personal access token.
+  id: totrans-442
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录后，您将直接进入 GitHub 设置页面以创建一个新的个人访问令牌。
 - en: 'Type a small description for the Token description field to identify your token.
     Leave the options under the Select scopes section at their default values:'
+  id: totrans-443
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在令牌描述字段中键入一个简短的描述，以标识您的令牌。保留选择范围部分下的选项默认值：
 - en: '![](img/3549184c-d257-4359-b6ad-1f12a6dbc9f9.png)'
+  id: totrans-444
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3549184c-d257-4359-b6ad-1f12a6dbc9f9.png)'
 - en: Creating a GitHub personal access token
+  id: totrans-445
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个 GitHub 个人访问令牌
 - en: 'Click on the Generate new token button at the bottom of the page to generate
     a new Personal access token:'
+  id: totrans-446
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击页面底部的生成新令牌按钮以生成一个新的个人访问令牌：
 - en: '![](img/c6bd151e-aa70-4820-8434-b1e8f7c9c57c.png)'
+  id: totrans-447
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c6bd151e-aa70-4820-8434-b1e8f7c9c57c.png)'
 - en: GitHub personal access token
+  id: totrans-448
   prefs: []
   type: TYPE_NORMAL
+  zh: GitHub 个人访问令牌
 - en: Copy the newly created personal access token and paste it inside your GitHub
     access token field, then click on the Connect button (see the following screenshot).
+  id: totrans-449
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制新创建的个人访问令牌并将其粘贴到您的 GitHub 访问令牌字段中，然后点击连接按钮（参见以下截图）。
 - en: 'Next, click on the listed organization:'
+  id: totrans-450
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，点击列出的组织：
 - en: '![](img/4c5b3274-88d7-49d9-8209-3c1bd9837584.png)'
+  id: totrans-451
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4c5b3274-88d7-49d9-8209-3c1bd9837584.png)'
 - en: Choosing the GitHub account
+  id: totrans-452
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择 GitHub 帐户
 - en: 'You can choose between New Pipeline and Auto-discover Jenkinsfiles. In the
     following example, we will choose the New Pipeline option:'
+  id: totrans-453
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您可以在新流水线和自动发现 Jenkinsfile 之间进行选择。在以下示例中，我们将选择新流水线选项：
 - en: '![](img/9fdce913-e10c-4b74-b977-22b2917eeae0.png)'
+  id: totrans-454
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/9fdce913-e10c-4b74-b977-22b2917eeae0.png)'
 - en: Choosing between creating and discovering pipelines
+  id: totrans-455
   prefs: []
   type: TYPE_NORMAL
+  zh: 在创建和发现流水线之间进行选择
 - en: 'Next, you will be asked to choose a repository from the list of available repositories
     on your GitHub account. You can utilize the Search… option to look for the desired
     repository in case it''s not listed. In our current example, we will choose the
     `hello-world-example` repo:'
+  id: totrans-456
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，系统将要求您从 GitHub 帐户的可用存储库列表中选择一个存储库。如果列表中没有列出所需的存储库，您可以使用搜索选项来查找所需的存储库。在我们当前的示例中，我们将选择`hello-world-example`存储库：
 - en: '![](img/32090f0e-7c8f-420a-b026-58cb8c3ddaa3.png)'
+  id: totrans-457
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/32090f0e-7c8f-420a-b026-58cb8c3ddaa3.png)'
 - en: Choosing a repository
+  id: totrans-458
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择一个存储库
 - en: 'The next thing Jenkins will ask you to do is create a pipeline. Since there
     is no Jenkinsfile found on the respective repository, click on the Create Pipeline
     button to create a Jenkinsfile:'
+  id: totrans-459
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Jenkins 接下来会要求你创建一个流水线。由于在相应的仓库中找不到 Jenkinsfile，请点击创建流水线按钮以创建一个 Jenkinsfile：
 - en: '![](img/ff10b159-86ec-40df-be8d-b01061ce0111.png)'
+  id: totrans-460
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ff10b159-86ec-40df-be8d-b01061ce0111.png)'
 - en: Creating a new pipeline
+  id: totrans-461
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个新的流水线
 - en: 'The page to create a pipeline will look like that which follows. On the left-hand
     side, you will find a visualization of your pipeline, and on the right-hand side,
     you will find the utility to choose the blocks, stages, and steps (similar to
     the pipeline syntax utility that we saw in the previous section):'
+  id: totrans-462
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建流水线的页面如下所示。在左侧，你会看到流水线的可视化，右侧找到选择块、阶段和步骤的工具（类似于我们在上一部分看到的流水线语法工具）：
 - en: '![](img/ef7846e1-9049-4198-bf91-f15ef634bc9b.png)'
+  id: totrans-463
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ef7846e1-9049-4198-bf91-f15ef634bc9b.png)'
 - en: Blue Ocean pipeline editor
+  id: totrans-464
   prefs: []
   type: TYPE_NORMAL
+  zh: Blue Ocean 流水线编辑器
 - en: 'Let us first choose an Agent to run our pipeline. To do so, from the Pipeline
     Settings, using the Agent field, choose the option label. Then type `master` under
     the Label field, as shown in the following screenshot. In this way, we are telling
     Jenkins to run our pipeline on the Jenkins master:'
+  id: totrans-465
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 让我们首先选择一个代理来运行我们的流水线。从“流水线设置”中，使用代理字段，选择标签选项。然后在标签字段下键入 `master`，如下截图所示。通过这种方式，我们告诉
+    Jenkins 在 Jenkins 主服务器上运行我们的流水线：
 - en: '![](img/9e5f51aa-9c1d-4343-9939-41e2cf3f7d7d.png)'
+  id: totrans-466
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/9e5f51aa-9c1d-4343-9939-41e2cf3f7d7d.png)'
 - en: Creating a node block
+  id: totrans-467
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个节点块
 - en: Next, let us create a stage named `Build` that will build our source code. To
     do so, click on the + button, available on the pipeline visualization.
+  id: totrans-468
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，让我们创建一个名为 `Build` 的阶段，用来构建我们的源代码。点击流水线可视化上的 + 按钮即可。
 - en: 'You will be asked to name your new stage. Do so by typing `Build` under the
     Name your stage field, as shown in the following screenshot:'
+  id: totrans-469
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将被要求命名新的阶段。在“命名你的阶段”字段下输入 `Build`，如下截图所示：
 - en: '![](img/03f37030-2c3a-4982-985c-0fac38ccc1ad.png)'
+  id: totrans-470
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/03f37030-2c3a-4982-985c-0fac38ccc1ad.png)'
 - en: Creating a build stage
+  id: totrans-471
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个构建阶段
 - en: Next, we will add a step to build our Maven code. To do so, click on the + Add
     step button.
+  id: totrans-472
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '接下来，我们将添加一个构建我们的 Maven 代码的步骤。点击+ 添加步骤按钮。 '
 - en: 'You will be asked to choose from a list of available steps, as shown in the
     following screenshot:'
+  id: totrans-473
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将被要求从可用步骤列表中选择，如下截图所示：
 - en: '![](img/a53f8bfa-15a5-445d-9acf-0e7c3cb0ddb4.png)'
+  id: totrans-474
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a53f8bfa-15a5-445d-9acf-0e7c3cb0ddb4.png)'
 - en: The step menu
+  id: totrans-475
   prefs: []
   type: TYPE_NORMAL
+  zh: 步骤菜单
 - en: Ours is a Maven project. Therefore, we might need to set up the Maven environment
     first, to tell Jenkins which Java and Maven tool it can use.
+  id: totrans-476
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们的是一个 Maven 项目。因此，我们可能需要先设置 Maven 环境，告诉 Jenkins 可以使用哪个 Java 和 Maven 工具。
 - en: 'To do so, search for `Provide Maven environment` using the search box (find
     steps by name):'
+  id: totrans-477
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为此，请使用搜索框搜索“提供 Maven 环境”（按名称查找步骤）：
 - en: '![](img/85f46033-e09b-4615-9a27-aa2c8ff92dc7.png)'
+  id: totrans-478
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/85f46033-e09b-4615-9a27-aa2c8ff92dc7.png)'
 - en: Choosing the provide Maven environment step
+  id: totrans-479
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择提供 Maven 环境步骤
 - en: Not all Jenkins plugins are compatible with Jenkins Blue Ocean. The list is
     still small. However, it's expected to grow over time.
+  id: totrans-480
   prefs: []
   type: TYPE_NORMAL
+  zh: 并非所有的 Jenkins 插件都与 Jenkins Blue Ocean 兼容。目前这个列表还很小。但预计随着时间的推移会不断增长。
 - en: 'When you click on the Provide Maven environment step, you will be presented
     with a list of fields to configure, as shown in the following screenshot. Type
     `M3` under the Maven field and leave rest of the options as is:'
+  id: totrans-481
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击“提供 Maven 环境”步骤时，会显示一个字段配置列表，如下截图所示。在 Maven 字段下键入 `M3`，其余选项保持不变：
 - en: '![](img/0bde4efe-b020-4f50-894d-d9f05a273a4a.png)'
+  id: totrans-482
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0bde4efe-b020-4f50-894d-d9f05a273a4a.png)'
 - en: Configuring the provide maven environment step
+  id: totrans-483
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置提供 Maven 环境步骤
 - en: At the bottom of the configuration page, click on the + Add step button to create
     a new child step that will build our Maven code.
+  id: totrans-484
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在配置页面底部，点击+ 添加步骤按钮以创建一个构建我们的 Maven 代码的新子步骤。
 - en: Choose Shell Script from the list of available steps, if your Jenkins master
     is a Linux machine. Choose Windows Batch Script, if it's a Windows machine.
+  id: totrans-485
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果你的 Jenkins 主服务器是 Linux 机器，从可用步骤列表中选择 Shell 脚本。如果是 Windows 机器，选择 Windows 批处理脚本。
 - en: 'Type the following code inside the textbox for Shell Script/Windows Batch Script:'
+  id: totrans-486
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Shell 脚本/Windows 批处理脚本的文本框中键入以下代码：
 - en: '[PRE9]'
+  id: totrans-487
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: '![](img/bc2cba34-769a-4d46-baa7-b0e761b702c4.png)'
+  id: totrans-488
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/bc2cba34-769a-4d46-baa7-b0e761b702c4.png)'
 - en: Configuring the shell script child step
+  id: totrans-489
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置 shell 脚本子步骤
 - en: 'Click on the back arrow to go back to the previous menu. You should now see
     your new step, Shell Script, listed under the Child steps section, as shown in
     the following screenshot:'
+  id: totrans-490
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击返回箭头返回到上一个菜单。现在你应该在子步骤部分看到你的新步骤，即 Shell 脚本，如下截图所示：
 - en: '![](img/45f426a5-bccc-4b67-9bef-dc4a9065305e.png)'
+  id: totrans-491
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/45f426a5-bccc-4b67-9bef-dc4a9065305e.png)'
 - en: Shell script as one of the child steps
+  id: totrans-492
   prefs: []
   type: TYPE_NORMAL
+  zh: Shell 脚本作为一个子步骤
 - en: Click on the back arrow to go back to the previous menu.
+  id: totrans-493
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击返回箭头返回到上一个菜单。
 - en: Next, let us create a stage named Results, wherein we will archive our built
     artifacts and the XML result reports. To do so, click on the + button available
     on the pipeline visualization.
+  id: totrans-494
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，让我们创建一个名为Results的阶段，在此阶段我们将存档我们构建的构件和 XML 结果报告。 要这样做，请点击可视化流水线上的+按钮。
 - en: 'You will be asked to name your new stage. Do so by typing `Results` under the
     Name your stage field, as shown in the following screenshot:'
+  id: totrans-495
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将被要求为新阶段命名。 请在“命名您的阶段”字段下键入`Results`，如下截图所示：
 - en: '![](img/b77a50b6-e9b1-4240-8282-6d810f915442.png)'
+  id: totrans-496
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b77a50b6-e9b1-4240-8282-6d810f915442.png)'
 - en: Creating a results stage
+  id: totrans-497
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个结果阶段
 - en: Next, we will add a few steps on our new stage. The first one will be a step
     to publish our test results report. To do so, click on the + Add step button.
+  id: totrans-498
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，我们将在新阶段上添加一些步骤。 第一个将是发布我们的测试结果报告的步骤。 要这样做，请点击“+ 添加步骤”按钮。
 - en: 'Choose Publish JUnit test result report from the list of available steps. You
     will be presented with a list of options to configure:'
+  id: totrans-499
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从可用步骤列表中选择发布 JUnit 测试结果报告。 您将看到一系列配置选项：
 - en: Add `**/target/surefire-reports/TEST-*.xml` under the TestResults field.
+  id: totrans-500
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“测试结果”字段下添加`**/target/surefire-reports/TEST-*.xml`。
 - en: 'Leave the rest of the options as is:'
+  id: totrans-501
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余选项保持不变：
 - en: '![](img/6121d63c-a160-4d77-a9a3-1aac84e4d4db.png)'
+  id: totrans-502
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6121d63c-a160-4d77-a9a3-1aac84e4d4db.png)'
 - en: Configuring the publish JUnit test result report step
+  id: totrans-503
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置发布 JUnit 测试结果报告步骤
 - en: Click on the back arrow to go back to the previous menu.
+  id: totrans-504
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击返回箭头以返回到上一个菜单。
 - en: Click on the + Add step button again to add a new step.
+  id: totrans-505
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 再次点击“+ 添加步骤”按钮以添加新步骤。
 - en: 'Choose Archive the artifacts from the list of available steps. You will be
     presented with a list of options to configure:'
+  id: totrans-506
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从可用步骤列表中选择存档构件。 您将看到一系列配置选项：
 - en: Add `target/*.jar` under the Artifacts field.
+  id: totrans-507
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“构件”字段下添加`target/*.jar`。
 - en: 'Leave the rest of the options as is:'
+  id: totrans-508
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余选项保持不变：
 - en: '![](img/00a94942-270b-439e-bc33-3fb2e087a827.png)'
+  id: totrans-509
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/00a94942-270b-439e-bc33-3fb2e087a827.png)'
 - en: Configuring the Archive the artifacts step
+  id: totrans-510
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置存档构件步骤
 - en: Click on the back arrow to go back to the previous menu.
+  id: totrans-511
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击返回箭头以返回到上一个菜单。
 - en: Finally, click on the Save button at the top-right corner of the page to save
     your pipeline configuration.
+  id: totrans-512
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 最后，点击页面右上角的保存按钮以保存您的流水线配置。
 - en: A pop-up window will ask you to add some Description and choose the branch on
     which to commit the pipeline configuration.
+  id: totrans-513
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 弹出窗口将要求您添加一些描述并选择提交流水线配置的分支。
 - en: 'Once done, click on the Save & run button:'
+  id: totrans-514
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击保存并运行按钮：
 - en: '![](img/dbcf67c9-5078-48b2-a26a-d594178d7a85.png)'
+  id: totrans-515
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/dbcf67c9-5078-48b2-a26a-d594178d7a85.png)'
 - en: Saving the pipeline
+  id: totrans-516
   prefs: []
   type: TYPE_NORMAL
+  zh: 保存流水线
 - en: 'This will immediately run a pipeline on the respective branch, as shown in
     the following screenshot:'
+  id: totrans-517
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这将立即在相应分支上运行流水线，如下截图所示：
 - en: '![](img/706e7583-47b3-4db5-b944-425924ab3213.png)'
+  id: totrans-518
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/706e7583-47b3-4db5-b944-425924ab3213.png)'
 - en: A successful build on the master branch
+  id: totrans-519
   prefs: []
   type: TYPE_NORMAL
+  zh: 主分支上的成功构建
 - en: 'You will notice that a new file has been created inside your repository under
     the master branch:'
+  id: totrans-520
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您会注意到在主分支下的存储库中创建了一个新文件：
 - en: '![](img/1e821bb2-57ef-4e99-be7f-4365c4dcdf91.png)'
+  id: totrans-521
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1e821bb2-57ef-4e99-be7f-4365c4dcdf91.png)'
 - en: Jenkinsfile listed inside the source code
+  id: totrans-522
   prefs: []
   type: TYPE_NORMAL
+  zh: 源代码中列出的 Jenkinsfile
 - en: 'The following should be the content of the file:'
+  id: totrans-523
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 文件内容应为：
 - en: '[PRE10]'
+  id: totrans-524
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: Summary
+  id: totrans-525
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: In the preceding chapter, we got hands-on experience of almost all of the new
     features in Jenkins. We chose modest examples to keep our pipelines simple. Nevertheless,
     in the upcoming chapters, we will learn to create a full-fledged CI/CD pipeline
     using all of the new features in Jenkins.
+  id: totrans-526
   prefs: []
   type: TYPE_NORMAL
+  zh: 在前一章中，我们几乎体验了 Jenkins 的所有新功能。 我们选择了适度的示例以保持我们的流水线简单。 然而，在接下来的章节中，我们将学习如何使用 Jenkins
+    的所有新功能创建一个完整的 CI/CD 流水线。
 - en: In the next chapter, we will take a look at some of the administrative tasks
     in Jenkins.
+  id: totrans-527
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将探讨 Jenkins 中的一些管理任务。

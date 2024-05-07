@@ -1,1222 +1,1848 @@
 - en: Installing SonarQube and Artifactory
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 SonarQube 和 Artifactory
 - en: 'In this chapter, we will learn about SonarQube, which is a popular open source
     tool for static code analysis. We will also learn about Artifactory, which is
     another popular open source tool for version controlling binary files. In this
     chapter, you will learn about the following topics:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将学习 SonarQube，这是一个流行的开源工具，用于静态代码分析。我们还将学习 Artifactory，这是另一个流行的开源工具，用于版本控制二进制文件。在本章中，您将学习以下主题：
 - en: Installing a standalone SonarQube server
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装独立的 SonarQube 服务器
 - en: Creating a project inside SonarQube
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 SonarQube 内创建项目
 - en: Installing the build breaker plugin for SonarQube
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为 SonarQube 安装构建破坏插件
 - en: Creating a quality gate and a quality profile
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 创建质量门和质量配置文件
 - en: Installing and configuring the SonarQube plugin in Jenkins
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中安装和配置 SonarQube 插件
 - en: Installing a standalone Artifactory server
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装独立的 Artifactory 服务器
 - en: Creating a repository inside Artifactory
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Artifactory 中创建存储库
 - en: Installing and configuring the Artifactory plugin in Jenkins
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中安装和配置 Artifactory 插件
 - en: Installing and configuring SonarQube
+  id: totrans-10
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装和配置 SonarQube
 - en: Apart from integrating code in a continuous way, CI pipelines nowadays also
     include tasks that perform continuous inspection—inspecting code for its quality
     in a continuous approach.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 除了连续集成代码外，CI 流水线现在还包括执行连续检查的任务 —— 以连续的方式检查代码的质量。
 - en: Continuous inspection deals with inspecting and avoiding code that is of poor
     quality. Tools such as SonarQube help us in achieving this. Every time a code
     gets checked-in (committed), a code analysis is performed on the code.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 连续检查涉及检查和避免质量低劣的代码。诸如 SonarQube 的工具帮助我们实现这一点。每次代码提交时，都会对代码进行代码分析。
 - en: This analysis is based on some rules defined by the code analysis tool. If the
     code passes the error threshold, it's allowed to move to the next step in its
     life cycle. But, if it crosses the error threshold, it's dropped.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 此分析基于代码分析工具定义的一些规则。如果代码通过了错误阈值，它被允许进入其生命周期的下一步。但是，如果它超过了错误阈值，它就会被丢弃。
 - en: Some organizations prefer checking the code for its quality, right at the moment
     when the developer tries to check-in the code. If the analysis is good, the code
     is allowed to be checked-in, or else the check-in is cancelled and the developer
     needs to work on the code again.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 有些组织更喜欢在开发人员尝试提交代码时立即检查代码质量。如果分析结果良好，则允许提交代码，否则取消提交并要求开发人员重新处理代码。
 - en: SonarQube is a code quality management tool that allows teams to manage, track,
     and improve the quality of their source code.  It is a web-based application that
     contains rules, alerts, and thresholds, all of which can be configured. It covers
     the seven types of code quality parameters, which are architecture and design,
     duplications, unit tests, complexity, potential bugs, coding rules, and comments.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: SonarQube 是一个代码质量管理工具，允许团队管理、跟踪和改善其源代码的质量。它是一个基于 Web 的应用程序，包含可配置的规则、警报和阈值。它涵盖了七种代码质量参数，包括架构和设计、重复、单元测试、复杂度、潜在错误、编码规则和注释。
 - en: SonarQube is an open source tool that supports almost all popular programming
     languages with the help of plugins. SonarQube can also be integrated with a CI
     tool such as Jenkins to perform continuous inspection, which we will see shortly.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: SonarQube 是一个开源工具，通过插件支持几乎所有流行的编程语言。SonarQube 还可以与 CI 工具（如 Jenkins）集成，以执行持续检查，我们很快就会看到。
 - en: So, first let's learn how to install SonarQube. In the following section, we
     will learn how to install SonarQube on Ubuntu 16.04.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 那么，首先让我们学习如何安装 SonarQube。在接下来的部分中，我们将学习如何在 Ubuntu 16.04 上安装 SonarQube。
 - en: Installing Java
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Java
 - en: 'Follow these steps to install Java:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤安装 Java：
 - en: 'Update the package index:'
+  id: totrans-20
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更新软件包索引：
 - en: '[PRE0]'
+  id: totrans-21
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Next, install Java. The following command will install the JRE:'
+  id: totrans-22
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，安装 Java。以下命令将安装 JRE：
 - en: '[PRE1]'
+  id: totrans-23
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'To set the `JAVA_HOME` environment variable, first get the Java installation
     location. Do this by executing the following command:'
+  id: totrans-24
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要设置 `JAVA_HOME` 环境变量，首先获取 Java 安装位置。通过执行以下命令执行此操作：
 - en: '[PRE2]'
+  id: totrans-25
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'You should get a similar output:'
+  id: totrans-26
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您应该会得到类似的输出：
 - en: '[PRE3]'
+  id: totrans-27
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: The path in the preceding output is the `JAVA_HOME` location. Copy it.
+  id: totrans-28
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述输出中的路径是 `JAVA_HOME` 的位置。复制它。
 - en: 'Open the `/etc/environment` file for editing:'
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开 `/etc/environment` 文件进行编辑：
 - en: '[PRE4]'
+  id: totrans-30
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Add the following line inside the `/etc/environment` file, as shown here:'
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将以下行添加到 `/etc/environment` 文件中，如下所示：
 - en: '[PRE5]'
+  id: totrans-32
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Type *Ctrl* + *X* and choose *Y* to save and close the file.
+  id: totrans-33
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 输入 *Ctrl* + *X* 并选择 *Y* 以保存并关闭文件。
 - en: 'Next, reload the file using the following command:'
+  id: totrans-34
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，使用以下命令重新加载文件：
 - en: '[PRE6]'
+  id: totrans-35
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: Downloading the SonarQube package
+  id: totrans-36
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载 SonarQube 包
 - en: 'The following steps will help you to download the SonarQube package:'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下步骤将帮助您下载 SonarQube 包：
 - en: Download the latest version of the SonarQube installation package by navigating
     to [https://www.sonarqube.org/downloads/](https://www.sonarqube.org/downloads/).
+  id: totrans-38
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过访问[https://www.sonarqube.org/downloads/](https://www.sonarqube.org/downloads/)下载最新版本的
+    SonarQube 安装包。
 - en: It is recommended that you always install the latest LTS* version of SonarQube.
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 建议您始终安装最新的 LTS* 版本 SonarQube。
 - en: 'Move to the `/tmp` folder:'
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 移动至 `/tmp` 文件夹：
 - en: '[PRE7]'
+  id: totrans-41
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Download the SonarQube ZIP package, using `wget`, as shown in the following
     command. Here, I am downloading SonarQube version 5.6.7 (LTS*):'
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 `wget` 下载 SonarQube ZIP 包，如下所示的命令。在这里，我下载 SonarQube 版本 5.6.7（LTS*）：
 - en: '[PRE8]'
+  id: totrans-43
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'Next, unzip the SonarQube ZIP package inside the `/opt` directory, using the
     following command:'
+  id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，在 `/opt` 目录下解压 SonarQube ZIP 包，使用以下命令：
 - en: '[PRE9]'
+  id: totrans-45
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'To use the `unzip` command, make sure you have the zipping tool installed on
     your Ubuntu machine. To install the ZIP tool, execute the following command:'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使用 `unzip` 命令，请确保您的 Ubuntu 机器上安装了压缩工具。要安装 ZIP 工具，请执行以下命令：
 - en: '`**sudo apt-get install zip**`'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: '`**sudo apt-get install zip**`'
 - en: You can also download the SonarQube ZIP package on a different machine and then
     move it to your SonarQube server, using WinSCP.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 您也可以在另一台机器上下载 SonarQube ZIP 包，然后使用 WinSCP 将其移动到您的 SonarQube 服务器上。
 - en: 'Move to the extracted folder and list its content:'
+  id: totrans-49
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 移动到已解压的文件夹并列出其内容：
 - en: '[PRE10]'
+  id: totrans-50
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: The `bin/` folder contains all the scripts to install and start SonarQube, and
     the `logs/` folder contains the SonarQube logs.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: '`bin/`文件夹包含了所有安装和启动 SonarQube 的脚本，而 `logs/`文件夹包含了 SonarQube 的日志。'
 - en: Running the SonarQube application
+  id: totrans-52
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行 SonarQube 应用程序
 - en: 'Follow these steps to start the SonarQube server:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤启动 SonarQube 服务器：
 - en: 'Move to `/opt/sonarqube-5.6.6/bin/linux-x86-64/`. In our current example, we
     are starting SonarQube on a 64-bit Linux OS:'
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 移动至 `/opt/sonarqube-5.6.6/bin/linux-x86-64/`。在我们当前的示例中，我们在 64 位 Linux 操作系统上启动
+    SonarQube：
 - en: '[PRE11]'
+  id: totrans-55
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Run the `sonar.sh` script to start SonarQube, as shown in the following command:'
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 `sonar.sh` 脚本以启动 SonarQube，如下所示的命令：
 - en: '[PRE12]'
+  id: totrans-57
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'You should see a similar output:'
+  id: totrans-58
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您应该会看到类似的输出：
 - en: '[PRE13]'
+  id: totrans-59
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: To access SonarQube, use the following link in your favorite web browser: `http://localhost:9000/`
     or `http://<IP-Address>:9000`.
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要访问 SonarQube，请在您喜爱的网络浏览器中使用以下链接：`http://localhost:9000/` 或 `http://<IP-Address>:9000`。
 - en: Right now there are no user accounts configured in SonarQube. However, by default
     there is an admin account with the username as `admin` and the password as `admin`.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前在 SonarQube 中没有配置用户帐户。但是，默认情况下有一个用户名为`admin`、密码为`admin`的管理员帐户。
 - en: Make sure you have at least 4 GB of memory to run the 64-bit version of SonarQube.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 确保您至少有 4GB 的内存来运行 64 位版本的 SonarQube。
 - en: Resetting the default credentials and generating a token
+  id: totrans-63
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 重置默认凭据并生成令牌
 - en: 'Follow these steps to reset the credentials and generate a token:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤重置凭据并生成一个令牌：
 - en: Open the SonarQube link in your favorite browser and switch to admin user.
+  id: totrans-65
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在您喜欢的浏览器中打开 SonarQube 链接并切换到管理员用户。
 - en: From the SonarQube dashboard, click on Administrator | My Account | Security
     (tab).
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 SonarQube 仪表板上，点击 Administrator | My Account | Security（选项卡）。
 - en: 'On the resultant page, under the Change password section, do the following:'
+  id: totrans-67
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面下，执行以下操作来更改密码部分：
 - en: Add your old password (`admin`) under the Old Password field.
+  id: totrans-68
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 旧密码 字段下添加您的旧密码（`admin`）。
 - en: Add a new password under the New Password field.
+  id: totrans-69
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 新密码 字段下添加一个新密码。
 - en: Reconfirm your new password by adding it again in the Confirm Password field.
+  id: totrans-70
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 确认密码 字段中重新输入新密码。
 - en: Once done, click on the Change Password button.
+  id: totrans-71
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击更改密码按钮。
 - en: 'On the same page under the Tokens section, there is an option to generate a
     token. Jenkins can use this token to access SonarQube. Perform the following steps
     to generate a new token:'
+  id: totrans-72
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在同一页的令牌部分下，有一个选项来生成一个令牌。Jenkins 可以使用此令牌访问 SonarQube。执行以下步骤生成一个新令牌：
 - en: Under the Tokens section, add a name for your new token, using the Generate
     Tokens field by clicking on the Generate button.
+  id: totrans-73
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在令牌部分下，通过点击生成按钮在 生成令牌 字段下为您的新令牌添加一个名称。
 - en: A new token will get generated, as shown in the following screenshot.
+  id: totrans-74
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 新的令牌将会生成，如下截图所示。
 - en: 'Copy and save this token, has we will need it later:'
+  id: totrans-75
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 复制并保存此令牌，因为我们稍后会用到它：
 - en: '![](img/d5b34192-d78e-4fa6-9402-c744e8bc6bac.png)'
+  id: totrans-76
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d5b34192-d78e-4fa6-9402-c744e8bc6bac.png)'
 - en: Creating a token inside SonarQube
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 SonarQube 中创建一个令牌
 - en: Creating a project inside SonarQube
+  id: totrans-78
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 SonarQube 中创建项目
 - en: 'In the following section, we will create a project inside SonarQube. The project
     will be used to display the static code analysis:'
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，我们将在 SonarQube 中创建一个项目。该项目将用于显示静态代码分析：
 - en: From the SonarQube dashboard, click on Administration | Projects (tab) | Management.
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 SonarQube 仪表板，点击管理| 项目（选项卡）| 管理。
 - en: On the resultant page, click on the Create Project button.
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，点击“创建项目”按钮。
 - en: 'On the resultant window, fill in the respective details, as illustrated in
     the following steps:'
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果窗口中，填写相应的详细信息，如下面的步骤所示：
 - en: Add a name under the Name field.
+  id: totrans-83
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“名称”字段下添加一个名称。
 - en: Add a key under the Key field.
+  id: totrans-84
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“键”字段下添加一个键。
 - en: 'Click on the Create button to create the project:'
+  id: totrans-85
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击“创建”按钮创建项目：
 - en: '![](img/df4e7d76-06d5-4d93-b709-ac3b166cd0bd.png)'
+  id: totrans-86
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/df4e7d76-06d5-4d93-b709-ac3b166cd0bd.png)'
 - en: Creating a project inside SonarQube
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 SonarQube 中创建一个项目
 - en: 'You can see your newly created project on the Project Management page, as shown
     in the following screenshot:'
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你可以在项目管理页面上看到你新创建的项目，如下图所示：
 - en: '![](img/f10bbd70-475c-4265-bce1-8faa6f2a5e83.png)'
+  id: totrans-89
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f10bbd70-475c-4265-bce1-8faa6f2a5e83.png)'
 - en: Newly created project inside SonarQube
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: SonarQube 中新创建的项目
 - en: Installing the build breaker plugin for SonarQube
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为 SonarQube 安装构建破坏插件
 - en: 'The build breaker plugin is available for SonarQube. It''s exclusively a SonarQube
     plugin and not a Jenkins plugin. This plugin allows the CI system (Jenkins) to
     forcefully fail a Jenkins build if a quality gate condition is not satisfied.
     To install the build breaker plugin, perform the following steps:'
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建破坏插件适用于 SonarQube。它是专门为 SonarQube 设计的插件，而不是 Jenkins 插件。此插件允许 CI 系统（Jenkins）在质量门限条件不满足时强制失败
+    Jenkins 构建。要安装构建破坏插件，请执行以下步骤：
 - en: Before downloading the plugin, first refer to the compatibility table. This
     will help us in downloading the right plugin version. The compatibility table
     is available at [https://github.com/SonarQubeCommunity/sonar-build-breaker](https://github.com/SonarQubeCommunity/sonar-build-breaker).
+  id: totrans-93
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在下载插件之前，先参考兼容性表。这将帮助我们下载正确的插件版本。兼容性表可在[https://github.com/SonarQubeCommunity/sonar-build-breaker](https://github.com/SonarQubeCommunity/sonar-build-breaker)上找到。
 - en: Download the build breaker plugin from [https://github.com/SonarQubeCommunity/sonar-build-breaker/releases](https://github.com/SonarQubeCommunity/sonar-build-breaker/releases).
+  id: totrans-94
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从[https://github.com/SonarQubeCommunity/sonar-build-breaker/releases](https://github.com/SonarQubeCommunity/sonar-build-breaker/releases)下载构建破坏插件。
 - en: 'Move to the `/tmp` directory and download the build breaker plugin, using the
     following command:'
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 移动到`/tmp`目录并下载构建破坏插件，使用以下命令：
 - en: '[PRE14]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'Move the downloaded `.jar` file to the location `opt/sonarqube-5.6.7/extensions/plugins/`:'
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将下载的`.jar`文件移动到位置`opt/sonarqube-5.6.7/extensions/plugins/`：
 - en: '[PRE15]'
+  id: totrans-98
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'Restart SonarQube, using the following commands:'
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令重新启动 SonarQube：
 - en: '[PRE16]'
+  id: totrans-100
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'You should see a similar output:'
+  id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你应该看到类似的输出：
 - en: '[PRE17]'
+  id: totrans-102
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: After a successful restart, go to the SonarQube dashboard and log in as administrator.
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 成功重新启动后，转到 SonarQube 仪表板，并以管理员身份登录。
 - en: Click on the Administration link from the menu bar.
+  id: totrans-104
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击菜单栏上的管理链接。
 - en: 'On the Administration page, you will see the Build Breaker option under the
     CATEGORY sidebar, as shown in the following screenshot; do nothing:'
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在管理页面上，您将在“类别”侧边栏下看到“构建破坏器”选项，如下图所示；不需要操作：
 - en: '![](img/0c2b47ca-93ec-4bbf-9f43-2f5f0780f35f.png)'
+  id: totrans-106
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0c2b47ca-93ec-4bbf-9f43-2f5f0780f35f.png)'
 - en: The build breaker plugin settings inside SonarQube
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 SonarQube 中的构建破坏插件设置
 - en: The build breaker plugin has been installed successfully.
+  id: totrans-108
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建破坏插件已成功安装。
 - en: Creating quality gates
+  id: totrans-109
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建质量门限
 - en: For the build breaker plugin to work, we need to create a *quality gate*; it's
     nothing but a rule with some conditions. When a Jenkins pipeline runs, it will
     execute the *quality profiles* and the quality gate. If the quality gate check
     passes successfully then the Jenkins pipeline continues, but if it fails then
     the Jenkins pipeline is aborted. Nevertheless, the analysis still happens.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了使构建破坏插件正常工作，我们需要创建一个*质量门限*；它只是一条带有一些条件的规则。当 Jenkins 流水线运行时，它将执行*质量配置文件*和质量门限。如果质量门限检查成功通过，则
+    Jenkins 流水线继续运行，但如果失败，则 Jenkins 流水线中止。尽管如此，分析仍然会发生。
 - en: 'Follow these steps to create a quality gate in SonarQube:'
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤在 SonarQube 中创建一个质量门限：
 - en: From the SonarQube dashboard, click on the Quality Gates link from the menu
     bar.
+  id: totrans-112
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 SonarQube 仪表板，点击菜单栏上的“质量门限”链接。
 - en: On the resultant page, click on the Create button at the top-left corner.
+  id: totrans-113
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，点击左上角的“创建”按钮。
 - en: 'You will get a pop-up window, as shown in the following screenshot. Add a name
     for your quality gate under the Name field, and click on the Create button:'
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将看到一个弹出窗口，如下面的屏幕截图所示。在名称字段下添加您的质量门名称，并点击创建按钮：
 - en: '![](img/377644cd-07c3-4848-affc-31adfd284e89.png)'
+  id: totrans-115
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/377644cd-07c3-4848-affc-31adfd284e89.png)'
 - en: Creating a new quality gate
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个新的质量门
 - en: 'You will see your new quality gate listed on the Quality Gates page, as shown
     in the following screenshot:'
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将在质量门页面上看到您的新质量门，如下面的屏幕截图所示：
 - en: '![](img/6b3b4f0a-47a2-47ea-b51b-0efc1e5c3373.png)'
+  id: totrans-118
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6b3b4f0a-47a2-47ea-b51b-0efc1e5c3373.png)'
 - en: The new quality gate
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 新质量门
 - en: 'Let us now add a condition to our quality gate by choosing one from the Add
     Condition menu:'
+  id: totrans-120
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在让我们通过从添加条件菜单中选择一个来为我们的质量门添加一个条件：
 - en: '![](img/d990542b-515b-4d37-84ae-aea4e6f663b5.png)'
+  id: totrans-121
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d990542b-515b-4d37-84ae-aea4e6f663b5.png)'
 - en: Condition menu
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: 条件菜单
 - en: 'The following screenshot shows a condition named Major Issues. If it''s greater
     than `1` but less than `50` it''s a WARNING, and if it''s greater than `50`, it''s
     an ERROR, as shown in the following screenshot. This is just an example; you can
     configure any number of conditions you like:'
+  id: totrans-123
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 下面的屏幕截图显示了一个名为主要问题的条件。如果大于`1`但小于`50`，则是警告，如果大于`50`，则是错误，如下面的屏幕截图所示。这只是一个示例；您可以配置任意数量的条件：
 - en: '![](img/c6cb40f3-a870-4e92-9953-f753e9fb2611.png)'
+  id: totrans-124
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c6cb40f3-a870-4e92-9953-f753e9fb2611.png)'
 - en: Configuring the quality gate
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置质量门
 - en: Next, let us make sure that the example project that we created earlier in SonarQube
     uses our newly created quality gate. To do so, from the SonarQube dashboard click
     on Administration | Projects (tab) | Management.
+  id: totrans-126
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，让我们确保我们之前在SonarQube中创建的示例项目使用我们新创建的质量门。为此，请从SonarQube仪表板点击管理 | 项目（选项卡）|
+    管理。
 - en: On the resultant page, you will see the example project that we created earlier
     in SonarQube. Click on it.
+  id: totrans-127
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将看到我们之前在SonarQube中创建的示例项目。点击它。
 - en: On the resultant page, click on Administration (tab) | Quality Gate.
+  id: totrans-128
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，点击管理（选项卡）| 质量门。
 - en: 'Under the Quality Gate section, you will see an option to choose the quality
     gate from the list of available quality gates in SonarQube. Choose the one that
     we created recently and click on the Update button:'
+  id: totrans-129
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在质量门部分下，您将看到一个选项，可以从SonarQube中的可用质量门列表中选择质量门。选择我们最近创建的一个并点击更新按钮：
 - en: '![](img/a554e7c0-38c9-447e-9efb-2e577b520d39.png)'
+  id: totrans-130
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a554e7c0-38c9-447e-9efb-2e577b520d39.png)'
 - en: Associating a quality gate to a project
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 将质量门关联到项目
 - en: Updating the default quality profile
+  id: totrans-132
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更新默认质量配置
 - en: 'In the following section, we will modify the default quality profile for Java
     (Sonar way), which we intend to use for our static code analysis. Follow these
     steps:'
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一节中，我们将修改Java（Sonar way）的默认质量配置，我们打算用于我们的静态代码分析。请按照以下步骤操作：
 - en: 'From the SonarQube dashboard, click on the Quality Profiles link from the menu
     bar. On the resultant page, you will see all the quality profiles that exist on
     SonarQube, as shown in the following screenshot:'
+  id: totrans-134
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从SonarQube仪表板，点击菜单栏中的质量配置链接。在结果页面上，您将看到所有存在于SonarQube上的质量配置，如下面的屏幕截图所示：
 - en: '![](img/e9449540-e547-4202-bcc1-f7f3ad4922e4.png)'
+  id: totrans-135
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e9449540-e547-4202-bcc1-f7f3ad4922e4.png)'
 - en: List of quality profiles in SonarQube
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: SonarQube中的质量配置列表
 - en: From the previous screenshot, you can see that the default quality profile for
     Java: Sonar way contains 254 active rules. Let us try to add more rules.
+  id: totrans-137
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从上一个屏幕截图中，您可以看到Java的默认质量配置：Sonar way包含254个活动规则。让我们尝试添加更多规则。
 - en: Click on the Activate More button.
+  id: totrans-138
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击激活更多按钮。
 - en: 'On the resultant page, you will see something, as shown in the following screenshot:'
+  id: totrans-139
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将看到一些内容，如下面的屏幕截图所示：
 - en: '![](img/d12868b9-ea7c-43c4-aceb-bfcd2864b2f1.png)'
+  id: totrans-140
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d12868b9-ea7c-43c4-aceb-bfcd2864b2f1.png)'
 - en: List of inactive rules
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 未激活规则列表
 - en: This is the place where you can add and remove rules from your quality profile.
     Let us activate all the inactive rules for Java.
+  id: totrans-142
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这是您可以向质量配置添加和删除规则的地方。让我们激活所有Java的未激活规则。
 - en: 'To do this, from the top-right corner of the page, click on Bulk Change | Activate
     In Sonar way, as shown in the following screenshot:'
+  id: totrans-143
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要做到这一点，从页面右上角，点击批量更改 | 在Sonar way中激活，如下面的屏幕截图所示：
 - en: '![](img/7ae29d7e-75a0-42e8-bf47-459b8cb9c0c1.png)'
+  id: totrans-144
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7ae29d7e-75a0-42e8-bf47-459b8cb9c0c1.png)'
 - en: Activating rules in bulk
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 批量激活规则
 - en: You will see a popup asking you to confirm the changes. Click on the Apply button
     and proceed.
+  id: totrans-146
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将看到一个弹出窗口询问您确认更改。点击应用按钮并继续。
 - en: Next, from the menu bar, click on the Quality Profiles link. On the resultant
     page, click on the **Sonar way** quality profile for Java, and now you should
     see a greater number of rules than before.
+  id: totrans-147
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，从菜单栏中点击“质量配置文件”链接。 在结果页面上，点击 Java 的 **Sonar way** 质量配置文件，现在您应该看到比以前更多的规则。
 - en: The list of rules and default quality profiles visible on SonarQube depends
     on the installed plugin. To get rules for your desired language, install its respective
     SonarQube plugin.
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 SonarQube 上可见的规则列表和默认质量配置文件取决于安装的插件。 要获取所需语言的规则，请安装相应的 SonarQube 插件。
 - en: Installing the SonarQube plugin in Jenkins
+  id: totrans-149
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中安装 SonarQube 插件
 - en: 'Follow these steps to install the SonarQube plugin for Jenkins:'
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤为 Jenkins 安装 SonarQube 插件：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available
     (tab). You will be taken to the Jenkins Manage Plugins page.
+  id: totrans-151
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，点击“管理 Jenkins | 管理插件 | 可用（选项卡）”。 您将进入 Jenkins 管理插件页面。
 - en: 'Enter `SonarQube` in the Filter field, as shown in the following screenshot:'
+  id: totrans-152
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“过滤器”字段中输入`SonarQube`，如下面的截图所示：
 - en: '![](img/a07538d6-68a3-4249-aec2-44e4e19f5b35.png)'
+  id: totrans-153
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a07538d6-68a3-4249-aec2-44e4e19f5b35.png)'
 - en: Installing the SonarQube plugin
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 SonarQube 插件
 - en: Select SonarQube Scanner for Jenkins from the list and click on the Install
     without restart button.
+  id: totrans-155
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从列表中选择“Jenkins 的 SonarQube 扫描仪”，然后点击“无需重新启动安装”按钮。
 - en: Restart Jenkins if needed.
+  id: totrans-156
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如有需要，请重新启动 Jenkins。
 - en: Configuring the SonarQube plugin in Jenkins
+  id: totrans-157
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中配置 SonarQube 插件
 - en: 'Now that we have our SonarQube plugin installed, let us configure it:'
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经安装了 SonarQube 插件，让我们来配置它：
 - en: From the Jenkins dashboard, click Manage Jenkins | Configure System.
+  id: totrans-159
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，点击“管理 Jenkins | 配置系统”。
 - en: Once on the Configure System page, scroll down all the way to the SonarQube
     servers section.
+  id: totrans-160
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦进入“配置系统”页面，请向下滚动到 SonarQube 服务器部分。
 - en: Under the SonarQube servers section, click on the Add SonarQube button. You
     will be presented with settings to configure, as shown in the following screenshot.
     Let us see them one by one.
+  id: totrans-161
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 SonarQube 服务器部分，点击“添加 SonarQube”按钮。 您将看到要配置的设置，如下面的截图所示。 让我们逐一了解它们。
 - en: Give your SonarQube server a name using the Name field.
+  id: totrans-162
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“名称”字段中为您的 SonarQube 服务器命名。
 - en: Enter the SonarQube server URL under the Server URL field.
+  id: totrans-163
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“服务器 URL”字段下输入 SonarQube 服务器的 URL。
 - en: Add Artifactory credentials under the Default Deployer Credentials.
+  id: totrans-164
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“默认部署者凭据”下添加 Artifactory 凭据。
 - en: Add the token that we created inside SonarQube under the Server authentication
     token field.
+  id: totrans-165
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“服务器身份验证令牌”字段下输入我们在 SonarQube 中创建的令牌。
 - en: 'Click on the Test Connection button to test the Jenkins connection with Artifactory:'
+  id: totrans-166
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击“测试连接”按钮以测试 Jenkins 与 Artifactory 的连接：
 - en: '![](img/264deaab-f537-40b7-9a3f-fb4106b72280.png)'
+  id: totrans-167
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/264deaab-f537-40b7-9a3f-fb4106b72280.png)'
 - en: Configuring the SonarQube plugin
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置 SonarQube 插件
 - en: Once done, click on the Save button at the end of the page to save the settings.
+  id: totrans-169
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击页面底部的“保存”按钮保存设置。
 - en: Installing and configuring Artifactory
+  id: totrans-170
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装和配置 Artifactory
 - en: Continuous integration results in frequent builds and packages. Hence, there
     is a need for a mechanism to store all this binary code (builds, packages, third-party
     plugins, and so on) in a system akin to a version control system.
+  id: totrans-171
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续集成导致频繁的构建和打包。 因此，需要一种机制来存储所有这些二进制代码（构建、包、第三方插件等），这种机制类似于版本控制系统。
 - en: 'Since version control systems such as Git, TFS, and SVN store code and not
     binary files, we need a binary repository tool. A binary repository tool such
     as Artifactory or Nexus tightly integrated with Jenkins provides the following
     advantages:'
+  id: totrans-172
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于像 Git、TFS 和 SVN 这样的版本控制系统存储的是代码而不是二进制文件，我们需要一个二进制存储库工具。 一个与 Jenkins 紧密集成的二进制存储库工具（如
+    Artifactory 或 Nexus）提供了以下优势：
 - en: Tracking builds (who triggers? What code was built?)
+  id: totrans-173
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 跟踪构建（谁触发？ 构建了什么代码？）
 - en: Dependencies
+  id: totrans-174
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 依赖项
 - en: Deployment history
+  id: totrans-175
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 部署历史
 - en: 'The following diagram depicts how a binary repository tool such as Artifactory
     works with Jenkins to store build artifacts. In the coming topics, we will learn
     how to achieve this by creating a Jenkins job to upload code to Artifactory:'
+  id: totrans-176
   prefs: []
   type: TYPE_NORMAL
+  zh: 下图描述了二进制存储库工具（如 Artifactory）与 Jenkins 如何一起工作以存储构建产物。 在接下来的话题中，我们将学习如何通过创建一个
+    Jenkins 作业将代码上传到 Artifactory 来实现这一点：
 - en: '![](img/feadc99b-1d20-434f-9521-e0b083eeab26.png)'
+  id: totrans-177
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/feadc99b-1d20-434f-9521-e0b083eeab26.png)'
 - en: Jenkins pipeline pushing built artifacts to Artifactory
+  id: totrans-178
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 流水线将构建产物推送到 Artifactory
 - en: In the current book, we will be dealing with Artifactory to store our builds.
     Artifactory is a tool used to version control binaries. The binaries can be anything
     from built code, packages, executables, Maven plugins, and so on.
+  id: totrans-179
   prefs: []
   type: TYPE_NORMAL
+  zh: 在当前书籍中，我们将处理 Artifactory 来存储我们的构建。 Artifactory 是一个用于版本控制二进制文件的工具。 这些二进制文件可以是任何内容，从构建代码、软件包、可执行文件、Maven
+    插件等等。
 - en: In the following section, we will set up Artifactory on Ubuntu 16.04.
+  id: totrans-180
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，我们将在 Ubuntu 16.04 上设置 Artifactory。
 - en: Installing Java
+  id: totrans-181
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Java
 - en: 'Follow these steps to install Java:'
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤安装 Java：
 - en: 'Update the package index:'
+  id: totrans-183
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更新软件包索引：
 - en: '[PRE18]'
+  id: totrans-184
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'Next, install Java. The following command will install the JRE:'
+  id: totrans-185
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，安装 Java。以下命令将安装 JRE：
 - en: '[PRE19]'
+  id: totrans-186
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'To set the `JAVA_HOME` environment variable, first get the Java installation
     location. Do this by executing the following command:'
+  id: totrans-187
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要设置 `JAVA_HOME` 环境变量，首先获取 Java 安装位置。 通过执行以下命令执行此操作：
 - en: '[PRE20]'
+  id: totrans-188
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'You should get a similar output:'
+  id: totrans-189
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您应该得到类似的输出：
 - en: '[PRE21]'
+  id: totrans-190
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: The path in the preceding output is the `JAVA_HOME` location. Copy it.
+  id: totrans-191
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在前面的输出中的路径是 `JAVA_HOME` 的位置。复制它。
 - en: 'Open the `/etc/environment` file for editing:'
+  id: totrans-192
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开 `/etc/environment` 文件进行编辑：
 - en: '[PRE22]'
+  id: totrans-193
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'Add the following line inside the `/etc/environment` file, as shown here:'
+  id: totrans-194
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `/etc/environment` 文件中添加以下行，如下所示：
 - en: '[PRE23]'
+  id: totrans-195
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: Type *Ctrl* + *X* and choose *Y* to save and close the file.
+  id: totrans-196
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 输入 *Ctrl* + *X* 并选择 *Y* 保存并关闭文件。
 - en: 'Next, reload the file using the following command:'
+  id: totrans-197
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，使用以下命令重新加载文件：
 - en: '[PRE24]'
+  id: totrans-198
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: Downloading the Artifactory package
+  id: totrans-199
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载 Artifactory 包
 - en: 'Follow the given steps to download the Artifactory package:'
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤下载 Artifactory 包：
 - en: Download the latest version of Artifactory (open source) from [https://www.jfrog.com/open-source/](https://www.jfrog.com/open-source/)
     or [https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip](https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip).
+  id: totrans-201
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 [https://www.jfrog.com/open-source/](https://www.jfrog.com/open-source/) 或
+    [https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip](https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip)
+    下载 Artifactory 的最新版本（开源）。
 - en: To download Artifactory Pro, visit [https://bintray.com/jfrog/artifactory-pro/](https://bintray.com/jfrog/artifactory-pro/)
     or [https://bintray.com/jfrog/artifactory-pro/jfrog-artifactory-pro-zip](https://bintray.com/jfrog/artifactory-pro/jfrog-artifactory-pro-zip).
+  id: totrans-202
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要下载 Artifactory Pro，请访问 [https://bintray.com/jfrog/artifactory-pro/](https://bintray.com/jfrog/artifactory-pro/)
+    或 [https://bintray.com/jfrog/artifactory-pro/jfrog-artifactory-pro-zip](https://bintray.com/jfrog/artifactory-pro/jfrog-artifactory-pro-zip)。
 - en: It is recommended that you always install the latest LTS version of Artifactory.
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 建议您始终安装 Artifactory 的最新 LTS 版本。
 - en: In the following chapter, we will use Artifactory Pro to demonstrate code promotion
     using properties in the upcoming chapter.
+  id: totrans-204
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将使用 Artifactory Pro 演示代码推广，使用即将到来的章节中的属性。
 - en: Refer to [https://www.jfrog.com/confluence/display/RTF/Artifactory+Pro#ArtifactoryPro-ActivatingArtifactoryPro](https://www.jfrog.com/confluence/display/RTF/Artifactory+Pro#ArtifactoryPro-ActivatingArtifactoryPro)
     to learn the process of activating Artifactory Pro.
+  id: totrans-205
   prefs: []
   type: TYPE_NORMAL
+  zh: 参考 [https://www.jfrog.com/confluence/display/RTF/Artifactory+Pro#ArtifactoryPro-ActivatingArtifactoryPro](https://www.jfrog.com/confluence/display/RTF/Artifactory+Pro#ArtifactoryPro-ActivatingArtifactoryPro)
+    了解激活 Artifactory Pro 的过程。
 - en: 'Move to the `/tmp` folder:'
+  id: totrans-206
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 移动到 `/tmp` 文件夹：
 - en: '[PRE25]'
+  id: totrans-207
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: 'Download the Artifactory Pro ZIP package, using `wget`, as shown in the following
     code. Here, I am downloading Artifactory version 5.5.2 (LTS*):'
+  id: totrans-208
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 `wget` 下载 Artifactory Pro ZIP 包，如下代码所示。这里，我正在下载 Artifactory 版本 5.5.2（LTS*）：
 - en: '[PRE26]'
+  id: totrans-209
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: You can download the Artifactory ZIP package on a different machine (from a
     browser) and then move it to your to-be Artifactory server, using WinSCP.
+  id: totrans-210
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从不同的机器（从浏览器）下载 Artifactory ZIP 包，然后使用 WinSCP 将其移动到即将成为 Artifactory 服务器的位置。
 - en: 'Next, unzip the SonarQube ZIP package inside the `/opt` directory, as shown
     in the following code:'
+  id: totrans-211
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，在 `/opt` 目录中解压 SonarQube ZIP 包，如下所示：
 - en: '[PRE27]'
+  id: totrans-212
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: 'Or, if the downloaded ZIP package has a strange name:'
+  id: totrans-213
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者，如果下载的 ZIP 包有奇怪的名字：
 - en: '[PRE28]'
+  id: totrans-214
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: 'To use the `unzip` command, make sure you have the zipping tool installed on
     your Ubuntu machine.  To install the ZIP tool, execute the following command:'
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使用 `unzip` 命令，请确保已在您的 Ubuntu 机器上安装了压缩工具。 要安装 ZIP 工具，请执行以下命令：
 - en: '`**sudo apt-get install zip**`'
+  id: totrans-216
   prefs: []
   type: TYPE_NORMAL
+  zh: '`**sudo apt-get install zip**`'
 - en: 'Move to the extracted folder and list its content:'
+  id: totrans-217
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 移动到提取的文件夹并列出其内容：
 - en: '[PRE29]'
+  id: totrans-218
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: The `bin/` folder contains all the scripts to install and start Artifactory,
     and the `logs/` folder contains the Artifactory logs.
+  id: totrans-219
   prefs: []
   type: TYPE_NORMAL
+  zh: '`bin/` 文件夹包含所有安装和启动 Artifactory 的脚本，`logs/` 文件夹包含 Artifactory 日志。'
 - en: Running the Artifactory application
+  id: totrans-220
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行 Artifactory 应用程序
 - en: 'Follow the given steps to start the Artifactory server:'
+  id: totrans-221
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤启动 Artifactory 服务器：
 - en: 'Move to the `/opt/artifactory-pro-5.5.2/bin/` directory and run the `installService.sh`
     script:'
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 进入 `/opt/artifactory-pro-5.5.2/bin/` 目录并运行 `installService.sh` 脚本：
 - en: '[PRE30]'
+  id: totrans-223
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'You should see a similar output:'
+  id: totrans-224
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您应该看到类似的输出：
 - en: '[PRE31]'
+  id: totrans-225
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: 'Start the Artifactory service, using any of the following commands:'
+  id: totrans-226
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动 Artifactory 服务，使用以下任何命令之一：
 - en: '[PRE32]'
+  id: totrans-227
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: 'Or:'
+  id: totrans-228
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者：
 - en: '[PRE33]'
+  id: totrans-229
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: 'Or:'
+  id: totrans-230
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者：
 - en: '[PRE34]'
+  id: totrans-231
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: 'You can check the Artifactory installation by executing any of the following
     commands:'
+  id: totrans-232
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您可以通过执行以下任何命令来检查 Artifactory 的安装：
 - en: '[PRE35]'
+  id: totrans-233
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: 'Or:'
+  id: totrans-234
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者：
 - en: '[PRE36]'
+  id: totrans-235
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE36]'
 - en: 'Or:'
+  id: totrans-236
   prefs: []
   type: TYPE_NORMAL
+  zh: 或者：
 - en: '[PRE37]'
+  id: totrans-237
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE37]'
 - en: Access the Artifactory dashboard by navigating to `http://<Server IP Address>:8081/`.
+  id: totrans-238
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过导航至 `http://<服务器 IP 地址>:8081/` 访问 Artifactory 仪表板。
 - en: Right now there are no user accounts configured in Artifactory. However, by
     default there is an admin account with the username as `admin` and the password
     as `password`.
+  id: totrans-239
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前在 Artifactory 中未配置任何用户帐户。但是，默认情况下存在一个 admin 帐户，用户名为 `admin`，密码为 `password`。
 - en: Make sure you have at least 4 GB of memory to run the 64-bit version of Artifactory.
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: 确保您至少有 4 GB 的内存来运行 Artifactory 的 64 位版本。
 - en: Resetting the default credentials and generating an API key
+  id: totrans-241
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 重置默认凭据并生成 API 密钥
 - en: 'Follow the given steps to reset the Artifactory credentials:'
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定步骤重置 Artifactory 凭据：
 - en: 'Access the Artifactory dashboard using the following link: `http://<Server
     IP Address>:8081/`.'
+  id: totrans-243
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下链接访问 Artifactory 仪表板：`http://<服务器 IP 地址>:8081/`。
 - en: Log in as admin using the initial default credentials for admin.
+  id: totrans-244
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 admin 的初始默认凭据登录。
 - en: From the Artifactory dashboard, click on Welcome, admin | Edit Profile.
+  id: totrans-245
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Artifactory 仪表板，单击 Welcome, admin | Edit Profile。
 - en: Enter your current password in the Current Password field and press the Unlock
     button.
+  id: totrans-246
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在当前密码字段中输入您当前的密码，然后点击解锁按钮。
 - en: On the resultant page, under Personal Settings, add your email ID.
+  id: totrans-247
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在生成的页面上，在个人设置下，添加您的电子邮件 ID。
 - en: Under the Change Password section, add a new password to reset the default credentials
     for the admin user.
+  id: totrans-248
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Change Password 部分下，添加一个新密码以重置 admin 用户的默认凭据。
 - en: Next, under the Authentication Settings section, click on Generate key (gear
     logo) to generate a new API key.
+  id: totrans-249
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，在 Authentication Settings 部分下，单击生成密钥（齿轮图标）以生成新的 API 密钥。
 - en: Copy the generated API key by clicking on the copy button (see the following
     screenshot).
+  id: totrans-250
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过单击复制按钮复制生成的 API 密钥（参见下图）。
 - en: 'We might need this API key later for authentication:'
+  id: totrans-251
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以后可能需要此 API 密钥进行身份验证：
 - en: '![](img/0636b012-51d8-4008-8a0b-03ccc76fd7f3.png)'
+  id: totrans-252
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0636b012-51d8-4008-8a0b-03ccc76fd7f3.png)'
 - en: Artifactory API key
+  id: totrans-253
   prefs: []
   type: TYPE_NORMAL
+  zh: Artifactory API 密钥
 - en: Once done, click on the Save button.
+  id: totrans-254
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，单击保存按钮。
 - en: Creating a repository in Artifactory
+  id: totrans-255
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Artifactory 中创建仓库
 - en: 'In the following section, we will create a genetic repository inside Artifactory.
     The repository will be used to store the build artifacts:'
+  id: totrans-256
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，我们将在 Artifactory 中创建一个通用仓库。该仓库将用于存储构建产物：
 - en: 'From the Artifactory dashboard, on the left-hand side menu, click on Admin
     | Repositories | Local, as shown in the following screenshot:'
+  id: totrans-257
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Artifactory 仪表板，在左侧菜单中，单击 Admin | Repositories | Local，如下图所示：
 - en: '![](img/b114abf2-e612-4867-a627-d8a28eb7a930.png)'
+  id: totrans-258
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b114abf2-e612-4867-a627-d8a28eb7a930.png)'
 - en: Creating a local repository in Artifactory
+  id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Artifactory 中创建一个本地仓库
 - en: 'The resultant page will show you all the Local Repositories currently available,
     as shown in the following screenshot:'
+  id: totrans-260
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 生成的页面将显示当前可用的所有本地仓库，如下图所示：
 - en: '![](img/cd5132ff-23dc-413c-8a2c-7022506f3884.png)'
+  id: totrans-261
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/cd5132ff-23dc-413c-8a2c-7022506f3884.png)'
 - en: List of all the Local Repositories
+  id: totrans-262
   prefs: []
   type: TYPE_NORMAL
+  zh: 所有本地仓库的列表
 - en: Click on the New button at the top-right corner to create a new local repository
     (see the following screenshot).
+  id: totrans-263
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在右上角单击 New 按钮创建一个新的本地仓库（参见下图）。
 - en: 'You will be presented with a pop-up window with a list of various types of
     repositories to choose from, shown as follows. Choose the Generic type (see the
     following screenshot):'
+  id: totrans-264
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将出现一个弹出窗口，列出各种类型的仓库供选择，如下图所示。选择 Generic 类型（参见下图）：
 - en: '![](img/55f13735-d54a-4cfe-8108-ba77f31f6928.png)'
+  id: totrans-265
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/55f13735-d54a-4cfe-8108-ba77f31f6928.png)'
 - en: Option to choose various types of repositories
+  id: totrans-266
   prefs: []
   type: TYPE_NORMAL
+  zh: 选择各种类型仓库的选项
 - en: 'Give your repository a name by adding a value under the Repository Key field,
     as shown in the following screenshot. Leave the rest of the settings to their
     default values:'
+  id: totrans-267
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Repository Key 字段下添加一个值，为您的仓库命名，如下图所示。将其余设置保留为默认值：
 - en: '![](img/80196f7a-711c-4f57-a07b-0744e800a211.png)'
+  id: totrans-268
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/80196f7a-711c-4f57-a07b-0744e800a211.png)'
 - en: Naming our new local repository
+  id: totrans-269
   prefs: []
   type: TYPE_NORMAL
+  zh: 命名我们的新本地仓库
 - en: Once done, click on the Save & Finish button.
+  id: totrans-270
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，单击保存 & 完成按钮。
 - en: 'Now we have our new local repository, as shown in the following screenshot:'
+  id: totrans-271
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在我们有了新的本地仓库，如下图所示：
 - en: '![](img/0c63f480-8313-4043-9833-6d7d2c327934.png)'
+  id: totrans-272
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0c63f480-8313-4043-9833-6d7d2c327934.png)'
 - en: Our newly created local repository
+  id: totrans-273
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们新创建的本地仓库
 - en: Adding Artifactory credentials inside Jenkins
+  id: totrans-274
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在Jenkins中添加Artifactory凭据
 - en: 'Follow the given steps to create credentials inside Jenkins to talk to Artifactory:'
+  id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定步骤在Jenkins中创建与Artifactory通信的凭据：
 - en: From the Jenkins dashboard, click on Credentials | System | Global credentials
     (unrestricted).
+  id: totrans-276
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板中，点击“凭据 | 系统 | 全局凭据（无限制）”。
 - en: Click on the Add Credentials link on the left-hand side menu to create a new
     credential (see the following screenshot).
+  id: totrans-277
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧菜单中点击“添加凭据”链接以创建一个新凭据（见下图）。
 - en: Choose Kind as Username with Password.
+  id: totrans-278
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择类型为用户名和密码。
 - en: Leave the Scope field to its default value.
+  id: totrans-279
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将范围字段保留为其默认值。
 - en: Add the Artifactory username under the Username field.
+  id: totrans-280
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在用户名字段下添加Artifactory用户名。
 - en: Under the Password field, add the password.
+  id: totrans-281
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在密码字段下，添加密码。
 - en: Add an ID under the ID field and a description under the Description field.
+  id: totrans-282
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在ID字段下添加一个ID，在描述字段下添加一个描述。
 - en: 'Once done, click on the OK button:'
+  id: totrans-283
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击“确定”按钮：
 - en: '![](img/d5107130-d5ae-4ef0-a630-1f593f84b85a.png)'
+  id: totrans-284
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d5107130-d5ae-4ef0-a630-1f593f84b85a.png)'
 - en: Adding Artifactory credentials inside Jenkins
+  id: totrans-285
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Jenkins中添加Artifactory凭据
 - en: Installing the Artifactory plugin in Jenkins
+  id: totrans-286
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在Jenkins中安装Artifactory插件
 - en: 'Follow the given steps to install the Artifactory plugin for Jenkins:'
+  id: totrans-287
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定步骤安装Jenkins的Artifactory插件：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available
     (tab). You will be taken to the Jenkins Manage Plugins page.
+  id: totrans-288
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板中，点击“管理Jenkins | 管理插件 | 可用（选项卡）”。你将被带到Jenkins管理插件页面。
 - en: 'Enter `Artifactory` in the Filter field, as shown in the following screenshot:'
+  id: totrans-289
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在过滤字段中输入“Artifactory”，如下图所示：
 - en: '![](img/ae9aade4-de56-41cb-af18-7bf9a541a195.png)'
+  id: totrans-290
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ae9aade4-de56-41cb-af18-7bf9a541a195.png)'
 - en: Installing the Artifactory Plugin
+  id: totrans-291
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装Artifactory插件
 - en: Select the Artifactory Plugin from the list and click on Install without restart
     button.
+  id: totrans-292
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从列表中选择Artifactory插件，然后点击“无需重新启动”按钮进行安装。
 - en: Restart Jenkins if needed.
+  id: totrans-293
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如有必要，重新启动Jenkins。
 - en: Configuring the Artifactory Plugin
+  id: totrans-294
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置Artifactory插件
 - en: 'Now that we have our Artifactory Plugin installed, let us configure it:'
+  id: totrans-295
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经安装了Artifactory插件，让我们来配置它：
 - en: From the Jenkins dashboard, click Manage Jenkins | Configure System.
+  id: totrans-296
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表板中，点击“管理Jenkins | 配置系统”。
 - en: Once on the Configure System page, scroll down all the way to the Artifactory
     section.
+  id: totrans-297
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 进入“配置系统”页面后，一直向下滚动到“Artifactory”部分。
 - en: Under the Artifactory section, click on the Add button. You will be presented
     with the following settings to configure, as shown in the following screenshot.
     Let us look at them one by one.
+  id: totrans-298
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Artifactory部分，点击“添加”按钮。你将看到以下设置以配置，如下图所示。让我们一一来看看它们。
 - en: Give your Artifactory server a name, using the Server ID field.
+  id: totrans-299
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用服务器ID字段给你的Artifactory服务器命名。
 - en: Enter the Artifactory server URL under the URL field.
+  id: totrans-300
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在URL字段下输入Artifactory服务器URL。
 - en: Add Artifactory credentials under the Default Deployer Credentials, as shown
     in the following screenshot.
+  id: totrans-301
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“默认部署者凭据”下添加Artifactory凭据，如下图所示。
 - en: 'Click on the Test Connection button to test the Jenkins connection with Artifactory:'
+  id: totrans-302
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击“测试连接”按钮测试Jenkins与Artifactory的连接：
 - en: '![](img/bbf8604f-29dd-4ff9-a997-7f9655a14d34.png)'
+  id: totrans-303
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/bbf8604f-29dd-4ff9-a997-7f9655a14d34.png)'
 - en: Configuring the Artifactory Plugin
+  id: totrans-304
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置Artifactory插件
 - en: Once done, click on the Save button at the end of the page to save the settings.
+  id: totrans-305
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击页面底部的“保存”按钮以保存设置。
 - en: Summary
+  id: totrans-306
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: In this chapter, we learned how to install and configure SonarQube and Artifactory.
     In today's world, static code analysis forms an important part of the CI pipeline
     (although it is not necessary). Similarly, Artifactory is a popular tool used
@@ -1224,9 +1850,13 @@
     CI pipeline is complete, Artifactory take the center stage. It is from Artifactory
     that all the built artifacts are deployed to various testing environments, and
     it is with Artifactory that we perform code promotion.
+  id: totrans-307
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们学习了如何安装和配置SonarQube和Artifactory。在今天的世界中，静态代码分析形成了CI流水线的重要组成部分（尽管不是必需的）。同样，Artifactory是一个流行的工具，用于存储CI流水线生成的所有构建工件。一旦CI流水线完成，Artifactory就成为了焦点。所有构建的工件都从Artifactory部署到各种测试环境中，并且我们通过Artifactory执行代码推进。
 - en: We will learn more about these tools in the next chapter, which is about implementing
     continuous integration using Jenkins.
+  id: totrans-308
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将在下一章中更多地了解这些工具，该章是关于使用Jenkins实现持续集成。

@@ -1,300 +1,427 @@
 - en: Distributed Builds
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 分布式构建
 - en: 'Jenkins'' master-slave architecture makes it easy to distribute work across
     multiple slave machines. This chapter is all about configuring Jenkins slaves
     across various platforms. The following are the topics that we will cover:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins的主从架构使得在多个从机器上分发工作变得更容易。本章节主要讨论在不同平台配置Jenkins从节点的相关内容。以下是我们将要涵盖的主题：
 - en: An overview of the Jenkins node manager
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins节点管理器概览
 - en: Installing a Jenkins slave on a standalone Linux machine
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在独立的Linux机器上安装Jenkins从节点
 - en: Installing a Jenkins slave on a standalone Windows machine
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在独立的Windows机器上安装Jenkins从节点
 - en: Installing and configuring the Docker plugin for creating on-demand Jenkins
     slaves
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装和配置Docker插件用于创建按需的Jenkins从节点
 - en: Distributed build and test
+  id: totrans-6
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 分布式构建和测试
 - en: In the following section let us learn a little bit about the distributed build
     and testing. Imagine you have a really fat unit test or integration test suite.
     If you can divide them in small parts then you can run them in parallel. To run
     them in parallel you need multiple clones of your build/test machines. If you
     have them in place either using Docker or using some other mechanism, then the
     remaining thing to do is to make them a Jenkins slave agent.
+  id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，让我们简单了解一下分布式构建和测试。想象一下，你有一个非常庞大的单元测试或集成测试套件。如果你可以将它们分为小部分，然后并行运行，那就可以了。要并行运行它们，你需要多个克隆的构建/测试机器。如果你已经设置好了，无论是使用Docker还是其他机制，那么剩下的就是将它们变成Jenkins从节点代理了。
 - en: 'The following illustration shows how a Jenkins pipeline to build, unit test
     and integration test utilizes the distributed build/test farm in Jenkins. You
     can see, we have two categories of Jenkins slave agents: Standalone Jenkins slave
     for build and unit test, and standalone Jenkins slave for integration test.'
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下示例展示了Jenkins流水线如何利用Jenkins中的分布式构建/测试农场进行构建、单元测试和集成测试。你会看到，我们有两类Jenkins从节点代理：用于构建和单元测试的独立Jenkins从节点，以及用于集成测试的独立Jenkins从节点。
 - en: The unit testing is distributed across three Jenkins slave agents for build
     and unit test (category 1), and the integration testing is distributed across
     two Jenkins slave agents for integration testing (category 2).
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 单元测试分布在三个用于构建和单元测试的Jenkins从节点代理中（第一类），而集成测试分布在两个用于集成测试的Jenkins从节点代理中（第二类）。
 - en: '![](img/717a6c52-f11d-47d3-be93-718225fdb5fd.png)'
+  id: totrans-10
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/717a6c52-f11d-47d3-be93-718225fdb5fd.png)'
 - en: Distributed build and testing farm using Jenkins standalone slave agents
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用Jenkins独立从节点进行分布式构建和测试
 - en: The Jenkins slave agents are categorized using **labels**. We will learn more
     about labels in the up-coming sections.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins从节点代理使用**标签**进行分类。我们将在接下来的章节中详细了解标签的内容。
 - en: It is also much better and easy to spawn on demand Jenkins slaves using Docker.
     Shown as follows is the Docker version of the same concept that we discussed previously.
     Here the Jenkins slave are created on demand using the Docker images.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用Docker按需生成Jenkins从节点也更好、更容易。如下图所示，这是我们之前讨论的相同概念的Docker版本。这里使用Docker镜像按需创建Jenkins从节点。
 - en: 'You can see in the following illustration, we have two types of Docker images:
     Docker image for build and unit test, and Docker image for integration test. The
     Docker slave agents are created using these Docker images. The unit testing is
     distributed across three Docker slave agents for build and unit test (category
     1), and the integration testing is distributed across two Docker slave agents
     for integration testing (category 2).'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以看到在以下示例中，我们有两种类型的Docker镜像：用于构建和单元测试的Docker镜像，以及用于集成测试的Docker镜像。这些Docker从节点代理是使用这些Docker镜像创建的。单元测试分布在三个用于构建和单元测试的Docker从节点代理中（第一类），而集成测试则分布在两个用于集成测试的Docker从节点代理中（第二类）。
 - en: 'Again here the Docker slave agents are categorized using labels. We will learn
     more about labels in the up-coming sections:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 同样在这里，Docker从节点代理使用标签进行分类。我们将在接下来的章节中详细了解标签的内容：
 - en: '![](img/61f3d4e8-b854-4484-ae97-a33c1f11cf00.png)'
+  id: totrans-16
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/61f3d4e8-b854-4484-ae97-a33c1f11cf00.png)'
 - en: Distributed build and testing farm using Jenkins and Docker slave agents
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用Jenkins和Docker从节点代理进行分布式构建和测试
 - en: The Jenkins Manage Nodes page
+  id: totrans-18
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins管理节点页面
 - en: 'In the following section, we will take a look at the Jenkins **Manage Nodes**
     page:'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，我们将看一下Jenkins **管理节点**页面：
 - en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Nodes**.
+  id: totrans-20
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从Jenkins仪表盘上，点击**管理Jenkins** | **管理节点**。
 - en: 'On the left-hand side, you will see a menu; the options are as explained in
     the following screenshot:'
+  id: totrans-21
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧，你会看到一个菜单；选项如以下截图所示：
 - en: '![](img/28dc83ba-a19f-4211-a012-6c05e799ccb7.png)'
+  id: totrans-22
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/28dc83ba-a19f-4211-a012-6c05e799ccb7.png)'
 - en: Jenkins Manage Nodes page
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 管理节点页面
 - en: 'On the right-hand side, you will also see a table showing the list of available
     Jenkins slaves, as shown in the following screenshot:'
+  id: totrans-24
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在右侧，您还将看到一个显示可用 Jenkins 从机列表的表格，如下截图所示：
 - en: '![](img/e1a18e07-2033-48e3-b60f-2b5136a9ec61.png)'
+  id: totrans-25
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e1a18e07-2033-48e3-b60f-2b5136a9ec61.png)'
 - en: List of available nodes
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 可用节点列表
 - en: 'Since we haven''t configured any Jenkins slaves yet, the list (as shown in
     the preceding screenshot) contains only one entry: that is, master.'
+  id: totrans-27
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 由于我们尚未配置任何 Jenkins 从机，列表（如前面的截图所示）只包含一个条目：即主机。
 - en: Along with the node's Name, the table also displays other useful information
     about the node, such as its Architecture, the amount of Free Disk Space, and the Response
     Time.
+  id: totrans-28
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 表格除了节点的名称外，还显示有关节点的其他有用信息，例如架构、可用磁盘空间量和响应时间。
 - en: 'To enable/disable the amount of information being displayed about each node,
     click on the Configure link (see the *Jenkins Manage Nodes page* screenshot).
     This will take you to the next page, as shown in the following screenshot:'
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要启用/禁用有关每个节点显示的信息量，点击配置链接（请参阅*Jenkins 管理节点页面*截图）。这将带您前往下一页，如下截图所示：
 - en: '![](img/8624581a-3562-4e27-89cb-538d2bfb5536.png)'
+  id: totrans-30
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8624581a-3562-4e27-89cb-538d2bfb5536.png)'
 - en: Preventive Node Monitoring options
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 预防性节点监控选项
 - en: Uncheck/Check the relevant options to disable/enable them. The Free Space Threshold option
     is important. If the amount of Free Disk Space and Free Temp Space goes below
     the specified value (by default it's set to `1GB`), then the nodes go offline.
     This prevents the Jenkins pipeline from running on slaves that have run out of
     disk space and eventually failing.
+  id: totrans-32
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选中/取消选中相关选项以启用/禁用它们。“空闲空间阈值”选项很重要。如果可用磁盘空间和临时空间的空闲量低于指定值（默认为`1GB`），则节点将离线。这可以防止
+    Jenkins 流水线在磁盘空间不足的从机上运行导致最终失败。
 - en: Adding Jenkins slaves – standalone Linux machine/VMs
+  id: totrans-33
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 添加 Jenkins 从机 – 独立的 Linux 机器/虚拟机
 - en: 'In the following section, we will try to add a standalone Linux machine as
     a Jenkins slave. Make sure you have Java installed on your soon-to-be Jenkins
     slave machine. Follow the given steps:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分，我们将尝试将一个独立的 Linux 机器添加为 Jenkins 从机。确保您即将添加的 Jenkins 从机上已安装了 Java。按照以下步骤操作：
 - en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Nodes**.
+  id: totrans-35
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，点击**管理 Jenkins** | **管理节点**。
 - en: 'From the left-hand side menu, click on **New Node**. On the resultant page
     you will be asked to provide a name for your node and choose the type, as shown
     in the following screenshot:'
+  id: totrans-36
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从左侧菜单中，点击**新建节点**。在生成的页面上，您将被要求为您的节点提供一个名称并选择类型，如下截图所示：
 - en: '![](img/d030bc67-453f-4a2f-b62a-b5b86d60d91b.png)'
+  id: totrans-37
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d030bc67-453f-4a2f-b62a-b5b86d60d91b.png)'
 - en: Adding a name and choosing the agent type (type of slave)
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 添加名称和选择代理类型（从机类型）
 - en: 'Add a meaningful name under the **Node name** field and choose the agent type.
     For now, there is only one type of agent to choose from: that is, Permanent Agent.
     These are the types of agents that are mainly physical machines and VMs.'
+  id: totrans-39
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**节点名称**字段下添加一个有意义的名称，并选择代理类型。目前，只有一种类型的代理可供选择：即永久代理。这些代理主要是物理机器和虚拟机。
 - en: Click on the **OK** button to proceed.
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**确定**按钮继续。
 - en: 'On the resultant page, you will see the following options to configure, as
     shown in the following screenshot:'
+  id: totrans-41
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在生成的页面上，您将看到以下配置选项，如下截图所示：
 - en: '![](img/7808491f-1b30-4647-85e2-acb14ccc6416.png)'
+  id: totrans-42
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7808491f-1b30-4647-85e2-acb14ccc6416.png)'
 - en: Jenkins slave configuration
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从机配置
 - en: 'Let''s see them one by one:'
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们逐一查看它们：
 - en: We already used the Name field to give a name to our Jenkins slave.
+  id: totrans-45
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们已经使用了“名称”字段为我们的 Jenkins 从机命名。
 - en: 'Use the Description field to add some notes about the Jenkins slave: for example,
     purpose, type, what it can build or test, and tools installed.'
+  id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用“描述”字段添加有关 Jenkins 从机的一些注释：例如，用途、类型、可构建或测试的内容以及已安装的工具。
 - en: The # of executors field is used to describe the number of parallel builds a
     Jenkins slave (agent) is allowed to run. Choosing a value greater than `1`, say
     `3`, will allow the Jenkins slave to run three builds in parallel. This could
     also result in each build taking more time than usual. Choose wisely.
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: “执行器数量”字段用于描述 Jenkins 从机（代理）被允许同时运行的平行构建数量。选择大于`1`的值，比如`3`，将允许 Jenkins 从机并行运行三个构建。这可能导致每个构建所需时间比平常长。请明智选择。
 - en: The Remote root directory field is used to define a directory path on the Jenkins
     slave that will serve as a dedicated workspace for Jenkins to perform build activities.
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 远程根目录字段 用于定义 Jenkins 从机上的目录路径，该路径将作为 Jenkins 执行构建活动的专用工作空间。
 - en: The Labels field is the most important. You can add multiple labels (separated
     by a space) to your Jenkins slave. In order to run a pipeline on a particular
     slave you will use its label, as shown in the preceding screenshot. We have added
     a `maven-build-1` label, which says it's a Jenkins slave to build a Maven project.
+  id: totrans-49
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 标签字段 是最重要的。您可以向 Jenkins 从机添加多个标签（用空格分隔）。为了在特定的从机上运行流水线，您将使用其标签，如前面的屏幕截图所示。我们添加了一个
+    `maven-build-1` 标签，表示它是一个 Jenkins 从机用于构建 Maven 项目。
 - en: 'The Usage field is used to define how Jenkins schedules build on this node.
     It contains two options, as follows:'
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用字段 用于定义 Jenkins 如何在此节点上安排构建。它包含两个选项，如下所示：
 - en: Use this node as much as possible: This is the default option. This mode makes
     the current Jenkins slave open to all the pipelines that haven't been configured
     to run on a specific Jenkins slave.
+  id: totrans-51
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 尽可能使用此节点：这是默认选项。此模式使当前 Jenkins 从机对所有未配置为在特定 Jenkins 从机上运行的流水线开放。
 - en: Only build jobs with label expressions matching this node: In this mode, Jenkins
     will only build a project on this node when that project is restricted to certain
     nodes using a label expression, and that expression matches this node's name and/or
     labels.
+  id: totrans-52
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 仅构建与该节点匹配标签表达式的作业：在此模式下，Jenkins 将仅在此节点上构建项目，当该项目被限制在特定节点上使用标签表达式，并且该表达式与此节点的名称和/或标签匹配时。
 - en: 'The Launch method field describes how Jenkins starts this Jenkins slave. It
     contains four options, shown as follows. In the following example, we will use
     the SSH method to launch our Jenkins slave. See the *Launching a Jenkins slave
     via SSH* section:'
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动方法字段 描述了 Jenkins 如何启动此 Jenkins 从机。它包含四个选项，如下所示。在下面的示例中，我们将使用 SSH 方法启动我们的 Jenkins
+    从机。请参阅 *通过 SSH 启动 Jenkins 从机* 部分：
 - en: 'Launch agent via Java Web Start: This allows an agent to be launched using
     Java Web Start. In this case, a **Java Network Launch Protocol** (**JNLP**) file
     must be opened on the agent machine, which will establish a TCP connection to
     the Jenkins master. If you have enabled security via the Configure Global Security
     page, you can customize the port on which the Jenkins master will listen for incoming
     JNLP agent connections.'
+  id: totrans-54
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 Java Web Start 启动代理：这允许使用 Java Web Start 启动代理。在这种情况下，必须在代理机器上打开一个 Java 网络启动协议（JNLP）文件，该文件将建立到
+    Jenkins 主机的 TCP 连接。如果您通过配置全局安全页面启用了安全性，您可以自定义 Jenkins 主机将监听传入 JNLP 代理连接的端口。
 - en: 'Launch agent via execution of command on the master: This starts an agent by
     having Jenkins execute a command from the master. Use this when the master is
     capable of remotely executing a process on another machine, for example, via SSH
     or **remote shell** (**RSH**).'
+  id: totrans-55
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过在主机上执行命令来启动代理：这通过让 Jenkins 从主机执行一个命令来启动一个代理。当主机能够在另一台机器上远程执行进程时，例如，通过 SSH
+    或远程 shell（RSH）时，使用此选项。
 - en: 'Launch slave agents via SSH: This starts a slave by sending commands over a
     secure SSH connection. The slave needs to be reachable from the master, and you
     will have to supply an account that can log in on the target machine. No root
     privileges are required.'
+  id: totrans-56
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 SSH 启动从机代理：这通过安全的 SSH 连接发送命令来启动从机代理。从机需要从主机可达，并且您将需要提供一个可以登录目标机器的帐户。不需要 root
+    权限。
 - en: 'Let Jenkins control this Windows slave as a Windows service: This starts a
     Windows slave by a remote management facility built into Windows. It is suitable
     for managing Windows slaves. Slaves need to be IP reachable from the master.'
+  id: totrans-57
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 让 Jenkins 作为 Windows 服务控制此 Windows 从机：这通过内置到 Windows 中的远程管理设施启动 Windows 从机。适用于管理
+    Windows 从机。从机需要从主机可达。
 - en: 'The Availability field defines how Jenkins starts, stops, and uses the Jenkins
     slaves. It has three options, as follows:'
+  id: totrans-58
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 可用性字段定义了 Jenkins 如何启动、停止和使用 Jenkins 从机。它有三个选项，如下所示：
 - en: 'Keep this agent online as much as possible: In this mode, Jenkins will keep
     this agent online as much as possible. If the agent goes offline, for example,
     due to a temporary network failure, Jenkins will periodically attempt to restart
     it.'
+  id: totrans-59
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 尽可能保持此代理在线：在此模式下，Jenkins 将尽可能保持此代理在线。如果代理下线，例如，由于临时网络故障，Jenkins 将定期尝试重新启动它。
 - en: 'Take this agent online and offline at specific times: In this mode, Jenkins
     will bring this agent online at the scheduled time(s), remaining online for a
     specified amount of time. If the agent goes offline while it is scheduled to be
@@ -303,124 +430,177 @@
     it will be taken offline. If Keep online while builds are running is checked,
     and the agent is scheduled to be taken offline, Jenkins will wait for any builds
     that may be in progress to be completed.'
+  id: totrans-60
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在特定时间在线和离线此代理：在此模式下，Jenkins 将在预定时间将此代理上线，保持在线一段指定时间。如果代理在预定上线时间内离线，Jenkins 将定期尝试重新启动它。在此代理在线时间达到“预定上线时间”字段指定的分钟数后，它将被下线。如果选中了“在构建运行时保持在线”复选框，并且预定将代理下线，Jenkins
+    将等待正在进行的任何构建完成。
 - en: 'Take this agent online when in demand, and offline when idle: In this mode,
     Jenkins will bring this agent online if there is demand, that is, if there are
     queued builds that meet the following criteria: They have been in the queue for
     at least the specified In demand delay time period'
+  id: totrans-61
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 当需求时上线此代理，并在空闲时下线：在此模式下，如果有需求，即如果有排队构建符合以下条件：它们至少已在队列中等待指定的需求延迟时间段
 - en: They can be executed by this agent (for example, have a matching label expression)
+  id: totrans-62
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它们可以由此代理执行（例如，具有匹配的标签表达式）
 - en: 'This agent will be taken offline if:'
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果：
 - en: There are no active builds running on this agent
+  id: totrans-64
   prefs:
   - PREF_OL
   - PREF_OL
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 此代理上没有正在运行的活动构建
 - en: This agent has been idle for at least the specified Idle delay time period
+  id: totrans-65
   prefs:
   - PREF_IND
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 此代理至少已处于指定的空闲延迟时间段中空闲
 - en: Passing environment variables to Jenkins slaves
+  id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 将环境变量传递给 Jenkins 的节点
 - en: 'Follow the given steps to pass the environment variables:'
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤传递环境变量：
 - en: You will see a section named Node Properties. Using these options, you can pass
     predefined environment variables to the Jenkins slaves and tools locations.
+  id: totrans-68
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将看到一个名为节点属性的部分。使用这些选项，你可以将预定义的环境变量传递给 Jenkins 的节点和工具位置。
 - en: 'As shown in the following screenshot, you can pass environment variables to
     the Jenkins slaves. It is possible to pass multiple environment variables (by
     clicking on the **Add** button). These environment variables are available to
     the Jenkins pipeline during its execution:'
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如下图所示，你可以将环境变量传递给 Jenkins 的节点。可以传递多个环境变量（通过点击**添加**按钮）。这些环境变量在 Jenkins 管道执行期间可用：
 - en: '![](img/5c88759c-f83e-4644-bbf0-be08e2a3dbdc.png)'
+  id: totrans-70
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5c88759c-f83e-4644-bbf0-be08e2a3dbdc.png)'
 - en: Passing environment variables to the Jenkins slaves
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: 将环境变量传递给 Jenkins 的节点
 - en: With the advent of *Pipeline as Code* feature in Jenkins, it is possible to
     define and use environment variables right within the Jenkins pipeline code (pipeline
     script/Jenkinsfile). Therefore, the option of defining environment variables (as
     demonstrated in the preceding screenshot) become less significant.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着 Jenkins 中 *Pipeline as Code* 功能的推出，可以在 Jenkins 管道代码（管道脚本/Jenkinsfile）中定义和使用环境变量。因此，定义环境变量选项（如前面的截图所示）变得不太重要。
 - en: Passing tools' locations to Jenkins slaves
+  id: totrans-73
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 将工具位置传递给 Jenkins 的节点
 - en: 'As shown in the following screenshot, you can specify the location of certain
     tools on the Jenkins slave, overriding the global configuration:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 如下图所示，你可以指定 Jenkins 节点上某些工具的位置，覆盖全局配置：
 - en: '![](img/6b6704f0-5295-4c5d-b77d-53f98ce2425c.png)'
+  id: totrans-75
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6b6704f0-5295-4c5d-b77d-53f98ce2425c.png)'
 - en: Passing tools' locations to the Jenkins slaves
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 将工具位置传递给 Jenkins 的节点
 - en: Launching a Jenkins slave via SSH
+  id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 SSH 启动 Jenkins 节点代理
 - en: 'To launch the slave via SSH, follow these steps:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 要通过 SSH 启动节点代理，请按照以下步骤：
 - en: When you choose the Launch slave agents via SSH option, you are presented with
     options, as shown in the following screenshot.
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 当你选择通过 SSH 启动节点代理选项时，会出现以下选项，如下图所示。
 - en: The Host field is where you can define the IP address or the hostname of the
     Jenkins slave machine.
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 主机字段是你可以定义 Jenkins 节点代理机器的 IP 地址或主机名的地方。
 - en: 'The Credentials field allows you to choose the relevant credentials saved inside
     Jenkins to authenticate the Jenkins slave. To create a new credential, click on
     the Add button beside the Credentials field (create a credential of the Kind:
     Username with password):'
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 凭据字段允许你选择保存在 Jenkins 内的相关凭据，以验证 Jenkins 节点代理。要创建新凭据，请点击凭据字段旁边的“添加”按钮（创建一个用户名和密码类型的凭据）：
 - en: '![](img/d4fa369b-876b-41e3-8c2b-35269b125a3d.png)'
+  id: totrans-82
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d4fa369b-876b-41e3-8c2b-35269b125a3d.png)'
 - en: Configure Launch slave agent via SSH properties
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置通过 SSH 属性启动从属代理
 - en: The user that you use to authenticate the Jenkins slave should have read/write
     permissions for the directory path defined under the Remote root directory field.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 您用于验证 Jenkins 从属代理的用户应该对远程根目录字段下定义的目录路径具有读/写权限。
 - en: 'The last option, Host Key Verification Strategy, defines how Jenkins verifies
     the SSH key presented by the remote host while connecting. This option is valid
     only when using credentials of the Kind: SSH username with private key. There
     are four options available, as follows:'
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 最后一个选项，主机密钥验证策略，定义了 Jenkins 在连接时验证远程主机呈现的 SSH 密钥的方式。此选项仅在使用以下凭据时有效：种类：SSH 用户名与私钥。有四个可用选项，如下所示：
 - en: 'Known hosts file Verification Strategy: This checks the `known_hosts` file
     (`~/.ssh/known_hosts`) for the user Jenkins is executing under, to see if an entry
     exists that matches the current connection. This method does not make any updates
@@ -428,1118 +608,1669 @@
     expects someone with suitable access to the appropriate user account on the Jenkins
     master to update the file as required, potentially using the `ssh hostname` command
     to initiate a connection and update the file appropriately.'
+  id: totrans-86
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 已知主机文件验证策略：这将检查用户 Jenkins 在其下执行的 `known_hosts` 文件（`~/.ssh/known_hosts`），以查看是否存在与当前连接匹配的条目。此方法不会对
+    `known_hosts` 文件进行任何更新，而是将文件用作只读源，并期望拥有适当访问权限的人员根据需要更新文件，可能使用 `ssh 主机名` 命令启动连接并适当地更新文件。
 - en: 'Manually provide key Verification Strategy: This checks that the key provided
     by the remote host matches the key set by the user who configured this connection.'
+  id: totrans-87
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 手动提供密钥验证策略：这检查远程主机提供的密钥是否与配置此连接的用户设置的密钥匹配。
 - en: 'Known trusted key Verification Strategy: This checks that the remote key matches
     the key currently marked as trusted for this host. Depending on the configuration,
     the key will be automatically trusted for the first connection, or an authorized
     user will be asked to approve the key. An authorized user will be required to
     approve any new key that gets presented by the remote host.'
+  id: totrans-88
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 已知受信任密钥验证策略：这将检查远程密钥是否与当前为此主机标记为受信任的密钥匹配。根据配置，密钥将自动受信任于第一次连接，或者将要求授权用户批准该密钥。将要求授权用户批准远程主机呈现的任何新密钥。
 - en: 'Non verifying Verification Strategy: This does not perform any verification
     of the SSH key presented by the remote host, allowing all connections regardless
     of the key they present.'
+  id: totrans-89
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 无验证验证策略：这不对远程主机呈现的 SSH 密钥执行任何验证，允许所有连接，而不管它们呈现的密钥是什么。
 - en: Once you are done configuring all the options, click on the Save button.
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦您完成了所有选项的配置，请单击保存按钮。
 - en: More about the active Jenkins slave
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 关于活动 Jenkins 从属代理的更多信息
 - en: 'In the following section, we will take a look at the various other configurable
     options available to us for the Jenkins slave agent that we have just added. Jenkins
     also provides a lot of general information about its slaves that we will see here.
     Follow these steps:'
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分，我们将看看我们刚刚添加的 Jenkins 从属代理可用的各种其他可配置选项。Jenkins 还提供了关于其从属代理的许多常规信息，我们将在这里看到。按照以下步骤：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Nodes.
+  id: totrans-93
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，单击管理 Jenkins | 管理节点。
 - en: On the right-hand side you will also see a table showing the list of available
     Jenkins slaves. New to the list will be our newly added Jenkins slave.
+  id: totrans-94
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在右侧，您还将看到一个表格，其中显示了可用的 Jenkins 从属代理列表。新添加到列表中的是我们新添加的 Jenkins 从属代理。
 - en: Click on the Jenkins slave name to access its configurations and metadata.
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击 Jenkins 从属代理名称以访问其配置和元数据。
 - en: 'On the resultant page (Jenkins slave Status page), on the left-hand side menu
     you will see a few options, as shown in the following screenshot:'
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面（Jenkins 从属代理状态页面）上，您将在左侧菜单中看到一些选项，如下图所示：
 - en: '![](img/0110ad53-fefb-415b-b8c1-07a7259ca3b2.png)'
+  id: totrans-97
   prefs: []
   type: TYPE_IMG
+  zh: '![img/0110ad53-fefb-415b-b8c1-07a7259ca3b2.png](img/0110ad53-fefb-415b-b8c1-07a7259ca3b2.png)'
 - en: Jenkins slave page
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从属代理页面
 - en: Most of the preceding links (from the preceding screenshot) are self-explanatory.
     However, let's look at some of them in detail.
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 大多数前述链接（来自前述屏幕截图）是不言自明的。但是，让我们详细查看其中一些。
 - en: 'The Log link is where you will find all the logs with respect to the Jenkins
     slave. After adding a Jenkins slave, if it does not come online, the Log is where
     you need to look. Authentication issues, permission issues, and everything else
     while connecting to the Jenkins slaves gets listed here. See the following screenshot:'
+  id: totrans-100
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 日志链接是您将找到与 Jenkins 从属节点相关的所有日志的地方。在添加 Jenkins 从属节点后，如果它没有上线，您需要查看日志。连接到 Jenkins
+    从属节点时遇到的认证问题、权限问题以及其他所有问题都会在此列出。请参阅以下屏幕截图：
 - en: '![](img/75e9461b-266b-4728-9ae9-199714b159f0.png)'
+  id: totrans-101
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/75e9461b-266b-4728-9ae9-199714b159f0.png)'
 - en: Jenkins slave logs
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从属节点日志
 - en: 'The System Information link will show you most of the system information about
     the respective Jenkins slave, such as System Properties, and Environment Variables.
     See the preceding screenshot. You won''t be visiting here frequently. Nevertheless,
     it''s useful when debugging build errors caused due to system tools, environment
     variables, and so on:'
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 系统信息链接将向您显示有关相应 Jenkins 从属节点的大多数系统信息，例如系统属性和环境变量。请参阅上述屏幕截图。您不会经常访问此处。尽管如此，在调试由于系统工具、环境变量等引起的构建错误时，这很有用：
 - en: '![](img/13597da5-9afd-4d48-8e55-a820df9d3f41.png)'
+  id: totrans-104
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/13597da5-9afd-4d48-8e55-a820df9d3f41.png)'
 - en: Jenkins slave System Information
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从属节点系统信息
 - en: The Build History link will show you a timeline of all the builds that were
     performed on the respective Jenkins slave.
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建历史链接将向您显示在相应的 Jenkins 从属节点上执行的所有构建的时间线。
 - en: 'On the Jenkins slave Status page, you will see the labels that are attached
     to the respective Jenkins slave and, also, information about the projects that
     are associated with the following Jenkins slave. See the following screenshot:'
+  id: totrans-107
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 从属节点状态页面上，您将看到附加到相应 Jenkins 从属节点的标签，以及与以下 Jenkins 从属节点关联的项目的信息。请参阅以下屏幕截图：
 - en: '![](img/3baed5fb-2918-44a3-8754-16f6c407c07f.png)'
+  id: totrans-108
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3baed5fb-2918-44a3-8754-16f6c407c07f.png)'
 - en: Jenkins slave Status page
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从属节点状态页面
 - en: 'There is an option to make the Jenkins slave temporarily offline by clicking
     on the Mark this node temporarily offline button. When you click on the button,
     you will be asked to add a note (optional) before taking the Jenkins slave offline:'
+  id: totrans-110
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 有一个选项可以通过点击“将此节点暂时脱机”按钮将 Jenkins 从属节点临时脱机。当您点击该按钮时，将会要求您在将 Jenkins 从属节点脱机之前添加一个注释（可选）：
 - en: '![](img/a2b42a63-8020-4717-b83e-0b5afd1ab36a.png)'
+  id: totrans-111
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a2b42a63-8020-4717-b83e-0b5afd1ab36a.png)'
 - en: Making a Jenkins slave offline
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 使 Jenkins 从属节点脱机
 - en: 'To bring the offline node back online, from the Jenkins Status page, click
     on the Bring this node back online button:'
+  id: totrans-113
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要将脱机节点重新上线，请从 Jenkins 状态页面上点击“使此节点重新上线”按钮：
 - en: '![](img/338fb9ee-1fab-4f4e-a7e9-7e412e0fdf7f.png)'
+  id: totrans-114
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/338fb9ee-1fab-4f4e-a7e9-7e412e0fdf7f.png)'
 - en: Bringing a Jenkins slave online
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 启动 Jenkins 从属节点
 - en: Adding Jenkins slaves – standalone Windows machine/VMs
+  id: totrans-116
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 添加 Jenkins 从属节点 – 独立的 Windows 机器/虚拟机
 - en: 'In the following section, we will try to add a standalone Windows machine as
     a Jenkins slave. Make sure you have Java installed on your soon-to-be Jenkins
     slave machine. Follow the given steps:'
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 在以下部分，我们将尝试将独立的 Windows 机器添加为 Jenkins 从属节点。确保您的即将成为 Jenkins 从属节点的机器上已安装了 Java。按照以下步骤操作：
 - en: 'From the left-hand side menu, click on New Node. On the resultant page, you
     will be asked to provide a name for your node and choose the type, as shown in
     the following screenshot:'
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从左侧菜单中，点击“新建节点”。在生成的页面上，您将被要求为您的节点提供名称并选择类型，如下面的屏幕截图所示：
 - en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Nodes**.
+  id: totrans-119
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，点击**管理 Jenkins** | **管理节点**。
 - en: '![](img/368c6f20-7c9f-4c0b-bfff-a130f5eb8508.png)'
+  id: totrans-120
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/368c6f20-7c9f-4c0b-bfff-a130f5eb8508.png)'
 - en: Adding a name and choosing the agent type (type of slave)
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 添加名称并选择代理类型（从属类型）
 - en: Add a meaningful name under the Node name field and choose the agent type as
     Permanent Agent. These are the types of agents that are mainly physical machines
     and VMs. Also, there is an option to clone an existing Jenkins slave. To do so,
     choose the Copy Existing Node option and under the Copy from field, enter the
     name of the Jenkins slave source.
+  id: totrans-122
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在“节点名称”字段下添加有意义的名称，并将代理类型选择为永久代理。这些代理类型主要是物理机器和虚拟机。还有一种选项可以克隆现有的 Jenkins 从属节点。要这样做，请选择“复制现有节点”选项，并在“从字段”下输入
+    Jenkins 从属节点源的名称。
 - en: In the following example however, we will choose the Permanent Agent option.
+  id: totrans-123
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 然而，在以下示例中，我们将选择永久代理选项。
 - en: Click on the OK button to proceed.
+  id: totrans-124
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“确定”按钮继续。
 - en: 'On the resultant page, you will see the following options to configure, as
     shown in the following screenshot. We have already seen them before:'
+  id: totrans-125
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在生成的页面上，您将看到以下配置选项，如下面的屏幕截图所示。我们已经在之前看过它们：
 - en: '![](img/a40ecb00-809b-4338-8daf-86bcbd42700e.png)'
+  id: totrans-126
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a40ecb00-809b-4338-8daf-86bcbd42700e.png)'
 - en: Jenkins slave configurations
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从节点配置
 - en: 'Since this is a Windows build agent, there are two ways we can launch the Jenkins
     slave, as shown here:'
+  id: totrans-128
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 由于这是一个 Windows 构建代理，我们有两种方式可以启动 Jenkins 从节点，如下所示：
 - en: 'Launch agent via Java Web Start: This allows an agent to be launched using
     Java Web Start. In this case, a JNLP file must be opened on the agent machine,
     which will establish a TCP connection to the Jenkins master. If you have enabled
     security via the Configure Global Security page, you can customize the port on
     which the Jenkins master will listen for incoming JNLP agent connections.'
+  id: totrans-129
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过 Java Web Start 启动代理：这允许使用 Java Web Start 启动代理。在这种情况下，必须在代理机器上打开一个 JNLP 文件，该文件将建立到
+    Jenkins 主服务器的 TCP 连接。如果您通过配置全局安全性页面启用了安全性，您可以自定义 Jenkins 主服务器将监听传入 JNLP 代理连接的端口。
 - en: 'Let Jenkins control this Windows slave as a Windows service: This starts a
     Windows slave by a remote management facility built into Windows. It is suitable
     for managing Windows slaves. Slaves need to be IP reachable from the master.'
+  id: totrans-130
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 让 Jenkins 作为 Windows 服务控制此 Windows 从节点：这将通过 Windows 内置的远程管理功能启动 Windows 从节点。适用于管理
+    Windows 从节点。从节点需要从主服务器可达的 IP。
 - en: Launching a Jenkins slave via Java Web Start
+  id: totrans-131
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 Java Web Start 启动 Jenkins 从节点
 - en: In the following section, we will learn how to launch a Jenkins slave on Windows
     using the Java Web Start method.
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一节中，我们将学习如何使用 Java Web Start 方法在 Windows 上启动 Jenkins 从节点。
 - en: For the Launch method field, choose Launch agent via Java Web Start.
+  id: totrans-133
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于 启动方法 字段，请选择通过 Java Web Start 启动代理。
 - en: Click on the Save button.
+  id: totrans-134
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击保存按钮。
 - en: From the Jenkins Manage Nodes page, click on the Jenkins slave name. In our
     example it's `standalone-windows-slave`.
+  id: totrans-135
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 管理节点页面，点击 Jenkins 从节点名称。在我们的示例中，它是`standalone-windows-slave`。
 - en: 'On the resultant page (Jenkin slave Status page), you will see the following
     options, as shown here:'
+  id: totrans-136
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面（Jenkins 从节点状态页面）上，您将看到以下选项，如下所示：
 - en: '![](img/e759d255-6a0c-4490-b307-4fe948e361f4.png)'
+  id: totrans-137
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e759d255-6a0c-4490-b307-4fe948e361f4.png)'
 - en: Jenkins slave connection method (Java Web Start)
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从节点连接方法（Java Web Start）
 - en: Do nothing on the Jenkins server.
+  id: totrans-139
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 服务器上不执行任何操作。
 - en: Now, log in to your prospective Jenkins slave machine (Windows) and open the
     Jenkins dashboard.
+  id: totrans-140
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，登录到您准备用作 Jenkins 从节点的机器（Windows）并打开 Jenkins 仪表板。
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Nodes.
+  id: totrans-141
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板，点击管理 Jenkins | 管理节点。
 - en: From the Jenkins Manage Nodes page, click on the Jenkins slave name. In our
     example it's `standalone-windows-slave`.
+  id: totrans-142
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 管理节点页面，点击 Jenkins 从节点名称。在我们的示例中，它是`standalone-windows-slave`。
 - en: Now, either run the command, as shown in the following screenshot, or click
     on the Launch button.
+  id: totrans-143
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，要么按照以下截图中所示运行命令，要么点击启动按钮。
 - en: 'If you choose to click on the Launch button, you will see the following pop-up
     window, as shown in the following screenshot:'
+  id: totrans-144
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果选择点击启动按钮，则会看到以下弹出窗口，如下截图所示：
 - en: '![](img/785440f2-11d0-4324-9932-0b72cfbad081.png)'
+  id: totrans-145
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/785440f2-11d0-4324-9932-0b72cfbad081.png)'
 - en: Opening the slave-agent.jnlp file
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 打开 slave-agent.jnlp 文件
 - en: Choose as the Open with option the Java(TM) Web Start Launcher (default) option,
     and click on the OK button.
+  id: totrans-147
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择 打开方式 选项为 Java(TM) Web Start Launcher（默认）选项，然后点击 确定按钮。
 - en: 'You will get another pop-up window, asking you to confirm that you would like
     to run this application. Click on Run, as shown in the following screenshot:'
+  id: totrans-148
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您将收到另一个弹出窗口，询问您是否希望运行此应用程序。如下截图所示，点击运行：
 - en: '![](img/ecd49b99-5d32-45cd-9d03-8d5bfcb3c875.png)'
+  id: totrans-149
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ecd49b99-5d32-45cd-9d03-8d5bfcb3c875.png)'
 - en: Running the Jenkins Remoting Agent
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行 Jenkins 远程代理
 - en: 'Finally, you will see a small window showing the Jenkins slave connection status
     as Connected, as shown in the following screenshot:'
+  id: totrans-151
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 最后，您将看到一个小窗口显示 Jenkins 从节点连接状态为已连接，如下截图所示：
 - en: '![](img/72c099b7-890c-484d-ab55-334c0e420c1a.png)'
+  id: totrans-152
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/72c099b7-890c-484d-ab55-334c0e420c1a.png)'
 - en: Jenkins slave agent window
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从节点代理窗口。
 - en: Your Jenkins slave (Windows) is now connected. To make it a Windows service,
     click on File (previous screenshot), and choose Install as a service.
+  id: totrans-154
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您的 Jenkins 从节点（Windows）现在已连接。要将其作为 Windows 服务，点击文件（上一张截图），然后选择安装为服务。
 - en: 'Open the Run utility and give the command `services.msc` to open the Windows
     Services utility. In the list of services, you will find the Jenkins slave agent
     service, as shown in the following screenshot:'
+  id: totrans-155
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开运行实用程序并输入命令`services.msc`以打开 Windows 服务实用程序。在服务列表中，您会发现 Jenkins 从节点代理服务，如下截图所示：
 - en: '![](img/7276900d-8174-46d6-bd08-9d8ae475fddd.png)'
+  id: totrans-156
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7276900d-8174-46d6-bd08-9d8ae475fddd.png)'
 - en: Jenkins slave listed as a Windows service
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从节点列为 Windows 服务。
 - en: Right-click on the Jenkins slave Windows service and choose Properties.
+  id: totrans-158
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 右键单击 Jenkins 从机 Windows 服务，选择属性。
 - en: 'In the Properties window, go to the Log On tab. Under the Log on as section,
     choose the This account option, and provide the administrator account details
     (a user with admin privileges on the Jenkins slave machine), as shown in the following
     screenshot:'
+  id: totrans-159
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在属性窗口中，转到*登录*选项卡。在*登录为*部分下，选择*此账户*选项，并提供管理员账户的详细信息（在 Jenkins 从机上具有管理员特权的用户），如下截图所示：
 - en: '![](img/5a306aab-9b75-4ce0-8af3-a1e674f00289.png)'
+  id: totrans-160
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5a306aab-9b75-4ce0-8af3-a1e674f00289.png)'
 - en: Jenkins slave service properties
+  id: totrans-161
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 从机服务属性
 - en: Your Jenkins slave (on Windows) is now installed.
+  id: totrans-162
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您的 Jenkins 从机（Windows 上）现已安装。
 - en: Adding Jenkins slaves – Docker containers
+  id: totrans-163
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 添加 Jenkins 从机 - Docker 容器
 - en: In the following section, we will learn how to install and configure the Docker
     plugin that will allow us to spawn on-demand Jenkins slaves (Docker containers)
     from a CI pipeline. The Docker containers are started by the CI pipeline, and
     once the build is done, they are destroyed. In the following section, we will
     only see the configuration part. It is in the next chapter that we will see this
     process in action.
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的部分中，我们将学习如何安装和配置 Docker 插件，该插件将允许我们从 CI 流水线生成按需的 Jenkins 从机（Docker 容器）。
+    Docker 容器由 CI 流水线启动，一旦构建完成，它们将被销毁。在接下来的部分中，我们只会看到配置部分。在下一章中，我们将看到这个过程的实际运行。
 - en: Prerequisites
+  id: totrans-165
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 先决条件
 - en: 'Before we begin, make sure you have the following things ready:'
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们开始之前，请确保您准备好以下内容：
 - en: 'A Jenkins server running on any of the following platforms: Docker, standalone,
     cloud, VM, servlet container, and so on. (refer to [Chapter 2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml), *Installing
     Jenkins*).'
+  id: totrans-167
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在以下任一平台上运行 Jenkins 服务器：Docker、独立、云、虚拟机、servlet 容器等（参考[第二章](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml)，*安装
+    Jenkins*）。
 - en: Your Jenkins server should have access to the internet. This is necessary to
     download and install plugins.
+  id: totrans-168
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 您的 Jenkins 服务器应该有访问互联网的权限。这是下载和安装插件所必需的。
 - en: Your Jenkins server can talk to GitHub using the GitHub plugin. (Refer to the
     *Add GitHub credentials inside Jenkins* and *Configure Webhooks on GitHub from
     Jenkins* sections from [Chapter 3](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml), *The
     New Jenkins*).
+  id: totrans-169
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 您的 Jenkins 服务器可以使用 GitHub 插件与 GitHub 进行交互（请参考[第三章](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml)中的*在
+    Jenkins 中添加 GitHub 凭证*和*从 Jenkins 配置 GitHub 上的 Webhooks*部分， *全新的 Jenkins*）。
 - en: You might also need Java, Git, and Maven configured on your Jenkins server.
     (Refer to the *The new Jenkins pipeline job* subsection under the *The Global
     Tool Configuration page* section of [Chapter 3](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml), *The
     New Jenkins*).
+  id: totrans-170
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 您的 Jenkins 服务器还可能需要配置 Java、Git 和 Maven。（请参考[第三章](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml)中*全局工具配置页面*部分下的*全新
+    Jenkins 流水线任务*子部分， *全新的 Jenkins*）。
 - en: A Docker server.
+  id: totrans-171
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个 Docker 服务器。
 - en: Setting up a Docker server
+  id: totrans-172
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Docker 服务器
 - en: 'To install Docker, you need a machine with any one of the following Ubuntu
     OSes (64-bit): Yakkety Yak 16.10, Xenial Xerus 16.04, or Trusty Tahr 14.04\. Make
     sure `curl` is also installed. Follow the steps given to set up a Docker server.'
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: 要安装 Docker，您需要拥有以下 Ubuntu 操作系统之一（64 位）的计算机：Yakkety Yak 16.10、Xenial Xerus 16.04
+    或 Trusty Tahr 14.04。确保还安装了`curl`。按照给定的步骤设置 Docker 服务器。
 - en: Setting up the repository
+  id: totrans-174
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置仓库
 - en: 'Follow the given steps to set up a repository:'
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下给出的步骤设置仓库：
 - en: 'Execute the following command to let `apt` use a repository:'
+  id: totrans-176
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令让`apt`使用一个仓库：
 - en: '[PRE0]'
+  id: totrans-177
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Add the Docker''s official GPG key using the following command:'
+  id: totrans-178
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令添加 Docker 的官方 GPG 密钥：
 - en: '[PRE1]'
+  id: totrans-179
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Verify that the key ID is exactly `58118E89F3A912897C070ADBF76221572C52609D`,
     using the following command:'
+  id: totrans-180
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 验证密钥 ID 是否完全是`58118E89F3A912897C070ADBF76221572C52609D`，使用以下命令：
 - en: '[PRE2]'
+  id: totrans-181
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'You should see a similar output:'
+  id: totrans-182
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您应该看到类似的输出：
 - en: '[PRE3]'
+  id: totrans-183
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Use the following command to set up a stable repository to download Docker:'
+  id: totrans-184
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令设置一个稳定的仓库来下载 Docker：
 - en: '[PRE4]'
+  id: totrans-185
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: It's recommended to always use the stable version of the repository.
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: 建议始终使用仓库的稳定版本。
 - en: Installing Docker using apt-get
+  id: totrans-187
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 apt-get 安装 Docker
 - en: 'Now that you have set up the repository, perform the following steps to install
     Docker:'
+  id: totrans-188
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在您已经设置好了仓库，请执行以下步骤安装 Docker：
 - en: 'Update the `apt` package index using the following command:'
+  id: totrans-189
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令更新`apt`软件包索引：
 - en: '[PRE5]'
+  id: totrans-190
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'To install the latest version of Docker, execute the following command:'
+  id: totrans-191
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要安装最新版本的 Docker，请执行以下命令：
 - en: '[PRE6]'
+  id: totrans-192
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'However, if you wish to install a specific version of Docker, execute the following
     command:'
+  id: totrans-193
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 然而，如果您希望安装特定版本的 Docker，请执行以下命令：
 - en: '[PRE7]'
+  id: totrans-194
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'This will give you a list of available versions:'
+  id: totrans-195
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这将给出可用版本的列表：
 - en: '[PRE8]'
+  id: totrans-196
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: The output of the preceding command depends on the type of repository configured
     in the previous section, *Setting up the repository*.
+  id: totrans-197
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面命令的输出取决于在前一部分配置的仓库类型，即*设置仓库*。
 - en: 'Next, execute the following command to install the specific version of Docker:'
+  id: totrans-198
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，执行以下命令来安装特定版本的 Docker：
 - en: '[PRE9]'
+  id: totrans-199
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Example: `sudo apt-get -y install docker-engine=1.16.0-0~trusty`
+  id: totrans-200
   prefs: []
   type: TYPE_NORMAL
+  zh: 例子：`sudo apt-get -y install docker-engine=1.16.0-0~trusty`
 - en: 'The `docker` service starts automatically. To verify whether Docker is installed
     and running, run the following command:'
+  id: totrans-201
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`docker`服务会自动启动。要验证 Docker 是否已安装并运行，请运行以下命令：'
 - en: '[PRE10]'
+  id: totrans-202
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: If the preceding command runs without any errors, and you see a `hello world`
     message, it means Docker is installed and running.
+  id: totrans-203
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果前面的命令运行没有任何错误，并且你看到了`hello world`消息，那意味着 Docker 已经安装并运行。
 - en: '[PRE11]'
+  id: totrans-204
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: Installing Docker using a .deb package
+  id: totrans-205
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 .deb 软件包安装 Docker
 - en: For some reason, if you are unable to install Docker using the preceding repository
     method, you can download the `.deb` package.
+  id: totrans-206
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果由于某些原因，你无法使用上述的仓库方法安装 Docker，你可以下载`.deb`包。
 - en: Download the `.deb` package of your choice from [https://apt.dockerproject.org/repo/pool/main/d/docker-engine/](https://apt.dockerproject.org/repo/pool/main/d/docker-engine/).
+  id: totrans-207
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从[https://apt.dockerproject.org/repo/pool/main/d/docker-engine/](https://apt.dockerproject.org/repo/pool/main/d/docker-engine/)下载你选择的`.deb`软件包。
 - en: 'To install the downloaded package, type the following:'
+  id: totrans-208
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要安装下载的软件包，请输入以下内容：
 - en: '[PRE12]'
+  id: totrans-209
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'Verify your Docker installation by running the following command:'
+  id: totrans-210
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行以下命令验证你的 Docker 安装：
 - en: '[PRE13]'
+  id: totrans-211
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: If the preceding command runs without any errors, and you see a `hello world` message,
     it means Docker is installed and running.
+  id: totrans-212
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果前面的命令运行没有任何错误，并且你看到了`hello world`消息，那意味着 Docker 已经安装并运行。
 - en: '[PRE14]'
+  id: totrans-213
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Enabling Docker remote API
+  id: totrans-214
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 启用 Docker 远程 API
 - en: Jenkins (through the Docker plugin) uses the *Docker remote API* to communicate
     with a Docker server. The Docker remote API allows external applications to communicate
     with the Docker server using REST APIs. Docker remote APIs can also be used to
     get information about all the running containers inside the Docker server.
+  id: totrans-215
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins（通过 Docker 插件）使用*Docker 远程 API*与 Docker 服务器进行通信。Docker 远程 API 允许外部应用程序使用
+    REST API 与 Docker 服务器通信。Docker 远程 API 也可以用于获取 Docker 服务器内所有运行的容器的信息。
 - en: To enable the Docker remote API, we need to modify Docker's configuration file.
     Depending on your OS version and the way you have installed Docker on your machine,
     you might need to choose the right configuration file to modify. Shown, as follows,
     are two methods that work on Ubuntu.
+  id: totrans-216
   prefs: []
   type: TYPE_NORMAL
+  zh: 要启用 Docker 远程 API，我们需要修改 Docker 的配置文件。根据你的操作系统版本和在你的计算机上安装 Docker 的方式，你可能需要选择正确的配置文件进行修改。以下是适用于
+    Ubuntu 的两种方法。
 - en: Modifying the docker.conf file
+  id: totrans-217
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 修改 docker.conf 文件
 - en: 'Follow these steps to modify the `docker.conf` file. These configurations are
     important to allow Jenkins to communicate with the Docker host:'
+  id: totrans-218
   prefs: []
   type: TYPE_NORMAL
+  zh: 遵循以下步骤修改 `docker.conf` 文件。这些配置是允许 Jenkins 与 Docker 主机通信的重要配置：
 - en: Log in to your Docker server, make sure you have `sudo` privileges.
+  id: totrans-219
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到你的 Docker 服务器，确保你有`sudo`权限。
 - en: 'Execute the following command to edit the `docker.conf` file:'
+  id: totrans-220
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令来编辑`docker.conf`文件：
 - en: '[PRE15]'
+  id: totrans-221
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: Inside the `docker.conf` file, go to the line containing `DOCKER_OPTS=`.
+  id: totrans-222
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 `docker.conf` 文件中，找到包含 `DOCKER_OPTS=`的行。
 - en: You will find the `DOCKER_OPTS=` variable at two places inside the `docker.conf`
     file. First, in the pre-start script section, and next in the post-start script
     section. Use the `DOCKER_OPTS=` variable under the pre-start script section.
+  id: totrans-223
   prefs: []
   type: TYPE_NORMAL
+  zh: 你会在 `docker.conf` 文件中找到两处包含`DOCKER_OPTS=`变量的地方。首先，在预启动脚本部分，然后在后启动脚本部分。在预启动脚本部分使用`DOCKER_OPTS=`变量。
 - en: 'Set the value of `DOCKER_OPTS` to the following:'
+  id: totrans-224
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将`DOCKER_OPTS`的值设置为以下内容：
 - en: '[PRE16]'
+  id: totrans-225
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: The preceding setting will bind the Docker server to the Unix socket, as well
     as on TCP port `4243`. `0.0.0.0`, which makes the Docker engine accept connections
     from anywhere.
+  id: totrans-226
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前面的设置将将 Docker 服务器绑定到 Unix 套接字，以及 TCP 端口`4243`。`0.0.0.0`，这使得 Docker 引擎接受来自任何地方的连接。
 - en: If you want your Docker server to accept connections from only your Jenkins
     server, then replace `0.0.0.0` with your Jenkins server IP.
+  id: totrans-227
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你希望你的 Docker 服务器仅接受来自你的 Jenkins 服务器的连接，则将`0.0.0.0`替换为你的 Jenkins 服务器 IP。
 - en: 'Restart the Docker server using the following command:'
+  id: totrans-228
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令重新启动 Docker 服务器：
 - en: '[PRE17]'
+  id: totrans-229
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'To check if the configuration has worked, type the following:'
+  id: totrans-230
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要检查配置是否生效，请输入以下内容：
 - en: '[PRE18]'
+  id: totrans-231
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: The preceding command will list all the images present on your Docker server,
     if any.
+  id: totrans-232
   prefs: []
   type: TYPE_NORMAL
+  zh: 前面的命令将列出 Docker 服务器上存在的所有镜像，如果有的话。
 - en: Modifying the docker.service file
+  id: totrans-233
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 修改 docker.service 文件
 - en: 'Follow the given steps to modify the `docker.service` file:'
+  id: totrans-234
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照以下步骤修改`docker.service`文件：
 - en: 'Execute the following command to edit the `docker.service` file:'
+  id: totrans-235
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令编辑`docker.service`文件：
 - en: '[PRE19]'
+  id: totrans-236
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: Inside the `docker.service` file, go to the line containing `ExecStart=`.
+  id: totrans-237
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`docker.service`文件中，转到包含`ExecStart=`的行。
 - en: 'Set the value of `ExecStart=` as shown:'
+  id: totrans-238
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将`ExecStart=`的值设置如下：
 - en: '[PRE20]'
+  id: totrans-239
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: The preceding setting will bind the Docker server to the Unix socket. Furthermore,
     on TCP port `4243`. `0.0.0.0`, it makes the Docker engine accept connections from
     anywhere.
+  id: totrans-240
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述设置将 Docker 服务器绑定到 Unix 套接字。此外，在 TCP 端口`4243`上。`0.0.0.0`，它使 Docker 引擎接受来自任何地方的连接。
 - en: If you want your Docker server to accept connections from only your Jenkins
     server, replace `0.0.0.0` with your Jenkins server IP.
+  id: totrans-241
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您希望您的 Docker 服务器仅接受来自您的 Jenkins 服务器的连接，请将`0.0.0.0`替换为您的 Jenkins 服务器 IP。
 - en: 'Execute the following command to make the Docker daemon notice the modified
     configuration:'
+  id: totrans-242
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令使 Docker 守护进程注意到修改后的配置：
 - en: '[PRE21]'
+  id: totrans-243
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Restart the Docker server using the following command:'
+  id: totrans-244
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令重新启动 Docker 服务器：
 - en: '[PRE22]'
+  id: totrans-245
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'To check whether the configuration has worked, type the following:'
+  id: totrans-246
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要检查配置是否生效，请输入以下内容：
 - en: '[PRE23]'
+  id: totrans-247
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: The preceding command will list all the images present on your Docker server,
     if any.
+  id: totrans-248
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果有的话，上述命令将列出您的 Docker 服务器上存在的所有镜像。
 - en: Installing the Docker plugin
+  id: totrans-249
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Docker 插件
 - en: 'To create Docker containers (build agents) on the fly, we need to install the
     Docker plugin for Jenkins. To achieve this, follow the given steps:'
+  id: totrans-250
   prefs: []
   type: TYPE_NORMAL
+  zh: 要动态创建 Docker 容器（构建代理），我们需要为 Jenkins 安装 Docker 插件。为此，请按照以下步骤操作：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available tab.
     You will be taken to the Jenkins Manage Plugins page.
+  id: totrans-251
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，单击“管理 Jenkins | 管理插件 | 可用”选项卡。您将进入 Jenkins 管理插件页面。
 - en: 'Enter `Docker Plugin` in the Filter field, as shown in the following screenshot:'
+  id: totrans-252
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在过滤字段中输入`Docker Plugin`，如下截图所示：
 - en: '![](img/b75bf3f0-c19e-4feb-88c5-19c5ffffec1a.png)'
+  id: totrans-253
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b75bf3f0-c19e-4feb-88c5-19c5ffffec1a.png)'
 - en: Installing the Docker plugin
+  id: totrans-254
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 Docker 插件
 - en: Select the **Docker Plugin** from the list and click on the **Install without
     restart** button.
+  id: totrans-255
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从列表中选择**Docker 插件**，然后单击**无需重启安装**按钮。
 - en: Restart Jenkins if needed.
+  id: totrans-256
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果需要，请重新启动 Jenkins。
 - en: Configuring the Docker plugin
+  id: totrans-257
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 Docker 插件
 - en: 'Now that we have our Docker plugin installed, let''s configure it:'
+  id: totrans-258
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经安装了 Docker 插件，让我们对其进行配置：
 - en: From the Jenkins dashboard, click Manage Jenkins | Configure System.
+  id: totrans-259
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，单击“管理 Jenkins | 配置系统”。
 - en: Once on the Configure System page, scroll all the way down to the Cloud section
     (see the following screenshot).
+  id: totrans-260
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦进入配置系统页面，请滚动到底部的 Cloud 部分（参见下图）。
 - en: Click on the Add a new cloud button and choose Docker from the available options.
+  id: totrans-261
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“添加新云”按钮，然后从可用选项中选择 Docker。
 - en: On the resultant page, you will find a good number of settings to configure.
+  id: totrans-262
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将找到许多要配置的设置。
 - en: Give your Docker server a name using the Name field.
+  id: totrans-263
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用“名称”字段为您的 Docker 服务器命名。
 - en: Add your Docker server URL under the Docker URL field.
+  id: totrans-264
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Docker URL 字段下添加您的 Docker 服务器 URL。
 - en: 'Click on the Test Connection button to check whether Jenkins can communicate
     with Docker server:'
+  id: totrans-265
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“测试连接”按钮以检查 Jenkins 是否可以与 Docker 服务器通信：
 - en: '![](img/fa494748-28b3-46bb-9054-1aaa218a2273.png)'
+  id: totrans-266
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/fa494748-28b3-46bb-9054-1aaa218a2273.png)'
 - en: Configuring the Docker plugin to talk to the Docker server
+  id: totrans-267
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置 Docker 插件以与 Docker 服务器通信
 - en: At the end of the page, click on the **Apply** and **Save** buttons. We will
     come back here later to make further configurations.
+  id: totrans-268
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在页面底部，单击**应用**和**保存**按钮。稍后我们会再次回到这里进行进一步的配置。
 - en: Creating a Docker image – Jenkins slave
+  id: totrans-269
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建 Docker 镜像 - Jenkins 从属
 - en: 'Enabling the Docker remote API made the communication between Jenkins and the
     Docker server possible. Now we need a Docker image on the Docker server. This
     Docker image will be used by Jenkins to create Docker containers (Jenkins slaves)
     on the fly. To achieve this, follow the steps as shown:'
+  id: totrans-270
   prefs: []
   type: TYPE_NORMAL
+  zh: 启用 Docker 远程 API 使 Jenkins 与 Docker 服务器之间的通信成为可能。现在我们需要在 Docker 服务器上有一个 Docker
+    镜像。Jenkins 将使用此 Docker 镜像动态创建 Docker 容器（Jenkins 从属）。为此，请按照如下步骤操作：
 - en: 'Log in to your Docker server. Give the following command to check the available
     Docker images:'
+  id: totrans-271
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 Docker 服务器。输入以下命令以检查可用的 Docker 镜像：
 - en: '[PRE24]'
+  id: totrans-272
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: 'From the following screenshot, you can see we have two `docker images` (`ubuntu`
     and `hello-world`) already on our Docker server:'
+  id: totrans-273
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从下图中，您可以看到我们的 Docker 服务器上已经有两个`docker images`（`ubuntu`和`hello-world`）：
 - en: '![](img/5f8fffd9-65b6-481d-a65e-4ebf3e152c99.png)'
+  id: totrans-274
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5f8fffd9-65b6-481d-a65e-4ebf3e152c99.png)'
 - en: List the Docker images
+  id: totrans-275
   prefs: []
   type: TYPE_NORMAL
+  zh: 列出 Docker 镜像
 - en: If your Docker server is a freshly backed-up machine, then you will see no images
     at this point.
+  id: totrans-276
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果您的 Docker 服务器是一台刚刚备份的机器，则此时您将看不到任何镜像。
 - en: 'We will build a Docker image for our use from the `ubuntu` Docker image. To
     do so, download the Docker image for `ubuntu` using the following command:'
+  id: totrans-277
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们将从`ubuntu` Docker 镜像构建一个用于我们的用途的 Docker 镜像。为此，请使用以下命令下载`ubuntu`的 Docker 镜像：
 - en: '[PRE25]'
+  id: totrans-278
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: You can find more Docker images for various OSes at [https://hub.docker.com/](https://hub.docker.com/).
+  id: totrans-279
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以在[https://hub.docker.com/](https://hub.docker.com/)找到更多不同操作系统的 Docker 镜像。
 - en: Once the pull gets completed, give the `sudo docker images` command again. Now
     you should see a Docker image for Ubuntu, as shown in the preceding screenshot.
+  id: totrans-280
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 拉取完成后，再次执行`sudo docker images`命令。现在，您应该可以看到一个用于 Ubuntu 的 Docker 镜像，如前面的截图所示。
 - en: 'We will now upgrade our Ubuntu Docker image with all the necessary applications
     that we need to run our build. They are as follows:'
+  id: totrans-281
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，我们将使用我们需要运行构建所需的所有必要应用程序来升级我们的 Ubuntu Docker 镜像。它们如下所示：
 - en: Java JDK (latest)
+  id: totrans-282
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Java JDK（最新版本）
 - en: Git
+  id: totrans-283
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Git
 - en: Maven
+  id: totrans-284
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Maven
 - en: A user account to log in to the Docker container
+  id: totrans-285
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用于登录到 Docker 容器的用户账户
 - en: '`sshd` (to accept an SSH connection)'
+  id: totrans-286
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`sshd`（用于接受 SSH 连接）'
 - en: 'Execute the following command to run a Docker container using the Ubuntu Docker
     image. This will create a container, and open up its bash shell:'
+  id: totrans-287
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令运行 Docker 容器，使用 Ubuntu Docker 镜像。这将创建一个容器，并打开其 bash shell：
 - en: '[PRE26]'
+  id: totrans-288
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: 'Now, install all the required applications as you would do on any normal Ubuntu
     machine. Let''s begin by creating a `jenkins` user:'
+  id: totrans-289
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，安装所有所需的应用程序，就像您在任何普通的 Ubuntu 机器上执行的操作一样。让我们从创建`jenkins`用户开始：
 - en: 'Execute the following command and follow the user creation steps, as shown
     in the following screenshot:'
+  id: totrans-290
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下命令，并按照下图中显示的用户创建步骤进行操作：
 - en: '[PRE27]'
+  id: totrans-291
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: '![](img/6924bed0-dcd8-437e-813a-7457b4bdd3b7.png)'
+  id: totrans-292
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6924bed0-dcd8-437e-813a-7457b4bdd3b7.png)'
 - en: Creating a user
+  id: totrans-293
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建用户
 - en: 'Check the new user using the switch user command:'
+  id: totrans-294
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用切换用户命令检查新用户：
 - en: '[PRE28]'
+  id: totrans-295
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE28]'
 - en: Switch back to the root user by typing `exit`.
+  id: totrans-296
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过键入`exit`切换回根用户。
 - en: 'Next, we will install the SSH server. Execute the following commands in sequence:'
+  id: totrans-297
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，我们将安装 SSH 服务器。按顺序执行以下命令：
 - en: '[PRE29]'
+  id: totrans-298
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE29]'
 - en: 'Next, we will install Git using the following command:'
+  id: totrans-299
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，使用以下命令安装 Git：
 - en: '[PRE30]'
+  id: totrans-300
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE30]'
 - en: 'Install Java JDK using the following command:'
+  id: totrans-301
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令安装 Java JDK：
 - en: '[PRE31]'
+  id: totrans-302
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE31]'
 - en: 'Install Maven using the following command:'
+  id: totrans-303
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用以下命令安装 Maven：
 - en: '[PRE32]'
+  id: totrans-304
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE32]'
 - en: Next, exit the container by typing `exit`.
+  id: totrans-305
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，键入`exit`退出容器。
 - en: We need to save (`commit`) all the changes that we made to our Docker container.
+  id: totrans-306
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们需要保存（`commit`）我们对 Docker 容器所做的所有更改。
 - en: 'Get the `CONTAINER ID` of the container that we worked on recently by listing
     all the inactive containers, as shown in the following screenshot:'
+  id: totrans-307
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过列出所有未活动容器，获取我们最近工作的容器的`CONTAINER ID`，如下图所示：
 - en: '[PRE33]'
+  id: totrans-308
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE33]'
 - en: '![](img/574a41b9-0acc-41e4-b8d2-815bdb493a0a.png)'
+  id: totrans-309
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/574a41b9-0acc-41e4-b8d2-815bdb493a0a.png)'
 - en: List of inactive containers
+  id: totrans-310
   prefs: []
   type: TYPE_NORMAL
+  zh: 未活动容器列表
 - en: 'Note the `CONTAINER ID`, and execute the `commit` command to commit the changes
     that we made to our container, shown as follows:'
+  id: totrans-311
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 注意`CONTAINER ID`，并执行`commit`命令，以提交我们对容器所做的更改，如下所示：
 - en: '[PRE34]'
+  id: totrans-312
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE34]'
 - en: 'We have named the container `maven-build-slave-0.1`, as shown in the following
     screenshot:'
+  id: totrans-313
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如下图所示，我们将容器命名为`maven-build-slave-0.1`：
 - en: '![](img/74b68bd5-87e1-42ee-b84a-2b004a2a1197.png)'
+  id: totrans-314
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/74b68bd5-87e1-42ee-b84a-2b004a2a1197.png)'
 - en: Docker commit command
+  id: totrans-315
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker commit 命令
 - en: Once you have committed the changes, a new Docker image gets created.
+  id: totrans-316
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦您提交了更改，将创建一个新的 Docker 镜像。
 - en: 'Execute the following Docker command to list the images:'
+  id: totrans-317
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行以下 Docker 命令列出镜像：
 - en: '[PRE35]'
+  id: totrans-318
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE35]'
 - en: '![](img/1f4bfdbd-03f3-4e18-856d-46d24a2b123c.png)'
+  id: totrans-319
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1f4bfdbd-03f3-4e18-856d-46d24a2b123c.png)'
 - en: List the Docker images
+  id: totrans-320
   prefs: []
   type: TYPE_NORMAL
+  zh: 列出 Docker 镜像
 - en: You can see our new Docker image, with the name `maven-build-slave-0.1`. We
     will now configure our Jenkins server to use the Docker image to create Jenkins
     slaves (build agents).
+  id: totrans-321
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您可以看到我们的新 Docker 镜像，名称为`maven-build-slave-0.1`。现在，我们将配置我们的 Jenkins 服务器以使用 Docker
+    镜像来创建 Jenkins 从节点（构建代理）。
 - en: Adding Docker container credentials in Jenkins
+  id: totrans-322
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中添加 Docker 容器凭据
 - en: 'Follow the given steps to add credentials inside Jenkins to allow it to talk
     to Docker:'
+  id: totrans-323
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤在 Jenkins 中添加凭据，以允许其与 Docker 通信：
 - en: From the Jenkins dashboard, navigate to Credentials | System | Global credentials
     (unrestricted).
+  id: totrans-324
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板导航到凭据 | 系统 | 全局凭据（无限制）。
 - en: Click on the **Add Credentials** link on the left-hand side menu to create a
     new credential (see the following screenshot).
+  id: totrans-325
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击左侧菜单上的**添加凭据**链接以创建新凭据（请参阅下图）。
 - en: Choose a **Kind** as Username with Password.
+  id: totrans-326
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择`用户名与密码`作为**类型**。
 - en: Leave the Scope field to its default value.
+  id: totrans-327
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将范围字段保留为其默认值。
 - en: Add a username for your Docker image (`jenkins`, as per our example) under the
     Username field.
+  id: totrans-328
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Username 字段下为你的 Docker 镜像添加一个用户名（按照我们的示例，是 `jenkins`）。
 - en: Under the Password field, add the password.
+  id: totrans-329
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Password 字段下，添加密码。
 - en: Add an ID under the ID field, and some description under the Description field.
+  id: totrans-330
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 ID 字段下添加一个 ID，并在描述字段下添加一些描述。
 - en: 'Once done, click on the OK button:'
+  id: totrans-331
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击确定按钮：
 - en: '![](img/798bfc0c-bb19-487e-b92d-161c409f9539.png)'
+  id: totrans-332
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/798bfc0c-bb19-487e-b92d-161c409f9539.png)'
 - en: Create credentials inside Jenkins
+  id: totrans-333
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中创建凭据
 - en: Updating the Docker settings inside Jenkins
+  id: totrans-334
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 更新 Jenkins 中的 Docker 设置
 - en: 'Follow the given steps to update the Docker settings inside Jenkins:'
+  id: totrans-335
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定步骤更新 Jenkins 中的 Docker 设置：
 - en: From the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  id: totrans-336
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板上，点击 Manage Jenkins | Configure System。
 - en: Scroll all the way down to the Cloud section (see the following screenshot).
+  id: totrans-337
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到底部找到 Cloud 部分（见下图）。
 - en: Under the Cloud section, click on the Add Docker Template button and choose
     Docker Template.
+  id: totrans-338
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Cloud 部分，点击添加 Docker 模板按钮，然后选择 Docker 模板。
 - en: 'You will be presented with lots of settings to configure. However, to keep
     this demo simple, let''s stick to the important settings:'
+  id: totrans-339
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将会看到许多设置需要配置。然而，为了保持这个演示简单，让我们专注于重要的设置：
 - en: Under the Docker Image field, enter the name of the Docker image that we created
     earlier. In our case, it's `maven-build-slave-0.1`.
+  id: totrans-340
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Docker Image 字段下，输入我们之前创建的 Docker 镜像的名称。在我们的案例中，它是 `maven-build-slave-0.1`。
 - en: Under the Labels field, add a label. The Docker container will be recognized
     using this label by your Jenkins pipeline. Add a  `docker` label.
+  id: totrans-341
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Labels 字段下，添加一个标签。Jenkins 流水线将使用此标签识别 Docker 容器。添加一个 `docker` 标签。
 - en: The Launch Method should be Docker SSH computer launcher.
+  id: totrans-342
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动方法应该是 Docker SSH 计算机启动器。
 - en: Under the **Credentials** field, choose the credentials that we created to access
     the Docker container.
+  id: totrans-343
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 **Credentials** 字段下，选择我们创建的用于访问 Docker 容器的凭据。
 - en: Make sure the Pull strategy option is set to Never pull.
+  id: totrans-344
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 确保 Pull 策略选项设置为 Never pull。
 - en: Leave the rest of the other options to their default values.
+  id: totrans-345
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余选项保留为默认值。
 - en: 'Once done, click on Apply and then Save:'
+  id: totrans-346
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击应用然后保存：
 - en: '![](img/ebebf3fa-3f71-40b1-a538-c2ee9dddfd4b.png)'
+  id: totrans-347
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ebebf3fa-3f71-40b1-a538-c2ee9dddfd4b.png)'
 - en: Configuring the Docker plugin settings
+  id: totrans-348
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置 Docker 插件设置
 - en: Now your Jenkins server is all set to create Jenkins slaves on demand using
     Docker.
+  id: totrans-349
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在你的 Jenkins 服务器已经设置好了，可以使用 Docker 随需创建 Jenkins 从节点。
 - en: Summary
+  id: totrans-350
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: 'In this chapter, we learned how to add and configure Jenkins slaves on standalone
     Windows and Linux machines (physical/VMs), using two widely used methods: Launching
     Jenkins slave via SSH and Launching Jenkins Slave via Java Web Start. We also
     learned how to install and configure the Docker plugin for Jenkins that allows
     us to create on-demand Docker containers (Jenkins slaves) for our CI.'
+  id: totrans-351
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们学习了如何在独立的 Windows 和 Linux 机器（物理/虚拟机）上添加和配置 Jenkins 从节点，使用了两种广泛使用的方法：通过
+    SSH 启动 Jenkins 从节点和通过 Java Web Start 启动 Jenkins 从节点。我们还学习了如何安装和配置 Jenkins 的 Docker
+    插件，该插件允许我们为 CI 创建按需的 Docker 容器（Jenkins 从节点）。
 - en: In the next chapter, we will learn how to implement continuous integration using
     Jenkins, and we will utilize the distributed build farm using Jenkins Docker containers
     (Jenkins slaves) to perform our CI.
+  id: totrans-352
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将学习如何使用 Jenkins 实现持续集成，并且我们将利用 Jenkins Docker 容器（Jenkins 从节点）来执行我们的
+    CI。

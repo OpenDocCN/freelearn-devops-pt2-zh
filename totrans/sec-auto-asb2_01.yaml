@@ -1,474 +1,714 @@
 - en: Introduction to Ansible Playbooks and Roles
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible Playbooks 和 Roles 介绍
 - en: According to Wikipedia, Ansible is an open source automation engine that automates
     software provisioning, configuration management, and application deployment. But
     you already knew that. This book is about taking the idea of IT automation software
     and applying it to the domain of Information Security Automation.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据维基百科，Ansible 是一个自动化软件配置、配置管理和应用部署的开源自动化引擎。但你已经知道这一点了。这本书是关于将 IT 自动化软件的理念应用于信息安全自动化领域。
 - en: The book will take you through the journey of *security automation* to show
     how Ansible is used in the real world.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书将带领你踏上 *安全自动化* 之旅，展示 Ansible 在现实世界中的应用。
 - en: In this book, we will be automating security-related tasks in a structured,
     modular fashion using a simple human-readable format YAML. Most importantly, what
     you will learn to create will be repeatable. This means once it is done, you can
     focus on fine-tuning, expanding the scope, and so on. The tool ensures that we
     can build and tear down anything, from simple application stacks to simple, but
     extensive, multi-application frameworks working together.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这本书中，我们将以一种结构化、模块化的方式，使用一种简单易读的格式 YAML 自动化执行与安全相关的任务。最重要的是，你将学会创建的内容是可重复的。这意味着一旦完成，你可以专注于微调、扩展范围等。这个工具确保我们可以构建和销毁从简单应用堆栈到简单但广泛的多应用框架一切。
 - en: 'If you have been playing around with Ansible, and in this book we assume you
     have, you would have definitely come across some of the following terms:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你已经玩过 Ansible，我们假设你已经这样做了，那么你肯定遇到了以下一些术语：
 - en: Playbook
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Playbook
 - en: Ansible Modules
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ansible 模块
 - en: YAML
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: YAML
 - en: Roles
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Roles
 - en: Templates (Jinja2)
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 模板（Jinja2）
 - en: Don't worry, we will address all of the aforementioned terms in this chapter.
     Once you are comfortable with these topics, we will move on to covering scheduler
     tools, and then to building security automation playbooks.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 别担心，我们将在本章节中解释所有上述术语。一旦你对这些主题感到舒适，我们将继续覆盖调度器工具，然后转向构建安全自动化 playbooks。
 - en: Ansible terms to keep in mind
+  id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 需记住的 Ansible 术语
 - en: Like all new subjects or topics, it is a good idea to get familiar with the
     terminology of that subject or topic. We will go through some of the Ansible terms
     that we will be using throughout the book, and if at any point you are not able
     to follow, you might want to come back to this chapter and refresh your understanding
     for that particular term.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 像所有新的主题或话题一样，熟悉该主题或话题的术语是一个不错的主意。我们将介绍一些我们将在整本书中使用的 Ansible 术语，如果在任何时候你无法跟上，你可能需要回到这一章节，重新理解特定术语。
 - en: Playbooks
+  id: totrans-13
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Playbooks
 - en: A playbook, in the classic sense, is about offensive and defensive plays in
     football. The players keep a record of the plays (plan of action) in a book, usually
     in the form of a diagram.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 在经典意义上，playbook 是关于足球比赛中的进攻和防守战术的。球员们会记录这些战术（行动计划），通常以图表形式呈现在一本书中。
 - en: In Ansible, a playbook is a series of ordered steps or instructions for an IT
     process. Think of a nicely-written instruction manual that can be read and understood
     by humans and computers alike.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Ansible 中，playbook 是一个IT过程的一系列有序步骤或指令。把它想象成一本可以被人类和计算机同时阅读和理解的精心撰写的说明书。
 - en: In the subsequent chapters, all the automation we will focus on regarding security
     will lead us toward building both simple and complex playbooks.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 在随后的章节中，我们将专注于安全方面的自动化，引导我们构建简单和复杂的 playbooks。
 - en: 'This is what an Ansible playbook command looks like:'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个 Ansible playbook 命令看起来像这样：
 - en: '[PRE0]'
+  id: totrans-18
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Ignore the `-i` flag for now and notice the extension of the playbook file.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 暂时忽略`-i` 标志，并注意 playbook 文件的扩展名。
 - en: 'As stated in [http://docs.ansible.com/ansible/playbooks_intro.html](http://docs.ansible.com/ansible/playbooks_intro.html):'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如 [http://docs.ansible.com/ansible/playbooks_intro.html](http://docs.ansible.com/ansible/playbooks_intro.html)
+    中所述：
 - en: '"Playbooks are expressed in YAML format (see YAML syntax ([http://docs.ansible.com/ansible/YAMLSyntax.html](http://docs.ansible.com/ansible/YAMLSyntax.html)))
     and have a minimum of syntax, which intentionally tries to not be a programming
     language or script, but rather a model of a configuration or a process."'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: '"Playbooks 以 YAML 格式表达（参见 YAML 语法 ([http://docs.ansible.com/ansible/YAMLSyntax.html](http://docs.ansible.com/ansible/YAMLSyntax.html)）,
+    且具有最少的语法，其旨在有意尝试不成为编程语言或脚本，而是一个配置或过程的模型。"'
 - en: Ansible modules
+  id: totrans-22
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible 模块
 - en: Ansible ships with a number of modules (called the **module library**) that
     can be executed directly on remote hosts or through playbooks.Tasks in playbooks
     call modules to do the work.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 随附了一些模块（称为 **模块库**），可以直接在远程主机上执行或通过 playbook 执行。Playbook 中的任务调用模块来完成工作。
 - en: Ansible has many modules, most of which are community contributed and maintained. Core
     modules are maintained by the Ansible core engineering team and will always ship
     with Ansible itself.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 有许多模块，其中大多数是由社区贡献和维护的。核心模块由 Ansible 核心工程团队维护，并将随着 Ansible 一起发布。
 - en: Users can also write their own modules. These modules can control system resources,
     like services, packages, or files (anything really), or handle executing system
     commands.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 用户还可以编写自己的模块。这些模块可以控制系统资源，如服务、软件包或文件（实际上是任何东西），或者处理执行系统命令。
 - en: Here is the list of modules available by Ansible: [http://docs.ansible.com/ansible/latest/modules_by_category.html#module-index](http://docs.ansible.com/ansible/latest/modules_by_category.html#module-index).
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面是 Ansible 提供的模块列表：[http://docs.ansible.com/ansible/latest/modules_by_category.html#module-index](http://docs.ansible.com/ansible/latest/modules_by_category.html#module-index)。
 - en: If you use Dash ([https://kapeli.com/dash](https://kapeli.com/dash)) or Zeal
     ([https://zealdocs.org/](https://zealdocs.org/)), you can download the offline
     version for easy reference.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您使用 Dash ([https://kapeli.com/dash](https://kapeli.com/dash)) 或 Zeal ([https://zealdocs.org/](https://zealdocs.org/))，您可以下载离线版本以便参考。
 - en: Modules can be executed via the command line as well. We will be using modules
     to write all the tasks inside our playbooks. All modules technically return JSON
     format data.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 模块也可以通过命令行执行。我们将使用模块来编写 playbook 中的所有任务。所有模块在技术上都返回 JSON 格式的数据。
 - en: Modules should be idempotent and should avoid making any changes if they detect
     that the current state matches the desired final state. When using Ansible playbooks,
     these modules can trigger *change events* in the form of notifying *handlers*
     to run additional tasks.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 模块应该是幂等的，如果检测到当前状态与期望的最终状态匹配，则应该避免进行任何更改。当使用 Ansible playbook 时，这些模块可以触发 *change
+    events*，以通知 *handlers* 运行额外的任务。
 - en: 'Documentation for each module can be accessed from the command line with the
     `ansible-doc` tool:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 每个模块的文档可以通过命令行工具 `ansible-doc` 访问：
 - en: '[PRE1]'
+  id: totrans-31
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'We can list all the modules available on our host:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以列出主机上所有可用的模块：
 - en: '[PRE2]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'Start the Apache web server on all nodes grouped under `webservers` by executing
     the `httpd` module. Note the use of the `-m` flag:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过执行 `httpd` 模块，在所有节点分组为 `webservers` 下启动 Apache Web 服务器。注意使用了 `-m` 标志：
 - en: '[PRE3]'
+  id: totrans-35
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'This snippet shows the exact same command but inside a playbook in YAML syntax:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个片段展示了完全相同的命令，但是在一个 YAML 语法的 playbook 中：
 - en: '[PRE4]'
+  id: totrans-37
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Each module contains multiple parameters and options, get to know more about
     the features of the modules by looking at their documentation and examples.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 每个模块包含多个参数和选项，通过查看它们的文档和示例来了解模块的特性。
 - en: YAML syntax for writing Ansible playbooks
+  id: totrans-39
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用于编写 Ansible playbook 的 YAML 语法
 - en: Ansible playbooks are written in **YAML**, which stands for **YAML Ain't Markup
     Language**.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible playbook 使用 **YAML** 编写，它代表 **YAML Ain't Markup Language**。
 - en: According to the official document ([http://yaml.org/spec/current.html](http://yaml.org/spec/current.html))[:](http://yaml.org/spec/current.html)
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据官方文档 ([http://yaml.org/spec/current.html](http://yaml.org/spec/current.html))：
 - en: <q>YAML Ain’t Markup Language</q> (abbreviated YAML) is a data serialization
     language designed to be human-friendly and work well with modern programming languages
     for everyday tasks.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: '"YAML Ain''t Markup Language"（缩写为 YAML）是一种设计成对人类友好并且与现代编程语言一起使用的数据序列化语言，用于日常任务。'
 - en: Ansible uses YAML because it is easier for humans to read and write than other
     common data formats, such as XML or JSON. All YAML files (regardless of their
     association with Ansible or not) can optionally begin with `---` and end with
     `...`. This is part of the YAML format and indicates the start and end of a document.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 使用 YAML 是因为它比其他常见的数据格式（如 XML 或 JSON）更易于人类阅读和编写。所有的 YAML 文件（无论它们是否与 Ansible
+    相关）都可以选择以 `---` 开始并以 `...` 结束。这是 YAML 格式的一部分，表示文档的开始和结束。
 - en: YAML files should end with `.yaml` or `.yml`. YAML is case sensitive.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: YAML 文件应该以 `.yaml` 或 `.yml` 结尾。YAML 区分大小写。
 - en: You can also use linters, such as [www.yamllint.com](http://www.yamllint.com),
     or your text editor plugins for linting YAML syntax, which help you to troubleshoot
     any syntax errors and so on.
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还可以使用诸如 [www.yamllint.com](http://www.yamllint.com) 这样的 Linters，或者您的文本编辑器插件来进行
+    YAML 语法的代码检查，这有助于您排除任何语法错误等等。
 - en: 'Here is an example of a simple playbook to showcase YAML syntax from Ansible
     documentation ([http://docs.ansible.com/ansible/playbooks_intro.html#playbook-language-example](http://docs.ansible.com/ansible/playbooks_intro.html#playbook-language-example)):'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里是一个简单 playbook 的示例，展示了来自 Ansible 文档的 YAML 语法（[http://docs.ansible.com/ansible/playbooks_intro.html#playbook-language-example](http://docs.ansible.com/ansible/playbooks_intro.html#playbook-language-example)）：
 - en: '[PRE5]'
+  id: totrans-47
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Ansible roles
+  id: totrans-48
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible 角色
 - en: While playbooks offer a great way to execute *plays* in a pre-defined order,
     there is a brilliant feature on Ansible that takes the whole idea to a completely
     different level. Roles are a convenient way to bundle tasks, supporting assets
     such as files and templates, coupled with an automatic set of search paths.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然 playbook 提供了一种以预定义顺序执行 *plays* 的好方法，但 Ansible 上有一个很棒的功能将整个理念提升到完全不同的层次。角色是一种方便的方式来捆绑任务，支持文件和模板等支持资产，并带有一组自动搜索路径。
 - en: By using a concept most programmers would be familiar with, of *including* files
     and folders and ascribing what is being included, a playbook becomes infinitely
     more readable and understandable. Roles are basically made up of tasks, handlers,
     and configurations, but by adding an additional layer to how a playbook is structured,
     we can easily get the big picture overview as well as the low-level details.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过使用大多数程序员熟悉的 *包含* 文件和文件夹的概念，并指定被包含的内容，playbook 变得无限可读且易于理解。角色基本上由任务、处理程序和配置组成，但通过向
+    playbook 结构添加附加层，我们可以轻松获得大局观以及细节。
 - en: This allows for reusable code and a division of work in a team tasked with writing
     playbooks. For example, the database guru writes a role (almost like a partial
     playbook) for setting up the database and the security guru writes one on hardening
     such a database.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 这样可以实现可重用的代码，并且在负责编写 playbook 的团队中分工明确。例如，数据库专家编写了一个角色（几乎像是一个部分 playbook）来设置数据库，安全专家则编写了一个加固此类数据库的角色。
 - en: While it is possible to write a playbook in one very large file, eventually
     you want to reuse files and start to organize things.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然可以在一个非常大的文件中编写 playbook，但最终你会想要重用文件并开始组织事务。
 - en: Large and complex playbooks are hard to maintain and it is very difficult to
     reuse sections of a large playbook. Breaking a playbook into roles allows very
     efficient code reuse and makes playbooks much easier to understand.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 大而复杂的 playbook 难以维护，很难重用大 playbook 的部分。将 playbook 拆分为角色允许非常高效的代码重用，并使 playbook
+    更容易理解。
 - en: 'The benefits of using roles while building large playbooks include:'
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 在构建大 playbook 时使用角色的好处包括：
 - en: Collaborating on writing playbooks
+  id: totrans-55
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 协作编写 playbooks
 - en: Reusing existing roles
+  id: totrans-56
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 重用现有角色
 - en: Roles can be updated, improved upon independently
+  id: totrans-57
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 角色可以独立更新、改进
 - en: Handling variables, templates, and files is easier
+  id: totrans-58
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 处理变量、模板和文件更容易
 - en: '**LAMP** usually stands for **Linux, Apache, MySQL, PHP**. A popular combination
     of software that is used to build applications for the web. Nowadays, another
     common combination in the PHP world is **LEMP**, which is **Linux, NGINX, MySQL,
     PHP**.'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: '**LAMP** 通常代表 **Linux，Apache，MySQL，PHP**。这是一种流行的软件组合，用于构建 Web 应用程序。如今，在 PHP
+    世界中另一个常见的组合是 **LEMP**，即 **Linux，NGINX，MySQL，PHP**。'
 - en: 'This is an example of what a possible LAMP stack `site.yml` can look like:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是一个可能的 LAMP 堆栈 `site.yml` 的示例：
 - en: '[PRE6]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: Note the list of roles. Just by reading the role names we can get an idea of
     the kind of tasks possibly under that role.
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 注意角色列表。仅通过阅读角色名称，我们就可以了解该角色下可能包含的任务类型。
 - en: Templates with Jinja2
+  id: totrans-63
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Jinja2 的模板
 - en: Ansible uses Jinja2 templating to enable dynamic expressions and access to variables.
     Jinja2 variables and expressions within playbooks and tasks allow us to create
     roles that are very flexible. By passing variables to a role written this way,
     we can have the same role perform different tasks or configurations. Using a templating
     language, such as Jinja2, we are able to write playbooks that are succinct and
     easier to read.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 使用 Jinja2 模板来实现动态表达式和访问变量。在 playbook 和任务中使用 Jinja2 变量和表达式使我们能够创建非常灵活的角色。通过向这种方式编写的角色传递变量，我们可以使相同的角色执行不同的任务或配置。使用模板语言，比如
+    Jinja2，我们能够编写简洁且易于阅读的 playbooks。
 - en: By ensuring that all the templating takes place on the Ansible controller, Jinja2
     is not required on the target machine. Only the required data is copied over,
     which reduces the data that needs to be transferred. As we know, less data transfer
     usually results in faster execution and feedback.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过确保所有模板化发生在 Ansible 控制器上，Jinja2 不需要在目标机器上。只复制所需的数据，这减少了需要传输的数据量。正如我们所知，数据传输量越少，通常执行速度越快，反馈越快。
 - en: Jinja templating examples
+  id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jinja 模板示例
 - en: A mark of a good templating language is the ability to allow control of the
     content without appearing to be a fully-fledged programming language. Jinja2 excels
     in that by providing us with the ability to do conditional output, such as iterations
     using loops, among other things.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 一个良好模板语言的标志是允许控制内容而不显得是完整的编程语言。Jinja2 在这方面表现出色，通过提供条件输出的能力，如使用循环进行迭代等等。
 - en: Let's look at some basic examples (obviously Ansible playbook-related) to see
     what that looks like.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看一些基本示例（显然是 Ansible playbook 相关的），看看是什么样子。
 - en: Conditional example
+  id: totrans-69
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 条件示例
 - en: 'Execute only when the operating system family is `Debian`:'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 仅当操作系统家族为 `Debian` 时执行：
 - en: '[PRE7]'
+  id: totrans-71
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: Loops example
+  id: totrans-72
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 循环示例
 - en: 'The following task adds users using the Jinja2 templating. This allows for
     dynamic functionality in playbooks. We can use variables to store data when required,
     we just need to update the variables rather than the entire playbook:'
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的任务使用 Jinja2 模板添加用户。这允许 playbooks 中的动态功能。我们可以使用变量在需要时存储数据，只需更新变量而不是整个 playbook：
 - en: '[PRE8]'
+  id: totrans-74
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: LAMP stack playbook example – combining all the concepts
+  id: totrans-75
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: LAMP 栈 playbook 示例 - 结合所有概念
 - en: 'We will look at how to write a LAMP stack playbook using the skills we have
     learned so far. Here is the high-level hierarchy structure of the entire playbook:'
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将看看如何使用我们迄今学到的技能编写一个 LAMP 栈 playbook。这是整个 playbook 的高层次结构：
 - en: '[PRE9]'
+  id: totrans-77
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Let's start with creating an inventory file. The following inventory file is
     created using static manual entry. Here is a very basic static inventory file
     where we will define a since host and set the IP address used to connect to it.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从创建一个清单文件开始。下面的清单文件是使用静态手动输入创建的。这是一个非常基本的静态清单文件，我们将在其中定义一个主机，并设置用于连接到它的 IP
+    地址。
 - en: 'Configure the following inventory file as required:'
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据需要配置以下清单文件：
 - en: '[PRE10]'
+  id: totrans-80
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'The following file is `group_vars/lamp.yml`, which has the configuration of
     all the global variables:'
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的文件是 `group_vars/lamp.yml`，其中包含所有全局变量的配置：
 - en: '[PRE11]'
+  id: totrans-82
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'The following file is the `site.yml`, which is the main playbook file to start:'
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的文件是 `site.yml`，这是启动的主要 playbook 文件：
 - en: '[PRE12]'
+  id: totrans-84
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'The following is the `roles/common/tasks/main.yml` file, which will install `python2`,
     `curl`, and `git`:'
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面是 `roles/common/tasks/main.yml` 文件，它将安装 `python2`、`curl` 和 `git`：
 - en: '[PRE13]'
+  id: totrans-86
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'The following task, `roles/web/tasks/main.yml`, performs multiple operations,
     such as installation and configuration of `apache2`. It also adds the service
     to the startup process:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的任务，`roles/web/tasks/main.yml`，执行多个操作，如安装和配置 `apache2`。它还将服务添加到启动过程中：
 - en: '[PRE14]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'The `notify` parameter will trigger the handlers found in `roles/web/handlers/main.yml`:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: '`notify` 参数将触发 `roles/web/handlers/main.yml` 中找到的处理程序：'
 - en: '[PRE15]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'The template files will be taken from `role/web/templates/web.conf.j2`, which
     uses Jinja templating, it also takes values from local variables:'
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 模板文件将从 `role/web/templates/web.conf.j2` 中获取，该文件使用 Jinja 模板，还从本地变量中获取值：
 - en: '[PRE16]'
+  id: totrans-92
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: 'The local variables file is located in `roles/web/vars/main.yml`:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 本地变量文件位于 `roles/web/vars/main.yml`：
 - en: '[PRE17]'
+  id: totrans-94
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: 'Similarly, we will write database roles as well. The following file `roles/db/tasks/main.yml`
     includes installation of the database server with assigned passwords when prompted.
     At the end of the file, we included `harden.yml`, which executes another set of
     tasks:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 类似地，我们也会编写数据库角色。下面的文件 `roles/db/tasks/main.yml` 包括在提示时安装数据库服务器并分配密码。在文件末尾，我们包含了
+    `harden.yml`，它执行另一组任务：
 - en: '[PRE18]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: 'The `harden.yml` performs hardening of MySQL server configuration:'
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: '`harden.yml` 执行 MySQL 服务器配置的加固：'
 - en: '[PRE19]'
+  id: totrans-98
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'The `db` server role also has `roles/db/handlers/main.yml` and local variables
     similar to the `web` role:'
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: '`db` 服务器角色也有类似于 `web` 角色的 `roles/db/handlers/main.yml` 和本地变量：'
 - en: '[PRE20]'
+  id: totrans-100
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: 'The following file is `roles/db/vars/main.yml`, which has the `mysql_root_password`
     while configuring the server. We will see how we can secure these plaintext passwords
     using `ansible-vault` in future chapters:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的文件是 `roles/db/vars/main.yml`，其中包含配置服务器时的 `mysql_root_password`。我们将在未来的章节中看到如何使用
+    `ansible-vault` 来保护这些明文密码：
 - en: '[PRE21]'
+  id: totrans-102
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: 'Now, we will install PHP and configure it to work with `apache2` by restarting
     the `roles/php/tasks/main.yml` service:'
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们将安装 PHP 并通过重新启动 `roles/php/tasks/main.yml` 服务来配置它与 `apache2` 一起工作：
 - en: '[PRE22]'
+  id: totrans-104
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: To run this playbook, we need to have Ansible installed in the system path.
     Please refer to [http://docs.ansible.com/ansible/intro_installation.html](http://docs.ansible.com/ansible/intro_installation.html)
     for installation instructions.
+  id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 要运行此剧本，我们需要在系统路径中安装 Ansible。请参阅[http://docs.ansible.com/ansible/intro_installation.html](http://docs.ansible.com/ansible/intro_installation.html)获取安装说明。
 - en: 'Then execute the following command against the Ubuntu 16.04 server to set up
     LAMP stack. Provide the password when it prompts for system access for user `hodor`:'
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后针对 Ubuntu 16.04 服务器执行以下命令来设置 LAMP 堆栈。当提示系统访问用户 `hodor` 时，请提供密码：
 - en: '[PRE23]'
+  id: totrans-107
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: After successful completion of the playbook execution, we will be ready to use
     LAMP stack in a Ubuntu 16.04 machine. You might have observed that each task or
     role is configurable as we need throughout the playbook. Roles give the power
     to generalize the playbook and customize easily using variables and templating.
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 完成剧本执行后，我们将准备在 Ubuntu 16.04 机器上使用 LAMP 堆栈。您可能已经注意到，每个任务或角色都可以根据我们在剧本中的需要进行配置。角色赋予了将剧本泛化并使用变量和模板轻松定制的能力。
 - en: Summary
+  id: totrans-109
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: We have codified a fairly decent real-world stack for development using a combination
     of Ansible's features. By thinking about what goes in a LAMP stack overview, we
     can start by creating the roles. Once we have that thrashed out, the individual
     tasks are mapped to modules in Ansible. Any task that requires copying of a pre-defined
     configuration, but with dynamically-generated output, can be done by using variables
     in our templates and the constructs offered by Jinja2.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经使用 Ansible 的各种功能对一个相当不错的真实世界堆栈进行了编码。通过思考 LAMP 堆栈概述中的内容，我们可以开始创建角色。一旦我们确定了这一点，就可以将单个任务映射到
+    Ansible 中的模块。任何需要复制预定义配置但具有动态生成输出的任务都可以使用我们模板中的变量和 Jinja2 提供的结构来完成。
 - en: We will use the same approach to various security-related setups that could
     do with a bit of automation for orchestration, operations, and so on. Once we
     have a handle on how to do this for a virtual machine running our laptop, it can
     be repurposed for deploying on your favorite cloud-computing instance as well.
     The output is human readable and in text, so that it can be added to version control,
     various roles can be reused as well.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用同样的方法来进行各种安全相关的设置，这些设置可能需要一些自动化用于编排、操作等。一旦我们掌握了在运行于我们笔记本电脑上的虚拟机上执行此操作的方法，它也可以被重新用于部署到您喜欢的云计算实例上。输出是人类可读的文本，因此可以添加到版本控制中，各种角色也可以被重复使用。
 - en: Now that we have a fairly decent idea of the terms we will be using throughout
     this book, let's get set for one final piece of the puzzle. In the next chapter,
     we will learn and understand how we can use automation and scheduling tools, such
     as Ansible Tower, Jenkins, and Rundeck, to manage and execute playbooks based
     on certain event triggers or time durations.
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们已经对本书中将要使用的术语有了相当不错的了解，让我们准备好最后一块拼图。在下一章中，我们将学习和理解如何使用自动化和调度工具，例如 Ansible
+    Tower、Jenkins 和 Rundeck，根据某些事件触发器或时间持续时间来管理和执行基于剧本的操作。

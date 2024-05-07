@@ -1,13 +1,17 @@
 - en: Getting Started with AWX
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 开始使用 AWX
 - en: As we have seen in the previous chapters, Ansible is a very powerful tool. This
     is not enough to make it ubiquitous. In fact, for it to become ubiquitous, a tool
     needs to be easy to use at any user level and easy to integrate in various ways
     with existing environments.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们在前面的章节中所看到的，Ansible 是一个非常强大的工具。但这还不足以使其无处不在。事实上，要使一个工具无处不在，它需要在任何用户级别上都易于使用，并且易于以各种方式与现有环境集成。
 - en: Ansible Inc recognized this and created a tool called Ansible Tower, which was
     basically a Web UI and API set around Ansible. Ansible Tower was a closed source
     tool, which was also the main source of revenue for the company. When Red Hat
@@ -15,462 +19,694 @@
     Ansible Tower open source. A couple of years later, Red Hat open sourced Ansible
     Tower, creating the AWX project, which is now the upstream of Ansible Tower, in
     the same way Fedora is the upstream of Red Hat Enterprise Linux.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 公司认识到了这一点，并创建了一个名为 Ansible Tower 的工具，它基本上是围绕 Ansible 构建的 Web UI 和 API
+    集。 Ansible Tower 是一个闭源工具，也是该公司的主要收入来源。 当红帽公司宣布收购 Ansible 时，其管理层也承诺将 Ansible Tower
+    开源化。 几年后，红帽公司开源了 Ansible Tower，创建了 AWX 项目，它现在是 Ansible Tower 的上游项目，就像 Fedora 是
+    Red Hat Enterprise Linux 的上游项目一样。
 - en: Before AWX, other Web UIs and API sets were developed in the open source community,
     such as Semaphore. AWX and Ansible Tower are not the only Web UI and API sets
     for Ansible today, but they are the more actively developed solutions.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 AWX 之前，开源社区中还开发了其他 Web UI 和 API 集，例如 Semaphore。 AWX 和 Ansible Tower 并不是今天
+    Ansible 的唯一 Web UI 和 API 集，但它们是更活跃的解决方案。
 - en: 'In this chapter, we are going to see how to set up AWX and learn how to use
     it. More specifically, we are going to discuss the following:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将看到如何设置 AWX 并学习如何使用它。 更具体地说，我们将讨论以下内容：
 - en: Setting up AWX
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 设置 AWX
 - en: Understanding what an AWX project is and how to leverage it
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 理解 AWX 项目是什么以及如何利用它
 - en: Understanding what an AWX inventory is and how it differs from an Ansible inventory
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 理解 AWX 清单是什么以及与 Ansible 清单的区别
 - en: Understanding what an AWX job template is and how to create one
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 理解 AWX 作业模板是什么以及如何创建一个
 - en: Understanding what an AWX job is and how to execute your first job
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 理解 AWX 作业是什么以及如何执行您的第一个作业
 - en: Technical requirements
+  id: totrans-10
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 技术要求
 - en: For this chapter, you will need a machine that can run `ansible` and  `docker`
     and has `docker-py` installed.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于本章，您需要一台可以运行 `ansible` 和 `docker` 并且已安装 `docker-py` 的机器。
 - en: Setting up AWX
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 AWX
 - en: Unlike Ansible, installing AWX involves more than a single command, but it's
     still fairly quick and easy.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 与 Ansible 不同，安装 AWX 不仅涉及一个单一命令，但仍然相当快速和简单。
 - en: First of all, you need to install `ansible`, `docker`, and `docker-py`. After
     this, you need to give permission to the desired user to run Docker. Lastly, you
     need to download AWX Git repo and execute an `ansible` playbook.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，您需要安装 `ansible`、`docker` 和 `docker-py`。之后，您需要给所需用户运行 Docker 的权限。最后，您需要下载
+    AWX Git 仓库并执行一个 `ansible` playbook。
 - en: Installing Ansible, Docker, and Docker-py in Fedora
+  id: totrans-15
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Fedora 中安装 Ansible、Docker 和 Docker-py
 - en: 'Let''s begin by installing `docker`, `ansible`, and `docker-py` packages in
     Fedora:'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从在 Fedora 中安装 `docker`、`ansible` 和 `docker-py` 包开始：
 - en: '[PRE0]'
+  id: totrans-17
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'To start and enable the Docker service use the following:'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 要启动并启用 Docker 服务，请使用以下命令：
 - en: '[PRE1]'
+  id: totrans-19
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: Now that we've installed `ansible`, `docker`, and `docker-py`, let's move on
     to granting user access to Docker.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经安装了 `ansible`、`docker` 和 `docker-py`，让我们继续授予用户访问 Docker 的权限。
 - en: Giving the current user permission to use Docker in Fedora
+  id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Fedora 中给当前用户授权使用 Docker
 - en: 'To ensure that the current user can use Docker (by default, Fedora only allows
     root to use it), you need to create a new Docker group, assign the current user
     to it, and restart Docker:'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 为确保当前用户可以使用 Docker（默认情况下，Fedora 仅允许 root 使用它），您需要创建一个新的 Docker 组，将当前用户分配到其中，并重新启动
+    Docker：
 - en: '[PRE2]'
+  id: totrans-23
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'Since the groups are assigned only at the beginning of the session, you would
     need to restart your session, but we can force Linux to add your new group to
     your current session, by executing the following:'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于组只在会话开始时分配，所以您需要重新启动您的会话，但我们可以通过执行以下命令来强制 Linux 将新组添加到当前会话中：
 - en: '[PRE3]'
+  id: totrans-25
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Now that we have all the prerequisites ready, we can move to the real AWX installation.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经准备好了所有的先决条件，我们可以开始真正的 AWX 安装了。
 - en: Installing AWX
+  id: totrans-27
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 AWX
 - en: 'The first thing that we need is to check out the `git` repository by executing
     the following:'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们首先需要做的是通过执行以下命令来检出 `git` 代码库：
 - en: '[PRE4]'
+  id: totrans-29
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'As soon as Git has completed its task, we can change the directory to the one
     containing the installer and run it:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦 Git 完成了它的任务，我们就可以将目录更改为包含安装程序的目录并运行它：
 - en: '[PRE5]'
+  id: totrans-31
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: This will install AWX in Docker containers and default configurations. You can
     tweak the configurations (before running the last command) by changing the `inventory`
     file, in the same folder.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将在 Docker 容器和默认配置中安装 AWX。您可以通过更改相同文件夹中的`inventory`文件来调整配置（在运行最后一个命令之前）。
 - en: When the installation process is completed, you can open your browser and point
     to `https://localhost` and log in using the `admin` username with the `password`
     password.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装过程完成后，您可以打开浏览器，并指向`https://localhost`，然后使用`admin`用户名和`password`密码登录。
 - en: 'After the login, you should see a page that resemble the following one:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 登录后，您应该会看到类似以下的页面：
 - en: '![](img/0e4ea5a6-e787-40d6-8c22-bc548d9693bf.png)'
+  id: totrans-35
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0e4ea5a6-e787-40d6-8c22-bc548d9693bf.png)'
 - en: Having set up AWX, you will now be able to execute Ansible playbooks without
     using the Ansible CLI anymore. To start this, we will firstly need a project,
     so let's see how to set it up.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置了 AWX 后，您现在将能够执行 Ansible playbooks 而不再使用 Ansible CLI。要开始这个过程，我们首先需要一个项目，所以让我们看看如何设置它。
 - en: Creating new AWX projects
+  id: totrans-37
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建新的 AWX 项目
 - en: AWX assumes that you save your playbooks somewhere, and to be able to use them
     in AWX, we need to create a project.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: AWX 假设您已经将您的 playbooks 保存在某个地方，为了能够在 AWX 中使用它们，我们需要创建一个项目。
 - en: A project is basically the AWX placeholder for a repository containing Ansible
     resources (roles and playbooks).
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 项目基本上是包含 Ansible 资源（角色和 playbooks）的存储库的 AWX 占位符。
 - en: 'When you go in the Projects section, in the left-hand menu bar, you''ll see
     something like the following:'
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您进入项目部分时，在左侧菜单栏中，您将看到类似以下的内容：
 - en: '![](img/43d1f1ec-f54e-4d38-b918-bc59a206129f.png)'
+  id: totrans-41
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/43d1f1ec-f54e-4d38-b918-bc59a206129f.png)'
 - en: As you can see, a Demo Project is already in place (the installer created it
     for us!) and it is backed by a Git repository.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 如您所见，演示项目已经就位（安装程序为我们创建了它！）并且由一个 Git 存储库支持。
 - en: On the left-hand side of the project name, a white circle is present, and represents
     that the specific project has never been pulled. If a green circle were present,
     it would mean that the project has been pulled successfully. A pulsing green circle
     means that a pull is in progress, while a red stop sign means that something went
     wrong.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 项目名称的左侧有一个白色圆圈，表示该特定项目尚未被拉取。如果有一个绿色圆圈，意味着项目已成功拉取。脉动的绿色圆圈表示拉取正在进行中，而红色停止标志表示出现了问题。
 - en: 'In the same line of the project, there are three buttons:'
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 在项目的同一行，有三个按钮：
 - en: '**Get SCM last revision**: To fetch the current latest revision of the code'
+  id: totrans-45
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**获取 SCM 最新修订版本**：获取代码的当前最新版本'
 - en: '**Duplicate**: To create a duplicate of the project'
+  id: totrans-46
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**复制**：创建项目的副本'
 - en: '**Delete**: To delete the project'
+  id: totrans-47
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**删除**：删除项目'
 - en: In the top right-hand part of the card, you can notice a green plus button.
     This is the button that allows us to add more projects.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 在卡片的右上角，您可以看到一个绿色的加号按钮。这是一个允许我们添加更多项目的按钮。
 - en: By selecting it, a new NEW PROJECT card appears on top of the Projects card,
     where you can add the new project.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过选择它，一个新的**新项目**卡片将出现在**项目**卡片的顶部，您可以在其中添加新项目。
 - en: 'The NEW PROJECT card will look like the following:'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: '**新项目**卡片将如下所示：'
 - en: '![](img/d2e61be9-d1c9-4660-9f76-e145fe46429e.png)'
+  id: totrans-51
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d2e61be9-d1c9-4660-9f76-e145fe46429e.png)'
 - en: 'It''s asking for information about the project you are going to create:'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 它正在请求有关您要创建的项目的信息：
 - en: 'NAME: This is the display name of your project. This is for human-usage, so
     make it human-sensible!'
+  id: totrans-53
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 名称：这是您项目的显示名称。这是为了人类使用，所以要做到人性化！
 - en: 'DESCRIPTION: An additional display (still for humans) to make sense of the
     project goals.'
+  id: totrans-54
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 描述：一个额外的显示（仍然是给人看的），以理解项目目标。
 - en: 'ORGANIZATION: The organization that is going to own the project. This will
     be covered in the next chapter. For now, let''s leave the default.'
+  id: totrans-55
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 组织：将拥有该项目的组织。这将在下一章中介绍。现在，让我们保持默认设置。
 - en: 'SCM TYPE: The type of SCM that your code is contained in. At the moment of
     writing, the supported options are: Manual, Git, Mercurial, Subversion, and Red
     Hat Insights.'
+  id: totrans-56
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: SCM 类型：您的代码所包含的 SCM 类型。在撰写本文时，受支持的选项有：手动、Git、Mercurial、Subversion 和 Red Hat
+    Insights。
 - en: Based on the SCM type you chose, more fields will appear, such as the SCM URL,
     and the SCM branch.
+  id: totrans-57
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 根据您选择的 SCM 类型，将出现更多字段，例如 SCM URL 和 SCM 分支。
 - en: When you complete all the mandatory fields, you can save and see that a new
     project has been added.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您填写完所有必填字段后，您可以保存并看到已添加一个新项目。
 - en: Using AWX inventories
+  id: totrans-59
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 AWX 清单
 - en: AWX inventories are the equivalent of Ansible inventories in the AWX world.
     Since AWX is a graphical tool, inventories are not stored as files (as done in
     Ansible) but will be manageable with the AWX user interface. Not being tied to
     a file also gives more flexibility to AWX inventories compared to Ansible inventories.
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: AWX 清单是 AWX 世界中 Ansible 清单的等价物。由于 AWX 是一个图形工具，清单不像 Ansible 中那样存储为文件（如在 Ansible
+    中所做），而是可通过 AWX 用户界面进行管理。不绑定到文件还使 AWX 清单相对于 Ansible 清单具有更多的灵活性。
 - en: AWX has different ways to manage the inventories.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: AWX 有不同的方式来管理清单。
 - en: 'You can reach this by clicking the Inventories item on the left-hand menu,
     and you''ll find something similar to this:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过点击左侧菜单上的 Inventories 项目来查看，您将找到类似于此的内容：
 - en: '![](img/8c479b7f-f596-44a3-afea-49ea888b23d2.png)'
+  id: totrans-63
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8c479b7f-f596-44a3-afea-49ea888b23d2.png)'
 - en: As for the projects, AWX comes with a demo inventory.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 至于项目，AWX 自带演示清单。
 - en: 'Looking from left to right, we can find the following columns:'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 从左到右看，我们可以找到以下列：
 - en: A cloud symbol – for inventory synchronization status
+  id: totrans-66
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 云符号 - 用于清单同步状态
 - en: The usual circle to show the status (okay or failed)
+  id: totrans-67
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 显示状态（正常或失败）的常规圆圈
 - en: The inventory NAME
+  id: totrans-68
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 清单名称
 - en: The inventory TYPE
+  id: totrans-69
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 清单类型
 - en: The ORGANIZATION that owns the inventory
+  id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 拥有清单的组织
 - en: The edit symbol
+  id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 编辑符号
 - en: The duplicate symbol
+  id: totrans-72
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 复制符号
 - en: The delete symbol
+  id: totrans-73
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 删除符号
 - en: As before, the green + button will allow you to create a new item. By clicking
     it, it will ask you if you want to create an inventory or a smart inventory.
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 与之前一样，绿色 + 按钮将允许您创建新项目。点击它，它会询问您想要创建清单还是智能清单。
 - en: We can select the Inventories option for now, and it will allow you to add a
     name and an organization (the only two mandatory options) as well as other non-mandatory
     options. As soon as you save, you'll be able to add hosts, groups, and permissions.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在可以选择 Inventories 选项，它将允许您添加名称和组织（仅两个强制选项）以及其他非强制选项。一旦保存，您将能够添加主机、组和权限。
 - en: If you prefer not to specify the hosts, groups, variables, and so on by hand,
     there is a Sources tabs for you.
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您不愿手工指定主机、组、变量等，还有一个 Sources 标签可供您使用。
 - en: By clicking the + on the Sources tab, you'll be able to add a source from a
     list of available types or with a custom script.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击 Sources 标签上的 +，您将能够从可用类型列表或使用自定义脚本添加来源。
 - en: 'The available sources types at the time of writing are as follows:'
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: 撰写时可用的来源类型如下：
 - en: '**Sourced from a project**: Basically, it will import an Ansible core inventory
     file from a repository.'
+  id: totrans-79
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**从项目中获取**：基本上，它将从存储库导入一个 Ansible 核心清单文件。'
 - en: '**Amazon EC2**: It will use the AWS API to discover all the EC2 machines and
     their characteristics running in your environment.'
+  id: totrans-80
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**亚马逊 EC2**：它将使用 AWS API 来发现在您的环境中运行的所有 EC2 机器及其特性。'
 - en: '**Google Compute Engine (GCE)**: It will use the Google API to discover all
     GCE machines and their characteristics running in your environment.'
+  id: totrans-81
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**谷歌计算引擎（GCE）**：它将使用 Google API 来发现您环境中运行的所有 GCE 机器及其特性。'
 - en: '**Microsoft Azure Resource Manager**: It will use the Azure API to discover
     all machines and their characteristics running in your environment.'
+  id: totrans-82
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Microsoft Azure 资源管理器**：它将使用 Azure API 来发现在您的环境中运行的所有机器及其特性。'
 - en: '**VMWare vCenter**: It will use the VMWare API to discover all machines and
     their characteristics managed by your vCenter.'
+  id: totrans-83
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**VMWare vCenter**：它将使用 VMWare API 来发现由您的 vCenter 管理的所有机器及其特性。'
 - en: '**Red Hat Satellite 6**: It will use the satellite API to discover all machines
     and their characteristics managed by your satellite'
+  id: totrans-84
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**红帽 Satellite 6**：它将使用卫星 API 来发现由您的卫星管理的所有机器及其特性。'
 - en: '**Red Hat CloudForms**: It will use CloudForms API to discover all machines
     and their characteristics managed by it.'
+  id: totrans-85
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**红帽 CloudForms**：它将使用 CloudForms API 来发现由其管理的所有机器及其特性。'
 - en: '**OpenStack**: It will use the OpenStack API to discover all machines and their
     characteristics running on your OpenStack environment.'
+  id: totrans-86
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**OpenStack**：它将使用 OpenStack API 来发现在您的 OpenStack 环境中运行的所有机器及其特性。'
 - en: '**Red Hat Virtualization**: It will use the RHEV API to discover all machines
     and their characteristics running on it.'
+  id: totrans-87
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**红帽虚拟化**：它将使用 RHEV API 来发现所有正在运行的机器及其特性。'
 - en: '**Ansible Tower**: It will use another Ansible Tower/AWX installation API to
     discover all machines and their characteristics managed by it.'
+  id: totrans-88
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Ansible Tower**：它将使用另一个 Ansible Tower/AWX 安装 API 来发现其管理的所有机器及其特性。'
 - en: '**Custom script**: It will use a script that you uploaded in the *Inventory
     Scripts* section.'
+  id: totrans-89
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**自定义脚本**：它将使用您在*清单脚本*部分上传的脚本。'
 - en: 'We have seen now how to set up an AWX Inventory, which is going to be needed
     for the next part: setting up an AWX job template.'
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在已经看到如何设置AWX清单，这将在下一部分中需要：设置AWX作业模板。
 - en: Understanding AWX job templates
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 理解AWX作业模板
 - en: In AWX, we have the concept of a job template, which is basically a wrapper
     around a playbook.
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 在AWX中，我们有一个作业模板的概念，它基本上是对playbook的封装。
 - en: 'To manage the job templates, you have to go to the Templates section from the
     left menu, and you''ll find something like the following:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 要管理作业模板，您必须转到左侧菜单中的“模板”部分，然后会发现类似以下内容：
 - en: '![](img/f17c3464-51a2-4a32-82ea-51888f89b563.png)'
+  id: totrans-94
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f17c3464-51a2-4a32-82ea-51888f89b563.png)'
 - en: 'Looking at the table containing the job templates, we will find the following
     things:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 查看包含作业模板的表格，我们会找到以下内容：
 - en: The job template name
+  id: totrans-96
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 作业模板名称
 - en: The template type (AWX supports also workflow templates, which are templates
     for groups of job templates)
+  id: totrans-97
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 模板类型（AWX还支持工作流模板，这是一组作业模板的模板）
 - en: The rocket button
+  id: totrans-98
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 火箭按钮
 - en: The duplicate button
+  id: totrans-99
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 复制按钮
 - en: The delete button
+  id: totrans-100
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 删除按钮
 - en: By clicking the rocket button, we can execute it. Doing so will automatically
     bring you into a different view, which we will discover in the next section.
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过点击火箭按钮，我们可以执行它。这样做会自动将您带入到不同的视图中，在下一节中我们会发现。
 - en: Using AWX jobs
+  id: totrans-102
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用AWX作业
 - en: AWX jobs are executions of AWX jobs templates, in the same way as Ansible runs
     are executions of Ansible playbooks.
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: AWX作业是AWX作业模板的执行，就像Ansible运行是Ansible playbooks的执行一样。
 - en: 'When you launch a job, you''ll see a window just like the following one:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 当您启动一个作业时，您会看到一个窗口，就像下面这个：
 - en: '![](img/e7d34166-9649-45fb-9c3a-de4dc0956bed.png)'
+  id: totrans-105
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e7d34166-9649-45fb-9c3a-de4dc0956bed.png)'
 - en: This is the AWX version of the output of Ansible, when run on the command line.
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是在命令行上运行Ansible时的AWX版本的输出。
 - en: After a few seconds, in the right-hand grey box a very familiar output will
     start to pop out, since it's exactly the same `stdout` of Ansible, just redirected
     there.
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 几秒钟后，在右侧的灰色框中，一个非常熟悉的输出将开始弹出，因为它完全相同于Ansible的`stdout`，只是重定向到那里。
 - en: 'If later you click on Jobs on the left menu bar, you will find yourself on
     a different screen, listing all previously run jobs:'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果稍后您在左侧菜单栏上点击“作业”，您会发现自己处于一个不同的屏幕上，列出了所有先前运行的作业：
 - en: '![](img/a1c73c44-3175-4b24-bc2b-f7d7773e834d.png)'
+  id: totrans-109
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a1c73c44-3175-4b24-bc2b-f7d7773e834d.png)'
 - en: As you can notice, we have two jobs that have been executed, while we've only
     executed the Demo Job Template. This is because the Demo Project has been pulled
     before and due to the Demo Job Template execution. This allows the operator to
     be always comfortable to run a job, knowing that it will always be the latest
     version available in the SCM to be executed.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如您所注意到的，我们有两个已经执行的作业，而我们只执行了演示作业模板。这是因为在演示作业模板执行之前已经拉取了演示项目。这使得操作员始终可以放心地运行作业，知道它将始终是SCM中可用的最新版本要执行的作业。
 - en: Summary
+  id: totrans-111
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: In this chapter, you have learned to set up AWX on Fedora and you've learned
     to use AWX projects, inventories, jobs templates, and jobs. As you can imagine
     by the number of options, flags, and items present in AWX, this is just the tip
     of the iceberg and does not intend to be a full explanation of it, since a dedicated
     book would be needed for that.
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，您已经学会了如何在Fedora上设置AWX，并学会了使用AWX项目、清单、作业模板和作业。正如您可以想象的那样，由于AWX中存在的选项、标志和项目数量，这只是冰山一角，并不打算对其进行完整的解释，因为需要一个专门的书籍来解释。
 - en: In the following chapter, we are going to discuss a little bit about AWX users,
     users permissions, and organizations.
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，我们将稍微讨论一下AWX用户、用户权限和组织。

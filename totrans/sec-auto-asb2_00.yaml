@@ -1,15 +1,19 @@
 - en: Preface
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 前言
 - en: IT is undergoing a massive paradigm shift. From a time where uptime was a measure
     of IT success, we are moving to the idea of immutable infrastructure, where, based
     on the requirements, we can spin up and trash a server on demand automatically.
     Ansible is playing a lead role in this transformation. It has become the tool
     of choice for companies big and small for tasks that are meant for one server
     to entire clusters.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: IT正在经历一次巨大的范式转变。从以正常运行时间作为IT成功的衡量标准的时代，我们正在转向不可变基础设施的理念，根据需求，我们可以自动地随时启动和销毁服务器。Ansible在这种转变中扮演着主导角色。它已经成为各大公司和小公司选择的工具，用于单个服务器到整个集群的任务。
 - en: This book is about security automation. We apply our knowledge of Ansible to
     different scenarios and workloads that revolve around security, hence the title.
     When boring and mundane tasks are automated, people doing those tasks can focus
@@ -17,52 +21,72 @@
     way to looking at how we learn about security (trainings), how much we can store,
     process, and analyze log data (DFIR), how we can keep applying security updates
     without any interruptions (security operations), and more.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书介绍了安全自动化。我们运用对Ansible的知识到不同的场景和工作负载中，这些场景和工作负载围绕着安全展开，因此得名。当无聊和单调的任务被自动化时，做这些任务的人可以集中精力解决他们所面对的安全问题。这为我们学习安全（培训）的方式、我们可以存储、处理和分析日志数据的数量（DFIR）、我们如何可以在没有任何中断的情况下保持应用安全更新（安全运营），以及更多内容提供了全新的观点。
 - en: In this book, we will share our experience of the types of automation we can
     enable using Ansible. You may be familiar with some of these, or they may be entirely
     new to you. Regardless, rather than trying to prescribe how Ansible should be
     used, we hope that you will read and understand how you can take each of these
     playbooks/workflows, and make your security work faster, better, and more reliable,
     or simply have fun creating complex infrastructure scenarios for yourself or others.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，我们将分享使用Ansible可以实现的各种自动化类型的经验。你可能对其中一些内容很熟悉，或者对你来说它们可能是全新的。无论如何，我们希望你不要试图规定应该如何使用Ansible，而是希望你阅读并理解如何使用每个playbook/工作流程，使你的安全工作更快、更好、更可靠，或者只是为自己或他人创建复杂的基础架构场景而感到开心。
 - en: This book would not have been possible without the excellent documentation provided
     by the folks at Red Hat Ansible and countless other blogs and projects already
     creating secure, resilient playbooks that we can all learn from and use.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果没有Red Hat Ansible的同事以及其他无数的博客和项目提供的优秀文档，本书将不可能问世，他们已经创建了安全、具有弹性的playbooks，我们都可以从中学习并使用。
 - en: 'The book is divided into three main sections:'
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书分为三个主要部分：
 - en: Essential Ansible you should be familiar with, for building useful playbooks
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 构建有用的playbook所需的基本Ansible
 - en: Security automation techniques and approaches
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安全自动化技术和方法
 - en: Extending and programming Ansible for even more security
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 扩展和编程Ansible以获得更多的安全性
 - en: The idea is to get you to quickly refresh your knowledge of Ansible and move
     on to becoming productive with it, and toward the end, you'll see how you can
     do even more by extending Ansible or creating your own security modules.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们的目标是让你快速更新你对Ansible的知识，然后让你变得对它更加高效，最后，你将看到如何通过扩展Ansible或创建你自己的安全模块来做更多事情
 - en: What this book covers
+  id: totrans-10
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 这本书涵盖的内容
 - en: '[Chapter 1](4f56b7ea-fbea-46f9-9512-1f054caf05f0.xhtml), *Introduction to Ansible
     Playbooks and Roles*, covers the terms that you would already be familiar with,
     in Ansible. They are explained with sample playbooks and the Ansible commands
     required to run those playbooks. If you feel your Ansible concepts and skills
     are a bit rusty, start here.'
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第1章](4f56b7ea-fbea-46f9-9512-1f054caf05f0.xhtml)，*介绍Ansible Playbooks和Roles*，介绍了您在Ansible中可能已经熟悉的术语。它们通过示例playbooks和运行这些playbooks所需的Ansible命令进行了解释。如果你觉得你的Ansible概念和技能有点生疏，可以从这里开始。'
 - en: '[Chapter 2](254b9e40-9165-42f7-a2f8-522f85f5f58d.xhtml), *Ansible Tower, Jenkins,
     and Other Automation Tools*, is all about automation of automation. We cover the
     use of scheduling automation tools commonly used with Ansible such as Ansible
@@ -70,8 +94,11 @@
     tasks of remembering when to schedule and execute playbooks and get notifications
     about the output can be delegated to the tools rather than in your head. If you
     haven''t used any tools like these, you should read this chapter.'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第二章](254b9e40-9165-42f7-a2f8-522f85f5f58d.xhtml)，*Ansible Tower、Jenkins和其他自动化工具*，全都是关于自动化的自动化。我们涵盖了与Ansible一起常用的调度自动化工具的使用，例如Ansible
+    Tower、Jenkins和Rundeck。如果您开始使用这些工具，那么记住何时安排和执行playbooks以及获取有关输出的通知等单调乏味的任务可以委托给这些工具，而不是留在您的头脑中。如果您还没有使用过这些工具，您应该阅读本章。'
 - en: '[Chapter 3](8345ba0c-aa35-4968-8caf-a3bcd0668f99.xhtml), *Setting up a Hardened
     WordPress with Encrypted Automated Backups*, covers the exploration of various
     security automation techniques and approaches. As with any technique or approach,
@@ -84,16 +111,22 @@
     for managing websites (even if it is just your own), this chapter should be useful.
     If you don''t use WordPress, there is enough in this chapter to get you to think
     about how to apply this chapter to your use case.'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第三章](8345ba0c-aa35-4968-8caf-a3bcd0668f99.xhtml)，*使用加密自动备份设置加固的WordPress*，涵盖了各种安全自动化技术和方法的探索。与任何技术或方法一样，我们所说的一些内容可能并不适用于您的用例。然而，通过采取一种主观的方法，我们向您展示了一种我们认为在很大程度上运行良好的方法。WordPress是目前最流行的网站创建软件。通过使用playbooks（并在IT自动化工具中运行），我们开始讨论一个IT/ops需求，即保持正在运行的服务器安全，并确保我们可以从故障中恢复。如果您负责管理网站（即使只是您自己的网站），这一章应该是有用的。如果您不使用WordPress，在本章中有足够的内容让您思考如何将本章应用于您的用例。'
 - en: '[Chapter 4](8c0a8c69-6d88-4fa9-ad9e-b7ad210ca794.xhtml), *Log Monitoring and
     Serverless Automated Defense (Elastic Stack in AWS)*, covers log monitoring and
     security automation, which are like peanut butter and jelly. In this chapter,
     using Ansible we set up a log monitoring server infrastructure on a server in
     AWS. Based on attack notifications, we create a near real-time dynamic firewall
     service using AWS services such as AWS Lambda, Dynamo DB, and AWS Cloudwatch.'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第四章](8c0a8c69-6d88-4fa9-ad9e-b7ad210ca794.xhtml)，*日志监视和无服务器自动防御（AWS中的Elastic
+    Stack）*，涵盖了日志监视和安全自动化，就像花生酱和果冻一样。在本章中，我们使用Ansible在AWS中的服务器上设置日志监视服务器基础架构。基于攻击通知，我们使用AWS
+    Lambda、Dynamo DB和AWS Cloudwatch等AWS服务创建一个几乎实时的动态防火墙服务。'
 - en: '[Chapter 5](5674486e-84e0-49b5-b1b2-e8455a0a1ea0.xhtml), *Automating Web Application
     Security Testing Using OWASP ZAP*, covers one of the most common security workflows
     of testing the security of a website using one of the most popular open source
@@ -101,14 +134,19 @@
     it for continuous scanning of your websites using Ansible and Jenkins. Read this
     chapter to see how we can work with Docker containers using Ansible, while doing
     continuous security scanning. A sure win-win!'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第五章](5674486e-84e0-49b5-b1b2-e8455a0a1ea0.xhtml)，*使用OWASP ZAP自动化Web应用程序安全测试*，涵盖了测试网站安全性的最常见安全工作流程之一，即使用最流行的开源工具之一OWASP
+    ZAP。一旦我们弄清了基本工作流程，我们就会通过Ansible和Jenkins对您的网站进行持续扫描，使其超级强大。阅读本章，了解如何使用Ansible在处理持续安全扫描时与Docker容器一起工作。这是一个确保双赢的策略！'
 - en: '[Chapter 6](5f9a1897-0304-42cb-8801-8004efd8aecb.xhtml), *Vulnerability Scanning
     with Nessus*, explains the use of Nessus with Ansible for vulnerability scanning.
     This chapter covers the approach of doing basic network scans, conducting security
     patch audits, and enumerating vulnerabilities.'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第六章](5f9a1897-0304-42cb-8801-8004efd8aecb.xhtml)，*使用Nessus进行漏洞扫描*，解释了使用Nessus与Ansible进行漏洞扫描的方法。本章涵盖了进行基本网络扫描、进行安全补丁审核和枚举漏洞的方法。'
 - en: '[Chapter 7](8fe755f4-a411-4f82-b2e7-b650c1b1d60f.xhtml), *Security Hardening
     for Applications and Networks*, shows that Ansible has enabled us to assert our
     security thinking declaratively. By utilizing the idea of what the system state
@@ -118,30 +156,43 @@
     existing security documentation, but most importantly, in a repeatable self-documenting
     way, which is under version control. If you were like us, doing all of this manually
     for many years, you will appreciate what a game changer this is for security automation.'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第 7 章](8fe755f4-a411-4f82-b2e7-b650c1b1d60f.xhtml)，*应用程序和网络的安全加固*，展示了 Ansible
+    已经使我们能够以声明方式表达我们的安全思想。通过利用系统状态应该是什么的想法，我们可以基于标准（如 CIS 和 NIST）以及美国国防部的 STIGs 提供的指南创建安全加固剧本。熟悉使用现有安全文档来加固应用程序和服务器的方法，但最重要的是，以可重复自描述的方式进行，这是在版本控制下进行的。如果你和我们一样，多年来一直手动执行所有这些任务，你会很感激这对安全自动化的改变。'
 - en: '[Chapter 8](db9ee51f-53e8-452c-8d5d-b2c3ae5f3361.xhtml), *Continuous Security
     Scanning for Docker Containers*, covers how to run security scanning tools against
     Docker containers. A lot of modern applications are deployed using containers,
     and this chapter will quickly helps you understand whether you have any vulnerable
     containers, and as always, coupled with Ansible Tower, how to make this a continuous
     process.'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第 8 章](db9ee51f-53e8-452c-8d5d-b2c3ae5f3361.xhtml)，*Docker 容器的持续安全扫描*，介绍了如何对
+    Docker 容器运行安全扫描工具。许多现代应用程序都使用容器部署，本章将帮助你快速了解是否有容器存在漏洞，并且一如既往地，与 Ansible Tower
+    结合使用，如何使这成为一个持续的过程。'
 - en: '[Chapter 9](756ea13b-7e67-4583-9df7-fbe8c141066e.xhtml), *Automating Lab Setups
     for Forensics Collection, Malware Analysis*, is specially for malware researchers.
     If you have always wanted to use Cuckoo sandbox and MISP, and have shied away
     because of the complicated steps involved in setting these up, this chapter has
     got you covered.'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第 9 章](756ea13b-7e67-4583-9df7-fbe8c141066e.xhtml)，*自动设置实验室进行取证收集、恶意软件分析*，特别适用于恶意软件研究人员。如果你一直想使用
+    Cuckoo 沙箱和 MISP，但因为设置这些工具涉及的步骤太复杂而望而却步，那么本章将为你提供帮助。'
 - en: '[Chapter 10](5365c833-8b99-4e76-b2b1-fbf3e63ef690.xhtml), *Writing an Ansible
     Module for Security Testing*, covers how we can extend the functionality offered
     by Ansible and learn from other projects that are using Ansible to deliver great
     software solutions. This chapter and the next, bring us to the third section of
     our book.'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第 10 章](5365c833-8b99-4e76-b2b1-fbf3e63ef690.xhtml)，*编写用于安全测试的 Ansible 模块*，介绍了我们如何扩展
+    Ansible 提供的功能，并学习其他项目如何使用 Ansible 提供优秀的软件解决方案。本章和下一章，带领我们进入本书的第三部分。'
 - en: Sometimes with all the amazing modules that come with Ansible, they are still
     not enough for us to do what we want to do. This chapter delves into creating
     an Ansible module, and if we may say so ourselves, it doesn't try to be very formal
@@ -149,8 +200,11 @@
     we create a module for running website security scans using a ZAP proxy. With
     a complete module provided, this will help you writing and using your modules
     in no time.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 有时候，尽管 Ansible 自带了许多惊人的模块，但它们仍然不足以满足我们的需求。本章探讨了创建 Ansible 模块，如果我们可以这么说的话，它并不试图对方法非常正式。记住我们想要关注的是安全自动化，我们创建了一个模块来运行使用
+    ZAP 代理进行网站安全扫描。提供了完整的模块，这将帮助你在很短的时间内编写和使用你自己的模块。
 - en: '[Chapter 11](695004a2-b349-4e80-aead-17615c65f356.xhtml), *Ansible Security
     Best Practices, References, and Further reading*, covers how to manage secrets
     and credentials using Ansible Vault. It will help you in setting up your own instance
@@ -159,30 +213,46 @@
     and open source version of Ansible Tower and show you how to set it up and use
     it. We conclude with a short discussion on Ansible 2.5, which is expected to be
     released in the first or second quarter of 2018.'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第 11 章](695004a2-b349-4e80-aead-17615c65f356.xhtml)，*Ansible 安全最佳实践、参考和进一步阅读*，介绍了如何使用
+    Ansible Vault 管理密码和凭证。它将帮助你建立自己的 Ansible Galaxy 实例。我们还介绍了其他使用 Ansible 剧本进行安全解决方案的项目，如
+    DebOps 和 Algo。我们还介绍了 AWX，这是 Ansible Tower 的免费开源版本，并向你展示如何设置和使用它。最后，我们简要讨论了预计在
+    2018 年第一或第二季度发布的 Ansible 2.5 版本。'
 - en: What you need for this book
+  id: totrans-23
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为了阅读本书，你需要什么
 - en: Ansible is a tool written in Python2\. For control machines, if Python2 is installed
     with the minimum version 2.6, you are good to go. Since Ansible 2.2 onwards, Python3
     is supported as a tech preview.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible 是一种用 Python2 编写的工具。对于控制机器，如果 Python2 安装了最低版本 2.6，那就没问题了。自 Ansible 2.2
+    起，Python3 作为技术预览版本得到支持。
 - en: Who this book is for
+  id: totrans-25
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 这本书适合谁
 - en: This book is for ideally anyone who understands that automation is key to repeatable,
     error free deployment and provisioning of infrastructure, applications, and networks.
     However, we really like to specify this.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 这本书最理想的读者是那些明白自动化是实现可重复、无错误部署和基础架构、应用程序和网络配置的关键的人。不过，我们确实想要指明这一点。
 - en: If you are a system administrator who also takes care of the security of websites,
     servers, and networks, this book is for you.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您是负责网站、服务器和网络安全的系统管理员，那么这本书适合您。
 - en: Security consultants and analysts would gain by focusing on [Chapter 3](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_72),
     *Setting up a Hardened WordPress with Encrypted Automated Backups*, to [Chapter
     10](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_442), *Writing
@@ -190,74 +260,112 @@
     to you, you will gain insights into how to use Ansible to provide security as
     a service to your teams. All the DevOps teams would love to work with someone
     who considers automation to be as important as the security part itself
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 安全顾问和分析师将通过专注于 [第三章](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_72)，*设置具有加密自动备份的强化
+    WordPress*，到 [第十章](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_442)，*编写用于安全测试的
+    Ansible 模块* 而受益。即使某些工作负载不适用于您，您也将了解如何使用 Ansible 为团队提供安全服务的见解。所有 DevOps 团队都愿意与将自动化视为与安全本身一样重要的人一起工作。
 - en: Application developers who would like an easy way to deploy secure servers especially
     should look at [Chapter 3](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_72), *Setting
     up a Hardened WordPress with Encrypted Automated Backups*, to [Chapter 7](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_265), *Security
     Hardening for Applications and Networks*.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 希望轻松部署安全服务器的应用程序开发人员尤其应该查看 [第三章](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_72)，*设置具有加密自动备份的强化
+    WordPress*，到 [第七章](https://cdp.packtpub.com/security_automation_with_ansible_2/wp-admin/post.php?post=23&action=edit#post_265)，*应用程序和网络的安全强化*。
 - en: 'You will get the most out of this book if you are one of these:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您是以下人员之一，您将从这本书中受益最多：
 - en: Someone who has used Ansible with basic commands before
+  id: totrans-31
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 之前使用过 Ansible 基本命令的人
 - en: Someone who familiar with Linux and Windows operating systems
+  id: totrans-32
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对 Linux 和 Windows 操作系统熟悉的人。
 - en: Someone who has a basic idea about IP addressing, networking, and working with
     software installers
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对 IP 地址、网络和软件安装程序有基本了解的人。
 - en: Conventions
+  id: totrans-34
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 惯例
 - en: 'In this book, you will find a number of text styles that distinguish between
     different kinds of information. Here are some examples of these styles and an
     explanation of their meaning. Code words in text, database table names, folder
     names, filenames, file extensions, pathnames, dummy URLs, user input, and Twitter
     handles are shown as follows: "The `harden.yml` performs hardening of MySQL server
     configuration" A block of code is set as follows:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，您将找到一些区分不同类型信息的文本样式。以下是这些样式的一些示例及其含义的解释。文本中的代码单词、数据库表名、文件夹名、文件名、文件扩展名、路径名、虚拟
+    URL、用户输入和 Twitter 句柄显示如下：“`harden.yml` 执行 MySQL 服务器配置的加固” 代码块设置如下：
 - en: '[PRE0]'
+  id: totrans-36
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'When we wish to draw your attention to a particular part of a code block, the
     relevant lines or items are set in bold:'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们希望引起您对代码块的特定部分的注意时，相关行或项目会以粗体显示：
 - en: '[PRE1]'
+  id: totrans-38
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Any command-line input or output is written as follows:'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 任何命令行输入或输出写成如下格式：
 - en: '[PRE2]'
+  id: totrans-40
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: '**New terms** and **important words** are shown in bold. Words that you see
     on the screen, for example, in menus or dialog boxes, appear in the text like
     this: "Click on Confirm Security Exception and continue to proceed with the installation
     steps"'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: '**新术语** 和 **重要单词** 以粗体显示。您在屏幕上看到的单词，例如菜单或对话框中的单词，会以这种方式出现在文本中：“点击 确认安全异常 并继续执行安装步骤”。'
 - en: Warnings or important notes appear like this.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 警告或重要提示会以这种方式出现。
 - en: Tips and tricks appear like this.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 提示和技巧会以这种方式出现。
 - en: Reader feedback
+  id: totrans-44
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 读者反馈
 - en: Feedback from our readers is always welcome. Let us know what you think about
     this book-what you liked or disliked. Reader feedback is important for us as it
     helps us develop titles that you will really get the most out of. To send us general
@@ -265,90 +373,130 @@
     the subject of your message. If there is a topic that you have expertise in and
     you are interested in either writing or contributing to a book, see our author
     guide at [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们的读者的反馈意见始终受到欢迎。告诉我们您对这本书的看法 - 您喜欢或不喜欢什么。读者的反馈对我们很重要，因为它帮助我们开发您真正能充分利用的标题。要向我们发送一般反馈，只需发送电子邮件至`feedback@packtpub.com`，并在您的消息主题中提到书名。如果您在某个专题上有专业知识，并且您有兴趣撰写或贡献一本书，请参阅我们的作者指南，网址为[www.packtpub.com/authors](http://www.packtpub.com/authors)。
 - en: Customer support
+  id: totrans-46
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 客户支持
 - en: Now that you are the proud owner of a Packt book, we have a number of things
     to help you to get the most from your purchase.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，您是Packt书籍的自豪所有者，我们有很多东西可以帮助您充分利用您的购买。
 - en: Downloading the example code
+  id: totrans-48
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载示例代码
 - en: 'You can download the example code files for this book from your account at
     [http://www.packtpub.com](http://www.packtpub.com). If you purchased this book
     elsewhere, you can visit [http://www.packtpub.com/support](http://www.packtpub.com/support)
     and register to have the files emailed directly to you. You can download the code
     files by following these steps:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以从[http://www.packtpub.com](http://www.packtpub.com)的帐户中下载本书的示例代码文件。如果你在其他地方购买了这本书，你可以访问[http://www.packtpub.com/support](http://www.packtpub.com/support)，并注册以直接将文件通过电子邮件发送给你。按照以下步骤下载代码文件：
 - en: Log in or register to our website using your email address and password.
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用您的电子邮件地址和密码登录或注册到我们的网站。
 - en: Hover the mouse pointer on the SUPPORT tab at the top.
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将鼠标指针悬停在顶部的SUPPORT选项卡上。
 - en: Click on Code Downloads & Errata.
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“代码下载与勘误”。
 - en: Enter the name of the book in the Search box.
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在搜索框中输入书名。
 - en: Select the book for which you're looking to download the code files.
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择您要下载代码文件的书籍。
 - en: Choose from the drop-down menu where you purchased this book from.
+  id: totrans-55
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从下拉菜单中选择购买本书的位置。
 - en: Click on Code Download.
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 单击“代码下载”。
 - en: 'Once the file is downloaded, please make sure that you unzip or extract the
     folder using the latest version of:'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 下载文件后，请确保使用以下最新版本的解压缩或提取文件夹：
 - en: WinRAR / 7-Zip for Windows
+  id: totrans-58
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Windows上的WinRAR / 7-Zip
 - en: Zipeg / iZip / UnRarX for Mac
+  id: totrans-59
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Mac上的Zipeg / iZip / UnRarX
 - en: 7-Zip / PeaZip for Linux
+  id: totrans-60
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Linux上的7-Zip / PeaZip
 - en: The code bundle for the book is also hosted on GitHub at [https://github.com/PacktPublishing/Security-Automation-with-Ansible-2](https://github.com/PacktPublishing/Security-Automation-with-Ansible-2).
     We also have other code bundles from our rich catalog of books and videos available
     at [https://github.com/PacktPublishing/](https://github.com/PacktPublishing/).
     Check them out!
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书的代码捆绑包也托管在GitHub上，地址为[https://github.com/PacktPublishing/Security-Automation-with-Ansible-2](https://github.com/PacktPublishing/Security-Automation-with-Ansible-2)。我们还提供了来自我们丰富书籍和视频目录的其他代码捆绑包，地址为[https://github.com/PacktPublishing/](https://github.com/PacktPublishing/)。来看看吧！
 - en: Downloading the color images of this book
+  id: totrans-62
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 下载本书的彩色图像
 - en: We also provide you with a PDF file that has color images of the screenshots/diagrams
     used in this book. The color images will help you better understand the changes
     in the output. You can download this file from [https://www.packtpub.com/sites/default/files/downloads/SecurityAutomationwithAnsible2_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/SecurityAutomationwithAnsible2_ColorImages.pdf).
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还为您提供了一个PDF文件，其中包含本书中使用的屏幕截图/图表的彩色图像。彩色图像将帮助您更好地理解输出的变化。您可以从[https://www.packtpub.com/sites/default/files/downloads/SecurityAutomationwithAnsible2_ColorImages.pdf](https://www.packtpub.com/sites/default/files/downloads/SecurityAutomationwithAnsible2_ColorImages.pdf)下载此文件。
 - en: Errata
+  id: totrans-64
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 勘误
 - en: Although we have taken every care to ensure the accuracy of our content, mistakes
     do happen. If you find a mistake in one of our books-maybe a mistake in the text
     or the code-we would be grateful if you could report this to us. By doing so,
@@ -361,12 +509,16 @@
     submitted errata, go to [https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)
     and enter the name of the book in the search field. The required information will
     appear under the Errata section.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 尽管我们已经尽一切努力确保内容的准确性，但错误还是会发生。如果您在我们的书籍中发现错误——也许是文字或代码上的错误——我们将不胜感激地请您向我们报告。通过这样做，您可以避免其他读者的困扰，并帮助我们改进本书的后续版本。如果您发现任何勘误，请访问[http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata)，选择您的书籍，点击"勘误提交表格"链接，并输入您的勘误详情。一旦您的勘误被验证，您的提交将被接受，并且勘误将被上传到我们的网站或添加到该书籍的"勘误"部分的任何现有勘误列表中。要查看之前提交的勘误，请转至[https://www.packtpub.com/books/content/support](https://www.packtpub.com/books/content/support)，并在搜索框中输入书名。所需信息将显示在"勘误"部分下面。
 - en: Piracy
+  id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 盗版
 - en: Piracy of copyrighted material on the internet is an ongoing problem across
     all media. At Packt, we take the protection of our copyright and licenses very
     seriously. If you come across any illegal copies of our works in any form on the
@@ -374,13 +526,19 @@
     so that we can pursue a remedy. Please contact us at `copyright@packtpub.com`
     with a link to the suspected pirated material. We appreciate your help in protecting
     our authors and our ability to bring you valuable content.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 互联网上的版权物资盗版是跨所有媒体持续存在的问题。在Packt，我们非常重视保护我们的版权和许可。如果您在互联网上的任何形式上发现我们作品的任何非法副本，请立即向我们提供位置地址或网站名称，以便我们采取补救措施。请通过`copyright@packtpub.com`与我们联系，并附上可疑盗版材料的链接。感谢您帮助我们保护我们的作者和我们为您带来有价值内容的能力。
 - en: Questions
+  id: totrans-68
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 问题
 - en: If you have a problem with any aspect of this book, you can contact us at `questions@packtpub.com`,
     and we will do our best to address the problem.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您对本书的任何方面有问题，请通过`questions@packtpub.com`与我们联系，我们将尽力解决问题。

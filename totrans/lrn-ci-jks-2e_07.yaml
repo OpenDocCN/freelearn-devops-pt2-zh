@@ -1,473 +1,718 @@
 - en: Continuous Integration Using Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Jenkins 进行持续集成
 - en: 'We will begin this chapter with a **Continuous Integration** (**CI**) design
     that covers the following areas:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将从涵盖以下方面的**持续集成**（**CI**）设计开始：
 - en: A branching strategy
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个分支策略
 - en: A list of tools for CI
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一份 CI 工具清单
 - en: A Jenkins pipeline structure
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个 Jenkins 流水线结构
 - en: The CI design will serve as a blueprint that will guide the readers in answering
     the how, why, and where of CI being implemented. The design will cover all the
     necessary steps involved in implementing an end-to-end CI pipeline.
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: CI 设计将作为一个蓝图，指导读者回答 CI 的实施如何、为什么以及在哪里的问题。设计将涵盖实施端到端 CI 流水线所涉及的所有必要步骤。
 - en: The CI design discussed in this chapter should be considered as a template for
     implementing CI, and not a full and final model. The branching strategy and the
     tools used can all be modified and replaced to suit the purpose.
+  id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章讨论的 CI 设计应被视为实施 CI 的模板，而不是最终的模型。分支策略和所使用的工具都可以修改和替换以适应目的。
 - en: Jenkins CI design
+  id: totrans-7
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins CI 设计
 - en: Almost every organization creates one before they even begin to explore the
     CI and DevOps tools. In this section, we will go through a very general CI design.
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: 几乎每个组织在甚至开始探索 CI 和 DevOps 工具之前都会创建一个。在本节中，我们将介绍一个非常通用的 CI 设计。
 - en: Continuous Integration includes not only Jenkins or any other similar CI tool
     for that matter, but it also deals with how you version control your code, the
     branching strategy you follow, and so on.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续集成不仅包括 Jenkins 或任何其他类似的 CI 工具，它还涉及到代码版本控制方式、分支策略等方面。
 - en: Various organizations may follow different kinds of strategies to achieve CI,
     since it all depends on the requirement and type of the project.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 不同的组织可能采用不同类型的策略来实现 CI，因为这完全取决于项目的需求和类型。
 - en: Branching strategy
+  id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 分支策略
 - en: 'It''s always good to have a branching strategy. Branching helps you organize
     your code. It is a way to isolate your working code from the code that is under
     development. In our CI design, we will start with three types of branches:'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 拥有分支策略总是很好的。分支有助于组织您的代码。这是将您的工作代码与正在开发的代码隔离开来的一种方式。在我们的 CI 设计中，我们将从三种类型的分支开始：
 - en: The master branch
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 主分支
 - en: The integration branch
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 集成分支
 - en: The feature branch
+  id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 功能分支
 - en: This branching strategy is a slimmer version of the GitFlow workflow branching
     model.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个分支策略是 GitFlow 工作流分支模型的简化版本。
 - en: The master branch
+  id: totrans-17
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 主分支
 - en: One can also call it a **production branch**. It holds the working copy of the
     code that has been delivered. The code on this branch has passed all the testing.
     No development happens on this branch.
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 也可以称之为**生产分支**。它保存了已交付的代码的工作副本。该分支上的代码已通过了所有测试。在这个分支上不进行开发。
 - en: The integration branch
+  id: totrans-19
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 集成分支
 - en: The integration branch is also known as the **mainline branch**. This is where
     all the features are integrated, built, and tested for integration issues. Again,
     no development happens here. However, developers can create feature branches out
     of the integration branch and work on them.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 集成分支也被称为**主干分支**。这是所有功能集成、构建和测试集成问题的地方。同样，在这里不进行开发。然而，开发人员可以从集成分支创建功能分支并在其上工作。
 - en: The feature branch
+  id: totrans-21
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 功能分支
 - en: Lastly, we have the feature branch. This is where the actual development takes
     place. We can have multiple feature branches spanning out of the integration branch.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们有功能分支。这是实际开发发生的地方。我们可以从集成分支创建多个功能分支。
 - en: 'The following illustration shows a typical branching strategy that we will
     be using as part of our CI design. We will be creating two feature branches spanning
     out from the **Integration/Mainline Branch**, which itself spans out from the
     master branch:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下插图显示了我们将作为 CI 设计一部分使用的典型分支策略。我们将创建两个功能分支，它们从**集成/主干分支**延伸出来，而这个分支本身则从主分支延伸出来：
 - en: '![](img/a84c0478-d3f6-458c-8940-f72357ae5915.png)'
+  id: totrans-24
   prefs: []
   type: TYPE_IMG
+  zh: '![图示](img/a84c0478-d3f6-458c-8940-f72357ae5915.png)'
 - en: Branching strategy
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 分支策略
 - en: A commit on the feature branch or the integration branch (a merge will create
     a commit) will go through a build, static code analysis, and integration test
     phase. If the code passes these phases successfully, the resultant package is
     uploaded to Artifactory (binary repository).
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 在功能分支或集成分支上的提交（合并会创建一个提交）将经过构建、静态代码分析和集成测试阶段。如果代码成功通过这些阶段，结果包将被上传到 Artifactory（二进制存储库）。
 - en: The CI pipeline
+  id: totrans-27
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: CI 流水线
 - en: 'We are now at the heart of the CI design. We will be creating a Multibranch
     Pipeline in Jenkins that will have the following stages:'
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在来到了CI设计的核心。我们将在Jenkins中创建一个多分支流水线，其中将包含以下阶段：
 - en: Fetch the code from the **version control system** (**VCS**) on a push event
     (initialization of the CI pipeline).
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在推送事件（CI流水线的初始化）上从**版本控制系统**（**VCS**）获取代码。
 - en: Build and unit test the code, and publish a unit test report on Jenkins.
+  id: totrans-30
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建和单元测试代码，并在Jenkins上发布单元测试报告。
 - en: Perform static code analysis on the code and upload the result to SonarQube.
     Fail the pipeline if the number of bugs crosses the threshold defined in the quality
     gate.
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对代码进行静态代码分析，并将结果上传到SonarQube。如果错误数量超过质量门限的定义，则流水线失败。
 - en: Perform integration testing and publish a unit test report on Jenkins.
+  id: totrans-32
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins上执行集成测试并发布单元测试报告。
 - en: Upload the built artifacts to Artifactory along with some meaningful properties.
+  id: totrans-33
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将构建的工件与一些有意义的属性一起上传到Artifactory。
 - en: The purpose of the previous CI pipeline is to automate the process of continuously
     building, testing (unit test and integration test), performing static code analysis,
     and uploading the built artifacts to the binary repository. Reporting for failures/success
     happens at every step. Let us discuss these pipelines and their constituents in
     detail.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 前一CI流水线的目的是自动化持续构建、测试（单元测试和集成测试）、进行静态代码分析以及上传构建的工件到二进制存储库的过程。每个步骤的失败/成功都有报告。让我们详细讨论这些流水线及其组成部分。
 - en: Toolset for CI
+  id: totrans-35
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: CI的工具集
 - en: 'The example project for which we are implementing CI is a simple Maven project.
     In this chapter, we will see Jenkins working closely with many other tools. The
     following table contains the list of tools and technologies involved in everything
     that we will be seeing:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们正在实现CI的示例项目是一个简单的Maven项目。在这一章中，我们将看到Jenkins与许多其他工具密切合作。以下表格包含了我们将要看到的一切所涉及的工具和技术的列表：
 - en: '| **Technology** | **Characteristic** |'
+  id: totrans-37
   prefs: []
   type: TYPE_TB
+  zh: '| **技术** | **特点** |'
 - en: '| Java | Primary programming language used for coding |'
+  id: totrans-38
   prefs: []
   type: TYPE_TB
+  zh: '| Java | 用于编码的主要编程语言 |'
 - en: '| Maven | Build tool |'
+  id: totrans-39
   prefs: []
   type: TYPE_TB
+  zh: '| Maven | 构建工具 |'
 - en: '| JUnit | Unit testing and integration testing tools |'
+  id: totrans-40
   prefs: []
   type: TYPE_TB
+  zh: '| JUnit | 单元测试和集成测试工具 |'
 - en: '| Jenkins | Continuous Integration tool |'
+  id: totrans-41
   prefs: []
   type: TYPE_TB
+  zh: '| Jenkins | 持续集成工具 |'
 - en: '| GitHub | Version control system |'
+  id: totrans-42
   prefs: []
   type: TYPE_TB
+  zh: '| GitHub | 版本控制系统 |'
 - en: '| SonarQube | Static code analysis tool |'
+  id: totrans-43
   prefs: []
   type: TYPE_TB
+  zh: '| SonarQube | 静态代码分析工具 |'
 - en: '| Artifactory | Binary repository manager |'
+  id: totrans-44
   prefs: []
   type: TYPE_TB
+  zh: '| Artifactory | 二进制存储库管理器 |'
 - en: Creating the CI pipeline
+  id: totrans-45
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建CI流水线
 - en: 'In this section, we will learn how to create the CI pipeline discussed in the
     previous section. We will perform the following steps:'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将学习如何创建上一节中讨论的CI流水线。我们将执行以下步骤：
 - en: We will create a source code repository in GitHub
+  id: totrans-47
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将在GitHub上创建一个源代码存储库
 - en: We will create a Jenkinsfile to describe the way we build, unit test, perform
     static code analysis, integration test, and publish built artifacts to Artifactory
+  id: totrans-48
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将创建一个Jenkinsfile来描述我们构建、单元测试、执行静态代码分析、集成测试和发布构建工件到Artifactory的方式
 - en: We will utilize Docker to spawn build agents to run our CI pipeline
+  id: totrans-49
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将利用Docker生成构建代理来运行我们的CI流水线
 - en: We will create a Multibranch Pipeline in Jenkins
+  id: totrans-50
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将在Jenkins中创建一个多分支流水线
 - en: It is important that you have configured the *Configuring Webhooks on GitHub
     from Jenkins* section from [Chapter 3](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml),
     *The New Jenkins*.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 非常重要的是，您已经配置了来自[第3章](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml)的 *Jenkins从GitHub配置Webhook*
+    部分。
 - en: Creating a new repository on GitHub
+  id: totrans-52
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在GitHub上创建一个新的存储库
 - en: 'Let us create a new repository on GitHub. Make sure you have Git installed
     on the machine that you will use to perform the steps mentioned in the following
     section:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们在GitHub上创建一个新的存储库。确保您的机器上安装了Git，以执行以下步骤：
 - en: Log in to your GitHub account.
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的GitHub帐户。
 - en: In this chapter, we will use the source code from [https://github.com/nikhilpathania/hello-world-greeting.git](https://github.com/nikhilpathania/hello-world-greeting.git)
     as an example.
+  id: totrans-55
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在本章中，我们将使用来自 [https://github.com/nikhilpathania/hello-world-greeting.git](https://github.com/nikhilpathania/hello-world-greeting.git)
+    的源代码作为示例。
 - en: 'Try to fork the repository mentioned in the previous link. To do so, just access
     the repository from your internet browser and click on the **Fork** button, as
     shown in the following screenshot:'
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 尝试从上一个链接中提到的存储库中分叉。要做到这一点，只需从您的互联网浏览器访问存储库，然后点击 **Fork** 按钮，如下截图所示：
 - en: '![](img/64b5022d-1083-416e-b2ba-5392fdc1da63.png)'
+  id: totrans-57
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/64b5022d-1083-416e-b2ba-5392fdc1da63.png)'
 - en: Forking a GitHub project
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 分叉一个GitHub项目
 - en: Once done, a replica of the repository will be visible under your GitHub account.
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，仓库的副本将会出现在您的 GitHub 账户下。
 - en: Using the SonarQube scanner for Maven
+  id: totrans-60
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 SonarQube 用于 Maven 的扫描器。
 - en: Ideally, we need the SonarQube scanner to perform static code analysis on a
     project. However, we will use the SonarQube scanner utility for Maven instead,
     as the example source code that we are using in the current chapter is a Maven
     project.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 理想情况下，我们需要 SonarQube 扫描器对项目进行静态代码分析。但是，我们将改为使用 Maven 的 SonarQube 扫描器实用程序，因为我们在当前章节中使用的示例源代码是一个
+    Maven 项目。
 - en: 'To do so, add the following code to your `.pom` file:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 为此，在您的 `.pom` 文件中添加以下代码：
 - en: '[PRE0]'
+  id: totrans-63
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'You need not perform the previous step if you have forked the following repository:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您已经 fork 了以下仓库，那么您不需要执行上一步：
 - en: '[https://github.com/nikhilpathania/hello-world-greeting.git](https://github.com/nikhilpathania/hello-world-greeting.git).'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: '[https://github.com/nikhilpathania/hello-world-greeting.git](https://github.com/nikhilpathania/hello-world-greeting.git)。'
 - en: Writing the Jenkinsfile for CI
+  id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为 CI 编写 Jenkinsfile。
 - en: In the following section, we will learn how to write pipeline code for our Continuous
     Integration.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，我们将学习如何为我们的持续集成编写流水线代码。
 - en: Spawning a Docker container – build agent
+  id: totrans-68
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 生成一个 Docker 容器 - 构建代理。
 - en: First, let us create pipeline code to create a Docker container (Jenkins slave),
     which will act as our build agent.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，让我们创建流水线代码来创建一个 Docker 容器（Jenkins 从机），这将作为我们的构建代理。
 - en: If you can recall, in the *Adding Jenkins slaves – Docker containers* section
     from [Chapter 5](9f74f9d8-e9cc-4406-b8f5-20661f4c8567.xhtml), *Distributed Builds*, we
     learned to create a Docker image (`maven-build-slave-0.1`) that was meant for
     creating Docker containers (Jenkins slaves). We will use the same Docker image
     over here to spawn Jenkins Slave Agents for our CI pipeline.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你还记得，在*添加 Jenkins 从机 - Docker 容器*章节中来自[第 5 章](9f74f9d8-e9cc-4406-b8f5-20661f4c8567.xhtml)的
+    *分布式构建*，我们学习了如何创建一个用于创建 Docker 容器（Jenkins 从机）的 Docker 镜像(`maven-build-slave-0.1`)。我们将在此处使用相同的
+    Docker 镜像来生成 Jenkins 从机代理用于我们的 CI 流水线。
 - en: 'In our Jenkinsfile, to spawn a Docker container (Jenkins slave) we need to
     write a code block for `node` with the label as `docker`:'
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: 在我们的 Jenkinsfile 中，为了生成一个 Docker 容器（Jenkins 从机），我们需要编写一个代码块，标签为 `docker`：
 - en: '[PRE1]'
+  id: totrans-72
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: Where `docker` is a label for the `maven-build-slave-0.1` Docker template.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: '`docker` 是 `maven-build-slave-0.1` Docker 模板的标签。'
 - en: 'We would like to perform the following tasks on the `docker` node:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们希望在`docker`节点上执行以下任务：
 - en: Perform build
+  id: totrans-75
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 执行构建。
 - en: Perform unit tests and publish the unit test report
+  id: totrans-76
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 执行单元测试并发布单元测试报告。
 - en: Perform static code analysis and upload the results on SonarQube
+  id: totrans-77
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 执行静态代码分析并将结果上传到 SonarQube。
 - en: Perform integration testing and publish the integration test report
+  id: totrans-78
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 执行集成测试并发布集成测试报告。
 - en: Publish artifacts to Artifactory
+  id: totrans-79
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将产物发布到 Artifactory。
 - en: All the previous tasks are various stages of our CI pipeline. Let's write pipeline
     code for each one of them.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 所有前面的任务都是我们 CI 流水线的各个阶段。让我们为每一个编写流水线代码。
 - en: Downloading the latest source code from VCS
+  id: totrans-81
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从 VCS 中下载最新的源代码。
 - en: 'We want our Jenkins pipeline to download the latest change pushed to the master
     branch on our GitHub repository:'
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们希望我们的 Jenkins 流水线下载推送到 GitHub 仓库主分支的最新更改：
 - en: '[PRE2]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'Wrap the previous step inside a stage called `Poll`:'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 将上一步包装在一个名为 `轮询` 的阶段中：
 - en: '[PRE3]'
+  id: totrans-85
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Pipeline code to perform the build and unit test
+  id: totrans-86
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 执行构建和单元测试的流水线代码。
 - en: 'The example project that we are using in the current chapter is a Maven project.
     Therefore, the pipeline code for the build is a simple shell script that runs
     the `mvn clean` command:'
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在当前章节中使用的示例项目是一个 Maven 项目。因此，用于构建的流水线代码是一个简单的 shell 脚本，运行 `mvn clean` 命令：
 - en: '[PRE4]'
+  id: totrans-88
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Where `-DskipITs=true` is the option to skip the integration test and perform
     only the build and unit test.
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 其中 `-DskipITs=true` 是跳过集成测试并仅执行构建和单元测试的选项。
 - en: The `junit '**/target/surefire-reports/TEST-*.xml'` command enables Jenkins
     to publish JUnit unit test reports on the Jenkins pipeline page.  `**/target/surefire-reports/TEST-*.xml` is
     the directory location where the unit test reports are generated.
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 命令 `junit '**/target/surefire-reports/TEST-*.xml'` 让 Jenkins 能够在 Jenkins 流水线页面上发布
+    JUnit 单元测试报告。`**/target/surefire-reports/TEST-*.xml` 是生成单元测试报告的目录位置。
 - en: Your Maven `.pom` file should have `maven-surefire-plugin` and `maven-failsafe-plugin` for
     the previous command to work.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 您的 Maven `.pom` 文件应该包含`maven-surefire-plugin`和`maven-failsafe-plugin`以使上一个命令工作。
 - en: You also need the Jenkins JUnit plugin (installed by default).
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还需要 Jenkins JUnit 插件（默认安装）。
 - en: 'Wrap the previous step inside a stage called `Build & Unit test`:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 将上一步包装在一个名为 `构建 & 单元测试` 的阶段中：
 - en: '[PRE5]'
+  id: totrans-94
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Pipeline code to perform static code analysis
+  id: totrans-95
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 执行静态代码分析的流水线代码
 - en: 'The pipeline code to perform static code analysis is a simple shell script
     that will run the Maven commands, as shown in the following command block. This
     is made possible using the SonarQube scanner utility for Maven. Remember the configuration
     that we saw in the *Using the SonarQube scanner for Maven* section:'
+  id: totrans-96
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行静态代码分析的流水线代码是一个简单的 shell 脚本，将运行 Maven 命令，如下所示的命令块。这是通过 Maven 的 SonarQube 扫描器实用程序实现的。记住我们在
+    *使用 SonarQube scanner for Maven* 部分看到的配置：
 - en: '[PRE6]'
+  id: totrans-97
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: The `-Dsonar.projectName=example-project` option is the option to pass the SonarQube
     project name. In this way, all our results will be visible under the `projectName=example-project`
     that we created in the previous chapter.
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: '`-Dsonar.projectName=example-project` 选项是传递 SonarQube 项目名称的选项。通过这种方式，我们所有的结果都将显示在我们在上一章中创建的
+    `projectName=example-project` 下。'
 - en: Similarly, the `-Dsonar.projectKey=example-project` option allows the SonarQube
     scanner for the Maven utility to confirm the `projectKey=example-project` with
     SonarQube.
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 类似地，`-Dsonar.projectKey=example-project` 选项允许 Maven 的 SonarQube 扫描器确认与 SonarQube
+    的 `projectKey=example-project`。
 - en: The `-Dsonar.projectVersion=$BUILD_NUMBER` option allows us to attach the Jenkins
     build number with every analysis that we perform and upload to SonarQube. `$BUILD_NUMBER` is
     the Jenkins environment variable for the build number.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: '`-Dsonar.projectVersion=$BUILD_NUMBER` 选项允许我们将 Jenkins 构建号与我们执行和上传到 SonarQube
+    的每个分析关联起来。`$BUILD_NUMBER` 是 Jenkins 的构建号环境变量。'
 - en: 'Wrap the previous step inside a stage called `Static Code Analysis`:'
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 将前一步骤包装在名为 `Static Code Analysis` 的阶段中：
 - en: '[PRE7]'
+  id: totrans-102
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: Pipeline code to perform integration testing
+  id: totrans-103
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 执行集成测试的流水线代码
 - en: 'The pipeline code to perform integration testing is a shell script that will
     run the Maven commands, as shown in the following command block:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行集成测试的流水线代码是一个 shell 脚本，将运行 Maven 命令，如下所示的命令块：
 - en: '[PRE8]'
+  id: totrans-105
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: Where `-Dsurefire.skip=true` is the option to skip unit testing and perform
     only the integration testing.
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 其中 `-Dsurefire.skip=true` 是跳过单元测试仅执行集成测试的选项。
 - en: The `junit '**/target/failsafe-reports/TEST-*.xml'` command enables Jenkins
     to publish JUnit unit test reports on the Jenkins pipeline page.  `**/target/failsafe-reports/TEST-*.xml` is
     the directory location where the integration test reports are generated.
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: '`junit ''**/target/failsafe-reports/TEST-*.xml''` 命令使 Jenkins 能够在 Jenkins 流水线页面上发布
+    JUnit 单元测试报告。`**/target/failsafe-reports/TEST-*.xml` 是生成集成测试报告的目录位置。'
 - en: 'Wrap the previous step inside a stage called `Integration Test`:'
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 将前一步骤包装在名为 `Integration Test` 的阶段中：
 - en: '[PRE9]'
+  id: totrans-109
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Your Maven `.pom` file should have `maven-surefire-plugin` and `maven-failsafe-plugin`
     for the previous command to work.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 要使上述命令生效，你的 Maven `.pom` 文件应包含 `maven-surefire-plugin` 和 `maven-failsafe-plugin`。
 - en: You also need the Jenkins JUnit plugin (installed by default).
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还需要 Jenkins JUnit 插件（默认安装）。
 - en: Pipeline code to publish built artifacts to Artifactory
+  id: totrans-112
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 执行将构建工件发布到 Artifactory 的流水线代码
 - en: 'To upload the build artifacts to Artifactory, we will use the *File Specs*.
     The File Specs code is shown in the following code block:'
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 要将构建工件上传到 Artifactory，我们将使用 *File Specs*。下面是 File Specs 代码的示例：
 - en: '[PRE10]'
+  id: totrans-114
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'The following table states the parameters from the preceding code:'
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下表格说明了前述代码的参数：
 - en: '| **Parameters** | **Condition** | **Description** |'
+  id: totrans-116
   prefs: []
   type: TYPE_TB
+  zh: '| **参数** | **条件** | **描述** |'
 - en: '| `pattern` | `[Mandatory]` | Specifies the local filesystem path to artifacts
     that should be uploaded to Artifactory. You can specify multiple artifacts by
     using wildcards or a regular expression, as designated by the `regexp` property.
@@ -476,8 +721,13 @@
     of the Jenkins Artifactory plugin and version 2.3.1 of the TeamCity Artifactory
     plugin, the pattern format has been simplified and uses the same file separator
     `/` for all operating systems, including Windows.  |'
+  id: totrans-117
   prefs: []
   type: TYPE_TB
+  zh: '| `pattern` | `[必填]` | 指定应上传到 Artifactory 的本地文件系统路径。您可以通过使用通配符或正则表达式来指定多个工件，正则表达式由
+    `regexp` 属性指定。如果使用 `regexp`，则需要使用反斜杠 `\` 对表达式中使用的任何保留字符（例如 `.`, `?` 等）进行转义。自 Jenkins
+    Artifactory 插件版本 2.9.0 和 TeamCity Artifactory 插件版本 2.3.1 起，模式格式已简化，并对包括 Windows
+    在内的所有操作系统使用相同的文件分隔符 `/`。 |'
 - en: '| `target` | `[Mandatory]` | Specifies the target path in Artifactory in the
     following format: `[repository_name]/[repository_path]`. If the pattern ends with
     a slash, for example, `repo-name/a/b/`, then `b` is assumed to be a folder in
@@ -487,591 +737,889 @@
     are replaced by corresponding tokens in the source path that are enclosed in parentheses. For
     more details, please refer to the *Using Placeholders* article ([https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders](https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders))**.**
     |'
+  id: totrans-118
   prefs: []
   type: TYPE_TB
+  zh: '| `target` | `[必填]` | 以以下格式指定Artifactory中的目标路径：`[repository_name]/[repository_path]`。如果模式以斜杠结尾，例如，`repo-name/a/b/`，那么`b`被视为Artifactory中的一个文件夹，并且文件将上传到其中。在`repo-name/a/b`的情况下，上传的文件将在Artifactory中重命名为`b`。为了灵活地指定上传路径，您可以包含形式为`{1},
+    {2}, {3}...`的占位符，它们被对应的括号中的源路径中的令牌所替换。有关更多详细信息，请参考 *使用占位符* 文章（[https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders](https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders))**。**
+    |'
 - en: '| `props` | `[Optional]` | List of `key=value` pairs separated by a semicolon
     (`;`) to be attached as properties to the uploaded properties. If any key can
     take several values, then each value is separated by a comma (`,`). For example,
     `key1=value1;key2=value21,value22;key3=value3`. |'
+  id: totrans-119
   prefs: []
   type: TYPE_TB
+  zh: '| `props` | `[可选]` | 以分号(`;`)分隔的`key=value`对的列表，作为附加到上传属性的属性。如果任何键可以接受多个值，则每个值用逗号(`,`)分隔。例如，`key1=value1;key2=value21,value22;key3=value3`。
+    |'
 - en: '| `flat` | `[Default: true]` | If `true`, artifacts are uploaded to the exact
     target path specified and their hierarchy in the source filesystem is ignored.
     If `false`, artifacts are uploaded to the target path while maintaining their
     filesystem hierarchy. |'
+  id: totrans-120
   prefs: []
   type: TYPE_TB
+  zh: '| `flat` | `[默认: true]` | 如果为`true`，构件将上传到指定的精确目标路径，并且源文件系统中的层次结构将被忽略。如果为`false`，构件将上传到目标路径，同时保留其文件系统层次结构。
+    |'
 - en: '| `recursive` | `[Default: true]` | If `true`, artifacts are also collected
     from subdirectories of the source directory for upload. If `false`, only artifacts
     specifically in the source directory are uploaded. |'
+  id: totrans-121
   prefs: []
   type: TYPE_TB
+  zh: '| `recursive` | `[默认: true]` | 如果为`true`，则还会从源目录的子目录中收集构建产物进行上传。如果为`false`，则仅上传源目录中明确定义的构建产物。
+    |'
 - en: '| `regexp` | `[Default: false]` | If `true`, the command will interpret the
     pattern property, which describes the local filesystem path of artifacts to upload,
     as a regular expression. If `false`, the command will interpret the pattern property
     as a wildcard expression. |'
+  id: totrans-122
   prefs: []
   type: TYPE_TB
+  zh: '| `regexp` | `[默认: false]` | 如果为`true`，命令将按照正则表达式解释描述要上传的构件的本地文件系统路径的模式属性。如果为`false`，命令将将模式属性解释为通配符表达式。
+    |'
 - en: 'The following is the File Specs code that we will use in our pipeline:'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面是我们在流水线中将使用的文件规范代码：
 - en: '[PRE11]'
+  id: totrans-124
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'The following table states the parameters from the preceding code:'
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: 下表列出了上述代码中的参数：
 - en: '| **Parameters** | **Description** |'
+  id: totrans-126
   prefs: []
   type: TYPE_TB
+  zh: '| **参数** | **描述** |'
 - en: '| `def server = Artifactory.server ''Default Artifactory Server''` | This line
     tells Jenkins to use the existing Artifactory server configured in Jenkins. In
     our example, it is the default Artifactory server. |'
+  id: totrans-127
   prefs: []
   type: TYPE_TB
+  zh: '| `def server = Artifactory.server ''Default Artifactory Server''` | 这行代码告诉Jenkins要使用Jenkins中配置的现有Artifactory服务器。在我们的例子中，它是默认的Artifactory服务器。
+    |'
 - en: '| `Default Artifactory Server` | This is the name of the Artifactory server
     configured inside Jenkins. |'
+  id: totrans-128
   prefs: []
   type: TYPE_TB
+  zh: '| `Default Artifactory Server` | 这是Jenkins内配置的Artifactory服务器的名称。 |'
 - en: '| `"pattern": "target/hello-0.0.1.war",` | This line of code will look at a
     file named `hello-0.0.1.war` inside the directory target, which is again inside
     the Jenkins workspace directory. |'
+  id: totrans-129
   prefs: []
   type: TYPE_TB
+  zh: '| `"pattern": "target/hello-0.0.1.war",` | 这行代码会查找目录`target`中名为`hello-0.0.1.war`的文件，而`target`目录又位于Jenkins工作目录内部。
+    |'
 - en: '| `"target": "example-project/${BUILD_NUMBER}/",` | This line of code will
     try to upload the build artifacts to the Artifactory repository named `helloworld-greeting-project`.
     It will place the artifact inside a folder named after the build number inside
     the Artifactory repository. |'
+  id: totrans-130
   prefs: []
   type: TYPE_TB
+  zh: '| `"target": "example-project/${BUILD_NUMBER}/",` | 这行代码尝试将构建产物上传到名为`helloworld-greeting-project`的Artifactory仓库。它将构建产物放置在Artifactory仓库内的一个以构建编号命名的文件夹内。
+    |'
 - en: '| `${BUILD_NUMBER}` | The Jenkins environment variable for the build number.
     |'
+  id: totrans-131
   prefs: []
   type: TYPE_TB
+  zh: '| `${BUILD_NUMBER}` | 构建编号的Jenkins环境变量。 |'
 - en: '| `"props": "Integration-Tested=Yes;Performance-Tested=No"` | This code creates
     two key-value pairs and assigns them to the uploaded artifacts. These key-value
     pairs can be used as labels for code promotion in Artifactory. |'
+  id: totrans-132
   prefs: []
   type: TYPE_TB
+  zh: '| `"props": "Integration-Tested=Yes;Performance-Tested=No"` | 此代码创建两个键值对并将它们分配给上载的工件。这些键值对可用作
+    Artifactory 中代码推广的标签。 |'
 - en: 'Wrap the previous step inside a stage called `Publish`:'
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 将上一步放入名为`Publish`的阶段中：
 - en: '[PRE12]'
+  id: totrans-134
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Combined CI pipeline code
+  id: totrans-135
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 组合的 CI 管道代码
 - en: 'The following is the complete combined code that will run inside the `docker`
     node:'
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是将在 `docker` 节点内运行的完整组合代码：
 - en: '[PRE13]'
+  id: totrans-137
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: Using a Jenkinsfile
+  id: totrans-138
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Jenkinsfile
 - en: 'Jenkins Multibranch Pipelines utilize Jenkinsfiles. In this section, we will
     learn how to create a Jenkinsfile. We will use the example pipeline script that
     we created in the previous section to create our Jenkinsfile. Follow these steps:'
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 多分支管道使用 Jenkinsfile。在本节中，我们将学习如何创建 Jenkinsfile。我们将使用上一节中创建的示例管道脚本来创建我们的
+    Jenkinsfile。请按照以下步骤操作：
 - en: Log in to your GitHub account.
+  id: totrans-140
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的 GitHub 帐户。
 - en: Navigate to the forked repository*.*
+  id: totrans-141
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到分叉的存储库*.*
 - en: Once on the repository page, click on the **Create new file** button to create
     a new empty file that will be our Jenkinsfile, as shown in the following screenshot:![](img/a2506300-1e55-4349-8790-560d4add5e0b.png)
+  id: totrans-142
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 进入存储库页面后，点击**创建新文件**按钮以创建一个新的空文件，这将是我们的 Jenkinsfile，如下截图所示：![](img/a2506300-1e55-4349-8790-560d4add5e0b.png)
 - en: Creating a new file on GitHub
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GitHub 上创建一个新文件
 - en: 'Name your new file `Jenkinsfile` by filling in the empty textbox, as shown
     in the following screenshot:'
+  id: totrans-144
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在空文本框中填写`Jenkinsfile`作为您的新文件名称，如下截图所示：
 - en: '![](img/79391053-cd83-43c1-b21e-9837c8009dfe.png)'
+  id: totrans-145
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/79391053-cd83-43c1-b21e-9837c8009dfe.png)'
 - en: Naming your new file on GitHub
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GitHub 上为您的新文件命名
 - en: 'Add the following code in your Jenkinsfile:'
+  id: totrans-147
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在您的 Jenkinsfile 中添加以下代码：
 - en: '[PRE14]'
+  id: totrans-148
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: 'Once done, commit the new file by adding a meaningful comment, as shown in
     the following screenshot:'
+  id: totrans-149
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，通过添加有意义的评论提交新文件，如下截图所示：
 - en: '![](img/08ecdfe7-3f64-4510-ab9a-5df45fa8ef3d.png)'
+  id: totrans-150
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/08ecdfe7-3f64-4510-ab9a-5df45fa8ef3d.png)'
 - en: Committing your new file on GitHub
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 GitHub 上提交您的新文件
 - en: Creating a Multibranch Pipeline in Jenkins
+  id: totrans-152
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Jenkins 中创建一个多分支管道
 - en: 'Follow these steps to create a new Jenkins pipeline job:'
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: 按以下步骤创建一个新的 Jenkins 管道作业：
 - en: From the Jenkins dashboard, click on the **New Item** link.
+  id: totrans-154
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板中，点击**新建项目**链接。
 - en: On the resultant page, you will be presented with various types of Jenkins jobs
     to choose from.
+  id: totrans-155
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将看到各种类型的 Jenkins 作业供您选择。
 - en: Choose **Multibranch** **Pipelin****e**, and give a name to your pipeline using
     the **Enter an item name** field.
+  id: totrans-156
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**多分支** **管道**，并使用**输入项目名称**字段为您的管道命名。
 - en: Once you are done, click on the OK button at the bottom of the page.
+  id: totrans-157
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成后，点击页面底部的确定按钮。
 - en: Scroll to the **Branch Sources** section. This is the place where we configure
     the GitHub repository that we want to use.
+  id: totrans-158
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到 **分支来源** 部分。这是我们配置要使用的 GitHub 存储库的地方。
 - en: Click on the **Add Source** button and choose GitHub. You will be presented
     with a list of fields to configure. Let us see them one by one (see the following
     screenshot).
+  id: totrans-159
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**添加源**按钮，选择 GitHub。您将看到一个配置字段的列表。我们逐一看一下它们（见下面的截图）。
 - en: 'For the Credentials field, choose the GitHub account credentials (Kind: Username
     with Password) that we created in the previous section.'
+  id: totrans-160
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 对于凭据字段，选择我们在上一节中创建的 GitHub 帐户凭据（种类：带有用户名和密码的用户名）。
 - en: Under the Owner field, specify the name of your GitHub organization or GitHub
     user account.
+  id: totrans-161
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在所有者字段下，指定您的 GitHub 组织或 GitHub 用户帐户的名称。
 - en: The moment you do so, the Repository field will list all the repositories that
     are on your GitHub account.
+  id: totrans-162
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦这样做，存储库字段将列出您 GitHub 帐户上的所有存储库。
 - en: Choose hello-world-greeting under the Repository field.
+  id: totrans-163
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在存储库字段下选择 hello-world-greeting
 - en: 'Leave the rest of the options to their default values:'
+  id: totrans-164
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将其余选项保留为默认值：
 - en: '![](img/8352c68e-83e1-49b8-b609-bc8357372200.png)'
+  id: totrans-165
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8352c68e-83e1-49b8-b609-bc8357372200.png)'
 - en: Configuring the Multibranch Pipeline
+  id: totrans-166
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置多分支管道
 - en: 'Scroll all the way down to the Build Configuration section. Make sure the Mode field
     is set to by Jenkinsfile and the Script Path field is set to `Jenkinsfile`:'
+  id: totrans-167
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到底部的构建配置部分。确保 Mode 字段设置为按 Jenkinsfile，Script Path 字段设置为`Jenkinsfile`：
 - en: '![](img/d1d71555-36df-4e7a-b61e-b3a1971774e6.png)'
+  id: totrans-168
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d1d71555-36df-4e7a-b61e-b3a1971774e6.png)'
 - en: Build configuration
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建配置
 - en: Scroll all the way down and click on the **Save** button.
+  id: totrans-170
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 滚动到底部，点击**保存**按钮。
 - en: Re-registering the Webhooks
+  id: totrans-171
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 重新注册 Webhooks
 - en: 'Now, let us re-register the Webhooks for all our Jenkins pipelines. To do so,
     perform the following steps:'
+  id: totrans-172
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们重新注册所有 Jenkins 流水线的 Webhooks。为此，请执行以下步骤：
 - en: On the Jenkins dashboard, click on **Manage Jenkins** | **Configure System**.
+  id: totrans-173
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 仪表板上，点击**管理 Jenkins** | **配置系统**。
 - en: On the Jenkins configuration page, scroll all the way down to the GitHub section.
+  id: totrans-174
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 配置页面上，向下滚动到 GitHub 部分。
 - en: Under the GitHub section, click on the **Advanced…** button (you will see two
     of them; click on the second one).
+  id: totrans-175
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 GitHub 部分下，点击**高级…**按钮（您将看到两个按钮；点击第二个）。
 - en: This will display a few more fields and options. Click on the **Re-register
     hooks for all jobs** button.
+  id: totrans-176
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 这将显示更多字段和选项。点击**重新注册所有作业的 hooks**按钮。
 - en: 'The previous action will create new Webhooks for our Multibranch Pipeline on
     the respective repository inside your GitHub account. Do the following to view
     the Webhooks on GitHub:'
+  id: totrans-177
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上一步将为您在 GitHub 帐户内相应存储库上的我们的多分支流水线创建新的 Webhooks。请按照以下步骤在 GitHub 上查看 Webhooks：
 - en: Log in to your GitHub account.
+  id: totrans-178
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录您的 GitHub 帐户。
 - en: Go to your GitHub repository, `hello-world-greeting` in our case.
+  id: totrans-179
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到您的 GitHub 存储库，在我们的案例中是 `hello-world-greeting`。
 - en: 'Click on the repository Settings button, as shown in the following screenshot:'
+  id: totrans-180
   prefs:
   - PREF_IND
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击存储库设置按钮，如下图所示：
 - en: '![](img/ea7a448f-a912-4c05-b68a-776cf1297a73.png)'
+  id: totrans-181
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/ea7a448f-a912-4c05-b68a-776cf1297a73.png)'
 - en: Repository settings
+  id: totrans-182
   prefs: []
   type: TYPE_NORMAL
+  zh: 存储库设置
 - en: 'On the repository Settings page, click on Webhooks from the left-hand side
     menu. You should see the Webhooks for your Jenkins server, as shown in the following
     screenshot:'
+  id: totrans-183
   prefs:
   - PREF_OL
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在存储库设置页面上，点击左侧菜单中的 Webhooks。您应该看到您的 Jenkins 服务器的 Webhooks，如下图所示：
 - en: '![](img/e60e4c18-80ec-4069-bfc2-468181edf9db.png)'
+  id: totrans-184
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e60e4c18-80ec-4069-bfc2-468181edf9db.png)'
 - en: Webhooks on GitHub repository
+  id: totrans-185
   prefs: []
   type: TYPE_NORMAL
+  zh: GitHub 存储库上的 Webhooks
 - en: Continuous Integration in action
+  id: totrans-186
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 正在进行的持续集成
 - en: 'Follow the given steps:'
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 按照给定的步骤操作：
 - en: From the Jenkins dashboard, click on your Multibranch Pipeline.
+  id: totrans-188
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板上，点击您的多分支流水线。
 - en: 'On the Jenkins Multibranch Pipeline page, from the left-hand side menu, click
     on the Scan Repository Now link. This will scan the repository for branches and
     Jenkinsfiles, and will immediately run a pipeline for every branch that has got
     a Jenkinsfile, as shown in the following screenshot:'
+  id: totrans-189
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 多分支流水线页面上，从左侧菜单中，点击**立即扫描存储库**链接。这将扫描分支和 Jenkinsfiles，并立即为每个具有 Jenkinsfile
+    的分支运行一个流水线，如下图所示：
 - en: '![](img/1191e0c3-04e5-4126-bb7c-a0bbdcaf3038.png)'
+  id: totrans-190
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/1191e0c3-04e5-4126-bb7c-a0bbdcaf3038.png)'
 - en: Pipeline for the master branch
+  id: totrans-191
   prefs: []
   type: TYPE_NORMAL
+  zh: 主分支的流水线
 - en: 'On the Multibranch Pipeline page, from the left-hand side menu, click on Scan
     Repository Log. You will see something similar to the following output. Notice
     the highlighted code. You can see the master branch met the criteria, as it had
     a Jenkinsfile and a pipeline was scheduled for it. There was no pipeline scheduled
     for the testing branch since there was no Jenkinsfile on it:'
+  id: totrans-192
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在多分支流水线页面上，从左侧菜单中，点击**扫描存储库日志**。您将看到类似以下输出。注意高亮代码。您可以看到主分支符合条件，因为它有一个 Jenkinsfile，并为其安排了一个流水线。由于测试分支上没有
+    Jenkinsfile，因此没有为其安排流水线：
 - en: '[PRE15]'
+  id: totrans-193
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: You need not always scan for the repository. The GitHub Webhooks are configured
     to automatically trigger a pipeline whenever there is a push or a new branch on
     your GitHub repository. Remember, a Jenkinsfile should also be present on the
     respective branch to tell Jenkins what it needs to do when it finds a change in
     the repository.
+  id: totrans-194
   prefs: []
   type: TYPE_NORMAL
+  zh: 您不需要总是扫描存储库。GitHub Webhooks 已配置为在您的 GitHub 存储库上推送或新建分支时自动触发流水线。请记住，相应分支上还应该存在
+    Jenkinsfile，以告诉 Jenkins 在发现存储库中的更改时应该执行什么操作。
 - en: From your Jenkins Multibranch Pipeline page (`<Jenkins URL>/job/<Jenkins Multi-branch
     pipeline name>/`), click on the respective branch pipeline (see the following
     screenshot).
+  id: totrans-195
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从您的 Jenkins 多分支流水线页面 (`<Jenkins URL>/job/<Jenkins Multi-branch pipeline name>/`)，点击相应的分支流水线（见下图）。
 - en: 'On the resultant page, you will see the Stage View for the master branch pipeline:'
+  id: totrans-196
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，您将看到主分支流水线的阶段视图：
 - en: '![](img/e5ee84d3-e56a-4487-84a8-309386750bfb.png)'
+  id: totrans-197
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e5ee84d3-e56a-4487-84a8-309386750bfb.png)'
 - en: Pipeline Stage View
+  id: totrans-198
   prefs: []
   type: TYPE_NORMAL
+  zh: 流水线阶段视图
 - en: 'To see the unit test and integration test results, click on Latest Test Result link,
     which is available on the same page below the Stage View, as shown in the following
     screenshot:'
+  id: totrans-199
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要查看单元测试和集成测试结果，请点击页面下方**最新测试结果**链接，该链接在与阶段视图相同的页面上，如下截图所示：
 - en: '![](img/d089eb2f-b0f8-4b0a-9f1a-43e4ee7c50a9.png)'
+  id: totrans-200
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d089eb2f-b0f8-4b0a-9f1a-43e4ee7c50a9.png)'
 - en: 'On the resultant page, you will see a detailed report about the unit as well
     as the integration test execution, as shown in the following screenshot:'
+  id: totrans-201
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，你将看到关于单元测试和集成测试执行的详细报告，如下截图所示：
 - en: '![](img/70400369-0ac2-40f1-a2c8-13c4a877c0e3.png)'
+  id: totrans-202
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/70400369-0ac2-40f1-a2c8-13c4a877c0e3.png)'
 - en: Test report using JUnit plugin
+  id: totrans-203
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 JUnit 插件的测试报告
 - en: You can click on the individual tests to get more details.
+  id: totrans-204
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你可以点击各个测试以获取更多细节。
 - en: 'While on the same page, on the left-hand side menu there is a link named History, which
     gives you a historic graph about the number of metrics related to the test execution
     over a period of time:'
+  id: totrans-205
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在同一页面上，在左侧菜单中有一个名为“History”的链接，它提供了一段时间内与测试执行相关的指标数量的历史图表：
 - en: '![](img/73efe47d-5080-4d6f-b25e-ab83f4c34c70.png)'
+  id: totrans-206
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/73efe47d-5080-4d6f-b25e-ab83f4c34c70.png)'
 - en: Test execution history
+  id: totrans-207
   prefs: []
   type: TYPE_NORMAL
+  zh: 测试执行历史
 - en: Viewing static code analysis in SonarQube
+  id: totrans-208
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 SonarQube 中查看静态代码分析
 - en: 'Let us take a look at the static code analysis report performed as part of
     our CI pipeline. Follow these steps:'
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们来看看作为我们 CI 流水线一部分执行的静态代码分析报告。按照以下步骤操作：
 - en: 'Open the SonarQube link, using your favorite browser. You should see something
     similar to the following screenshot:'
+  id: totrans-210
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用你喜欢的浏览器打开 SonarQube 链接。你应该看到类似以下截图的内容：
 - en: '![](img/e90f47c6-2fe9-4c33-b8d8-6ece576f93c1.png)'
+  id: totrans-211
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e90f47c6-2fe9-4c33-b8d8-6ece576f93c1.png)'
 - en: SonarQube homepage
+  id: totrans-212
   prefs: []
   type: TYPE_NORMAL
+  zh: SonarQube 主页
 - en: From the SonarQube dashboard, using the menu option, click on the Log in link.
+  id: totrans-213
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从 SonarQube 仪表板，使用菜单选项，点击登录链接。
 - en: Enter your SonarQube credentials.
+  id: totrans-214
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 输入你的 SonarQube 凭据。
 - en: On the resultant page, under the PROJECTS widget, click on the `example-project`
     project.
+  id: totrans-215
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在结果页面上，在“PROJECTS”小部件下，点击“example-project”项目。
 - en: 'You will see an overview of the static code analysis of your project (see the
     following screenshot):'
+  id: totrans-216
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 你将看到项目的静态代码分析概览（参见以下截图）：
 - en: '![](img/c9bd2038-3014-4e97-bb31-5aa3ba3c136c.png)'
+  id: totrans-217
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c9bd2038-3014-4e97-bb31-5aa3ba3c136c.png)'
 - en: Static code analysis overview
+  id: totrans-218
   prefs: []
   type: TYPE_NORMAL
+  zh: 静态代码分析概述
 - en: 'Click on Measures | Coverage. On the resultant page, you will get a nice overview
     of your code coverage and unit test result report, as shown in the following screenshot:'
+  id: totrans-219
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击“Measures | Coverage”。在结果页面上，你将得到你的代码覆盖率和单元测试结果报告的良好概览，如下截图所示：
 - en: '![](img/61a44fa4-2629-47e3-b837-e7f5a459699c.png)'
+  id: totrans-220
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/61a44fa4-2629-47e3-b837-e7f5a459699c.png)'
 - en: Code coverage report and unit test report
+  id: totrans-221
   prefs: []
   type: TYPE_NORMAL
+  zh: 代码覆盖率报告和单元测试报告
 - en: Accessing SonarQube analysis right from Jenkins
+  id: totrans-222
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 直接从 Jenkins 访问 SonarQube 分析
 - en: 'You can access your static code analysis report right from your CI pipeline.
     Follow these steps:'
+  id: totrans-223
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以直接从 CI 流水线中访问你的静态代码分析报告。按照以下步骤操作：
 - en: From your Jenkins dashboard, click on your Multibranch Pipeline. Next, click
     on the respective branch pipeline (master in our example).
+  id: totrans-224
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从你的 Jenkins 仪表板，点击你的多分支流水线。接下来，点击相应的分支流水线（我们示例中的 master）。
 - en: 'Once you are on your branch pipeline, hover your mouse on the Static Code Analysis
     stage and click on Logs. See the following screenshot:'
+  id: totrans-225
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦你进入你的分支流水线，将鼠标悬停在“Static Code Analysis”阶段上，然后点击“Logs”。参见以下截图：
 - en: '![](img/7db067ed-9cfb-4a21-b084-b395c2531571.png)'
+  id: totrans-226
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7db067ed-9cfb-4a21-b084-b395c2531571.png)'
 - en: Fetching individual stage logs
+  id: totrans-227
   prefs: []
   type: TYPE_NORMAL
+  zh: 获取单个阶段日志
 - en: 'In the resultant pop-up window named Stage Logs (Static Code Analysis), scroll
     all the way down to the end. You should see a link to the SonarQube analysis page.
     See the following screenshot:'
+  id: totrans-228
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在名为“Stage Logs（静态代码分析）”的弹出窗口中向下滚动到底部。你应该看到一个链接，指向 SonarQube 分析页面。参见以下截图：
 - en: '![](img/b2b94a51-ea3b-4362-bf30-c555d7afe146.png)'
+  id: totrans-229
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/b2b94a51-ea3b-4362-bf30-c555d7afe146.png)'
 - en: SonarQube analysis link from Jenkins logs
+  id: totrans-230
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 Jenkins 日志中的 SonarQube 分析链接
 - en: Clicking on the link, as shown in the previous screenshot, will take you straight
     to the SonarQube dashboard of the respective project.
+  id: totrans-231
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击前述截图中显示的链接将直接带您到相应项目的 SonarQube 仪表板。
 - en: Viewing artifacts in Artifactory
+  id: totrans-232
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 Artifactory 中查看构件
 - en: 'Let us see how our artifacts look when uploaded to Artifactory. Follow these
     steps:'
+  id: totrans-233
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们看看上传到 Artifactory 后我们的构件是什么样子。按照以下步骤操作：
 - en: From your favorite browser, access the Artifactory link. From the Artifactory
     dashboard, log in using the Log in link.
+  id: totrans-234
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从你喜爱的浏览器访问 Artifactory 链接。从 Artifactory 仪表板，使用登录链接登录。
 - en: 'Click on the Artifacts tab on the left-hand side menu. You should see your
     repository listed under the Artifact Repository Browser, as shown in the following
     screenshot:'
+  id: totrans-235
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在左侧菜单中点击“Artifacts”选项卡。你应该在“Artifact Repository Browser”下看到你的仓库，如下截图所示：
 - en: '![](img/a2a4d822-acbf-428c-8060-37a9c4fc8f8d.png)'
+  id: totrans-236
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/a2a4d822-acbf-428c-8060-37a9c4fc8f8d.png)'
 - en: Artifact Repository Browser
+  id: totrans-237
   prefs: []
   type: TYPE_NORMAL
+  zh: 构件库浏览器
 - en: 'Expand the repository, and you should see the built artifact along with the
     properties, as shown in the following screenshot:'
+  id: totrans-238
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 展开仓库，您应该看到构建的构件和属性，如下截图所示：
 - en: '![](img/069781a4-5c14-4f7d-bbf0-1e981654cee5.png)'
+  id: totrans-239
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/069781a4-5c14-4f7d-bbf0-1e981654cee5.png)'
 - en: Artifact generated by the CI pipeline
+  id: totrans-240
   prefs: []
   type: TYPE_NORMAL
+  zh: CI管道生成的构件
 - en: Failing the build when quality gate criteria are not met
+  id: totrans-241
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 当质量门标准不符合时构建失败
 - en: 'In the following section, we will tweak the SonarQube quality gate that we
     created in the previous chapter, such that it should fail the Jenkins CI pipeline.
     Follow these steps to simulate this scenario:'
+  id: totrans-242
   prefs: []
   type: TYPE_NORMAL
+  zh: 在以下部分，我们将微调在上一章中创建的SonarQube质量门，使其应该使Jenkins CI管道失败。按照以下步骤模拟此场景：
 - en: Log in to your SonarQube server and click on Quality Gates from the menu bar.
+  id: totrans-243
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到您的SonarQube服务器，然后从菜单栏中点击质量门。
 - en: 'From the left-hand side menu, click on the quality gate: `example-quality-gate`
     that we created in the previous chapter.'
+  id: totrans-244
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从左侧菜单中，点击上一章中创建的质量门：`example-quality-gate`。
 - en: Now, change the value of the ERROR field from `50` to `3`.
+  id: totrans-245
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，将 ERROR 字段的值从 `50` 改为 `3`。
 - en: 'Click on Update. Finally, everything should look as shown in the following
     screenshot:'
+  id: totrans-246
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击更新。最后，一切都应该如下截图所示：
 - en: '![](img/d63005f3-1445-4c3b-b04f-37e58c628235.png)'
+  id: totrans-247
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d63005f3-1445-4c3b-b04f-37e58c628235.png)'
 - en: Updating the SonarQube quality gate
+  id: totrans-248
   prefs: []
   type: TYPE_NORMAL
+  zh: 更新SonarQube质量门
 - en: Next, make some changes on the GitHub repository to trigger a CI pipeline in
     Jenkins.
+  id: totrans-249
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 接下来，在GitHub仓库上进行一些更改，以触发Jenkins中的CI管道。
 - en: 'Log in to Jenkins and navigate to your Jenkins Multibranch CI Pipeline. You
     should see something similar to the following screenshot:'
+  id: totrans-250
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 登录到Jenkins，并导航到您的Jenkins多分支CI管道。您应该看到类似以下截图的内容：
 - en: '![](img/07e485d5-9c07-4e70-b65a-984f42a0e102.png)'
+  id: totrans-251
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/07e485d5-9c07-4e70-b65a-984f42a0e102.png)'
 - en: Failed CI pipeline
+  id: totrans-252
   prefs: []
   type: TYPE_NORMAL
+  zh: 失败的CI管道
 - en: 'Click on the failed stage of the respective pipeline to fetch its logs. In
     the pop-up window, scroll all the way down. You should see the reason for the
     pipeline failure, as shown in the following screenshot (arrow):'
+  id: totrans-253
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击相应管道的失败阶段以获取其日志。在弹出窗口中，滚动到底部。您应该看到管道失败的原因，如下截图所示（箭头）：
 - en: '![](img/276fc79d-0046-4daf-b2c4-5d08c7251ee3.png)'
+  id: totrans-254
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/276fc79d-0046-4daf-b2c4-5d08c7251ee3.png)'
 - en: SonarQube logs with quality gate status
+  id: totrans-255
   prefs: []
   type: TYPE_NORMAL
+  zh: 带有质量门状态的SonarQube日志
 - en: Summary
+  id: totrans-256
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: In this chapter, we learned how to create a Multibranch CI Pipeline that gets
     triggered on a push event, performs build, static code analysis, integration testing,
     and uploads the successfully tested binary artifact to Artifactory. Lastly, we
     saw the whole CI pipeline in action from the perspective of a developer.
+  id: totrans-257
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这一章中，我们学习了如何创建一个多分支CI管道，通过推送事件触发，执行构建、静态代码分析、集成测试，并将成功测试的二进制构件上传到Artifactory。最后，我们从开发者的角度看到了整个CI管道的运行。
 - en: The CI design discussed in the book can be modified to suit the needs of any
     type of project; the users just need to identify the right tools and configurations
     that can be used with Jenkins.
+  id: totrans-258
   prefs: []
   type: TYPE_NORMAL
+  zh: 书中讨论的CI设计可以修改以适应任何类型项目的需求；用户只需确定可以与Jenkins一起使用的正确工具和配置。
 - en: In the next chapter, we will extend our CI pipeline to do more in the area of
     QA.
+  id: totrans-259
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将扩展我们的CI管道，在QA领域做更多事情。
