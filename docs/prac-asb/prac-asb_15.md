@@ -1,4 +1,4 @@
-# 开始使用 Ansible Tower
+# 第十二章：开始使用 Ansible Tower
 
 Ansible 非常强大，但它需要用户使用 CLI。在某些情况下，这不是最佳选择，比如在需要从另一个作业触发 Ansible 作业的情况下（API 可能更好），或者在应该触发作业的人只能触发特定作业的情况下。对于这些情况，AWX 或 Ansible Tower 是更好的选择。
 

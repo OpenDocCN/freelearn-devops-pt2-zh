@@ -1,4 +1,4 @@
-# 部署 WPScan 和 OWASP ZAP
+# 第十四章：部署 WPScan 和 OWASP ZAP
 
 在本章中，我们将介绍创建一个 playbook，部署和运行两个安全工具 WPScan 和 OWASP ZAP。然后，使用之前章节的 playbooks，我们将启动一个 WordPress 安装供我们扫描。
 

@@ -1,4 +1,4 @@
-# 开发插件
+# 第七章：开发插件
 
 本章将详细介绍 Jenkins 中的插件，我们将首先看如何在 Windows、Linux 和 macOS 中设置 Maven。然后我们将通过为 Jenkins 创建一个`Hello World`插件来了解插件开发，然后我们将简要介绍 Jenkins 插件站点以及如何浏览和使用它来找到各种插件。
 

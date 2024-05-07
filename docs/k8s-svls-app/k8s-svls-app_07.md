@@ -1,4 +1,4 @@
-# Apache OpenWhisk 和 Kubernetes
+# 第七章：Apache OpenWhisk 和 Kubernetes
 
 在本章中，我们将看看 Apache OpenWhisk。虽然不严格是一个仅限于 Kubernetes 的项目，比如 Kubeless 和 Fission（这些将在下一章中介绍），但它可以部署并利用 Kubernetes。
 

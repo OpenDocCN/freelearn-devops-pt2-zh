@@ -1,4 +1,4 @@
-# *第八章*：使用 Skaffold 将 Spring Boot 应用部署到 Google Kubernetes Engine
+# 第八章：*第八章*：使用 Skaffold 将 Spring Boot 应用部署到 Google Kubernetes Engine
 
 在上一章中，您学习了如何使用 Google 的 IntelliJ 的 Cloud Code 插件将 Spring Boot 应用部署到本地 Kubernetes 集群。本章重点介绍了如何将相同的 Spring Boot 应用部署到远程 Google Kubernetes Engine（GKE），这是 Google Cloud Platform（GCP）提供的托管 Kubernetes 服务。我们还将向您介绍 Google 最近推出的无服务器 Kubernetes 服务 GKE Autopilot。您还将了解 Google Cloud SDK 和 Cloud Shell，并使用它们来连接和管理远程 Kubernetes 集群。
 

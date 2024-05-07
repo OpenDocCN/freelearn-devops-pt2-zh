@@ -1,4 +1,4 @@
-## 6：Kubernetes Services
+## 第七章：6：Kubernetes Services
 
 在之前的章节中，我们已经启动了 Pods 并使用 Deployments 来添加自愈、可伸缩性和滚动更新。然而，尽管所有这些，**我们仍然不能依赖 Pod IPs！**在本章中，我们将看到 Kubernetes *Services*如何给我们提供可靠的网络。
 

@@ -1,4 +1,4 @@
-# Travis CI CLI 命令和自动化
+# 第十章：Travis CI CLI 命令和自动化
 
 在上一章中，我们向您展示了如何在软件项目中配置 Travis CI，并解释了如何使用 Travis CI 的基础知识。本章将帮助您在操作系统上安装 Travis CLI，并且我们将介绍 Travis CI 中所有不同类型的命令，例如一般 API 命令，存储库命令等。我们将介绍 CLI 命令可以使用的不同选项，并且我们还将详细介绍每个命令的含义。我们还将通过使用我们的访问令牌和 curl REST 客户端直接查看使用 Travis API。我们将简要介绍 Travis Pro 和 Enterprise 版本。
 

@@ -1,4 +1,4 @@
-# CircleCI 的安装和基础知识
+# 第十二章：CircleCI 的安装和基础知识
 
 在上一章中，我们展示了如何在本地调试 Travis CI 项目，并更详细地解释了 Travis CI 的 Web 界面。我们还看了如何在 Travis CI 中进行日志记录。本章将帮助您设置 CircleCI，并解释如何创建 Bitbucket 帐户，以及如何在新的 CircleCI 帐户上设置 GitHub 和 Bitbucket。我们将在 Bitbucket 中创建一个简单的 Java 项目，并为其运行 CircleCI 构建。我们还将讨论如何浏览 Bitbucket 的用户界面。最后，我们将通过创建一个新的 GitHub 存储库来结束本章，并讨论一个 CircleCI YML 脚本，该脚本将通过 Docker 镜像安装 Golang 并运行我们的单元测试。
 

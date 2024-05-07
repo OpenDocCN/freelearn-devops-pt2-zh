@@ -1,4 +1,4 @@
-# 部署 WordPress
+# 第五章：部署 WordPress
 
 在上一章中，我们致力于构建一个安装和配置基本 LAMP 堆栈的 playbook。在本章中，我们将在那里使用的技术基础上构建一个安装 LEMP 堆栈和 WordPress 的 playbook。
 

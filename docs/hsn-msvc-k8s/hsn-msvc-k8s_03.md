@@ -1,4 +1,4 @@
-# Delinkcious - 示例应用程序
+# 第三章：Delinkcious - 示例应用程序
 
 Delinkcious 是 Delicious（[`en.wikipedia.org/wiki/Delicious_(website)`](https://en.wikipedia.org/wiki/Delicious_(website)）的模仿者。Delicious 曾经是一个管理用户链接的互联网热门网站。它被雅虎收购，然后被转手多次。最终被 Pinboard 收购，后者运行类似的服务，并打算很快关闭 Delicious。
 

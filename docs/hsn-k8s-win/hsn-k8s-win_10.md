@@ -1,4 +1,4 @@
-# 部署混合本地 Kubernetes 集群
+# 第七章：部署混合本地 Kubernetes 集群
 
 在之前的章节中，我们更多地从理论角度关注了 Docker 和 Kubernetes 的概念，现在是时候利用这些知识并从头开始部署一个 Kubernetes 集群了。本章的目标是在本地环境中拥有一个功能齐全的混合 Windows/Linux Kubernetes 集群。
 

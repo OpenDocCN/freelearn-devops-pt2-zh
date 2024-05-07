@@ -1,4 +1,4 @@
-# Kubernetes 中的后台处理
+# 第六章：Kubernetes 中的后台处理
 
 Kubernetes 包括对一次性（也称为批处理）计算工作的支持，以及支持异步后台工作的常见用例。在本章中，我们将介绍 Kubernetes 的作业概念及其邻居 CronJob。我们还将介绍 Kubernetes 如何处理和支持持久性，以及 Kubernetes 中可用的一些选项。然后，我们将介绍 Kubernetes 如何支持异步后台任务以及 Kubernetes 可以如何表示、操作和跟踪这些任务的方式。我们还将介绍如何设置从消息队列操作的工作代码。
 

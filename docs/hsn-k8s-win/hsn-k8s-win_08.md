@@ -1,4 +1,4 @@
-# 与 Kubernetes 集群交互
+# 第六章：与 Kubernetes 集群交互
 
 作为 Kubernetes 集群的用户或操作员，您需要与 Kubernetes API 交互，以管理 Kubernetes 对象或调试在集群中运行的应用程序。一般来说，有两种方式与 Kubernetes API 通信：您可以直接使用表征状态传输（RESTful）HTTPS 端点，例如用于编程访问，或者您可以使用 kubectl，这是 Kubernetes 命令行工具（或**命令行接口**（**CLI**））。一般来说，kubectl 封装了 RESTful API 通信，并隐藏了有关定位和认证到 Kubernetes API 服务器的复杂性。创建或列出 Kubernetes 对象以及执行 Pod 容器等操作都作为整齐组织的 kubectl 子命令可用-您可以在对集群执行临时操作时使用这些命令，也可以作为应用程序的**持续集成/持续部署**（**CI/CD**）的一部分使用这些命令。
 

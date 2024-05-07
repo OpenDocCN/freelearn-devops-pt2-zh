@@ -1,4 +1,4 @@
-# 保护 Kubernetes 集群和应用程序
+# 第十三章：保护 Kubernetes 集群和应用程序
 
 安全性这个话题值得特别关注——Kubernetes 是一个庞大而复杂的系统，在这个系统中安全性并不明显，潜在的攻击向量也不会立即显现。如果考虑到这个系统可以执行的强大操作以及它与操作系统内部的深度集成，那么在 Kubernetes 中考虑安全性就更加重要了。只是为了让您了解，如果您忽视了配置细节，事情可能会变得很糟糕，可以看一下有关特斯拉因为 Kubernetes Dashboard 的*公共*、*未经身份验证*端点而被加密挖矿的文章[`blog.heptio.com/on-securing-the-kubernetes-dashboard-16b09b1b7aca`](https://blog.heptio.com/on-securing-the-kubernetes-dashboard-16b09b1b7aca)。
 

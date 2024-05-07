@@ -1,4 +1,4 @@
-# 存储状态
+# 第九章：存储状态
 
 本章主要介绍 Kubernetes 与 AWS 原生存储解决方案 Elastic Block Store（EBS）的深度集成。 Amazon EBS 提供网络附加存储作为服务，并且是提供块存储给 EC2 实例的主要解决方案。
 

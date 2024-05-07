@@ -1,4 +1,4 @@
-# 本地安装 Kubernetes
+# 第三章：本地安装 Kubernetes
 
 在本章中，我们将看看如何使用 Minikube 快速搭建本地的 Kubernetes 安装。一旦我们的本地 Kubernetes 安装运行起来，我们将学习一些基本功能，并讨论在本地运行 Kubernetes 的局限性。我们将学习在以下平台上安装 Kubernetes：
 

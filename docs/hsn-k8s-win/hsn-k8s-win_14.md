@@ -1,4 +1,4 @@
-# 部署 Microsoft SQL Server 2019 和 ASP.NET MVC 应用程序
+# 第十章：部署 Microsoft SQL Server 2019 和 ASP.NET MVC 应用程序
 
 之前的章节为您提供了一个部署和操作混合 Windows/Linux Kubernetes 集群的瑞士军刀，现在，您已经掌握了部署真实 Windows 容器应用程序到 Kubernetes 集群的所有基本知识。本章将重点演示如何处理使用 C# .NET Framework 4.8 和 ASP.NET MVC 5 编写的简单投票应用程序的容器化和部署，其中 Microsoft SQL Server 2019 用于持久层。技术栈的选择可能看起来是传统的（为什么不使用.NET Core？！），但这是有意为之——如果您正在考虑在 Kubernetes 中使用 Windows 容器，那么您很可能需要经典的.NET Framework 运行时，因为您还没有准备好迁移到.NET Core。
 

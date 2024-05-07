@@ -1,4 +1,4 @@
-# Ansible 清单和 playbook
+# 第三章：Ansible 清单和 playbook
 
 现在我们已经安装了 Ansible，可以继续进行下一个里程碑。我们现在将探索两个主要功能：Ansible 清单，用于客户端主机组织，以及 Ansible playbooks，演示如何编写 Ansible play 脚本。这两个功能的结合是 Ansible 自动化和编排的基础。本章将介绍如何使用 Ansible 进行快速命令或模块。我们还将看看如何使用其清单来识别和配置主机的访问权限，并将它们静态或动态地分组。最后，我们将介绍 Ansible playbook，并查看其操作、处理程序和变量。我们将涵盖以下主题：
 

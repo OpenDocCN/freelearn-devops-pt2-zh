@@ -1,4 +1,4 @@
-# *第五章*：安装 Skaffold 并揭秘其流水线阶段
+# 第五章：*第五章*：安装 Skaffold 并揭秘其流水线阶段
 
 在上一章中，我们深入了解了 Skaffold 的架构和工作流程。我们还看了 Skaffold 的配置。本章将介绍如何在不同操作系统上安装 Skaffold，如 Linux、Windows 和 macOS。我们还将探讨常见的 CLI 命令以及如何在 Skaffold 的不同流水线阶段中使用这些命令。
 

@@ -1,4 +1,4 @@
-# *第七章*：使用 Cloud Code 插件构建和部署 Spring Boot 应用程序
+# 第七章：*第七章*：使用 Cloud Code 插件构建和部署 Spring Boot 应用程序
 
 在上一章中，我们了解了 Skaffold 支持的容器镜像构建器和部署器。在本章中，我们将向您介绍 Google 的 Cloud Code 插件，该插件可在 IntelliJ 等 IDE 中使用。我们将创建一个 Spring Boot 应用程序，并使用 Cloud Code 插件将其部署到本地 Kubernetes 集群。
 

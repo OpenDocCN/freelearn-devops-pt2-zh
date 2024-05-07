@@ -1,4 +1,4 @@
-# 使用 Jenkins 构建管道
+# 第八章：使用 Jenkins 构建管道
 
 本章将详细介绍如何使用现有的 Jenkins 实例设置 Jenkins 蓝海以及如何使用 Docker 进行设置。我们将详细了解蓝海用户界面（UI），并讨论 Jenkins 经典视图和蓝海视图之间的区别。我们还将详细讨论 Pipeline Syntax，并简要讨论其用途，并解释两种不同类型的 Pipeline Syntax。
 

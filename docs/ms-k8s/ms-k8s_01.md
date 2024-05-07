@@ -1,4 +1,4 @@
-# 了解 Kubernetes 架构
+# 第一章：了解 Kubernetes 架构
 
 Kubernetes 是一个庞大的开源项目和生态系统，拥有大量的代码和功能。Kubernetes 由谷歌开发，但加入了**Cloud Native Computing Foundation**（**CNCF**），成为容器应用领域的明确领导者。简而言之，它是一个用于编排基于容器的应用程序部署、扩展和管理的平台。您可能已经了解过 Kubernetes，甚至在一些项目中使用过它，甚至在工作中使用过它。但要理解 Kubernetes 的全部内容，如何有效使用它以及最佳实践是什么，需要更多的知识。在本章中，我们将建立必要的知识基础，以充分利用 Kubernetes 的潜力。我们将首先了解 Kubernetes 是什么，Kubernetes 不是什么，以及容器编排的确切含义。然后，我们将介绍一些重要的 Kubernetes 概念，这些概念将构成我们在整本书中将使用的词汇。之后，我们将更详细地深入了解 Kubernetes 的架构，并看看它如何为用户提供所有这些功能。然后，我们将讨论 Kubernetes 支持的各种运行时和容器引擎（Docker 只是其中一种选择），最后，我们将讨论 Kubernetes 在完整的持续集成和部署流水线中的作用。
 

@@ -1,4 +1,4 @@
-# Travis CI 的安装和基础知识
+# 第九章：Travis CI 的安装和基础知识
 
 本章将帮助您设置 Travis **持续集成**（**CI**）。我们将解释托管解决方案（如 Travis CI）的应用嵌入式配置的概念。我们还将解释什么是 YAML 配置以及如何使用它。我们将研究使用 Travis CI 的基础知识，并花一些时间探索 Travis CI 和 Jenkins 之间的一些区别，以及 Travis CI 的概念。我们将介绍 Travis CI 的不同部分，包括语法和构建生命周期，并查看一些实际示例。
 

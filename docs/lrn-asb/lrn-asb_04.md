@@ -1,4 +1,4 @@
-# 部署 LAMP Stack
+# 第四章：部署 LAMP Stack
 
 在本章中，我们将使用 Ansible 随附的各种核心模块来部署完整的 LAMP stack。我们将针对我们在 第二章 部署的 CentOS 7 Vagrant box 进行操作，*安装和运行 Ansible*。
 

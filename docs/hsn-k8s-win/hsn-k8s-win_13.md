@@ -1,4 +1,4 @@
-# 部署您的第一个应用程序
+# 第九章：部署您的第一个应用程序
 
 在前几章中，我们介绍了 Kubernetes 的关键操作原则和 Windows/Linux 混合集群的部署策略。现在是时候更专注于部署和使用 Kubernetes 应用程序了。为了演示 Kubernetes 应用程序的基本操作，我们将使用在第八章中创建的 AKS Engine 混合 Kubernetes 集群，*部署混合 Azure Kubernetes 服务引擎集群*。您也可以使用本地混合集群，但您应该期望功能有限；例如，LoadBalancer 类型的服务将不可用。
 

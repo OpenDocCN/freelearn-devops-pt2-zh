@@ -1,4 +1,4 @@
-# *第一章*：编码、构建、测试和重复 - 应用程序开发内部循环
+# 第一章：*第一章*：编码、构建、测试和重复 - 应用程序开发内部循环
 
 构建和部署云原生应用程序可能会对本地和远程开发造成麻烦，如果您没有使用适当的工具。开发人员经历了很多痛苦来自动化构建、推送和部署步骤。在本书中，我们将向您介绍**Skaffold**，它可以帮助自动化这些开发工作流程步骤。您将学习如何使用 Skaffold CLI 来加速内部开发循环，以及如何创建有效的**持续集成**/**持续部署**（**CI/CD**）流水线，并执行构建和部署以管理 Kubernetes 实例，如**Google Kubernetes Engine**（**GKE**）、**Microsoft 的 Azure Kubernetes Service**（**AKS**）和 Amazon 的**Elastic Kubernetes Service**（**EKS**）。
 

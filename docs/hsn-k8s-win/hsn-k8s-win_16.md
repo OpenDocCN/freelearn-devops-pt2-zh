@@ -1,4 +1,4 @@
-# 使用 Kubernetes 的开发工作流程
+# 第十二章：使用 Kubernetes 的开发工作流程
 
 让我们面对现实吧——Kubernetes 应用程序开发并不简单。在前几章中，我们主要关注了 Kubernetes 的集群供应和运营方面，这本身就有其复杂性。作为在 Windows 上使用 Kubernetes 的软件开发人员，您将面临完全不同的挑战。事实上，您可能需要调整设计方法，采用云优先、云原生、Kubernetes 优先或其他现代方法。您已经看到，Kubernetes 擅长处理从未设计时就意味着要在容器中托管的 Windows 应用程序，但要充分利用 Kubernetes 的功能，您必须扭转这种依赖关系，开始将 Kubernetes 视为设计的中心和开发环境。
 

@@ -1,4 +1,4 @@
-# Kubernetes 简介
+# 第二章：Kubernetes 简介
 
 正如前一章末尾提到的，本章将讨论 Kubernetes。我们将讨论：
 

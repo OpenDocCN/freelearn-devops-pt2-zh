@@ -1,4 +1,4 @@
-# Travis CI UI Logging and Debugging
+# 第十一章：Travis CI UI Logging and Debugging
 
 本章将概述 Travis 作业日志和作业日志中的各个部分。本章还将解释如何以几种不同的方式调试 Travis 构建作业，包括使用 Docker 在本地构建，然后以调试模式运行构建。我们将介绍所有获取作业 ID 的不同方式，以及如何在公共存储库中启用调试模式，然后使用 Travis API 以调试模式启动构建。我们将解释如何使用**tmate**，这是一个终端复用器，然后我们将讨论在 Travis Web 客户端中记录环境变量。最后，我们将介绍如何在 Travis CI 中使用 Heroku 进行部署以及如何调试部署失败。
 

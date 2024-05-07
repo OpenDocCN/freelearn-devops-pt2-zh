@@ -1,4 +1,4 @@
-# *第三章*：Skaffold ——轻松开发云原生 Kubernetes 应用程序
+# 第三章：*第三章*：Skaffold ——轻松开发云原生 Kubernetes 应用程序
 
 在上一章中，我们了解到使用 Kubernetes 开发应用是繁琐的，并提供了一些编码示例。本章将概述 Skaffold 的高级概述。您还将学习和了解 Skaffold 基本命令行界面（CLI）命令以及这些命令如何简化开发人员在 Skaffold 中开发云原生微服务的痛点。我们将通过构建和部署一个 Spring Boot 应用程序来演示 Skaffold 的基本功能。
 

@@ -1,4 +1,4 @@
-# *第六章*：使用 Skaffold 容器映像构建器和部署器
+# 第六章：*第六章*：使用 Skaffold 容器映像构建器和部署器
 
 在上一章中，我们深入研究了 Skaffold CLI 及其流水线阶段。我们还研究了 Skaffold 配置。在本章中，我们将通过创建一个 Reactive Spring Boot CRUD 应用程序来向您介绍响应式编程。然后，我们将了解 Skaffold 的可插拔架构，该架构支持不同的构建和部署容器映像到 Kubernetes 集群的方法。
 

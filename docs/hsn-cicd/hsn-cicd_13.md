@@ -1,4 +1,4 @@
-# CircleCI CLI 命令和自动化
+# 第十三章：CircleCI CLI 命令和自动化
 
 在上一章中，我们介绍了如何在 Bitbucket 和 GitHub 中设置使用 CircleCI，并向您展示了如何导航 Bitbucket UI，并介绍了 CircleCI Web UI 的基础知识。在本章中，我们将介绍如何在 macOS/Linux 上安装 CircleCI CLI，并向您展示如何从 CLI 获取夜间构建。我们将详细介绍每个 CircleCI CLI 命令，并解释 CircleCI 中的工作流程。我们将向您展示如何使用顺序作业设置更复杂的工作流程。最后，我们将介绍 CircleCI API，并向您展示如何在使用 HTTP 请求时使用`jq` JSON 命令实用程序转换 JSON。
 

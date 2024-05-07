@@ -1,4 +1,4 @@
-# 在 GCP 上构建 Kubernetes
+# 第七章：在 GCP 上构建 Kubernetes
 
 在本章中，我们将在以下食谱中使用**Google Cloud Platform**（**GCP**）：
 

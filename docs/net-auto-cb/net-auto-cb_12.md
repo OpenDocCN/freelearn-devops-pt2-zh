@@ -1,4 +1,4 @@
-# 使用 AWX 和 Ansible 简化自动化
+# 第十二章：使用 AWX 和 Ansible 简化自动化
 
 在本书的所有先前章节中，我们一直在使用 Ansible，更具体地说是 Ansible Engine，并且使用 Ansible 提供的**命令行界面**（**CLI**）选项执行不同的自动化任务。然而，在跨多个团队的 IT 企业中大规模使用 Ansible 可能具有挑战性。这就是为什么我们将介绍**Ansible Web eXecutable**（**AWX**）框架。AWX 是一个开源项目，是 Red Hat Ansible Tower 的上游项目。
 

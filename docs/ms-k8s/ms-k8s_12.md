@@ -1,4 +1,4 @@
-# 自定义 Kubernetes - API 和插件
+# 第十二章：自定义 Kubernetes - API 和插件
 
 在本章中，我们将深入研究 Kubernetes 的内部。我们将从 Kubernetes API 开始，学习如何通过直接访问 API、Python 客户端来以编程方式使用 Kubernetes，然后我们将自动化 Kubectl。然后，我们将研究如何使用自定义资源扩展 Kubernetes API。最后一部分是关于 Kubernetes 支持的各种插件。Kubernetes 操作的许多方面都是模块化的，并且设计用于扩展。我们将研究几种类型的插件，如自定义调度程序、授权、准入控制、自定义指标和卷。最后，我们将研究如何扩展 Kubectl 并添加自己的命令。
 

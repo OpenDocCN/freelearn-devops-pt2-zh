@@ -1,4 +1,4 @@
-# 部署混合 Azure Kubernetes 服务引擎集群
+# 第八章：部署混合 Azure Kubernetes 服务引擎集群
 
 上一章概述了如何在本地环境中创建混合 Windows/Linux Kubernetes 集群的方法。这种方法也可以用于基础设施即服务云环境中的部署，但如果您使用 Azure，您有一个更简单的解决方案：**Azure Kubernetes 服务**（**AKS**）**引擎** ([`github.com/Azure/aks-engine`](https://github.com/Azure/aks-engine))。该项目旨在提供一种使用**Azure 资源管理器**（**ARM**）模板部署自管理 Kubernetes 集群的 Azure 本地方式，可以利用 Kubernetes 的所有 Azure 云集成，例如负载均衡器服务。此外，使用 AKS Engine，您可以支持使用 Windows 节点部署 Kubernetes 集群，与本地环境相比，需要的配置和节点准备较少。换句话说，您将能够在几分钟内部署一个生产级的高可用混合集群。
 
