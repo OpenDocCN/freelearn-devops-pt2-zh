@@ -1,31 +1,45 @@
 - en: 'Section 2: Deploying Playbooks in a Production Environment'
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第二节：在生产环境中部署 Playbooks
 - en: This section will help you to create deployments that have multiple phases and
     multiple machines. It will also explain how Ansible can be integrated with various
     cloud offerings and how it can simplify your life by managing the cloud for you.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 这一部分将帮助您创建具有多个阶段和多台机器的部署。它还将解释 Ansible 如何与各种云服务集成以及如何通过管理云来简化您的生活。
 - en: 'This section contains the following chapters:'
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 这一部分包含以下章节：
 - en: '[Chapter 3](a3cea92c-92a2-4dd2-a666-a57b53f052dd.xhtml), *Scaling to Multiple
     Hosts*'
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第三章](a3cea92c-92a2-4dd2-a666-a57b53f052dd.xhtml)，*扩展到多个主机*'
 - en: '[Chapter 4](99cce790-a03d-4810-b707-83e05bb45043.xhtml), *Handling Complex
     Deployment*'
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第四章](99cce790-a03d-4810-b707-83e05bb45043.xhtml)，*处理复杂部署*'
 - en: '[Chapter 5](9bd9ae64-df2b-4dd0-b43e-da6da4553943.xhtml), *Going Cloud*'
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第五章](9bd9ae64-df2b-4dd0-b43e-da6da4553943.xhtml)，*转向云端*'
 - en: '[Chapter 6](d2d5f311-222c-4d51-a562-d003ee85e228.xhtml), *Getting Notification
     from Ansible*'
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第六章](d2d5f311-222c-4d51-a562-d003ee85e228.xhtml)，*从 Ansible 获取通知*'
