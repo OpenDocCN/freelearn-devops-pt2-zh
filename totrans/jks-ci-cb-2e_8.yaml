@@ -613,17 +613,21 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*创建多个 Jenkins 节点* 在[第6章](ch06.html "Chapter 6. Testing Remotely")中的*Testing
+    Remotely*食谱中'
 - en: The *Custom setup scripts for slave nodes* recipe in [Chapter 6](ch06.html "Chapter 6. Testing
     Remotely"), *Testing Remotely*
   id: totrans-78
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '*自定义从属节点的设置脚本* 在[第6章](ch06.html "Chapter 6. Testing Remotely")中的*Testing Remotely*食谱中'
 - en: Starving QA/integration servers
   id: totrans-79
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使 QA/集成服务器处于饥饿状态
 - en: 'A few hundred years ago, coal miners would die because of the build-up of methane
     and carbon monoxide in the mines. To give early warning of this situation, canaries
     were brought into the mines. Being more sensitive, the birds would faint first,
@@ -634,16 +638,20 @@
   id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 几百年前，煤矿工人会因矿井中甲烷和一氧化碳的积聚而死亡。为了提前警告这种情况，人们在矿井中引入了金丝雀。由于它们更加敏感，鸟类会首先晕倒，给矿工足够的时间逃脱。考虑在您的验收环境中为集成服务器采取同样的做法：故意使它们资源匮乏。如果它们崩溃了，您将有足够的时间进行审查，然后看着生产中的爆炸。
 - en: For more information, refer to the *Monitoring via JavaMelody* recipe in [Chapter
     1](ch01.html "Chapter 1. Maintaining Jenkins"), *Maintaining Jenkins*.
   id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 要了解更多信息，请参考[第1章](ch01.html "Chapter 1. Maintaining Jenkins")中的*通过 JavaMelody
+    进行监控*食谱，*Maintaining Jenkins*。
 - en: Reading the change log of Jenkins
   id: totrans-82
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 阅读 Jenkins 的变更日志
 - en: Jenkins practices what it preaches. Minor version number releases occur about
     once a week. New features appear, bugs are resolved, and new bugs introduced.
     In general, the great majority of changes lead to improvement, but a few do not.
@@ -651,6 +659,7 @@
   id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins践行其所宣扬的。次要版本号发布大约每周一次。新功能出现，错误被解决，新错误被引入。一般来说，绝大多数的变更都会带来改进，但也有少数不会。然而，一旦引入，错误通常会很早被发现并迅速被修复。
 - en: Before updating Jenkins for new features and potential stability glitches, it's
     worth reading the changelog ([http://jenkins-ci.org/changelog](http://jenkins-ci.org/changelog)).
     Occasionally, you might want to speed up a deployment to production because of
@@ -658,21 +667,25 @@
   id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 在更新 Jenkins 以获取新功能和潜在稳定性故障之前，值得阅读变更日志（[http://jenkins-ci.org/changelog](http://jenkins-ci.org/changelog)）。偶尔，您可能希望因安全问题而加快部署到生产环境的速度，或者由于稳定性失误而错过某个版本。
 - en: Note
   id: totrans-85
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'If you are focused on stability rather than feature richness, consider using
     the older but more stable long-term support release. For more details visit: [https://wiki.jenkins-ci.org/display/JENKINS/LTS+Release+Line](https://wiki.jenkins-ci.org/display/JENKINS/LTS+Release+Line).'
   id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您专注于稳定性而不是功能丰富性，请考虑使用更老但更稳定的长期支持版本。更多详细信息请访问：[https://wiki.jenkins-ci.org/display/JENKINS/LTS+Release+Line](https://wiki.jenkins-ci.org/display/JENKINS/LTS+Release+Line)。
 - en: Avoiding human bottlenecks
   id: totrans-87
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 避免人为瓶颈
 - en: The simpler your testing environment is, the less skill you'll need to maintain
     it. As you learn to use the plugins and explore the potential of new tools and
     scripting languages, the more knowledge the organization needs to maintain a stable
@@ -683,22 +696,26 @@
   id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 您的测试环境越简单，维护所需的技能就越少。随着您学习使用插件并探索新工具和脚本语言的潜力，组织需要维护稳定系统的知识越多。如果您希望在没有随机短信请求建议的情况下度假，请确保您的知识已传递至少给第二人。这听起来很明显，但在您日常工作的忙碌中，这个原则经常被遗忘或搁置一边。
 - en: One of the easiest ways to share knowledge is to send a couple of developers
     off to the same conferences and events together ([https://www.CloudBees.com/company/events/juc](https://www.CloudBees.com/company/events/juc)).
   id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 共享知识的最简单方法之一是让几名开发人员一起参加同一场会议和活动（[https://www.CloudBees.com/company/events/juc](https://www.CloudBees.com/company/events/juc)）。
 - en: This is where managers play a significant role in knowledge dissemination. They
     need to plan in time and activities for the sharing of knowledge, rather than
     expecting it to happen by magic.
   id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 这就是经理在知识传播中发挥重要作用的地方。他们需要及时计划和活动，以便分享知识，而不是期望它会以魔术般的方式发生。
 - en: Avoiding groupthink
   id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 避免群体思维
 - en: It is easy to be perfect on paper, defining the importance of a solid set of
     JavaDocs and unit tests. However, the real world on its best days is chaotic.
     Project momentum, motivated by the need to deliver, is an elusive force to push
@@ -788,11 +805,14 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Kohsuke Kawaguchi 解释参与漏斗作为构建社区方法的幻灯片可在 [http://www.slideshare.net/kohsuke/building-developer-community](http://www.slideshare.net/kohsuke/building-developer-community)
+    上找到。
 - en: Visibly rewarding successful developers
   id: totrans-103
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 对成功开发者进行可见的奖励
 - en: This is a call to resource managers. Developers and testers specialize in technical
     matters that are at times hard to explain to those outside their problem domain.
     To reach the highest level of expertise and to keep track of trends requires time
@@ -807,17 +827,20 @@
   id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是一个对资源经理的呼吁。开发人员和测试人员专门从事有时很难向不了解他们问题领域的人解释的技术问题。要达到最高水平的专业知识，并跟踪趋势需要时间（有时是他们自己的很多时间）、精力和动力。削弱他们的动力或低估建立技能所需的时间最终将降低产品的质量，并且最终会花费更多。考虑一下你可以做些什么来支持他们，从工资水平的跳跃、学习路径、为开发人员保留时间阅读和实践新想法，到会议和小工具。例如，在加薪之后，Kickstarter（[https://www.kickstarter.com/](https://www.kickstarter.com/)）是一个很好的地方，可以寻找激励性的奖励，并激发开发人员的创造力。
 - en: Finally, do not make developers do non-development stuff. In general, they need
     to be highly focused on the complex task of understanding detailed requirements
     and turning them into rock-solid code.
   id: totrans-105
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，不要让开发人员做非开发性的工作。一般来说，他们需要高度专注于理解详细的需求，并将其转化为牢固的代码的复杂任务。
 - en: Stability and code maintenance
   id: totrans-106
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 稳定性和代码维护
 - en: This book mentions many plugins and a number of languages and testing tools.
     It is OK to experiment in development and then push to acceptance, but the more
     diversity you have in production, the more skills are needed to maintain and especially
@@ -829,6 +852,9 @@
   id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书提到了许多插件和一些语言和测试工具。在开发中进行实验然后推向验收是可以的，但是在生产中拥有更多的多样性，需要更多的技能来维护，尤其是编写流畅的工作流。微妙的选择，比如将
+    Jenkins 插件固定在已知版本，并且将 Jenkins 服务器的生产版本稳定在固定时间段内，有助于提高上线时间。同样重要的是，监控负载并将大部分工作远离主
+    Jenkins，确保工作的时序性。
 - en: To limit job maintenance implies keeping configuration simple and similar. This
     is not realistic in a complex organization with a high degree of diversity. Using
     a test-driven approach helps; conventions also simplify configuration. As the
@@ -838,11 +864,13 @@
   id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 限制工作维护意味着保持配置的简单和相似。在一个具有高度多样性的复杂组织中，这是不现实的。采用测试驱动的方法是有帮助的；惯例也简化了配置。随着多样性的增加，沟通和达成惯例变得重要。简单的策略——比如一份文档智慧的源头（例如，一个共同的维基），定期的经验总结会议，以及每周的回顾——变得至关重要。
 - en: Resources on quality assurance
   id: totrans-109
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 质量保证资源
 - en: 'It is a mistake to consider testing to be the sole responsibility of the testers.
     Coders should feel responsible for the quality of their code, architects for the
     quality of their designs, managers for the ethos of the project and project planning,
@@ -851,12 +879,14 @@
   id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 认为测试是测试人员的唯一责任是错误的。程序员应该对他们的代码质量负责，架构师应该对他们的设计质量负责，管理人员应该对项目的精神和项目规划负责，等等。以下是一些实用的资源范例，涵盖了可行的质量保证领域——这不仅仅是为了测试人员：
 - en: There are many wise words on avoiding classic mistakes based on years of hard
     knocks and bruising. One well thought-out set of comments can be found at [http://www.exampler.com/testing-com/writings/classic/mistakes.html](http://www.exampler.com/testing-com/writings/classic/mistakes.html).
   id: totrans-111
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 关于避免经过多年的艰辛和挫折的经典错误的许多明智的话语。其中一组深思熟虑的评论可以在[http://www.exampler.com/testing-com/writings/classic/mistakes.html](http://www.exampler.com/testing-com/writings/classic/mistakes.html)找到。
 - en: If unit tests cover your code thoroughly, then if you break a piece of code
     during an update, you will know this quickly during the next build. JUnit is arguably
     the most well-known framework in this genre. You can find the framework's home
@@ -865,6 +895,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果单元测试充分覆盖了你的代码，那么如果你在更新过程中破坏了一段代码，你将在下一次构建过程中迅速发现这一点。JUnit可以说是这个领域中最著名的框架。你可以在[http://junit.org/](http://junit.org/)找到该框架的主页。
 - en: The Jenkins home page ([http://jenkins-ci.org/](http://jenkins-ci.org/)) covers
     a wealth of information around the practicalities of configuration, plugins, the
     community, and hints and tips.
@@ -872,6 +903,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins主页（[http://jenkins-ci.org/](http://jenkins-ci.org/)）涵盖了大量关于配置、插件、社区、提示和技巧的实用信息。
 - en: The **Open Web Application Security Project** (**OWASP**) is a great source
     of information and tools on security testing. OWASP is focused on improving the
     security of software. Its mission is to make software security visible so that
@@ -881,29 +913,34 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**开放式网络应用安全项目**（**OWASP**）是一个关于安全测试的信息和工具的重要来源。OWASP致力于提高软件的安全性。其使命是使软件安全可见，以便全球个人和组织能够就真实的软件安全风险做出知情决策。你可以在[https://www.owasp.org/index.php/Main_Page](https://www.owasp.org/index.php/Main_Page)找到OWASP的主页。'
 - en: If you want a hardcopy or e-book of any of the OWASP material, then you can
     download or buy from Lulu ([http://www.lulu.com/spotlight/owasp](http://www.lulu.com/spotlight/owasp)).
   id: totrans-115
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果你想要OWASP材料的实体书或电子书，你可以从Lulu（[http://www.lulu.com/spotlight/owasp](http://www.lulu.com/spotlight/owasp)）下载或购买。
 - en: You can find OWASP's security testing guide at [https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents](https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents).
   id: totrans-116
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 你可以在[https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents](https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents)找到OWASP的安全测试指南。
 - en: One popular example of a commercial company selling Jenkins infrastructure in
     the cloud is Sauce Labs ([https://docs.saucelabs.com/ci-integrations/jenkins/](https://docs.saucelabs.com/ci-integrations/jenkins/)).
   id: totrans-117
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个流行的商业公司销售云端Jenkins基础设施的例子是Sauce Labs（[https://docs.saucelabs.com/ci-integrations/jenkins/](https://docs.saucelabs.com/ci-integrations/jenkins/)）。
 - en: There are a number of excellent and free-to-download software testing magazines.
     The Professional Tester is one such example and is available at [http://www.professionaltester.com/](http://www.professionaltester.com/).
   id: totrans-118
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 有许多优秀的免费软件测试杂志可供下载。专业测试员就是其中之一，可以在[http://www.professionaltester.com/](http://www.professionaltester.com/)找到。
 - en: uTest is the world's largest open community dedicated to professional testers
     and software testing. Its sole purpose is to promote and advance the testing profession,
     and the people who do this vital work. For more information, visit [http://www.utest.com/about-us](http://www.utest.com/about-us).
@@ -911,6 +948,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: uTest是世界上最大的致力于专业测试员和软件测试的开放社区。它的唯一目的是促进和推进测试专业及从事这项重要工作的人。更多信息，请访问[http://www.utest.com/about-us](http://www.utest.com/about-us)。
 - en: There are more and more free MOOC courses and a number of them support the learning
     paths of software testers. You can find a full list of currently running MOOC
     courses at [https://www.mooc-list.com/](https://www.mooc-list.com/).
@@ -918,6 +956,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 越来越多的免费MOOC课程，其中一些支持软件测试员的学习路径。你可以在[https://www.mooc-list.com/](https://www.mooc-list.com/)找到当前正在运行的MOOC课程的完整列表。
 - en: There are many hundreds of excellent blogs centered on testing. Martin Fowler's
     blog ([http://martinfowler.com/](http://martinfowler.com/)) is a great resource
     and the father of Jenkins, Kohsuke Kawaguchi, has another ([http://kohsuke.org/](http://kohsuke.org/)).
@@ -925,6 +964,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 有数以百计的优秀博客聚焦于测试。马丁·福勒的博客（[http://martinfowler.com/](http://martinfowler.com/)）是一个很好的资源，而Jenkins的创始人小冈晃佑还有另一个博客（[http://kohsuke.org/](http://kohsuke.org/)）。
 - en: Static code review allows jobs to find a wide range of issues without human
     intervention. A set of articles I wrote about static code review for the Free
     Software Magazine is available at [http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1](http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1).
@@ -932,16 +972,19 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 静态代码审查允许作业在不需要人工干预的情况下找到各种问题。我在 Free Software Magazine 上撰写的一系列关于静态代码审查的文章可以在[http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1](http://www.freesoftwaremagazine.com/articles/destroy_annoying_bugs_part_1)找到。
 - en: And there's always more
   id: totrans-123
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 还有更多
 - en: 'There are always more points to consider. Here are a few of the cherry-picked
     ones:'
   id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: 总是有更多要考虑的地方。以下是一些精选的内容：
 - en: '**Blurring the team boundary**: Tools such as FitNesse and Selenium IDE make
     it easier for non-Java programmers to write tests. The easier it is to write tests,
     the more likely it is that the relevant tests capture the quintessential details
@@ -952,6 +995,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**模糊团队边界**：诸如 FitNesse 和 Selenium IDE 等工具使非 Java 程序员编写测试更加容易。编写测试越容易，相关测试捕获用户期望的本质细节的可能性就越大。寻找支持降低学习曲线的工具的新
+    Jenkins 插件。有关更多信息，请参阅[第六章](ch06.html "第六章。远程测试")中的 *运行 Selenium IDE 测试* 配方，*远程测试*。'
 - en: '**Deliberately adding defects**: By rotating through Jenkins builds and then
     deliberately adding code that fails, you can test the alertness and response time
     of the team.'
@@ -959,23 +1004,27 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**故意添加缺陷**：通过轮流使用 Jenkins 构建，然后故意添加失败的代码，可以测试团队的警觉性和响应时间。'
 - en: Tip
   id: totrans-127
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Warning**'
   id: totrans-128
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '**警告**'
 - en: Before adding defects, make sure that the team has agreed to the process or
     you might be getting angry e-mails late at night.
   id: totrans-129
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 在添加缺陷之前，请确保团队已经同意了这个过程，否则你可能会在深夜收到愤怒的电子邮件。
 - en: '**Increasing code coverage with link crawlers and security scanners**: A fuzzer
     discovers the inputs of the application it is attacking and then fires off unexpected
     input. Not only is this good for security testing, but also for boundary testing.
@@ -988,6 +1037,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**使用链接爬虫和安全扫描器增加代码覆盖率**：模糊器发现正在攻击的应用程序的输入，然后发射意外输入。这不仅对安全测试有好处，而且对边界测试也有好处。如果您的服务器返回意外错误，则使用模糊器触发更彻底的审核。模糊器和链接爬虫是增加测试代码覆盖率的廉价方法。有关更多信息，请参阅[第二章](ch02.html
+    "第二章。增强安全性")中的 *在 Jenkins 中通过模糊测试查找 500 错误和 XSS 攻击* 配方，*增强安全性*。'
 - en: In your development environment, periodically review for new Jenkin plugins.
     The number of plugins is increasing rapidly and there may be new ways for Jenkins
     to connect different parts of your organization's infrastructure to Continuous
@@ -996,37 +1047,44 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在您的开发环境中，定期查看新的 Jenkin 插件。插件数量正在迅速增加，可能会有新的方式将 Jenkins 连接到组织基础设施的不同部分以进行持续集成。
 - en: Final comments
   id: totrans-132
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 最后评论
 - en: The combination of Jenkins with aggressive automated testing acts as a solid
     safety net around coding projects. The recipes in this book support best practices.
   id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 与积极的自动化测试的结合构成了对编码项目的坚实安全网络。本书中的配方支持最佳实践。
 - en: Producing quality requires great attention to detail. Jenkins can pay attention
     to many of the details and then shout loudly when violations occur.
   id: totrans-134
   prefs: []
   type: TYPE_NORMAL
+  zh: 生成高质量的作品需要高度关注细节。Jenkins 可以关注许多细节，然后在发生违规行为时大声呼喊。
 - en: Each project is different and there are many ways to structure the workflow.
     Luckily, with over 1,000 plugins and the number rising rapidly, Jenkins is flexible
     enough to adapt to even the most obscure infrastructures.
   id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 每个项目都是不同的，有许多方法来构建工作流程。幸运的是，有超过 1000 个插件，并且数量迅速增长，Jenkins 足够灵活，可以适应甚至最隐蔽的基础设施。
 - en: If you do not have the exact plugin that you want, then it is straightforward
     for Java programmers to adapt or create their own plugin.
   id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您没有您想要的确切插件，那么对于 Java 程序员来说，自行适应或创建自己的插件是很简单的。
 - en: Note
   id: totrans-137
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Without a thriving open source Jenkins community, none of this would be possible.
     Jenkins is yet another positive example of the open source mentality working in
     practice. If you agree, consider participating.
