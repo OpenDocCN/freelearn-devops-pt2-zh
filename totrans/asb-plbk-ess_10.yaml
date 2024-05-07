@@ -215,6 +215,7 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加一个以环境名称命名的父组，例如，production、development、staging 等，并将属于该环境的所有其他组包括为子组。每个这样的组又包括一组主机，例如：
 - en: '[PRE0]'
   id: totrans-29
   prefs:
@@ -227,12 +228,14 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，在`group_vars/all`文件中创建通用/默认组变量。然后，可以从特定于环境的文件中覆盖这些变量。
 - en: 'To specify the environment-specific variables, create the `group_vars/{{env}}`
     file, which is shown as follows:'
   id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要指定环境特定的变量，请创建`group_vars/{{env}}`文件，如下所示：
 - en: '[PRE1]'
   id: totrans-32
   prefs:
@@ -244,19 +247,23 @@
   id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: '这也将覆盖`all`组中的变量。以下图示了使用此方法创建的文件结构： '
 - en: '![Approach 1 – using nested groups in an inventory](img/B03800_09_04.jpg)'
   id: totrans-34
   prefs: []
   type: TYPE_IMG
+  zh: '![方法 1 – 在清单中使用嵌套组](img/B03800_09_04.jpg)'
 - en: Once this has been created, it's just a matter of calling the environment-specific
     inventory with the `ansible-playbook` command run.
   id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建完毕后，只需运行`ansible-playbook`命令即可调用特定于环境的清单。
 - en: 'For example, let''s take a look at the following command:'
   id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，让我们看一下以下命令：
 - en: '[PRE2]'
   id: totrans-37
   prefs: []
@@ -267,53 +274,63 @@
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 方法 2 – 使用环境特定的清单变量
 - en: 'The second approach does not require nested groups and relies on the following
     two features of Ansible:'
   id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 第二种方法不需要嵌套组，并依赖于 Ansible 的以下两个特性：
 - en: The `-i` option of Ansible-playbook also accepts a directory that can contain
     one or more inventory files
   id: totrans-40
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ansible-playbook 的 `-i` 选项还接受一个目录，该目录可以包含一个或多个清单文件
 - en: The `host` and `group` variables can be relative to the inventory files in addition
     to the `group_vars` and `host_vars` groups in the root of the Ansible repository
   id: totrans-41
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 主机和组变量可以相对于清单文件，并且还可以相对于 Ansible 仓库根目录中的`group_vars`和`host_vars`组
 - en: 'This approach will create completely isolated variable files for each environment.
     The file structure we created is portrayed in the following diagram:'
   id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 这种方法将为每个环境创建完全隔离的变量文件。我们创建的文件结构如下图所示：
 - en: '![Approach 2 – using environment-specific inventory variables](img/B03800_09_05.jpg)'
   id: totrans-43
   prefs: []
   type: TYPE_IMG
+  zh: '![方法 2 – 使用环境特定的清单变量](img/B03800_09_05.jpg)'
 - en: 'The following is the step-by-step method used for this approach:'
   id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是用于此方法的逐步方法：
 - en: Create an environment directory in the root of the Ansible repository. Under
     this, create one directory per environment.
   id: totrans-45
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Ansible 仓库的根目录下创建一个名为环境的目录。在此目录下，为每个环境创建一个目录。
 - en: 'Each of the environment directories contain two things:'
   id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每个环境目录包含两个内容：
 - en: A host's inventory.
   id: totrans-47
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 主机清单。
 - en: Inventory variables, for example, `group_vars` and `host_vars`. To make environment-specific
     changes, `group_vars` is relevant to us.
   id: totrans-48
@@ -321,6 +338,7 @@
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 清单变量，例如，`group_vars`和`host_vars`。为了进行环境特定的更改，我们关注`group_vars`。
 - en: Each environment contains its own `group_vars` directory, which in turn can
     have one or more files, including the `all` file as default. No two environments
     share these variables with others.
@@ -328,11 +346,13 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每个环境都包含自己的`group_vars`目录，该目录又可以包含一个或多个文件，包括默认的`all`文件。没有两个环境共享这些变量。
 - en: Tip
   id: totrans-50
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: '**Caution**: In addition to the environment-specific `group_vars` group, it''s
     possible to use the `group_vars` file residing on top of the Ansible-playbook
     repository. However, it''s recommended that you don''t use it with this approach,
@@ -341,11 +361,14 @@
   id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: '**注意**: 除了特定于环境的`group_vars`组外，还可以使用位于 Ansible-playbook 仓库顶部的`group_vars`文件。但是，建议不要在此方法中使用它，因为如果值相同，环境特定更改将被
+    playbook 的`group_vars`中的值覆盖。'
 - en: 'With this approach, the playbook can be launched specific to an environment
     as:'
   id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用此方法，可以针对特定环境启动 playbook，如下所示：
 - en: '[PRE3]'
   id: totrans-53
   prefs: []
@@ -355,11 +378,13 @@
   id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这里，`environments/dev`是一个目录。
 - en: Creating a development environment
   id: totrans-55
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建一个开发环境
 - en: 'After learning about how to manage environments, let''s try it out by refactoring
     our existing code and create a dev environment. To test it, let''s create a variable
     called "`env_name`" and change the default page of Nginx to dynamically use this

@@ -1,30 +1,41 @@
 - en: Chapter 10. Orchestrating Infrastructure with Ansible
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第十章。 使用 Ansible 编排基础架构
 - en: 'Orchestration can mean different things at different times when used in different
     scenarios. The following are some of the orchestration scenarios described:'
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在不同的情况下使用编排可能意味着不同的事情。以下是一些编排场景的描述：
 - en: Running ad hoc commands in parallel on a group of hosts, for example, using
     a `for` loop to walk over a group of web servers to restart the Apache service.
     This is the crudest form of orchestration.
+  id: totrans-2
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在一组主机上并行运行临时命令，例如，使用 `for` 循环遍历一组 Web 服务器以重新启动 Apache 服务。这是最原始的编排形式。
 - en: Invoking an orchestration engine to launch another configuration management
     tool to enforce correct ordering.
+  id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 调用编排引擎启动另一个配置管理工具以确保正确的顺序。
 - en: Configuring a multitier application infrastructure in a certain order with the
     ability to have fine-grained control over each step, and the flexibility to move
     back and forth while configuring multiple components. For example, installing
     the database, setting up the web server, coming back to the database, creating
     a schema, going to web servers to start services, and more.
+  id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 以特定顺序配置多层应用程序基础设施，并能够对每个步骤进行精细控制，并且在配置多个组件时具有来回移动的灵活性。例如，安装数据库，设置 Web 服务器，返回数据库，创建模式，转到
+    Web 服务器以启动服务等。
 - en: Most real-world scenarios are similar to the last scenario, which involve a
     multitier application stacks and more than one environment, where it's important
     to bring up and update nodes in a certain order, and in a coordinated way. It's
@@ -32,35 +43,51 @@
     on to the next. The workflow to set up the stack for the first time versus pushing
     updates can be different. There can be times when you would not want to update
     all the servers at once, but do them in batches so that downtime is avoided.
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 大多数实际场景与最后一个场景相似，涉及多层应用堆栈和多个环境，重要的是按照一定顺序和协调的方式启动和更新节点。在继续下一步之前测试应用程序是否正常运行也很有用。首次设置堆栈与推送更新的工作流可能不同。有时您可能不希望立即更新所有服务器，而是分批处理以避免停机时间。
 - en: 'In this chapter, we will cover the following topics:'
+  id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将介绍以下主题：
 - en: Orchestration scenarios
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 编排场景
 - en: Using Ansible as an infrastructure orchestrating engine
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将 Ansible 用作基础架构编排引擎
 - en: Implementing rolling updates
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 实施滚动更新
 - en: Using tags, limits and patterns
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用标签、限制和模式
 - en: Building tests into playbooks
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将测试构建到剧本中
 - en: Ansible as an orchestrator
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible 作为编排器
 - en: When it comes to orchestration of any sort, Ansible really shines over other
     tools. Of course, as the creators of Ansible would say, it's more than a configuration
     management tool, which is true. Ansible can find a place for itself in any of
@@ -68,16 +95,24 @@
     multitier deployments. Even if you have your infrastructure being automated with
     other configuration management tools, you can consider Ansible to orchestrate
     those.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 在任何编排情景下，Ansible 都比其他工具更加出色。当然，正如 Ansible 的创建者所说，它不仅是一个配置管理工具，这是真的。 Ansible
+    可以在前面讨论的任何编排场景中找到自己的位置。它旨在管理复杂的多层部署。即使您的基础架构已经使用其他配置管理工具自动化了，您也可以考虑使用 Ansible
+    来编排这些工具。
 - en: Let's discuss the specific features that Ansible ships with, which are useful
     for orchestration.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们讨论 Ansible 提供的具体功能，这些功能对编排非常有用。
 - en: Multiple playbooks and ordering
+  id: totrans-15
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 多个剧本和顺序
 - en: Unlike most other configuration management systems, Ansible supports running
     different playbooks at different times to configure or manage the same infrastructure.
     You can create one playbook to set up the application stack for the first time,
@@ -85,12 +120,16 @@
     the playbook is that it can contain more than one play, which allows the separation
     of groups of hosts for each tier in the application stack, and configures them
     at the same time.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 与大多数其他配置管理系统不同，Ansible 支持在不同时间运行不同的剧本来配置或管理相同的基础架构。您可以创建一个剧本来首次设置应用程序堆栈，另一个剧本按照一定的方式推送更新。剧本的另一个属性是它可以包含多个播放，这允许将应用程序堆栈中每个层的主机分组，并同时对其进行配置。
 - en: Pre-tasks and post-tasks
+  id: totrans-17
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 预任务和后任务
 - en: We have used pre-tasks and post-tasks earlier, which are very relevant while
     orchestrating, as these allow us to execute a task or run validations before and
     after running a play. Let's use the example of updating web servers that are registered
@@ -101,12 +140,18 @@
     the update process and automatically enabled again using pre-tasks and post-tasks.
     This can avoid the noise that the monitoring tool may generate in the form of
     alerts.
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们之前使用过前置任务和后置任务，在编排过程中非常相关，因为这些任务允许我们在运行播放之前和之后执行任务或运行验证。让我们以更新注册在负载均衡器上的 Web
+    服务器为例。使用前置任务，可以将 Web 服务器从负载均衡器中移除，然后将角色应用于 Web 服务器以推送更新，随后是后置任务，将 Web 服务器重新注册到负载均衡器中。此外，如果这些服务器由
+    **Nagios** 监控，可以在更新过程中禁用警报，然后使用前置任务和后置任务自动重新启用。这可以避免监控工具可能以警报的形式产生的噪音。
 - en: Delegation
+  id: totrans-19
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 委托
 - en: 'If you would like tasks to be selectively run on a certain class of hosts,
     especially the ones outside the current play, the delegation feature of Ansible
     can come in handy. This is relevant to the scenarios discussed previously and
@@ -116,15 +161,23 @@
     can be solved by using the delegation feature. With pre-tasks, a script can be
     launched on the load balancer using the `delegate_to` keyword, which does the
     deregistering part as follows:'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你希望任务选择性地在某一类主机上运行，特别是当前播放范围之外的主机，Ansible 的委托功能会很方便。这与之前讨论的场景相关，并且通常与前置任务和后置任务一起使用。例如，在更新
+    Web 服务器之前，需要将其从负载均衡器中注销。现在，这个任务应该在播放范围之外的负载均衡器上运行。可以通过使用委托功能来解决这个问题。使用前置任务时，可以使用
+    `delegate_to` 关键字在负载均衡器上启动脚本，执行注销操作，如下所示：
 - en: '[PRE0]'
+  id: totrans-21
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Rolling updates
+  id: totrans-22
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 滚动更新
 - en: 'This is also called batch updates or zero-downtime updates. Let''s assume that
     we have 100 web servers that need to be updated. If we define these in an inventory
     and launch a playbook against them, Ansible will start updating all the hosts
@@ -132,33 +185,50 @@
     a seamless update, it would make sense to update them in batches, for example,
     20 at a time. While running a playbook, batch size can be mentioned by using the
     `serial` keyword in the play. Let''s take a look at the following code snippet:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 这也被称为批量更新或零停机更新。假设我们有 100 个需要更新的 Web 服务器。如果我们在清单中定义它们并针对它们启动 playbook，Ansible
+    将同时开始更新所有主机。这也可能导致停机时间。为了避免完全停机并实现无缝更新，有意义的做法是分批更新，例如，每次更新 20 个。在运行 playbook 时，可以使用
+    `serial` 关键字指定批处理大小。让我们看一下以下代码片段：
 - en: '[PRE1]'
+  id: totrans-24
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: Tests
+  id: totrans-25
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 测试
 - en: 'While orchestrating, it''s not only essential to configure the applications
     in order, but also to ensure that they are actually started, and functioning as
     expected. Ansible modules, such as `wait_for` and `uri`, help you build that testing
     into the playbooks, for example:'
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 在编排过程中，不仅要按顺序配置应用程序，还要确保它们实际启动并按预期工作。Ansible 模块，如 `wait_for` 和 `uri`，可以帮助您将这些测试构建到
+    playbooks 中，例如：
 - en: '[PRE2]'
+  id: totrans-27
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: The `wait_for` module can be additionally used to test the existence of a file.
     It's also useful when you would like to wait until a service is available before
     proceeding.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: '`wait_for` 模块可以额外用于测试文件的存在。当你希望在继续之前等待服务可用时，它也非常有用。'
 - en: Tags
+  id: totrans-29
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 标签
 - en: Ansible plays map roles to specific hosts. While the plays are run, the entire
     logic that is called from the main task is executed. While orchestrating, we may
     need to just run a part of the tasks based on the phases that we want to bring
@@ -169,124 +239,187 @@
     start it. The second phase involves starting the application on all nodes almost
     simultaneously. This can be achieved by tagging individual tasks, for example,
     configure, install, service, and more.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible play将角色映射到特定的主机。在运行play时，会执行从主要任务调用的整个逻辑。在编排时，我们可能只需要根据我们想要将基础架构带入的阶段来运行部分任务。一个例子是zookeeper集群，重要的是同时启动集群中的所有节点，或者在几秒钟的间隔内。Ansible可以通过两阶段执行来轻松地实现这一点。在第一阶段，您可以在所有节点上安装和配置应用程序，但不启动它。第二阶段涉及几乎同时在所有节点上启动应用程序。这可以通过给个别任务打标签来实现，例如，configure、install、service等。
 - en: 'For example, let''s take a look at the following screenshot:'
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 举个例子，让我们来看下面的屏幕截图：
 - en: '![Tags](img/B03800_10_01.jpg)'
+  id: totrans-32
   prefs: []
   type: TYPE_IMG
+  zh: '![标签](img/B03800_10_01.jpg)'
 - en: 'While running a playbook, all tasks with a specific tag can be called using
     `–-tags` as follows:'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 在运行playbook时，所有具有特定标签的任务可以使用`--tags`来调用，如下所示：
 - en: '[PRE3]'
+  id: totrans-34
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Tags can not only be applied to tasks, but also to the roles, as follows:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 标签不仅可以应用于任务，还可以应用于角色，如下所示：
 - en: '[PRE4]'
+  id: totrans-36
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: If a specific task needs to be executed always, even if filtered with a tag,
     use a special tag called `always`. This will make the task execute unless an overriding
     option, such as `--skip-tags always` is used.
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果一个特定的任务需要始终执行，即使通过标签进行过滤，使用一个名为`always`的特殊标签。这将使任务执行，除非使用了覆盖选项，比如`--skip-tags
+    always`。
 - en: Patterns and limits
+  id: totrans-38
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 模式和限制
 - en: 'Limits can be used to run tasks on a subset of hosts, which are filtered by
     patterns. For example, the following code would run tasks only on hosts that are
     part of the `db` group:'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 限制可以用来在主机的一个子集上运行任务，这些主机是通过模式进行筛选的。例如，以下代码将仅在属于`db`组的主机上运行任务：
 - en: '[PRE5]'
+  id: totrans-40
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'Patterns usually contain a group of hosts to include or exclude. A combination
     of more than one pattern can be specified as follows:'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 模式通常包含一组要包括或排除的主机。可以指定一个以上的模式组合，如下所示：
 - en: '[PRE6]'
+  id: totrans-42
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Having a colon as separator can be used to filter hosts further. The following
     command would run tasks on all hosts except for the ones that belong to the groups
     `www` and `db`:'
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用冒号作为分隔符可以进一步过滤主机。以下命令将在除了属于`www`和`db`组的主机之外的所有主机上运行任务：
 - en: '[PRE7]'
+  id: totrans-44
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Note that this usually needs to be enclosed in quotes. In this pattern, we
     used the `all` group, which matches all hosts in the inventory, and can be replaced
     with `*`. That was followed by `!` to exclude hosts in the `db` group. The output
     of this command is as follows, which shows that plays by the name `db` and `www`
     were skipped as no hosts matched due to the filter we used previously:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 请注意，通常这需要用引号括起来。在这个模式中，我们使用了`all`组，该组匹配清单中的所有主机，并且可以用`*`替代。接着是`!`来排除`db`组中的主机。这个命令的输出如下，显示了由于先前使用的过滤器，名称为`db`和`www`的play被跳过了，因为没有主机匹配：
 - en: '![Patterns and limits](img/B03800_10_02.jpg)'
+  id: totrans-46
   prefs: []
   type: TYPE_IMG
+  zh: '![模式和限制](img/B03800_10_02.jpg)'
 - en: Let's now see these orchestration features in action. We will begin by tagging
     the role and do the multiphase execution followed by writing a new playbook to
     manage updates to the WordPress application.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们看看这些编排特性是如何运作的。我们将首先给角色打上标签，进而进行多阶段执行，然后编写一个新的playbook来管理对WordPress应用程序的更新。
 - en: Tagging the roles
+  id: totrans-48
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 给角色打标签
 - en: 'Let''s now start tagging the roles we created earlier. We will create the following
     tags that map to the phases the applications are managed in:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在让我们开始给之前创建的角色打上标签。我们将创建以下标签，这些标签对应着应用程序管理中的阶段：
 - en: Install
+  id: totrans-50
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装
 - en: Configure
+  id: totrans-51
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置
 - en: Start
+  id: totrans-52
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 开始
 - en: 'Here is an example of adding tags to the `haproxy` role. Tagging other roles
     is excluded from the text to avoid redundancy. We can either add tags to the tasks
     inside the role or tag the complete roles in a playbook. Let''s begin by tagging
     tasks:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是给`haproxy`角色添加标签的例子。为了避免冗余，将其他角色加上标签的操作从文本中排除掉。我们可以给角色内的任务添加标签，或者在playbook中给整个角色加上标签。让我们从给任务加标签开始：
 - en: '[PRE8]'
+  id: totrans-54
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'After tagging tasks in a role, we will additionally tag the roles in the playbooks
     too, as follows:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 在角色中打上标签后，我们还会在playbooks中打上角色的标签，如下所示：
 - en: '[PRE9]'
+  id: totrans-56
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'Once applied, the tags for our main playbook can be listed as follows:'
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 应用后，我们主要playbook的标签可以列举如下：
 - en: '[PRE10]'
+  id: totrans-58
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: 'Using the combination of tags and limits gives us a fine-grained control over
     what gets executed in a playbook run, for example:'
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE11]'
+  id: totrans-60
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: Creating an orchestration playbook for WordPress
+  id: totrans-61
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -295,49 +428,61 @@
     with zero downtime and deploying new revisions, the `site.yml` file is not the
     ideal playbook though. We would want to follow a workflow that would involve the
     following steps:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
 - en: Update the web servers one at a time. This will avoid any downtime.
+  id: totrans-63
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Before updating, deregister the web server from the haproxy load balancer. This
     will stop the traffic to the web server in order to avoid downtime.
+  id: totrans-64
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Run roles related to the WordPress application, that is, Nginx, php5-fpm, and
     WordPress.
+  id: totrans-65
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Ensure that the web server is running and is listening to port 80.
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Register the server back on haproxy and start sending the traffic again.
+  id: totrans-67
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: 'Let''s create a playbook by the name `update.yml`, which does the orchestration
     just as explained earlier and uses most of the features discussed previously in
     this chapter. Here is the playbook:'
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
 - en: '[PRE12]'
+  id: totrans-69
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'Let''s analyze this code:'
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
 - en: The playbook contains just one play, which runs on the hosts that belong to
     the `www group in` inventory.
+  id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: The serial keyword specifies the batch size, and allows rolling updates with
     zero downtime. In our case, since we have fewer hosts, we chose one web server
     to be updated at a time.
+  id: totrans-72
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
@@ -345,58 +490,71 @@
     the pre-tasks section ,which runs a shell command with **socat**. This is run
     on all load balancers using the `delegate` keyword. Socat is a Unix utility similar
     to and more at (nc) but has a richer feature set.
+  id: totrans-73
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: After deregistering the host, roles are applied to it; this will update the
     configurations for the web server or deploy new code.
+  id: totrans-74
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Once updated, the post-tasks kick in, which first wait until the web server
     is up and listening to port 80, and only after its ready, then it registers it
     back to the load balancer.
+  id: totrans-75
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
 - en: Review questions
+  id: totrans-76
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
 - en: 'Do you think you''ve understood the chapter well enough? Try answering the
     following questions to test your understanding:'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
 - en: Is it possible to use Ansible to orchestrate another configuration management
     tool?
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How can you achieve zero downtime while deploying applications with Ansible?
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: What does the `--limit` command do to Ansible playbook?
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: How would you run a subset of tasks for a given role in a playbook?
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: What is the purpose of using pre-tasks and post-tasks?
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: What modules can be used to run tests from playbooks?
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Why is the `always` tag special?
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
 - en: Summary
+  id: totrans-85
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
@@ -410,18 +568,27 @@
     update web servers, which involves zero-downtime deployment, delegation, pre-tasks
     and post-tasks, and tests. You also learned that Ansible can be a good fit in
     any orchestration scenario.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在本章开始时讨论了编排是什么，不同的编排场景是什么，以及 Ansible 如何适应其中。您了解了 Ansible 在编排背景下的一系列丰富功能。这包括多
+    playbook 支持、预任务和后任务、标签和限制、运行测试等等。我们继续为之前创建的角色打标签，并学习如何使用标签、模式和限制的组合控制代码在哪些机器上运行的部分。最后，我们创建了一个新的
+    playbook 来编排工作流，更新 Web 服务器，其中包括零停机部署、委托、预任务和后任务以及测试。您还了解到 Ansible 可以适用于任何编排场景中。
 - en: This brings us to the end of this book. Before we conclude, on behalf of the
     reviewers, editors, contributors, and rest of the publishing team, I would like
     to thank you for considering this book as a companion in your journey towards
     being an Ansible practitioner.
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 这就是本书的结尾。在结束之前，我代表审阅者、编辑、贡献者和出版团队的其他成员，感谢您将本书视为您成为 Ansible 实践者的伴侣之一。
 - en: We hope that by now you have become comfortable with the various primitives
     that Ansible offers to automate common infrastructure tasks, create dynamic roles,
     manage multitier application configurations, zero-downtime deployments, orchestrate
     complex infrastructure, and more. We hope that you will be able to apply the knowledge
     acquired in this book to create effective Ansible playbooks.
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们希望您现在已经熟悉了 Ansible 提供的各种原语，用于自动化常见基础设施任务、创建动态角色、管理多层应用程序配置、零停机部署、编排复杂基础设施等。我们希望您能够应用本书中所学知识创建有效的
+    Ansible playbook。
