@@ -1,646 +1,985 @@
 - en: Automating Web Application Security Testing Using OWASP ZAP
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 OWASP ZAP 进行自动化 Web 应用程序安全测试
 - en: The OWASP **Zed Attack Proxy** (commonly known as **ZAP**) is one of the most
     popular web application security testing tools. It has many features that allow
     it to be used for manual security testing; it also fits nicely into **continuous
     integration/continuous delivery** (**CI/CD**) environments after some tweaking
     and configuration.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP **Zed Attack Proxy**（通常称为**ZAP**）是最受欢迎的网络应用安全测试工具之一。它具有许多功能，使其可用于手动安全测试；在一些调整和配置后，它也很好地适用于**持续集成/持续交付**（**CI/CD**）环境。
 - en: More details about the project can be found at [https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project).
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 有关该项目的更多详细信息可以在[https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)找到。
 - en: '**Open Web Application Security Project** (**OWASP**) is a worldwide not-for-profit
     charitable organization focused on improving the security of software. Read more
     about OWASP projects and resources at [https://www.owasp.org](https://www.owasp.org).'
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: '**开放式网络应用安全项目**（**OWASP**）是一个致力于改善软件安全性的全球性非营利慈善组织。在[https://www.owasp.org](https://www.owasp.org)了解更多关于OWASP项目和资源的信息。'
 - en: 'OWASP ZAP includes many different tools and features in one package. For a
     pentester tasked with doing the security testing of web applications, the following
     features are invaluable:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP 在一个包中包含许多不同的工具和功能。对于负责对 Web 应用程序进行安全测试的渗透测试员，以下功能至关重要：
 - en: '| **Feature** | **Use case** |'
+  id: totrans-5
   prefs: []
   type: TYPE_TB
+  zh: '| **功能** | **用例** |'
 - en: '| Intercepting proxy | This allows us to intercept requests and responses in
     the browser |'
+  id: totrans-6
   prefs: []
   type: TYPE_TB
+  zh: '| 拦截代理 | 这允许我们拦截浏览器中的请求和响应 |'
 - en: '| Active scanner | Automatically run web security scans against targets |'
+  id: totrans-7
   prefs: []
   type: TYPE_TB
+  zh: '| 主动扫描器 | 自动运行针对目标的网络安全扫描 |'
 - en: '| Passive scanner | Glean information about security issues from pages that
     get downloaded using spider tools and so on |'
+  id: totrans-8
   prefs: []
   type: TYPE_TB
+  zh: '| 被动扫描器 | 从使用蜘蛛工具下载的页面中获取有关安全问题的信息 |'
 - en: '| Spiders | Before ZAP can attack an application, it creates a site map of
     the application by crawling all the possible web pages on it |'
+  id: totrans-9
   prefs: []
   type: TYPE_TB
+  zh: '| 蜘蛛 | 在 ZAP 可以攻击应用程序之前，它通过遍历所有可能的网页来创建应用程序的站点地图 |'
 - en: '| REST API | Allows ZAP to be run in headless mode and to be controlled for
     running automated scanner, spider, and get the results |'
+  id: totrans-10
   prefs: []
   type: TYPE_TB
+  zh: '| REST API | 允许 ZAP 在无头模式下运行，并控制运行自动扫描器、蜘蛛和获取结果 |'
 - en: As you may have guessed, in this chapter, for security automation we will invoke
     ZAP in headless mode and use the API interfaces provided by it to do the scanning
     and security testing.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如你可能已经猜到的，在本章中，为了进行安全自动化，我们将以无头模式调用 ZAP，并使用其提供的 API 接口来进行扫描和安全测试。
 - en: 'ZAP is a Java-based software. The typical way of using it will involve the
     following:'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: ZAP 是基于 Java 的软件。使用它的典型方式将涉及以下内容：
 - en: '**Java Runtime Environment** (**JRE**) 7 or more recent installed in the operating
     system of your choice (macOS, Windows, Linux)'
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Java 运行时环境**（**JRE**）7 或更高版本安装在您选择的操作系统中（macOS、Windows、Linux）'
 - en: Install ZAP using package managers, installers from the official downloads page
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用官方下载页面的软件包管理器、安装程序安装 ZAP
 - en: You can find the latest updated stable links here: [https://github.com/zaproxy/zaproxy/wiki/Downloads](https://github.com/zaproxy/zaproxy/wiki/Downloads).
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在此处找到最新的更新稳定链接：[https://github.com/zaproxy/zaproxy/wiki/Downloads](https://github.com/zaproxy/zaproxy/wiki/Downloads)。
 - en: While we can build a playbook to do exactly that, the developer world is moving
     toward concepts of CI/CD and continuous security. An approach in which we can
     bootstrap a stable version of ZAP as and when required would be ideal.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然我们可以构建一个执行此操作的操作手册，但开发者世界正在向 CI/CD 和持续安全的概念发展。一个可以在需要时引导稳定版本的 ZAP 的方法将是理想的。
 - en: The best way to achieve that is to use OWASP ZAP as a container. In fact, this
     is the kind of setup Mozilla uses ZAP in a CI/CD pipeline to verify the baseline
     security controls at every release.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 实现这一目标的最佳方法是将 OWASP ZAP 用作容器。事实上，这是 Mozilla 在 CI/CD 管道中使用 ZAP 来验证每个发布的基线安全控制的设置方式。
 - en: If you are wondering about the connection between Mozilla and OWASP ZAP, Simon
     Bennetts leads the OWASP ZAP project and works at Mozilla. Read his blog post
     about ZAP baseline scans at [https://blog.mozilla.org/security/2017/01/25/setting-a-baseline-for-web-security-controls/](https://blog.mozilla.org/security/2017/01/25/setting-a-baseline-for-web-security-controls/).
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您想知道 Mozilla 和 OWASP ZAP 之间的联系，Simon Bennetts 领导了 OWASP ZAP 项目并在 Mozilla 工作。
+    阅读他关于 ZAP 基线扫描的博客文章：[https://blog.mozilla.org/security/2017/01/25/setting-a-baseline-for-web-security-controls/](https://blog.mozilla.org/security/2017/01/25/setting-a-baseline-for-web-security-controls/)。
 - en: Installing OWASP ZAP
+  id: totrans-19
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 OWASP ZAP
 - en: We are going to use OWASP ZAP as a container in this chapter, which requires
     container runtime in the host operating system. The team behind OWASP ZAP releases
     ZAP Docker images on a weekly basis via Docker Hub. The approach of pulling Docker
     images based on tags is popular in modern DevOps environments and it makes sense
     that we talk about automation with respect to that.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将使用 OWASP ZAP 作为一个容器，这需要在主机操作系统中运行容器运行时。 OWASP ZAP 团队每周通过 Docker Hub
+    发布 ZAP Docker 镜像。 根据标签拉取 Docker 镜像的方法在现代 DevOps 环境中很受欢迎，因此我们谈论与其相关的自动化是有意义的。
 - en: Official ZAP is now available with stable and weekly releases via the Docker
     container at Docker Hub: [https://github.com/zaproxy/zaproxy/wiki/Docker](https://github.com/zaproxy/zaproxy/wiki/Docker).
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 官方 ZAP 现在通过 Docker Hub 的 Docker 容器提供稳定版和每周发布版本：[https://github.com/zaproxy/zaproxy/wiki/Docker](https://github.com/zaproxy/zaproxy/wiki/Docker)。
 - en: Installing Docker runtime
+  id: totrans-22
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Docker 运行时
 - en: '**Docker** is an open platform for developers and system administrators to
     build, ship, and run distributed applications whether on laptops, data center
     VMs, or the cloud. To learn more about Docker, refer to [https://www.docker.com/what-docker](https://www.docker.com/what-docker).'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: '**Docker** 是供开发人员和系统管理员构建、发布和运行分布式应用程序的开放平台，无论是在笔记本电脑、数据中心虚拟机还是云中。 要了解有关 Docker
+    的更多信息，请参阅 [https://www.docker.com/what-docker](https://www.docker.com/what-docker)。'
 - en: 'The following playbook will install Docker Community Edition software in Ubuntu
     16.04:'
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 Playbook 将在 Ubuntu 16.04 中安装 Docker Community Edition 软件：
 - en: '[PRE0]'
+  id: totrans-25
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Docker requires a 64-bit version OS and a Linux kernel version equal to or greater
     than 3.10\. Docker runtime is available for Windows and macOS as well. For the
     purposes of this chapter, the containers we will use are Linux-based. So the runtime
     can be in Windows, but the container running in that will be a Linux-based one.
     These are the standard OWASP ZAP containers available for use.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: Docker 需要 64 位版本的操作系统和 Linux 内核版本大于或等于 3.10。 Docker 运行时也适用于 Windows 和 macOS。
+    对于本章的目的，我们将使用基于 Linux 的容器。 因此运行时可以在 Windows 上，但在其中运行的容器将是基于 Linux 的。 这些是可用于使用的标准
+    OWASP ZAP 容器。
 - en: OWASP ZAP Docker container setup
+  id: totrans-27
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: OWASP ZAP Docker 容器设置
 - en: The two new modules to deal with Docker containers that we will be using here
     are `docker_image` and `docker_container`.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将在这里使用的两个新模块来处理 Docker 容器是 `docker_image` 和 `docker_container`。
 - en: These modules require you to be using a 2.1 and higher version of Ansible. Right
     now would be a good time to check your version of Ansible using the `—version`
     flag.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 这些模块要求您使用 2.1 及更高版本的 Ansible。现在是检查您的 Ansible 版本的好时机，可以使用 `—version` 标志。
 - en: 'If you need to get the latest stable version using `pip`, run the following
     command:'
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您需要使用 `pip` 获取最新稳定版本，请运行以下命令：
 - en: '[PRE1]'
+  id: totrans-31
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'The following playbook will take some time to complete as it has to download
     about 1 GB of data from the internet:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于需要从互联网下载约 1GB 的数据，以下操作可能需要一些时间才能完成：
 - en: '[PRE2]'
+  id: totrans-33
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: In the following configuration, we are saying `api.disablekey=true`, which means
     we are not using any API key. This can be overwritten by giving the specific API
     key. `api.addrs.addr.name=.*` and `api.addrs.addr.regex=true` will allow all IP
     addresses to connect to the ZAP API.  More information about ZAP API key settings
     can be found at [https://github.com/zaproxy/zaproxy/wiki/FAQapikey](https://github.com/zaproxy/zaproxy/wiki/FAQapikey).
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 在以下配置中，我们说 `api.disablekey=true`，这意味着我们不使用任何 API 密钥。 这可以通过给定特定的 API 密钥来覆盖。 `api.addrs.addr.name=.*`
+    和 `api.addrs.addr.regex=true` 将允许所有 IP 地址连接到 ZAP API。 有关 ZAP API 密钥设置的更多信息，请参阅
+    [https://github.com/zaproxy/zaproxy/wiki/FAQapikey](https://github.com/zaproxy/zaproxy/wiki/FAQapikey)。
 - en: 'You can access the ZAP API interface by navigating to `http://ZAPSERVERIPADDRESS:8090`:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以通过导航到 `http://ZAPSERVERIPADDRESS:8090` 来访问 ZAP API 界面：
 - en: '![](img/cd7413f7-b766-41af-b24f-9d79ce0dbc07.png)'
+  id: totrans-36
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/cd7413f7-b766-41af-b24f-9d79ce0dbc07.png)'
 - en: OWASP ZAP API Web UI
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP API Web UI
 - en: A specialized tool for working with Containers - Ansible Container
+  id: totrans-38
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用于处理容器的专用工具 - Ansible Container
 - en: Currently, we are using Docker modules to perform container operations. A new
     tool, `ansible-container`, provides an Ansible-centric workflow for building,
     running, testing, and deploying containers.
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前，我们正在使用 Docker 模块执行容器操作。新工具 `ansible-container` 提供了一个 Ansible 中心化的工作流程，用于构建、运行、测试和部署容器。
 - en: This allows us to build, push, and run containers using existing playbooks.
     Dockerfiles are like writing shell scripts, therefore, `ansible-container` will
     allow us to codify those Dockerfiles and build them using existing playbooks rather
     writing complex scripts.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 这使我们能够使用现有的播放构建、推送和运行容器。Dockerfiles 就像编写 shell 脚本一样，因此，`ansible-container` 将允许我们将这些
+    Dockerfiles 编码化，并使用现有的播放构建它们，而不是编写复杂的脚本。
 - en: The `ansible-container` supports various orchestration tools, such as Kubernetes
     and OpenShift. It can also be used to push the build images to private registries
     such as Google Container Registry and Docker Hub.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: '`ansible-container` 支持各种编排工具，如 Kubernetes 和 OpenShift。它还可以用于将构建的映像推送到私有注册表，如
+    Google Container Registry 和 Docker Hub。'
 - en: Read more about `ansible-container` at [https://docs.ansible.com/ansible-container](https://docs.ansible.com/ansible-container/).
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 在[https://docs.ansible.com/ansible-container/](https://docs.ansible.com/ansible-container/)了解更多关于`ansible-container`的信息。
 - en: Configuring ZAP Baseline scan
+  id: totrans-43
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 ZAP 基线扫描
 - en: The ZAP Baseline scan is a script that is available in the ZAP Docker images.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: ZAP 基线扫描是在 ZAP Docker 镜像中可用的脚本。
 - en: More details about OWASP ZAP Baseline scan can be found at [https://github.com/zaproxy/zaproxy/wiki/ZAP-Baseline-Scan](https://github.com/zaproxy/zaproxy/wiki/ZAP-Baseline-Scan).
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多关于 OWASP ZAP 基线扫描的详细信息可以在[https://github.com/zaproxy/zaproxy/wiki/ZAP-Baseline-Scan](https://github.com/zaproxy/zaproxy/wiki/ZAP-Baseline-Scan)找到。
 - en: 'This is what the script does:'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 此脚本的功能如下：
 - en: Runs ZAP spider against the specified target for one minute and then does a
     passive scan
+  id: totrans-47
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 对指定目标运行 ZAP 蜘蛛一分钟，然后执行被动扫描
 - en: By default, reports all alerts as warnings
+  id: totrans-48
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 默认情况下，将所有警报报告为警告
 - en: This script is intended to be ideal to run in a CI/CD environment, even against
     production sites
+  id: totrans-49
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 此脚本旨在在CI/CD环境中运行，甚至针对生产站点也是理想的。
 - en: Before setting up and running the ZAP Baseline scan, we want to run a simple
     vulnerable application so that all scans and testing using ZAP are running against
     that application, rather than running the scans against real-world applications,
     which is illegal without permission.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 在设置和运行 ZAP 基线扫描之前，我们希望运行一个简单易受攻击的应用程序，以便所有使用 ZAP 的扫描和测试都针对该应用程序运行，而不是针对真实世界的应用程序运行扫描，这是未经许可的。
 - en: Running a vulnerable application container
+  id: totrans-51
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行一个易受攻击的应用容器
 - en: We will be using the **Damn Vulnerable Web Services** (**DVWS**) application
     (for more information, you can visit [https://github.com/snoopysecurity/dvws](https://github.com/snoopysecurity/dvws)).
     It is an insecure web application with multiple vulnerable web service components
     that can be used to learn real-world web service vulnerabilities.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用**Damn Vulnerable Web Services**（**DVWS**）应用程序（更多信息，请访问[https://github.com/snoopysecurity/dvws](https://github.com/snoopysecurity/dvws)）。它是一个带有多个易受攻击的
+    Web 服务组件的不安全 Web 应用程序，可用于学习真实世界的 Web 服务漏洞。
 - en: 'The following playbook will set up the Docker container for running the DVWS
     application:'
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下播放将设置运行 DVWS 应用程序的 Docker 容器：
 - en: '[PRE3]'
+  id: totrans-54
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: 'Once the playbook is successfully executed, we can navigate to `http://DVWSSERVERIP`:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦播放成功执行，我们可以导航到 `http://DVWSSERVERIP`：
 - en: '![](img/938c0a0d-3b89-43b5-9fa4-88a534cf121d.png)'
+  id: totrans-56
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/938c0a0d-3b89-43b5-9fa4-88a534cf121d.png)'
 - en: DVWS application home page
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: DVWS 应用首页
 - en: Now, we are ready to perform our OWASP ZAP Baseline scan against the DVWS application,
     by running the Baseline scan playbook.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，我们已经准备好对 DVWS 应用程序执行我们的 OWASP ZAP 基线扫描，通过运行基线扫描播放。
 - en: Running an OWASP ZAP Baseline scan
+  id: totrans-59
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行 OWASP ZAP 基线扫描
 - en: 'The following playbook runs the Docker Baseline scan against a given website
     URL. It also stores the output of the Baseline''s scan in the host system in HTML,
     Markdown, and XML formats:'
+  id: totrans-60
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下播放会针对给定的网站 URL 运行 Docker 基线扫描。它还将基线扫描的输出存储在主机系统中，以 HTML、Markdown 和 XML 格式进行存储：
 - en: '[PRE4]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Let''s explore the parameters of the preceding playbook:'
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们探索前面播放的参数：
 - en: '`website_url` is the domain (or) URL that you want to perform the Baseline
     scan, we can pass this via `--extra-vars "website_url: http://192.168.33.111"` from
     the `ansible-playbook` command'
+  id: totrans-63
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`website_url` 是要执行基线扫描的域名（或）URL，我们可以通过 `--extra-vars "website_url: http://192.168.33.111"`
+    从 `ansible-playbook` 命令传递这个参数'
 - en: '`reports_location` is the path to ZAP host machine where reports get stored'
+  id: totrans-64
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`reports_location` 是 ZAP 主机的路径，报告存储在其中。'
 - en: 'The following screenshot is the scanning report output from OWASP ZAP:'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的截图是来自 OWASP ZAP 的扫描报告输出：
 - en: '![](img/576c1909-a7c7-43a8-90e3-93ced983ca3c.png)'
+  id: totrans-66
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/576c1909-a7c7-43a8-90e3-93ced983ca3c.png)'
 - en: OWASP ZAP Baseline scan HTML report
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP 基线扫描 HTML 报告
 - en: To generate reports in the Markdown and XML formats, add `-w report.md` and
     `-x report.xml`, respectively, to command.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 要生成 Markdown 和 XML 格式的报告，请分别添加`-w report.md`和`-x report.xml`到命令。
 - en: Security testing against web applications and websites
+  id: totrans-69
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 针对 Web 应用程序和网站进行安全测试
 - en: Until now, we have seen how to run a Baseline scan using the OWASP ZAP container.
     Now we will see how we can perform active scans against web applications. An active
     scan may cause the vulnerability to be exploited in the application. Also, this
     type of scan requires extra configuration, which includes authentication and sensitive
     functionalities.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 到目前为止，我们已经看到了如何使用 OWASP ZAP 容器运行基线扫描。现在我们将看到如何对 Web 应用程序执行主动扫描。主动扫描可能导致应用程序中的漏洞被利用。此外，这种类型的扫描需要额外的配置，包括身份验证和敏感功能。
 - en: Running ZAP full scan against DVWS
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 对 DVWS 运行 ZAP 全面扫描
 - en: 'The following playbook will run the full scan against the DVWS application.
     Now we can see that the playbook looks almost similar, except the flags sent to
     command:'
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的 playbook 将针对 DVWS 应用程序运行全面扫描。现在我们可以看到 playbook 看起来几乎相似，只是发送给命令的标志不同：
 - en: '[PRE5]'
+  id: totrans-73
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: 'The OWASP ZAP full scan checks for a lot of vulnerabilities, which includes
     OWASP TOP 10 (for more information visit [https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project))
     and many others. This can be intrusive to the application and it sends active
     requests to the application. It may cause damage to the functionality based on
     the vulnerability that exists in the application:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP 全面扫描检查了许多漏洞，其中包括 OWASP TOP 10（有关更多信息，请访问[https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project)）和许多其他漏洞。这可能对应用程序造成干扰，并向应用程序发送主动请求。它可能会基于应用程序中存在的漏洞对功能造成损害：
 - en: '![](img/f1f77783-9cb8-4c72-9f58-15f022c2e90c.png)'
+  id: totrans-75
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f1f77783-9cb8-4c72-9f58-15f022c2e90c.png)'
 - en: OWASP ZAP full scan for DVWS application report
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: DVWS 应用程序的 OWASP ZAP 全面扫描报告
 - en: The preceding screenshot is the report from the OWASP ZAP full scan for the
     DVWS application. We can clearly see the difference between the Baseline scan
     and the full scan, based on the number of vulnerabilities, different types of
     vulnerabilities, and risk rating.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 上面的截图是 OWASP ZAP 针对 DVWS 应用程序的全面扫描报告。我们可以清楚地看到基线扫描和全面扫描之间的差异，这是基于漏洞数量、不同类型的漏洞和风险评级。
 - en: Testing web APIs
+  id: totrans-78
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 测试 Web API
 - en: Similar to the ZAP Baseline scan, the fine folks behind ZAP provide a script
     as part of their live and weekly Docker images. We can use it to run scans against
     API endpoints defined either by OpenAPI specification or **Simple Object Access
     Protocol** (**SOAP**).
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 与 ZAP 基线扫描类似，ZAP 背后的可爱人士们提供了一个脚本作为他们的实时和每周 Docker 镜像的一部分。我们可以使用它来对由 OpenAPI
+    规范或**简单对象访问协议**（**SOAP**）定义的 API 端点运行扫描。
 - en: 'The script can understand the API specifications and import all the definitions.
     Based on this, it runs an active scan against all the URLs found:'
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: 脚本可以理解 API 规范并导入所有定义。基于此，它对找到的所有 URL 运行主动扫描：
 - en: '[PRE6]'
+  id: totrans-81
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: Continuous scanning workflow using ZAP and Jenkins
+  id: totrans-82
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 ZAP 和 Jenkins 进行持续扫描工作流
 - en: Jenkins is an open source automation server. It is used extensively in CI/CD
     pipelines. These pipelines usually refer to a series of automated steps that occur
     based on triggers, such as code commits to version control software or a new release
     being created.
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 是一个开源自动化服务器。它在 CI/CD 流水线中被广泛使用。这些流水线通常指一系列基于触发器发生的自动化步骤，例如提交代码到版本控制软件或创建新版本。
 - en: 'We already saw the example of ZAP Baseline''s scans being part of the Mozilla
     release cycle. We can integrate ZAP with Jenkins. While there are many ways we
     can do this, a useful set of steps will be the following:'
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经看到了 ZAP 基线扫描作为 Mozilla 发布周期的一部分的示例。我们可以将 ZAP 与 Jenkins 集成。虽然我们可以有许多方式来实现这一点，但一组有用的步骤将是以下内容：
 - en: Based on a trigger, a new ZAP instance is ready for scanning
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 基于触发器，一个新的 ZAP 实例已经准备好进行扫描
 - en: The ZAP instance runs against an automatically deployed application
+  id: totrans-86
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: ZAP 实例针对自动部署的应用程序运行
 - en: The results of the scan are captured and stored in some format
+  id: totrans-87
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 扫描结果以某种格式捕获和存储
 - en: If we choose, the results can also create tickets in bug tracking systems such
     as Atlassian Jira
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果我们选择，结果也可以在诸如 Atlassian Jira 的缺陷跟踪系统中创建票证
 - en: 'For this, we will set up our pipeline infrastructure first:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 为此，我们将首先设置我们的流水线基础设施：
 - en: Set up Jenkins using a playbook
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用 playbook 设置 Jenkins
 - en: Add the official OWASP ZAP Jenkins plugin
+  id: totrans-91
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加官方 OWASP ZAP Jenkins 插件
 - en: Trigger the workflow using another playbook
+  id: totrans-92
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用另一个 playbook 触发工作流程
 - en: The official OWASP ZAP Jenkins plugin can be found at [https://wiki.jenkins.io/display/JENKINS/zap+plugin](https://wiki.jenkins.io/display/JENKINS/zap+plugin).
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 官方 OWASP ZAP Jenkins 插件可以在 [https://wiki.jenkins.io/display/JENKINS/zap+plugin](https://wiki.jenkins.io/display/JENKINS/zap+plugin)
+    找到。
 - en: Setting up Jenkins
+  id: totrans-94
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Jenkins
 - en: 'Set up Jenkins on the server to be used as a CI/CD platform for OWASP ZAP.
     This will return the Jenkins administrator password and once it has been done,
     we can install the Ansible plugin:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 在服务器上设置 Jenkins 用作 OWASP ZAP 的 CI/CD 平台。 这将返回 Jenkins 管理员密码，一旦完成，我们就可以安装 Ansible
+    插件：
 - en: '[PRE7]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Then, we can add the playbook to the project. When the new trigger happens
     in the Jenkins build, the playbook will start to scan the website to perform the
     Baseline scan:'
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们可以将 playbook 添加到项目中。 当 Jenkins 构建中发生新的触发时，playbook 将开始扫描网站以执行基线扫描：
 - en: '![](img/5f4b742a-1eb2-48e3-bc56-962db8f2ad5b.png)'
+  id: totrans-98
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5f4b742a-1eb2-48e3-bc56-962db8f2ad5b.png)'
 - en: 'Once the playbook triggers, it will execute the playbook against the URL and
     return the ZAP Baseline scan output:'
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦 playbooks 触发，它将针对 URL 执行 playbooks 并返回 ZAP 基线扫描输出：
 - en: '![](img/0530335e-2a45-4cf4-9d97-14eb53e6e209.png)'
+  id: totrans-100
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0530335e-2a45-4cf4-9d97-14eb53e6e209.png)'
 - en: Setting up the OWASP ZAP Jenkins plugin
+  id: totrans-101
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 OWASP ZAP Jenkins 插件
 - en: OWASP ZAP working in tandem with Jenkins is a fairly well-known setup. We already
     know how to set up Jenkins. We can install the official ZAP Jenkins plugin using
     our playbook.
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP 与 Jenkins 配合工作是一个相当常见的设置。我们已经知道如何设置 Jenkins。我们可以使用我们的 playbook 安装官方
+    ZAP Jenkins 插件。
 - en: Once the playbook is ready, a bit of manual configuration is required. We start
     after our playbook has installed Jenkins and restarted the server so that the
     plugin is available for our build jobs.
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦 playbook 准备就绪，需要进行一些手动配置。 我们在我们的 playbook 安装了 Jenkins 并重新启动服务器后开始，以便插件可用于我们的构建作业。
 - en: 'Let''s create a new build job and call it `ZAP-Jenkins`, as shown in the following
     screenshot:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们创建一个新的构建作业，并将其命名为 `ZAP-Jenkins`，如下面的屏幕截图所示：
 - en: '![](img/532650b3-2529-4ef8-baf2-c5271b1626dc.png)'
+  id: totrans-105
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/532650b3-2529-4ef8-baf2-c5271b1626dc.png)'
 - en: 'This will be a freestyle project for us. Now we will add the magic of ZAP to
     this:'
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 对我们来说，这将是一个自由风格的项目。 现在我们将向其中添加 ZAP 的魔力：
 - en: '![](img/c01a9481-e741-4a27-a5f7-81fe43a0427f.png)'
+  id: totrans-107
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c01a9481-e741-4a27-a5f7-81fe43a0427f.png)'
 - en: We are following the instructions as given on the Jenkins page for the official
     plugin: [https://wiki.jenkins.io/display/JENKINS/zap+plugin](https://wiki.jenkins.io/display/JENKINS/zap+plugin).
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们正在按照 Jenkins 页面上官方插件的说明进行操作： [https://wiki.jenkins.io/display/JENKINS/zap+plugin](https://wiki.jenkins.io/display/JENKINS/zap+plugin)。
 - en: Some assembly required
+  id: totrans-109
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 需要一些组装
 - en: 'Specify the interface''s IP address and the port number on which ZAP should
     be listening. Usually, this port is `8080`, but since Jenkins is listening on
     that, we choose `8090`:'
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 指定接口的 IP 地址和 ZAP 应监听的端口号。 通常，此端口为 `8080`，但由于 Jenkins 正在监听该端口，我们选择 `8090`：
 - en: '![](img/730cfcc9-281b-48be-afb8-c5a4b7b6b73a.png)'
+  id: totrans-111
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/730cfcc9-281b-48be-afb8-c5a4b7b6b73a.png)'
 - en: 'For JDK, we choose the only available option, InheritFromJob:'
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于 JDK，我们选择唯一可用的选项，即从作业继承：
 - en: '![](img/9f243189-aa25-4418-8fae-a1833c4c4153.png)'
+  id: totrans-113
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/9f243189-aa25-4418-8fae-a1833c4c4153.png)'
 - en: For the installation method, we select the ZAP that is already installed on `/usr/share/owasp-zap`. We
     add this value to a `ZAPROXY_HOME` environment variable in `/etc/environment`.
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于安装方法，我们选择已经安装在 `/usr/share/owasp-zap` 上的 ZAP。 我们将此值添加到 `/etc/environment`
+    中的 `ZAPROXY_HOME` 环境变量中。
 - en: 'By doing this, we have ensured that the environment variable values will survive
     a system reboot as well:'
+  id: totrans-115
   prefs: []
   type: TYPE_NORMAL
+  zh: 这样做，我们确保环境变量值在系统重新启动时也能存活：
 - en: '![](img/4eccf484-5cca-4f5f-b724-4804d0f95444.png)'
+  id: totrans-116
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4eccf484-5cca-4f5f-b724-4804d0f95444.png)'
 - en: We specify a fairly small value for a timeout to ensure that in case something
     goes wrong, we don't have to wait long to see that the build failed or ZAP isn't
     responding.
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们为超时设置了相当小的值，以确保万一出现问题，我们不必等待太久才能看到构建失败或 ZAP 无响应。
 - en: We also specify a command-line option to tell Jenkins what the install directory
     for ZAP is.
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还指定了一个命令行选项，告诉 Jenkins ZAP 的安装目录是什么。
 - en: You may need to click on the Advanced button to see these options.
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可能需要单击“高级”按钮才能查看这些选项。
 - en: '![](img/590e44b0-85bf-4458-b085-843093366d5a.png)'
+  id: totrans-120
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/590e44b0-85bf-4458-b085-843093366d5a.png)'
 - en: 'We specify the path to the ZAP home directory:'
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们指定了 ZAP 主目录的路径：
 - en: '![](img/7ca7ac48-5b26-44b3-829a-db3204f326b2.png)'
+  id: totrans-122
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7ca7ac48-5b26-44b3-829a-db3204f326b2.png)'
 - en: 'Then we configure where we plan to load the ZAP session from:'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后我们配置从哪里加载 ZAP 会话：
 - en: '![](img/af32082a-c625-49a8-b04f-6df0f587185d.png)'
+  id: totrans-124
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/af32082a-c625-49a8-b04f-6df0f587185d.png)'
 - en: 'The context name, scope, and exclusions are shown here:'
+  id: totrans-125
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里显示了上下文名称、范围和排除项：
 - en: '![](img/0e38dc8c-b8a3-4846-95cd-5d4052862e9b.png)'
+  id: totrans-126
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0e38dc8c-b8a3-4846-95cd-5d4052862e9b.png)'
 - en: 'This is the starting point of the URL to test. The kind of test we are planning
     to do is Spider Scan, default Active Scan:'
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是要测试的 URL 的起始点。我们计划执行的测试类型是爬虫扫描，默认为主动扫描：
 - en: '![](img/4480cb66-d930-4888-827e-5930f8108cb9.png)'
+  id: totrans-128
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/4480cb66-d930-4888-827e-5930f8108cb9.png)'
 - en: Finally, we specify the filename for the report that will be generated. We are
     adding the `BUILD_ID` variable to ensure that we don't have to worry about overwriting
     the reports.
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们指定将生成的报告的文件名。我们添加`BUILD_ID`变量以确保我们无需担心覆盖报告。
 - en: Triggering the build (ZAP scan)
+  id: totrans-130
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 触发构建（ZAP 扫描）
 - en: Once the job is configured, we are ready to trigger the build. Of course, you
     can manually click Build now and get going.
+  id: totrans-131
   prefs: []
   type: TYPE_NORMAL
+  zh: 作业配置完成后，我们就可以触发构建了。当然，您也可以手动点击立即构建然后开始。
 - en: But we will configure the build job to be triggered remotely, and at the same
     time pass the necessary target information.
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: 但我们将配置构建作业以远程触发，并同时传递必要的目标信息。
 - en: 'Under General check This project is parameterized:'
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 在常规下勾选此项目是参数化的：
 - en: '![](img/97119a78-d832-4e6e-8063-b7a9e494be69.png)'
+  id: totrans-134
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/97119a78-d832-4e6e-8063-b7a9e494be69.png)'
 - en: Inside that, we add a `TARGET` parameter with a default value.
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 在其中，我们添加一个带有默认值的`TARGET`参数。
 - en: 'Under Build Triggers, we specify an authentication token to be passed as a
     parameter while remotely triggering a build:'
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 在构建触发器下，我们指定一个身份验证令牌，以便在远程触发构建时作为参数传递：
 - en: '![](img/0fe9b5c7-ca95-4b00-a6e3-c38d88445237.png)'
+  id: totrans-137
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0fe9b5c7-ca95-4b00-a6e3-c38d88445237.png)'
 - en: Try to ensure that this token is sufficiently lengthy and random, and not the
     simple word we have used as an example.
+  id: totrans-138
   prefs: []
   type: TYPE_NORMAL
+  zh: 请尽量确保此令牌足够长且随机，并且不是我们用作示例的简单单词。
 - en: A great way to generate sufficiently random strings in Linux/macOS is to use
     the OpenSSL command. For the `hex` output (`20` is the length of the output),
     use `**openssl rand -hex 20**`. For the `base64` output (`24` is the length of
     the output), use `**openssl rand -base64 24**`.
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Linux/macOS 中生成足够随机的字符串的一个好方法是使用 OpenSSL 命令。对于`hex`输出（`20`是输出的长度），使用`**openssl
+    rand -hex 20**`。对于`base64`输出（`24`是输出的长度），使用`**openssl rand -base64 24**`。
 - en: 'At this point, all we have to do is note the API Token of the logged in user
     (from `http://JENKINS-URL/user/admin/configure`):'
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 在此时，我们所要做的就是注意已登录用户的 API 令牌（从`http://JENKINS-URL/user/admin/configure`）：
 - en: '![](img/f484ebee-c98d-4148-baba-a06dbcb14ad7.png)'
+  id: totrans-141
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f484ebee-c98d-4148-baba-a06dbcb14ad7.png)'
 - en: 'Clicking Show API Token will show the token:'
+  id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 单击“显示 API 令牌”将显示令牌：
 - en: '![](img/d828b98f-18ee-4aac-8e5a-7c704816525d.png)'
+  id: totrans-143
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d828b98f-18ee-4aac-8e5a-7c704816525d.png)'
 - en: We can now use a command-line tool, such as `curl`, to see if this works.
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们现在可以使用命令行工具，比如`curl`，来查看是否正常工作。
 - en: The format of the link is `curl "http://username:API-TOKEN@JENKINS-URL/job/ZAP-Jenkins/buildWithParameters?TARGET=http://demo.testfire.net&token=ansible2security"`.
+  id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 链接的格式是`curl "http://username:API-TOKEN@JENKINS-URL/job/ZAP-Jenkins/buildWithParameters?TARGET=http://demo.testfire.net&token=ansible2security"`。
 - en: This will trigger the build and the application will get scanned for security
     issues.
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将触发构建，应用程序将被扫描以查找安全问题。
 - en: Playbook to do this with automation
+  id: totrans-147
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用自动化进行的操作指南
 - en: To perform the preceding trigger, we can use the following Ansible playbook.
     This can be used in our Ansible Tower to schedule the scan as well.
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 要执行前述触发器，我们可以使用以下 Ansible playbook。这也可以在我们的 Ansible Tower 中使用来安排扫描。
 - en: The following playbook can store the the API Token key using Ansible Vault,
     feature to store secret data in an encrypted format in playbooks. We will learn
     more about Ansible Vault usage in [Chapter 11](695004a2-b349-4e80-aead-17615c65f356.xhtml),
     *Ansible Security Best Practices, References and Further Reading*.
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下操作指南可以使用 Ansible Vault 存储 API 令牌密钥，该功能用于以加密格式存储 playbooks 中的机密数据。我们将在[第 11
+    章](695004a2-b349-4e80-aead-17615c65f356.xhtml)中学习有关 Ansible Vault 用法的更多信息，*Ansible
+    安全最佳实践、参考资料和进一步阅读*。
 - en: To create an Ansible Vault encrypted variable, run the following command. When
     it prompts for a password, give a password to encrypt this variable and it requires
     while executing the playbook
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 要创建 Ansible Vault 加密变量，请运行以下命令。当它提示输入密码时，给出一个密码以加密此变量，执行 playbook 时需要。
 - en: '[PRE8]'
+  id: totrans-151
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'After executing, it returns the encrypted variable which we can use in the
     playbook it self directly as a variable:'
+  id: totrans-152
   prefs: []
   type: TYPE_NORMAL
+  zh: 执行后，它会返回加密变量，我们可以直接在 playbook 中使用它作为变量：
 - en: '[PRE9]'
+  id: totrans-153
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: 'To perform the `ansible-vault` decryption while executing the playbook, the
     playbook execution command looks like this:'
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 在执行 playbook 时执行 `ansible-vault` 解密，playbook 执行命令如下：
 - en: '[PRE10]'
+  id: totrans-155
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: ZAP Docker and Jenkins
+  id: totrans-156
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: ZAP Docker 和 Jenkins
 - en: There is a great blog series by the folks at Mozilla about configuring the ZAP
     Docker with Jenkins. Rather than repeating what they have to say, we thought it
     made sense to point you to the first post in that series.
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: Mozilla 的一群人撰写了一篇关于如何配置 ZAP Docker 与 Jenkins 的出色博客系列。与其重复他们的内容，我们觉得把你指向该系列的第一篇文章更有意义。
 - en: For further reading, you can check out the interesting blog *Dockerized, OWASP-ZAP
     security scanning, in Jenkins, part one at *[https://blog.mozilla.org/webqa/2016/05/11/docker-owasp-zap-part-one/](https://blog.mozilla.org/webqa/2016/05/11/docker-owasp-zap-part-one/).
+  id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请查看有趣的博客 *Docker 化，OWASP-ZAP 安全扫描，在 Jenkins 中，第一部分*，链接在：[https://blog.mozilla.org/webqa/2016/05/11/docker-owasp-zap-part-one/](https://blog.mozilla.org/webqa/2016/05/11/docker-owasp-zap-part-one/)。
 - en: Summary
+  id: totrans-159
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: OWASP ZAP is a great addition to any security team's arsenal of tools. It provides
     complete flexibility in terms of what we can do with it and how it can fit into
     our setup. By combining ZAP with Jenkins, we can quickly set up a decent production-worthy
@@ -648,10 +987,16 @@
     to install and configure all of these great tools using playbooks. This is great
     as it is mostly a one-time effort and then we can start seeing the results and
     the reports for ZAP.
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: OWASP ZAP 是任何安全团队工具库中的绝佳选择。它在我们如何使用以及如何将其融入我们的设置中提供了完全的灵活性。通过将 ZAP 与 Jenkins
+    结合使用，我们可以快速建立一个体面的、适合生产的持续扫描工作流，并围绕它对我们的流程进行调整。Ansible 允许我们使用 playbooks 安装和配置所有这些优秀的工具。这很棒，因为这主要是一次性的努力，然后我们就可以开始看到
+    ZAP 的结果和报告。
 - en: Now that we are on our way to automating security tools, next we shall see the
     most popular vulnerability assessment tool, Nessus, and how we can build a similar
     workflow for vulnerability assessment for software and networks.
+  id: totrans-161
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们正在自动化安全工具的过程中，接下来我们将看到最流行的漏洞评估工具 Nessus，以及我们如何为软件和网络的漏洞评估构建类似的工作流程。

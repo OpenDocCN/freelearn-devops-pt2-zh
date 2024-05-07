@@ -1,452 +1,675 @@
 - en: Log Monitoring and Serverless Automated Defense (Elastic Stack in AWS)
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 日志监控和无服务器自动防御（AWS 中的 Elastic Stack）
 - en: Log monitoring is the perfect place to think about security automation. For
     monitoring to be effective, a few things need to happen. We should be able to
     move logs from different devices to a central location. We should be able to make
     sense of what a regular log entry is and what could possibly be an attack. We
     should be able to store the logs, and also operate on them for things such as
     aggregation, normalization, and eventually, analysis.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 日志监控是考虑安全自动化的理想场所。要使监视有效，需要发生一些事情。我们应该能够将来自不同设备的日志移动到一个中心位置。我们应该能够理解什么是常规日志条目，以及可能是攻击的内容。我们应该能够存储日志，并对其进行诸如聚合、标准化以及最终分析等操作。
 - en: But, before diving into setting up the stack and building centralized logging
     and monitoring using Elastic Stack, we need to understand a little bit about why
     we need to use and automate the setup for defending against near real-time attacks.
     It's difficult to be a jack-of-all-trades. Traditional logging systems find it
     difficult to log for all applications, systems, and devices. The variety of time
     formats, log output formats, and so on, makes the task pretty complicated.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 但是，在深入设置堆栈并使用 Elastic Stack 构建集中式日志记录和监控之前，我们需要了解一些关于为什么需要使用和自动设置来防御接近实时攻击的原因。成为万事通是困难的。传统的日志记录系统发现很难为所有应用程序、系统和设备记录日志。各种时间格式、日志输出格式等等使得这项任务变得非常复杂。
 - en: The biggest roadblock is finding a way to be able to centralize logs. This gets
     in the way of being able to process log entries in real time, or near real time
     effectively.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 最大的障碍是找到一种方法能够集中日志。这妨碍了能够有效地实时或接近实时处理日志条目。
 - en: 'Some of the problematic points are as follows:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是一些问题点：
 - en: Access is often difficult
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 访问通常很困难
 - en: High expertise in mined data is required
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 需要高度专业的挖掘数据技能
 - en: Logs can be difficult to find
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 日志很难找到
 - en: Log data is immense in size
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 日志数据庞大
 - en: 'In this chapter, we will discuss the following topics:'
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将讨论以下主题：
 - en: Installing Elastic Stack for log monitoring
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装 Elastic Stack 进行日志监控
 - en: Installing Beats on the server
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在服务器上安装 Beats
 - en: Setting up and configuring alerts
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 设置和配置警报
 - en: Setting up an AWS Lambda endpoint to do automated defense
+  id: totrans-13
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 设置 AWS Lambda 终端点以进行自动化防御
 - en: Introduction to Elastic Stack
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Elastic Stack 简介
 - en: 'Elastic Stack is a group of open source products from the Elastic company.
     It takes data from any type of source and in any format and searches, analyzes,
     and visualizes that data in real time. It consists of four major components, as
     follows:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: Elastic Stack 是 Elastic 公司推出的一组开源产品。它可以从任何类型的来源和任何格式的数据中提取数据，并实时搜索、分析和可视化该数据。它由四个主要组件组成，如下：
 - en: Elasticsearch
+  id: totrans-16
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Elasticsearch
 - en: Logstash
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Logstash
 - en: Kibana
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Kibana
 - en: Beats
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 节拍
 - en: '![](img/07737655-ba15-4f81-8526-9cf1d3c9aa88.png)'
+  id: totrans-20
   prefs: []
   type: TYPE_IMG
+  zh: '![图片](img/07737655-ba15-4f81-8526-9cf1d3c9aa88.png)'
 - en: Elastic Stack architecture overview (image taken from https://www.elastic.co/blog/beats-1-0-0)
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: Elastic Stack 架构概述（图片来源：https://www.elastic.co/blog/beats-1-0-0）
 - en: It helps users/admins to collect, analyze, and visualize data in (near) real
     time. Each module fits based on your use case and environment.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 它帮助用户/管理员以（接近）实时的方式收集、分析和可视化数据。每个模块根据您的用例和环境进行调整。
 - en: Elasticsearch
+  id: totrans-23
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Elasticsearch
 - en: Elasticsearch is a distributed, RESTful search and analytics engine capable
     of solving a growing number of use cases. As the heart of the Elastic Stack, it
     centrally stores your data so you can discover the expected and uncover the unexpected
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: Elasticsearch 是一个分布式的、RESTful 的搜索和分析引擎，能够解决越来越多的使用案例。作为 Elastic Stack 的核心，它集中存储您的数据，以便您可以发现预期的内容并发现意外情况
 - en: 'Main plus points of Elastic Stack:'
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: Elastic Stack 的主要优点：
 - en: Distributed and highly available search engine, written in Java, and uses Groovy
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 分布式和高可用搜索引擎，用 Java 编写，使用 Groovy
 - en: Built on top of Lucene
+  id: totrans-27
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于 Lucene 构建
 - en: Multi-tenant, with multi types and a set of APIs
+  id: totrans-28
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 多租户，具有多种类型和一组 API
 - en: Document-oriented, providing (near) real-time search
+  id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 面向文档的，提供（接近）实时搜索
 - en: Logstash
+  id: totrans-30
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Logstash
 - en: Logstash is an open source, server-side data processing pipeline that ingests
     data from a multitude of sources, simultaneously transforms it, and then sends
     it to your favorite *stash.*
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: Logstash 是一个开源的、服务器端的数据处理管道，它从多种来源摄取数据，同时对其进行转换，然后将其发送到您喜欢的 *stash*。
 - en: 'Just to highlight Logstash is:'
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 只是强调 Logstash 是：
 - en: A tool for managing events and logs written in Ruby
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个用 Ruby 编写的管理事件和日志的工具
 - en: Centralized data processing of all types of logs
+  id: totrans-34
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 所有类型日志的集中式数据处理
 - en: 'Consists of the following three main components:'
+  id: totrans-35
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 包括以下三个主要组件：
 - en: '**Input**: Passing logs to process them into machine-understandable format'
+  id: totrans-36
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**输入**：传递日志以将其处理为机器可理解的格式'
 - en: '**Filter**: A set of conditions to perform a specific action on an event'
+  id: totrans-37
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**过滤器**：一组条件，用于对事件执行特定操作'
 - en: '**Output**: The decision maker for processed events/logs'
+  id: totrans-38
   prefs:
   - PREF_IND
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**输出**：已处理事件/日志的决策者'
 - en: Kibana
+  id: totrans-39
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Kibana
 - en: Kibana lets you visualize your Elasticsearch data and navigate the Elastic Stack,
     so you can do anything from learning why you're getting paged at 2:00 a.m. to
     understanding the impact rain might have on your quarterly numbers.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: Kibana 让你可以可视化你的 Elasticsearch 数据并导航 Elastic Stack，这样你就可以做任何事情，从了解为什么在凌晨 2 点会被叫醒到理解雨水可能对你的季度数据造成的影响。
 - en: 'Kibana''s list of features:'
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: Kibana 的功能列表：
 - en: Powerful frontend dashboard is written in JavaScript
+  id: totrans-42
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 强大的前端仪表板是用 JavaScript 编写的
 - en: Browser-based analytics and search dashboard for Elasticsearch
+  id: totrans-43
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于浏览器的 Elasticsearch 分析和搜索仪表板
 - en: A flexible analytics and visualization platform
+  id: totrans-44
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个灵活的分析和可视化平台
 - en: Provides data in the form of charts, graphs, counts, maps, and so on, in real
     time
+  id: totrans-45
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 实时以图表、图形、计数、地图等形式提供数据
 - en: Beats
+  id: totrans-46
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Beats
 - en: Beats is the platform for single-purpose data shippers. They install as lightweight
     agents and send data from hundreds or thousands of machines to Logstash or Elasticsearch.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: Beats 是单一用途数据船的平台。它们安装为轻量级代理，并将数据从数百或数千台机器发送到 Logstash 或 Elasticsearch。
 - en: 'Beats are:'
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: Beats 是：
 - en: Lightweight shippers for Elasticsearch and Logstash
+  id: totrans-49
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为 Elasticsearch 和 Logstash 提供轻量级船员
 - en: Capture all sorts of operational data, like logs or network packet data
+  id: totrans-50
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 捕获各种运营数据，比如日志或网络数据包
 - en: They can send logs to either Elasticsearch or Logstash
+  id: totrans-51
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它们可以将日志发送到 Elasticsearch 或 Logstash
 - en: 'The different types of Beats are as follows:'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 不同类型的 Beats 如下所示：
 - en: '**Libbeat**: The Go framework for creating new Beats'
+  id: totrans-53
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Libbeat**：用于创建新 Beats 的 Go 框架'
 - en: '**Packetbeat**: Taps into your wire data'
+  id: totrans-54
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Packetbeat**：窥探您的线路数据'
 - en: '**Filebeat**: Lightweight log forwarder to Logstash and Elasticsearch'
+  id: totrans-55
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Filebeat**：轻量级日志转发器到 Logstash 和 Elasticsearch'
 - en: '**Winlogbeat**: Sends windows event logs, and many other Beats, by community'
+  id: totrans-56
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**Winlogbeat**：发送 Windows 事件日志，以及许多其他由社区提供的 Beats'
 - en: Why should we use Elastic Stack for security monitoring and alerting?
+  id: totrans-57
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为什么我们应该使用 Elastic Stack 进行安全监控和警报？
 - en: 'The Elastic Stack solves most of the problems that we have discussed before,
     such as:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: Elastic Stack 解决了我们之前讨论过的大部分问题，比如：
 - en: Ability to store large amounts of data
+  id: totrans-59
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 能够存储大量数据
 - en: Ability to understand and read a variety of log formats
+  id: totrans-60
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 能够理解和读取各种日志格式
 - en: Ability to ship the log information from a variety of devices in near real time
     to one central location
+  id: totrans-61
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 能够将日志信息从各种设备以近乎实时的方式发送到一个中央位置
 - en: A visualization dashboard for log analysis
+  id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 日志分析的可视化仪表板
 - en: Prerequisites for setting up Elastic Stack
+  id: totrans-63
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Elastic Stack 的先决条件
 - en: 'Let''s start with the prerequisites. Here, we are using `debconf` to add values
     for interactive inputs. Then we are installing Java, nginx, and other required
     packages:'
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从先决条件开始。在这里，我们使用 `debconf` 来为交互式输入添加值。然后我们安装 Java、nginx 和其他必需的软件包：
 - en: '[PRE0]'
+  id: totrans-65
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Setting up the Elastic Stack
+  id: totrans-66
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Elastic Stack
 - en: 'The stack is a combination of:'
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 栈是以下组合：
 - en: The Elasticsearch service
+  id: totrans-68
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Elasticsearch 服务
 - en: The Logstash service
+  id: totrans-69
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Logstash 服务
 - en: The Kibana service
+  id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Kibana 服务
 - en: The Beats service on all the devices
+  id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 所有设备上的 Beats 服务
 - en: This Elastic Stack can be set up in different ways. In this chapter, we are
     going to set up Elasticsearch, Logstash, and Kibana on a single machine.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 这个 Elastic Stack 可以以不同的方式设置。在本章中，我们将在单台机器上设置 Elasticsearch、Logstash 和 Kibana。
 - en: 'This is the main log collection machine:'
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是主要的日志收集机器：
 - en: It requires a minimum of 4 GB RAM, as we are using a single machine to serve
     three services (Elasticsearch, Logstash, and Kibana)
+  id: totrans-74
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它至少需要 4 GB 的 RAM，因为我们在一台机器上为三个服务（Elasticsearch、Logstash 和 Kibana）提供服务
 - en: It requires a minimum of 20 GB disk space, and, based on your log size, you
     can add the disk space
+  id: totrans-75
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它需要至少 20 GB 的磁盘空间，并根据您的日志大小增加磁盘空间
 - en: Logstash integrations
+  id: totrans-76
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Logstash 集成
 - en: 'Logstash has a very large amount of integration support for the following:'
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: Logstash 为以下内容提供了非常大量的集成支持：
 - en: '**Input**: An input plugin enables a specific source of events to be read by
     Logstash. The input plugin has file, lumberjack, s3, Beats, stdin, and many more.'
+  id: totrans-78
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**输入**：输入插件使得 Logstash 能够读取特定事件源。输入插件有文件、lumberjack、s3、Beats、stdin 等等。'
 - en: '**Filter**: A filter plugin performs intermediary processing on an event. Filters
     are often applied conditionally, depending on the characteristics of the event.'
+  id: totrans-79
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**过滤器**：过滤器插件对事件进行中间处理。根据事件的特征，通常会有条件地应用过滤器。'
 - en: '**Output**: An output plugin sends event data to a particular destination.
     Outputs are the final stage in the event pipeline. The output plugin has Elasticsearch,
     email, stdout, s3, file, HTTP, and so on.'
+  id: totrans-80
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**输出**：输出插件将事件数据发送到特定目的地。输出是事件管道中的最后阶段。输出插件包括 Elasticsearch、电子邮件、标准输出、s3、文件、HTTP
+    等等。'
 - en: Kibana
+  id: totrans-81
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Kibana
 - en: Kibana has different kinds of plugins and integrations by default, as well as
     those from the community, which can be found at [https://www.elastic.co/guide/en/kibana/current/known-plugins.html](https://www.elastic.co/guide/en/kibana/current/known-plugins.html).
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: Kibana 默认具有不同类型的插件和集成，以及社区提供的插件，可在[https://www.elastic.co/guide/en/kibana/current/known-plugins.html](https://www.elastic.co/guide/en/kibana/current/known-plugins.html)找到。
 - en: ElastAlert
+  id: totrans-83
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: ElastAlert
 - en: ElastAlert is a Python tool which also bundles with the different types of integrations
     to support with alerting and notifications. Some of them include Command, Email,
     JIRA, OpsGenie, AWS SNS, HipChat, Slack, Telegram, and so on. It also provides
     a modular approach to creating our own integrations.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: ElastAlert 是一个 Python 工具，还捆绑了不同类型的集成，用于支持警报和通知。其中一些包括命令、电子邮件、JIRA、OpsGenie、AWS
+    SNS、HipChat、Slack、Telegram 等。它还提供了一种模块化的方法来创建我们自己的集成。
 - en: Installing Elasticsearch
+  id: totrans-85
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Elasticsearch
 - en: 'Install Elasticsearch from the repository with `gpg key` and add it to the
     startup programs:'
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 从存储库安装 Elasticsearch，并将其添加到启动程序：
 - en: '[PRE1]'
+  id: totrans-87
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Configure the Elasticsearch cluster with the required settings. Also, set up
     the JVM options for the Elasticsearch cluster. Also, create a backup directory
     for Elasticsearch cluster backups and snapshots:'
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: '配置 Elasticsearch 集群所需的设置。另外，为 Elasticsearch 集群备份和快照创建一个备份目录。为 Elasticsearch
+    集群设置 JVM 选项。 '
 - en: '[PRE2]'
+  id: totrans-89
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: 'The notify part will trigger the `restart elasticsearch` handler and the handler
     file will look as follows. We can use handlers anywhere in tasks once we create
     them in the handlers directory:'
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 通知部分将触发 `重启 elasticsearch` 处理程序，处理程序文件如下所示。一旦在处理程序目录中创建了处理程序，我们可以在任务中的任何地方使用处理程序：
 - en: '[PRE3]'
+  id: totrans-91
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Installing Logstash
+  id: totrans-92
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Logstash
 - en: 'Install Logstash from the repository with `gpg key` and add it to the startup
     programs:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 从存储库安装 Logstash，并将其添加到启动程序：
 - en: '[PRE4]'
+  id: totrans-94
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: 'Configure the Logstash service with input, output, and filter settings. This
     enables receiving logs, processing logs, and sending logs to the Elasticsearch
     cluster:'
+  id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 配置 Logstash 服务的输入、输出和过滤器设置。这使得可以接收日志、处理日志并将日志发送到 Elasticsearch 集群：
 - en: '[PRE5]'
+  id: totrans-96
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Logstash configuration
+  id: totrans-97
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Logstash 配置
 - en: 'To receive logs from different systems, we use the Beats service from Elastic.
     The following configuration is to receive logs from different servers to the Logstash
     server. Logstash runs on port `5044` and we can use SSL certificates to ensure
     logs are transferred via an encrypted channel:'
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了从不同系统接收日志，我们使用 Elastic 的 Beats 服务。以下配置用于将来自不同服务器的日志发送到 Logstash 服务器。Logstash
+    运行在端口 `5044` 上，我们可以使用 SSL 证书来确保日志通过加密通道传输：
 - en: '[PRE6]'
+  id: totrans-99
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'The following configuration is to parse the system SSH service logs (`auth.log`)
     using `grok` filters. It also applies filters like `geoip`, while providing additional
     information like country, location, longitude, latitude, and so on:'
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下配置用于使用 `grok` 过滤器解析系统 SSH 服务日志（`auth.log`）。同时还应用了 `geoip` 等过滤器，提供额外的国家、地点、经度、纬度等信息：
 - en: '[PRE7]'
+  id: totrans-101
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'The following configuration is to parse web server logs (`nginx`, `apache2`).
     We will also apply filters for `geoip` and `useragent`. The `useragent` filter
     allows us to get information about the agent, OS type, version information, and
     so on:'
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下配置用于解析 Web 服务器日志（`nginx`、`apache2`）。还将应用 `geoip` 和 `useragent` 过滤器。`useragent`
+    过滤器可帮助我们获取有关代理、操作系统类型、版本信息等的信息：
 - en: '[PRE8]'
+  id: totrans-103
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: 'The following configuration will send the log output into the Elasticsearch
     cluster with daily index formats:'
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下配置将日志输出发送到 Elasticsearch 集群，并采用每日索引格式：
 - en: '[PRE9]'
+  id: totrans-105
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Installing Kibana
+  id: totrans-106
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Kibana
 - en: 'The following playbook will install Kibana. By default we are not making any
     changes in Kibana, as it works out of the box with Elasticsearch:'
+  id: totrans-107
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下 Playbook 将安装 Kibana。默认情况下，我们不会对 Kibana 进行任何更改，因为它与 Elasticsearch 相配合：
 - en: '[PRE10]'
+  id: totrans-108
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: By default Kibana doesn't have any authentication, X-Pack is the commercial
     plug-in by Elastic for RBAC (role-based access control) with security. Also, some
     open source options include [https://readonlyrest.com/](https://readonlyrest.com/)
@@ -454,389 +677,596 @@
     with Elasticsearch. Using TLS/SSL and custom authentication and aauthorization
     is highly recommended. Some of the open source options includes Oauth2 Proxy ([https://github.com/bitly/oauth2_proxy](https://github.com/bitly/oauth2_proxy))
     and Auth0, and so on.
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 默认情况下，Kibana 没有任何身份验证，X-Pack 是 Elastic 提供的商业插件，用于 RBAC（基于角色的访问控制）和安全性。此外，一些开源选项包括 [https://readonlyrest.com/](https://readonlyrest.com/)
+    和 Search Guard ([https://floragunn.com](https://floragunn.com)) 用于与 Elasticsearch
+    交互。强烈建议使用 TLS/SSL 和自定义身份验证和授权。一些开源选项包括 OAuth2 Proxy ([https://github.com/bitly/oauth2_proxy](https://github.com/bitly/oauth2_proxy))
+    和 Auth0 等。
 - en: Setting up nginx reverse proxy
+  id: totrans-110
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 nginx 反向代理
 - en: 'The following configuration is to enable basic authentication for Kibana using
     `nginx` reverse proxy:'
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下配置是使用 `nginx` 反向代理启用 Kibana 的基本身份验证：
 - en: '[PRE11]'
+  id: totrans-112
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Setting up and configuring the nginx service looks as follows:'
+  id: totrans-113
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置和配置 nginx 服务如下所示：
 - en: '[PRE12]'
+  id: totrans-114
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: Installing Beats to send logs to Elastic Stack
+  id: totrans-115
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装 Beats 以将日志发送到 Elastic Stack
 - en: 'As we discussed, Beats are different types. In the following playbook, we are
     going to install Filebeat to send SSH and web server logs to the Elastic Stack:'
+  id: totrans-116
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如我们讨论的那样，Beats 有不同类型。在下面的 playbook 中，我们将安装 Filebeat，以将 SSH 和 web 服务器日志发送到 Elastic
+    Stack：
 - en: '[PRE13]'
+  id: totrans-117
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: 'Now we can configure the Filebeat to send both SSH and web server logs to Elastic
     Stack, to process and index in near real-time:'
+  id: totrans-118
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们可以配置 Filebeat，将 SSH 和 web 服务器日志发送到 Elastic Stack，以便实时处理和索引：
 - en: '[PRE14]'
+  id: totrans-119
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: ElastAlert for alerting
+  id: totrans-120
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 用于警报的 ElastAlert
 - en: 'First, we need to install the prerequisites for setting up ElastAlert. Then
     we will add the configuration files to perform alerting based on the rules:'
+  id: totrans-121
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，我们需要安装设置 ElastAlert 的先决条件。然后我们将添加配置文件以根据规则执行警报：
 - en: '[PRE15]'
+  id: totrans-122
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: 'We are also creating a simple startup script so that ElastAlert will be used
     as a system service:'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还将创建一个简单的启动脚本，以便将 ElastAlert 用作系统服务：
 - en: '[PRE16]'
+  id: totrans-124
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: Configuring the Let's Encrypt service
+  id: totrans-125
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置 Let's Encrypt 服务
 - en: We can use a command-line tool offered by Let's Encrypt to get free SSL/TLS
     certificates in an open, automated manner.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用 Let's Encrypt 提供的命令行工具以开放、自动化的方式获取免费的 SSL/TLS 证书。
 - en: 'The tool is capable of reading and understanding an nginx virtual host file
     and generating the relevant certificates completely automatically, without any
     kind of manual intervention:'
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 该工具能够读取并理解 nginx 虚拟主机文件，并完全自动生成相关证书，无需任何手动干预：
 - en: '[PRE17]'
+  id: totrans-128
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: ElastAlert rule configuration
+  id: totrans-129
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: ElastAlert 规则配置
 - en: 'Assuming that you already have Elastic Stack installed and logging SSH logs,
     use the following ElastAlert rule to trigger SSH attack IP blacklisting:'
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 假设您已经安装了 Elastic Stack 并记录了 SSH 日志，请使用以下 ElastAlert 规则触发 SSH 攻击 IP 黑名单：
 - en: '[PRE18]'
+  id: totrans-131
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: In the preceding example rule, most of the parameters are configurable, based
     on use case.
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述示例规则中，大多数参数都是可配置的，根据使用情况而定。
 - en: For more references, visit [https://elastalert.readthedocs.io/en/latest/running_elastalert.html](https://elastalert.readthedocs.io/en/latest/running_elastalert.html).
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多参考，请访问 [https://elastalert.readthedocs.io/en/latest/running_elastalert.html](https://elastalert.readthedocs.io/en/latest/running_elastalert.html)。
 - en: Kibana dashboards
+  id: totrans-134
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Kibana 仪表板
 - en: We can import existing dashboard files (JSON format) into Kibana to view different
     patterns by uploading the JSON file.
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以将现有的仪表板文件（JSON 格式）导入到 Kibana 中，通过上传 JSON 文件来查看不同的模式。
 - en: '![](img/e6a3bd97-e0b8-489c-8923-7cb7604497e0.png)'
+  id: totrans-136
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/e6a3bd97-e0b8-489c-8923-7cb7604497e0.png)'
 - en: Index creation in Kibana dashboard
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Kibana 仪表板中创建索引
 - en: '![](img/c9600d4f-2e98-4357-81ca-44952ffbbbe7.png)'
+  id: totrans-138
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c9600d4f-2e98-4357-81ca-44952ffbbbe7.png)'
 - en: Importing existing dashboards and visualizations into Kibana dashboard
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 将现有的仪表板和可视化内容导入到 Kibana 仪表板
 - en: '![](img/7ff55bec-6f91-41a5-8cec-700f4de02ab9.png)'
+  id: totrans-140
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/7ff55bec-6f91-41a5-8cec-700f4de02ab9.png)'
 - en: Attack dashboards from SSH and web server logs
+  id: totrans-141
   prefs: []
   type: TYPE_NORMAL
+  zh: 来自 SSH 和 web 服务器日志的攻击仪表板
 - en: Automated defense?
+  id: totrans-142
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自动化防御？
 - en: 'If we can get a notification for an attack, we can set up and do the following:'
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果我们能够收到攻击的通知，我们可以进行以下设置和操作：
 - en: Call an AWS Lambda function
+  id: totrans-144
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 调用 AWS Lambda 函数
 - en: Send the attacker's IP address information to this AWS Lambda function endpoint
+  id: totrans-145
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将攻击者的 IP 地址信息发送到此 AWS Lambda 函数端点
 - en: Use the code deployed in the Lambda function to call the VPC network access
     list API and block the attacker's IP address
+  id: totrans-146
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用部署在 Lambda 函数中的代码调用 VPC 网络访问列表 API，并阻止攻击者的 IP 地址
 - en: To ensure that we don't fill up the ACLs with attacker IPs, we can combine this
     approach with AWS DynamoDB to store this information for a short duration and
     remove it from the block list.
+  id: totrans-147
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了确保我们不会用攻击者的 IP 填满 ACL，我们可以将这种方法与 AWS DynamoDB 结合使用，将此信息存储一段时间并从阻止列表中删除。
 - en: '![](img/3bc96a8d-e7d8-4319-bda8-232f46135565.png)'
+  id: totrans-148
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3bc96a8d-e7d8-4319-bda8-232f46135565.png)'
 - en: AWS services used in setup
+  id: totrans-149
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在设置中使用的 AWS 服务
 - en: As soon as an attack is detected, the alerter sends the IP to the blacklist
     lambda endpoint via an HTTPS request. The IP is blocked using the network ACL
     and the record of it is maintained in DynamoDB. If the IP is currently blocked
     already, then the expiry time for the rule will be extended in the DynamoDB.
+  id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦检测到攻击，警报器会通过 HTTPS 请求将 IP 发送到黑名单 Lambda 端点。使用网络 ACL 阻止 IP，并在 DynamoDB 中维护其记录。如果
+    IP 已被阻止，则在 DynamoDB 中将为该规则的过期时间延长。
 - en: An expiry handler function is periodically triggered, which removes expired
     rules from DynamoDB and ACL accordingly.
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 定期触发一个到期处理程序函数，从 DynamoDB 和 ACL 中相应地删除过期的规则。
 - en: DynamoDB
+  id: totrans-152
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: DynamoDB
 - en: DynamoDB is the central database where rules are mapped to their respective
     ACL IDs. Rules for IP addresses are added and removed from the `blacklist_ip`
     table by appropriate lambda functions.
+  id: totrans-153
   prefs: []
   type: TYPE_NORMAL
+  zh: DynamoDB 是规则映射到其相应 ACL ID 的中央数据库。通过适当的 Lambda 函数将 IP 地址的规则添加到`blacklist_ip`表中，并从中删除。
 - en: Blacklist lambda function
+  id: totrans-154
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 黑名单 Lambda 函数
 - en: The Blacklist function is the only exposed endpoint from the setup. Any IP that
     needs to be blacklisted needs to be supplied to this function via an HTTPS request.
+  id: totrans-155
   prefs: []
   type: TYPE_NORMAL
+  zh: 黑名单函数是设置的唯一暴露的端点。需要通过 HTTPS 请求将需要列入黑名单的任何 IP 提供给此函数。
 - en: HandleExpiry lambda function
+  id: totrans-156
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: HandleExpiry Lambda 函数
 - en: The HandleExpiry function is triggered every minute and removes expired rules
     from the ACL and DynamoDB based on the `expirymin` field.
+  id: totrans-157
   prefs: []
   type: TYPE_NORMAL
+  zh: HandleExpiry 函数每分钟触发一次，并根据`expirymin`字段从 ACL 和 DynamoDB 中删除过期规则。
 - en: Cloudwatch
+  id: totrans-158
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 云监控
 - en: Cloudwatch is used to trigger the HandleExpiry lambda function periodically.
     By default, the function is triggered every minute.
+  id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: 云监控定期触发 HandleExpiry Lambda 函数。默认情况下，该函数每分钟触发一次。
 - en: VPC Network ACL
+  id: totrans-160
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: VPC 网络 ACL
 - en: The VPC Network ACL is where the ACL rules are added and deleted from. The ACL
     ID must be configured during the time of setup.
+  id: totrans-161
   prefs: []
   type: TYPE_NORMAL
+  zh: VPC 网络 ACL 是 ACL 规则添加和删除的地方。在设置时必须配置 ACL ID。
 - en: Setup
+  id: totrans-162
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置
 - en: 'The setup involves the following steps:'
+  id: totrans-163
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置涉及以下步骤：
 - en: Obtain IAM credentials
+  id: totrans-164
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 获取 IAM 凭证
 - en: Create a table in DynamoDB
+  id: totrans-165
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 DynamoDB 中创建一个表
 - en: Configure the lambda function based on requirement
+  id: totrans-166
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 根据需求配置 Lambda 函数
 - en: Deploy code to AWS Lambda
+  id: totrans-167
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将代码部署到 AWS Lambda
 - en: Configure Cloudwatch to periodic invocation
+  id: totrans-168
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 配置云监控定期调用
 - en: The entire setup is automated, except for obtaining the IAM credentials and
     configuring the function based on requirements.
+  id: totrans-169
   prefs: []
   type: TYPE_NORMAL
+  zh: 整个设置是自动化的，除了获取 IAM 凭证并根据需求配置函数之外。
 - en: Configuration
+  id: totrans-170
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置
 - en: 'The following parameters are configurable before deployment:'
+  id: totrans-171
   prefs: []
   type: TYPE_NORMAL
+  zh: 在部署之前可配置以下参数：
 - en: '`region`: AWS region to deploy in. This needs to be the same as the region
     where the VPC network resides.'
+  id: totrans-172
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`region`：部署的 AWS 区域。这需要与 VPC 网络所在的区域相同。'
 - en: '`accessToken`: The accessToken that will be used to authenticate the requests
     to the blacklist endpoint.'
+  id: totrans-173
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`accessToken`：用于对黑名单端点进行身份验证的 accessToken。'
 - en: '`aclLimit`: The maximum number of rules an ACL can handle. The maximum limit
     in AWS is 20 by default.'
+  id: totrans-174
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`aclLimit`：ACL 可处理的规则数的最大限制。AWS 中默认的最大限制是 20。'
 - en: '`ruleStartId`: The starting ID for rules in the ACL.'
+  id: totrans-175
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`ruleStartId`：ACL 中规则的起始 ID。'
 - en: '`aclID`: The ACL ID of the network where the rules will be applied.'
+  id: totrans-176
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`aclID`：规则将应用的网络的 ACL ID。'
 - en: '`tableName`: The unique table name in DynamoDB, created for each VPC to be
     defended.'
+  id: totrans-177
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`tableName`：为每个要防御的 VPC 创建的唯一表名称。'
 - en: '`ruleValidity`: The duration for which a rule is valid, after which the IP
     will be unblocked.'
+  id: totrans-178
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`ruleValidity`：规则有效的持续时间，之后 IP 将被解除阻止。'
 - en: 'Configure the following in the `config.js` file:'
+  id: totrans-179
   prefs: []
   type: TYPE_NORMAL
+  zh: 在`config.js`文件中配置以下内容：
 - en: '[PRE19]'
+  id: totrans-180
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: 'Make sure to modify at least the `aclId`, `accessToken`, and `region` based
     on your setup. To modify the lambda deployment configuration use the `serverless.yml` file:'
+  id: totrans-181
   prefs: []
   type: TYPE_NORMAL
+  zh: 确保至少根据您的设置修改`aclId`、`accessToken`和`region`。要修改 Lambda 部署配置，请使用`serverless.yml`文件：
 - en: '[PRE20]'
+  id: totrans-182
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: For example, the rate at which the expiry function is triggered and the endpoint
     URL for the blacklist function can be modified using the YML file. But the defaults
     are already optimal.
+  id: totrans-183
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，可以使用 YML 文件修改到期函数触发的速率以及黑名单函数的端点 URL。但默认值已经是最佳的。
 - en: 'The playbook looks as follows:'
+  id: totrans-184
   prefs: []
   type: TYPE_NORMAL
+  zh: 播放手册如下：
 - en: '[PRE21]'
+  id: totrans-185
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: The current setup for AWS Lambda is to block the IP address against network
     ACL. This can be reused with other API endpoints, like a firewall dynamic block
     list and other security devices.
+  id: totrans-186
   prefs: []
   type: TYPE_NORMAL
+  zh: 目前AWS Lambda的设置是针对网络ACL封锁IP地址。这可以在其他API端点上重用，比如防火墙动态封锁列表和其他安全设备。
 - en: As per the AWS documentation, the VPC network ACL rule limit is set to 20: [http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html#vpc-limits-nacls](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html#vpc-limits-nacls)
+  id: totrans-187
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据AWS文档，VPC网络ACL规则限制设置为20：[http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html#vpc-limits-nacls](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html#vpc-limits-nacls)
 - en: Usage - block an IP address
+  id: totrans-188
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用方法 - 封锁IP地址
 - en: The blacklist endpoint is responsible for blocking an IP address.
+  id: totrans-189
   prefs: []
   type: TYPE_NORMAL
+  zh: 黑名单端点负责封锁IP地址。
 - en: Request
+  id: totrans-190
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 请求
 - en: The URL looks like the following: `https://lambda_url/blacklistipaccessToken=ACCESS_TOKEN&ip=IP_ADDRESS`
+  id: totrans-191
   prefs: []
   type: TYPE_NORMAL
+  zh: URL看起来像以下内容：`https://lambda_url/blacklistipaccessToken=ACCESS_TOKEN&ip=IP_ADDRESS`
 - en: 'The query parameters are as follows:'
+  id: totrans-192
   prefs: []
   type: TYPE_NORMAL
+  zh: 查询参数如下：
 - en: '`IP_ADDRESS`: This is the IP address to be blocked'
+  id: totrans-193
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`IP_ADDRESS`：要封锁的IP地址'
 - en: '`ACCESS_TOKEN`: The `accessToken` to authenticate the request'
+  id: totrans-194
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`ACCESS_TOKEN`：用于验证请求的`accessToken`'
 - en: Response
+  id: totrans-195
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 响应
 - en: 'Responses are standard HTTP status codes, which are explained as follows:'
+  id: totrans-196
   prefs: []
   type: TYPE_NORMAL
+  zh: 响应是标准的HTTP状态码，如下所述：
 - en: '| **Status code** | **Body** | **Explanation** |'
+  id: totrans-197
   prefs: []
   type: TYPE_TB
+  zh: '| **状态码** | **主体** | **解释** |'
 - en: '| `200` | Blocked | The IP has been added to the blacklist |'
+  id: totrans-198
   prefs: []
   type: TYPE_TB
+  zh: '| `200` | 已封锁 | 该IP已添加到黑名单 |'
 - en: '| `200` | Expiryextended | The blacklist rule validity has been extended |'
+  id: totrans-199
   prefs: []
   type: TYPE_TB
+  zh: '| `200` | 延长到期 | 黑名单规则的有效期已延长 |'
 - en: '| `400` | Bad Request | Required fields are missing |'
+  id: totrans-200
   prefs: []
   type: TYPE_TB
+  zh: '| `400` | 错误请求 | 缺少必填字段 |'
 - en: '| `401` | Unauthorized | The accessToken is invalid or missing |'
+  id: totrans-201
   prefs: []
   type: TYPE_TB
+  zh: '| `401` | 未经授权 | accessToken无效或丢失 |'
 - en: '| `500` | Rulelimitreached | The ACL rule limit has been reached |'
+  id: totrans-202
   prefs: []
   type: TYPE_TB
+  zh: '| `500` | 规则限制已达到 | 已达到ACL规则限制 |'
 - en: Automated defense lambda in action
+  id: totrans-203
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自动化防御lambda在行动
 - en: When the ElastAlert detects an SSH brute force attack, it will trigger a request
     to lambda endpoint by providing the attacker's IP address. Then our automated
     defense platform will trigger a network ACL blocklist rule. This can be configurable
     to say for how much time it should be blocked.
+  id: totrans-204
   prefs: []
   type: TYPE_NORMAL
+  zh: 当ElastAlert检测到SSH暴力攻击时，它将触发对lambda端点的请求，提供攻击者的IP地址。然后我们的自动化防御平台将触发网络ACL封锁列表规则。这可以配置为阻止多长时间。
 - en: '![](img/bf231e4a-6b2a-44db-8f58-c18ca8739187.png)'
+  id: totrans-205
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/bf231e4a-6b2a-44db-8f58-c18ca8739187.png)'
 - en: Summary
+  id: totrans-206
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: That is a lot of information to take in. Also, we have made many assumptions
     about the scenario. But if this spurs you into thinking about combining the various
     logs of your devices and servers into one central location and enabling automated
     alerting and defenses, we have done our job well.
+  id: totrans-207
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是很多信息需要消化的。此外，我们对场景做出了很多假设。但是，如果这激发了您考虑将设备和服务器的各种日志组合到一个中央位置并启用自动警报和防御措施，那我们的工作就做得很好。
 - en: As this chapter demonstrates, security automation is a bit like plumbing. As
     long as we can understand how a bunch of disparate systems can be made to communicate
     together, we can add them to our playbooks. In many cases, Ansible will already
     have a module in place for us to use and get going.
+  id: totrans-208
   prefs: []
   type: TYPE_NORMAL
+  zh: 正如本章所示，安全自动化有点像管道工作。只要我们能够理解如何让一堆不同的系统相互通信，我们就可以将它们添加到我们的playbooks中。在许多情况下，Ansible已经为我们提供了可用于使用和启动的模块。
 - en: Now that we have whet your appetite for logging and attack detection, in the
     next chapter, let's dive into what it takes to set up an automated web security
     testing setup. We will pick the incredibly powerful and versatile OWASP ZAP scanner
     and intercepting proxy and use it to scan and test websites and APIs.
+  id: totrans-209
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们已经激发了您对日志记录和攻击检测的兴趣，在下一章中，让我们深入了解设置自动化网络安全测试的所需。我们将选择功能强大且多才多艺的OWASP ZAP扫描仪和拦截代理，并使用它扫描和测试网站和API。

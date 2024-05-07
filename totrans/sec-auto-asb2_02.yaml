@@ -181,104 +181,127 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 能够对其本地存储或可能是另一个服务（OAuth/**安全断言标记语言** (**SAML**)）进行身份验证
 - en: They all fundamentally give us a clear way to automate tasks to suit our workflow
   id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 它们从根本上为我们提供了一种清晰的方式来自动化任务以适应我们的工作流程
 - en: Most security-related automation does boil down to doing a similar task over
     and over again and looking at the differences. This is especially true when you
     are in the line of doing security operations and security assessments.
   id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 大多数与安全相关的自动化归结为一遍又一遍地执行类似的任务并查看差异。当您从事安全运营和安全评估时，这一点尤为真实。
 - en: Remember that by using Ansible roles and the playbooks containing them, we are
     already on our way to doing security automation. Now our aim is to take away the
     grunt work of remembering to execute those playbooks and get going.
   id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 请记住，通过使用 Ansible 角色和包含它们的 playbooks，我们已经在朝着进行安全自动化的目标迈出了一步。现在我们的目标是消除记得执行那些
+    playbooks 的麻烦工作并开始进行。
 - en: 'There are three primary contenders that are used for this kind of automation.
     They are listed and described here:'
   id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 有三个主要竞争对手用于这种类型的自动化。它们在这里列出并描述：
 - en: Ansible Tower
   id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Ansible Tower
 - en: Jenkins
   id: totrans-34
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins
 - en: Rundeck
   id: totrans-35
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Rundeck
 - en: '| **Tools** | **Our take** | **License ** |'
   id: totrans-36
   prefs: []
   type: TYPE_TB
+  zh: '| **工具** | **我们的看法** | **许可证 ** |'
 - en: '| Ansible Tower | Brilliant tool by the makers of Ansible so fits very well
     with the idea of IT automation, which we extend to our security needs. | Paid
     with a free trial |'
   id: totrans-37
   prefs: []
   type: TYPE_TB
+  zh: '| Ansible Tower | 由 Ansible 制造商推出的出色工具，非常适合 IT 自动化的理念，我们将其扩展到我们的安全需求。 | 付费，有免费试用版
+    |'
 - en: '| Jenkins | The workhorse and the mainstay of a lot of CI/CD pipelines. Has
     hundreds of plugins to extend its core functionality. The best option if price
     or license is a concern. | Free and open source  |'
   id: totrans-38
   prefs: []
   type: TYPE_TB
+  zh: '| Jenkins | 工作流引擎，很多 CI/CD 流水线的主力。有数百个插件来扩展其核心功能。如果考虑价格或许可证问题，这是最佳选择。 | 免费和开源 
+    |'
 - en: '| Rundeck | Great tool for job scheduling and automation.  | A paid pro version
     is available |'
   id: totrans-39
   prefs: []
   type: TYPE_TB
+  zh: '| Rundeck | 用于作业调度和自动化的优秀工具。  | 有付费的专业版本 |'
 - en: In this chapter, we will install and configure all three tools to get you started.
   id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将安装和配置所有三个工具，以便让您开始使用。
 - en: Red Hat, who bought Ansible in the October 2015, has indicated that they plan
     to open source Ansible Tower. They made this announcement at AnsibleFest 2016\.
     You can follow the progress of that at [https://www.ansible.com/open-tower](https://www.ansible.com/open-tower).
   id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 红帽公司于 2015 年 10 月收购了 Ansible，他们表示计划开源 Ansible Tower。他们在 2016 年 AnsibleFest 上宣布了这一消息。您可以在 [https://www.ansible.com/open-tower](https://www.ansible.com/open-tower) 上关注该进展。
 - en: Getting up and running
   id: totrans-42
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 起步运行
 - en: Let's start by setting up each of the three tools we mentioned and look at some
     of their features.
   id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们从设置我们提到的三个工具开始，看一下它们的一些特点。
 - en: Setting up Ansible Tower
   id: totrans-44
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Ansible Tower
 - en: There are multiple ways to install the Ansible Tower trial version. The simplest
     way to get set up is by using their existing images from [https://www.ansible.com/tower-trial](https://www.ansible.com/tower-trial).
   id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 有多种方法可以安装 Ansible Tower 试用版。最简单的设置方式是使用它们现有的镜像从 [https://www.ansible.com/tower-trial](https://www.ansible.com/tower-trial) 获取。
 - en: You can also set up manually using their bundle installation. Please have a
     look at the requirements before installing at [http://docs.ansible.com/ansible-tower/3.1.4/html/installandreference/index.html](http://docs.ansible.com/ansible-tower/3.1.4/html/installandreference/index.html).
   id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 您还可以使用他们的捆绑安装手动设置。在安装之前，请查看 [http://docs.ansible.com/ansible-tower/3.1.4/html/installandreference/index.html](http://docs.ansible.com/ansible-tower/3.1.4/html/installandreference/index.html) 的要求。
 - en: 'Run the following commands to install Ansible Tower in the Ubuntu 16.04 operating
     system:'
   id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行以下命令在 Ubuntu 16.04 操作系统中安装 Ansible Tower：
 - en: '[PRE0]'
   id: totrans-48
   prefs: []
@@ -292,6 +315,8 @@
   id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后编辑清单文件以更新密码和其他变量，并运行设置。 清单文件包含了用于塔管理员登录帐户的`admin_password`，如果我们正在设置多节点设置，则需要
+    Postgres 数据库的`pg_host`和`pg_port`。最后是用于排队操作的`rabbitmq`详情。
 - en: '[PRE1]'
   id: totrans-50
   prefs: []
@@ -302,19 +327,23 @@
   id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您已经安装了 Vagrant，则可以简单地下载他们的 Vagrant box 来开始使用。
 - en: 'Make sure you have Vagrant installed in your host system before running the
     following command:'
   id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 在运行以下命令之前，请确保您的主机系统上已安装了 Vagrant：
 - en: '`$ vagrant init ansible/tower`'
   id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: '`$ vagrant init ansible/tower`'
 - en: '`$ vagrant up`'
   id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: '`$ vagrant up`'
 - en: '`$ vagrant ssh`'
   id: totrans-55
   prefs: []
@@ -815,19 +844,23 @@
   id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: 作业运行成功并显示输出如下截图：
 - en: '![](img/fe07b80e-0344-4855-a6f8-5f3e1dbdd6b0.png)'
   id: totrans-136
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/fe07b80e-0344-4855-a6f8-5f3e1dbdd6b0.png)'
 - en: Playbook execution output in Ansible Tower
   id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Tower 中的 Playbook 执行输出
 - en: Jenkins Ansible integration configuration
   id: totrans-138
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins Ansible 集成配置
 - en: Not surprisingly, Jenkins supports SCM to use playbooks and local directories
     for manual playbooks too. This can be configured with the build options. Jenkins
     supports both ad-hoc commands and playbooks to trigger as a build (or) post-build
@@ -835,116 +868,143 @@
   id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 毫不奇怪，Jenkins 支持 SCM 以使用 Playbook 和本地目录用于手动 Playbook。这可以通过构建选项进行配置。Jenkins 支持即席命令和
+    Playbook 作为构建（或）后置构建操作触发。
 - en: 'The following screenshot shows how we can point our repository and specify
     a branch as well. We can also specify credentials if we want to access private
     repositories:'
   id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下屏幕截图显示了我们如何指定我们的存储库并指定分支。如果要访问私有存储库，我们还可以指定凭据：
 - en: '![](img/c2733a7a-ebce-4801-8289-a147ebadb44a.png)'
   id: totrans-141
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/c2733a7a-ebce-4801-8289-a147ebadb44a.png)'
 - en: Adding Github (SCM) based playbooks for build
   id: totrans-142
   prefs: []
   type: TYPE_NORMAL
+  zh: 添加基于 Github（SCM）的 Playbooks 以进行构建
 - en: 'Then we can add the Playbook path by specifying the location of the playbook
     and defining inventory and variables as required:'
   id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们可以通过指定 Playbook 的位置并根据需要定义清单和变量来添加 Playbook 路径：
 - en: '![](img/0028f394-5ea7-4bd2-be0d-5a599f72cd9c.png)'
   id: totrans-144
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/0028f394-5ea7-4bd2-be0d-5a599f72cd9c.png)'
 - en: Start playbook execution when build triggers
   id: totrans-145
   prefs: []
   type: TYPE_NORMAL
+  zh: 在构建触发器启动 Playbook 执行
 - en: 'Finally, we can execute the Jenkins job by triggering the Jenkins build (or)
     we can integrate this with other tools:'
   id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们可以通过触发 Jenkins 构建来执行 Jenkins 作业（或者）我们可以将其与其他工具集成：
 - en: '![](img/bcef17b5-87e0-489b-a2a3-24e8c8ebac4c.png)'
   id: totrans-147
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/bcef17b5-87e0-489b-a2a3-24e8c8ebac4c.png)'
 - en: Jenkins build output of playbook execution
   id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: Playbook 执行的 Jenkins 构建输出
 - en: Rundeck configuration
   id: totrans-149
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Rundeck 配置
 - en: Rundeck supports adding custom playbooks, as well as SCM and many other options.
     The following screenshots show different options to add playbooks and modules
     in Rundeck using the jobs feature.
   id: totrans-150
   prefs: []
   type: TYPE_NORMAL
+  zh: Rundeck 支持添加自定义 Playbook，以及 SCM 和许多其他选项。以下屏幕截图显示了使用作业功能在 Rundeck 中添加 Playbook
+    和模块的不同选项。
 - en: '![](img/525750e9-851f-4874-be36-3c44b66ec960.png)'
   id: totrans-151
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/525750e9-851f-4874-be36-3c44b66ec960.png)'
 - en: Rundeck has multiple options for us to choose from
   id: totrans-152
   prefs: []
   type: TYPE_NORMAL
+  zh: Rundeck 有多个选项供我们选择
 - en: '![](img/6e072793-3c21-494b-9ad5-e2befc0fa520.png)'
   id: totrans-153
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6e072793-3c21-494b-9ad5-e2befc0fa520.png)'
 - en: Rundeck Ansible Playbook configuration for variables and keys
   id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于变量和密钥的 Rundeck Ansible Playbook 配置
 - en: '![](img/8baeae91-7dfc-441e-be3b-becacc09fc15.png)'
   id: totrans-155
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/8baeae91-7dfc-441e-be3b-becacc09fc15.png)'
 - en: Rundeck job definition including overview of job details
   id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 包括作业详情概述的 Rundeck 作业定义
 - en: Authentication and  data security
   id: totrans-157
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 身份验证和数据安全
 - en: When we talk about automation and working with systems, we should talk about
     security. We are going to keep talking about security automation as that is the
     title of the book.
   id: totrans-158
   prefs: []
   type: TYPE_NORMAL
+  zh: 当我们谈论自动化和与系统一起工作时，我们应该谈论安全性。我们将继续谈论安全自动化，因为这是本书的标题。
 - en: 'Some of the security features the tools offer include:'
   id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: 工具提供的一些安全功能包括：
 - en: RBAC (authentication and authorization)
   id: totrans-160
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: RBAC（身份验证和授权）
 - en: Web application over TLS/SSL (security for data in motion)
   id: totrans-161
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Web 应用程序通过 TLS/SSL（数据在传输中的安全性）
 - en: Encryption for storing secrets (security for data at rest)
   id: totrans-162
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用于存储密钥的加密（数据在静止时的安全性）
 - en: RBAC for Ansible Tower
   id: totrans-163
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Ansible Tower 的 RBAC
 - en: 'Ansible Tower supports RBAC to manage multiple users with different permissions
     and roles. It also supports **Lightweight Directory Access Protocol** (**LDAP**) integration
     in the enterprise version to support Active Directory. This feature allows us
@@ -952,12 +1012,15 @@
   id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Tower 支持 RBAC 以管理具有不同权限和角色的多个用户。企业版还支持 **轻量目录访问协议** (**LDAP**) 集成以支持
+    Active Directory。此功能允许我们为访问 Ansible Tower 创建不同级别的用户。例如：
 - en: The operations team requires a system administrator role to perform playbook
     execution and other activities like monitoring
   id: totrans-165
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 运维团队需要系统管理员角色来执行 Playbook 执行和其他活动，如监视
 - en: The security team requires a system auditor role to perform audit check for
     compliance standards such as **Payment Card Industry Data Security Standard**
     (**PCI DSS**) or even internal policy validation
@@ -965,16 +1028,19 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安全团队需要系统审计员角色来执行符合标准（如 **支付卡行业数据安全标准** (**PCI DSS**) 或甚至内部策略验证）的审计检查
 - en: Normal users, such as team members, might just want to see how things are going,
     in the form of status updates and failure (or) success of job status
   id: totrans-167
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 普通用户，如团队成员，可能只想查看事物的进展，以状态更新和作业状态的成功或失败的形式
 - en: '![](img/10acb85d-52aa-4b55-8780-f959c561b05b.png)'
   id: totrans-168
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/10acb85d-52aa-4b55-8780-f959c561b05b.png)'
 - en: Users can be assigned to different types of roles
   id: totrans-169
   prefs: []

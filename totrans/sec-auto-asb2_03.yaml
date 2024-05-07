@@ -1,717 +1,1077 @@
 - en: Setting Up a Hardened WordPress with Encrypted Automated Backups
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用加密自动备份的强化WordPress
 - en: Now that the basic setup is done, let's pick up various security automation
     scenarios and look at them one by one.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在基本设置已完成，让我们逐个讨论各种安全自动化场景，并一一查看它们。
 - en: Everyone would agree that setting up a secure website and keeping it secured
     is a fairly common security requirement. And since it is so common, it would be
     useful for a lot of people who are tasked with building and managing websites
     to stay secure to look at that specific scenario.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 每个人都会同意，建立一个安全的网站并保持其安全性是一个相当普遍的安全要求。由于这是如此普遍，因此对于那些负责构建和管理网站以保持安全的人来说，查看特定情景可能是有用的。
 - en: Are you aware that, according to Wikipedia, 27.5% of the top 10 million websites
     use WordPress? According to another statistic, 58.7% of all websites with known
     software on the entire web run WordPress.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 您是否知道，根据维基百科的数据，前1000万个网站中有27.5%使用WordPress？根据另一项统计数据，整个网络上所有已知软件中有58.7%的网站在运行WordPress。
 - en: If there are so many, an automated secure way of setting up and maintaining
     WordPress should be useful for some readers.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果有这么多，那么一种自动化的安全方式来设置和维护WordPress对一些读者应该是有用的。
 - en: Even if WordPress is something that doesn't interest you a lot, bear in mind
     that the overall steps to set up and secure a LAMP/LEMP stack application are
     universal.
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 即使WordPress不是您非常感兴趣的内容，也请记住，设置和保护LAMP/LEMP堆栈应用程序的整体步骤是普遍适用的。
 - en: 'For us, setting up a hardened WordPress with encrypted automated backups can
     be broken down into the following steps:'
+  id: totrans-6
   prefs: []
   type: TYPE_NORMAL
+  zh: 对我们来说，使用加密自动备份的强化WordPress可以分解为以下步骤：
 - en: Setting up a Linux/Windows server with security measures in place.
+  id: totrans-7
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 设置带有安全措施的Linux/Windows服务器。
 - en: Setting up a web server (Apache/Nginx on Linux and IIS on Windows).
+  id: totrans-8
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 设置Web服务器（Linux上的Apache/Nginx和Windows上的IIS）。
 - en: Setting up a database server (MySQL) on the same host.
+  id: totrans-9
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在同一主机上设置数据库服务器（MySQL）。
 - en: Setting up WordPress using a command-line utility called **WP-CLI**.
+  id: totrans-10
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用名为**WP-CLI**的命令行实用程序设置WordPress。
 - en: Setting up backup for the site files and the database which is incremental,
     encrypted, and most importantly, automated.
+  id: totrans-11
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为网站文件和数据库设置增量、加密和最重要的自动化备份。
 - en: In this chapter, we will do all of this using Ansible playbooks and roles. We
     will assume that the server that we plan to deploy our WordPress website on is
     already up and running and we are able to connect to it. We will store the backup
     in an already configured AWS S3 bucket, for which the access key and secret access
     key is already provisioned.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将使用Ansible playbook和roles完成所有这些。我们将假设我们计划部署WordPress网站的服务器已经启动并运行，并且我们能够连接到它。我们将备份存储在已经配置好的AWS
+    S3存储桶中，其中访问密钥和秘密访问密钥已经提供。
 - en: 'We will discuss the following topics:'
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将讨论以下主题：
 - en: CLI for WordPress
+  id: totrans-14
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: WordPress的CLI
 - en: Why Ansible for this setup?
+  id: totrans-15
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为什么选择Ansible进行此设置？
 - en: A complete WordPress installation, step-by-step
+  id: totrans-16
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 逐步完成WordPress安装
 - en: Setting up an Apache2 web server
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 设置Apache2 Web服务器
 - en: What if you don't want to roll your own? The Trellis stack
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如果您不想自己构建，那么Trellis堆栈呢？
 - en: Why would we use Trellis, and when is it a good idea to use it?
+  id: totrans-19
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们为什么要使用Trellis，并且何时使用它是一个好主意？
 - en: Enabling TLS/SSL with Let's Encrypt
+  id: totrans-20
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用Let's Encrypt启用TLS/SSL
 - en: WordPress on Windows
+  id: totrans-21
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Windows上的WordPress
 - en: CLI for WordPress
+  id: totrans-22
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: WordPress的CLI
 - en: We will be using a tool called WP-CLI, which allows us to do many things in
     WordPress that traditionally require a web browser.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用一个名为WP-CLI的工具，它允许我们在WordPress中执行许多传统上需要使用Web浏览器的操作。
 - en: WP-CLI is the CLI for WordPress. You can update plugins, configure multisite
     installs, and much more, without using a web browser. For more information on
     WP-CLI, visit [https://WP-CLI.org/](https://wp-cli.org/), and for WordPress, visit [https://wordpress.org/](https://wordpress.org/).
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: WP-CLI是WordPress的CLI。您可以更新插件、配置多站点安装等，而无需使用Web浏览器。有关WP-CLI的更多信息，请访问[https://WP-CLI.org/](https://wp-cli.org/)，有关WordPress，请访问[https://wordpress.org/](https://wordpress.org/)。
 - en: 'For example, the following command will download and set up a WordPress:'
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，以下命令将下载并设置WordPress：
 - en: '[PRE0]'
+  id: totrans-26
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'A complete example can be found at [https://developer.WordPress.org/cli/commands/core/#examples](https://developer.wordpress.org/cli/commands/core/#examples):'
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 完整示例可在[https://developer.WordPress.org/cli/commands/core/#examples](https://developer.wordpress.org/cli/commands/core/#examples)找到：
 - en: '[PRE1]'
+  id: totrans-28
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: This example gives us a glimpse of the power of the WP-CLI tool when invoked
     from an Ansible playbook.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: 此示例让我们一窥从Ansible playbook中调用WP-CLI工具的威力。
 - en: Why Ansible for this setup?
+  id: totrans-30
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为什么选择Ansible进行此设置？
 - en: Ansible is made for security automation and hardening. It uses YAML syntax,
     which helps us to codify our entire process of repeated tasks. By using this,
     we can automate the process of continuous delivery and deployment of infrastructure
     using roles and playbooks.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible专为安全自动化和硬化而设计。它使用YAML语法，帮助我们对重复任务的整个过程进行编码。通过使用这个，我们可以使用角色和播放书自动化基础架构的持续交付和部署过程。
 - en: The modular approach enables us to perform tasks very simply. For example, the
     operations teams can write a playbook to set up a WordPress site and the security
     team can create another role which can harden the WordPress site.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 模块化方法使我们能够非常简单地执行任务。例如，运维团队可以编写一个播放书来设置WordPress站点，安全团队可以创建另一个角色，用于加固WordPress站点。
 - en: It is very easy to use the modules for repeatability, and the output is idempotent,
     which means creating standards for the servers, applications, and infrastructure.
     Some use cases include creating base images for organizations using internal policy
     standards.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用模块实现可重复性非常容易，并且输出是幂等的，这意味着可以为服务器、应用程序和基础架构创建标准。一些用例包括使用内部政策标准为组织创建基础镜像。
 - en: Ansible uses SSH protocol, which is by default secured with encrypted transmission
     and host encryption. Also, there are no dependency issues while dealing with different
     types of operating systems. It uses Python to perform; this can be easily extended,
     based on our use case.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible使用SSH协议，默认情况下使用加密传输和主机加密进行保护。而且，在处理不同类型的操作系统时不存在依赖性问题。它使用Python执行；根据我们的用例，这可以很容易地扩展。
 - en: A complete WordPress installation step-by-step
+  id: totrans-35
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 逐步完成WordPress安装
 - en: In this section, we will go ahead and do a complete setup of WordPress, the
     required database server, hardening, and backup. Our platform of choice is Linux
     (Ubuntu 16.04) with nginx web server and with PHP-FPM for PHP runtime. We will
     use duply to set up the backups which will get stored in AWS S3.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本节中，我们将继续完成WordPress、所需的数据库服务器、硬化和备份的完整设置。我们选择的平台是Linux（Ubuntu 16.04），使用nginx
+    Web服务器和PHP-FPM作为PHP运行时。我们将使用duply设置备份，备份将存储在AWS S3中。
 - en: Setting up nginx web server
+  id: totrans-37
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置nginx Web服务器
 - en: 'Setting up nginx is as simple as `sudo apt-get install nginx`, but configuring
     for our use case and managing the configuration''s automated way is where Ansible
     gives the power. Let''s look at the following snippet of nginx''s role from the
     playbook:'
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 设置nginx就像`sudo apt-get install nginx`这样简单，但是为我们的用例配置并管理配置的自动化方式是Ansible的强大之处。让我们看一下播放书中nginx角色的以下片段：
 - en: '[PRE2]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: In the preceding code snippet, we are adding the signing key, then adding the
     repository, then installing. This ensures that we can also perform integrity checks
     while downloading packages from the repositories.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上述代码片段中，我们正在添加签名密钥，然后添加存储库，然后进行安装。这样可以确保我们在从存储库下载软件包时也可以执行完整性检查。
 - en: Then, we are using Jinja2 templating to perform the configuration changes, which
     can be predefined in our configuration before updating in the server.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后，我们使用Jinja2模板执行配置更改，这些更改可以在服务器更新之前预定义在我们的配置中。
 - en: Setting up prerequisites
+  id: totrans-42
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置先决条件
 - en: To set up WordPress CMS, we need to have a database and PHP installed, so we
     will be installing MySQL as a database and PHP-FPM for processing.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 要设置WordPress CMS，我们需要安装数据库和PHP，因此我们将安装MySQL作为数据库，以及PHP-FPM用于处理。
 - en: Setting up MySQL database
+  id: totrans-44
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置MySQL数据库
 - en: 'We have already seen how to set up MySQL in the previous chapter. Here, we
     will see how to create new users and databases for the WordPress application.
     Then we will apply the hardening steps via Ansible modules:'
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经在前一章中看到了如何设置MySQL。在这里，我们将看到如何为WordPress应用程序创建新用户和数据库。然后，我们将通过Ansible模块应用硬化步骤：
 - en: '[PRE3]'
+  id: totrans-46
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: The preceding code snippet describes creating a new database and user and assigning
     that user full permission to the WordPress application database using the `mysql_db` and `mysql_user`
     modules, respectively.
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 上述代码片段描述了使用`mysql_db`和`mysql_user`模块创建新数据库和用户，并分别将该用户赋予WordPress应用数据库完全权限。
 - en: Installing PHP for WordPress setup
+  id: totrans-48
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 为WordPress设置安装PHP
 - en: 'The following code snippet uses different modules to perform the installation
     of PHP and other required packages. Then it updates the PHP-FPM configuration
     using the `replace` module. Finally, it also updates the nginx configuration to
     update the PHP-FPM processing using the `template` module, and restarts the service
     to apply the changes:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段使用不同的模块来执行 PHP 和其他所需包的安装。然后，它使用 `replace` 模块更新 PHP-FPM 配置。最后，它还使用 `template`
+    模块更新 nginx 配置以更新 PHP-FPM 处理，并重新启动服务以应用更改：
 - en: '[PRE4]'
+  id: totrans-50
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Installing WordPress using WP-CLI
+  id: totrans-51
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 WP-CLI 安装 WordPress
 - en: 'The following code snippet will install and set up WordPress so it is up and
     running:'
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段将安装和设置 WordPress，以便它能够正常运行：
 - en: '[PRE5]'
+  id: totrans-53
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Hardening SSH service
+  id: totrans-54
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 强化 SSH 服务
 - en: 'This will be like a more traditional approach, with a modern automated method,
     using Ansible. Some of the items included here are:'
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 这将是一个更传统的方法，采用现代化的自动化方法，使用 Ansible。这里包括的一些项目有：
 - en: 'Disabling the `root` user login, and instead creating a different user, and,
     if required, providing the `sudo` privilege:'
+  id: totrans-56
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 禁用 `root` 用户登录，并创建一个不同的用户，如果需要，提供 `sudo` 权限：
 - en: '[PRE6]'
+  id: totrans-57
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Using key-based authentication to log in. Unlike with password-based authentication,
     we can generate SSH keys and add the public key to the authorized keys:'
+  id: totrans-58
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用基于密钥的身份验证登录。与基于密码的身份验证不同，我们可以生成 SSH 密钥并将公钥添加到授权密钥中：
 - en: '[PRE7]'
+  id: totrans-59
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: 'Some of the configuration tweaks using the SSH configuration file; for example, `PermitRootLogin`,
     `PubkeyAuthentication`, and `PasswordAuthentication`:'
+  id: totrans-60
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用 SSH 配置文件进行一些配置调整；例如，`PermitRootLogin`、`PubkeyAuthentication` 和 `PasswordAuthentication`：
 - en: '[PRE8]'
+  id: totrans-61
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: We can also set up services like `fail2ban` for protecting against basic attacks.
+  id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们还可以设置诸如 `fail2ban` 之类的服务，以保护免受基本攻击。
 - en: Also, we can enable MFA, if required to log in. For more information, visit
     [https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-ubuntu-16-04).
+  id: totrans-63
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 此外，如果需要登录，则可以启用 MFA。欲了解更多信息，请访问 [https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-ubuntu-16-04)。
 - en: The following playbook will provide more advanced features for SSH hardening
     by dev-sec team: [https://github.com/dev-sec/ansible-ssh-hardening](https://github.com/dev-sec/ansible-ssh-hardening)
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: 下面的操作手册将由 dev-sec 团队提供更多关于 SSH 强化的高级功能：[https://github.com/dev-sec/ansible-ssh-hardening](https://github.com/dev-sec/ansible-ssh-hardening)
 - en: Hardening a database service
+  id: totrans-65
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 强化数据库服务
 - en: 'We have seen setting up the database. The following code snippet shows how
     we can harden the MySQL service by binding it to localhost and the required interfaces
     for interacting with the application. It then removes the anonymous user and test
     databases:'
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经看到如何设置数据库。以下代码片段显示了如何通过将其绑定到 localhost 和与应用程序交互所需的接口来加固 MySQL 服务。然后，它移除了匿名用户和测试数据库：
 - en: '[PRE9]'
+  id: totrans-67
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: Hardening nginx
+  id: totrans-68
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 强化 nginx
 - en: 'Here, we can start looking at things like disabling server tokens to not display
     version information, adding headers like `X-XSS-Protection`, and many other configuration
     tweaks. Most of these changes are done via configuration changes, and Ansible
     allows us to version and control and automate these changes based on user requirements:'
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: '在这里，我们可以开始查看如何禁用服务器标记以不显示版本信息，添加诸如 `X-XSS-Protection` 之类的头部，以及许多其他配置调整。这些大多数更改都是通过配置更改完成的，Ansible
+    允许我们根据用户需求对这些更改进行版本控制和自动化： '
 - en: The nginx server version information can be blocked by adding the `server_tokens
     off;` value to the configuration
+  id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 可以通过在配置中添加 `server_tokens off;` 来阻止 nginx 服务器版本信息
 - en: '`add_header X-XSS-Protection "1; mode=block";` will enable the cross-site scripting
     (XSS) filter'
+  id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`add_header X-XSS-Protection "1; mode=block";` 将启用跨站点脚本 (XSS) 过滤器'
 - en: SSLv3 can be disabled by adding  `ssl_protocols TLSv1 TLSv1.1 TLSv1.2;`
+  id: totrans-72
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 可以通过添加 `ssl_protocols TLSv1 TLSv1.1 TLSv1.2;` 来禁用 SSLv3
 - en: 'This list can be pretty large, based on the use case and scenario:'
+  id: totrans-73
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 这个列表可能会相当长，根据使用情况和场景而定：
 - en: 'The following code snippet contains nginx configuration template for updating
     the hardened nginx configuration changes:'
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段包含了用于更新强化的 nginx 配置更改的 nginx 配置模板：
 - en: '[PRE10]'
+  id: totrans-75
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE10]'
 - en: Mozilla runs an updated web page on guidance for SSL/TLS at [https://wiki.mozilla.org/Security/Server_Side_TLS](https://wiki.mozilla.org/Security/Server_Side_TLS). The
     guidance offers an opinion on what cipher suites to use, and other security measures.
     Additionally, if you trust their judgment, you can also use their SSL/TLS configuration
     generator to quickly generate a configuration for your web server configuration.
     For more information, visit [https://mozilla.github.io/server-side-tls/ssl-config-generator/](https://mozilla.github.io/server-side-tls/ssl-config-generator/).
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: Mozilla 在 [https://wiki.mozilla.org/Security/Server_Side_TLS](https://wiki.mozilla.org/Security/Server_Side_TLS) 上提供了更新的有关
+    SSL/TLS 指导的网页。该指导提供了关于使用什么密码套件以及其他安全措施的建议。此外，如果您信任他们的判断，您还可以使用他们的 SSL/TLS 配置生成器快速生成您的
+    Web 服务器配置的配置。欲了解更多信息，请访问 [https://mozilla.github.io/server-side-tls/ssl-config-generator/](https://mozilla.github.io/server-side-tls/ssl-config-generator/)。
 - en: Whichever configuration you decide to use, the template needs to be named as `hardened-nginx-config.j2`.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 无论您决定使用哪种配置，模板都需要命名为 `hardened-nginx-config.j2`。
 - en: Hardening WordPress
+  id: totrans-78
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 加固 WordPress
 - en: 'This includes basic checks for WordPress security misconfigurations. Some of
     them include:'
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 这包括对 WordPress 安全配置错误的基本检查。其中一些包括：
 - en: 'Directory and file permissions:'
+  id: totrans-80
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 目录和文件权限：
 - en: '[PRE11]'
+  id: totrans-81
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE11]'
 - en: 'Username and attachment enumeration blocking. The following code snippet is
     part of nginx''s configuration:'
+  id: totrans-82
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 用户名和附件枚举阻止。以下代码片段是 nginx 配置的一部分：
 - en: '[PRE12]'
+  id: totrans-83
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE12]'
 - en: 'Disallowing file edits in the WordPress editor:'
+  id: totrans-84
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 禁止在 WordPress 编辑器中编辑文件：
 - en: '[PRE13]'
+  id: totrans-85
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE13]'
 - en: There are many other checks we can add as the configuration changes and updates.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 随着配置的更改和更新，我们可以添加许多其他检查。
 - en: Hardening a host firewall service
+  id: totrans-87
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 加固主机防火墙服务
 - en: The following code snippet is for installing and configuring the **uncomplicated
     firewall** (**UFW**) with its required services and rules. Ansible even has a
     module for UFW, so the following snippet starts with installing this and enabling
     logging. It follows this by adding default policies, like default denying all
     incoming and allowing outgoing.
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段是用于安装和配置**简易防火墙**（**UFW**）及其所需的服务和规则。Ansible 甚至有一个用于 UFW 的模块，因此以下片段以安装此模块并启用日志记录开始。接着它添加了默认策略，比如默认拒绝所有入站流量并允许出站流量。
 - en: 'Then it will add SSH, HTTP, and HTTPS services to allow incoming. These options
     are completely configurable, as required. Then it will enable and add to startup
     programs that apply the changes:'
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 然后将添加 SSH、HTTP 和 HTTPS 服务以允许进入。这些选项是完全可配置的，根据需要。然后它将启用并添加到启动程序中以应用更改：
 - en: '[PRE14]'
+  id: totrans-90
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE14]'
 - en: Setting up automated encrypted backups in AWS S3
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在 AWS S3 中设置自动化的加密备份
 - en: Backups are always something that most of us feel should be done, but they seem
     quite a chore. Over the years, people have done extensive work to ensure we can
     have simple enough ways to back up and restore our data.
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 备份始终是我们大多数人觉得应该完成的事情，但它们似乎相当繁琐。多年来，人们已经做了大量工作，以确保我们可以有足够简单的方式来备份和恢复我们的数据。
 - en: 'In today''s day and age, a great backup solution/software should be able to
     do the following:'
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 在当今这个时代，一个出色的备份解决方案/软件应该能够执行以下操作：
 - en: '| **Feature** | **Remark** |'
+  id: totrans-94
   prefs: []
   type: TYPE_TB
+  zh: '| **特性** | **备注** |'
 - en: '| Automated | Automation allows for process around it |'
+  id: totrans-95
   prefs: []
   type: TYPE_TB
+  zh: '| 自动化 | 自动化允许围绕其进行流程 |'
 - en: '| Incremental | While storage is cheap overall, if we want backups at five minute intervals,
     what has changed should be backed up |'
+  id: totrans-96
   prefs: []
   type: TYPE_TB
+  zh: '| 增量 | 尽管整体存储成本较低，但如果我们想要每五分钟备份一次，那么已更改的内容应该被备份 |'
 - en: '| Encrypted before it leaves our server | This is to ensure that we have security
     of data at rest and in motion |'
+  id: totrans-97
   prefs: []
   type: TYPE_TB
+  zh: '| 离开我们的服务器之前加密 | 这是为了确保数据在静止和运动中的安全性 |'
 - en: '| Cheap | While we care about our data, a good back up solution will be much
     cheaper than the server which needs to be backed up |'
+  id: totrans-98
   prefs: []
   type: TYPE_TB
+  zh: '| 便宜 | 尽管我们关心我们的数据，但一个好的备份解决方案会比需要备份的服务器便宜得多 |'
 - en: 'For our backup solution, we will pick up the following stack:'
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于我们的备份解决方案，我们将选择以下堆栈：
 - en: '| **Software** | Duply - A wrapper over duplicity, a Python script  |'
+  id: totrans-100
   prefs: []
   type: TYPE_TB
+  zh: '| **软件** | Duply - 一个包装在 duplicity 上的包装器，是一个 Python 脚本 |'
 - en: '| **Storage** | While duply offers many backends, it works really well with
     AWS S3  |'
+  id: totrans-101
   prefs: []
   type: TYPE_TB
+  zh: '| **存储** | 尽管 duply 提供了许多后端，但它与 AWS S3 非常兼容 |'
 - en: '| **Encryption** | By using GPG, we can use asymmetric public and private key
     pairs |'
+  id: totrans-102
   prefs: []
   type: TYPE_TB
+  zh: '| **加密** | 通过使用 GPG，我们可以使用非对称的公钥和私钥对 |'
 - en: 'The following code snippet is to set up duply for encrypted automated backups
     from the server to AWS S3:'
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段是为了在服务器和 AWS S3 之间设置 duply 进行加密的自动化备份：
 - en: '[PRE15]'
+  id: totrans-104
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE15]'
 - en: Executing playbook against an Ubuntu 16.04 server using Ansible Tower
+  id: totrans-105
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Ansible Tower 对 Ubuntu 16.04 服务器执行 playbook
 - en: Once we are ready with the playbook and updating the variables as required,
     we can go ahead and execute the playbook. Before that, we have to create the template
     in Ansible Tower to perform this operation.
+  id: totrans-106
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦我们准备好 playbook 并根据需要更新变量，我们就可以继续执行 playbook。在那之前，我们必须在 Ansible Tower 中创建模板来执行此操作。
 - en: '![](img/266b5435-4813-4632-b833-57f4ab04cb58.png)'
+  id: totrans-107
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/266b5435-4813-4632-b833-57f4ab04cb58.png)'
 - en: Ansible Tower job template for WordPress setup playbook
+  id: totrans-108
   prefs: []
   type: TYPE_NORMAL
+  zh: 用于 WordPress 设置 playbook 的 Ansible Tower 作业模板
 - en: '![](img/5ade359b-1b20-4bf1-8ac1-cd68381d87ac.png)'
+  id: totrans-109
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/5ade359b-1b20-4bf1-8ac1-cd68381d87ac.png)'
 - en: WordPress setup playbook job execution
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: WordPress 设置 playbook 作业执行
 - en: '![](img/3958664f-96b6-458d-bac0-11c931a7a00f.png)'
+  id: totrans-111
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/3958664f-96b6-458d-bac0-11c931a7a00f.png)'
 - en: WordPress website with HTTPS
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用 HTTPS 的 WordPress 网站
 - en: Secure automated the WordPress updates
+  id: totrans-113
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安全地自动化 WordPress 更新
 - en: 'The following code snippet is to run the backups and update WordPress core,
     themes, and plugins. This can be scheduled via an Ansible Tower job for every
     day:'
+  id: totrans-114
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段是用于运行备份并更新 WordPress 核心、主题和插件的。可以通过 Ansible Tower 作业每天定时执行：
 - en: '[PRE16]'
+  id: totrans-115
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE16]'
 - en: Scheduling via Ansible Tower for daily updates
+  id: totrans-116
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 通过 Ansible Tower 进行每日更新的调度
 - en: Ansible Tower allows us to schedule jobs to run automatically against servers.
     We can configure this in templates by configuring the start date and repeat frequency
     to execute the playbook.
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: Ansible Tower 允许我们安排自动运行对服务器的作业。我们可以在模板中配置开始日期和重复频率以执行 playbook。
 - en: '![](img/6f760e32-86f5-44da-afc2-6cbb8965f516.png)'
+  id: totrans-118
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/6f760e32-86f5-44da-afc2-6cbb8965f516.png)'
 - en: Ansible Tower job scheduling for automated WordPress updates
+  id: totrans-119
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过 Ansible Tower 进行自动化 WordPress 更新的作业调度
 - en: 'Otherwise, we can use the `cron` job template to perform this daily and add
     this template while deploying the WordPress setup:'
+  id: totrans-120
   prefs: []
   type: TYPE_NORMAL
+  zh: 否则，我们可以使用 `cron` 作业模板每天执行此操作，并在部署 WordPress 设置时添加此模板：
 - en: '[PRE17]'
+  id: totrans-121
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE17]'
 - en: Setting up Apache2 web server
+  id: totrans-122
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 设置 Apache2 web 服务器
 - en: 'We have already seen this in our LEMP stack setup, and it''s very similar.
     But here, we have to use the required modules for working with WordPress. The
     following code snippet shows how we can use templating to perform configuration
     updates in the server:'
+  id: totrans-123
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在我们的 LEMP 栈设置中已经见过这个，它非常相似。但是在这里，我们必须使用与 WordPress 一起工作的所需模块。以下代码片段显示了我们如何使用模板来执行服务器上的配置更新：
 - en: '[PRE18]'
+  id: totrans-124
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE18]'
 - en: Enabling TLS/SSL with Let's Encrypt
+  id: totrans-125
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用 Let's Encrypt 启用 TLS/SSL
 - en: We can use a command-line tool offered by Let's Encrypt to get free SSL/TLS
     certificates in an open, automated manner.
+  id: totrans-126
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以使用 Let's Encrypt 提供的命令行工具以开放、自动化的方式获取免费的 SSL/TLS 证书。
 - en: 'The tool is capable of reading and understanding an nginx virtual host file
     and generating the relevant certificates completely automatically, without any
     kind of manual intervention:'
+  id: totrans-127
   prefs: []
   type: TYPE_NORMAL
+  zh: 该工具能够完全自动地读取和理解一个 nginx 虚拟主机文件，并生成相关的证书，不需要任何手动干预：
 - en: '[PRE19]'
+  id: totrans-128
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE19]'
 - en: Let's Encrypt has become an extremely popular and secure way of enabling SSL/TLS
     on a website.
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: Let's Encrypt 已成为在网站上启用 SSL/TLS 的一种极其流行和安全的方式。
 - en: By the end of June 2017, Let's Encrypt had issued over 100 million free SSL/TLS
     certificates in an automatic manner. For more information, visit [https://letsencrypt.org/2017/06/28/hundred-million-certs.html](https://letsencrypt.org/2017/06/28/hundred-million-certs.html).
+  id: totrans-130
   prefs: []
   type: TYPE_NORMAL
+  zh: 到 2017 年 6 月底，Let's Encrypt 已经以自动方式发布了超过 1 亿个免费的 SSL/TLS 证书。有关更多信息，请访问 [https://letsencrypt.org/2017/06/28/hundred-million-certs.html](https://letsencrypt.org/2017/06/28/hundred-million-certs.html)。
 - en: What if you don't want to roll your own? The Trellis stack
+  id: totrans-131
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 如果你不想自己动手怎么办？Trellis 栈
 - en: Trellis stack is a way for development teams to have a local staging and production
     setup for WordPress websites.
+  id: totrans-132
   prefs: []
   type: TYPE_NORMAL
+  zh: Trellis 栈是开发团队为 WordPress 网站建立本地临时和生产环境设置的一种方式。
 - en: Trellis is an open source MIT license set of Ansible playbooks for a WordPress
     LEMP stack.
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: Trellis 是一个为 WordPress LEMP 栈设计的一组开源 MIT 许可的 Ansible playbook。
 - en: Why would we use Trellis, and when is it a good idea to use it?
+  id: totrans-134
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 我们为什么要使用 Trellis，以及什么时候使用它是一个好主意？
 - en: Trellis is a full-fledged project, based on various tools held together by Ansible.
     In many ways, it is a better alternative to using the playbook for this chapter.
+  id: totrans-135
   prefs: []
   type: TYPE_NORMAL
+  zh: Trellis 是一个完整的项目，基于各种工具，由 Ansible 组合在一起。在许多方面，它是使用本章节的 playbook 的一个更好的选择的替代品。
 - en: If you are expected to build/develop, deploy, and then maintain the production
     of a WordPress website or websites, then Trellis is a good choice.
+  id: totrans-136
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你预期要构建/开发、部署，然后维护 WordPress 网站或网站的生产环境，那么 Trellis 是一个不错的选择。
 - en: The only caveat is that a lot of the features available are more useful if there
     is a team doing development and deployment. Otherwise, the stack is opinionated,
     and you may be saddled with some software choices that you may not like.
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 唯一的注意事项是，如果有团队进行开发和部署，则许多可用功能更有用。否则，堆栈是有偏见的，你可能会被一些你不喜欢的软件选择所困扰。
 - en: WordPress on Windows
+  id: totrans-138
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Windows上的WordPress
 - en: This is one of the new things we are going to perform now. Until now, we have
     been setting up things in Linux based operating systems. Now we are going to set
     up IIS web server in the Windows operating system, which requires that we enable
     the `WinRM` feature in Windows services to perform Ansible playbook execution.
+  id: totrans-139
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是我们现在要执行的新事物之一。到目前为止，我们一直在Linux操作系统中设置东西。现在我们要在Windows操作系统中设置IIS Web服务器，这需要我们在Windows服务中启用`WinRM`功能以执行Ansible
+    playbook。
 - en: 'We need to make sure that the `pywinrm` module is installed in the control
     machine; we can install it by executing the following `pip` command:'
+  id: totrans-140
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们需要确保在控制机器上安装了`pywinrm`模块；我们可以通过执行以下`pip`命令来安装它：
 - en: '[PRE20]'
+  id: totrans-141
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE20]'
 - en: How to enable WinRM in Windows
+  id: totrans-142
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 如何在Windows中启用WinRM
 - en: To simplify this process, Ansible provides a PowerShell script, which needs
     to be run as an administrator in the PowerShell console. Download the PowerShell
     script from [https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1](https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1).
+  id: totrans-143
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了简化这个过程，Ansible提供了一个PowerShell脚本，需要在PowerShell控制台中以管理员身份运行。从[https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1](https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)下载PowerShell脚本。
 - en: 'On a Windows machine, open the command prompt as an administrator and run the
     following command:'
+  id: totrans-144
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Windows机器上，以管理员身份打开命令提示符，并运行以下命令：
 - en: '[PRE21]'
+  id: totrans-145
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE21]'
 - en: Make sure you opened port `5986` for the Windows machine in firewall rules.
     For more references, about Windows setup, visit [http://docs.ansible.com/ansible/latest/intro_windows.html](http://docs.ansible.com/ansible/latest/intro_windows.html).
+  id: totrans-146
   prefs: []
   type: TYPE_NORMAL
+  zh: 请确保在防火墙规则中为Windows机器打开了端口`5986`。有关Windows设置的更多参考信息，请访问[http://docs.ansible.com/ansible/latest/intro_windows.html](http://docs.ansible.com/ansible/latest/intro_windows.html)。
 - en: Running Ansible against a Windows server
+  id: totrans-147
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 运行Ansible针对Windows服务器
 - en: Now, let's test by executing a simple ping module against the Windows server.
+  id: totrans-148
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在，让我们通过执行简单的ping模块来测试针对Windows服务器的情况。
 - en: 'First, we need to create the `inventory` file, which includes the options for
     connecting the Windows `winrm` service:'
+  id: totrans-149
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，我们需要创建包括连接Windows `winrm`服务选项的`inventory`文件：
 - en: '[PRE22]'
+  id: totrans-150
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE22]'
 - en: 'To execute the Windows ping module, we can run the following Ansible command:'
+  id: totrans-151
   prefs: []
   type: TYPE_NORMAL
+  zh: 要执行Windows ping模块，我们可以运行以下Ansible命令：
 - en: '[PRE23]'
+  id: totrans-152
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE23]'
 - en: '![](img/f2ec7fad-707a-4d82-9128-f61098edddd3.png)'
+  id: totrans-153
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/f2ec7fad-707a-4d82-9128-f61098edddd3.png)'
 - en: To learn more about the different available modules in Windows, refer to [http://docs.ansible.com/ansible/latest/list_of_windows_modules.html](http://docs.ansible.com/ansible/latest/list_of_windows_modules.html).
+  id: totrans-154
   prefs: []
   type: TYPE_NORMAL
+  zh: 要了解有关Windows中可用模块的不同可用模块的更多信息，请参阅[http://docs.ansible.com/ansible/latest/list_of_windows_modules.html](http://docs.ansible.com/ansible/latest/list_of_windows_modules.html)。
 - en: Installing IIS server using playbook
+  id: totrans-155
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用playbook安装IIS服务器
 - en: 'The following code snippet explains how we can install and start the IIS service
     in the Windows server operating system:'
+  id: totrans-156
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下代码片段解释了我们如何在Windows服务器操作系统中安装和启动IIS服务：
 - en: '[PRE24]'
+  id: totrans-157
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE24]'
 - en: '![](img/d1c4c6a1-656c-4c98-93a3-aa7201ba86ff.png)'
+  id: totrans-158
   prefs: []
   type: TYPE_IMG
+  zh: '![](img/d1c4c6a1-656c-4c98-93a3-aa7201ba86ff.png)'
 - en: We will be using Chocolatey (for more information, visit [https://chocolatey.org/](https://chocolatey.org/)),
     a package manager for Windows, for advanced installations and setup in Windows.
+  id: totrans-159
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用Chocolatey（有关更多信息，请访问[https://chocolatey.org/](https://chocolatey.org/)），这是Windows的软件包管理器，用于在Windows中进行高级安装和设置。
 - en: The next step is installing the Web Platform Installer.
+  id: totrans-160
   prefs: []
   type: TYPE_NORMAL
+  zh: 下一步是安装Web平台安装程序。
 - en: The Microsoft Web Platform Installer (Web PI) is a free tool that makes getting
     the latest components of the Microsoft Web Platform, including **Internet Information
     Services** (**IIS**), SQL Server Express, .NET Framework, and Visual Web Developer,
     easy. For more information, visit [https://www.microsoft.com/web/downloads/platform.aspx](https://www.microsoft.com/web/downloads/platform.aspx).
+  id: totrans-161
   prefs: []
   type: TYPE_NORMAL
+  zh: Microsoft Web平台安装程序（Web PI）是一个免费工具，可轻松获取Microsoft Web平台的最新组件，包括**Internet信息服务**（**IIS**），SQL
+    Server Express，.NET Framework和Visual Web开发人员工具。有关更多信息，请访问[https://www.microsoft.com/web/downloads/platform.aspx](https://www.microsoft.com/web/downloads/platform.aspx)。
 - en: 'Once this is installed, we can install MySQL and WordPress using this:'
+  id: totrans-162
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装完毕后，我们可以使用此方法安装MySQL和WordPress：
 - en: The following playbook runs the PowerShell script created by [https://gist.github.com/chrisloweau/8a15516d551a87b096620134c3624b73](https://gist.github.com/chrisloweau/8a15516d551a87b096620134c3624b73). Please
     refer to [http://www.lowefamily.com.au/2017/04/11/how-to-install-wordpress-on-windows-server-2016/](http://www.lowefamily.com.au/2017/04/11/how-to-install-wordpress-on-windows-server-2016/)
     for more details about the PowerShell script.
+  id: totrans-163
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下剧本运行了由[https://gist.github.com/chrisloweau/8a15516d551a87b096620134c3624b73](https://gist.github.com/chrisloweau/8a15516d551a87b096620134c3624b73)创建的PowerShell脚本。有关PowerShell脚本的更多详细信息，请参阅[http://www.lowefamily.com.au/2017/04/11/how-to-install-wordpress-on-windows-server-2016/](http://www.lowefamily.com.au/2017/04/11/how-to-install-wordpress-on-windows-server-2016/)。
 - en: This setup requires some of the prerequirements. Which includes setting up the
     PowerShell execution policy and windows version supported.
+  id: totrans-164
   prefs: []
   type: TYPE_NORMAL
+  zh: 此设置需要一些先决条件。其中包括设置PowerShell执行策略和支持的Windows版本。
 - en: 'First, we need to setup the Execution Policy by running the following command:'
+  id: totrans-165
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 首先，我们需要运行以下命令设置执行策略：
 - en: '[PRE25]'
+  id: totrans-166
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE25]'
 - en: This script only supports Windows Server 2016 operating system and Windows 10
+  id: totrans-167
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 此脚本仅支持Windows Server 2016操作系统和Windows 10。
 - en: The following Ansible playbook is executing PowerShell script to setup WordPress
     in Windows operating system.
+  id: totrans-168
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下Ansible剧本正在执行PowerShell脚本，以在Windows操作系统中设置WordPress。
 - en: '[PRE26]'
+  id: totrans-169
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE26]'
 - en: After the execution it returns the output similar to the following. Then we
     can navigate to the IP address and follow the instructions to setup the WordPress
     final configuration
+  id: totrans-170
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 执行后，它会返回类似以下的输出。然后我们可以导航到IP地址并按照说明设置WordPress的最终配置。
 - en: '[PRE27]'
+  id: totrans-171
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE27]'
 - en: Summary
+  id: totrans-172
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 摘要
 - en: This chapter was all about WordPress. We used Ansible to create a fairly secure
     installation of WordPress by default. By changing the default values for the database,
     web server, and WordPress, we utilized the ability to codify security knowledge
     using Ansible playbooks. Additionally, by setting up automated, incremental, encrypted
     backups, we allowed for resilience and continuity in the face of the worst that
     could happen.
+  id: totrans-173
   prefs: []
   type: TYPE_NORMAL
+  zh: 这一章主要讲解了WordPress。我们使用Ansible默认创建了一个相当安全的WordPress安装。通过改变数据库、Web服务器和WordPress的默认值，我们利用了使用Ansible剧本编码安全知识的能力。此外，通过设置自动、增量、加密备份，我们实现了对最坏情况的弹性和连续性。
 - en: We took a brief look at how to enable Windows for working with Ansible.
+  id: totrans-174
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们简要介绍了如何启用Windows以便与Ansible一起使用。
 - en: In the next chapter, we will look at Elastic stack for setting up a centralized
     logging infrastructures. This will serve us well not only for storing all kinds
     of logs but will also alert and notify us in case we are attacked. We will also
     learn how to deploy serverless defenses to automatically block attackers.
+  id: totrans-175
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将研究Elastic Stack用于设置集中式日志基础设施。这不仅适用于存储各种日志，而且还会在我们受到攻击时提醒和通知我们。我们还将学习如何部署无服务器防御以自动阻止攻击者。
