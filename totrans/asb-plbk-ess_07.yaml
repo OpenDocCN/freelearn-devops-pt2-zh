@@ -3,6 +3,7 @@
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第六章。迭代控制结构 - 循环
 - en: You learned about conditional controls in the previous chapter. Our journey
     into Ansible's world of control structures continues with iterative controls.
     Often, we need to create a list of directories, install a bunch of packages, or
@@ -12,30 +13,36 @@
   id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: 在前一章节中您了解了条件控制。我们对Ansible的控制结构的世界进行的旅程将继续学习迭代控制。我们经常需要创建一系列目录、安装一堆软件包、定义和遍历嵌套哈希或字典。传统的编程语言使用`for`或`while`循环进行迭代。Ansible将它们替换为`with`语句。
 - en: 'In this chapter, we are going to learn about:'
   id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本章中，我们将学习：
 - en: How to use iterative controls using the `with` statements
   id: totrans-3
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如何使用`with`语句进行迭代控制
 - en: How to loop arrays to create multiple objects at once
   id: totrans-4
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如何循环数组以一次创建多个对象
 - en: How to define nested hashes and walk over them to create data-driven roles
   id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如何定义嵌套哈希并遍历它们以创建数据驱动的角色
 - en: The omnipotent with statement
   id: totrans-6
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 万能的with语句
 - en: 'Iterating plain lists, parsing dictionaries, looping a sequence of numbers,
     parsing through a path and selectively copying files, or just picking up a random
     item from a list could be achieved using the "Swiss knife" utility, `with` statement.
@@ -43,6 +50,7 @@
   id: totrans-7
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用“瑞士军刀”实用工具`with`语句可以实现循环纯列表、解析字典、循环一系列数字、解析路径并有选择地复制文件，或者只是从列表中挑选一个随机项。`with`语句采用以下形式：
 - en: '[PRE0]'
   id: totrans-8
   prefs: []
@@ -53,71 +61,85 @@
   id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 这里，`xxx`参数是需要循环的数据类型，例如，项、字典等。
 - en: 'The following table lists the types of data that the `with` statement can iterate:'
   id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下表列出了`with`语句可以迭代的数据类型：
 - en: '| Construct | Data type | Description |'
   id: totrans-11
   prefs: []
   type: TYPE_TB
+  zh: 构造 | 数据类型 | 描述 |
 - en: '| --- | --- | --- |'
   id: totrans-12
   prefs: []
   type: TYPE_TB
+  zh: '| --- | --- | --- |'
 - en: '| `with_items` | Array | This is used to loop array items. For example, this
     is used to create a group of users, directories, or to install a list of packages.
     |'
   id: totrans-13
   prefs: []
   type: TYPE_TB
+  zh: '| `with_items` | 数组 | 用于循环数组项。例如，用于创建一组用户、目录，或者安装一系列软件包。 |'
 - en: '| `with_nested` | Nested loops | This is used to parse multidimensional arrays.
     For example, to create a list of MySQL users and grant them access to a group
     of databases. |'
   id: totrans-14
   prefs: []
   type: TYPE_TB
+  zh: '| `with_nested` | 嵌套循环 | 用于解析多维数组。例如，创建一个MySQL用户列表并为他们授予一组数据库的访问权限。'
 - en: '| `with_dict` | Hashes | This is used to parse a dictionary of key-value pairs
     and create virtual hosts. |'
   id: totrans-15
   prefs: []
   type: TYPE_TB
+  zh: '| `with_dict` | 哈希 | 用于解析键值对字典并创建虚拟主机。'
 - en: '| `with_fileglobs` | Files with pattern match | This is used to parse a path
     and copy only those files that match a certain pattern. |'
   id: totrans-16
   prefs: []
   type: TYPE_TB
+  zh: '| `with_fileglobs` | 文件模式匹配 | 用于解析路径并仅复制与特定模式匹配的文件。'
 - en: '| `with_together` | Sets | This is used to join two arrays as a set and to
     loop over it. |'
   id: totrans-17
   prefs: []
   type: TYPE_TB
+  zh: '| `with_together` | 集合 | 用于将两个数组合并为一个集合并循环遍历它。 |'
 - en: '| `with_subelements` | Hash subelement | This is used to parse a subelement
     of a hash. For example, to walk over the list of SSH keys and distribute them
     to a user. |'
   id: totrans-18
   prefs: []
   type: TYPE_TB
+  zh: '| `with_subelements` | 哈希子元素 | 用于解析哈希的子元素。例如，遍历SSH密钥列表并将其分发给用户。'
 - en: '| `with_sequence` | Integer sequence | This is used to loop a sequence of numbers.
     |'
   id: totrans-19
   prefs: []
   type: TYPE_TB
+  zh: '| `with_sequence` | 整数序列 | 用于循环一系列数字。'
 - en: '| `with_random_choice` | Random choice | This is used to pick up items from
     the array in a random order. |'
   id: totrans-20
   prefs: []
   type: TYPE_TB
+  zh: '| `with_random_choice` | 随机选择 | 用于以随机顺序从数组中选择项目。 |'
 - en: '| `with_indexed_items` | Array with index | This is an array with an index
     and is useful when an index for items is required. |'
   id: totrans-21
   prefs: []
   type: TYPE_TB
+  zh: '| `with_indexed_items` | 带索引的数组 | 这是一个带有索引的数组，当需要项目索引时很有用。'
 - en: Configuring WordPress requisites
   id: totrans-22
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 配置WordPress必备条件
 - en: 'While creating a role to install WordPress in [Chapter 4](ch04.html "Chapter 4. Bringing
     In Your Code – Custom Commands and Scripts"), *Bringing In Your Code – Custom
     Commands and Scripts*, we created tasks to download, extract, and copy the WordPress
@@ -126,21 +148,25 @@
   id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 在[第四章](ch04.html "第四章。引入您的代码 - 自定义命令和脚本")安装WordPress的角色创建时，*引入您的代码 - 自定义命令和脚本*，我们创建了下载、提取和复制WordPress应用的任务。然而，这还不足以启动WordPress，它有以下先决条件：
 - en: A web server
   id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个网络服务器
 - en: PHP bindings for a web server
   id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 网络服务器的PHP绑定
 - en: The MySQL database and MySQL users
   id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: MySQL数据库和MySQL用户
 - en: An Nginx web server and MySQL service have already been installed in our case.
     We still need to install and configure PHP along with the MySQL database and a
     user required for our WordPress application. To handle PHP requests, we choose
@@ -302,11 +328,14 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '**服务和处理器**：`service.yml` 文件和处理器 `main.yml` 文件管理 `php5-fom` 服务的启动和重新启动。它使用字典变量
+    `php5[''service''][''name'']` 来确定服务名称。'
 - en: Creating MySQL databases and user accounts
   id: totrans-50
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建 MySQL 数据库和用户账户
 - en: WordPress is a content management system that requires a MySQL DB to be available
     to store data, such as posts, users, and so on. Additionally, it also requires
     a MySQL user with appropriate privileges to connect to the database from a WordPress
@@ -316,11 +345,14 @@
   id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: WordPress 是一个内容管理系统，需要一个可用的 MySQL DB 来存储数据，例如帖子、用户等。此外，它还需要一个具有适当权限的 MySQL 用户来从
+    WordPress 应用程序连接到数据库。在安装 MySQL 时会获得一个管理员用户，但是，根据需要创建额外的用户帐户并授予用户权限是一个好习惯。
 - en: Creating a hash
   id: totrans-52
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 创建哈希
 - en: 'A **hash**, an abbreviation of hash table, is a dictionary of key-value pairs.
     It''s a useful data structure to create a multilevel variable, which can then
     be programmatically to create multiple objects, each having their own values.
@@ -329,6 +361,8 @@
   id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: '**哈希**，哈希表的缩写，是键值对字典。它是一个有用的数据结构，用于创建多级变量，然后可以通过编程方式创建具有自己值的多个对象。我们将在 `group_vars`/`all`
+    文件中定义数据库和用户为字典项，如下所示：'
 - en: '[PRE7]'
   id: totrans-54
   prefs: []
@@ -338,6 +372,7 @@
   id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是上述代码的分析：
 - en: We defined this variable hash in the `group_vars`/`all` file instead of in the
     role. This is because we would like to keep roles generic and shareable, without
     adding data specific to our respective environments.
@@ -345,34 +380,41 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们在 `group_vars`/`all` 文件中定义了此变量哈希，而不是在角色中。这是因为我们希望保持角色的通用性和共享性，而不添加特定于我们各自环境的数据。
 - en: We defined the databases and user configurations as multilevel dictionaries,
     or hashes.
   id: totrans-57
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 我们将数据库和用户配置定义为多级字典或哈希。
 - en: Nested hashes
   id: totrans-58
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 嵌套哈希
 - en: 'This multilevel hash is explained through the following diagram:'
   id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过以下图解释这个多级哈希：
 - en: '![Nested hashes](img/B03800_06_01.jpg)'
   id: totrans-60
   prefs: []
   type: TYPE_IMG
+  zh: '![嵌套哈希](img/B03800_06_01.jpg)'
 - en: 'The following is the description of how this nested hash is structured:'
   id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是这个嵌套哈希结构的描述：
 - en: 'A MySQL variable is a hash with two keys: databases and users. For example:'
   id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: MySQL 变量是一个具有两个键的哈希：数据库和用户。例如：
 - en: '[PRE8]'
   id: totrans-63
   prefs:
@@ -385,6 +427,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 这两个键的每个值都是哈希，或关于要创建的数据库和用户的信息字典。例如：
 - en: '[PRE9]'
   id: totrans-65
   prefs:
@@ -397,11 +440,13 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 每个数据库本身都是键值对字典。例如，对于 MySQL 用户 `fifalive`，键值对是 "state:present"。
 - en: Iterating a hash
   id: totrans-67
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 遍历哈希
 - en: 'Creating databases and user accounts would typically require the creation of
     custom scripts with templates, which would then be called using command modules.
     Ansible instead comes with batteries, and staying true to this statement, it provides
@@ -411,6 +456,8 @@
   id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建数据库和用户账户通常需要创建具有模板的自定义脚本，然后使用命令模块调用。相反，Ansible 提供了一些现成的模块来执行与 MySQL 相关的任务，即
+    `mysql_db` 和 `mysql_user` 参数。使用 `with_dict` 语句，我们将遍历我们之前定义的数据库和用户字典，如下所示：
 - en: '[PRE10]'
   id: totrans-69
   prefs: []
@@ -420,18 +467,21 @@
   id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是上述代码的分析：
 - en: The `mysql['databases']` and `mysql['users']` parameters are dictionaries that
     are passed to a task using the `with_dict` statements
   id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`mysql[''databases'']` 和 `mysql[''users'']` 参数是使用 `with_dict` 语句传递给任务的字典'
 - en: Each dictionary, or hash, has a key-value pair that is passed as the `{{ item.key
     }}` and `{{ item.value }}` parameters
   id: totrans-72
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 每个字典或哈希都有一个键值对，作为 `{{ item.key }}` 和 `{{ item.value }}` 参数传递
 - en: The `{{ item.value }}` parameter is a dictionary. Each key in this dictionary
     is then referred to as `{{ item.value.<key> }}`. For example, the `{{ item.value.state
     }}` parameter
@@ -439,19 +489,24 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`{{ item.value }}` 参数是一个字典。此字典中的每个键然后称为 `{{ item.value.<key> }}`。例如，`{{ item.value.state
+    }}` 参数'
 - en: 'The following diagram explains how this nested hash is parsed:'
   id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下图解释了这个嵌套哈希是如何解析的：
 - en: '![Iterating a hash](img/B03800_06_02.jpg)'
   id: totrans-75
   prefs: []
   type: TYPE_IMG
+  zh: '![遍历哈希](img/B03800_06_02.jpg)'
 - en: Creating Nginx virtual hosts
   id: totrans-76
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建 Nginx 虚拟主机
 - en: After installing the `php5-fpm` manager and creating the MySQL databases and
     user accounts, the last bit of configuration that is left is to create a virtual
     host with Nginx to serve our WordPress application. The Nginx web server that
@@ -460,11 +515,14 @@
   id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装完`php5-fpm`管理器并创建了 MySQL 数据库和用户账户后，剩下的配置是在 Nginx 中创建一个虚拟主机以服务我们的 WordPress
+    应用程序。之前安装的 Nginx Web 服务器只服务于一个简单的 HTML 页面，并不知道 WordPress 应用程序的存在或如何服务它。让我们从添加这些配置开始。
 - en: Defining the PHP site information
   id: totrans-78
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 定义 PHP 站点信息
 - en: 'In addition to the `fifanews.com` site that we are setting up, we may also
     launch a few more sites related to soccer in future. Hence, we need to have the
     ability to programmatically add multiple sites with the same Nginx server. Creating
@@ -474,6 +532,8 @@
   id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: 除了我们正在设置的`fifanews.com`站点外，我们可能还会在将来启动一些与足球相关的站点。因此，我们需要有能力以编程方式添加多个站点到同一个 Nginx
+    服务器上。创建一个定义站点信息的字典并将其嵌入到模板中听起来是一个不错的选择。由于站点信息是特定于我们的，我们将将变量哈希添加到`group_vars`文件中，如下所示：
 - en: '[PRE11]'
   id: totrans-80
   prefs: []
@@ -485,6 +545,7 @@
   id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们学习了如何从 Ansible 任务中解析这个字典。让我们添加一个任务，允许我们遍历这个字典，将值传递给模板，并创建虚拟主机配置：
 - en: '[PRE12]'
   id: totrans-82
   prefs: []
@@ -496,6 +557,7 @@
   id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 字典中的每个项目都会传递给模板，这种情况下是传递给`php_vhost.j2`参数。然后，模板会读取哈希并创建一个虚拟主机模板，配置一个 PHP 应用程序，如下所示：
 - en: '[PRE13]'
   id: totrans-84
   prefs: []
@@ -505,6 +567,7 @@
   id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 这是前述代码的分析：
 - en: The `{{ ansible_managed }}` parameter is a special variable that adds a comment
     notifying the server that this file is being managed by Ansible, with the path
     to this file in the Ansible repository, last modification time, and the user who
@@ -513,6 +576,8 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '`{{ ansible_managed }}`参数是一个特殊变量，它添加了一条注释，通知服务器该文件正在被 Ansible 管理，包括该文件在 Ansible
+    存储库中的路径、最后修改时间以及修改它的用户。'
 - en: The template gets a dictionary item and parses its values since it's a nested
     hash. This template has configuration for creating a php virtual hosts for Nginx
     using dictionary values set with `nginx.phpsites`.
@@ -520,6 +585,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 该模板获取字典项并解析其值，因为它是一个嵌套的哈希。该模板配置了使用`nginx.phpsites`设置的字典值创建 Nginx 的 php 虚拟主机的配置。
 - en: Configuration parameters provided with the dictionary include doc root, port,
     backend to use which make Nginx aware of how to handle incoming PHP requests,
     which backend to use, which port to listen on, and so on.
@@ -527,10 +593,12 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 提供的字典中的配置参数包括文档根目录、端口、后端使用的内容，这使得 Nginx 知道如何处理传入的 PHP 请求，使用哪个后端，监听哪个端口等等。
 - en: 'Finally, we add the new role to the `www.yaml` file, as follows:'
   id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 最后，我们将新角色添加到`www.yaml`文件中，如下所示：
 - en: '[PRE14]'
   id: totrans-90
   prefs: []
@@ -540,6 +608,7 @@
   id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用以下命令运行 Playbook：
 - en: '[PRE15]'
   id: totrans-92
   prefs: []
@@ -550,56 +619,68 @@
   id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行完成后，是时候测试我们的工作了。让我们在浏览器中加载以下 URL：
 - en: '`http://<web_server_ip>:8080`'
   id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: '`http://<web_server_ip>:8080`'
 - en: 'Congratulations!! We''ve successfully created a WordPress PHP application with
     the Nginx web server and MySQL backend, fully configured. Now, we are ready to
     set up our fifanews site:'
   id: totrans-95
   prefs: []
   type: TYPE_NORMAL
+  zh: 恭喜！我们已成功创建了一个带有 Nginx Web 服务器和 MySQL 后端的 WordPress PHP 应用程序，完全配置完毕。现在，我们准备设置我们的
+    fifanews 网站：
 - en: '![Defining the PHP site information](img/B03800_06_03.jpg)'
   id: totrans-96
   prefs: []
   type: TYPE_IMG
+  zh: '![定义 PHP 站点信息](img/B03800_06_03.jpg)'
 - en: Review questions
   id: totrans-97
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 复习问题
 - en: 'Do you think you''ve understood this chapter well enough? Try answering the
     following questions to test your understanding:'
   id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 您认为自己已经足够理解了本章内容吗？尝试回答以下问题来测试您的理解：
 - en: Which statement in Ansible replaces the `for` loop?
   id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Ansible 中，哪个语句替代了`for`循环？
 - en: How is the `with_____` statement used to iterate dictionaries?
   id: totrans-100
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如何使用`with_____`语句迭代字典？
 - en: How would you add a statement to a template that prints when, and by whom, it
     was modified?
   id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如何向模板中添加一个语句，以打印修改时间和修改人？
 - en: How would you print the values of a nested hash?
   id: totrans-102
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如何打印嵌套哈希的值？
 - en: Summary
   id: totrans-103
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概要
 - en: In this chapter, you learned how to create multiple objects iteratively. We
     started with an overview of the omnipotent `with` statement and its various forms.
     Then, we dove deeper into iterating the two most essential data structures, which
