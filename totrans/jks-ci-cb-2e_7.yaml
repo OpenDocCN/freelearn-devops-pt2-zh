@@ -2930,6 +2930,7 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第 4 章](ch04.html "第 4 章. 通过 Jenkins 进行通信"), *通过 Jenkins 进行通信* 中的*高效使用视图*配方'
 - en: The *Saving screen space with the Dashboard View plugin* recipe in [Chapter
     4](ch04.html "Chapter 4. Communicating Through Jenkins"), *Communicating Through
     Jenkins*
@@ -2937,17 +2938,21 @@
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第 4 章](ch04.html "第 4 章. 通过 Jenkins 进行通信"), *通过 Jenkins 进行通信* 中的*使用 Dashboard
+    View 插件节省屏幕空间*配方'
 - en: The *Monitoring via JavaMelody* recipe in [Chapter 1](ch01.html "Chapter 1. Maintaining
     Jenkins"), *Maintaining Jenkins*
   id: totrans-452
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: '[第 1 章](ch01.html "第 1 章. 维护 Jenkins"), *维护 Jenkins* 中的*通过 JavaMelody 进行监控*配方'
 - en: Creating my first ListView plugin
   id: totrans-453
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 创建我的第一个 ListView 插件
 - en: In this final recipe, you will create your first custom ListView plugin. This
     allows you to add an extra column to the standard list view with comments. The
     code for the content of the column is a placeholder, just waiting for you to replace
@@ -2955,25 +2960,30 @@
   id: totrans-454
   prefs: []
   type: TYPE_NORMAL
+  zh: 在最后一个配方中，您将创建您的第一个自定义 ListView 插件。这允许您向标准列表视图添加一个额外的列，其中包含注释。列的内容代码是一个占位符，只等着您用自己的精彩实验替换它。
 - en: Getting ready
   id: totrans-455
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 准备就绪
 - en: Create a directory ready for the code.
   id: totrans-456
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个准备好的代码目录。
 - en: How to do it...
   id: totrans-457
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 操作方法...
 - en: 'Create a top-level `pom.xml` file with the content as follows:'
   id: totrans-458
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个顶级`pom.xml`文件，内容如下：
 - en: '[PRE48]'
   id: totrans-459
   prefs:
@@ -2985,11 +2995,13 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录`src/main/java/jenkins/plugins/comments`。
 - en: 'In the comments directory, add `CommentsColumn.java` with the following content:'
   id: totrans-461
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 comments 目录中，添加`CommentsColumn.java`，其内容如下：
 - en: '[PRE49]'
   id: totrans-462
   prefs:
@@ -3001,11 +3013,13 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建目录`src/main/resources/jenkins/plugins/comments/CommentsColumn`。
 - en: 'In the `CommentsColumn` directory, add `column.jelly` with the following content:'
   id: totrans-464
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`CommentsColumn`目录中，添加`column.jelly`，其内容如下：
 - en: '[PRE50]'
   id: totrans-465
   prefs:
@@ -3018,6 +3032,7 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`CommentsColumn`目录中，添加`columnHeader.jelly`，其内容如下：
 - en: '[PRE51]'
   id: totrans-467
   prefs:
@@ -3030,6 +3045,7 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`CommentsColumn`目录中，添加`columnHeader.properties`，其内容如下：
 - en: '[PRE52]'
   id: totrans-469
   prefs:
@@ -3042,6 +3058,7 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`CommentsColumn`目录中，添加`columnHeader_an.properties`，其内容如下：
 - en: '[PRE53]'
   id: totrans-471
   prefs:
@@ -3054,6 +3071,7 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`src/main/resources`目录中，添加插件描述文件`index.jelly`，其内容如下：
 - en: '[PRE54]'
   id: totrans-473
   prefs:
@@ -3065,6 +3083,7 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在顶级目录中，运行以下命令：
 - en: '[PRE55]'
   id: totrans-475
   prefs:
@@ -3077,6 +3096,7 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问 Jenkins 作业创建页面：`http://localhost:8090/jenkins/view/All/newJob`。创建一个名为`ch7.plugin.l`的新自由样式作业。
 - en: On the main Jenkins page, `http://localhost:8090/jenkins`, you will now have
     a view with the column called **My Fake Column [Default]**. If you change the
     preferred language of your web browser to **Aragonese [an]**, then the column
@@ -3086,25 +3106,31 @@
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 的主页面，`http://localhost:8090/jenkins`，现在将有一个名为**我的假栏 [默认]**的列视图。如果您将
+    web 浏览器的首选语言更改为**阿拉贡语 [an]**，那么该列现在将被称为**我的假栏 [an]**，如下面的屏幕截图所示：![操作方法...](img/0082OS_07_38.jpg)
 - en: 'In the default Firefox browser for Ubuntu, you can change the preferred language
     under the **Edit/Preferences** content tab, in the **Languages** section, as shown
     in the following screenshot:'
   id: totrans-478
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Ubuntu 的默认 Firefox 浏览器中，您可以在**编辑/首选项**内容选项卡下的**语言**部分更改首选语言，如下面的屏幕截图所示：
 - en: '![How to do it...](img/0082OS_07_39.jpg)'
   id: totrans-479
   prefs: []
   type: TYPE_IMG
+  zh: '![操作方法...](img/0082OS_07_39.jpg)'
 - en: How it works...
   id: totrans-480
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 工作原理...
 - en: 'In this recipe, a basic ListView plugin was created with the following structure:'
   id: totrans-481
   prefs: []
   type: TYPE_NORMAL
+  zh: 在这个配方中，创建了一个基本的 ListView 插件，具有以下结构：
 - en: '[PRE56]'
   id: totrans-482
   prefs: []
@@ -3115,11 +3141,13 @@
   id: totrans-483
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件中包含的一个 Java 文件是`CommentsColumn.java`，位于`/src/main/java/jenkins/plugins/comments`下。该类扩展了`ListViewColumn`扩展点。
 - en: The method `getFakeComment` expects an input of the type `Job` and returns a
     string. This method is used to populate the entries in the column.
   id: totrans-484
   prefs: []
   type: TYPE_NORMAL
+  zh: 方法`getFakeComment`期望输入类型为`Job`并返回一个字符串。此方法用于填充列中的条目。
 - en: The GUI in the ListView is defined under `/src/main/resources/packagename/Classname/`.
     You can find the GUI for `/src/main/java/jenkins/plugins/comments/CommentsColumn.java`
     mapped to the `/src/main/resources/Jenkins/plugins/comments/CommentsColumn` directory.
