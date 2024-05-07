@@ -1,0 +1,2310 @@
+- en: The New Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this chapter, we will look at some of the new features that are now part
+    of the Jenkins 2.x release. After completing this chapter, you will have an understanding
+    of the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The new Jenkins setup wizard
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins pipeline as a code (Jenkins pipeline job)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins Stage view
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins Declarative Pipeline syntax
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins Multibranch pipeline
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins pipeline syntax utility (Snippet Generator)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins credentials
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkinsfile
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins Blue Ocean
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a pipeline in Jenkins Blue Ocean
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Jenkins setup wizard
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When you access Jenkins for the first time, you are presented with the Getting
+    Started wizard. We have already been through this exercise in the previous chapter;
+    nevertheless, in the following section, we will take a deeper look at some of
+    its important sections.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Prerequisites
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before we begin, make sure you have the following things ready:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A Jenkins server running on any of the platforms discussed in the previous chapter
+    (Docker, standalone, cloud, VM, servlet container, and so on).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Make sure your Jenkins server has access to the internet. This is necessary
+    to download and install plugins.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Unlocking Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'When you access Jenkins for the first time, you are asked to unlock it using
+    a secret initial admin password. This password is stored inside the file `initialAdminPassword`,
+    which is located inside your `jenkins_home` directory. The file, along with its
+    full path, is displayed on the Jenkins page, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**On Windows**: You can find the file under `C:\Program Files (x86)\Jenkins\secrets`.
+    If you have chosen to install Jenkins somewhere else, then look for the file under
+    `<Jenkins installation directory>\secrets`.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**On Linux**: You can find the file under `/var/jenkins_home/secrets`:'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '![](img/8a772edd-f225-4c4a-a8ff-729360dc0125.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Unlocking Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Get the password from the `initialAdminPassword` file, paste it under the Administrator
+    password field, and click on Continue.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can always log in to Jenkins using the password from the `intialAdminPassword`
+    file and the username `admin`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Customizing Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Next, you are presented with two options to install the Jenkins plugins, as
+    shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/b79b0471-a5d9-4cad-99b5-9ddc0506d4a2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Customizing Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Choosing Install suggested plugins will install all the generic plugins for
+    Jenkins, like Git, Pipeline as Code, and so on (as suggested by the Jenkins community).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Choosing Select plugins to install will let you install the plugins of your
+    choice.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the following section, we will go ahead and choose the option Select plugins
+    to install. When you do, you should see the screen shown in the following screenshot.
+    The following page will list some of the most popular plugins, although it''s
+    not a complete list of Jenkins plugins. You will notice that the suggested plugin
+    is already selected (ticked) by default:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a72f15ab-db44-47c7-ae53-2dd78dc4cede.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choosing plugins to install
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can choose All, None, or the Suggested plugins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once you are done choosing plugins, click Install at the bottom of the page.
+    The following screenshot shows the Jenkins plugin installation:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a28850e3-50a0-4695-894d-4e72883a215c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Installing Jenkins plugins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating the first admin user
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Once the plugins are installed, you will be asked to create an administrator
+    user account, as shown in the following screenshot. The following administrator
+    account is different from the temporary administrator user account that was used
+    at the beginning of the setup wizard (the initial admin account):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c006f56d-abf5-48ac-9211-d912bdb16c23.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating your first Jenkins user
+  prefs: []
+  type: TYPE_NORMAL
+- en: Fill in the fields appropriately and click on the Save and Finish button. Alternatively,
+    you can also choose to ignore creating a new administrator user and continue with
+    the initial administrator user by clicking on Continue as admin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, on the following page, you will be greeted with a message saying, Jenkins
+    is ready! Your Jenkins setup is complete. Click on Start using Jenkins to proceed
+    to the Jenkins dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The new Jenkins pipeline job
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Those who are already familiar with Jenkins are well aware of the freestyle
+    Jenkins job. The classic way of creating a pipeline in Jenkins is by using the
+    *freestyle job*, wherein each CI stage is represented using a Jenkins job (freestyle).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Jenkins freestyle job is a web-based, GUI-propelled configuration. Any modification
+    to the CI pipeline requires you to log in to Jenkins and reconfigure each of the
+    Jenkins freestyle jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The concept of **Pipeline as Code** rethinks the way we create a CI pipeline.
+    The idea is to write the whole CI/CD pipeline as a code that offers some level
+    of programming and that can be version controlled.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are some of the advantages of taking the Pipeline as Code route:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: It's programmable
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: All of your CI/CD pipeline configurations can be described using just a single
+    file (Jenkinsfile)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It's version controllable, just like any other code
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It comes with an option to define your pipeline using the Declarative Pipeline
+    syntax, which is an easy and elegant way of coding your pipeline
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Let's take a look at the Jenkins pipeline job. We will try to look and get the
+    feel of it by creating a simple CI pipeline.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Prerequisite
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before we begin, make sure you have the following things ready:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A Jenkins server running on any of the platforms discussed in the previous chapter
+    (Docker, standalone, cloud, VM, servlet container, and so on).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Make sure your Jenkins server has access to the internet. This is necessary
+    to download and install plugins.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Make sure your Jenkins server has all the suggested plugins installed. See the
+    *Customizing Jenkins* section.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a Jenkins pipeline job
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to create a Jenkins pipeline job:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on the New Item link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, you will be presented with various types of Jenkins jobs
+    to choose from.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Pipeline, and give a name to your pipeline using the Enter an item name
+    field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you are done, click on the OK button at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'All kinds of Jenkins jobs (freestyle, pipeline, multibranch, and so on) now
+    come with a featured tab, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a2812c0a-85ae-4326-a547-5628397a63e2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The new tab feature in Jenkins jobs
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will quickly navigate to the pipeline section by clicking on the Pipeline
+    tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The following screenshot depicts the pipeline section. Let us see this section
+    in detail:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Definition field gives you two options to choose from—Pipeline script and
+    Pipeline script from SCM. If you choose the option Pipeline script, then you define
+    your pipeline code inside the Script field. But, if you choose the option Pipeline
+    script from SCM (not shown in the screenshot), then your pipeline script (Jenkinsfile)
+    is automatically fetched from the Version Control System (We will explore this
+    option in the upcoming section).
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To get a short description about any of the options, you can click on the question
+    mark icon.
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Pipeline Syntax is a utility that helps you to convert GUI configurations
+    into code. (We will explore this option in the upcoming section).
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '![](img/7f7ae013-b35a-4166-89cd-e29aaee573dd.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The pipeline section
+  prefs: []
+  type: TYPE_NORMAL
+- en: Now let us write some code inside the Script field to see how the pipeline works.
+    We will try some of the example code provided by Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'To do so, click on the try sample Pipeline… field and choose the GitHub + Maven
+    option, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/30171bc2-e4c7-4125-b765-23a3a72c3c41.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choosing a sample pipeline script
+  prefs: []
+  type: TYPE_NORMAL
+- en: This will fill the Script field with a sample code.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The code is shown as follows. It''s in the Declarative Pipeline syntax form:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Let us quickly scan through the pipeline script (we will explore more about
+    Declarative Pipeline syntax in the upcoming section):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The `node {}` is the main container which tells Jenkins to run the whole pipeline
+    script on the Jenkins master.
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Inside the `node {}` container, there are three more containers, shown as follows:'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: The `Preparation` stage will download the Maven source code from a GitHub repository
+    and will tell Jenkins to use the M3 Maven tool that is defined in the global configuration
+    (we need to do this before we run our pipeline).
+  prefs:
+  - PREF_OL
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The `Build` stage will build the Maven project.
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The `Results` stage will archive the build artifacts along with the JUnit testing
+    results.
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Save the changes made to the pipeline job by clicking on the Save button at
+    the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Global Tool Configuration page
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before we run the pipeline, it is important that we take a look at the Global
+    Tool Configuration page in Jenkins. This is the place where you configure tools
+    that you think will be used globally across all your pipelines: for example, Java,
+    Maven, Git, and so on.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let's say you have multiple build agents (Jenkins slave agents) that build your
+    Java code, and your build pipeline requires Java JDK, Maven, and Git. All you
+    need to do is configure these tools inside the Global Tool Configuration, and
+    Jenkins will automatically summon them while building your code on the build agents
+    (Jenkins slave agents). There is no need for you to install these tools on any
+    of the build agents.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let us configure the Maven tool inside Global Tool Configuration to make our
+    pipeline work. Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To access the Global Tool Configuration page, do any one of the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Global Tool Configuration.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Or paste the URL `http://<IP Address of your Jenkins server>:8080/configureTools/`
+    in your browser.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Scroll all the way down to the Maven section and click on the Add Maven button.
+    You will be presented with a list of options, as shown in the following screenshot.
+    Fill the information in as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide a unique name for your Maven installation by filling the Name field.
+    (Make it `M3` for our example pipeline to work.)
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The Install from Apache option will appear by default. This will make Jenkins
+    download the Maven application from Apache:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e1607e85-369d-418e-94a3-399cd3dc06fc.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring Maven inside the Global Tool Configuration
+  prefs: []
+  type: TYPE_NORMAL
+- en: Choose the latest Maven version using the Version field; I have chosen to use
+    Maven 3.5.0, as shown in the previous screenshot.
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To choose a different installer first, delete the existing installer by clicking
+    on the Delete Installer button. Next, click on the Add Installer drop-down menu
+    and choose a different installer. The other options, apart from Install from Apache are, Run
+    Batch Command, Run Shell Command, and Extract *.zip/*.tar.gz (not shown in the
+    screenshot).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Java tool is also needed to build the Maven project, but since we are building
+    our code on Jenkins master (which already has Java JDK), we can skip installing
+    the Java tool for now.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you are done with configuring Maven, scroll down to the bottom of the page
+    and click on the Save button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Jenkins pipeline Stage View
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins *Stage View* is a new feature that comes as a part of release 2.x. It
+    works only with Jenkins Pipeline and Jenkins Multibranch pipeline jobs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Jenkins Stage View lets you visualize the progress of various stages of your
+    pipeline in real time. Let us see that in action by running our example pipeline:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, under the All view tab, you will see your pipeline.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the build trigger icon to run the pipeline, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/87a1a20e-2e55-474c-b8d1-9dfee98ea1a4.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Viewing pipeline on the Jenkins dashboard
+  prefs: []
+  type: TYPE_NORMAL
+- en: To get to the Stage View, click on your pipeline name (which also happens to
+    be a link to your pipeline project page).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Alternatively, you can mouse over your pipeline name to get a drop-down menu
+    with a list of action items and links, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/116beaf2-76f9-4a74-8e84-3c65d644f288.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: A view of the pipeline menu
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The Stage View page will look something like the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/522cf1f9-2c0f-436f-b373-b74eb20e6517.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Stage View
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To view the build logs of a particular stage, mouse over the color-coded status
+    box, and you should see an option to view the logs. Clicking it will open up a
+    small pop-up window displaying the logs, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e6abe66d-9f7f-45ed-9499-cd539bfc45db.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins individual stage logs
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To view the complete build log, look for the Build History on the left-hand
+    side. The Build History tab will list all the builds that have been run. Right-click
+    on the desired build number and click Console Output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7ec8e5c8-9f21-4e0f-bb5e-eb2e9e2b1f81.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Accessing the console output
+  prefs: []
+  type: TYPE_NORMAL
+- en: Declarative Pipeline syntax
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the previous section, we created a Jenkins pipeline to get a look at and
+    feel for its various components. We utilized the pipeline script that followed
+    a declarative syntax to define our pipeline.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Declarative Pipeline syntax is a more simplified and structured version
+    of the Groovy syntax, the latter being more powerful due to its programmability.
+    In this section, we will learn about the Declarative Pipeline syntax in a bit
+    more detail. This is important because in the upcoming chapters we will be using
+    the same to define our CI and CD pipelines.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Basic structure of a Declarative Pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In simple terms, a Declarative Pipeline is a collection of multiple `node` blocks
+    (nodes), `stage` blocks (stages), directives, and steps. A single `node` block
+    can have multiple `stage` blocks, and vice versa. We can also run multiple stages
+    in parallel. Let's see each of them in detail.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The node block
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'A `node` block defines the Jenkins agent wherein its constituents (stage blocks,
+    directives, and steps) should run. The `node` block structure looks like the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following gives more information about the `node` block:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Defines**: The node where the `stage`, directives, or steps should run'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Constituents**: Multiple `stage` blocks, directives, or steps'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Required**: Yes'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Parameters**: Any, label'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The stage block
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'A `stage` block is a collection of closely related steps and directives that
+    have a common objective. The `stage` block structure looks like the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following gives more information about the `stage` block:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Defines**: A collection of steps and directives'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Constituents**: Multiple `node` blocks, directives, or steps'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Required**: Yes'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Parameters**: A string that is the name of the stage (mandatory)'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Directives
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The main purpose of directives is to assist the `node` block, `stage` block,
+    and steps by providing them with any of the following elements: environments,
+    options, parameters, triggers, tools.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following gives more information about the `stage` block:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Defines**:  The node where the stage should run'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Constituents**: Environments, options, parameters, triggers, tools'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Required**: No, but every CI/CD pipeline has it'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Parameters**: None'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Steps
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Steps are the fundamental elements that make up the Declarative Pipeline. A
+    step could be a batch script or a shell script, or any other command that's executable.
+    Steps have various purposes, such as cloning a repository, building code, running
+    tests, uploading artifacts to the repository server, performing static code analysis,
+    and so on. In the upcoming section, we will see how to generate steps using the
+    Jenkins pipeline syntax utility.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following gives more information about the `stage` block:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Defines**:  It tells Jenkins what to do'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Constituents**: Commands, scripts, and so on. It''s the fundamental block
+    of a pipeline'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Required**: No. But every CI/CD pipeline has it'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Parameters**: None'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The following is the pipeline code that we used earlier. The `node` block,
+    the `stage` blocks, the directives, and the steps are highlighted using comments
+    (`//`). As you can see, there are three `stage` blocks inside the `node` block.
+    A `node` block can have multiple `stage` blocks. In addition to that, each `stage`
+    block contains multiple steps, and one of them also contains a directive:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'In the preceding code, note the line: `node (''master'') {`. Here, the string `master`
+    is a parameter (`label`) that tells Jenkins to use the Jenkins master for running
+    the contents of the `node` block.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you choose the parameter value as any, then all the stage nodes and their
+    respective steps and directives will be executed on any one of the available Jenkins
+    slave agents.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will learn more about the Declarative Pipeline in the upcoming chapters,
+    wherein we will try to write a CI/CD pipeline using it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more information about Declarative Pipeline syntax, refer to [https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections](https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections).
+  prefs: []
+  type: TYPE_NORMAL
+- en: To get a list of all the available steps that are compatible with the Declarative
+    Pipeline, refer to [https://jenkins.io/doc/pipeline/steps/](https://jenkins.io/doc/pipeline/steps/)[.](https://jenkins.io/doc/book/pipeline/syntax/#declarative-sections)
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins pipeline syntax utility
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Jenkins pipeline syntax utility is a quick and easy way to create pipeline
+    code. The pipeline syntax utility is available inside the Jenkins pipeline job;
+    see the screenshot: *The pipeline section* in the *Creating a Jenkins pipeline
+    job* section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this section, we will recreate the pipeline that we created in the previous
+    section, but this time using the pipeline syntax utility.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Prerequisite
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before we begin, make sure you have the following things ready:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Maven tool configured inside the Global Tool Configuration page (refer to
+    the *The Global Tool Configuration page* section)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Install Pipeline Maven Integration Plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Java tool is also needed to build the Maven project, but since we are building
+    our code on Jenkins master (which already has Java JDK), we can skip installing
+    the Java tool
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing the Pipeline Maven Integration Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to install the Pipeline Maven Integration Plugin. The
+    following plugin will allow us to use the Maven tool inside our pipeline code:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Type `Pipeline Maven Integration` inside the Filter field to search the respective
+    plugin, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e0dc9e79-b757-4d80-ba9a-a2dde9275ed9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Plugin Manager page
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the checkbox to select the respective plugin, and then click on the
+    Install without restart button to install it.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you click on the Install without restart button, you will see the plugin
+    getting installed, as shown in the following screenshot. Jenkins will first check
+    for the network connection, after which it will install the dependencies, and
+    lastly, it will install the plugin.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Some plugins might need a restart before they can be used. To do so, check
+    the option, Restart Jenkins when installation is complete and no jobs are running:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e725c942-5e2a-467f-8021-e4a130881ba2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Plugin installation in progress
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a Jenkins pipeline using the pipeline syntax utility
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to create a new Jenkins pipeline job:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on the New Item link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, you will be presented with various types of Jenkins jobs
+    to choose from.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Pipeline, and give a name to your pipeline using the Enter an item name
+    field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you are done, click on the OK button at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We will quickly navigate to the pipeline section by clicking on the Pipeline
+    tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Under the Pipeline tab, click on the link named Pipeline Syntax. This will
+    open up a new tab, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/74eda867-bec6-4849-989a-41596806e3f2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Pipeline Syntax page
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will be using the following Snippet Generator to create pipeline code for
+    various blocks and steps.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Let us first generate a code for a `node` block:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Pipeline Syntax page, under the Steps section, choose node: Allocate
+    node using the Sample Step field, as shown in the following screenshot.'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the Label field, add a string `master`. By doing so we tell Jenkins to use
+    the Jenkins master as the node of choice to execute our pipeline.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Generate Pipeline Script button to generate the code.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Copy the generated code and keep it aside on a text editor:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/cc01527d-c048-4819-964c-d52ed9b33490.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Generating code for the node block
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now, let us create two `stage` blocks named `Preparation` and `Build`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Pipeline Syntax page, under the Steps section, choose stage: Stage using
+    the Sample Step field, as shown in the following screenshot.'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the Stage Name field, add a string `Preparation`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Generate Pipeline Script button to generate the code.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Copy the generated code and paste it inside the `node` block that we generated
+    earlier:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/89be1a2d-475d-46e3-b6b9-f507b6756641.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Generating code for the stage block
+  prefs: []
+  type: TYPE_NORMAL
+- en: Similarly, repeat *step 9* to create a `stage` block named `Build`. Paste the
+    generated code inside the `node` block and after the `Preparation` (the `stage`
+    block).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Our pipeline code, so far, should look something like the following (without
+    the `// some block` lines):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Let us now create a step to download the source code from GitHub:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Pipeline Syntax page, under the Steps section, choose git: Git using
+    the Sample Step field, as shown in the following screenshot.'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the Repository URL field, add the link to the example GitHub repository:
+    `https://github.com/jglick/simple-maven-project-with-tests.git`.'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the rest of the options as is.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Generate Pipeline Script button to generate the code.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Copy the generated code, and paste it into the `Preparation` (the `stage` block)
+    that we generated earlier:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/044110f3-342c-495a-bc73-239692bb3861.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Generating code for the Git step
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Next, let us generate a directive that will tell Jenkins to use the M3 Maven
+    tool that we have configured inside the Global Tool Configuration:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Pipeline Syntax page, under the Steps section, choose withMaven: Provide
+    Maven environment using the Sample Step field, as shown in the following screenshot.'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the Maven field, choose `M3`, which is the Maven tool that we have configured
+    inside the Global Tool Configuration.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the rest of the options as is.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Generate Pipeline Script button to generate the code.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Copy the generated code and paste it into the `Build` (the `stage` block) that
+    we generated earlier:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e9fff868-cfb0-4208-87e6-cc922892cd65.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Generating code for the withMaven directive
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Lastly, generate a pipeline code for our Maven build command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Pipeline Syntax page, under the Steps section, choose sh: Shell Script
+    using the Sample Step field, as shown in the following screenshot. This is a step
+    to create a shell script.'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the Shell Script field, type `mvn -Dmaven.test.failure.ignore clean package`,
+    which is the Maven command to build, test, and package the code. This will be
+    the content of our shell script.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Generate Pipeline Script button to generate the code.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Copy the generated code and paste it into the `withMaven` (directive) that
+    we generated earlier:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/542c5aa3-1b45-4499-a082-36084c5439b1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Generating code for the maven build
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Our final pipeline script should look something like the following (without
+    the `// some block` lines):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: Now switch to the pipeline job configuration page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Scroll to the Pipeline section and paste the preceding pipeline code inside
+    the Script field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Save button at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We will see more examples in the upcoming chapters when we try to create a CI/CD
+    pipeline using the Declarative Pipeline syntax, utilizing the pipeline syntax
+    utility.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Multibranch pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this section, we will learn about the multibranch pipeline job in Jenkins.
+    This is one of the new features added to Jenkins release 2.x.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The Multibranch pipeline allows you to automatically create a pipeline for
+    each branch on your source control repository. This is depicted in the following
+    screenshot. A Multibranch pipeline works using a **Jenkinsfile** that is stored
+    along with your source code inside a version control repository. A **Jenkinsfile**
+    is nothing but a pipeline script that defines your CI pipeline:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d2f51380-f683-4e9f-8807-0eaf756fcbd7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Auto-generated pipeline for a new branch
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In addition to that, the Multibranch pipeline is designed to trigger a build
+    whenever there is a new code change on any of the branches on your Git/GitHub
+    repository. This is depicted in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d2fdbec6-baaa-4e51-b6f1-795ee8ff8af7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Usage of multibranch pipeline for continuous integration
+  prefs: []
+  type: TYPE_NORMAL
+- en: Prerequisite
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before we begin, make sure you have the following things ready:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Maven tool configured inside the Global Tool Configuration page (refer to
+    the section: *The Global Tool Configuration page*).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Install Pipeline Maven Integration Plugin.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Java tool is also needed to build the Maven project, but since we are building
+    our code on Jenkins master (which already has Java JDK), we can skip installing
+    the Java tool.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Install GitHub plugin (already installed if you have chosen to install the recommended
+    plugins during the Jenkins setup wizard).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Make sure your Jenkins URL is accessible from the internet. If you are using
+    a staging or a development environment to perform this exercise, and your Jenkins
+    server doesn't have a domain name, your Jenkins server might not be accessible
+    from the internet. To make your Jenkins URL accessible over the internet, refer
+    to the *Exposing your local server to the internet* section in the [Appendix](b60e8632-7912-4d4a-825e-ae9a8546a510.xhtml),
+    *Supporting Tools and Installation Guide*.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Adding GitHub credentials inside Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In order to make Jenkins communicate with GitHub, we need to add GitHub account
+    credentials inside Jenkins. We will do this using the Jenkins Credentials Plugin.
+    If you have followed the Jenkins setup wizard (discussed at the beginning of the
+    chapter), you will find the Credentials feature on the Jenkins dashboard (see
+    the left-hand side menu).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to add the GitHub credentials inside Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Credentials | System | Global credentials
+    (unrestricted).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Global credentials (unrestricted) page, from the left-hand side menu,
+    click on the Add Credentials link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will be presented with a bunch of fields to configure (see the following
+    screenshot):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Username with password for the Kind field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Global (Jenkins, nodes, items, all child items, etc) for the Scope field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add your GitHub username to the Username field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add your GitHub password to the Password field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give a unique ID to your credentials by typing a string in the ID field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add some meaningful description to the Description field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Save button once done:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ab96cc1d-13fe-418d-860d-318c863d1a6c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding GitHub credentials inside Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: And that's how you save credentials inside Jenkins. We will use these GitHub
+    credentials shortly.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configuring Webhooks on GitHub from Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that we have saved GitHub account credentials inside Jenkins, let's configure
+    Jenkins to talk to GitHub. We will do this by configuring the GitHub settings
+    inside the Jenkins configuration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Carefully follow the given steps to configure GitHub settings inside Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant Jenkins configuration page, scroll all the way down to the
+    GitHub section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the GitHub section, click on the Add GitHub Server button and choose GitHub
+    Servers from the available drop-down list. Doing so will display a bunch of options
+    for you to configure.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Let us configure them one by one, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give your GitHub server a name by adding a string to the Name field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the API URL field, add `https://api.github.com` (default value) if you
+    are using a public GitHub account. Otherwise, if you are using GitHub Enterprise,
+    then specify its respective API endpoint.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Make sure the Manage hooks option is checked:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/407bb3e5-3b11-4c33-8364-c5f27b796175.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the GitHub server
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the Advanced… button (you will see two of them; click on the second
+    one). Doing so will display a few more fields to configure.
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Additional actions field, click on Manage additional GitHub actions
+    and choose Convert login and password to token from the available list (you will
+    see only one option to choose).
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: This will further disclose new fields to configure.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Select the From credentials option (active by default). Using the Credentials field,
+    choose the GitHub credentials that we created in the previous section (`ID: github_credentials`).'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Next, click on the Create token credentials button. This will generate a new
+    personal access token on your GitHub account:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/31cab72b-5fe6-4a14-9f59-f4d729a712ea.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Converting GitHub credentials to a token
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To view your personal access token on GitHub, log in to your GitHub account
+    and navigate to Settings | Developer settings | Personal access tokens:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/8b88000f-8f24-4110-9184-e875520405de.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Personal access token on GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, click on the Save button at the bottom of the Jenkins configuration
+    page.
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: An entry of the respective personal access token will also be added inside the
+    Jenkins credentials. To view it, navigate to Jenkins dashboard | Credentials |
+    System | `api.github.com`, and you should see a credential entry of the Kind secret
+    text.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'We are not yet done with our GitHub configuration inside Jenkins. Follow the
+    remaining steps as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Scroll all the way down to the GitHub section.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Using the Credentials field, choose the newly generated credentials of the Kind
+    secret text (the personal access token entry inside Jenkins).
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, click on the Test connection button to test our connection between Jenkins
+    and GitHub.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on the Save button at the bottom of your Jenkins configuration
+    page:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/dc71186f-4385-417c-a19b-c75ca5c3ba4d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Testing the connection between Jenkins and GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: We are now done with configuring GitHub settings inside Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a new repository on GitHub
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this section, we will create a new repository on GitHub. Make sure you have
+    Git installed on the machine that you will use to perform the steps mentioned
+    in the following section (refer to the *Installing Git on Windows/Linux* section
+    in the [Appendix](b60e8632-7912-4d4a-825e-ae9a8546a510.xhtml), *Supporting Tools
+    and Installation Guide*).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to create a repository on GitHub:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To keep things simple, we will reuse the source code from the repository at [https://github.com/jglick/simple-maven-project-with-tests.git](https://github.com/jglick/simple-maven-project-with-tests.git).
+    This is the repository that we have been using to create a Jenkins pipeline.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The easiest way to reuse a GitHub repository is to fork it. To do so, just
+    access the above repository from your internet browser and click on the Fork button,
+    as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/dcdbf242-72bd-4929-a677-3c9b47c1511f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Forking a GitHub project
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, a replica of the preceding repository will be visible on your GitHub
+    account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Using a Jenkinsfile
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Jenkins multibranch pipeline utilizes Jenkinsfile. In the following section,
+    we will learn how to create a Jenkinsfile. We will reuse the example pipeline
+    script that we created in the previous section to create our Jenkinsfile. Follow
+    the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Navigate to the forked repository `simple-maven-project-with-tests`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once on the repository page, click on the Create new file button to create
+    a new empty file that will be our Jenkinsfile, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/cf8502d2-a1d9-4b0e-8315-570ea32d2fcc.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a new file on GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Name your new file `Jenkinsfile` by filling the empty text box, as shown in
+    the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/06937fdb-4d28-4e9c-85c3-bed014c2ade2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Naming your new file on GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Add the following code to your `Jenkinsfile`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Once done, commit the new file by adding a meaningful comment, as shown in
+    the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7dd6182e-ff2a-4851-bd85-3fe1f7a95f5d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Committing your new file on GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a Multibranch pipeline in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to create a new Jenkins pipeline job:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on the New Item link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, you will be presented with various types of Jenkins jobs
+    to choose from.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Multibranch Pipeline, and give a name to your pipeline using the Enter
+    an item name field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you are done, click on the OK button at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Scroll to the section Branch Sources. This is the place where we configure the
+    GitHub repository that we want to use.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Add Source button and choose GitHub. You will be presented with
+    a list of fields to configure. Let us see them one by one (see the following screenshot):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For the Credentials field, choose the GitHub account credentials (Kind as Username
+    with Password) that we created in the previous section.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Owner field, specify the name of your GitHub organization or GitHub
+    user account.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The moment you do so, the Repository field will list all the repositories that
+    are on your GitHub account.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose `simple-maven-project-with-tests` under the Repository field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Leave the rest of the options at their default values:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/16eb4ab3-f25c-45ed-b5ef-1c31886e807c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the multibranch pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scroll all the way down and click on the Save button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Re-register the Webhooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before we proceed, let us re-register the Webhooks for all our Jenkins pipelines:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: To do so, from the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Jenkins configuration page, scroll all the way down to the GitHub section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the GitHub section, click on the Advanced… button (you will see two of
+    them; click on the second one).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: This will display a few more fields and options. Click on the Re-register hooks
+    for all jobs button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The preceding action will create new Webhooks for our multibranch pipeline
+    on the respective repository inside your GitHub account. Do the following to view
+    the Webhooks on GitHub:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in to your GitHub account.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to your GitHub repository, `simple-maven-project-with-tests` in our case.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the repository Settings, as shown in the following screenshot:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5cc912af-7a37-47d9-bbac-4a0d8dcda61e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Repository Settings
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On the Repository Settings page, click on Webhooks from the left-hand side
+    menu. You should see the Webhooks for your Jenkins server, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/276529b2-d674-4ed9-a73f-68b62a1e3197.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Webhooks on GitHub repository
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins Multibranch pipeline in action
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on your Multibranch pipeline.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On your Jenkins Multibranch pipeline page, from the left-hand side menu, click
+    on the Scan Repository Now link. This will scan the repository for branches with
+    Jenkinsfile, and will immediately run a pipeline for every branch that has got
+    a Jenkinsfile, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/04880dcc-7390-4e9e-850a-b00ff65e51ee.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pipeline for the master branch
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On your Multibranch pipeline page, from the left-hand side menu, click on Scan
+    Repository Log. You will see something like that which is shown as follows. Notice
+    the highlighted code. You can see that the `master` branch met the criteria, as
+    it had a Jenkinsfile and a pipeline was secluded for it. There was no pipeline
+    scheduled for the testing branch since there was no Jenkinsfile on it:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: You need not always scan the repository. The GitHub Webhooks is configured to
+    trigger a pipeline automatically whenever there is a push or a new branch on your
+    GitHub repository. Remember, a Jenkinsfile should also be present on the respective
+    branch to tell Jenkins what it needs to do when it finds a change in the repository.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Creating a new feature branch to test the multibranch pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Let us now create a feature branch out of the master branch and see if Jenkins
+    can run a pipeline for it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: To do so, log in to your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to your respective GitHub repository; in our case it's `simple-maven-project-with-tests`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Branch: master button and type a name for your new branch in the
+    empty text box. Next, click on the Create branch: feature option to create a new
+    branch named feature, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ee2f6d60-778f-4fa8-b432-bcbea4c1d48f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a feature branch
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This should immediately trigger a pipeline inside Jenkins for our new feature
+    branch:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5fe7c47e-611e-420e-9ce7-307594a00458.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pipeline for the new feature branch
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins Blue Ocean
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The Jenkins Blue Ocean is a completely new way of interacting with Jenkins.
+    It''s more of a UI sidekick to the main Jenkins application. The following are
+    some the features of Jenkins Blue Ocean:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Improved visualizations
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Pipeline editor
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Personalization
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Quick and easy pipeline setup wizard for Git and GitHub
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The pipelines that you create using your classic Jenkins interface can be visualized
+    in the new Jenkins Blue Ocean, and vice versa. As I said earlier, Jenkins Blue
+    Ocean is a UI sidekick to the main Jenkins application.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the following section, we will visualize the Jenkins pipelines that we created
+    in the previous section in Blue Ocean. We will also create a new pipeline, just
+    to get a look at and feel for the new Jenkins Blue Ocean interface.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing the Jenkins Blue Ocean plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In order to use the Jenkins Blue Ocean plugin, we need to install the Blue
+    Ocean plugin for Jenkins. Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Plugin Manager page, click on the Available tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Using the Filter option, search for `Blue Ocean`, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/caac1ef5-8704-4f73-b1ff-78fe35e852a7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Installing the Jenkins Blue Ocean plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the list of items, choose Blue Ocean and click on Install without restart.
+    You only need Blue Ocean and nothing else.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The dependency list for Blue Ocean is big, so you will see a lot of stuff getting
+    installed along with the Blue Ocean plugin on the Installing Plugins/Upgrades
+    page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: View your regular Jenkins pipeline in Blue Ocean
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this section, we will try to visualize our existing Jenkins pipelines that
+    we have created in the previous sections:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, you should now see a new link on the left-hand side
+    menu with the name Open Blue Ocean.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Open Blue Ocean link to go to the Jenkins Blue Ocean dashboard.
+    The following is what you should see (refer to the following screenshot):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Administration link will take you to the Manage Jenkins page.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Pipelines link will take you to the Jenkins Blue Ocean dashboard that you
+    are seeing now.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The icon (arrow within a square) will take you to the classic Jenkins dashboard.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The New Pipeline button will open up the pipeline creation wizard for Git- and
+    GitHub-based projects.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'A list of pipelines (highlighted as **e**):'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/1cb007db-8457-4c84-b1b4-b087b367e199.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Jenkins Blue Ocean dashboard
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let us have a look at our multibranch pipeline. Click on your multibranch pipeline
+    from the Jenkins Blue Ocean dashboard. Doing so will open up the respective multibranch
+    pipeline page, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The button (highlighted as **a**) will take you to the pipeline configuration
+    page.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Activity tab will list all the current and past pipelines.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Branches tab will show you an aggregate view of the pipelines for each branch.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Pull Requests tab will list all the open pull requests on your branches.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The button (highlighted as **e**) is used to rerun the pipeline:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/90868ba9-9b9d-47ac-aadc-2823937899c6.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Multibranch pipeline in Blue Ocean
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now let us see the individual build page. To do so, from the Jenkins pipeline
+    page (see the preceding screenshot), click on any of the builds, and you will
+    be taken to the build page of the respective pipeline, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Changes tab will list the code changes that triggered the build.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Artifacts tab will list all the artifacts that are generated by the build.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The button (highlighted as **c**) will rerun your build.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The section (highlighted as **d**) displays some metrics about your build.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: This Stage View (highlighted as **e**) will list all the sequential and parallel
+    stages.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Steps Results section will show you all the steps of a particular stage
+    that you have selected (in the following screenshot, I have selected the stage
+    Results).
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Each listed step (highlighted as **g**) can be expanded and its log  can be
+    viewed:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/858f6f25-7150-457a-a1ca-8c8718c4196c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Build page in Blue Ocean
+  prefs: []
+  type: TYPE_NORMAL
+- en: This was a short overview of how your Jenkins pipeline (the one that you created
+    using the classic Jenkins UI) should look in Blue Ocean. It has demonstrated pretty
+    much everything. However, I encourage readers to keep exploring.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a pipeline in Blue Ocean
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this section, we will see how to create a new pipeline from the Jenkins
+    Blue Ocean dashboard. We will look at the new pipeline creation wizard in Blue
+    Ocean. Before you begin make the following things ready:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Fork the following repository: [https://github.com/nikhilpathania/hello-world-example.git](https://github.com/nikhilpathania/hello-world-example.git)
+    into your GitHub account. We will be using it in the example described in the
+    following section'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Install the JUnit plugin ([https://plugins.jenkins.io/junit](https://plugins.jenkins.io/junit))
+    for Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'From the Jenkins Blue Ocean dashboard, click on the New Pipeline button. Jenkins
+    will ask you to choose between Git and GitHub. For our current exercise, we will
+    choose GitHub:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/be77336b-9115-4a4a-8d4e-17c57c49749a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choosing between Git and GitHub repositories
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Next, Jenkins will ask you to provide the GitHub access token for your GitHub
+    account. Click on the Create an access key here link to create a new one:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5ff0eeed-f4d9-4898-bebd-70a21507e379.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: GitHub access token field
+  prefs: []
+  type: TYPE_NORMAL
+- en: In a new tab, you will be asked to log in to your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you log in, you will be taken directly to the GitHub settings page to create
+    a New personal access token.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Type a small description for the Token description field to identify your token.
+    Leave the options under the Select scopes section at their default values:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/3549184c-d257-4359-b6ad-1f12a6dbc9f9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a GitHub personal access token
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Click on the Generate new token button at the bottom of the page to generate
+    a new Personal access token:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/c6bd151e-aa70-4820-8434-b1e8f7c9c57c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: GitHub personal access token
+  prefs: []
+  type: TYPE_NORMAL
+- en: Copy the newly created personal access token and paste it inside your GitHub
+    access token field, then click on the Connect button (see the following screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Next, click on the listed organization:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/4c5b3274-88d7-49d9-8209-3c1bd9837584.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choosing the GitHub account
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can choose between New Pipeline and Auto-discover Jenkinsfiles. In the
+    following example, we will choose the New Pipeline option:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/9fdce913-e10c-4b74-b977-22b2917eeae0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choosing between creating and discovering pipelines
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Next, you will be asked to choose a repository from the list of available repositories
+    on your GitHub account. You can utilize the Search… option to look for the desired
+    repository in case it''s not listed. In our current example, we will choose the
+    `hello-world-example` repo:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/32090f0e-7c8f-420a-b026-58cb8c3ddaa3.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choosing a repository
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The next thing Jenkins will ask you to do is create a pipeline. Since there
+    is no Jenkinsfile found on the respective repository, click on the Create Pipeline
+    button to create a Jenkinsfile:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ff10b159-86ec-40df-be8d-b01061ce0111.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a new pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The page to create a pipeline will look like that which follows. On the left-hand
+    side, you will find a visualization of your pipeline, and on the right-hand side,
+    you will find the utility to choose the blocks, stages, and steps (similar to
+    the pipeline syntax utility that we saw in the previous section):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ef7846e1-9049-4198-bf91-f15ef634bc9b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Blue Ocean pipeline editor
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let us first choose an Agent to run our pipeline. To do so, from the Pipeline
+    Settings, using the Agent field, choose the option label. Then type `master` under
+    the Label field, as shown in the following screenshot. In this way, we are telling
+    Jenkins to run our pipeline on the Jenkins master:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/9e5f51aa-9c1d-4343-9939-41e2cf3f7d7d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a node block
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, let us create a stage named `Build` that will build our source code. To
+    do so, click on the + button, available on the pipeline visualization.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will be asked to name your new stage. Do so by typing `Build` under the
+    Name your stage field, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/03f37030-2c3a-4982-985c-0fac38ccc1ad.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a build stage
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, we will add a step to build our Maven code. To do so, click on the + Add
+    step button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will be asked to choose from a list of available steps, as shown in the
+    following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a53f8bfa-15a5-445d-9acf-0e7c3cb0ddb4.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The step menu
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ours is a Maven project. Therefore, we might need to set up the Maven environment
+    first, to tell Jenkins which Java and Maven tool it can use.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'To do so, search for `Provide Maven environment` using the search box (find
+    steps by name):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/85f46033-e09b-4615-9a27-aa2c8ff92dc7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choosing the provide Maven environment step
+  prefs: []
+  type: TYPE_NORMAL
+- en: Not all Jenkins plugins are compatible with Jenkins Blue Ocean. The list is
+    still small. However, it's expected to grow over time.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'When you click on the Provide Maven environment step, you will be presented
+    with a list of fields to configure, as shown in the following screenshot. Type
+    `M3` under the Maven field and leave rest of the options as is:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/0bde4efe-b020-4f50-894d-d9f05a273a4a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the provide maven environment step
+  prefs: []
+  type: TYPE_NORMAL
+- en: At the bottom of the configuration page, click on the + Add step button to create
+    a new child step that will build our Maven code.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Shell Script from the list of available steps, if your Jenkins master
+    is a Linux machine. Choose Windows Batch Script, if it's a Windows machine.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Type the following code inside the textbox for Shell Script/Windows Batch Script:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/bc2cba34-769a-4d46-baa7-b0e761b702c4.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the shell script child step
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Click on the back arrow to go back to the previous menu. You should now see
+    your new step, Shell Script, listed under the Child steps section, as shown in
+    the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/45f426a5-bccc-4b67-9bef-dc4a9065305e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Shell script as one of the child steps
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the back arrow to go back to the previous menu.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Next, let us create a stage named Results, wherein we will archive our built
+    artifacts and the XML result reports. To do so, click on the + button available
+    on the pipeline visualization.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will be asked to name your new stage. Do so by typing `Results` under the
+    Name your stage field, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/b77a50b6-e9b1-4240-8282-6d810f915442.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a results stage
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, we will add a few steps on our new stage. The first one will be a step
+    to publish our test results report. To do so, click on the + Add step button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Choose Publish JUnit test result report from the list of available steps. You
+    will be presented with a list of options to configure:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add `**/target/surefire-reports/TEST-*.xml` under the TestResults field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Leave the rest of the options as is:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/6121d63c-a160-4d77-a9a3-1aac84e4d4db.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the publish JUnit test result report step
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the back arrow to go back to the previous menu.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the + Add step button again to add a new step.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Choose Archive the artifacts from the list of available steps. You will be
+    presented with a list of options to configure:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add `target/*.jar` under the Artifacts field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Leave the rest of the options as is:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/00a94942-270b-439e-bc33-3fb2e087a827.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the Archive the artifacts step
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the back arrow to go back to the previous menu.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Finally, click on the Save button at the top-right corner of the page to save
+    your pipeline configuration.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: A pop-up window will ask you to add some Description and choose the branch on
+    which to commit the pipeline configuration.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on the Save & run button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/dbcf67c9-5078-48b2-a26a-d594178d7a85.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Saving the pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This will immediately run a pipeline on the respective branch, as shown in
+    the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/706e7583-47b3-4db5-b944-425924ab3213.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: A successful build on the master branch
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You will notice that a new file has been created inside your repository under
+    the master branch:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/1e821bb2-57ef-4e99-be7f-4365c4dcdf91.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkinsfile listed inside the source code
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following should be the content of the file:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the preceding chapter, we got hands-on experience of almost all of the new
+    features in Jenkins. We chose modest examples to keep our pipelines simple. Nevertheless,
+    in the upcoming chapters, we will learn to create a full-fledged CI/CD pipeline
+    using all of the new features in Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will take a look at some of the administrative tasks
+    in Jenkins.
+  prefs: []
+  type: TYPE_NORMAL

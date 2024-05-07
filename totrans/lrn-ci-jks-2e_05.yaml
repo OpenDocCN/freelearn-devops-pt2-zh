@@ -1,0 +1,1545 @@
+- en: Distributed Builds
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Jenkins'' master-slave architecture makes it easy to distribute work across
+    multiple slave machines. This chapter is all about configuring Jenkins slaves
+    across various platforms. The following are the topics that we will cover:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: An overview of the Jenkins node manager
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing a Jenkins slave on a standalone Linux machine
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing a Jenkins slave on a standalone Windows machine
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing and configuring the Docker plugin for creating on-demand Jenkins
+    slaves
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Distributed build and test
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the following section let us learn a little bit about the distributed build
+    and testing. Imagine you have a really fat unit test or integration test suite.
+    If you can divide them in small parts then you can run them in parallel. To run
+    them in parallel you need multiple clones of your build/test machines. If you
+    have them in place either using Docker or using some other mechanism, then the
+    remaining thing to do is to make them a Jenkins slave agent.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following illustration shows how a Jenkins pipeline to build, unit test
+    and integration test utilizes the distributed build/test farm in Jenkins. You
+    can see, we have two categories of Jenkins slave agents: Standalone Jenkins slave
+    for build and unit test, and standalone Jenkins slave for integration test.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The unit testing is distributed across three Jenkins slave agents for build
+    and unit test (category 1), and the integration testing is distributed across
+    two Jenkins slave agents for integration testing (category 2).
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/717a6c52-f11d-47d3-be93-718225fdb5fd.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Distributed build and testing farm using Jenkins standalone slave agents
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Jenkins slave agents are categorized using **labels**. We will learn more
+    about labels in the up-coming sections.
+  prefs: []
+  type: TYPE_NORMAL
+- en: It is also much better and easy to spawn on demand Jenkins slaves using Docker.
+    Shown as follows is the Docker version of the same concept that we discussed previously.
+    Here the Jenkins slave are created on demand using the Docker images.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can see in the following illustration, we have two types of Docker images:
+    Docker image for build and unit test, and Docker image for integration test. The
+    Docker slave agents are created using these Docker images. The unit testing is
+    distributed across three Docker slave agents for build and unit test (category
+    1), and the integration testing is distributed across two Docker slave agents
+    for integration testing (category 2).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Again here the Docker slave agents are categorized using labels. We will learn
+    more about labels in the up-coming sections:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/61f3d4e8-b854-4484-ae97-a33c1f11cf00.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Distributed build and testing farm using Jenkins and Docker slave agents
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Jenkins Manage Nodes page
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will take a look at the Jenkins **Manage Nodes**
+    page:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Nodes**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the left-hand side, you will see a menu; the options are as explained in
+    the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/28dc83ba-a19f-4211-a012-6c05e799ccb7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins Manage Nodes page
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On the right-hand side, you will also see a table showing the list of available
+    Jenkins slaves, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e1a18e07-2033-48e3-b60f-2b5136a9ec61.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of available nodes
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Since we haven''t configured any Jenkins slaves yet, the list (as shown in
+    the preceding screenshot) contains only one entry: that is, master.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Along with the node's Name, the table also displays other useful information
+    about the node, such as its Architecture, the amount of Free Disk Space, and the Response
+    Time.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'To enable/disable the amount of information being displayed about each node,
+    click on the Configure link (see the *Jenkins Manage Nodes page* screenshot).
+    This will take you to the next page, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/8624581a-3562-4e27-89cb-538d2bfb5536.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Preventive Node Monitoring options
+  prefs: []
+  type: TYPE_NORMAL
+- en: Uncheck/Check the relevant options to disable/enable them. The Free Space Threshold option
+    is important. If the amount of Free Disk Space and Free Temp Space goes below
+    the specified value (by default it's set to `1GB`), then the nodes go offline.
+    This prevents the Jenkins pipeline from running on slaves that have run out of
+    disk space and eventually failing.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Adding Jenkins slaves – standalone Linux machine/VMs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will try to add a standalone Linux machine as
+    a Jenkins slave. Make sure you have Java installed on your soon-to-be Jenkins
+    slave machine. Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Nodes**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'From the left-hand side menu, click on **New Node**. On the resultant page
+    you will be asked to provide a name for your node and choose the type, as shown
+    in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d030bc67-453f-4a2f-b62a-b5b86d60d91b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding a name and choosing the agent type (type of slave)
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Add a meaningful name under the **Node name** field and choose the agent type.
+    For now, there is only one type of agent to choose from: that is, Permanent Agent.
+    These are the types of agents that are mainly physical machines and VMs.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **OK** button to proceed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page, you will see the following options to configure, as
+    shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7808491f-1b30-4647-85e2-acb14ccc6416.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave configuration
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let''s see them one by one:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: We already used the Name field to give a name to our Jenkins slave.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Use the Description field to add some notes about the Jenkins slave: for example,
+    purpose, type, what it can build or test, and tools installed.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The # of executors field is used to describe the number of parallel builds a
+    Jenkins slave (agent) is allowed to run. Choosing a value greater than `1`, say
+    `3`, will allow the Jenkins slave to run three builds in parallel. This could
+    also result in each build taking more time than usual. Choose wisely.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Remote root directory field is used to define a directory path on the Jenkins
+    slave that will serve as a dedicated workspace for Jenkins to perform build activities.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Labels field is the most important. You can add multiple labels (separated
+    by a space) to your Jenkins slave. In order to run a pipeline on a particular
+    slave you will use its label, as shown in the preceding screenshot. We have added
+    a `maven-build-1` label, which says it's a Jenkins slave to build a Maven project.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The Usage field is used to define how Jenkins schedules build on this node.
+    It contains two options, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Use this node as much as possible: This is the default option. This mode makes
+    the current Jenkins slave open to all the pipelines that haven't been configured
+    to run on a specific Jenkins slave.
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Only build jobs with label expressions matching this node: In this mode, Jenkins
+    will only build a project on this node when that project is restricted to certain
+    nodes using a label expression, and that expression matches this node's name and/or
+    labels.
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The Launch method field describes how Jenkins starts this Jenkins slave. It
+    contains four options, shown as follows. In the following example, we will use
+    the SSH method to launch our Jenkins slave. See the *Launching a Jenkins slave
+    via SSH* section:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Launch agent via Java Web Start: This allows an agent to be launched using
+    Java Web Start. In this case, a **Java Network Launch Protocol** (**JNLP**) file
+    must be opened on the agent machine, which will establish a TCP connection to
+    the Jenkins master. If you have enabled security via the Configure Global Security
+    page, you can customize the port on which the Jenkins master will listen for incoming
+    JNLP agent connections.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Launch agent via execution of command on the master: This starts an agent by
+    having Jenkins execute a command from the master. Use this when the master is
+    capable of remotely executing a process on another machine, for example, via SSH
+    or **remote shell** (**RSH**).'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Launch slave agents via SSH: This starts a slave by sending commands over a
+    secure SSH connection. The slave needs to be reachable from the master, and you
+    will have to supply an account that can log in on the target machine. No root
+    privileges are required.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Let Jenkins control this Windows slave as a Windows service: This starts a
+    Windows slave by a remote management facility built into Windows. It is suitable
+    for managing Windows slaves. Slaves need to be IP reachable from the master.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The Availability field defines how Jenkins starts, stops, and uses the Jenkins
+    slaves. It has three options, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Keep this agent online as much as possible: In this mode, Jenkins will keep
+    this agent online as much as possible. If the agent goes offline, for example,
+    due to a temporary network failure, Jenkins will periodically attempt to restart
+    it.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Take this agent online and offline at specific times: In this mode, Jenkins
+    will bring this agent online at the scheduled time(s), remaining online for a
+    specified amount of time. If the agent goes offline while it is scheduled to be
+    online, Jenkins will periodically attempt to restart it. After this agent has
+    been online for the number of minutes specified in the Scheduled Uptime field,
+    it will be taken offline. If Keep online while builds are running is checked,
+    and the agent is scheduled to be taken offline, Jenkins will wait for any builds
+    that may be in progress to be completed.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Take this agent online when in demand, and offline when idle: In this mode,
+    Jenkins will bring this agent online if there is demand, that is, if there are
+    queued builds that meet the following criteria: They have been in the queue for
+    at least the specified In demand delay time period'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: They can be executed by this agent (for example, have a matching label expression)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'This agent will be taken offline if:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: There are no active builds running on this agent
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: This agent has been idle for at least the specified Idle delay time period
+  prefs:
+  - PREF_IND
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Passing environment variables to Jenkins slaves
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to pass the environment variables:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will see a section named Node Properties. Using these options, you can pass
+    predefined environment variables to the Jenkins slaves and tools locations.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'As shown in the following screenshot, you can pass environment variables to
+    the Jenkins slaves. It is possible to pass multiple environment variables (by
+    clicking on the **Add** button). These environment variables are available to
+    the Jenkins pipeline during its execution:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5c88759c-f83e-4644-bbf0-be08e2a3dbdc.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Passing environment variables to the Jenkins slaves
+  prefs: []
+  type: TYPE_NORMAL
+- en: With the advent of *Pipeline as Code* feature in Jenkins, it is possible to
+    define and use environment variables right within the Jenkins pipeline code (pipeline
+    script/Jenkinsfile). Therefore, the option of defining environment variables (as
+    demonstrated in the preceding screenshot) become less significant.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Passing tools' locations to Jenkins slaves
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'As shown in the following screenshot, you can specify the location of certain
+    tools on the Jenkins slave, overriding the global configuration:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/6b6704f0-5295-4c5d-b77d-53f98ce2425c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Passing tools' locations to the Jenkins slaves
+  prefs: []
+  type: TYPE_NORMAL
+- en: Launching a Jenkins slave via SSH
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To launch the slave via SSH, follow these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: When you choose the Launch slave agents via SSH option, you are presented with
+    options, as shown in the following screenshot.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Host field is where you can define the IP address or the hostname of the
+    Jenkins slave machine.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The Credentials field allows you to choose the relevant credentials saved inside
+    Jenkins to authenticate the Jenkins slave. To create a new credential, click on
+    the Add button beside the Credentials field (create a credential of the Kind:
+    Username with password):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d4fa369b-876b-41e3-8c2b-35269b125a3d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configure Launch slave agent via SSH properties
+  prefs: []
+  type: TYPE_NORMAL
+- en: The user that you use to authenticate the Jenkins slave should have read/write
+    permissions for the directory path defined under the Remote root directory field.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The last option, Host Key Verification Strategy, defines how Jenkins verifies
+    the SSH key presented by the remote host while connecting. This option is valid
+    only when using credentials of the Kind: SSH username with private key. There
+    are four options available, as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Known hosts file Verification Strategy: This checks the `known_hosts` file
+    (`~/.ssh/known_hosts`) for the user Jenkins is executing under, to see if an entry
+    exists that matches the current connection. This method does not make any updates
+    to the `known_hosts` file, instead it uses the file as a read-only source and
+    expects someone with suitable access to the appropriate user account on the Jenkins
+    master to update the file as required, potentially using the `ssh hostname` command
+    to initiate a connection and update the file appropriately.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Manually provide key Verification Strategy: This checks that the key provided
+    by the remote host matches the key set by the user who configured this connection.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Known trusted key Verification Strategy: This checks that the remote key matches
+    the key currently marked as trusted for this host. Depending on the configuration,
+    the key will be automatically trusted for the first connection, or an authorized
+    user will be asked to approve the key. An authorized user will be required to
+    approve any new key that gets presented by the remote host.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Non verifying Verification Strategy: This does not perform any verification
+    of the SSH key presented by the remote host, allowing all connections regardless
+    of the key they present.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Once you are done configuring all the options, click on the Save button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: More about the active Jenkins slave
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will take a look at the various other configurable
+    options available to us for the Jenkins slave agent that we have just added. Jenkins
+    also provides a lot of general information about its slaves that we will see here.
+    Follow these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Nodes.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the right-hand side you will also see a table showing the list of available
+    Jenkins slaves. New to the list will be our newly added Jenkins slave.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Jenkins slave name to access its configurations and metadata.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page (Jenkins slave Status page), on the left-hand side menu
+    you will see a few options, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/0110ad53-fefb-415b-b8c1-07a7259ca3b2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave page
+  prefs: []
+  type: TYPE_NORMAL
+- en: Most of the preceding links (from the preceding screenshot) are self-explanatory.
+    However, let's look at some of them in detail.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The Log link is where you will find all the logs with respect to the Jenkins
+    slave. After adding a Jenkins slave, if it does not come online, the Log is where
+    you need to look. Authentication issues, permission issues, and everything else
+    while connecting to the Jenkins slaves gets listed here. See the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/75e9461b-266b-4728-9ae9-199714b159f0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave logs
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The System Information link will show you most of the system information about
+    the respective Jenkins slave, such as System Properties, and Environment Variables.
+    See the preceding screenshot. You won''t be visiting here frequently. Nevertheless,
+    it''s useful when debugging build errors caused due to system tools, environment
+    variables, and so on:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/13597da5-9afd-4d48-8e55-a820df9d3f41.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave System Information
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Build History link will show you a timeline of all the builds that were
+    performed on the respective Jenkins slave.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Jenkins slave Status page, you will see the labels that are attached
+    to the respective Jenkins slave and, also, information about the projects that
+    are associated with the following Jenkins slave. See the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/3baed5fb-2918-44a3-8754-16f6c407c07f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave Status page
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'There is an option to make the Jenkins slave temporarily offline by clicking
+    on the Mark this node temporarily offline button. When you click on the button,
+    you will be asked to add a note (optional) before taking the Jenkins slave offline:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a2b42a63-8020-4717-b83e-0b5afd1ab36a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Making a Jenkins slave offline
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To bring the offline node back online, from the Jenkins Status page, click
+    on the Bring this node back online button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/338fb9ee-1fab-4f4e-a7e9-7e412e0fdf7f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Bringing a Jenkins slave online
+  prefs: []
+  type: TYPE_NORMAL
+- en: Adding Jenkins slaves – standalone Windows machine/VMs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will try to add a standalone Windows machine as
+    a Jenkins slave. Make sure you have Java installed on your soon-to-be Jenkins
+    slave machine. Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'From the left-hand side menu, click on New Node. On the resultant page, you
+    will be asked to provide a name for your node and choose the type, as shown in
+    the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Nodes**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/368c6f20-7c9f-4c0b-bfff-a130f5eb8508.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding a name and choosing the agent type (type of slave)
+  prefs: []
+  type: TYPE_NORMAL
+- en: Add a meaningful name under the Node name field and choose the agent type as
+    Permanent Agent. These are the types of agents that are mainly physical machines
+    and VMs. Also, there is an option to clone an existing Jenkins slave. To do so,
+    choose the Copy Existing Node option and under the Copy from field, enter the
+    name of the Jenkins slave source.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the following example however, we will choose the Permanent Agent option.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the OK button to proceed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page, you will see the following options to configure, as
+    shown in the following screenshot. We have already seen them before:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a40ecb00-809b-4338-8daf-86bcbd42700e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave configurations
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Since this is a Windows build agent, there are two ways we can launch the Jenkins
+    slave, as shown here:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Launch agent via Java Web Start: This allows an agent to be launched using
+    Java Web Start. In this case, a JNLP file must be opened on the agent machine,
+    which will establish a TCP connection to the Jenkins master. If you have enabled
+    security via the Configure Global Security page, you can customize the port on
+    which the Jenkins master will listen for incoming JNLP agent connections.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Let Jenkins control this Windows slave as a Windows service: This starts a
+    Windows slave by a remote management facility built into Windows. It is suitable
+    for managing Windows slaves. Slaves need to be IP reachable from the master.'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Launching a Jenkins slave via Java Web Start
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the following section, we will learn how to launch a Jenkins slave on Windows
+    using the Java Web Start method.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For the Launch method field, choose Launch agent via Java Web Start.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Save button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Jenkins Manage Nodes page, click on the Jenkins slave name. In our
+    example it's `standalone-windows-slave`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page (Jenkin slave Status page), you will see the following
+    options, as shown here:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e759d255-6a0c-4490-b307-4fe948e361f4.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave connection method (Java Web Start)
+  prefs: []
+  type: TYPE_NORMAL
+- en: Do nothing on the Jenkins server.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, log in to your prospective Jenkins slave machine (Windows) and open the
+    Jenkins dashboard.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Nodes.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Jenkins Manage Nodes page, click on the Jenkins slave name. In our
+    example it's `standalone-windows-slave`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, either run the command, as shown in the following screenshot, or click
+    on the Launch button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'If you choose to click on the Launch button, you will see the following pop-up
+    window, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/785440f2-11d0-4324-9932-0b72cfbad081.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Opening the slave-agent.jnlp file
+  prefs: []
+  type: TYPE_NORMAL
+- en: Choose as the Open with option the Java(TM) Web Start Launcher (default) option,
+    and click on the OK button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will get another pop-up window, asking you to confirm that you would like
+    to run this application. Click on Run, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ecd49b99-5d32-45cd-9d03-8d5bfcb3c875.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Running the Jenkins Remoting Agent
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Finally, you will see a small window showing the Jenkins slave connection status
+    as Connected, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/72c099b7-890c-484d-ab55-334c0e420c1a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave agent window
+  prefs: []
+  type: TYPE_NORMAL
+- en: Your Jenkins slave (Windows) is now connected. To make it a Windows service,
+    click on File (previous screenshot), and choose Install as a service.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Open the Run utility and give the command `services.msc` to open the Windows
+    Services utility. In the list of services, you will find the Jenkins slave agent
+    service, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7276900d-8174-46d6-bd08-9d8ae475fddd.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave listed as a Windows service
+  prefs: []
+  type: TYPE_NORMAL
+- en: Right-click on the Jenkins slave Windows service and choose Properties.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'In the Properties window, go to the Log On tab. Under the Log on as section,
+    choose the This account option, and provide the administrator account details
+    (a user with admin privileges on the Jenkins slave machine), as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5a306aab-9b75-4ce0-8af3-a1e674f00289.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins slave service properties
+  prefs: []
+  type: TYPE_NORMAL
+- en: Your Jenkins slave (on Windows) is now installed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Adding Jenkins slaves – Docker containers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the following section, we will learn how to install and configure the Docker
+    plugin that will allow us to spawn on-demand Jenkins slaves (Docker containers)
+    from a CI pipeline. The Docker containers are started by the CI pipeline, and
+    once the build is done, they are destroyed. In the following section, we will
+    only see the configuration part. It is in the next chapter that we will see this
+    process in action.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Prerequisites
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Before we begin, make sure you have the following things ready:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A Jenkins server running on any of the following platforms: Docker, standalone,
+    cloud, VM, servlet container, and so on. (refer to [Chapter 2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml), *Installing
+    Jenkins*).'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Your Jenkins server should have access to the internet. This is necessary to
+    download and install plugins.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Your Jenkins server can talk to GitHub using the GitHub plugin. (Refer to the
+    *Add GitHub credentials inside Jenkins* and *Configure Webhooks on GitHub from
+    Jenkins* sections from [Chapter 3](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml), *The
+    New Jenkins*).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: You might also need Java, Git, and Maven configured on your Jenkins server.
+    (Refer to the *The new Jenkins pipeline job* subsection under the *The Global
+    Tool Configuration page* section of [Chapter 3](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml), *The
+    New Jenkins*).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A Docker server.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Setting up a Docker server
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To install Docker, you need a machine with any one of the following Ubuntu
+    OSes (64-bit): Yakkety Yak 16.10, Xenial Xerus 16.04, or Trusty Tahr 14.04\. Make
+    sure `curl` is also installed. Follow the steps given to set up a Docker server.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Setting up the repository
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to set up a repository:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Execute the following command to let `apt` use a repository:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Add the Docker''s official GPG key using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Verify that the key ID is exactly `58118E89F3A912897C070ADBF76221572C52609D`,
+    using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should see a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Use the following command to set up a stable repository to download Docker:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: It's recommended to always use the stable version of the repository.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Docker using apt-get
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that you have set up the repository, perform the following steps to install
+    Docker:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Update the `apt` package index using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To install the latest version of Docker, execute the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'However, if you wish to install a specific version of Docker, execute the following
+    command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'This will give you a list of available versions:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: The output of the preceding command depends on the type of repository configured
+    in the previous section, *Setting up the repository*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Next, execute the following command to install the specific version of Docker:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: Example: `sudo apt-get -y install docker-engine=1.16.0-0~trusty`
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The `docker` service starts automatically. To verify whether Docker is installed
+    and running, run the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: If the preceding command runs without any errors, and you see a `hello world`
+    message, it means Docker is installed and running.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: Installing Docker using a .deb package
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: For some reason, if you are unable to install Docker using the preceding repository
+    method, you can download the `.deb` package.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Download the `.deb` package of your choice from [https://apt.dockerproject.org/repo/pool/main/d/docker-engine/](https://apt.dockerproject.org/repo/pool/main/d/docker-engine/).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'To install the downloaded package, type the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Verify your Docker installation by running the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: If the preceding command runs without any errors, and you see a `hello world` message,
+    it means Docker is installed and running.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: Enabling Docker remote API
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins (through the Docker plugin) uses the *Docker remote API* to communicate
+    with a Docker server. The Docker remote API allows external applications to communicate
+    with the Docker server using REST APIs. Docker remote APIs can also be used to
+    get information about all the running containers inside the Docker server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To enable the Docker remote API, we need to modify Docker's configuration file.
+    Depending on your OS version and the way you have installed Docker on your machine,
+    you might need to choose the right configuration file to modify. Shown, as follows,
+    are two methods that work on Ubuntu.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Modifying the docker.conf file
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow these steps to modify the `docker.conf` file. These configurations are
+    important to allow Jenkins to communicate with the Docker host:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your Docker server, make sure you have `sudo` privileges.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following command to edit the `docker.conf` file:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: Inside the `docker.conf` file, go to the line containing `DOCKER_OPTS=`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will find the `DOCKER_OPTS=` variable at two places inside the `docker.conf`
+    file. First, in the pre-start script section, and next in the post-start script
+    section. Use the `DOCKER_OPTS=` variable under the pre-start script section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Set the value of `DOCKER_OPTS` to the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: The preceding setting will bind the Docker server to the Unix socket, as well
+    as on TCP port `4243`. `0.0.0.0`, which makes the Docker engine accept connections
+    from anywhere.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: If you want your Docker server to accept connections from only your Jenkins
+    server, then replace `0.0.0.0` with your Jenkins server IP.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Restart the Docker server using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To check if the configuration has worked, type the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: The preceding command will list all the images present on your Docker server,
+    if any.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Modifying the docker.service file
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to modify the `docker.service` file:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Execute the following command to edit the `docker.service` file:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: Inside the `docker.service` file, go to the line containing `ExecStart=`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Set the value of `ExecStart=` as shown:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: The preceding setting will bind the Docker server to the Unix socket. Furthermore,
+    on TCP port `4243`. `0.0.0.0`, it makes the Docker engine accept connections from
+    anywhere.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: If you want your Docker server to accept connections from only your Jenkins
+    server, replace `0.0.0.0` with your Jenkins server IP.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Execute the following command to make the Docker daemon notice the modified
+    configuration:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Restart the Docker server using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To check whether the configuration has worked, type the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: The preceding command will list all the images present on your Docker server,
+    if any.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing the Docker plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To create Docker containers (build agents) on the fly, we need to install the
+    Docker plugin for Jenkins. To achieve this, follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available tab.
+    You will be taken to the Jenkins Manage Plugins page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Enter `Docker Plugin` in the Filter field, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/b75bf3f0-c19e-4feb-88c5-19c5ffffec1a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Installing the Docker plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: Select the **Docker Plugin** from the list and click on the **Install without
+    restart** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Jenkins if needed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configuring the Docker plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that we have our Docker plugin installed, let''s configure it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click Manage Jenkins | Configure System.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the Configure System page, scroll all the way down to the Cloud section
+    (see the following screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Add a new cloud button and choose Docker from the available options.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, you will find a good number of settings to configure.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give your Docker server a name using the Name field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add your Docker server URL under the Docker URL field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Test Connection button to check whether Jenkins can communicate
+    with Docker server:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/fa494748-28b3-46bb-9054-1aaa218a2273.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the Docker plugin to talk to the Docker server
+  prefs: []
+  type: TYPE_NORMAL
+- en: At the end of the page, click on the **Apply** and **Save** buttons. We will
+    come back here later to make further configurations.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Creating a Docker image – Jenkins slave
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Enabling the Docker remote API made the communication between Jenkins and the
+    Docker server possible. Now we need a Docker image on the Docker server. This
+    Docker image will be used by Jenkins to create Docker containers (Jenkins slaves)
+    on the fly. To achieve this, follow the steps as shown:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Log in to your Docker server. Give the following command to check the available
+    Docker images:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'From the following screenshot, you can see we have two `docker images` (`ubuntu`
+    and `hello-world`) already on our Docker server:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5f8fffd9-65b6-481d-a65e-4ebf3e152c99.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List the Docker images
+  prefs: []
+  type: TYPE_NORMAL
+- en: If your Docker server is a freshly backed-up machine, then you will see no images
+    at this point.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'We will build a Docker image for our use from the `ubuntu` Docker image. To
+    do so, download the Docker image for `ubuntu` using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: You can find more Docker images for various OSes at [https://hub.docker.com/](https://hub.docker.com/).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once the pull gets completed, give the `sudo docker images` command again. Now
+    you should see a Docker image for Ubuntu, as shown in the preceding screenshot.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'We will now upgrade our Ubuntu Docker image with all the necessary applications
+    that we need to run our build. They are as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Java JDK (latest)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Git
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Maven
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A user account to log in to the Docker container
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`sshd` (to accept an SSH connection)'
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Execute the following command to run a Docker container using the Ubuntu Docker
+    image. This will create a container, and open up its bash shell:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, install all the required applications as you would do on any normal Ubuntu
+    machine. Let''s begin by creating a `jenkins` user:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following command and follow the user creation steps, as shown
+    in the following screenshot:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/6924bed0-dcd8-437e-813a-7457b4bdd3b7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a user
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Check the new user using the switch user command:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: Switch back to the root user by typing `exit`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Next, we will install the SSH server. Execute the following commands in sequence:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, we will install Git using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Install Java JDK using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE31]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Install Maven using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE32]'
+  prefs: []
+  type: TYPE_PRE
+- en: Next, exit the container by typing `exit`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We need to save (`commit`) all the changes that we made to our Docker container.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Get the `CONTAINER ID` of the container that we worked on recently by listing
+    all the inactive containers, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE33]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/574a41b9-0acc-41e4-b8d2-815bdb493a0a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of inactive containers
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Note the `CONTAINER ID`, and execute the `commit` command to commit the changes
+    that we made to our container, shown as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE34]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We have named the container `maven-build-slave-0.1`, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/74b68bd5-87e1-42ee-b84a-2b004a2a1197.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Docker commit command
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once you have committed the changes, a new Docker image gets created.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following Docker command to list the images:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE35]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/1f4bfdbd-03f3-4e18-856d-46d24a2b123c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List the Docker images
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can see our new Docker image, with the name `maven-build-slave-0.1`. We
+    will now configure our Jenkins server to use the Docker image to create Jenkins
+    slaves (build agents).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Adding Docker container credentials in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to add credentials inside Jenkins to allow it to talk
+    to Docker:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, navigate to Credentials | System | Global credentials
+    (unrestricted).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Add Credentials** link on the left-hand side menu to create a
+    new credential (see the following screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose a **Kind** as Username with Password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the Scope field to its default value.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a username for your Docker image (`jenkins`, as per our example) under the
+    Username field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Password field, add the password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add an ID under the ID field, and some description under the Description field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on the OK button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/798bfc0c-bb19-487e-b92d-161c409f9539.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Create credentials inside Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Updating the Docker settings inside Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to update the Docker settings inside Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Configure System.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Scroll all the way down to the Cloud section (see the following screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Cloud section, click on the Add Docker Template button and choose
+    Docker Template.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will be presented with lots of settings to configure. However, to keep
+    this demo simple, let''s stick to the important settings:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Docker Image field, enter the name of the Docker image that we created
+    earlier. In our case, it's `maven-build-slave-0.1`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Labels field, add a label. The Docker container will be recognized
+    using this label by your Jenkins pipeline. Add a  `docker` label.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Launch Method should be Docker SSH computer launcher.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Credentials** field, choose the credentials that we created to access
+    the Docker container.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Make sure the Pull strategy option is set to Never pull.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the rest of the other options to their default values.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on Apply and then Save:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ebebf3fa-3f71-40b1-a538-c2ee9dddfd4b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the Docker plugin settings
+  prefs: []
+  type: TYPE_NORMAL
+- en: Now your Jenkins server is all set to create Jenkins slaves on demand using
+    Docker.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this chapter, we learned how to add and configure Jenkins slaves on standalone
+    Windows and Linux machines (physical/VMs), using two widely used methods: Launching
+    Jenkins slave via SSH and Launching Jenkins Slave via Java Web Start. We also
+    learned how to install and configure the Docker plugin for Jenkins that allows
+    us to create on-demand Docker containers (Jenkins slaves) for our CI.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will learn how to implement continuous integration using
+    Jenkins, and we will utilize the distributed build farm using Jenkins Docker containers
+    (Jenkins slaves) to perform our CI.
+  prefs: []
+  type: TYPE_NORMAL

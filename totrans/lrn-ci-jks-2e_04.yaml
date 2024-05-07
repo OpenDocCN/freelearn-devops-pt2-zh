@@ -1,0 +1,1581 @@
+- en: Configuring Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this chapter, we will learn how to perform some basic Jenkins administration
+    tasks, as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Updating/installing/uninstalling/downgrading Jenkins plugins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing Jenkins plugins manually
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Performing Jenkins backup and restore
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Upgrading Jenkins on various platforms (Windows/Linux/servlet)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Upgrading Jenkins running inside a Docker container
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating and managing users in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Learning various authentication methods in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configuring various authorization methods in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins comes with a pile of items to configure. The more plugins you install,
+    the more there is to configure. In this chapter, we will cover only the basic
+    administrative tasks in Jenkins. We will learn more about the Jenkins configuration
+    in the upcoming chapters, wherein we will try to add up more plugins to Jenkins
+    in order to achieve **Continuous Integration** (**CI**) and **Continuous Delivery**
+    (**CD**).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Jenkins Plugin Manager
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins derives most of its power from plugins. Jenkins plugins are pieces of
+    software that upon installation enhance the Jenkins functionality. A plugin that
+    is installed inside Jenkins manifests itself as a parameter or a configurable
+    item inside a Jenkins job or inside the Jenkins system configuration, or event
+    as a step under the Snippet Generator (in case it's compatible with the *Declarative
+    Pipeline syntax*).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot shows the Jenkins system configuration. It''s a setting
+    to configure the SonarQube tool (a static code analysis tool). The respective
+    configuration is available only after installing the Jenkins plugin for SonarQube:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d3c961a3-4b8c-48a6-950b-d44df9021f26.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: SonarQube settings inside Jenkins system configuration
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'There is a special section inside Jenkins to manage plugins. In this section,
+    we will learn how to manage plugins using the Jenkins Plugin Manager:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard click on **Manage Jenkins**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the Manage Jenkins page, click on **Manage Plugins**. You can also access
+    the same Jenkins Plugin Manager page using the `<Jenkins URL>/pluginManager` link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will see the following four tabs: Updates, Available, Installed, and Advanced.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Updating Jenkins plugins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The **Updates** tab lists out all of the plugins that need an update, as shown
+    in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/30cbbc4e-258f-4614-90b7-86239c75ad5d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Updating Jenkins plugins
+  prefs: []
+  type: TYPE_NORMAL
+- en: To update a plugin, select it by clicking on its respective checkbox and click
+    on the **Download now and install after restart** button.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To update all plugins listed under the **Update** tab, click on **All** (available
+    at the bottom of the page). This will select all the plugins. Then, click on the
+    **Download now and install after restart** button to install the updates.
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the **Updates** tab, at the bottom of the page, you will see a button named
+    **Check now**. Click on it to refresh the list of plugins that are displayed under
+    the **Updates** tab. This will check for plugin updates.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing a new Jenkins plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The **Available** tab lists all plugins available for Jenkins. Plugins that
+    are installed on your Jenkins instance will not be listed here.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot shows a list of available plugins for Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a78bf775-0f8f-459c-8aa8-3cdc49ce6843.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The plugins are grouped based on their functionality
+  prefs: []
+  type: TYPE_NORMAL
+- en: To install a plugin, select it by clicking on its respective checkbox. Then,
+    at the bottom of the page click on either the **Install without restart** button
+    (to install the plugin immediately) or on the **Download now and install after
+    restart** button (the name is self-explanatory).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Just like the **Updates** tab, here too you will see a button named **Check
+    now**. Clicking on it will refresh the list of plugins under the **Available**
+    tab.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Uninstalling or downgrading a Jenkins plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The **Installed** tab lists all the plugins currently installed on your Jenkins
+    instance. As shown in the following screenshot, you can see there is an option
+    to uninstall a plugin as well as downgrade it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can always choose to downgrade a plugin, in the event your Jenkins instance
+    becomes unstable or your CI/CD pipeline does not do well, after a plugin update:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/2418c781-8498-4498-b877-fa0743ad6873.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of installed Jenkins plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: Configuring proxy settings in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Under the **Advanced** tab, you will see a section named HTTP Proxy Configuration.
+    This is the place where you configure your proxy settings to allow Jenkins to
+    fetch updates from the internet:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/5948748e-4024-4099-9db2-7be2cb9e4899.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: HTTP Proxy Configuration settings
+  prefs: []
+  type: TYPE_NORMAL
+- en: Leave these fields empty if your Jenkins server is not behind any firewall and
+    has direct access to the internet.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins uses the HTTP Proxy Configuration details when you try to install or
+    upgrade a Jenkins plugin. It also uses this information to update the list of
+    Jenkins plugins available on the Update tab and the Available tab.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To test your proxy settings, do the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Under the **HTTP Proxy Configuration** section, click on the **Advanced…** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a URL to the **Test URL** field and click on the **Validate Proxy** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You should see a message: Success, as shown in the following screenshot.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the **Submit** button to save the settings:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/8351e74a-5ba7-49a7-9fd2-9f856ee465af.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Checking the proxy settings
+  prefs: []
+  type: TYPE_NORMAL
+- en: Manually installing a Jenkins plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Under the **Advanced** tab, just after the **HTTP Proxy Configuration** section,
+    you will see another section named **Upload Plugin**. It provides you with the
+    facility to install or upgrade a Jenkins plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This feature is helpful when your Jenkins instance does not have internet access
+    and you are in need of a new plugin or you need to upgrade an existing plugin.
+    Imagine a situation where you have a Jenkins instance running inside a local area
+    network, but with no access to the internet, or shall we say the Jenkins online
+    plugin repository. In such cases, you will first download the required Jenkins
+    plugin from the online Jenkins repository, and then you will transport it to the
+    Jenkins master server using a removable media. And finally, you will use the **Upload
+    Plugin** section to install the required Jenkins plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let us try to install a plugin manually by following the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'From a machine that has access to the internet, open the website: [https://updates.jenkins-ci.org/download/plugins/](https://updates.jenkins-ci.org/download/plugins/).'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The preceding site contains the list of all plugins available for Jenkins,
+    as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a2beda43-f4d7-4cf8-a7ca-a04e664ea5d7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins plugin index
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the following example, we will install a plugin named `logstash`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the index page, search for `logstash` and click on it.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will see all available versions of the respective plugin. Click on the
+    one that you need (I choose to install the latest):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/dd8ac73e-9be4-4e7b-8dc3-05eb011557aa.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of versions available for a plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: This will download a `.hpi` file on your system.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: When you download a plugin, it is also important that you download its dependencies
+    (other Jenkins plugins).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All the dependencies (Jenkins plugins) must be installed before installing the
+    desired plugin.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Copy this `.hpi` file (`logstash.hpi`) to your Jenkins server or to any machine
+    that has access to your Jenkins dashboard.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, log in to your Jenkins server. From the Jenkins dashboard, navigate to
+    **Manage Jenkins** | **Manage Plugins** | **Advanced**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the **Advanced** tab, under the **Upload Plugin** section, do the following
+    (as shown in the following screenshot):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Browse… button under the File field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the resultant window, upload the downloaded `.hpi` file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on the **Upload** button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/f68e3f67-10c9-4109-a8c7-3db079818704.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Manually uploading a Jenkins plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins will now proceed with the plugin installation.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Jenkins backup and restore
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: What happens if someone accidentally deletes important Jenkins configurations?
+    Although this can be avoided using stringent user permissions that we will see
+    in the *User Administration* section, imagine a situation where someone working
+    on the Jenkins configuration wants to restore to a previous stable Jenkins configuration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: From what we have learned so far, we know that the entire Jenkins configuration
+    is stored under the Jenkins home directory. It is `C:\jenkins` (Windows), `/var/jenkins_home`
+    (Apache Tomcat), `/var/lib/jenkins` (Linux). In the following section, we will
+    learn how to back up and restore the Jenkins configuration using a plugin, the Periodic
+    Backup plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing the Periodic Backup plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to install the Periodic Backup plugin:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins** | **Manage Plugins**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the **Plugin Manager** page, click on the **Available** tab.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Using the **Filter** option, search for `Periodic Backup`, as shown in the
+    following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/1c0318be-9128-46d6-84b9-d3b385f2e707.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Installing the Periodic Backup plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the list of items choose Periodic Backup and click on **Install without
+    restart**. You only need Blue Ocean and nothing else.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configuring the Periodic Backup plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We need to tell the Periodic Backup plugin what to back up, where to back up,
+    and how frequent to back up before we even start using it. Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard go to **Manage Jenkins** | **Periodic Backup Manager**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'When you access the Periodic Backup Manager for the first time you will see
+    the following notification:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Periodic Backup plugin has not been configured yet. Click here to configure
+    it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the **Click here to configure it** link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will be taken to the Periodic Backup Manager page, and you will find quite
+    a few options to configure. Let us see them one by one (as shown in the following
+    screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Root Directory, `<your Jenkins home directory>`, is your Jenkins home directory.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Temporary Directory field should be a directory located on your Jenkins
+    server machine. As the name says, this directory is used as a temporary location
+    to perform archive/unarchive operations during the backup/restore process. It
+    can be any directory and should be outside Jenkins home directory.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The Backup schedule (cron) field is where you define when or how frequent to
+    make a backup. Do not leave this field empty. Note that the field accepts cron
+    syntax. For example, to back up daily at midnight, use the following cron syntax
+    without quotes: `0 0 * * *`.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Validate cron syntax button is to validate the cron that you have entered
+    in the Backup schedule (cron) field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Maximum backups in location field tells Jenkins not to store backups greater
+    than the number described here.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Store no older than (days) field tells Jenkins to delete any backup that
+    is older than this value.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Under File Management Strategy, you have two options to choose from: ConfigOnly
+    and FullBackup. If you choose the ConfigOnly option, Jenkins will back up all
+    the `.xml` files from the Jenkins home directory and the `config.xml` files of
+    all the jobs. But, if you choose FullBackup, then Jenkins will back up the whole
+    Jenkins home directory.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under Storage Strategy, you have three options to choose from: NullStorage,
+    TarGzStorage, and ZipStorage (with multi-volume support). You can choose the one
+    that suits your requirement.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under Backup Location, you can add multiple backup locations to store your backups.
+    To do so, click on the **Add Location** button and choose LocalDirectory. Next,
+    under the Backup directory path field, add the location where you want Jenkins
+    to store the backup. Also, do not forget to check the **Enable this location**
+    checkbox. You can choose multiple locations and enable all of them.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d0faaace-2f45-4a7b-8506-6ad8d2c20a45.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Periodic Backup configurations
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a Jenkins backup
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that we have configured the Periodic Backup plugin, let us run a backup
+    to test our settings. To do so, on the Periodic Backup Manager page, click on
+    the Backup Now! link available on the left-hand side menu.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will see the notification on the Periodic Backup Manager page while the
+    backup is in progress as Creating backup….
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once the backup is complete, you will see it listed on the same page, as shown
+    in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/36f2c2eb-3c25-4f7e-b793-f30febb61293.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of backup
+  prefs: []
+  type: TYPE_NORMAL
+- en: Restoring a Jenkins backup
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Let us now test restoring a Jenkins backup. But before we do that, let us make
+    some configuration changes to see if the restore operation works. We will do this
+    by making some configuration changes on the Configure System page:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins |Configure System**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the **Configure System** page, change the values for the following fields.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Change the value of the # of executors field from `2` to `5`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Change the value of the Quiet period field from `5` to `10`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Save** button at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, let us restore Jenkins to a point previous to the above changes.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins | Periodic Backup Manager**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, choose the backup that we created in the previous section
+    and click on the **Restore selected backup** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will see the following message:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restoring backup…
+  prefs: []
+  type: TYPE_NORMAL
+- en: Refresh the page, and from the Jenkins dashboard click on **Manage Jenkins |
+    Configure System**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will find the value of the # of executors field as two and the Quiet period
+    field as five.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Viewing the backup and restore logs
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'You can see the whole log with respect to Jenkins backup and restore. To view
+    the details logs, perform the following steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins | System Log**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Logs page, under the Log Recorders section, click on `org.jenkinsci.plugins.periodicbackup`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will find the complete log of the backup and the restore action performed
+    here, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/3eeb250d-f852-432e-8fb4-fb06b6166658.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins Periodic Backup log
+  prefs: []
+  type: TYPE_NORMAL
+- en: Upgrading Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'There are two kinds of Jenkins releases: *LTS Release* and *Weekly Release*.
+    The *Jenkins Weekly Release* contains new features and bug fixes, whereas the
+    *LTS (Long Term Support)* *Release* are special releases that are considered stable
+    over a period of 12 weeks. It''s recommended that you always choose an *LTS Release*
+    for your Jenkins server:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/b70677e5-6337-4f2e-a625-8d5b7014741e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins download page
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Jenkins by itself notifies you when there is a newer version available (provided
+    your Jenkins server has access to the internet), as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/5cf66ecb-2dc9-43fe-8457-18344b00f90d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins notification about the availability of a new version
+  prefs: []
+  type: TYPE_NORMAL
+- en: Upgrading Jenkins running on Tomcat Server
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will learn to update Jenkins running inside a
+    servlet (Apache Tomcat). Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your Apache Tomcat server machine as the root user.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Download the latest (LTS) version of `jenkins.war` under the `/tmp` directory
+    using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To download a specific version of Jenkins (LTS), go to the following link:
+    [http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/)
+    and choose the desired version of Jenkins (for example, [http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war](http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war)).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To download a specific version of Jenkins (Weekly), go to the following link:
+    [http://mirrors.jenkins.io/war/](http://mirrors.jenkins.io/war/) and choose the
+    desired version of Jenkins (for example, [http://mirrors.jenkins.io/war/2.78/jenkins.war](http://mirrors.jenkins.io/war/2.78/jenkins.war)).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Before we upgrade Jenkins, it is important that we take a backup of our `jenkins_home`
+    directory. Refer to the* Creating a Jenkins backup* section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Always run a backup of Jenkins before upgrading Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now, stop the `tomcat` service using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, go to the location where the current `jenkins.war` file is present. In
+    our case, it is `/opt/tomcat/webapps`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: If you have chosen to use Tomcat Server solely to run Jenkins, you may find
+    `ROOT.war` instead of `jenkins.war` under the `webapps` directory. Refer to the *Installing
+    Jenkins alone on Apache Tomcat Server* section, from [Chapter 2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml), *Installing
+    Jenkins.*
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Take a backup of your existing `jenkins.war` or `ROOT.war` and place it somewhere
+    outside the `webapps` directory (for example, the `/tmp` directory):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, delete the current `jenkins.war` or `ROOT.war` file inside the webapps
+    directory:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, move the new `jenkins.war` that you have downloaded from the `/tmp` directory
+    to the `webapps` directory. If you are using Apache Tomcat Server solely for running
+    Jenkins, then rename the `destination.war` file as `ROOT.war`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, start the Tomcat service using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: Log in to your Jenkins instance. To confirm the Jenkins version, look at the
+    bottom-right corner of your Jenkins dashboard, where you will find a new Jenkins
+    version number.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Upgrading standalone Jenkins running on Windows
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Upgrading a standalone Jenkins server on Windows is a simple task. Follow the
+    given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Download the latest `jenkins.war` from [https://jenkins.io/download/](https://jenkins.io/download/).
+    Or, if you are looking for a particular Jenkins version that you want to upgrade
+    to, then download it from the following link: [http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/).'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Before we upgrade Jenkins it is important that we take a backup of our `jenkins_home`
+    directory. Refer to the *Creating a Jenkins backup* section under the *Jenkins
+    backup and restore* section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Always run a backup of Jenkins before upgrading Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: On a Jenkins standalone instance (running on a Windows machine), the `jenkins.war`
+    file is present inside the `jenkins_home` directory. Hence, backing up the `jenkins_home`
+    directory is enough.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, stop the Jenkins service. To do that, execute `services.msc` from Windows
+    Run. This will open the Windows services page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Search for the Jenkins service (usually named Jenkins). Stop the Jenkins service,
+    as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/35a27889-be95-47b7-bea9-5bb2bdd978fb.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Stopping a Jenkins service
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Or, you can also stop the Jenkins service from the Windows Command Prompt (Run
+    as administrator), using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The output is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: Next, replace the `jenkins.war` file, present under `C:\Program Files (x86)\Jenkins\`,
+    with the newly downloaded `jenkins.war` file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'After replacing the `jenkins.war` file*,* start the Jenkins service from the
+    services window, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/b683c11b-e08c-4f8d-b4c4-05119f8d0ef6.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Starting a Jenkins service
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Or, you can also start the Jenkins service from the Windows Command Prompt
+    (Run as administrator), using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The output is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: Log in to your Jenkins instance. To confirm the Jenkins version, look at the
+    bottom-right corner of your Jenkins dashboard, where you should see a new Jenkins
+    version number.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Upgrading standalone Jenkins running on Ubuntu
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will learn how to update Jenkins running on Ubuntu.
+    Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your Jenkins server machine as a root user.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Download the latest (LTS) version of `jenkins.war` under the `/tmp` directory,
+    using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To download a specific version of Jenkins (LTS), go to the following link:
+    [http://mirrors.jenkins.io/war-stable/](http://mirrors.jenkins.io/war-stable/)
+    and choose the desired version of Jenkins (for example, [http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war](http://mirrors.jenkins.io/war-stable/2.73.1/jenkins.war)).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To download a specific version of Jenkins (Weekly), go to the following link:
+    [http://mirrors.jenkins.io/war/](http://mirrors.jenkins.io/war/) and choose the
+    desired version of Jenkins (for example, [http://mirrors.jenkins.io/war/2.78/jenkins.war](http://mirrors.jenkins.io/war/2.78/jenkins.war)).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Before we upgrade Jenkins, it is important that we take a backup of our `jenkins_home`
+    directory. Refer to the *Creating a Jenkins Backup* section under the *Jenkins
+    backup and restore *section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Always run a backup of Jenkins before upgrading Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now, stop the `jenkins` service, using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, go to the location where the current `jenkins.war` file is present. In
+    our case, it is `/usr/share/jenkins/`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Take a backup of your existing `jenkins.war` and place it somewhere outside
+    the `jenkins` directory (for example, the `/tmp` directory):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, delete the current `jenkins.war` file inside the `jenkins` directory:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, move the new `jenkins.war` file that you have downloaded from the `/tmp`
+    directory to the `jenkins` directory:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, start the `jenkins` service using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: Log in to your Jenkins instance. To confirm the Jenkins version, look at the
+    bottom-right corner of your Jenkins dashboard, where you will find a new Jenkins
+    version number.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Upgrading Jenkins running on a Docker container
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will learn how to update a Jenkins instance running
+    inside a Docker container:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The following section is applicable only if you are running your Jenkins instance
+    using a data volume for your `jenkins_home` directory. See the *Running Jenkins
+    on Docker, Running a Jenkins container using a data volume* sections from the [Chapter
+    2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml), *Installing Jenkins*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your Docker host machine.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Look for the running Jenkins container, using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The output is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: You should get an output similar to the previous snippet. Note the Jenkins container
+    name, in my example it is `jenkins_prod`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'We will stop and then delete the running Jenkins container using the following
+    Docker commands. But, before you stop and delete your Jenkins instance, make sure
+    that there is no job running on your Jenkins server:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'List the available Docker images on your Docker host, using the following command.
+    You can see we have a Jenkins Docker image: `jenkins/jenkins:lts`. However, that
+    is no longer the latest:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The output is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Download the latest Jenkins Docker image, using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: The aforementioned command may take a while to download the Jenkins Docker image.
+  prefs: []
+  type: TYPE_NORMAL
+- en: At the time of writing this chapter, 2.73.1 was the latest Jenkins release (LTS).
+    Choose the desired version of Jenkins by modifying the command.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Once the download is completed, execute the `sudo docker images` command again,
+    as shown in the following segment. Note the new Jenkins Docker image. In my example,
+    it is `jenkins/jenkins:2.73.1`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The output is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now let us start a new Jenkins container using the newly downloaded Jenkins
+    Docker image (we will reuse the old Jenkins container name):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following table explains the Docker commands that we used before:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '| `docker` | Used to invoke Docker utility. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `run` | It''s a Docker command to run a container. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `-d` | This option runs the container on the backend. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `--name` | This option gives a name to your container. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `-p` | This option is used to map a container''s port with the host. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `jenkins/jenkins:2.73.1` | The name of the Docker image and its version used
+    to create a container. `jenkins/jenkins` is the Jenkins Docker image and `2.73.1`
+    is a particular version of that image. |'
+  prefs: []
+  type: TYPE_TB
+- en: Log in to your Jenkins instance. You should see all your jobs/settings intact.
+    To confirm the Jenkins version, look at the bottom-right corner of your Jenkins
+    dashboard, where you will find a new Jenkins version number.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: User administration
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Let's see what Jenkins has to offer in the area of user administration. From
+    the Jenkins dashboard, click on Manage Jenkins | Configure Global Security to
+    access the Configure Global Security page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can also access the Configure Global Security page by using the `<Jenkins
+    URL>/configureSecurity/` link.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the following section, we will stick to the options that are related to user
+    authentication and permissions. We will look at the other security options in
+    the upcoming chapters.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Enabling/disabling global security on Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Once on the Configure Global Security page, you will see that the Enable security
+    option is already enabled. The Enable security option should always be on; disabling
+    it will make Jenkins accessible to anyone who has the Jenkins URL, with no restrictions
+    of any kind.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Enabling/disabling computers to remember user credentials
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'When users try to access Jenkins, they are offered an option to be remembered
+    on their respective computers, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/7904f347-7f7b-4906-bc12-5d42d721ac52.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Remember me on this computer option
+  prefs: []
+  type: TYPE_NORMAL
+- en: This behavior is enabled by default. To disable this feature, tick the **Disable
+    remember me** option available under the Configure Global Security page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Authentication methods
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Jenkins offers a variety of authentication methods to choose from. The following
+    is a list of available options:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Delegate to servlet container
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins' own user database
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: LDAP
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Unix user/group database
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '![](img/1e461503-6663-4b58-b44d-02fa04fd0b2e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins' authentication methods
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Jenkins' own user database option is enabled by default. The initial users
+    that we created during the Jenkins setup wizard are all stored under the Jenkins'
+    own user database. There is no actual database of any kind, and all user information
+    is saved as XML files. Let us take a quick look at each of the authentication
+    methods.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Delegating to a servlet container
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This option can be used only when you are running your Jenkins server from a
+    servlet container, such as Apache Tomcat and so on. Enabling this option will
+    allow Jenkins to authenticate users using the servlet containers’ realm.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For example, in the *Configure the Apache Tomcat Server* sub-section under the *Running
+    Jenkins inside a servlet container* section from the  [Chapter 2](8998d7f5-8e3f-45ee-acba-4a9c76dd6444.xhtml),
+    *Installing Jenkins*,we modified the `tomcat-user.xml` file to create users and
+    access. That is an example of the `UserDatabaseRealm`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: That means, if your Jenkins server is running on Apache Tomcat server and you
+    have configured the `UserDatabaseRealm`*,* then all users defined in the `tomcat-user.xml`
+    file will be able to access Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Refer to the following website to see all types of realms supported by Apache
+    Tomcat: [http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Standard_Realm_Implementations.](http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Standard_Realm_Implementations)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins' own user database
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This option is enabled by default. Under this scheme, Jenkins stores all the
+    user information inside XML files. This option is good for small organizations
+    or if you are exploring Jenkins and are yet to make it a part of your organization.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There is also an option to allow users to sign up at the login page. To enable
+    it, tick the **Allow users to sign up** option available under Jenkins' own user
+    database.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This will enable a link named **Create an account** at the Jenkins login page,
+    as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/6af0a744-f7f3-422d-81a9-4fca5744b0dc.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Allow user to sign up option
+  prefs: []
+  type: TYPE_NORMAL
+- en: As a new user, when you click on the **Create an account** link you will be
+    asked to fill in some basic details about yourself, such as username, password,
+    email, full name, and so on. Once you are done filling in the necessary information
+    you will be allowed to access Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: What you as a new user are allowed to see/do on Jenkins depends on the **Authorization**
+    settings inside Jenkins. We will learn about the **Authorization** settings later
+    in the current chapter.
+  prefs: []
+  type: TYPE_NORMAL
+- en: LDAP
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This is one of the most widely used authentication methods in most organizations.
+    If you do not see the **LDAP** option listed under the **Access Control** | **Security
+    Realm** section, then check for the **LDAP plugin**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The following option, as shown in the following screenshot allows Jenkins to
+    authenticate users using an LDAP server. Contact the IT administration team in
+    your organization to provide the LDAP server details (if your organization uses
+    LDAP).
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/28a9fbb7-38a9-4ab6-94ce-24e63f8d1259.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'For more information about the LDAP configuration, refer to the LDAP plugin
+    page: [https://wiki.jenkins.io/display/JENKINS/LDAP+Plugin](https://wiki.jenkins.io/display/JENKINS/LDAP+Plugin).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Unix user/group database
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The following option works if Jenkins is installed on a Unix/Linux machine.
+    When enabled, Jenkins delegates the authentication to the underlying OS. In other
+    words, all users/groups that are configured on the underlying OS get access to
+    Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You need not configure anything inside Jenkins to make this option work. However,
+    all users on the underlying OS should have access to the `/etc/shadow` file*.*
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Use the following command to make the `/etc/shadow` file accessible to all
+    users:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs: []
+  type: TYPE_PRE
+- en: Creating new users inside Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The following section is only applicable if you are using Jenkins' own user
+    database as the Authentication method. Perform the following steps to manually
+    add users to your Jenkins server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins | Manage Users**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the **Manage Users** page, from the left-hand side menu, click on **Create
+    User**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page, you will be asked to provide some basic information
+    about the user, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/77dccbc9-a126-4781-9437-1f5b79ed21ef.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a user in Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Fill the fields with appropriate values and click on the **Create User** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Manage Users link is only available if you are using Jenkins' own user database
+    as the Authentication method.
+  prefs: []
+  type: TYPE_NORMAL
+- en: People page
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The People page displays all users that have access to the Jenkins server,
+    as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/d5c6bb50-da5d-4e75-926c-0411f5cdcb1f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Jenkins People page
+  prefs: []
+  type: TYPE_NORMAL
+- en: User information and settings in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Click on any particular user ID or name (see the following screenshot) to get
+    information about the respective user. You will be taken to the users'' Status
+    page, as seen in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/ffa8caf4-1644-4929-863d-fcb6b34ed212.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The users' Status page
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On the users'' Status page you will see the following options on the left-hand
+    side menu: **Status**, **Builds**, **Configure**, **My Views** and **Credentials**.
+    Let us explore some of them in detail:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The **Builds** page will display information about all the Jenkins builds that
+    were run by the current user.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The **My Views** page will take you to the views that are accessible by the
+    current user. If no views are configured for the current user, then the **My Views**
+    page will show the default All view (Jenkins dashboard).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The Credentials link will take you to the **Credentials** page. However, the
+    Credentials page will display additional information with respect to the current
+    user, as shown in the following screenshot:'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '![](img/8f5db5c3-8ee0-4fe7-bc64-46a7ffcaf1f8.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins credentials scoped to a user
+  prefs: []
+  type: TYPE_NORMAL
+- en: Authorization methods
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Jenkins offers a variety of authorization methods to choose from. The following
+    is a list of available options:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Anyone can do anything
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Legacy mode
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Logged-in users can do anything
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Matrix-based
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Project-based Matrix Authorization Strategy
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Logged-in users can do anything option is enabled by default. Let us take
+    a quick look at each of the authorization methods.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To access the Jenkins Authorization settings, from the Jenkins dashboard navigate
+    to **Manage Jenkins | Configure Global Security | Access Control**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Anyone can do anything
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When you choose this option, Jenkins does not perform any authorization. Anyone
+    who has access to Jenkins gets full control, including anonymous users. This option
+    is not recommended.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Legacy mode
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When you choose this option, Jenkins behaves the way it used to be before release
+    1.164\. In simple terms, Jenkins will look for a user named `Admin` (irrespective
+    of the Authentication method you use)*.* This `Admin` user will be provided administrative
+    privilege, and the rest of the users will be treated as anonymous users. This
+    option is again not recommended.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Logged-in users can do anything
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This is the default authentication setting that Jenkins comes with when you
+    install and set up a new Jenkins server. The name is self-explanatory, that is,
+    logged-in users are administrators by default. Again, this option is not recommended.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Under the Logged-in users can do anything field, there is an option named Allow
+    anonymous read access (disabled by default). When this option is ticked (enabled),
+    anyone who has access to the Jenkins URL will be straight away taken to the Jenkins
+    dashboard with read-only access to all Jenkins jobs. However, you are required
+    to log in in order to edit a Jenkins job or view Jenkins' configuration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Matrix-based security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'This is one of the most widely used Authorization methods in Jenkins. Let us
+    explore it in detail by performing the following steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Enable the Matrix-based security authorization method by selecting it. You
+    will be presented with the following matrix:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/c1df46a8-b178-4657-a133-727ebd636d54.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Matrix-based security configurations
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the previous screenshot, you can see the columns represent various items
+    in Jenkins and the rows represent various users. At the bottom of the matrix there
+    is an option to add users.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Let us add some users and provide them some permissions.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To add a user, enter the exact username of the user in the **User/group to add**
+    field, and click on the **Add** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You can see from the following screenshot that I have added four users (refer
+    to the *People page* section to see the list of users that you can add in here).
+    If you are using Jenkins'' own user database then create a few users (refer to
+    the *Creating new users inside Jenkins* section):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/b880a897-95a6-4653-afef-83117295df5a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding users to the matrix
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now, let us give them some permissions by selecting the appropriate checkbox.
+    You can see from the following screenshot that I have given full access to the
+    user `jenkins_admin`. The users `jenkins_developer` and `jenkins_tester` have
+    been given access to read and execute Jenkins jobs, and the `jenkins_user` user
+    has been given only read access:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/924c015c-dd88-45da-b66b-239d8c01f1e1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Providing permissions using the Matrix
+  prefs: []
+  type: TYPE_NORMAL
+- en: Leave the rest of the settings as they are and click on the Save button at the
+    bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To check the configuration, log in as each user and confirm what you see on
+    the Jenkins dashboard.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Project-based Matrix Authorization Strategy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the previous section, we saw the matrix-based security authorization feature,
+    which gave us a good amount of control over the users and permissions.
+  prefs: []
+  type: TYPE_NORMAL
+- en: However, imagine a situation where your Jenkins server has grown to a point
+    where it contains hundreds of Jenkins jobs and many users, and you want to control
+    user permissions at the job level (project level).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In such a case, we need the Project-based Matrix Authorization Strategy:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/6ecdc314-dceb-4878-ac42-055baa7cf532.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: User permission at job level
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let us learn how to configure the Project-based Matrix Authorization Strategy.
+    Perform the following steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: To access the Jenkins Authorization settings, from the Jenkins dashboard navigate
+    to **Manage Jenkins | Configure Global Security | Access Control**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Select the Project-based Matrix Authorization Strategy option. You will be
+    presented with the following matrix:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7bd98a77-5268-43d7-b7cd-513e7d68f99f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Project-based Matrix Authorization Strategy configurations
+  prefs: []
+  type: TYPE_NORMAL
+- en: For now, add a user and give it full permissions. To add a user, type the exact
+    username of the user in the User/group to add field, and click on the **Add**
+    button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You can see from the following screenshot that I have added the user `jenkins_admin`
+    with full permissions:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/658d04c6-e015-4bd6-a911-3c0fc68b87ec.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding users to the matrix
+  prefs: []
+  type: TYPE_NORMAL
+- en: Leave the rest of the settings as they are and click on the **Save** button
+    at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Next, from the Jenkins dashboard right-click on any of the Jenkins jobs and
+    select **Configure**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the Jobs Configuration page, scroll all the way down to the Enable project-based
+    security option and enable it.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The moment you enable the project-based security, a matrix table will appear,
+    as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/dd1355de-4c12-4620-a2a9-0f15078d3120.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Project-based security configurations inside Jenkins job
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let us add some users and provide them some permissions.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To add a user, enter the exact username of the user in the User/group to add
+    field, and click on the **Add** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You can see from the following screenshot that I have added the user `jenkins_developer`
+    with some permissions:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/f40c3688-14a8-4d28-8ea1-e518b87afeb8.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Providing permissions using the Matrix
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, click on the **Save** button at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now log in as the user that you have just given permissions to for the respective
+    Jenkins job (in our example it is `jenkins_developer`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will find that the user can only see the Jenkins job that it has permission
+    to access.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Similarly, you can configure user permissions on each and every job that you
+    create in Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we saw how to configure some of the basic but important elements
+    in Jenkins, all with the help of some practical examples. Jenkins upgrade, Jenkins
+    backup, and Jenkins user management are some of the important things we learned
+    in this chapter.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The next chapter is all about the Jenkins master-slave architecture and the
+    Jenkins *Distributed Build System*.
+  prefs: []
+  type: TYPE_NORMAL

@@ -1,0 +1,1137 @@
+- en: Continuous Delivery Using Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We will begin this chapter with a Continuous Delivery design that covers the
+    following areas:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Branching strategy
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A list of tools for Continuous Delivery
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A Jenkins pipeline structure
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The **Continuous Delivery** (**CD**) design will serve as a blueprint that will
+    guide the readers in answering the how, why, and where of the CD being implemented.
+    The design will cover all the necessary steps involved in implementing an end-to-end
+    CD pipeline.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The CD design, discussed in this chapter, should be considered as a template
+    for implementing CD, and not a full and final model. All the tools used can be
+    modified and replaced to suit the purpose.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins CD design
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this section, we will go through a very general CD design.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Branching strategy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In [Chapter 7](0699eee2-c25d-468e-ba6a-741f9068abce.xhtml), *Continuous Integration
+    Using Jenkins*, we followed a branching strategy for the CI that included the
+    following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The master branch
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The integration branch
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The feature branch
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: This branching strategy is a slimmer version of the *GitFlow workflow* branching
+    model.
+  prefs: []
+  type: TYPE_NORMAL
+- en: While CI can be performed on integration/development branches or feature branches,
+    CD is carried out only on the integration and release branches.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The release branch
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Some teams go with the strategy of having a release branch. A release branch
+    is created after a successfully-tested code goes live in production (distributed
+    to customers) from the master branch. The purpose of creating a release branch
+    is to support bug fixes on the respective release:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/37e7abda-0552-457b-a75c-a61fceddf129.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Branching strategy
+  prefs: []
+  type: TYPE_NORMAL
+- en: CD pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We are now at the heart of the CD design. We will not create a new pipeline;
+    instead, we will build on the existing CI Multibranch Pipeline in Jenkins. The
+    new CD pipeline will have the following stages:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Fetch the code from the **version control system** (**VCS**) on a push event
+    (initialization of the CI pipeline).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Build and unit test the code; publish a unit test report on Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Perform static code analysis on the code and upload the result to SonarQube.
+    Fail the pipeline if the number of bugs crosses the threshold defined in the quality
+    gate.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Perform integration testing; publish a unit test report on Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Upload the built artifacts to Artifactory along with some meaningful properties.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Deploy the binaries to the testing environment.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Execute testing (quality analysis).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Promote the solution in Artifactory and mark it as a release candidate.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The purpose of the preceding CD pipeline is to automate the process of continuously
+    deploying, testing (QA), and promoting the build artifacts in the binary repository.
+    Reporting for failures/success happens at every step. Let us discuss these pipelines
+    and their constituents in detail.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the real world, the QA may contain multiple stages of testing, such as performance
+    testing, user acceptance testing, component testing, and so on. To keep things
+    simple, we will perform only performance testing in our example CD pipeline.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Toolset for CD
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The example project for which we are implementing CI is a simple Maven project.
+    Therefore, we will see Jenkins working closely with many other tools.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following table contains the list of tools and technologies involved in
+    everything that we will be seeing:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Tool/Technology** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Java | Primary programming language used for coding |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Maven | Build tool |'
+  prefs: []
+  type: TYPE_TB
+- en: '| JUnit | Unit test and integration test tools |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Jenkins | CI tool |'
+  prefs: []
+  type: TYPE_TB
+- en: '| GitHub | VCS |'
+  prefs: []
+  type: TYPE_TB
+- en: '| SonarQube | Static code analysis tool |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Artifactory | Binary repository manager |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Apache Tomcat | Application server to host the solution |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Apache JMeter | Performance testing tool |'
+  prefs: []
+  type: TYPE_TB
+- en: Creating a Docker image – performance testing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this section, we will create a Docker image for our **performance testing**
+    (**PT**). This Docker image will be used by Jenkins to create Docker containers,
+    wherein we will deploy our built solution and execute our performance tests. Follow
+    the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Log in to your Docker server. Give the following command to check the available
+    Docker images:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'From the following screenshot, you can see I have three Docker images (`ubuntu`,
+    `hello-world`, and `maven-build-slave-0.1`) already on my Docker server:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/cd806558-9290-422f-843b-89af36ee38a2.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Listing the Docker images
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will build a new Docker image for running our PT using the Ubuntu Docker
+    image.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Let us upgrade our Ubuntu Docker image with all the necessary application that
+    we need to run our tests, which are as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Java JDK (latest)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Apache Tomcat (8.5)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Apache JMeter
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A user account to log in the Docker container
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: OpenSSH daemon (to accept SSH connection)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Curl
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Execute the following command to run a Docker container using the Ubuntu Docker
+    image. This will create a container and open up its bash shell:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now, install all the required application as you would do on any normal Ubuntu
+    machine. Let''s begin with creating a `jenkins` user:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following command and follow the user creation steps, shown as
+    follows:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/f509ecad-31db-44c1-9812-d40924045d39.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a user
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Check the new user, using the switch user command:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: Switch back to the `root` user by typing `exit`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Next, we will install the SSH server. Execute the following commands in sequence:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Follow the given steps to install Java:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Update the package index:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, install Java. The following command will install the **Java Runtime Environment**
+    (**JRE**):'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The best way to install Tomcat 8.5 is to download the latest binary release
+    and then configure it manually:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Move to the `/tmp` directory and download Apache Tomcat 8.5, using the following
+    commands:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We will install Tomcat inside the `home/jenkins/` directory. To do so, first
+    switch to the `jenkins` user. Create a `tomcat` directory inside `/home/jenkins/`:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then extract the archive to it:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: Switch back to the `root` userby typing `exit`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Apache JMeter is a good tool to perform performance testing. It''s free and
+    open source. It can run in both GUI and command-line mode, which makes it a suitable
+    candidate for automating performance testing:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Move to the `/tmp` directory:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Download `apache-jmeter-3.1.tgz`, or whichever is the latest stable version,
+    from [http://jmeter.apache.org/download_jmeter.cgi](http://jmeter.apache.org/download_jmeter.cgi):'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We will install JMeter inside the `opt/jmeter/` directory. To do so, create
+    a `jmeter` directory inside `/opt`:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then extract the archive to the `/opt/jmeter/` directory and also give it the
+    appropriate permissions:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Follow the given step to install `curl`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Follow the given steps to save all the changes that we made to the Docker image:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Exit the container by typing `exit`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We need to save (`commit`) all the changes that we did to our Docker container.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Get the `CONTAINER ID` of the container that we worked on recently by listing
+    all the inactive containers, as shown in the following screenshot after the command:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/326c64cd-d3bf-4fa2-8020-d8731154e286.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Listing inactive containers
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Note the `CONTAINER ID`, and execute the following command to save (`commit`)
+    the changes that we made to our container:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'I have named my container `performance-test-agent-0.1`, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/62e687de-76e9-4bab-991c-729c89603e8c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Docker commit command
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once you have committed the changes, a new Docker image gets created.
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following `docker` command to list images, as shown in the following
+    screenshot after the command:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: '![](img/4e968dab-db63-4073-aedd-8995d881c7ec.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Listing the Docker images
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can see our new Docker image with the name `performance-test-agent-0.1`.
+    We will now configure our Jenkins server to use the `performance-test-agent-0.1` Docker
+    image to create Jenkins slaves (build agents).
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Adding Docker container credentials in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to add credentials inside Jenkins to allow it to talk
+    to Docker:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, navigate to Credentials | System | Global credentials
+    (unrestricted).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Add Credentials** link on the left-hand side menu to create a
+    new credential (see the following screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose **Kind** as Username with Password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the Scope field to its default value.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a username for your Docker image (`jenkins`, as per our example) under the Username field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Password field, add the password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add an ID under the ID field, and a description under the Description field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on the OK button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/47b38548-a70f-4df2-8ca8-25e3525af551.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating credentials inside Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Updating the Docker settings inside Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to update the Docker settings inside Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on **Manage Jenkins** | **Configure System**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Scroll all the way down to the **Cloud** section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Cloud section, click on the **Add Docker Template** button and choose
+    **Docker Template**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will be presented with a lot of settings to configure (see the following
+    screenshot). However, to keep this demonstration simple, let us stick to the important
+    settings.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Docker Image** field, enter the name of the Docker image that we
+    created earlier. In my case, it is `performance-test-agent-0.1`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Labels** field, add a label. The Docker container will be recognized,
+    using this label by your Jenkins pipeline. I have added the `docker_pt` label.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Launch Method** should be Docker SSH computer launcher.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the **Credentials** field, choose the credentials that we created to access
+    the Docker container.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Make sure that the Pull strategy option is set to Never pull.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the rest of the options to their default values.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on **Apply** and then **Save**:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/792f399f-263f-45c0-98b2-8431a6e73315.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a Docker Template for integration testing
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a performance test using JMeter
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this section, we will learn how to create a simple performance test using
+    the JMeter tool. The steps mentioned should be performed on your local machine.
+    The following steps are performed on a machine with Ubuntu 16.04.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Java
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to install Java:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Update the package index:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, install Java. The following command will install the JRE:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To set the `JAVA_HOME` environment variable, first get the Java installation
+    location. Do this by executing the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: Copy the resultant path and update the `JAVA_HOME` variable inside the `/etc/environment`
+    file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing Apache JMeter
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to install Apache JMeter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Move to the `/tmp` directory:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Download `apache-jmeter-3.1.tgz`, or whichever is the latest stable version,
+    from [http://jmeter.apache.org/download_jmeter.cgi](http://jmeter.apache.org/download_jmeter.cgi):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We will install JMeter inside the `/opt/jmeter` directory. To do so, create
+    a `jmeter` directory inside `/opt`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then extract the archive to it:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: Starting JMeter
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to start JMeter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To start JMeter, move to the JMeter installation directory and run the `jmeter.sh`,
+    script using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: The JMeter GUI utility will open up in a new window.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Creating a performance test case
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'By default, you will see an example test plan. We will create a new test plan
+    by modifying the existing template:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Rename the test plan to `Hello_World_Test_Plan`, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a956195c-a5df-4d44-915a-e6d07b529020.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a test plan
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Save it inside the `examples` folder by clicking on the Save button from the
+    menu items or by clicking *Ctrl* + *S*, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7b1dafe8-34ef-48f6-a714-94b9fde90f54.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Saving the test plan
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a thread group
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to create a thread group:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Add a thread group. To do so, right-click on `Hello_World_Test_Plan` and select
+    **Add** | **Threads (Users)** | **Thread Group**:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/141ed30d-e9c4-4c9e-99b4-aaddef0ec338.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a thread group
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the resultant page, give your thread group a name and fill the options as
+    follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select **Continue** for the option **Action to be taken after a Sampler error**.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add **Number of Threads (users)** as `1`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add **Ramp-Up Period (in seconds)** as `1`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add **Loop Count** as `1`:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a53d3e48-1049-44b7-9afd-f6af7bddaf20.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring a thread group
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a sampler
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to create a sampler:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Right-click on `Hello_World_Test_Plan` and select **Add** | **Sampler** | **HTTP
+    Request**:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/6b05ed69-1771-48e8-a77b-e3ec50e0dae7.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding a Sampler
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Name the HTTP Request appropriately and fill the options as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add **Server Name or IP** as `<IP Address of your Testing Server machine>`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add Port Number as `8080`.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add **Path** as `/hello.0.0.1/`:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/bf85ab3c-ee78-483f-930b-00c251dbadfc.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring a sampler
+  prefs: []
+  type: TYPE_NORMAL
+- en: Adding a listener
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to add a listener:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Right-click on `Hello_World_Test_Plan` and select **Add** | **Listener** |
+    **View Results Tree**:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/5b778cfb-8997-45e4-a40b-912e5322b473.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding a Listener
+  prefs: []
+  type: TYPE_NORMAL
+- en: Do nothing; leave all the fields as they are.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Save the whole configuration by clicking on the Save button in the menu items
+    or by clicking *Ctrl* + *S*.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Copy the `.jmx` file from `/opt/jmeter/bin/examples`*.*
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under your Maven project, create a folder named `pt` inside the `src` directory
+    and add the `.jmx` file inside it.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Upload the code to GitHub.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The CD pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We have all the required tools and the Docker image is ready. In this section,
+    we will create a pipeline in Jenkins that will describe our CD process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Writing the Jenkinsfile for CD
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We will build on the CI pipeline that we created earlier. Let's first revisit
+    our CI pipeline, and then we will add some new stages to it as part of the CD
+    process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Revisiting the pipeline code for CI
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following is the complete combined code that was part of the CI:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code to stash the build artifacts
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The Jenkins pipeline uses a feature called `stash` to pass build artifacts
+    across nodes. In the following step, we will `stash` a few build artifacts that
+    we wish to pass to the `docker_pt` node, wherein we will perform our performance
+    test:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'In the preceding code:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`name`: Name for the stash'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '`includes`: Comma-separated files to include'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Spawning a Docker container – performance testing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'First, let us create a pipeline code that will create a Docker container (Jenkins
+    slave) using the `performance-test-agent-0.1` Docker image for performance testing:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: Where `docker_pt` is the label for the `performance-test-agent-0.1` Docker template.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We would like to perform the following tasks on the `docker_pt` node:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Start Tomcat.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Deploy the build artifacts to Tomcat on the testing environment.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Perform performance testing.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Promote the build artifacts inside Artifactory.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All the preceding tasks are various stages of our CD pipeline. Let's write the
+    pipeline code for each one of them.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Pipeline code to start Apache Tomcat
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The pipeline code to start Apache Tomcat on the performance testing agent is
+    a simple shell script that will run the `./startup.sh` script present inside the
+    Tomcat installation directory:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Wrap the preceding step inside a `stage` called `Start Tomcat`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code to deploy build artifacts
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The pipeline code to deploy build artifacts happens in two steps. First, we
+    will un-stash the binary package that we stashed from the previous node Docker
+    block. Then, we deploy the un-stashed files into the `webapps` folder inside the
+    Tomcat installation directory on our testing environment. The code is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE31]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Wrap the preceding step inside a `stage` called `Deploy`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE32]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code to run performance testing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The pipeline code to execute the performance testing is a simple shell script
+    that evokes the `jmeter.sh` script and passes the `.jmx` file to it. The test
+    result is stored inside a `.jtl` file that is then archived. The code is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE33]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following table gives the description the preceding code snippet:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Code** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `./jmeter.sh -n -t <path to the .jmx file> -l <path to save the .jtl file>`
+    | This is the `jmeter` command to execute the performance test plan (the `.jmx`
+    files) and generate a test result (the `.jtl` files). |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `step([$class: ''ArtifactArchiver'', artifacts: ''**/*.jtl''])` | This line
+    of code will archive all files with the `.jtl` extension. |'
+  prefs: []
+  type: TYPE_TB
+- en: 'Wrap the previous step inside a `stage` called `Performance Testing`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE34]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code to promote build artifacts in Artifactory
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The way we are going to promote build artifacts in Artifactory is by using
+    the properties (key-value pair) feature. All builds that have passed performance
+    testing will be applied a `Performance-Tested=Yes` tag. The code is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE35]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following table gives the description the preceding code snippet:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Code** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `withCredentials([usernameColonPassword(credentialsId: ''artifactory-account'',
+    variable: ''credentials'')]) {``}` | We are using the `withCredentials` plugin
+    inside Jenkins to pass Artifactory credentials to the `curl` command. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `curl -u<username>:password -X PUT "<artifactory server URL>/api/storage/<artifactory
+    repository name>?properties=key-value"` | This is the `curl` command to update
+    the property (key-value pair) on the build artifact present inside Artifactory.
+    The `curl` command makes use of the REST API features of Artifactory. |'
+  prefs: []
+  type: TYPE_TB
+- en: 'Wrap the previous step inside a `stage` called `Promote build in Artifactory`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE36]'
+  prefs: []
+  type: TYPE_PRE
+- en: Combined CD pipeline code
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following is the complete combined code that will run inside the `docker_pt`
+    node:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE37]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Let us combine the preceding code with the pipeline code for CI to get the
+    complete CD pipeline code, shown as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE38]'
+  prefs: []
+  type: TYPE_PRE
+- en: CD in action
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Make some changes on your GitHub code or just trigger the Jenkins pipeline
+    from the Jenkins dashboard:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Log in to Jenkins, and from the Jenkins dashboard click on your Multibranch
+    Pipeline. You should see something like the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/254111d5-9f2e-4f30-9332-c02d289e5f0b.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins CD pipeline in action
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Log in to the Artifactory server and see if the code has been uploaded and
+    promoted using the properties, shown as follows:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/2e2b9422-cd5c-4416-b89b-a217114f070f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Build artifacts being promoted inside Artifactory
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let us see our CD pipeline in Jenkins Blue Ocean. To do so, navigate to your
+    Jenkins Multibranch CD pipeline (<`Jenkins URL>/job/<Jenkins multibranch pipeline
+    name>/`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the pipeline page, click on the Open Blue Ocean link available on the left-hand
+    side menu.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will be taken to your Multibranch Pipeline page in Blue Ocean, as shown
+    in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d9717ae3-3dd7-4a38-bf60-9a40464a1d42.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Click on the master branch to see its pipeline. You should see something like
+    the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/83069db0-08c4-4210-8b28-c951e83858ec.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we learned how to create an end-to-end CD pipeline that gets
+    triggered on a push event, performs builds, static code analysis, and integration
+    testing, uploads the successfully tested binary artifact to Artifactory, deploys
+    the code to the testing environment, performs some automated testing, and promotes
+    the binaries in Artifactory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The CD design discussed in the book can be modified to suit the needs of any
+    type of project. The users just need to identify the right tools and configurations
+    that can be used with Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will learn about Continuous Deployment, how different
+    it is from Continuous Delivery, and more.
+  prefs: []
+  type: TYPE_NORMAL

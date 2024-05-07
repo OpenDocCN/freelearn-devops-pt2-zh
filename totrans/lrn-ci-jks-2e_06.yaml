@@ -1,0 +1,1232 @@
+- en: Installing SonarQube and Artifactory
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this chapter, we will learn about SonarQube, which is a popular open source
+    tool for static code analysis. We will also learn about Artifactory, which is
+    another popular open source tool for version controlling binary files. In this
+    chapter, you will learn about the following topics:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing a standalone SonarQube server
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a project inside SonarQube
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing the build breaker plugin for SonarQube
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a quality gate and a quality profile
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing and configuring the SonarQube plugin in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing a standalone Artifactory server
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a repository inside Artifactory
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing and configuring the Artifactory plugin in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing and configuring SonarQube
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Apart from integrating code in a continuous way, CI pipelines nowadays also
+    include tasks that perform continuous inspection—inspecting code for its quality
+    in a continuous approach.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous inspection deals with inspecting and avoiding code that is of poor
+    quality. Tools such as SonarQube help us in achieving this. Every time a code
+    gets checked-in (committed), a code analysis is performed on the code.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This analysis is based on some rules defined by the code analysis tool. If the
+    code passes the error threshold, it's allowed to move to the next step in its
+    life cycle. But, if it crosses the error threshold, it's dropped.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Some organizations prefer checking the code for its quality, right at the moment
+    when the developer tries to check-in the code. If the analysis is good, the code
+    is allowed to be checked-in, or else the check-in is cancelled and the developer
+    needs to work on the code again.
+  prefs: []
+  type: TYPE_NORMAL
+- en: SonarQube is a code quality management tool that allows teams to manage, track,
+    and improve the quality of their source code.  It is a web-based application that
+    contains rules, alerts, and thresholds, all of which can be configured. It covers
+    the seven types of code quality parameters, which are architecture and design,
+    duplications, unit tests, complexity, potential bugs, coding rules, and comments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: SonarQube is an open source tool that supports almost all popular programming
+    languages with the help of plugins. SonarQube can also be integrated with a CI
+    tool such as Jenkins to perform continuous inspection, which we will see shortly.
+  prefs: []
+  type: TYPE_NORMAL
+- en: So, first let's learn how to install SonarQube. In the following section, we
+    will learn how to install SonarQube on Ubuntu 16.04.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Java
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow these steps to install Java:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Update the package index:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, install Java. The following command will install the JRE:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To set the `JAVA_HOME` environment variable, first get the Java installation
+    location. Do this by executing the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should get a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: The path in the preceding output is the `JAVA_HOME` location. Copy it.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Open the `/etc/environment` file for editing:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Add the following line inside the `/etc/environment` file, as shown here:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: Type *Ctrl* + *X* and choose *Y* to save and close the file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Next, reload the file using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: Downloading the SonarQube package
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following steps will help you to download the SonarQube package:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Download the latest version of the SonarQube installation package by navigating
+    to [https://www.sonarqube.org/downloads/](https://www.sonarqube.org/downloads/).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It is recommended that you always install the latest LTS* version of SonarQube.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Move to the `/tmp` folder:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Download the SonarQube ZIP package, using `wget`, as shown in the following
+    command. Here, I am downloading SonarQube version 5.6.7 (LTS*):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, unzip the SonarQube ZIP package inside the `/opt` directory, using the
+    following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To use the `unzip` command, make sure you have the zipping tool installed on
+    your Ubuntu machine. To install the ZIP tool, execute the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`**sudo apt-get install zip**`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can also download the SonarQube ZIP package on a different machine and then
+    move it to your SonarQube server, using WinSCP.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Move to the extracted folder and list its content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: The `bin/` folder contains all the scripts to install and start SonarQube, and
+    the `logs/` folder contains the SonarQube logs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Running the SonarQube application
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow these steps to start the SonarQube server:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Move to `/opt/sonarqube-5.6.6/bin/linux-x86-64/`. In our current example, we
+    are starting SonarQube on a 64-bit Linux OS:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Run the `sonar.sh` script to start SonarQube, as shown in the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should see a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: To access SonarQube, use the following link in your favorite web browser: `http://localhost:9000/`
+    or `http://<IP-Address>:9000`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Right now there are no user accounts configured in SonarQube. However, by default
+    there is an admin account with the username as `admin` and the password as `admin`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Make sure you have at least 4 GB of memory to run the 64-bit version of SonarQube.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Resetting the default credentials and generating a token
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow these steps to reset the credentials and generate a token:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Open the SonarQube link in your favorite browser and switch to admin user.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the SonarQube dashboard, click on Administrator | My Account | Security
+    (tab).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page, under the Change password section, do the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add your old password (`admin`) under the Old Password field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a new password under the New Password field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Reconfirm your new password by adding it again in the Confirm Password field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once done, click on the Change Password button.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the same page under the Tokens section, there is an option to generate a
+    token. Jenkins can use this token to access SonarQube. Perform the following steps
+    to generate a new token:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Tokens section, add a name for your new token, using the Generate
+    Tokens field by clicking on the Generate button.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: A new token will get generated, as shown in the following screenshot.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Copy and save this token, has we will need it later:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d5b34192-d78e-4fa6-9402-c744e8bc6bac.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a token inside SonarQube
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a project inside SonarQube
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will create a project inside SonarQube. The project
+    will be used to display the static code analysis:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the SonarQube dashboard, click on Administration | Projects (tab) | Management.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, click on the Create Project button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant window, fill in the respective details, as illustrated in
+    the following steps:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a name under the Name field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a key under the Key field.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Create button to create the project:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/df4e7d76-06d5-4d93-b709-ac3b166cd0bd.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a project inside SonarQube
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can see your newly created project on the Project Management page, as shown
+    in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/f10bbd70-475c-4265-bce1-8faa6f2a5e83.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Newly created project inside SonarQube
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing the build breaker plugin for SonarQube
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The build breaker plugin is available for SonarQube. It''s exclusively a SonarQube
+    plugin and not a Jenkins plugin. This plugin allows the CI system (Jenkins) to
+    forcefully fail a Jenkins build if a quality gate condition is not satisfied.
+    To install the build breaker plugin, perform the following steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Before downloading the plugin, first refer to the compatibility table. This
+    will help us in downloading the right plugin version. The compatibility table
+    is available at [https://github.com/SonarQubeCommunity/sonar-build-breaker](https://github.com/SonarQubeCommunity/sonar-build-breaker).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Download the build breaker plugin from [https://github.com/SonarQubeCommunity/sonar-build-breaker/releases](https://github.com/SonarQubeCommunity/sonar-build-breaker/releases).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Move to the `/tmp` directory and download the build breaker plugin, using the
+    following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Move the downloaded `.jar` file to the location `opt/sonarqube-5.6.7/extensions/plugins/`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Restart SonarQube, using the following commands:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should see a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: After a successful restart, go to the SonarQube dashboard and log in as administrator.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Administration link from the menu bar.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Administration page, you will see the Build Breaker option under the
+    CATEGORY sidebar, as shown in the following screenshot; do nothing:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/0c2b47ca-93ec-4bbf-9f43-2f5f0780f35f.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The build breaker plugin settings inside SonarQube
+  prefs: []
+  type: TYPE_NORMAL
+- en: The build breaker plugin has been installed successfully.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Creating quality gates
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: For the build breaker plugin to work, we need to create a *quality gate*; it's
+    nothing but a rule with some conditions. When a Jenkins pipeline runs, it will
+    execute the *quality profiles* and the quality gate. If the quality gate check
+    passes successfully then the Jenkins pipeline continues, but if it fails then
+    the Jenkins pipeline is aborted. Nevertheless, the analysis still happens.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Follow these steps to create a quality gate in SonarQube:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the SonarQube dashboard, click on the Quality Gates link from the menu
+    bar.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, click on the Create button at the top-left corner.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will get a pop-up window, as shown in the following screenshot. Add a name
+    for your quality gate under the Name field, and click on the Create button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/377644cd-07c3-4848-affc-31adfd284e89.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a new quality gate
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You will see your new quality gate listed on the Quality Gates page, as shown
+    in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/6b3b4f0a-47a2-47ea-b51b-0efc1e5c3373.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The new quality gate
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Let us now add a condition to our quality gate by choosing one from the Add
+    Condition menu:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d990542b-515b-4d37-84ae-aea4e6f663b5.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Condition menu
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following screenshot shows a condition named Major Issues. If it''s greater
+    than `1` but less than `50` it''s a WARNING, and if it''s greater than `50`, it''s
+    an ERROR, as shown in the following screenshot. This is just an example; you can
+    configure any number of conditions you like:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/c6cb40f3-a870-4e92-9953-f753e9fb2611.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the quality gate
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, let us make sure that the example project that we created earlier in SonarQube
+    uses our newly created quality gate. To do so, from the SonarQube dashboard click
+    on Administration | Projects (tab) | Management.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, you will see the example project that we created earlier
+    in SonarQube. Click on it.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, click on Administration (tab) | Quality Gate.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Under the Quality Gate section, you will see an option to choose the quality
+    gate from the list of available quality gates in SonarQube. Choose the one that
+    we created recently and click on the Update button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a554e7c0-38c9-447e-9efb-2e577b520d39.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Associating a quality gate to a project
+  prefs: []
+  type: TYPE_NORMAL
+- en: Updating the default quality profile
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will modify the default quality profile for Java
+    (Sonar way), which we intend to use for our static code analysis. Follow these
+    steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'From the SonarQube dashboard, click on the Quality Profiles link from the menu
+    bar. On the resultant page, you will see all the quality profiles that exist on
+    SonarQube, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e9449540-e547-4202-bcc1-f7f3ad4922e4.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of quality profiles in SonarQube
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the previous screenshot, you can see that the default quality profile for
+    Java: Sonar way contains 254 active rules. Let us try to add more rules.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Activate More button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page, you will see something, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d12868b9-ea7c-43c4-aceb-bfcd2864b2f1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of inactive rules
+  prefs: []
+  type: TYPE_NORMAL
+- en: This is the place where you can add and remove rules from your quality profile.
+    Let us activate all the inactive rules for Java.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'To do this, from the top-right corner of the page, click on Bulk Change | Activate
+    In Sonar way, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7ae29d7e-75a0-42e8-bf47-459b8cb9c0c1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Activating rules in bulk
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will see a popup asking you to confirm the changes. Click on the Apply button
+    and proceed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Next, from the menu bar, click on the Quality Profiles link. On the resultant
+    page, click on the **Sonar way** quality profile for Java, and now you should
+    see a greater number of rules than before.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The list of rules and default quality profiles visible on SonarQube depends
+    on the installed plugin. To get rules for your desired language, install its respective
+    SonarQube plugin.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing the SonarQube plugin in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow these steps to install the SonarQube plugin for Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available
+    (tab). You will be taken to the Jenkins Manage Plugins page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Enter `SonarQube` in the Filter field, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a07538d6-68a3-4249-aec2-44e4e19f5b35.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Installing the SonarQube plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: Select SonarQube Scanner for Jenkins from the list and click on the Install
+    without restart button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Jenkins if needed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configuring the SonarQube plugin in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that we have our SonarQube plugin installed, let us configure it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click Manage Jenkins | Configure System.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the Configure System page, scroll down all the way to the SonarQube
+    servers section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the SonarQube servers section, click on the Add SonarQube button. You
+    will be presented with settings to configure, as shown in the following screenshot.
+    Let us see them one by one.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give your SonarQube server a name using the Name field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter the SonarQube server URL under the Server URL field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add Artifactory credentials under the Default Deployer Credentials.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add the token that we created inside SonarQube under the Server authentication
+    token field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Test Connection button to test the Jenkins connection with Artifactory:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/264deaab-f537-40b7-9a3f-fb4106b72280.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the SonarQube plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, click on the Save button at the end of the page to save the settings.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing and configuring Artifactory
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Continuous integration results in frequent builds and packages. Hence, there
+    is a need for a mechanism to store all this binary code (builds, packages, third-party
+    plugins, and so on) in a system akin to a version control system.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Since version control systems such as Git, TFS, and SVN store code and not
+    binary files, we need a binary repository tool. A binary repository tool such
+    as Artifactory or Nexus tightly integrated with Jenkins provides the following
+    advantages:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tracking builds (who triggers? What code was built?)
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Dependencies
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Deployment history
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'The following diagram depicts how a binary repository tool such as Artifactory
+    works with Jenkins to store build artifacts. In the coming topics, we will learn
+    how to achieve this by creating a Jenkins job to upload code to Artifactory:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/feadc99b-1d20-434f-9521-e0b083eeab26.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins pipeline pushing built artifacts to Artifactory
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the current book, we will be dealing with Artifactory to store our builds.
+    Artifactory is a tool used to version control binaries. The binaries can be anything
+    from built code, packages, executables, Maven plugins, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the following section, we will set up Artifactory on Ubuntu 16.04.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Java
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow these steps to install Java:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Update the package index:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, install Java. The following command will install the JRE:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To set the `JAVA_HOME` environment variable, first get the Java installation
+    location. Do this by executing the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should get a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: The path in the preceding output is the `JAVA_HOME` location. Copy it.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Open the `/etc/environment` file for editing:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Add the following line inside the `/etc/environment` file, as shown here:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: Type *Ctrl* + *X* and choose *Y* to save and close the file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Next, reload the file using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: Downloading the Artifactory package
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to download the Artifactory package:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Download the latest version of Artifactory (open source) from [https://www.jfrog.com/open-source/](https://www.jfrog.com/open-source/)
+    or [https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip](https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To download Artifactory Pro, visit [https://bintray.com/jfrog/artifactory-pro/](https://bintray.com/jfrog/artifactory-pro/)
+    or [https://bintray.com/jfrog/artifactory-pro/jfrog-artifactory-pro-zip](https://bintray.com/jfrog/artifactory-pro/jfrog-artifactory-pro-zip).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It is recommended that you always install the latest LTS version of Artifactory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the following chapter, we will use Artifactory Pro to demonstrate code promotion
+    using properties in the upcoming chapter.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Refer to [https://www.jfrog.com/confluence/display/RTF/Artifactory+Pro#ArtifactoryPro-ActivatingArtifactoryPro](https://www.jfrog.com/confluence/display/RTF/Artifactory+Pro#ArtifactoryPro-ActivatingArtifactoryPro)
+    to learn the process of activating Artifactory Pro.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Move to the `/tmp` folder:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Download the Artifactory Pro ZIP package, using `wget`, as shown in the following
+    code. Here, I am downloading Artifactory version 5.5.2 (LTS*):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: You can download the Artifactory ZIP package on a different machine (from a
+    browser) and then move it to your to-be Artifactory server, using WinSCP.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Next, unzip the SonarQube ZIP package inside the `/opt` directory, as shown
+    in the following code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or, if the downloaded ZIP package has a strange name:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To use the `unzip` command, make sure you have the zipping tool installed on
+    your Ubuntu machine.  To install the ZIP tool, execute the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`**sudo apt-get install zip**`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Move to the extracted folder and list its content:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: The `bin/` folder contains all the scripts to install and start Artifactory,
+    and the `logs/` folder contains the Artifactory logs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Running the Artifactory application
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to start the Artifactory server:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Move to the `/opt/artifactory-pro-5.5.2/bin/` directory and run the `installService.sh`
+    script:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should see a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE31]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Start the Artifactory service, using any of the following commands:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE32]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE33]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE34]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You can check the Artifactory installation by executing any of the following
+    commands:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE35]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE36]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE37]'
+  prefs: []
+  type: TYPE_PRE
+- en: Access the Artifactory dashboard by navigating to `http://<Server IP Address>:8081/`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Right now there are no user accounts configured in Artifactory. However, by
+    default there is an admin account with the username as `admin` and the password
+    as `password`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Make sure you have at least 4 GB of memory to run the 64-bit version of Artifactory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Resetting the default credentials and generating an API key
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to reset the Artifactory credentials:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Access the Artifactory dashboard using the following link: `http://<Server
+    IP Address>:8081/`.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in as admin using the initial default credentials for admin.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: From the Artifactory dashboard, click on Welcome, admin | Edit Profile.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter your current password in the Current Password field and press the Unlock
+    button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, under Personal Settings, add your email ID.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Change Password section, add a new password to reset the default credentials
+    for the admin user.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Next, under the Authentication Settings section, click on Generate key (gear
+    logo) to generate a new API key.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Copy the generated API key by clicking on the copy button (see the following
+    screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'We might need this API key later for authentication:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/0636b012-51d8-4008-8a0b-03ccc76fd7f3.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Artifactory API key
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, click on the Save button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Creating a repository in Artifactory
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will create a genetic repository inside Artifactory.
+    The repository will be used to store the build artifacts:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'From the Artifactory dashboard, on the left-hand side menu, click on Admin
+    | Repositories | Local, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/b114abf2-e612-4867-a627-d8a28eb7a930.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating a local repository in Artifactory
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The resultant page will show you all the Local Repositories currently available,
+    as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/cd5132ff-23dc-413c-8a2c-7022506f3884.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: List of all the Local Repositories
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the New button at the top-right corner to create a new local repository
+    (see the following screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will be presented with a pop-up window with a list of various types of
+    repositories to choose from, shown as follows. Choose the Generic type (see the
+    following screenshot):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/55f13735-d54a-4cfe-8108-ba77f31f6928.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Option to choose various types of repositories
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Give your repository a name by adding a value under the Repository Key field,
+    as shown in the following screenshot. Leave the rest of the settings to their
+    default values:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/80196f7a-711c-4f57-a07b-0744e800a211.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Naming our new local repository
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, click on the Save & Finish button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Now we have our new local repository, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/0c63f480-8313-4043-9833-6d7d2c327934.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Our newly created local repository
+  prefs: []
+  type: TYPE_NORMAL
+- en: Adding Artifactory credentials inside Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to create credentials inside Jenkins to talk to Artifactory:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Credentials | System | Global credentials
+    (unrestricted).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Add Credentials link on the left-hand side menu to create a new
+    credential (see the following screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Kind as Username with Password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the Scope field to its default value.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add the Artifactory username under the Username field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Password field, add the password.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add an ID under the ID field and a description under the Description field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on the OK button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d5107130-d5ae-4ef0-a630-1f593f84b85a.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding Artifactory credentials inside Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing the Artifactory plugin in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps to install the Artifactory plugin for Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Plugins | Available
+    (tab). You will be taken to the Jenkins Manage Plugins page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Enter `Artifactory` in the Filter field, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ae9aade4-de56-41cb-af18-7bf9a541a195.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Installing the Artifactory Plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: Select the Artifactory Plugin from the list and click on Install without restart
+    button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Jenkins if needed.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configuring the Artifactory Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now that we have our Artifactory Plugin installed, let us configure it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click Manage Jenkins | Configure System.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the Configure System page, scroll down all the way to the Artifactory
+    section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Artifactory section, click on the Add button. You will be presented
+    with the following settings to configure, as shown in the following screenshot.
+    Let us look at them one by one.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give your Artifactory server a name, using the Server ID field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter the Artifactory server URL under the URL field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add Artifactory credentials under the Default Deployer Credentials, as shown
+    in the following screenshot.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Test Connection button to test the Jenkins connection with Artifactory:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/bbf8604f-29dd-4ff9-a997-7f9655a14d34.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the Artifactory Plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, click on the Save button at the end of the page to save the settings.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we learned how to install and configure SonarQube and Artifactory.
+    In today's world, static code analysis forms an important part of the CI pipeline
+    (although it is not necessary). Similarly, Artifactory is a popular tool used
+    to store all the build artifacts that are generated by the CI pipeline. Once the
+    CI pipeline is complete, Artifactory take the center stage. It is from Artifactory
+    that all the built artifacts are deployed to various testing environments, and
+    it is with Artifactory that we perform code promotion.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will learn more about these tools in the next chapter, which is about implementing
+    continuous integration using Jenkins.
+  prefs: []
+  type: TYPE_NORMAL

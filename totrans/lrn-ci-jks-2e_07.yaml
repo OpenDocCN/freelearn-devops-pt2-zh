@@ -1,0 +1,1077 @@
+- en: Continuous Integration Using Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We will begin this chapter with a **Continuous Integration** (**CI**) design
+    that covers the following areas:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: A branching strategy
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A list of tools for CI
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A Jenkins pipeline structure
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The CI design will serve as a blueprint that will guide the readers in answering
+    the how, why, and where of CI being implemented. The design will cover all the
+    necessary steps involved in implementing an end-to-end CI pipeline.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The CI design discussed in this chapter should be considered as a template for
+    implementing CI, and not a full and final model. The branching strategy and the
+    tools used can all be modified and replaced to suit the purpose.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins CI design
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Almost every organization creates one before they even begin to explore the
+    CI and DevOps tools. In this section, we will go through a very general CI design.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous Integration includes not only Jenkins or any other similar CI tool
+    for that matter, but it also deals with how you version control your code, the
+    branching strategy you follow, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Various organizations may follow different kinds of strategies to achieve CI,
+    since it all depends on the requirement and type of the project.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Branching strategy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'It''s always good to have a branching strategy. Branching helps you organize
+    your code. It is a way to isolate your working code from the code that is under
+    development. In our CI design, we will start with three types of branches:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The master branch
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The integration branch
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The feature branch
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: This branching strategy is a slimmer version of the GitFlow workflow branching
+    model.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The master branch
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: One can also call it a **production branch**. It holds the working copy of the
+    code that has been delivered. The code on this branch has passed all the testing.
+    No development happens on this branch.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The integration branch
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The integration branch is also known as the **mainline branch**. This is where
+    all the features are integrated, built, and tested for integration issues. Again,
+    no development happens here. However, developers can create feature branches out
+    of the integration branch and work on them.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The feature branch
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Lastly, we have the feature branch. This is where the actual development takes
+    place. We can have multiple feature branches spanning out of the integration branch.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following illustration shows a typical branching strategy that we will
+    be using as part of our CI design. We will be creating two feature branches spanning
+    out from the **Integration/Mainline Branch**, which itself spans out from the
+    master branch:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a84c0478-d3f6-458c-8940-f72357ae5915.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Branching strategy
+  prefs: []
+  type: TYPE_NORMAL
+- en: A commit on the feature branch or the integration branch (a merge will create
+    a commit) will go through a build, static code analysis, and integration test
+    phase. If the code passes these phases successfully, the resultant package is
+    uploaded to Artifactory (binary repository).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The CI pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We are now at the heart of the CI design. We will be creating a Multibranch
+    Pipeline in Jenkins that will have the following stages:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Fetch the code from the **version control system** (**VCS**) on a push event
+    (initialization of the CI pipeline).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Build and unit test the code, and publish a unit test report on Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Perform static code analysis on the code and upload the result to SonarQube.
+    Fail the pipeline if the number of bugs crosses the threshold defined in the quality
+    gate.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Perform integration testing and publish a unit test report on Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Upload the built artifacts to Artifactory along with some meaningful properties.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The purpose of the previous CI pipeline is to automate the process of continuously
+    building, testing (unit test and integration test), performing static code analysis,
+    and uploading the built artifacts to the binary repository. Reporting for failures/success
+    happens at every step. Let us discuss these pipelines and their constituents in
+    detail.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Toolset for CI
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The example project for which we are implementing CI is a simple Maven project.
+    In this chapter, we will see Jenkins working closely with many other tools. The
+    following table contains the list of tools and technologies involved in everything
+    that we will be seeing:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Technology** | **Characteristic** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Java | Primary programming language used for coding |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Maven | Build tool |'
+  prefs: []
+  type: TYPE_TB
+- en: '| JUnit | Unit testing and integration testing tools |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Jenkins | Continuous Integration tool |'
+  prefs: []
+  type: TYPE_TB
+- en: '| GitHub | Version control system |'
+  prefs: []
+  type: TYPE_TB
+- en: '| SonarQube | Static code analysis tool |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Artifactory | Binary repository manager |'
+  prefs: []
+  type: TYPE_TB
+- en: Creating the CI pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this section, we will learn how to create the CI pipeline discussed in the
+    previous section. We will perform the following steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will create a source code repository in GitHub
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: We will create a Jenkinsfile to describe the way we build, unit test, perform
+    static code analysis, integration test, and publish built artifacts to Artifactory
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: We will utilize Docker to spawn build agents to run our CI pipeline
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: We will create a Multibranch Pipeline in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It is important that you have configured the *Configuring Webhooks on GitHub
+    from Jenkins* section from [Chapter 3](3452a7ad-de28-4ec6-b207-4b1b567ef3ba.xhtml),
+    *The New Jenkins*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a new repository on GitHub
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Let us create a new repository on GitHub. Make sure you have Git installed
+    on the machine that you will use to perform the steps mentioned in the following
+    section:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In this chapter, we will use the source code from [https://github.com/nikhilpathania/hello-world-greeting.git](https://github.com/nikhilpathania/hello-world-greeting.git)
+    as an example.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Try to fork the repository mentioned in the previous link. To do so, just access
+    the repository from your internet browser and click on the **Fork** button, as
+    shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/64b5022d-1083-416e-b2ba-5392fdc1da63.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Forking a GitHub project
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once done, a replica of the repository will be visible under your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Using the SonarQube scanner for Maven
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Ideally, we need the SonarQube scanner to perform static code analysis on a
+    project. However, we will use the SonarQube scanner utility for Maven instead,
+    as the example source code that we are using in the current chapter is a Maven
+    project.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To do so, add the following code to your `.pom` file:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You need not perform the previous step if you have forked the following repository:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[https://github.com/nikhilpathania/hello-world-greeting.git](https://github.com/nikhilpathania/hello-world-greeting.git).'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Writing the Jenkinsfile for CI
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the following section, we will learn how to write pipeline code for our Continuous
+    Integration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Spawning a Docker container – build agent
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: First, let us create pipeline code to create a Docker container (Jenkins slave),
+    which will act as our build agent.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you can recall, in the *Adding Jenkins slaves – Docker containers* section
+    from [Chapter 5](9f74f9d8-e9cc-4406-b8f5-20661f4c8567.xhtml), *Distributed Builds*, we
+    learned to create a Docker image (`maven-build-slave-0.1`) that was meant for
+    creating Docker containers (Jenkins slaves). We will use the same Docker image
+    over here to spawn Jenkins Slave Agents for our CI pipeline.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In our Jenkinsfile, to spawn a Docker container (Jenkins slave) we need to
+    write a code block for `node` with the label as `docker`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: Where `docker` is a label for the `maven-build-slave-0.1` Docker template.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We would like to perform the following tasks on the `docker` node:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Perform build
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Perform unit tests and publish the unit test report
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Perform static code analysis and upload the results on SonarQube
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Perform integration testing and publish the integration test report
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Publish artifacts to Artifactory
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: All the previous tasks are various stages of our CI pipeline. Let's write pipeline
+    code for each one of them.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Downloading the latest source code from VCS
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We want our Jenkins pipeline to download the latest change pushed to the master
+    branch on our GitHub repository:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Wrap the previous step inside a stage called `Poll`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code to perform the build and unit test
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The example project that we are using in the current chapter is a Maven project.
+    Therefore, the pipeline code for the build is a simple shell script that runs
+    the `mvn clean` command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: Where `-DskipITs=true` is the option to skip the integration test and perform
+    only the build and unit test.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `junit '**/target/surefire-reports/TEST-*.xml'` command enables Jenkins
+    to publish JUnit unit test reports on the Jenkins pipeline page.  `**/target/surefire-reports/TEST-*.xml` is
+    the directory location where the unit test reports are generated.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Your Maven `.pom` file should have `maven-surefire-plugin` and `maven-failsafe-plugin` for
+    the previous command to work.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You also need the Jenkins JUnit plugin (installed by default).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Wrap the previous step inside a stage called `Build & Unit test`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code to perform static code analysis
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The pipeline code to perform static code analysis is a simple shell script
+    that will run the Maven commands, as shown in the following command block. This
+    is made possible using the SonarQube scanner utility for Maven. Remember the configuration
+    that we saw in the *Using the SonarQube scanner for Maven* section:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: The `-Dsonar.projectName=example-project` option is the option to pass the SonarQube
+    project name. In this way, all our results will be visible under the `projectName=example-project`
+    that we created in the previous chapter.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Similarly, the `-Dsonar.projectKey=example-project` option allows the SonarQube
+    scanner for the Maven utility to confirm the `projectKey=example-project` with
+    SonarQube.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `-Dsonar.projectVersion=$BUILD_NUMBER` option allows us to attach the Jenkins
+    build number with every analysis that we perform and upload to SonarQube. `$BUILD_NUMBER` is
+    the Jenkins environment variable for the build number.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Wrap the previous step inside a stage called `Static Code Analysis`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code to perform integration testing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The pipeline code to perform integration testing is a shell script that will
+    run the Maven commands, as shown in the following command block:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: Where `-Dsurefire.skip=true` is the option to skip unit testing and perform
+    only the integration testing.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The `junit '**/target/failsafe-reports/TEST-*.xml'` command enables Jenkins
+    to publish JUnit unit test reports on the Jenkins pipeline page.  `**/target/failsafe-reports/TEST-*.xml` is
+    the directory location where the integration test reports are generated.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Wrap the previous step inside a stage called `Integration Test`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: Your Maven `.pom` file should have `maven-surefire-plugin` and `maven-failsafe-plugin`
+    for the previous command to work.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You also need the Jenkins JUnit plugin (installed by default).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Pipeline code to publish built artifacts to Artifactory
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To upload the build artifacts to Artifactory, we will use the *File Specs*.
+    The File Specs code is shown in the following code block:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following table states the parameters from the preceding code:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Parameters** | **Condition** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `pattern` | `[Mandatory]` | Specifies the local filesystem path to artifacts
+    that should be uploaded to Artifactory. You can specify multiple artifacts by
+    using wildcards or a regular expression, as designated by the `regexp` property.
+    If you use a `regexp`, you need to escape any reserved characters (such as `.`,
+    `?`, and so on) used in the expression using a backslash `\`. Since version 2.9.0
+    of the Jenkins Artifactory plugin and version 2.3.1 of the TeamCity Artifactory
+    plugin, the pattern format has been simplified and uses the same file separator
+    `/` for all operating systems, including Windows.  |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `target` | `[Mandatory]` | Specifies the target path in Artifactory in the
+    following format: `[repository_name]/[repository_path]`. If the pattern ends with
+    a slash, for example, `repo-name/a/b/`, then `b` is assumed to be a folder in
+    Artifactory and the files are uploaded into it. In the case of `repo-name/a/b`,
+    the uploaded file is renamed to `b` in Artifactory. For flexibility in specifying
+    the upload path, you can include placeholders in the form of `{1}, {2}, {3}...` which
+    are replaced by corresponding tokens in the source path that are enclosed in parentheses. For
+    more details, please refer to the *Using Placeholders* article ([https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders](https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders))**.**
+    |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `props` | `[Optional]` | List of `key=value` pairs separated by a semicolon
+    (`;`) to be attached as properties to the uploaded properties. If any key can
+    take several values, then each value is separated by a comma (`,`). For example,
+    `key1=value1;key2=value21,value22;key3=value3`. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `flat` | `[Default: true]` | If `true`, artifacts are uploaded to the exact
+    target path specified and their hierarchy in the source filesystem is ignored.
+    If `false`, artifacts are uploaded to the target path while maintaining their
+    filesystem hierarchy. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `recursive` | `[Default: true]` | If `true`, artifacts are also collected
+    from subdirectories of the source directory for upload. If `false`, only artifacts
+    specifically in the source directory are uploaded. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `regexp` | `[Default: false]` | If `true`, the command will interpret the
+    pattern property, which describes the local filesystem path of artifacts to upload,
+    as a regular expression. If `false`, the command will interpret the pattern property
+    as a wildcard expression. |'
+  prefs: []
+  type: TYPE_TB
+- en: 'The following is the File Specs code that we will use in our pipeline:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following table states the parameters from the preceding code:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Parameters** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `def server = Artifactory.server ''Default Artifactory Server''` | This line
+    tells Jenkins to use the existing Artifactory server configured in Jenkins. In
+    our example, it is the default Artifactory server. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `Default Artifactory Server` | This is the name of the Artifactory server
+    configured inside Jenkins. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `"pattern": "target/hello-0.0.1.war",` | This line of code will look at a
+    file named `hello-0.0.1.war` inside the directory target, which is again inside
+    the Jenkins workspace directory. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `"target": "example-project/${BUILD_NUMBER}/",` | This line of code will
+    try to upload the build artifacts to the Artifactory repository named `helloworld-greeting-project`.
+    It will place the artifact inside a folder named after the build number inside
+    the Artifactory repository. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `${BUILD_NUMBER}` | The Jenkins environment variable for the build number.
+    |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `"props": "Integration-Tested=Yes;Performance-Tested=No"` | This code creates
+    two key-value pairs and assigns them to the uploaded artifacts. These key-value
+    pairs can be used as labels for code promotion in Artifactory. |'
+  prefs: []
+  type: TYPE_TB
+- en: 'Wrap the previous step inside a stage called `Publish`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: Combined CI pipeline code
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following is the complete combined code that will run inside the `docker`
+    node:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: Using a Jenkinsfile
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Jenkins Multibranch Pipelines utilize Jenkinsfiles. In this section, we will
+    learn how to create a Jenkinsfile. We will use the example pipeline script that
+    we created in the previous section to create our Jenkinsfile. Follow these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Navigate to the forked repository*.*
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the repository page, click on the **Create new file** button to create
+    a new empty file that will be our Jenkinsfile, as shown in the following screenshot:![](img/a2506300-1e55-4349-8790-560d4add5e0b.png)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Creating a new file on GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Name your new file `Jenkinsfile` by filling in the empty textbox, as shown
+    in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/79391053-cd83-43c1-b21e-9837c8009dfe.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Naming your new file on GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Add the following code in your Jenkinsfile:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Once done, commit the new file by adding a meaningful comment, as shown in
+    the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/08ecdfe7-3f64-4510-ab9a-5df45fa8ef3d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Committing your new file on GitHub
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a Multibranch Pipeline in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow these steps to create a new Jenkins pipeline job:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on the **New Item** link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, you will be presented with various types of Jenkins jobs
+    to choose from.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose **Multibranch** **Pipelin****e**, and give a name to your pipeline using
+    the **Enter an item name** field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you are done, click on the OK button at the bottom of the page.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Scroll to the **Branch Sources** section. This is the place where we configure
+    the GitHub repository that we want to use.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Add Source** button and choose GitHub. You will be presented
+    with a list of fields to configure. Let us see them one by one (see the following
+    screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'For the Credentials field, choose the GitHub account credentials (Kind: Username
+    with Password) that we created in the previous section.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Owner field, specify the name of your GitHub organization or GitHub
+    user account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The moment you do so, the Repository field will list all the repositories that
+    are on your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose hello-world-greeting under the Repository field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Leave the rest of the options to their default values:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/8352c68e-83e1-49b8-b609-bc8357372200.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the Multibranch Pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Scroll all the way down to the Build Configuration section. Make sure the Mode field
+    is set to by Jenkinsfile and the Script Path field is set to `Jenkinsfile`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d1d71555-36df-4e7a-b61e-b3a1971774e6.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Build configuration
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scroll all the way down and click on the **Save** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Re-registering the Webhooks
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Now, let us re-register the Webhooks for all our Jenkins pipelines. To do so,
+    perform the following steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, click on **Manage Jenkins** | **Configure System**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Jenkins configuration page, scroll all the way down to the GitHub section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the GitHub section, click on the **Advanced…** button (you will see two
+    of them; click on the second one).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: This will display a few more fields and options. Click on the **Re-register
+    hooks for all jobs** button.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'The previous action will create new Webhooks for our Multibranch Pipeline on
+    the respective repository inside your GitHub account. Do the following to view
+    the Webhooks on GitHub:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in to your GitHub account.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to your GitHub repository, `hello-world-greeting` in our case.
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the repository Settings button, as shown in the following screenshot:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ea7a448f-a912-4c05-b68a-776cf1297a73.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Repository settings
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On the repository Settings page, click on Webhooks from the left-hand side
+    menu. You should see the Webhooks for your Jenkins server, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e60e4c18-80ec-4069-bfc2-468181edf9db.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Webhooks on GitHub repository
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous Integration in action
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on your Multibranch Pipeline.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the Jenkins Multibranch Pipeline page, from the left-hand side menu, click
+    on the Scan Repository Now link. This will scan the repository for branches and
+    Jenkinsfiles, and will immediately run a pipeline for every branch that has got
+    a Jenkinsfile, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/1191e0c3-04e5-4126-bb7c-a0bbdcaf3038.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pipeline for the master branch
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On the Multibranch Pipeline page, from the left-hand side menu, click on Scan
+    Repository Log. You will see something similar to the following output. Notice
+    the highlighted code. You can see the master branch met the criteria, as it had
+    a Jenkinsfile and a pipeline was scheduled for it. There was no pipeline scheduled
+    for the testing branch since there was no Jenkinsfile on it:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: You need not always scan for the repository. The GitHub Webhooks are configured
+    to automatically trigger a pipeline whenever there is a push or a new branch on
+    your GitHub repository. Remember, a Jenkinsfile should also be present on the
+    respective branch to tell Jenkins what it needs to do when it finds a change in
+    the repository.
+  prefs: []
+  type: TYPE_NORMAL
+- en: From your Jenkins Multibranch Pipeline page (`<Jenkins URL>/job/<Jenkins Multi-branch
+    pipeline name>/`), click on the respective branch pipeline (see the following
+    screenshot).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'On the resultant page, you will see the Stage View for the master branch pipeline:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e5ee84d3-e56a-4487-84a8-309386750bfb.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Pipeline Stage View
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To see the unit test and integration test results, click on Latest Test Result link,
+    which is available on the same page below the Stage View, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d089eb2f-b0f8-4b0a-9f1a-43e4ee7c50a9.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'On the resultant page, you will see a detailed report about the unit as well
+    as the integration test execution, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/70400369-0ac2-40f1-a2c8-13c4a877c0e3.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Test report using JUnit plugin
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can click on the individual tests to get more details.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'While on the same page, on the left-hand side menu there is a link named History, which
+    gives you a historic graph about the number of metrics related to the test execution
+    over a period of time:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/73efe47d-5080-4d6f-b25e-ab83f4c34c70.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Test execution history
+  prefs: []
+  type: TYPE_NORMAL
+- en: Viewing static code analysis in SonarQube
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Let us take a look at the static code analysis report performed as part of
+    our CI pipeline. Follow these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Open the SonarQube link, using your favorite browser. You should see something
+    similar to the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/e90f47c6-2fe9-4c33-b8d8-6ece576f93c1.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: SonarQube homepage
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the SonarQube dashboard, using the menu option, click on the Log in link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter your SonarQube credentials.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the resultant page, under the PROJECTS widget, click on the `example-project`
+    project.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'You will see an overview of the static code analysis of your project (see the
+    following screenshot):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/c9bd2038-3014-4e97-bb31-5aa3ba3c136c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Static code analysis overview
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Click on Measures | Coverage. On the resultant page, you will get a nice overview
+    of your code coverage and unit test result report, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/61a44fa4-2629-47e3-b837-e7f5a459699c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Code coverage report and unit test report
+  prefs: []
+  type: TYPE_NORMAL
+- en: Accessing SonarQube analysis right from Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'You can access your static code analysis report right from your CI pipeline.
+    Follow these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From your Jenkins dashboard, click on your Multibranch Pipeline. Next, click
+    on the respective branch pipeline (master in our example).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once you are on your branch pipeline, hover your mouse on the Static Code Analysis
+    stage and click on Logs. See the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/7db067ed-9cfb-4a21-b084-b395c2531571.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Fetching individual stage logs
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the resultant pop-up window named Stage Logs (Static Code Analysis), scroll
+    all the way down to the end. You should see a link to the SonarQube analysis page.
+    See the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/b2b94a51-ea3b-4362-bf30-c555d7afe146.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: SonarQube analysis link from Jenkins logs
+  prefs: []
+  type: TYPE_NORMAL
+- en: Clicking on the link, as shown in the previous screenshot, will take you straight
+    to the SonarQube dashboard of the respective project.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Viewing artifacts in Artifactory
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Let us see how our artifacts look when uploaded to Artifactory. Follow these
+    steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From your favorite browser, access the Artifactory link. From the Artifactory
+    dashboard, log in using the Log in link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Artifacts tab on the left-hand side menu. You should see your
+    repository listed under the Artifact Repository Browser, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/a2a4d822-acbf-428c-8060-37a9c4fc8f8d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Artifact Repository Browser
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Expand the repository, and you should see the built artifact along with the
+    properties, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/069781a4-5c14-4f7d-bbf0-1e981654cee5.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Artifact generated by the CI pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: Failing the build when quality gate criteria are not met
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In the following section, we will tweak the SonarQube quality gate that we
+    created in the previous chapter, such that it should fail the Jenkins CI pipeline.
+    Follow these steps to simulate this scenario:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your SonarQube server and click on Quality Gates from the menu bar.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'From the left-hand side menu, click on the quality gate: `example-quality-gate`
+    that we created in the previous chapter.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, change the value of the ERROR field from `50` to `3`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on Update. Finally, everything should look as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d63005f3-1445-4c3b-b04f-37e58c628235.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Updating the SonarQube quality gate
+  prefs: []
+  type: TYPE_NORMAL
+- en: Next, make some changes on the GitHub repository to trigger a CI pipeline in
+    Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Log in to Jenkins and navigate to your Jenkins Multibranch CI Pipeline. You
+    should see something similar to the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/07e485d5-9c07-4e70-b65a-984f42a0e102.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Failed CI pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Click on the failed stage of the respective pipeline to fetch its logs. In
+    the pop-up window, scroll all the way down. You should see the reason for the
+    pipeline failure, as shown in the following screenshot (arrow):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/276fc79d-0046-4daf-b2c4-5d08c7251ee3.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: SonarQube logs with quality gate status
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this chapter, we learned how to create a Multibranch CI Pipeline that gets
+    triggered on a push event, performs build, static code analysis, integration testing,
+    and uploads the successfully tested binary artifact to Artifactory. Lastly, we
+    saw the whole CI pipeline in action from the perspective of a developer.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The CI design discussed in the book can be modified to suit the needs of any
+    type of project; the users just need to identify the right tools and configurations
+    that can be used with Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will extend our CI pipeline to do more in the area of
+    QA.
+  prefs: []
+  type: TYPE_NORMAL

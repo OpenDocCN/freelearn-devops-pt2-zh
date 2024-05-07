@@ -1,0 +1,228 @@
+- en: Supporting Tools and Installation Guide
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This chapter will take you through the steps required to make your Jenkins server
+    accessible over the internet. We will also cover the steps required for installing
+    Git on Windows and Linux.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Exposing your localhost server to the internet
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: You are required to create Webhooks on GitHub in order to trigger a pipeline
+    in Jenkins. Also, for the GitHub Webhooks to work, it is important that the Jenkins
+    server is accessible over the internet.
+  prefs: []
+  type: TYPE_NORMAL
+- en: While practicing the examples described in this book, you may feel a need to
+    make your Jenkins server accessible over the internet, which is installed in your
+    sandbox environment.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the following section, we will use a tool named ngrokto achieve this feat.
+    Perform the following steps to make your Jenkins server accessible over the internet:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to the Jenkins server machine (standalone Windows/Linux machine). If
+    you are running Jenkins using Docker, log in to your Docker host machine (most
+    probably, Linux).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Download the ngrok application from [https://ngrok.com/download](https://ngrok.com/download).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: What you download is a ZIP package. Extract it using the `unzip` command (to
+    install the ZIP utility on Ubuntu, execute `sudo apt-get install zip`).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Run the following command to unzip the ngrok ZIP package:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To run ngrok on Linux, execute the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Alternatively, run the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To run ngrok on Windows, execute the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should see a similar output, as shown as follows; the highlighted text
+    is the public URL of `localhost:8080`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: Copy the preceding public URL.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in to your Jenkins server. From the Jenkins dashboard, navigate to Manage
+    Jenkins | Configure System.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Jenkins configuration page, scroll all the way down to the Jenkins Location
+    section and add the public URL generated using ngrok inside the Jenkins URL field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the Save button to save the settings.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will now be able to access your Jenkins server using the public URL over
+    the internet.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: While creating Webhooks on GitHub, use the public URL generated using ngrok.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing Git on Windows/Linux
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The steps mentioned in the following sections are required to install Git on
+    Windows and Linux:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Git on Windows
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To install Git on Windows, follow these steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'You can download Git from [https://git-scm.com/downloads](https://git-scm.com/downloads):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ce6a95c9-0f54-4ef8-8e00-42a521ea5d82.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Click on the downloaded executable and proceed with the installation steps.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Accept the license agreement and click on Next.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Select all the components and click on Next, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/ff2bae15-4881-435e-a35a-d6145c36ec10.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choose the default editor used by Git, and click on Next.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Adjust your path environment by selecting the appropriate environment and click
+    on Next, as shown in the following screenshot:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/c3f61f02-6489-495f-a39a-4d362c3f66d4.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Choose Use OpenSSH as the SSH executable and click on Next:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/d53c922f-0c0e-4ccc-95e2-df874beca61e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Select Use the OenSSL library as the HTTPS transport backend and click on Next:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/0da5aa5c-2fda-4669-a6e9-ff3cee992fb8.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Choose the line ending conversion that suits you the best and click on Next.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose the terminal emulator and click on Next.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Select the Enable file system caching and Enable Git Credentials Manager options,
+    as shown in the following screenshot, and click on Install:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/52217b0f-36f5-497f-a50c-9b52762360ac.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Git installation should begin now. Once it's complete, click on Finish.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing Git on Linux
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Perform the following steps to install Git on Linux:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Git on Linux is simple. In this section, we will install Git on Ubuntu
+    (16.04.x).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in to your Ubuntu machine. Ensure that you have admin privileges.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Open a terminal in case you are using the GUI.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following commands in sequence:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Execute the following command to check the Git installation:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should get the following result:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE

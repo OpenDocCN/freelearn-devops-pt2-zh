@@ -1,0 +1,772 @@
+- en: Continuous Deployment Using Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This chapter begins by defining and explaining Continuous Deployment. We will
+    also try to differentiate between Continuous Deployment and Continuous Delivery.
+    Continuous Deployment is a simple, tweaked version of the Continuous Delivery
+    pipeline. Hence, we won't be seeing any major Jenkins configuration changes or
+    any new tools.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following topics will be covered in the chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a production server
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing a Jenkins slave on a production server
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a Jenkins Continuous Deployment pipeline
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Continuous Delivery in action
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: What is Continuous Deployment?
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The process of continuously deploying production-ready features into the production
+    environment, or to the end user, is termed as **Continuous Deployment**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous Deployment in a holistic sense means, *the process of making production-ready
+    features go live instantly without any intervention*. This includes building features
+    in an agile manner, integrating and testing them continuously, and deploying them
+    into the production environment without any breaks.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous Deployment in a literal sense means, *the task of deploying any given
+    package continuously in any given environment*. Therefore, the task of deploying
+    packages into a testing server and a production server conveys the literal meaning
+    of Continuous Deployment.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How Continuous Deployment is different from Continuous Delivery
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: First, the features are developed, and then they go through a cycle, or Continuous
+    Integration, or through testing of all kinds. Anything that passes the various
+    tests is considered as a production-ready feature. These production-ready features
+    are then labeled in Artifactory (not shown in this book) or kept separately to
+    segregate them from non-production ready features.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This is similar to the manufacturing production line. The raw product goes through
+    phases of modifications and testing. Finally, the finished product is packaged
+    and stored in the warehouses. From the warehouses, depending on the orders, it
+    gets shipped to various places. The product doesn't get shipped immediately after
+    it's packaged.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We can safely call this practice Continuous Delivery. The following illustration
+    depicts the **Continuous Delivery** life cycle:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/00f3b49d-a8dc-401f-8462-5540e3faed4e.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Continuous Delivery pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'On the other hand, a **Continuous Deployment** life cycle looks somewhat as
+    shown in the following illustration. The deployment phase is immediate without
+    any break. The production-ready features are immediately deployed into production:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/6d1df560-8ff6-4bce-9cc9-fac015f8c960.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Continuous Deployment pipeline
+  prefs: []
+  type: TYPE_NORMAL
+- en: Who needs Continuous Deployment?
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'One might have the following questions rolling in their minds: *how can I achieve
+    Continuous Deployment in my organization*, *what could be the challenges*, *how
+    much testing do I need to incorporate and automate?* The list goes on.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: However, technical challenges are one thing. What's more important to decide
+    is whether we really need it. Do we really need Continuous Deployment?
+  prefs: []
+  type: TYPE_NORMAL
+- en: The answer is, *not always and not in every case*. Since, from our definition
+    of Continuous Deployment and our understanding from the previous topic, production-ready
+    features get deployed instantly into the production environments.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In many organizations, it's the business that decides whether or not to make
+    a feature live, or when to make a feature live. Therefore, think of Continuous
+    Deployment as an option, and not a compulsion.
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the other hand, Continuous Delivery; which means creating production-ready
+    features in a continuous way, should be the motto for any organization.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a production server
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the following section, let us create a production server that will host our
+    *hello world* application. We will later extend our Continuous Delivery pipeline
+    to automatically deploy fully testing binary artifacts on our production server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the following example, our production server is a simple Tomcat server. Let
+    us create one using Vagrant.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Vagrant
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this section, we will install Vagrant on Ubuntu. Make sure you perform these
+    steps as a `root` user or with an account having root privileges (`sudo` access):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Open up a Terminal and type the following command to download Vagrant:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Or, you can also download the latest Vagrant package from the Vagrant website
+    at [https://www.vagrantup.com/downloads.html](https://www.vagrantup.com/downloads.html):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/051e5837-2fba-4fb7-a108-9005364b8dc6.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Vagrant download webpage
+  prefs: []
+  type: TYPE_NORMAL
+- en: Use the latest version of Vagrant and VirtualBox available. Using an older version
+    of Vagrant with a newer version of VirtualBox or vice versa may result in issues
+    while creating VMs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once the download is complete, you should see a `.deb` file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following commands to install Vagrant using the downloaded package
+    file. You may be prompted to provide a password:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Once the installation is complete, check the installed version of Vagrant by
+    executing the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should see a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: Installing VirtualBox
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Vagrant needs Oracle VirtualBox to create virtual machines. However, it''s
+    not limited to just Oracle VirtualBox, you can use VMware too. Follow the given
+    steps to install VirtualBox on your machine:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: To run Vagrant with either VMware or AWS, visit [https://www.vagrantup.com/docs/getting-started/providers.html](https://www.vagrantup.com/docs/getting-started/providers.html).
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Add the following line to your `sources.list` file present inside the `/etc/apt`
+    directory:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: According to your Ubuntu distribution, replace `xenial` with `vivid`, `utopic`,
+    `trusty`, `raring`, `quantal`, `precise`, `lucid`, `jessie`, `wheezy`, or `squeeze`.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Download and register the keys using the following commands. You should expect
+    a output: `OK` for both the commands.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'To install VirtualBox, execute the following commands:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Execute the following command to see the installed VirtualBox version:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'You should see a similar output:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Ubuntu/Debian users might want to install the `dkms` package to ensure that
+    the VirtualBox host kernel modules (`vboxdrv`, `vboxnetflt`, and `vboxnetadp`)
+    are properly updated if the Linux kernel version changes during the next `apt-get
+    upgrade`. For Debian, it is available in Lenny backports and in the normal repository
+    for Squeeze and later. The `dkms` package can be installed through the Synaptic
+    package manager or through the following command:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`**sudo apt-get install dkms**`'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a VM using Vagrant
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the following section, we will spawn up a VM that will act as our production
+    server using Vagrant and VirtualBox.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a Vagrantfile
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We will create a Vagrantfile to describe our VM. Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Create a new file named `Vagrantfile` using the following command:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Paste the following code into the file:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE10]'
+  prefs: []
+  type: TYPE_PRE
+- en: Choose the IP address, memory, and number of CPUs accordingly.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Type *Ctrl* + *X*, and then *Y* to save the file.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Spawning a VM using Vagrant
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this section, we will create a VM using the `Vagrantfile` that we created
+    just now:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Type the following command to spawn a VM using the preceding `Vagrantfile`:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE11]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'It will take a while for Vagrant to bring up the machine. Once it is done,
+    execute the following command to log in to the new VM:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE12]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The output is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE13]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We are now inside the VM. We will upgrade our VM with all the necessary applications
+    that we need to run our application:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Java JDK (latest)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Apache Tomcat (8.5)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A user account to log in to the Docker container
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Open SSH daemon—`sshd` (to accept SSH connections)
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Curl
+  prefs:
+  - PREF_IND
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Now, install all the required applications as you would do on any normal Ubuntu
+    machine. Let''s begin with creating a `jenkins` user:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Execute the following command and follow the user creation steps:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE14]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The output is as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE15]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Check the new user using the switch user command:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE16]'
+  prefs: []
+  type: TYPE_PRE
+- en: Switch back to the root user by typing `exit`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Next, we will install the SSH server. Execute the following command in sequence
+    (ignore if the `openssh-server` application and the `/var/run/sshd` directory
+    path already exist):'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE17]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Follow the given steps to install Java:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Update the package index:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE18]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Next, install Java. The following command will install the JRE:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE19]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The best way to install Tomcat 8.5 is to download the latest binary release,
+    then configure it manually:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Move to the `/tmp` directory and download Apache Tomcat 8.5 using the following
+    commands:'
+  prefs:
+  - PREF_IND
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE20]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'We will install Tomcat inside the `$HOME` directory. To do so, create a `tomcat`
+    directory inside `$HOME`:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE21]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Then, extract the archive to it:'
+  prefs:
+  - PREF_OL
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE22]'
+  prefs: []
+  type: TYPE_PRE
+- en: Exit the VM by typing `exit` in the Terminal.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Adding production server credentials inside Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In order to make Jenkins communicate with the production server, we need to
+    add the account credentials inside Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'We will do this using the Jenkins Credentials plugin. If you have followed
+    the Jenkins setup wizard (discussed at the beginning of the chapter), you will
+    find the Credentials feature on the Jenkins dashboard (see the left-hand side
+    menu):'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Credentials | System | Global credentials
+    (unrestricted).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Global credentials (unrestricted) page, from the left-hand side menu,
+    click on the Add Credentials link.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: You will be presented with a bunch of fields to configure.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Username with password for the Kind field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose Global (Jenkins, nodes, items, all child items, etc) for the Scope field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a username under the Username field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a password under the Password field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give a unique ID to your credentials by typing a string under the ID field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add a meaningful description under the Description field.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Click on the Save button once done:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/4d6e00da-6cea-423c-aecd-b71b2ab777b4.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding credentials inside Jenkins
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing a Jenkins slave on a production server
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'In this section, we will install a Jenkins slave on the production server.
+    This will allow us to perform deployment on the production server. Execute the
+    following steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the Jenkins dashboard, click on Manage Jenkins | Manage Nodes.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the Node Manager page, from the left-hand side menu click on New Node.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Give your new Jenkins slave node a name, as shown:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/759518a8-0daf-4c5b-867a-a16c9da145bf.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Adding a new Jenkins slave
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the resultant page, you will be presented with a large number of options.
+    Let us see them one by one.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For the Remote root directory field, add the value `/home/jenkins`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For the Labels field, add the value `production`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For the Usage field, choose Use this node as much as possible.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For the Launch method field, choose the option Launch slave agents via SSH.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Host field, add the IP address of the production server.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Under the Credentials field, choose the credentials that we created in the previous
+    section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Leave the rest of the options as they are.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Once done, click on the Save button:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '![](img/00db7d51-f0f0-42fd-92bd-11ada1770bc6.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring the Jenkins slave
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating a Jenkins Continuous Deployment pipeline
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the following section, we will extend our Continuous Delivery pipeline to
+    perform deployment.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A revisit to the pipeline code for CD
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following is the complete combined code that was part of the CD:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE23]'
+  prefs: []
+  type: TYPE_PRE
+- en: Pipeline code for a production Jenkins slave
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'First, let us create a node block for our Jenkins slave, production-server:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE24]'
+  prefs: []
+  type: TYPE_PRE
+- en: Where `production` is the label for the Jenkins slave node, production-server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We would like to deploy the build artifacts to Tomcat on the production server
+    on the `production` node.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let's write the pipeline code for it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Pipeline code to download binaries from Artifactory
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To download the build artifacts from Artifactory, we will use the File Specs.
+    The File Specs code looks as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE25]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'The following table describes the various parameters used:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Parameters** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `pattern` | `[Mandatory]`Specifies the local filesystem path to artifacts
+    that should be uploaded to Artifactory. You can specify multiple artifacts by
+    using wildcards or a regular expression as designated by the `regexp` property.
+    If you use a `regexp`, you need to escape any reserved characters (such as `.`,
+    `?`, and so on) used in the expression using a backslash `\`.Since version 2.9.0
+    of the Jenkins Artifactory plugin and version 2.3.1 of the TeamCity Artifactory
+    plugin, the pattern format has been simplified and uses the same file separator
+    `/` for all operating systems, including Windows.  |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `target` | `[Mandatory]`Specifies the target path in Artifactory in the following
+    format: `[repository_name]/[repository_path]`If the pattern ends with a slash,
+    for example, `repo-name/a/b/`, then `b` is assumed to be a folder in Artifactory
+    and the files are uploaded into it. In the case of `repo-name/a/b`, the uploaded
+    file is renamed to `b` in Artifactory.For flexibility in specifying the upload
+    path, you can include placeholders in the form of `{1}, {2}, {3}...` which are
+    replaced by corresponding tokens in the source path that are enclosed in parentheses. For
+    more details, please refer to the *Using Placeholders* document at [https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders](https://www.jfrog.com/confluence/display/RTF/Using+File+Specs#UsingFileSpecs-UsingPlaceholders)**.**
+    |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `props` | `[Optional]` List of `key=value` pairs separated by a semi-colon
+    (`;`) to be attached as properties to the uploaded properties. If any key can
+    take several values, then each value is separated by a comma (`,`). For example,
+    `key1=value1;key2=value21,value22;key3=value3`. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `flat` | `[Default: true]`If `true`, artifacts are uploaded to the exact
+    target path specified and their hierarchy in the source filesystem is ignored.
+    If `false`, artifacts are uploaded to the target path while maintaining their
+    filesystem hierarchy. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `recursive` | `[Default: true]`If `true`, artifacts are also collected from
+    subdirectories of the source directory for upload. If `false`, only artifacts
+    specifically in the source directory are uploaded. |'
+  prefs: []
+  type: TYPE_TB
+- en: '| `regexp` | `[Default: false]`If `true`, the command will interpret the pattern
+    property, which describes the local filesystem path of artifacts to upload, as
+    a regular expression. If `false`, the command will interpret the pattern property
+    as a wildcard expression. |'
+  prefs: []
+  type: TYPE_TB
+- en: 'The following is the File Specs code that we will use in our pipeline:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE26]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Wrap the preceding step inside a `stage` called `Deploy to Prod`:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE27]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Wrap the `Deploy to Prod` stage inside the `production` node block:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE28]'
+  prefs: []
+  type: TYPE_PRE
+- en: Combined Continuous Deployment pipeline code
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following is the combined Continuous Deployment pipeline code:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE29]'
+  prefs: []
+  type: TYPE_PRE
+- en: Update the Jenkinsfile
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'A Jenkins Multibranch CD Pipeline utilizes a Jenkinsfile. In this section,
+    we will update our existing Jenkinsfile. Follow the given steps:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Log in to your GitHub account.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Navigate to the forked repository*.*
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once on the repository page, click on the `Jenkinsfile`. Next, on the resultant
+    page click on the Edit button to edit your `Jenkinsfile`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Replace the existing content with the following code:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE30]'
+  prefs: []
+  type: TYPE_PRE
+- en: Once done, Commit the new file by adding a meaningful comment.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Continuous Delivery in action
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Make some changes to your GitHub code or just trigger the Jenkins pipeline from
+    the Jenkins dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Log in to Jenkins, and from the Jenkins dashboard click on your Multibranch
+    Pipeline. You should see something similar to the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/6849205d-4800-46d6-955d-82b98778ca11.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins Continuous Deployment pipeline in action
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This marks the end of Continuous Deployment. In this chapter, we learned how
+    to achieve Continuous Deployment using Jenkins. Also, I hope the confusion between
+    Continuous Delivery and Continuous Deployment is clear. There were no major setups
+    or configurations in the chapter, as all the necessary things were achieved in
+    the previous chapters while implementing Continuous Integration and Continuous
+    Delivery.
+  prefs: []
+  type: TYPE_NORMAL
+- en: I really hope this book serves as a means for you to go out there and experiment
+    more with Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Until next time, cheers!
+  prefs: []
+  type: TYPE_NORMAL

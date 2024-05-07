@@ -1,0 +1,1136 @@
+- en: Concepts of Continuous Integration
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'We will begin this chapter with an overview of the two primary software development
+    methodologies of the era: Waterfall, and agile. An understanding of their concepts
+    and implications will help us answer how **Continuous Integration** (**CI**) came
+    into existence.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Next, we will try to understand the concept behind CI and the elements that
+    make it. Reading through the topics, you will see how CI helps projects go agile.
+    After completing this chapter, you should be able to:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Describe how CI came into existence.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Define what CI is.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Describe the elements of CI.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Software Development Life Cycle
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'For those of you who are not familiar with the term: Software Development Life
+    Cycle, let us try to understand it.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The **Software Development Life Cycle**, also sometimes referred to as **SDLC**
+    for short, is the process of planning, developing, testing, and deploying software.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Teams follow a sequence of phases, and each phase uses the outcome of its previous
+    phase, as shown in the following diagram:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/357ee6b7-7641-4d0a-93d7-88d28c7a61e5.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Software Development Life Cycle
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let's take a look at the SDLC phases in detail.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Requirement analysis
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This is the first stage of the cycle. Here, the business team (mostly comprised
+    of business analysts) perform a requirement analysis of their project's business
+    needs. The requirements can be internal to the organization, or external, from
+    a customer. This study involves finding the nature and scope of the requirements.
+    With the gathered information, there is a proposal to either improve the system
+    or create a new one. The project cost gets decided, and benefits are laid out.
+    Then the project goals are defined.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Design
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The second phase is the design phase. Here, the system architects and the system
+    designers formulate the desired features of the software solution and create a
+    project plan. This plan may include process diagrams, overall interface, and layout
+    design, along with a vast set of documentation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Implementation
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The third phase is the implementation phase. Here, the project manager creates
+    and assigns work to the developers. The developers develop the code depending
+    on the tasks and goals defined in the design phase. This phase may last from a
+    few months to a year, depending on the project.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Testing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The fourth phase is the testing phase. When all the decided features are developed,
+    the testing team takes over. For the next few months, all features are thoroughly
+    tested. Every module of the software is collected and tested. Defects are raised
+    if any bugs or errors occur while testing. In the event of a failure, the development
+    team quickly acts to resolve the failures. The thoroughly tested code is then
+    deployed into the production environment.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Evolution
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The last phase is the evolution phase or the maintenance phase. Feedback from
+    the users/customers is analyzed, and the whole cycle of developing, testing, and
+    releasing the new features and fixes in the form of patches or upgrades repeats.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Waterfall model of software development
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: One of the most famous and widely used software development processes is the
+    Waterfall model. The Waterfall model is a sequential software development process.
+    It was derived from the manufacturing industry. One can see a highly structured
+    flow of processes that run in one direction. At the time of its creation, there
+    were no other software development methodologies, and the only thing the developers
+    could have imagined was the production line process that was simple to adapt for
+    software development.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following diagram illustrates the Waterfall model of software development:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/3e822d7c-11be-4aba-a2b8-394915bed092.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Waterfall model
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Waterfall approach is simple to understand, as the steps involved are similar
+    to that of the SDLC.
+  prefs: []
+  type: TYPE_NORMAL
+- en: First, there is a requirement analysis phase, which is followed by the designing
+    phase. There is a considerable time spent on the analysis and the designing part.
+    And once it's over, there are no further additions or deletions. In short, once
+    the development begins, there is no modification allowed in the design.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Then comes the implementation phase, where the actual development takes place.
+    The development cycle can range from three months to six months. During this time,
+    the testing team is usually free. When the development cycle is completed, a whole
+    week's time is planned for performing the integration of the source code. During
+    this time, many integration issues pop up and are fixed immediately. This stage
+    is followed by the testing phase.
+  prefs: []
+  type: TYPE_NORMAL
+- en: When the testing starts, it goes on for another three months or more, depending
+    on the software solution. After the testing completes successfully, the source
+    code is then deployed in the production environment. For this, a day or so is
+    again planned to carry out the deployment in production. There is a possibility
+    that some deployment issues may pop up. When the software solution goes live,
+    teams get feedback and may also anticipate issues.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The last phase is the maintenance phase. Feedback from the users/customers is
+    analyzed, and the whole cycle of developing, testing, and releasing new features
+    and fixes in the form of patches or upgrades repeats.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There is no doubt that the Waterfall model worked remarkably for decades. However,
+    flaws did exist, but they were simply ignored for a long time. Since, way back
+    then software projects had ample time and resources to get the job done.
+  prefs: []
+  type: TYPE_NORMAL
+- en: However, looking at the way software technologies have changed over the past
+    few years, we can easily say that the Waterfall model won't suit the requirements
+    of the current world.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Disadvantages of the Waterfall model
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following are some of the disadvantages of the Waterfall model:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Working software is produced only at the end of the SDLC, which lasts for a
+    year or so in most cases.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There is a huge amount of uncertainty.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It is not suitable for projects where the demand for new features is too frequent.
+    For example, e-commerce projects.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Integration is performed only after the entire development phase is complete.
+    As a result, integration issues are found at a much later stage and in large quantities.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There is no backward traceability.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It's difficult to measure progress within stages.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Advantages of the Waterfall model
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'By looking at the disadvantages of the Waterfall model, we can say that it''s
+    mostly suitable for projects where:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The requirements are well documented and fixed.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There is enough funding available to maintain a management team, a testing team,
+    a development team, a build and release team, a deployment team, and so on.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The technology is fixed, and not dynamic.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There are no ambiguous requirements. And most importantly, they don't pop up
+    during any other phase apart from the requirement analysis phase.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Agile to the rescue
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The name **Agile** rightly suggests *quick and easy*. Agile is a collection
+    of methods where software is developed through collaboration among self-organized
+    teams. The principles behind agile are incremental, quick, flexible software development,
+    and it promotes adaptive planning.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Agile software development process is an alternative to the traditional
+    software development processes discussed earlier.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The twelve agile principles
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following are the twelve principles of the agile model:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Customer satisfaction through early and continuous delivery of useful software.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Welcome changing requirements, even late in development.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Working software is frequently delivered (in weeks, rather than months).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Close daily cooperation between businesses, people, and developers.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Projects are built around motivated individuals, who should be trusted.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Face-to-face conversation is the best form of communication (co-location).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Working software is the principal measure of progress.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Sustainable development—able to maintain a constant pace.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Continuous attention to technical excellence and good design.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Simplicity—the art of maximizing the amount of work not done—is essential.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Self-organizing teams.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Regular adaptation to changing circumstances.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To know more about the Agile principles visit the link: [http://www.agilemanifesto.org](http://www.agilemanifesto.org).
+  prefs: []
+  type: TYPE_NORMAL
+- en: The twelve principles of Agile software development indicate the expectations
+    of the current software industry and its advantages over the Waterfall model.
+  prefs: []
+  type: TYPE_NORMAL
+- en: How does the Agile software development process work?
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the Agile software development process, the whole software application is
+    split into multiple features or modules. These features are delivered in iterations.
+    Each iteration lasts for three weeks, and involves cross-functional teams that
+    work simultaneously in various areas, such as planning, requirement analysis,
+    designing, coding, unit testing, and acceptance testing.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'As a result, no person sits idle at any given point in time. This is quite
+    different from the Waterfall model wherein while the development team is busy
+    developing the software, the testing team, the production team, and everyone else
+    is idle or underutilized. The following diagram illustrates the Agile model of
+    software development:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/1e48e17b-d7e3-436f-9f70-3a42b1ff01fc.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Agile methodology
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the preceding diagram, we can see that there is no time spent on requirement
+    analysis or design. Instead, a very high-level plan is prepared, just enough to
+    outline the scope of the project.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The team then goes through a series of iterations. Iteration can be classified
+    as time frames, each lasting for a month or even a week in some mature projects.
+    In this duration, a project team develops and tests features. The goal is to develop,
+    test, and release a feature in a single iteration. At the end of the iteration,
+    the feature goes for a demo. If the clients like it, then the feature goes live.
+    But, if it gets rejected, the feature is taken as a backlog, re-prioritized, and
+    again worked upon in the consecutive iteration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There is also a possibility of parallel development and testing. In a single
+    iteration, one can develop and test more than one feature in parallel.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Advantages of Agile software development process
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Let us see some of the advantages of the Agile software development process:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Functionality can be developed and demonstrated rapidly**: In an agile process,
+    the software project is divided by features, and each feature is called as a backlog.
+    The idea is to develop either a single or a set of features right from its conceptualization
+    till its deployment, in a week or a month. This puts at least a feature or two
+    on the customer''s plate, which they can then start using.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Resource requirement is less**: In Agile, there are no separate development
+    and testing teams. Neither is there a build or release team, or a deployment team.
+    In Agile, a single project team contains around eight members. Each member of
+    the team is capable of doing everything.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Promotes teamwork and cross-training**: Since there is a small team of about
+    eight members, the team members switch their roles in turns and learn from each
+    other''s experience.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Suitable for projects where requirements frequently change**: In an Agile
+    model of software development, the complete software is divided into features,
+    and each feature is developed and delivered in a short time span. Hence, changing
+    the feature, or even completely discarding it, doesn''t affect the whole project.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Minimalistic documentation**: This methodology focuses primarily on delivering
+    working software quickly, rather than creating huge documents. Documentation exists,
+    but it''s limited to the overall functionality.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Little or no planning required**: Since features are developed one after
+    the other in a short period, there is no need for extensive planning.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Parallel development**: Iteration consists of one or more features developed
+    in sequence, or even in parallel.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Scrum framework
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Scrum is a framework for developing and sustaining complex products that are
+    based on the Agile software development process. It is more than a process; it's
+    a framework with certain roles, tasks, and teams. Scrum was written by **Ken Schwaber** and
+    **Jeff Sutherland**; together, they created *The Scrum Guide*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In a Scrum framework, the development team decides on how to develop a feature.
+    This is because the team knows best about the problem they are presented with.
+    I assume most of the readers are happy after reading this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Scrum relies on a self-organizing and cross-functional team. The Scrum team
+    is self-organizing; hence, there is no overall team leader who decides which person
+    will do which task, or how a problem will be solved.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Important terms used in the Scrum framework
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following are the important terms used in the Scrum framework:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**The Sprint**: Sprint is a timebox during which a usable and potentially releasable
+    product gets created. A new Sprint starts immediately after the conclusion of
+    the previous Sprint. A Sprint may last between two weeks to one month, depending
+    on the project''s command over Scrum.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Product Backlog**: The Product Backlog is a list of all the required features
+    in a software solution. The list is dynamic. That is, now and then the customers
+    or team members add or delete items to the Product Backlog.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Sprint Backlog**: The Sprint Backlog is the set of Product Backlog items,
+    selected for the Sprint.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**Increment**: The Increment is the sum of all the Product Backlog items completed
+    during a Sprint and the value of the Increments from all the previous Sprints.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The Development Team**: The Development Team does the work of delivering
+    a releasable set of features named Increment at the end of each Sprint. Only members
+    of the Development Team create the Increment. Development Teams are empowered
+    by the organization to organize and manage their work. The resulting synergy optimizes
+    the Development Team''s overall efficiency and effectiveness.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The Product Owner**: The Product Owner is a mediator between the Scrum Team
+    and everyone else. He is the front face of the Scrum Team and interacts with customers,
+    infrastructure teams, admin teams, everyone involved in the Scrum, and so on.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: '**The Scrum Master**: The Scrum Master is responsible for ensuring Scrum is
+    understood and enacted. Scrum Masters do this by ensuring that the Scrum Team
+    follows the Scrum theory, practices, and rules.'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: How does Scrum work?
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The Product Owner, the Scrum Master, and the Scrum Team together follow a set
+    of stringent procedures to deliver the software features. The following diagram
+    explains the Scrum development process:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/5769741f-1b23-4f9f-8510-161d08fcb172.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Scrum methodology
+  prefs: []
+  type: TYPE_NORMAL
+- en: Let us see some of the important aspects of the Scrum software development process
+    that the team goes through.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Sprint Planning
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Sprint Planning is an opportunity for the Scrum Team to plan the features in
+    the current Sprint cycle. The plan is created mainly by the developers. Once the
+    plan is created, it is explained to the Scrum Master and the Product Owner. The
+    Sprint Planning is a timeboxed activity, and it is usually around eight hours
+    in total for a one-month Sprint cycle. It is the responsibility of the Scrum Master
+    to ensure everyone participates in the Sprint Planning activity.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the meeting, the Development Team takes into consideration the following
+    items:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: The number of Product Backlogs to be worked on (both new and the old ones from
+    the last Sprint).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Team performances in the last Sprint.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Projected capacity of the Development Team.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Sprint cycle
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: During the Sprint cycle, the developers simply work on completing the backlogs
+    decided in the Sprint Planning. The duration of a Sprint may last from two weeks
+    to one month, depending on the number of backlogs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Daily Scrum meeting
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This happens on a daily basis. During the Scrum meeting, the Development Team
+    discusses what was accomplished yesterday, and what will be accomplished today.
+    They also discuss the things that are stopping them from achieving their goal.
+    The Development Team does not attend any other meeting or discussion apart from
+    the Scrum meeting.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Monitoring Sprint progress
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Daily Scrum is a good opportunity for a team to measure its progress. The
+    Scrum Team can track the total work remaining, and by doing so, they can estimate
+    the likelihood of achieving the Sprint Goal.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Sprint Review
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the Sprint Review, the Development Team demonstrates the features that have
+    been accomplished. The Product Owner updates on the Product Backlog status to
+    date. The Product Backlog list is updated depending on the product performance
+    or usage in the market. Sprint Review is a four-hour activity altogether for a
+    one-month Sprint.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Sprint Retrospective
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this meeting, the team discusses the things that went well, and the things
+    that need improvement. The team then decides the points on which it has to improve
+    to perform better in the upcoming Sprint. This meeting usually occurs after the
+    Sprint Review and before the Sprint Planning.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous Integration
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Continuous Integration (CI) is a software development practice where developers
+    frequently integrate their work with the project's Integration branch and create
+    a build.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Integration is the act of submitting your private work (modified code) to the
+    common work area (the potential software solution). This is technically done by
+    merging your private work (personal branch) with the common work area (Integration
+    branch). Or we can say, pushing your private branch to the remote branch.
+  prefs: []
+  type: TYPE_NORMAL
+- en: CI is necessary to bring out issues encountered during the integration as early
+    as possible. This can be understood from the following diagram, which depicts
+    various issues encountered during a single CI cycle.
+  prefs: []
+  type: TYPE_NORMAL
+- en: A build failure can occur due to either an improper code or a human error while
+    doing a build (assuming that the tasks are done manually). An integration issue
+    can occur if the developers do not rebase their local copy of code frequently
+    with the code on the Integration branch. A testing issue can occur if the code
+    does not pass any of the unit or integration test cases.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'In the event of an issue, the developer has to modify the code to fix it:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/c923f2eb-e6e1-4dd7-b42c-28c428b8c2b0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: CI process
+  prefs: []
+  type: TYPE_NORMAL
+- en: Agile runs on CI
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Agile software development process focuses mainly on fast delivery, and
+    CI helps Agile in achieving that speed. But how does CI do that? Let us understand
+    by using a simple case.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Developing a feature involves many code changes, and between every code change,
+    there are a set of tasks to perform, such as checking-in the code, polling the
+    version control system for changes, building the code, unit testing, integration,
+    building on the integrated code, integration testing, and packaging. In a CI environment,
+    all these steps are made fast and error-free by using a CI tool such as *Jenkins*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Adding notifications makes things even faster. The sooner the team members
+    are aware of a build, integration, or deployment failure, the quicker they can
+    act. The following diagram depicts all the steps involved in a CI process:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/1ce449b9-0115-4152-9e16-c5039649c57d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: CI process with notifications
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this way, the team quickly moves from feature to feature. In simple terms,
+    the *agility* of the agile software development is greatly due to CI.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Types of projects that benefit from CI
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The amount of code written for the embedded systems presents inside a car is
+    more than the one present inside a fighter jet. In today's world, embedded software
+    is inside every product, modern or traditional. Be it cars, TVs, refrigerators,
+    wrist watches, or bikes; all have little or more software-dependent features.
+    Consumer products are becoming smarter day by day. Nowadays, we can see a product
+    being marketed more using its smart and intelligent features than its hardware
+    capabilities. For example, an air conditioner is marketed by its wireless control
+    features, and TVs are being marketed by their smart features, like embedded web
+    browsers, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The need to market new products has increased the complexity of products. This
+    increase in software complexity had brought the Agile software development and
+    CI methodologies to the limelight, though there were times when agile software
+    development was used by a team of no more than 30-40 people that were working
+    on a simple project. Almost all types of projects benefit from CI: mostly the
+    web-based projects, for example, the e-commerce websites, and mobile phone apps.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: CI and agile methodologies are used in projects that are based on Java, .NET,
+    Ruby on Rails, and every other programming language present today. The only place
+    where you will see it not being used is in the legacy systems. However, even they
+    are going agile. Projects based on SAS, Mainframes; all are trying to benefit
+    from CI.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Elements of CI
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Let us see the important elements of the CI process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Version control system
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This is the most basic and the most important requirement for implementing CI.
+    A **Version Control System,** sometimes also called a **Revision Control System,**
+    is a tool to manage your code history. It can be centralized or distributed. Some
+    of the famous centralized version control systems are SVN and IBM Rational ClearCase.
+    In the distributed segment, we have tools like GIT and Mercurial.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Ideally, everything that is required to build software must be version controlled.
+    A version control tool offers many features, such as tagging, branching, and so
+    on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Branching strategy
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: When using a Version Control System, keep the branching to a minimum. A few
+    companies have only one main branch, and all the development activity happens
+    on that. Nevertheless, most of the companies follow some branching strategies.
+    This is because there is always a possibility that a part of the team may work
+    on one release, while others may work on another release. Other times, there is
+    a need to support the older release versions. Such scenarios always lead companies
+    to use multiple branches.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'GitFlow is another way of managing your code using multiple branches. In the
+    following method, the Master/Production branch is kept clean and contains only
+    the releasable, ready-to-ship code. All the development happens on the Feature
+    branches, with the Integration branch serving as a common place to integrate all
+    the features. The following diagram is a moderate version of the GitFlow:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/2d249a6c-ede9-4a30-82d0-6bf59340a4f0.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Branching strategy
+  prefs: []
+  type: TYPE_NORMAL
+- en: GitFlow branching model
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following diagram illustrates the full version of GitFlow. We have a Master/Production
+    branch that contains only the production-ready code. The Feature branches are
+    where all of the development takes place. The Integration branch is where the
+    code gets integrated and tested for quality. In addition to that, we have release
+    branches that are pulled out from the Integration branch as and when there is
+    a stable release. All bug fixes related to a release happen in the Release branches.
+    There is also a Hotfix branch that is pulled out of the Master/Production branch
+    as and when there is a need for a hotfix:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/a452caa6-2dd5-4b7b-b374-fcd04f8ea34d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: GitFlow branching strategy
+  prefs: []
+  type: TYPE_NORMAL
+- en: CI tool
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'What is a CI tool? Well, it is nothing more than an orchestrator. A CI tool
+    is at the center of the CI system, connected to the Version Control System, build
+    tools, Binary Repository Manager tool, testing and production environments, quality
+    analysis tool, test automation tool, and so on. There are many CI tools: Build
+    Forge, Bamboo, and TeamCity, to name a few. But the prime focus of our book is
+    Jenkins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/89003f6b-027e-46f8-baa2-c3fe1109e946.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Centralized CI server
+  prefs: []
+  type: TYPE_NORMAL
+- en: A CI tool provides options to create pipelines. Each pipeline has its own purpose.
+    There are pipelines to take care of CI. Some take care of testing; some take care
+    of deployments, and so on. Technically, a pipeline is a flow of jobs. Each job
+    is a set of tasks that run sequentially. Scripting is an integral part of a CI tool
+    that performs various kinds of tasks. The tasks may be as simple as copying a
+    folder/file from one location to the other, or they can be complex Perl scripts
+    to monitor machines for file modifications. Nevertheless, the script is getting
+    replaced by the growing number of plugins available in Jenkins. Now you need not
+    script to build a Java code; there are plugins available for it. All you need
+    to do is install and configure a plugin to get the job done. Technically, plugins
+    are nothing but small modules written in Java. They remove the burden of scripting
+    from the developer's head. We will learn more about pipelines in the upcoming
+    chapters.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Self-triggered builds
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The next important thing to understand is the self-triggered automated build.
+    Build automation is simply a series of automated steps that compile the code and
+    generate executables. The build automation can take the help of build tools like
+    Ant and Maven. The self-triggered automated build is the most important part of
+    a CI system. There are two main factors that call for an automated build mechanism:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Speed.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Catching integration or code issues as early as possible.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: There are projects where 100 to 200 builds happen per day. In such cases, speed
+    plays an important factor. If the builds are automated, then it can save a lot
+    of time. Things become even more interesting if the triggering of the build is
+    made self-driven, without any manual intervention. Auto-triggered build on every
+    code change further saves time.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'When builds are frequent and fast, the probability of finding an error (build
+    error, compilation error, or integration error) in the framework of SDLC is higher
+    and faster:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/07304f0b-783a-498e-b707-c033986ca49d.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Probability of error versus build graph
+  prefs: []
+  type: TYPE_NORMAL
+- en: Code coverage
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Code coverage is the amount of code (in percentage) that is covered by your
+    test case. The metrics that you might see in your coverage reports could be more
+    or less as defined in the following table:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Type of coverage** | **Description** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Function | The number of functions called out of the total number of functions
+    defined |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Statement | The number of statements in the program that are truly called
+    out of the total number |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Branches | The number of branches of the control structures executed |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Condition | The number of Boolean sub-expressions that are being tested for
+    a true and a false value |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Line | The number of lines of source code that are being tested out of the
+    total number of lines present inside the code |'
+  prefs: []
+  type: TYPE_TB
+- en: Types of code coverage
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This coverage percentage is calculated by dividing the number of items tested
+    by the number of items found. The following screenshot illustrates the code coverage
+    report from  SonarQube:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**![](img/ccf7322a-5472-4ad9-98f5-bacf5798ade3.png)**'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Code coverage report on SonarQube
+  prefs: []
+  type: TYPE_NORMAL
+- en: Code coverage tools
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'You might find several options to create coverage reports, depending on the
+    language(s) you use. Some of the popular tools are listed as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '| **Language** | **Tools** |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Java | Atlassian Clover, Cobertura, JaCoCo |'
+  prefs: []
+  type: TYPE_TB
+- en: '| C#/.NET | OpenCover, dotCover |'
+  prefs: []
+  type: TYPE_TB
+- en: '| C++ | OpenCppCoverage, gcov |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Python | Coverage.py |'
+  prefs: []
+  type: TYPE_TB
+- en: '| Ruby | SimpleCov |'
+  prefs: []
+  type: TYPE_TB
+- en: Static code analysis
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Static code analysis, also commonly called **white-box** testing, is a form
+    of software testing that looks for the structural qualities of the code. For example,
+    it answers how robust or maintainable the code is. Static code analysis is performed
+    without actually executing programs. It is different from the functional testing,
+    which looks into the functional aspects of software, and is dynamics.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Static code analysis is the evaluation of software's inner structures. For example,
+    is there a piece of code used repetitively? Does the code contain lots of commented
+    lines? How complex is the code? Using the metrics defined by a user, an analysis
+    report is generated that shows the code quality regarding maintainability. It
+    doesn't question the code's functionality.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Some of the static code analysis tools like SonarQube come with a dashboard,
+    which shows various metrics and statistics of each run. Usually, as part of CI,
+    the static code analysis is triggered every time a build runs. As discussed in
+    the previous sections, static code analysis can also be included before a developer
+    tries to check-in his code. Hence, a code of low quality can be prevented right
+    at the initial stage.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'They support many languages, such as Java, C/C++, Objective-C, C#, PHP, Flex,
+    Groovy, JavaScript, Python, PL/SQL, COBOL, and so on. The following screenshots illustrate
+    the static code analysis report using SonarQube:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/ab5d269d-6d44-449e-b6da-be6b1d649e1c.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Static code analysis report
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/da3b4670-eb42-4f16-a02d-deffe64d51ae.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Static code analysis report
+  prefs: []
+  type: TYPE_NORMAL
+- en: Automated testing
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Testing is an important part of an SDLC. To maintain quality software, it is
+    necessary that the software solution goes through various test scenarios. Giving
+    less importance to testing can result in customer dissatisfaction and a delayed
+    product.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Since testing is a manual, time-consuming, and repetitive task, automating the
+    testing process can significantly increase the speed of software delivery. However,
+    automating the testing process is a bit more difficult than automating the build,
+    release, and deployment processes. It usually takes a lot of effort to automate
+    nearly all the test cases used in a project. It is an activity that matures over
+    time.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Hence, when beginning to automate the testing, we need to take a few factors
+    into consideration. Test cases that are of great value and easy to automate must
+    be considered first. For example, automate the testing where the steps are the
+    same, although they run with different data every time. Further, automate the
+    testing where software functionality is tested on various platforms. Also, automate
+    the testing that involves a software application running with different configurations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Previously, the world was mostly dominated by desktop applications. Automating
+    the testing of a GUI-based system was quite difficult. This called for scripting
+    languages where the manual mouse and keyboard entries were scripted and executed
+    to test the GUI application. Nevertheless, today the software world is completely
+    dominated by web and mobile-based applications, which are easy to test through
+    an automated approach using a test automation tool.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once a code is built, packaged, and deployed, testing should run automatically
+    to validate the software. Traditionally, the process followed is to have an environment
+    for SIT, UAT, PT, and pre-production. First, the release goes through SIT, which
+    stands for system integration testing. Here, testing is performed on an integrated
+    code to check its functionality altogether. If the integration testing is passed,
+    the code is deployed to the next environment, which is UAT, where it goes through
+    user acceptance testing, and then it can lastly be deployed in PT, where it goes
+    through performance testing. In this way, the testing is prioritized.
+  prefs: []
+  type: TYPE_NORMAL
+- en: It is not always possible to automate all the testing. But, the idea is to automate
+    whatever testing that is possible. The preceding method discussed requires the
+    need to have many environments and also a higher number of automated deployments
+    into various environments. To avoid this, we can go for another method where there
+    is only one environment where the build is deployed, and then the basic tests
+    are run, and after that, long-running tests are triggered manually.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Binary repository tools
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: As part of the SDLC, the source code is continuously built into binary artifacts
+    using CI. Therefore, there should be a place to store these built packages for
+    later use. The answer is, using a binary repository tool. But what is a binary
+    repository tool?
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A binary repository tool is a Version Control System for binary files. Do not
+    confuse this with the Version Control System discussed in the previous sections.
+    The former is responsible for versioning the source code, and the latter is for
+    binary files, such as `.rar`, `.war`, `.exe`, `.msi`, and so on. Along with managing
+    built artifacts, a binary repository tool can also manage 3-party binaries that
+    are required for a build. For example, the Maven plugin always downloads the plugins
+    required to build the code into a folder. Rather than downloading the plugins
+    again and again, they can be managed using a repository tool:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![](img/704daee7-e279-40f8-ac8c-2fb2e1f88c33.png)'
+  prefs: []
+  type: TYPE_IMG
+- en: Repository tool
+  prefs: []
+  type: TYPE_NORMAL
+- en: From the above illustration, you can see as soon as a build gets created and
+    passes all the checks, the built artifact is uploaded to the binary repository
+    tool. From here, the developers and testers can manually pick them, deploy them,
+    and test them. Or, if the automated deployment is in place, then the built artifacts
+    are automatically deployed to the respective test environment. So, what're the
+    advantages of using a binary repository?
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'A binary repository tool does the following:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Every time a built artifact gets generated, it is stored in a binary repository
+    tool. There are many advantages of storing the build artifacts. One of the most
+    important advantages is that the build artifacts are located in a centralized
+    location from where they can be accessed when needed.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It can store third-party binary plugins, modules that are required by the build
+    tools. Hence, the build tool need not download the plugins every time a build
+    runs. The repository tool is connected to the online source and keeps updating
+    the plugin repository.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It records what, when, and who created a build package.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: It provides a staging like environments to manage releases better. This also
+    helps in speeding up the CI process.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: In a CI environment, the frequency of build is too high, and each build generates
+    a package. Since all the built packages are in one place, developers are at liberty
+    to choose what to promote and what not to promote in higher environments.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Automated packaging
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: There is a possibility that a build may have many components. Let's take, for
+    example, a build that has a `.rar` file as an output. Along with that, it has
+    some Unix configuration files, release notes, some executables, and also some
+    database changes. All of these different components need to be together. The task
+    of creating a single archive or a single media out of many components is called
+    **packaging**. Again, this can be automated using the CI tools and can save a
+    lot of time.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Benefits of using CI
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The following are some of the benefits of using CI. The list is brief, and not
+    comprehensive.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Freedom from long integrations
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Integrating the code rarely, as seen in the Waterfall model, can lead to *merge
+    hell*. It is a situation wherein teams spend weeks resolving the merge issues.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In contrast to this, integrating every single commit on your Feature branch
+    with the Integration branch and testing it for issues (CI) allows you to find
+    integration issues as early as possible.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Metrics
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Tools like Jenkins, SonarQube, Artifactory, and GitHub allow you to generate
+    trends over a period. All of these trends can help project managers and teams
+    to make sure the project is heading in the right direction and with the right
+    pace.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Catching issues faster
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This is the most important advantage of having a carefully implemented CI system.
+    Any integration issue or merge issue gets caught early. The CI system has the
+    facility to send notification as soon as the build fails.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Rapid development
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: From a technical perspective, CI helps teams work more efficiently. Projects
+    that use CI follow an automatic and continuous approach while building, testing,
+    and integrating their code. This results in a faster development.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Developers spend more time developing their code and zero time building, packaging,
+    integrating, and deploying it, as everything is automated. This also helps teams
+    that are geographically distributed to work together. With a good *software configuration
+    management process* in place, people can work on widely distributed teams.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Spend more time adding features
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In the past, build and release activities were managed by the developers, along
+    with the regular development work. It was followed by a trend of having separate
+    teams that handled the build, release, and deployment activities. And it didn't
+    stop there; this new model suffered from communication issues and a lack of coordination
+    among developers, release engineers, and testers. However, using CI, all the build,
+    release, and deployment work gets automated. Therefore, the development team need
+    not worry about anything other than developing features. In most cases, even the
+    complete testing is automated. Therefore by using a CI process, the development
+    team can spend more time developing the code.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '"Behind every successful agile project, there is a Continuous Integration process."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: In this chapter, we took a glance through the history of software engineering
+    processes. We learned about CI and the elements that make it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The various concepts and terminologies discussed in this chapter form a foundation
+    for the upcoming chapters. Without these, the coming chapters are mere technical
+    know-how.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will learn how to install Jenkins on various platforms.
+  prefs: []
+  type: TYPE_NORMAL
