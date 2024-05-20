@@ -189,7 +189,7 @@
   id: totrans-23
   prefs: []
   type: TYPE_NORMAL
-  zh: 我们将使用以下命令以一级冗余度运行此播放：
+  zh: 使用日志文件并不意味着与记录到标准输出互斥。两者可以同时发生，并且所提供的冗余级别对两者都有影响。日志记录当然是有帮助的，但它并不一定告诉我们代码中发生了什么，以及我们的变量可能包含什么。我们将在下一节中看看如何执行变量内省，以帮助您完成这个任务。
 - en: Variable introspection
   id: totrans-24
   prefs:
@@ -216,7 +216,7 @@
   id: totrans-26
   prefs: []
   type: TYPE_NORMAL
-  zh: '![图9.2 - 使用调试模块的var参数检查变量子元素'
+  zh: 要排除变量使用不当的问题，检查变量值是关键。检查变量值的最简单方法是使用`ansible.builtin.debug`模块。`ansible.builtin.debug`模块允许在屏幕上显示自由格式的文本，并且与其他任务一样，模块的参数也可以利用Jinja2模板语法。让我们通过创建一个执行任务的示例播放来演示这种用法，注册结果，然后使用Jinja2语法在`ansible.builtin.debug`语句中显示结果，如下所示：
 - en: '[PRE0]'
   id: totrans-27
   prefs: []
@@ -226,7 +226,7 @@
   id: totrans-28
   prefs: []
   type: TYPE_NORMAL
-  zh: '![图9.1 - 使用一级冗余度检查注册变量的值'
+  zh: 我们将使用以下命令以一级冗余度运行此播放：
 - en: '[PRE1]'
   id: totrans-29
   prefs: []
@@ -238,21 +238,16 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 假设我们正在测试的网站是可访问的，我们将看到`derpops`的显示值，如下面的屏幕截图所示：
-- en: '![Figure 9.1 – Using level one verbosity to examine registered variable values'
+- en: '![Figure 9.1 – Using level one verbosity to examine registered variable values](Images/B17462_09_01.jpg)'
   id: totrans-31
   prefs: []
   type: TYPE_NORMAL
-  zh: '](Images/B17462_09_01.jpg)'
-- en: '](Images/B17462_09_01.jpg)'
-  id: totrans-32
-  prefs: []
-  type: TYPE_NORMAL
-  zh: 图9.1 - 使用一级冗余度检查注册变量的值
+  zh: '![图9.1 - 使用一级冗余度检查注册变量的值](Images/B17462_09_01.jpg)'
 - en: Figure 9.1 – Using level one verbosity to examine registered variable values
   id: totrans-33
   prefs: []
   type: TYPE_NORMAL
-  zh: 使用相同冗余度运行此修改后的播放将只显示`derpops`变量的`server`部分，如下面的屏幕截图所示：
+  zh: 图9.1 - 使用一级冗余度检查注册变量的值
 - en: 'The `ansible.builtin.debug` module has a different option that may be useful
     as well. Instead of printing a freeform string to debug template usage, the module
     can simply print the value of any variable. This is done using the `var` argument
@@ -274,18 +269,13 @@
   id: totrans-36
   prefs: []
   type: TYPE_NORMAL
-  zh: 要排除变量使用不当的问题，检查变量值是关键。检查变量值的最简单方法是使用`ansible.builtin.debug`模块。`ansible.builtin.debug`模块允许在屏幕上显示自由格式的文本，并且与其他任务一样，模块的参数也可以利用Jinja2模板语法。让我们通过创建一个执行任务的示例播放来演示这种用法，注册结果，然后使用Jinja2语法在`ansible.builtin.debug`语句中显示结果，如下所示：
+  zh: 使用相同冗余度运行此修改后的播放将只显示`derpops`变量的`server`部分，如下面的屏幕截图所示：
 - en: '![Figure 9.2 – Using the var parameter of the debug module to inspect variable
-    subelements'
+    subelements](Images/B17462_09_02.jpg)'
   id: totrans-37
   prefs: []
   type: TYPE_NORMAL
-  zh: '](Images/B17462_09_02.jpg)'
-- en: '](Images/B17462_09_02.jpg)'
-  id: totrans-38
-  prefs: []
-  type: TYPE_NORMAL
-  zh: 使用日志文件并不意味着与记录到标准输出互斥。两者可以同时发生，并且所提供的冗余级别对两者都有影响。日志记录当然是有帮助的，但它并不一定告诉我们代码中发生了什么，以及我们的变量可能包含什么。我们将在下一节中看看如何执行变量内省，以帮助您完成这个任务。
+  zh: '![图9.2 - 使用调试模块的var参数检查变量子元素](Images/B17462_09_02.jpg)'
 - en: Figure 9.2 – Using the var parameter of the debug module to inspect variable
     subelements
   id: totrans-39

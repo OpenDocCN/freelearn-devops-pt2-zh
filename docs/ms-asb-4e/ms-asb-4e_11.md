@@ -1,4 +1,4 @@
-# 第九章：故障排除 Ansible
+# *第九章*：故障排除 Ansible
 
 Ansible 简单而强大。Ansible 的简单意味着它的操作易于理解和遵循。然而，即使是最简单和最用户友好的系统，有时也会出现问题——也许是因为我们正在学习编写自己的代码（playbooks、roles、modules 或其他）并需要调试它，或者更少见的是，当我们可能在已发布版本的集合或 `ansible-core` 中发现了错误时。
 
@@ -44,17 +44,40 @@ Ansible 简单而强大。Ansible 的简单意味着它的操作易于理解和�
 
 虽然`ansible-playbook`的默认日志记录到标准输出，但输出量可能大于所使用的终端仿真器的缓冲区；因此，可能需要将所有输出保存到文件中。虽然各种 shell 提供了一些重定向输出的机制，但更优雅的解决方案是将`ansible-playbook`指向日志记录到文件。这可以通过在`ansible.cfg`文件中定义`log_path`或者将`ANSIBLE_LOG_PATH`设置为环境变量来实现。任何一个的值都应该是文件的路径。如果路径不存在，Ansible 将尝试创建一个文件。如果文件已经存在，Ansible 将追加到文件，允许合并多个`ansible-playbook`执行日志。
 
-我们将使用以下命令以一级冗余度运行此播放：
+使用日志文件并不意味着与记录到标准输出互斥。两者可以同时发生，并且所提供的冗余级别对两者都有影响。日志记录当然是有帮助的，但它并不一定告诉我们代码中发生了什么，以及我们的变量可能包含什么。我们将在下一节中看看如何执行变量内省，以帮助您完成这个任务。
 
 # 变量内省
 
 在开发 Ansible playbook 时遇到的常见问题是变量的值的不正确使用或无效假设。当在变量中注册一个任务的结果，然后在另一个任务或模板中使用该变量时，这种情况特别常见。如果没有正确访问结果的所需元素，最终结果将是意外的，甚至可能是有害的。
 
-![图 9.2 - 使用调试模块的 var 参数检查变量子元素```--- - name: variable introspection demo   hosts: localhost   gather_facts: false   tasks:     - name: do a thing       ansible.builtin.uri:         url: https://derpops.bike       register: derpops     - name: show derpops       ansible.builtin.debug:         msg: "derpops value is {{ derpops }}" ```![图 9.1 - 使用一级冗余度检查注册变量的值```ansible-playbook -i mastery-hosts vintro.yaml -v```假设我们正在测试的网站是可访问的，我们将看到`derpops`的显示值，如下面的屏幕截图所示：](img/B17462_09_01.jpg)
+要排除变量使用不当的问题，检查变量值是关键。检查变量值的最简单方法是使用`ansible.builtin.debug`模块。`ansible.builtin.debug`模块允许在屏幕上显示自由格式的文本，并且与其他任务一样，模块的参数也可以利用 Jinja2 模板语法。让我们通过创建一个执行任务的示例播放来演示这种用法，注册结果，然后使用 Jinja2 语法在`ansible.builtin.debug`语句中显示结果，如下所示：
+
+```
+--- 
+- name: variable introspection demo
+  hosts: localhost
+  gather_facts: false   
+  tasks:     
+- name: do a thing       
+  ansible.builtin.uri:         
+    url: https://derpops.bike       
+    register: derpops     
+- name: show derpops       
+  ansible.builtin.debug:         
+    msg: "derpops value is {{ derpops }}" 
+```
+
+我们将使用以下命令以一级冗余度运行此播放：
+
+```
+ansible-playbook -i mastery-hosts vintro.yaml -v
+```
+
+假设我们正在测试的网站是可访问的，我们将看到`derpops`的显示值，如下面的屏幕截图所示：
+
+![图 9.1 - 使用一级冗余度检查注册变量的值](img/B17462_09_01.jpg)
 
 图 9.1 - 使用一级冗余度检查注册变量的值
-
-使用相同冗余度运行此修改后的播放将只显示`derpops`变量的`server`部分，如下面的屏幕截图所示：
 
 `ansible.builtin.debug`模块还有一个不同的选项，可能也很有用。该模块不是将自由格式的字符串打印到调试模板中，而是可以简单地打印任何变量的值。这是通过使用`var`参数而不是`msg`参数来完成的。让我们重复我们的例子，但这次我们将使用`var`参数，并且我们将仅访问`derpops`变量的`server`子元素，如下所示：
 
@@ -75,11 +98,9 @@ Ansible 简单而强大。Ansible 的简单意味着它的操作易于理解和�
         var: derpops.server 
 ```
 
-要排除变量使用不当的问题，检查变量值是关键。检查变量值的最简单方法是使用`ansible.builtin.debug`模块。`ansible.builtin.debug`模块允许在屏幕上显示自由格式的文本，并且与其他任务一样，模块的参数也可以利用 Jinja2 模板语法。让我们通过创建一个执行任务的示例播放来演示这种用法，注册结果，然后使用 Jinja2 语法在`ansible.builtin.debug`语句中显示结果，如下所示：
+使用相同冗余度运行此修改后的播放将只显示`derpops`变量的`server`部分，如下面的屏幕截图所示：
 
-](Images/B17462_09_02.jpg)
-
-使用日志文件并不意味着与记录到标准输出互斥。两者可以同时发生，并且所提供的冗余级别对两者都有影响。日志记录当然是有帮助的，但它并不一定告诉我们代码中发生了什么，以及我们的变量可能包含什么。我们将在下一节中看看如何执行变量内省，以帮助您完成这个任务。
+![图 9.2 - 使用调试模块的 var 参数检查变量子元素](img/B17462_09_02.jpg)
 
 图 9.2 - 使用调试模块的 var 参数来检查变量子元素
 
