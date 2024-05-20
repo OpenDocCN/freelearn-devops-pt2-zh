@@ -305,7 +305,55 @@ $ gcloud compute project-info describe --format=json
 
 现在您拥有自己的 VPC、子网和防火墙规则。这个基础设施将被计算引擎（VM 实例）、Kubernetes 引擎和一些其他 GCP 产品使用。让我们在您的 VPC 上部署两个 VM 实例，如下图所示，看看它是如何工作的：
 
-![最终状态# 启动 VM 实例我们将使用以下配置在`us-central1`和`us-east1`上启动两个 VM 实例：| **VM 实例名称** | **目标 VPC** | **区域（参见以下步骤）** | **目标子网** | **分配网络标签** || --- | --- | --- | --- | --- || `chap7-public` | `chap7` | `us-central1-a` | `chap7-us-central1` | public || `chap7-private` | `chap7` | `us-east1-b` | `chap7-us-east1` | private |1.  使用以下命令检查`us-central1`和`us-east1`中可用的区域：```$ gcloud compute zones list --filter='name:(us-east1,us-central1)'NAME           REGION       STATUS  NEXT_MAINTENANCE  TURNDOWN_DATE **us-east1-b**     us-east1     UP us-east1-c     us-east1     UP us-east1-d     us-east1     UP us-central1-c  us-central1  UP **us-central1-a**  us-central1  UP us-central1-f  us-central1  UP us-central1-b  us-central1  UP```因此，让我们选择`us-central1-a`作为`chap7-public`，选择`us-east1-b`作为`chap7-private`：1.  输入以下命令创建两个 VM 实例：```$ gcloud compute instances create chap7-public --network=chap7 --subnet=chap7-us-central1 --zone=us-central1-a --tags=public --machine-type=f1-micro$ gcloud compute instances create chap7-private --network=chap7 --subnet=chap7-us-east1 --zone=us-east1-b --tags=private --machine-type=f1-micro```1.  通过以下命令检查 VM 实例的外部 IP 地址：```$ gcloud compute instances listNAME           ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS chap7-public   us-central1-a  f1-micro                   192.168.1.2  **35.224.14.45**   RUNNING chap7-private  us-east1-b     f1-micro                   **192.168.2.2**  35.229.95.179  RUNNING```1.  运行`ssh-agent`以记住您的 ssh 密钥：```$ ssh-add ~/.ssh/id_rsa```1.  从您的机器通过`-A`选项（转发身份验证）和使用外部 IP 地址 ssh 到`chap7-public`：![](img/01c661b0-0fb2-4541-a527-1d97a51994cd.png)ssh 到公共 VM 实例
+![最终状态](img/061df439-c2c1-48b2-9aeb-9645e75b1deb.png)
+
+# 启动 VM 实例
+
+我们将使用以下配置在`us-central1`和`us-east1`上启动两个 VM 实例：
+
+| **VM 实例名称** | **目标 VPC** | **区域（参见以下步骤）** | **目标子网** | **分配网络标签** |
+| --- | --- | --- | --- | --- |
+| `chap7-public` | `chap7` | `us-central1-a` | `chap7-us-central1` | public |
+| `chap7-private` | `chap7` | `us-east1-b` | `chap7-us-east1` | private |
+
+1.  使用以下命令检查`us-central1`和`us-east1`中可用的区域：
+
+```
+$ gcloud compute zones list --filter='name:(us-east1,us-central1)'
+NAME           REGION       STATUS  NEXT_MAINTENANCE  TURNDOWN_DATE 
+**us-east1-b**     us-east1     UP us-east1-c     us-east1     UP us-east1-d     us-east1     UP 
+us-central1-c  us-central1  UP **us-central1-a**  us-central1  UP us-central1-f  us-central1  UP us-central1-b  us-central1  UP
+```
+
+因此，让我们选择`us-central1-a`作为`chap7-public`，选择`us-east1-b`作为`chap7-private`：
+
+1.  输入以下命令创建两个 VM 实例：
+
+```
+$ gcloud compute instances create chap7-public --network=chap7 --subnet=chap7-us-central1 --zone=us-central1-a --tags=public --machine-type=f1-micro
+$ gcloud compute instances create chap7-private --network=chap7 --subnet=chap7-us-east1 --zone=us-east1-b --tags=private --machine-type=f1-micro
+```
+
+1.  通过以下命令检查 VM 实例的外部 IP 地址：
+
+```
+$ gcloud compute instances list
+NAME           ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS 
+chap7-public   us-central1-a  f1-micro                   192.168.1.2  **35.224.14.45**   RUNNING 
+chap7-private  us-east1-b     f1-micro                   **192.168.2.2**  35.229.95.179  RUNNING
+```
+
+1.  运行`ssh-agent`以记住您的 ssh 密钥：
+
+```$
+ ssh-add ~/.ssh/id_rsa
+ ```
+
+1.  从您的机器通过`-A`选项（转发身份验证）和使用外部 IP 地址 ssh 到`chap7-public`：
+
+![](img/01c661b0-0fb2-4541-a527-1d97a51994cd.png)
+
+ssh 到公共 VM 实例
 
 1.  通过内部 IP 地址从`chap7-public`到`chap7-private`进行 ssh：
 
