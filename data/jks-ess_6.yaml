@@ -1,397 +1,589 @@
 - en: Chapter 6. Managing Code Quality and Notifications
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第6章 管理代码质量和通知
 - en: '|   | *"Limit your burden by making very small incremental changes"* |   |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *"通过进行非常小的增量更改来限制您的负担"* |   |'
 - en: '|   | --*Anonymous* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*匿名* |'
 - en: We saw how various customers are using Jenkins on Cloud, based on their requirements.
     We also saw cloud-based offerings from Red Hat OpenShift and CloudBees, and case
     studies to understand how Jenkins is used effectively. Now, it is time to know
     about additional aspects of code quality inspection and notification on build
     failure.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们看到了各种客户如何根据他们的需求在云上使用Jenkins。我们还看到了Red Hat OpenShift和CloudBees的云端产品，以及案例研究，以了解Jenkins如何有效地使用。现在，是时候了解关于代码质量检查和构建失败通知的额外方面了。
 - en: This chapter will teach you how to integrate static code analysis behavior into
     Jenkins. Code quality is an extremely vital feature that impacts application's
     effectiveness and by integrating it with sonar, Checkstyle, FindBugs, and other
     tools, the user gets an insight into problematic portions of code.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将教你如何将静态代码分析行为集成到Jenkins中。代码质量是影响应用程序效能的极其重要的特性，通过与Sonar、Checkstyle、FindBugs等工具集成，用户可以洞察到代码中的问题部分。
 - en: Integration with Sonar
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 与Sonar集成
 - en: Exploring Static code analysis Plugins
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 探索静态代码分析插件
 - en: E-mail Notifications on Build status
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 构建状态的电子邮件通知
 - en: Integration with Sonar
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 与Sonar集成
 - en: Quality of code is one of the important facets of DevOps culture. It provides
     quality checks that highlight the level of reliability, security, efficiency,
     portability, manageability, and so on. It helps to find bugs or possibility of
     bugs in the source code and sets culture to align with coding standards in the
     organization.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 代码质量是DevOps文化的一个重要方面。它提供了质量检查，突出了可靠性、安全性、效率、可移植性、可管理性等方面的水平。它有助于发现源代码中的错误或可能的错误，并建立与组织中编码标准一致的文化。
 - en: SonarQube is the open source platform for continuous inspection of code quality.
     It supports Java, C#, PHP, Python, C/C++, Flex, Groovy, JavaScript, PL/SQL, COBOL,
     Objective-C, Android development, and so on. It provides reports on coding standards,
     code coverage, complex code, unit tests, duplicated code, potential bugs, comments,
     design and architecture.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: SonarQube是一个开源的代码质量持续检查平台。它支持Java、C#、PHP、Python、C/C++、Flex、Groovy、JavaScript、PL/SQL、COBOL、Objective-C、Android开发等。它提供关于编码标准、代码覆盖、复杂代码、单元测试、重复代码、潜在错误、注释、设计和架构的报告。
 - en: Go to [http://www.sonarqube.org/downloads/](http://www.sonarqube.org/downloads/),
     and download SonarQube 5.1.![Integration with Sonar](img/3471_06_01.jpg)
+  id: totrans-11
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前往[http://www.sonarqube.org/downloads/](http://www.sonarqube.org/downloads/)，下载SonarQube
+    5.1。![与Sonar集成](img/3471_06_01.jpg)
 - en: Extract files, and it will look similar to the following screenshot:![Integration
     with Sonar](img/3471_06_02.jpg)
+  id: totrans-12
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提取文件，它将类似于以下截图：![与Sonar集成](img/3471_06_02.jpg)
 - en: Go to the `bin` folder to run SonarQube based on the operating system on which
     you want to run Sonar.![Integration with Sonar](img/3471_06_03.jpg)
+  id: totrans-13
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据您想要运行SonarQube的操作系统，转到`bin`文件夹以运行SonarQube。![与Sonar集成](img/3471_06_03.jpg)
 - en: Select a folder based on your platform, in our case, we are installing it on
     CentOS, and so we will select `linux-x86-64`.![Integration with Sonar](img/3471_06_04.jpg)
+  id: totrans-14
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据您的平台选择一个文件夹，在我们的例子中，我们将在CentOS上安装，因此我们将选择`linux-x86-64`。![与Sonar集成](img/3471_06_04.jpg)
 - en: 'Open the terminal and go to the SonarQube home directory; go to `bin/linux-x86-64/`
     and run `sonar.sh`. We need to use parameters with `sonar.sh`, as shown in the
     following usage:'
+  id: totrans-15
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开终端并进入SonarQube的安装目录；转到`bin/linux-x86-64/`并运行`sonar.sh`。我们需要使用`sonar.sh`的参数，如下所示：
 - en: '[PRE0]'
+  id: totrans-16
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: '![Integration with Sonar](img/3471_06_05.jpg)'
+  id: totrans-17
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![与Sonar集成](img/3471_06_05.jpg)'
 - en: Visit `http://localhost:9000/` or `http://<IP address>:9000/`.![Integration
     with Sonar](img/3471_06_06.jpg)
+  id: totrans-18
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问`http://localhost:9000/`或`http://<IP地址>:9000/`。![与Sonar集成](img/3471_06_06.jpg)
 - en: Explore **Rules** in the SonaQube dashboard.![Integration with Sonar](img/3471_06_07.jpg)
+  id: totrans-19
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 探索SonarQube仪表板中的**规则**。![与Sonar集成](img/3471_06_07.jpg)
 - en: Verify **Settings** in the SonaQube dashboard.![Integration with Sonar](img/3471_06_08.jpg)
+  id: totrans-20
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 验证SonarQube仪表板中的**设置**。![与Sonar集成](img/3471_06_08.jpg)
 - en: 'Create `sonar-project.properties`, and save it in a repository where the project
     is stored:'
+  id: totrans-21
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建`sonar-project.properties`，并将其保存在项目存储的仓库中：
 - en: '[PRE1]'
+  id: totrans-22
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: Install the SonarQube plugin in Jenkins. To know more on this, visit [https://wiki.jenkins-ci.org/display/JENKINS/SonarQube+plugin](https://wiki.jenkins-ci.org/display/JENKINS/SonarQube+plugin).![Integration
     with Sonar](img/3471_06_09.jpg)
+  id: totrans-23
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins中安装SonarQube插件。欲了解更多信息，请访问[https://wiki.jenkins-ci.org/display/JENKINS/SonarQube+plugin](https://wiki.jenkins-ci.org/display/JENKINS/SonarQube+plugin)。![与Sonar集成](img/3471_06_09.jpg)
 - en: Click on **Manage Jenkins** and go to **Configure System**. Go to the **SonarQube**
     section, and configure SonarQube in Jenkins.![Integration with Sonar](img/3471_06_10.jpg)
+  id: totrans-24
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**管理Jenkins**并前往**系统配置**。转到**SonarQube**部分，并在Jenkins中配置SonarQube。![与Sonar集成](img/3471_06_10.jpg)
 - en: Add Build step to **Invoke Standalone SonarQube Analysis** in a build Job.![Integration
     with Sonar](img/3471_06_11.jpg)
+  id: totrans-25
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在构建作业中添加构建步骤**调用独立SonarQube分析**。![与Sonar集成](img/3471_06_11.jpg)
 - en: Run the build job, and if you get a certificate error, execute the `svn export`
     command to solve the certificate issue.![Integration with Sonar](img/3471_06_12.jpg)
+  id: totrans-26
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行构建作业，若遇到证书错误，执行`svn export`命令以解决证书问题。![与Sonar集成](img/3471_06_12.jpg)
 - en: Execute the `svn export` command to solve certificate issue on a virtual machine
     where SonarQube and Jenkins are installed, as shown in the following screenshot:![Integration
     with Sonar](img/3471_06_13.jpg)
+  id: totrans-27
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行`svn export`命令以解决虚拟机上安装的SonarQube和Jenkins的证书问题，如以下截图所示：![与Sonar集成](img/3471_06_13.jpg)
 - en: Run the build job.![Integration with Sonar](img/3471_06_14.jpg)
+  id: totrans-28
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行构建作业。![与Sonar集成](img/3471_06_14.jpg)
 - en: Verify the Sonar execution steps in the console.![Integration with Sonar](img/3471_06_15.jpg)
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在控制台中验证Sonar执行步骤。![与Sonar集成](img/3471_06_15.jpg)
 - en: Refresh the dashboard of SonarQube, and we will be able to see details on the
     recently executed build in SonarQube, as shown in the following screenshot:![Integration
     with Sonar](img/3471_06_16.jpg)
+  id: totrans-30
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 刷新SonarQube仪表板，我们便能在SonarQube中查看最近执行的构建的详细信息，如以下截图所示：![与Sonar集成](img/3471_06_16.jpg)
 - en: To get more details on code verification, click on the project, and we will
     be able to get details on **Lines of Code**, **Duplications**, **Complexity**,
     and so on.![Integration with Sonar](img/3471_06_17.jpg)
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如需获取更多代码验证详情，点击项目，我们将能看到**代码行数**、**重复度**、**复杂度**等详细信息。![与Sonar集成](img/3471_06_17.jpg)
 - en: Explore more things on SonarQube and Jenkins integration, as in the following
     steps.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 进一步探索SonarQube与Jenkins的集成，如下步骤所示。
 - en: Exploring Static Code Analysis Plugins
+  id: totrans-33
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 探索静态代码分析插件
 - en: Static Code Analysis Plugins provide utilities for the static code analysis
     plugins. Jenkins interprets the result files of several static code analysis tools
     with the use of different plugins for configuration and parsing. We can have more
     flexibility with these plugins to build exactly what you want.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 静态代码分析插件为静态代码分析插件提供实用工具。Jenkins使用不同的插件进行配置和解析，解释了多个静态代码分析工具的结果文件。通过这些插件，我们可以更灵活地构建您所需的内容。
 - en: To install any of these plugins, go to the Jenkins dashboard, click on **Manage
     Jenkins**, and select the **Manage Plugins** link. Go to the **Available** tab,
     find the respective plugin, and select it. Click on **Download now**, and install
     after restart.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 要安装这些插件中的任何一个，请前往Jenkins仪表板，点击**管理Jenkins**，然后选择**管理插件**链接。转到**可用**标签页，找到相应的插件并选中它。点击**立即下载**，并在重启后安装。
 - en: 'All these results are visualized by the same backend. The following plugins
     use the same visualization:'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 所有这些结果均由同一后端可视化。以下插件使用相同的可视化方式：
 - en: Checkstyle Plugin
+  id: totrans-37
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 检查样式插件
 - en: The Checkstyle plugin generates the report for an open source static code analysis
     program, Checkstyle.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 检查样式插件为开源静态代码分析程序Checkstyle生成报告。
 - en: To know more about the Checkstyle plugin, visit [https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin).
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多关于检查样式插件的信息，请访问[https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin)。
 - en: FindBugs Plugin
+  id: totrans-40
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: FindBugs插件
 - en: The FindBugs plugin is supported by the Static Analysis Collector plugin that
     shows the results in aggregated trend graphs, health reporting, and builds stability.
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: FindBugs插件由静态分析收集器插件支持，该插件在聚合趋势图、健康报告和构建稳定性中显示结果。
 - en: To learn more about this, visit [https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin).
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/FindBugs+Plugin)。
 - en: Compiler Warnings Plugin
+  id: totrans-43
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 编译器警告插件
 - en: The Compiler Warnings plugin generates the trend report for compiler warnings
     in the console log, or in log files.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 编译器警告插件在控制台日志或日志文件中生成编译器警告的趋势报告。
 - en: To know more, visit [https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin).
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[警告插件](https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin)。
 - en: To publish the combined results of Checkstyle, FindBugs, and compiler warnings
     plugins, go to the **Build** section of any job, and click on **Add post-build
     action** and select **Publish combined analysis results**.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 要发布Checkstyle、FindBugs和编译器警告插件的组合结果，请前往任何作业的**构建**部分，点击**添加构建后操作**，并选择**发布组合分析结果**。
 - en: '![Compiler Warnings Plugin](img/3471_06_18.jpg)'
+  id: totrans-47
   prefs: []
   type: TYPE_IMG
+  zh: '![编译器警告插件](img/3471_06_18.jpg)'
 - en: We can also see these results with the use of the Dashboard View plugin.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以通过使用仪表板视图插件查看这些结果。
 - en: In the configuration of a Dashboard view, click on **Edit** **View** and select
     checkboxes in the **Number of warnings** section. Add **Dashboard Portlets** in
     different sections for Checkstyle, Compiler, and Findbug.
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 在仪表板视图的配置中，点击**编辑视图**并在**警告数量**部分选择复选框。在不同部分添加**仪表板小部件**，用于Checkstyle、编译器和Findbug。
 - en: '![Compiler Warnings Plugin](img/3471_06_19.jpg)'
+  id: totrans-50
   prefs: []
   type: TYPE_IMG
+  zh: '![编译器警告插件](img/3471_06_19.jpg)'
 - en: Verify the view after all the changes and running build jobs.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 在所有更改和运行构建作业后验证视图。
 - en: '![Compiler Warnings Plugin](img/3471_06_20.jpg)'
+  id: totrans-52
   prefs: []
   type: TYPE_IMG
+  zh: '![编译器警告插件](img/3471_06_20.jpg)'
 - en: The following plugins are also useful.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下插件也很有用。
 - en: DRY Plugin
+  id: totrans-54
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: DRY插件
 - en: The DRY plugin shows the duplicate code blocks in your project. It only shows
     the results of duplicate code checker tools.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: DRY插件显示项目中的重复代码块。它仅显示重复代码检查工具的结果。
 - en: To know more, visit [https://wiki.jenkins-ci.org/display/JENKINS/DRY+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/DRY+Plugin).
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[DRY插件](https://wiki.jenkins-ci.org/display/JENKINS/DRY+Plugin)。
 - en: PMD Plugin
+  id: totrans-57
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: PMD插件
 - en: The PMD plugin scans the `pmd.xml` files in the build workspace, and reports
     warnings.
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: PMD插件扫描构建工作区中的`pmd.xml`文件，并报告警告。
 - en: To know more, visit [https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin).
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[PMD插件](https://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin)。
 - en: Task Scanner Plugin
+  id: totrans-60
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 任务扫描器插件
 - en: The Task Scanner plugin scans the workspace files for open tasks and provides
     a trend report.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 任务扫描器插件扫描工作区文件中的开放任务并提供趋势报告。
 - en: To know more, visit [https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin).
+  id: totrans-62
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[Jenkins任务扫描器插件](https://wiki.jenkins-ci.org/display/JENKINS/Task+Scanner+Plugin)。
 - en: CCM Plugin
+  id: totrans-63
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: CCM插件
 - en: The CCM plugin provides details on cyclomatic complexity for .NET code.
+  id: totrans-64
   prefs: []
   type: TYPE_NORMAL
+  zh: CCM插件提供.NET代码的圈复杂度详细信息。
 - en: To know more, visit [https://wiki.jenkins-ci.org/display/JENKINS/CCM+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/CCM+Plugin).
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[CCM插件](https://wiki.jenkins-ci.org/display/JENKINS/CCM+Plugin)。
 - en: Android Lint Plugin
+  id: totrans-66
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: Android Lint插件
 - en: The Android Lint plugin parses the output from the Android lint tool.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: Android Lint插件解析来自Android lint工具的输出。
 - en: To know more, visit [https://wiki.jenkins-ci.org/display/JENKINS/Android+Lint+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Android+Lint+Plugin).
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[Android Lint插件](https://wiki.jenkins-ci.org/display/JENKINS/Android+Lint+Plugin)。
 - en: OWASP Dependency-Check Plugin
+  id: totrans-69
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: OWASP依赖检查插件
 - en: The Dependency-Check Jenkins Plugin features the ability to perform a dependency
     analysis build.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 依赖检查Jenkins插件具有执行依赖分析构建的能力。
 - en: To know more, visit [https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Dependency-Check+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Dependency-Check+Plugin).
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[OWASP依赖检查插件](https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Dependency-Check+Plugin)。
 - en: E-mail notifications on build status
+  id: totrans-72
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 构建状态的电子邮件通知
 - en: To send an e-mail notification based on build status, we need to configure SMTP
     details. Click on **Manage Jenkins**, and go to **Configure System**. Go to the
     **E-mail Notification** section.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 要基于构建状态发送电子邮件通知，我们需要配置SMTP详细信息。点击**管理Jenkins**，然后进入**系统配置**。前往**电子邮件通知**部分。
 - en: '![E-mail notifications on build status](img/3471_06_21.jpg)'
+  id: totrans-74
   prefs: []
   type: TYPE_IMG
+  zh: '![构建状态的电子邮件通知](img/3471_06_21.jpg)'
 - en: Go to build Job configuration, and click on **Add post-build action**. Select
     **E-mail Notification**. Provide the recipients list and save.
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 前往构建作业配置，点击**添加构建后操作**。选择**电子邮件通知**。提供收件人列表并保存。
 - en: '![E-mail notifications on build status](img/3471_06_22.jpg)'
+  id: totrans-76
   prefs: []
   type: TYPE_IMG
+  zh: '![构建状态的电子邮件通知](img/3471_06_22.jpg)'
 - en: Run the build job, and a broken build will result in an e-mail notification
     in the mailbox.
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: 运行构建作业，若构建失败，则会在邮箱中收到电子邮件通知。
 - en: Self-test questions
+  id: totrans-78
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自测题
 - en: Q1\. Which languages are supported by SonarQube?
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. SonarQube 支持哪些编程语言？
 - en: Java
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Java
 - en: C#
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: C#
 - en: PHP
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: PHP
 - en: Python
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Python
 - en: C/C++
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: C/C++
 - en: JavaScript
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: JavaScript
 - en: All of the above
+  id: totrans-86
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上皆是
 - en: Q2\. Which among these is not a Static Code Analysis plugin?
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. 以下哪项不是静态代码分析插件？
 - en: DRY Plugin
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: DRY 插件
 - en: PMD Plugin
+  id: totrans-89
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: PMD 插件
 - en: Task Scanner Plugin
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 任务扫描器插件
 - en: FindBugs Plugin
+  id: totrans-91
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: FindBugs 插件
 - en: None of the above
+  id: totrans-92
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述皆非
 - en: Summary
+  id: totrans-93
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: Here again, we are at the end of another chapter. We need to remember that every
     new beginning comes from some other beginning's end. To summarize, we learned
     how to manage code quality of applications configured, and how to use notification
     features to send information to developers based on the failed build. We also
     covered some static code analysis plugins in short, to get some idea about it.
     In the next chapter, we will learn how to manage and monitor Jenkins.
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: 至此，我们又来到了另一章的结尾。我们需要记住，每一个新的开始都源自另一个开始的结束。总结一下，我们学习了如何管理已配置应用程序的代码质量，以及如何使用通知功能，在构建失败时向开发者发送信息。我们还简要介绍了一些静态代码分析插件，以对其有所了解。在下一章中，我们将学习如何管理和监控
+    Jenkins。

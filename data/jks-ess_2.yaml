@@ -1,74 +1,107 @@
 - en: Chapter 2. Installation and Configuration of Code Repository and Build Tools
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第2章 代码仓库和构建工具的安装与配置
 - en: '|   | *"Life is really simple, but we insist on making it complicated"* |  
     |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *"生活本就简单，是我们执意将其复杂化"* |   |'
 - en: '|   | --*Confucius* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*孔子* |'
 - en: We looked at the deployment pipeline in the last chapter in which the source
     code repository and automated build form a significant part. SVN, Git, CVS, and
     StarTeam are some of the popular code repositories that manage changes to code,
     artifacts, or documents, while Ant and Maven are popular build automation tools
     for Java applications.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在上一章中探讨了部署管道，其中源代码仓库和自动化构建构成了重要部分。SVN、Git、CVS和StarTeam是一些流行的代码仓库，它们管理代码、制品或文档的变更，而Ant和Maven则是Java应用程序中流行的构建自动化工具。
 - en: 'This chapter describes in detail how to prepare a runtime environment for life
     cycle management with a Java application and configure it with Jenkins. It will
     cover how to integrate Eclipse and code repositories such as SVN to create a base
     for continuous integration. The following is the list of topics covered in this
     chapter:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章详细描述了如何为Java应用程序的生命周期管理准备运行时环境，并使用Jenkins进行配置。它将涵盖如何将Eclipse与SVN等代码仓库集成，为持续集成创建基础。以下是本章涵盖的主题列表：
 - en: Overview of a build in Jenkins and its requirements
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 概述Jenkins中的构建及其要求
 - en: Installing Java and configuring environment variables
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装Java并配置环境变量
 - en: SVN installation, configuration, and operations on CentOS and Windows
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: CentOS和Windows上的SVN安装、配置和操作
 - en: Installing Ant
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装Ant
 - en: Configuring Ant, Maven, and JDK in Jenkins
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在Jenkins中配置Ant、Maven和JDK
 - en: Integrating Eclipse with code repositories
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将Eclipse与代码仓库集成
 - en: Installing and configuring Git
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 安装和配置Git
 - en: Creating a new build job in Jenkins with Git
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在Jenkins中创建一个新的使用Git的构建作业
 - en: An overview of a build in Jenkins and its requirements
+  id: totrans-13
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 概述Jenkins中的构建及其要求
 - en: 'To explain continuous integration, we are going to use a code repository installed
     on a physical machine or laptop while Jenkins is installed on a virtual machine,
     as suggested in different ways in [Chapter 1](ch01.html "Chapter 1. Exploring
     Jenkins"), *Exploring Jenkins*. The following figure depicts the setup of the
     runtime environment:'
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了解释持续集成，我们将使用安装在物理机或笔记本电脑上的代码仓库，而Jenkins则安装在虚拟机上，正如[第1章](ch01.html "第1章 探索Jenkins")
+    *探索Jenkins* 中所建议的不同方式。下图描绘了运行时环境的设置：
 - en: '![An overview of a build in Jenkins and its requirements](img/3471_02_01.jpg)'
+  id: totrans-15
   prefs: []
   type: TYPE_IMG
+  zh: '![Jenkins中构建的概述及其要求](img/3471_02_01.jpg)'
 - en: We saw in [Chapter 1](ch01.html "Chapter 1. Exploring Jenkins"), *Exploring
     Jenkins*, that the **Manage Jenkins** link on the dashboard is used to configure
     the system. Click on the **Configure System** link to configure Java, Ant, Maven,
@@ -76,515 +109,759 @@
     with Virtual box or the VMware workstation. We need to install all required software
     to provide a runtime environment for continuous integration. We assume that Java
     is already installed in the system.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们在[第1章](ch01.html "第1章 探索Jenkins") *探索Jenkins* 中看到，仪表板上的**管理Jenkins**链接用于配置系统。点击**配置系统**链接以配置Java、Ant、Maven和其他第三方产品相关信息。我们可以使用Virtual
+    Box或VMware工作站创建虚拟机。我们需要安装所有必需的软件以提供持续集成的运行时环境。我们假设系统中已安装Java。
 - en: Installing Java and configuring environment variables
+  id: totrans-17
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装Java并配置环境变量
 - en: 'If Java is not already installed in the system then you can install it as follows:'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果系统中尚未安装Java，则可以按以下步骤进行安装：
 - en: Find the Java related packages available in CentOS repository and locate the
     appropriate package to install.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 在CentOS仓库中查找Java相关的包，并定位到合适的安装包。
 - en: '[PRE0]'
+  id: totrans-20
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: 'Now install Java package available in the local repositories by executing `yum
     install` command as follows:'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在通过执行`yum install`命令安装本地仓库中可用的Java包，如下所示：
 - en: '[PRE1]'
+  id: totrans-22
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: Java is installed successfully from the local repository.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: Java已成功从本地仓库安装。
 - en: Configure environment variables
+  id: totrans-24
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 配置环境变量
 - en: 'The following are the steps to configure the environment variables:'
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是配置环境变量的步骤：
 - en: Set `JAVA_HOME` and `JRE_HOME` variables
+  id: totrans-26
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 设置`JAVA_HOME`和`JRE_HOME`变量
 - en: Go to `/root`
+  id: totrans-27
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到`/root`
 - en: Press *Ctrl* + *H* to list hidden files
+  id: totrans-28
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 按下*Ctrl* + *H*以列出隐藏文件
 - en: Find `.bash_profile` and edit it by appending the Java path, as shown in the
     following screenshot:![Configure environment variables](img/3471_02_02.jpg)
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 找到`.bash_profile`并编辑它，通过追加Java路径，如下面的截图所示：![配置环境变量](img/3471_02_02.jpg)
 - en: Installing, configuring, and operating SVN on CentOS and Windows
+  id: totrans-30
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在CentOS和Windows上安装、配置和操作SVN
 - en: Install SVN from the local repository on CentOS.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 从本地仓库在CentOS上安装SVN。
 - en: Installing SVN on CentOS
+  id: totrans-32
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 在CentOS上安装SVN
 - en: 'To install SVN on a CentOS machine, execute the `yum install mod_dav_svn subversion`
     command as follows:'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在CentOS机器上安装SVN，请执行以下`yum install mod_dav_svn subversion`命令：
 - en: '[PRE2]'
+  id: totrans-34
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: Configuring SVN
+  id: totrans-35
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 配置SVN
 - en: Create the password file using the `htpasswd` command. Initially use the `-cm`
     arguments. This creates the file and also encrypts the password with MD5\. If
     you need to add users, make sure you simply use the `-m` flag, and not the `–c`,
     after the initial creation.
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 使用`htpasswd`命令创建密码文件。最初使用`-cm`参数。这会创建文件并用MD5加密密码。如果需要添加用户，确保您只使用`-m`标志，而不是初始创建后的`–c`。
 - en: '[PRE3]'
+  id: totrans-37
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE3]'
 - en: Now configure SVN in Apache to integrate both. Edit `/etc/httpd/conf.d/subversion.conf`.
     The location is what Apache will pass in the URL bar.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在在Apache中配置SVN以整合两者。编辑`/etc/httpd/conf.d/subversion.conf`。位置是Apache将在URL栏中传递的内容。
 - en: '[PRE4]'
+  id: totrans-39
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE4]'
 - en: Now all configurations are completed. Let's perform operations on SVN.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在所有配置都已完成。让我们在SVN上执行操作。
 - en: SVN operations
+  id: totrans-41
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: SVN操作
 - en: Create the actual repository to perform SVN operations on the CentOS virtual
     machine.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 在CentOS虚拟机上创建实际仓库以执行SVN操作。
 - en: '[PRE5]'
+  id: totrans-43
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE5]'
 - en: Import a directory into SVN
+  id: totrans-44
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 将目录导入SVN
 - en: Create a sample folder structure to test SVN operations. Create the `mytestproj`
     directory with sub-directories named `main`, `configurations`, and `resources`.
     Create sample files in each sub-directory.
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 创建一个示例文件夹结构以测试SVN操作。创建`mytestproj`目录，其下包含名为`main`、`configurations`和`resources`的子目录。在每个子目录中创建示例文件。
 - en: '[PRE6]'
+  id: totrans-46
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE6]'
 - en: 'Verify the repository from a web browser: `http://localhost/repos`.'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Web浏览器中验证仓库：`http://localhost/repos`。
 - en: Check out from SVN
+  id: totrans-48
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 从SVN检出
 - en: 'To check out source code from the repository, perform the following operations:'
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: 要从仓库检出源代码，请执行以下操作：
 - en: Start `httpd` service.
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动`httpd`服务。
 - en: '[PRE7]'
+  id: totrans-51
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE7]'
 - en: Check out the source code.
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 检出源代码。
 - en: '[PRE8]'
+  id: totrans-53
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE8]'
 - en: You can avoid future appearances of this warning by setting the value of the
     `store-plaintext-passwords` option to either `yes` or `no` in `/root/.subversion/servers`.
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 您可以通过在`/root/.subversion/servers`中将`store-plaintext-passwords`选项的值设置为`yes`或`no`来避免未来出现此警告。
 - en: '[PRE9]'
+  id: totrans-55
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE9]'
 - en: VisualSVN Server on Windows
+  id: totrans-56
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 在Windows上安装VisualSVN Server
 - en: 'Download the VisualSVN server from: [https://www.visualsvn.com/server/download/](https://www.visualsvn.com/server/download/).
     It allows you to install and manage a fully-functional Subversion server with
     Windows.'
+  id: totrans-57
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从[https://www.visualsvn.com/server/download/](https://www.visualsvn.com/server/download/)下载VisualSVN服务器。它允许您在Windows上安装和管理一个完全功能的Subversion服务器。
 - en: Execute `VisualSVN-Server-x.x.x-x64.msi` and follow the wizard to install VisualSVN
     Server.
+  id: totrans-58
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行`VisualSVN-Server-x.x.x-x64.msi`并按照向导安装VisualSVN Server。
 - en: Open VisualSVN Server Manager.
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开VisualSVN Server管理器。
 - en: Create a new repository, `JenkinsTest`.![VisualSVN Server on Windows](img/3471_02_03.jpg)
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个新仓库，名为`JenkinsTest`。![Windows上的VisualSVN Server](img/3471_02_03.jpg)
 - en: Select the regular subversion repository and click on **Next >**.![VisualSVN
     Server on Windows](img/3471_02_04.jpg)
+  id: totrans-61
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择常规Subversion仓库并点击**下一步 >**。![Windows上的VisualSVN Server](img/3471_02_04.jpg)
 - en: Provide the **Repository Name** and click on **Next >**.![VisualSVN Server on
     Windows](img/3471_02_05.jpg)
+  id: totrans-62
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提供**仓库名称**并点击**下一步 >**。![Windows上的VisualSVN Server](img/3471_02_05.jpg)
 - en: Select **Single-project repository** and click on **>**.![VisualSVN Server on
     Windows](img/3471_02_06.jpg)
+  id: totrans-63
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**单项目仓库**并点击**>**。![Windows上的VisualSVN Server](img/3471_02_06.jpg)
 - en: Select the Repository Access Permissions based on your requirements and click
     on **Create**.![VisualSVN Server on Windows](img/3471_02_07.jpg)
+  id: totrans-64
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据您的需求选择仓库访问权限，然后点击**创建**。![Windows上的VisualSVN Server](img/3471_02_07.jpg)
 - en: Review the created repository details and click on **Finish**.![VisualSVN Server
     on Windows](img/3471_02_08.jpg)
+  id: totrans-65
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 查看创建的仓库详情并点击**完成**。![Windows上的VisualSVN Server](img/3471_02_08.jpg)
 - en: Verify the newly created repository in VisualSVN Server Manager.![VisualSVN
     Server on Windows](img/3471_02_09.jpg)
+  id: totrans-66
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在VisualSVN Server管理器中验证新创建的仓库。![Windows上的VisualSVN Server](img/3471_02_09.jpg)
 - en: Verify the repository location in the browser, as shown in the following screenshot:![VisualSVN
     Server on Windows](img/3471_02_10.jpg)
+  id: totrans-67
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在浏览器中验证仓库位置，如下所示：![Windows上的VisualSVN Server](img/3471_02_10.jpg)
 - en: 'Now install SVN client from: [http://sourceforge.net/projects/tortoisesvn/](http://sourceforge.net/projects/tortoisesvn/),
     to perform SVN operations.'
+  id: totrans-68
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在从[http://sourceforge.net/projects/tortoisesvn/](http://sourceforge.net/projects/tortoisesvn/)安装SVN客户端，以执行SVN操作。
 - en: Let's create a sample JEE project in Eclipse to illustrate SVN and Eclipse integration.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们在Eclipse中创建一个示例JEE项目，以说明SVN和Eclipse的集成。
 - en: Open Eclipse, go to the **File** menu and click on **Dynamic Web Project**.![VisualSVN
     Server on Windows](img/3471_02_11.jpg)
+  id: totrans-70
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开Eclipse，转到**文件**菜单并点击**动态Web项目**。![Windows上的VisualSVN Server](img/3471_02_11.jpg)
 - en: It will open a dialog box to create a **New Dynamic Web Project**.![VisualSVN
     Server on Windows](img/3471_02_12.jpg)
+  id: totrans-71
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将弹出一个对话框以创建一个**新动态Web项目**。![Windows上的VisualSVN Server](img/3471_02_12.jpg)
 - en: Create the source files and a `build` file for a simple project.![VisualSVN
     Server on Windows](img/3471_02_13.jpg)
+  id: totrans-72
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为简单项目创建源文件和`build`文件。![Windows上的VisualSVN Server](img/3471_02_13.jpg)
 - en: Go to **Application Directory**, right-click on it, select **TortoiseSVN**,
     and select **Import** from the sub-menu.![VisualSVN Server on Windows](img/3471_02_14.jpg)
+  id: totrans-73
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到**应用程序目录**，右键点击，选择**TortoiseSVN**，然后从子菜单中选择**导入**。![Windows上的VisualSVN Server](img/3471_02_14.jpg)
 - en: Enter the repository URL and click on **OK**.![VisualSVN Server on Windows](img/3471_02_15.jpg)
+  id: totrans-74
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 输入仓库URL并点击**确定**。![Windows上的VisualSVN Server](img/3471_02_15.jpg)
 - en: It will add all files from the application to SVN, as shown in the following
     screenshot.![VisualSVN Server on Windows](img/3471_02_16.jpg)
+  id: totrans-75
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 它将把应用程序中的所有文件添加到SVN，如下面的截图所示。![Windows上的VisualSVN Server](img/3471_02_16.jpg)
 - en: Verify the import by visiting the SVN repository in a browser as shown:![VisualSVN
     Server on Windows](img/3471_02_17.jpg)
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过在浏览器中访问SVN仓库来验证导入，如下所示：![Windows上的VisualSVN Server](img/3471_02_17.jpg)
 - en: Integrating Eclipse with code repositories
+  id: totrans-77
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 将Eclipse与代码仓库集成
 - en: Open Eclipse IDE, go to the **Help** menu and click on **Install New Software**.
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开Eclipse IDE，转到**帮助**菜单并点击**安装新软件**。
 - en: 'Add the repository by adding this URL: [http://subclipse.tigris.org/update_1.10.x](http://subclipse.tigris.org/update_1.10.x),
     then select all packages and click on **Next >**.![Integrating Eclipse with code
     repositories](img/3471_02_18.jpg)'
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过添加此URL添加仓库：[http://subclipse.tigris.org/update_1.10.x](http://subclipse.tigris.org/update_1.10.x)，然后选择所有包并点击**下一步
+    >**。![将Eclipse与代码仓库集成](img/3471_02_18.jpg)
 - en: Review the items to be installed and the Review Licenses in the wizard. Accept
     the terms of agreement and click on **Finish**.
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在向导中查看要安装的项和许可证协议。接受条款并点击**完成**。
 - en: Restart Eclipse. Go to the **Window** menu, select **Show View**, click on **Other**,
     and find the SVN and SVN repositories.
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重启Eclipse。转到**窗口**菜单，选择**显示视图**，点击**其他**，并找到SVN和SVN仓库。
 - en: In the SVN repositories area, right-click and select **New**; select **Repository
     Location…** from the sub-menu.![Integrating Eclipse with code repositories](img/3471_02_19.jpg)
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在SVN仓库区域，右键点击并选择**新建**；从子菜单中选择**仓库位置…**。![将Eclipse与代码仓库集成](img/3471_02_19.jpg)
 - en: 'Add a new SVN Repository in Eclipse with this URL: `https://<Ip address/ localhost
     / hostname>/svn/JenkinsTest/`.'
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Eclipse中添加一个新的SVN仓库，使用此URL：`https://<Ip地址/本地主机/主机名>/svn/JenkinsTest/`。
 - en: Click on **Finish**.![Integrating Eclipse with code repositories](img/3471_02_20.jpg)
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**完成**。![将Eclipse与代码仓库集成](img/3471_02_20.jpg)
 - en: Verify the SVN repository.![Integrating Eclipse with code repositories](img/3471_02_21.jpg)
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 验证SVN仓库。![将Eclipse与代码仓库集成](img/3471_02_21.jpg)
 - en: Try to integrate SVN, installed on CentOS, with Eclipse IDE, as practice.
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 尝试将安装在CentOS上的SVN与Eclipse IDE集成，作为练习。
 - en: Installing and configuring Ant
+  id: totrans-87
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装和配置Ant
 - en: 'Download the Ant distribution from: [https://ant.apache.org/bindownload.cgi](https://ant.apache.org/bindownload.cgi)
     and unzip it.'
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从[https://ant.apache.org/bindownload.cgi](https://ant.apache.org/bindownload.cgi)下载Ant发行版并解压。
 - en: Set the `ANT_HOME` and `JAVA_HOME` environment variables.![Installing and configuring
     Ant](img/3471_02_22.jpg)
+  id: totrans-89
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 设置`ANT_HOME`和`JAVA_HOME`环境变量。![安装和配置Ant](img/3471_02_22.jpg)
 - en: There is an option available in Jenkins to install Ant or Maven automatically.
     We will study this in the *Configuring Ant, Maven, and JDK in Jenkins* section.
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins中有一个选项可以自动安装Ant或Maven。我们将在*Jenkins中配置Ant、Maven和JDK*部分学习这一点。
 - en: Installing Maven
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装Maven
 - en: Download the Maven binary ZIP file from [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
     and extract it to the local system where Jenkins is installed.
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: 从[https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)下载Maven二进制ZIP文件，并将其提取到Jenkins安装的本地系统中。
 - en: '![Installing Maven](img/3471_02_23.jpg)'
+  id: totrans-93
   prefs: []
   type: TYPE_IMG
+  zh: '![安装Maven](img/3471_02_23.jpg)'
 - en: Configuring Ant, Maven, and JDK in Jenkins
+  id: totrans-94
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在Jenkins中配置Ant、Maven和JDK
 - en: 'Open the Jenkins dashboard in your browser with this URL: `http://<ip_address>:8080/configure`.
     Go to the **Manage Jenkins** section and click on **Configure System**.'
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用此URL在浏览器中打开Jenkins仪表板：`http://<ip_address>:8080/configure`。转到**管理Jenkins**部分并点击**系统配置**。
 - en: Configure Java, based on the installation shown in the following screenshot:![Configuring
     Ant, Maven, and JDK in Jenkins](img/3471_02_24.jpg)
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据以下截图所示安装配置Java：![在Jenkins中配置Ant、Maven和JDK](img/3471_02_24.jpg)
 - en: Configure or install Ant automatically on the same page. Configure Maven as
     well.![Configuring Ant, Maven, and JDK in Jenkins](img/3471_02_25.jpg)
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在同一页面上自动配置或安装Ant，并配置Maven。![在Jenkins中配置Ant、Maven和JDK](img/3471_02_25.jpg)
 - en: Installing and configuring Git
+  id: totrans-98
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装和配置Git
 - en: Git is a free and open source distributed version control system. In this section,
     we will try to install and configure Git.
+  id: totrans-99
   prefs: []
   type: TYPE_NORMAL
+  zh: Git是一个免费且开源的分布式版本控制系统。本节我们将尝试安装和配置Git。
 - en: Open the terminal in the CentOS-based system and execute the command `yum install
     git` in the terminal.
+  id: totrans-100
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在基于CentOS的系统中打开终端，并在终端中执行`yum install git`命令。
 - en: Once it is successfully installed, verify the version with the command `git
     --version`.
+  id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 成功安装后，使用`git --version`命令验证版本。
 - en: Provide information about the user with the `git config` command so that `commit`
     messages will be generated with the correct information attached.
+  id: totrans-102
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用`git config`命令提供用户信息，以便`commit`消息将附带正确的信息。
 - en: Provide the name and e-mail address to embed into commits.
+  id: totrans-103
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提供姓名和电子邮件地址以嵌入提交中。
 - en: To create a workspace environment, create a directory called `git` in the home
     directory and then create a subdirectory inside of that called `development`.
+  id: totrans-104
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要创建工作区环境，请在主目录中创建一个名为`git`的目录，然后在该目录内创建一个名为`development`的子目录。
 - en: Use `mkdir -p ~/git/development ; cd ~/git/development` in the terminal.
+  id: totrans-105
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 在终端中使用`mkdir -p ~/git/development ; cd ~/git/development`。
 - en: Copy the `AntExample1` directory into the `development` folder.
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将`AntExample1`目录复制到`development`文件夹中。
 - en: Convert an existing project into a workspace environment by using the `git init`
     command.
+  id: totrans-107
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用`git init`命令将现有项目转换为工作区环境。
 - en: Once the repository is initialized, add files and folders.![Installing and configuring
     Git](img/3471_02_26.jpg)
+  id: totrans-108
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 初始化仓库后，添加文件和文件夹。![安装和配置Git](img/3471_02_26.jpg)
 - en: Commit by executing `git commit -m "Initial Commit" –a`.![Installing and configuring
     Git](img/3471_02_27.jpg)
+  id: totrans-109
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行`git commit -m "初始提交" –a`进行提交。![安装和配置Git](img/3471_02_27.jpg)
 - en: Verify the Git repository![Installing and configuring Git](img/3471_02_28.jpg)
+  id: totrans-110
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 验证Git仓库![安装和配置Git](img/3471_02_28.jpg)
 - en: Verify the project in the Git repository.![Installing and configuring Git](img/3471_02_29.jpg)
+  id: totrans-111
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Git仓库中验证项目。![安装和配置Git](img/3471_02_29.jpg)
 - en: Creating a new build job in Jenkins with Git
+  id: totrans-112
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在Jenkins中使用Git创建新构建作业
 - en: On the Jenkins dashboard, click on **Manage Jenkins** and select **Manage Plugins**.
     Click on the **Available** tab and write `github` plugin in the search box.
+  id: totrans-113
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上，点击**管理Jenkins**并选择**管理插件**。点击**可用**标签并在搜索框中输入`github`插件。
 - en: Click the checkbox and click on the button, **Download now and install after
     restart**.
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 勾选复选框并点击按钮，**立即下载并在重启后安装**。
 - en: Restart Jenkins.![Creating a new build job in Jenkins with Git](img/3471_02_30.jpg)
+  id: totrans-115
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重启Jenkins。![在Jenkins中使用Git创建新构建作业](img/3471_02_30.jpg)
 - en: Create a new **Freestyle project**. Provide **Item name** and click on **OK**.![Creating
     a new build job in Jenkins with Git](img/3471_02_31.jpg)
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建新的**自由风格项目**。提供**项目名称**并点击**确定**。![在Jenkins中使用Git创建新构建作业](img/3471_02_31.jpg)
 - en: Configure **Git** in the **Source Code Management** section.![Creating a new
     build job in Jenkins with Git](img/3471_02_32.jpg)
+  id: totrans-117
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**源代码管理**部分配置**Git**。![在Jenkins中使用Git创建新构建作业](img/3471_02_32.jpg)
 - en: Add the **Invoke Ant** build step by clicking on **Add build step**.![Creating
     a new build job in Jenkins with Git](img/3471_02_33.jpg)
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过点击**添加构建步骤**添加**调用Ant**构建步骤。![在Jenkins中使用Git创建新构建作业](img/3471_02_33.jpg)
 - en: Execute the build.![Creating a new build job in Jenkins with Git](img/3471_02_34.jpg)
+  id: totrans-119
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 执行构建。![在Jenkins中使用Git创建新构建作业](img/3471_02_34.jpg)
 - en: Click on **Console Output** to see the progress of the build.![Creating a new
     build job in Jenkins with Git](img/3471_02_35.jpg)
+  id: totrans-120
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**控制台输出**查看构建进度。![在Jenkins中使用Git创建新构建作业](img/3471_02_35.jpg)
 - en: Once the build has succeeded, verify **Workspace** in the build job.![Creating
     a new build job in Jenkins with Git](img/3471_02_36.jpg)
+  id: totrans-121
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建成功后，验证构建作业中的**工作区**。![在Jenkins中使用Git创建新构建作业](img/3471_02_36.jpg)
 - en: Done!
+  id: totrans-122
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成！
 - en: Self-test questions
+  id: totrans-123
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自测题
 - en: Q1\. Where to set the `JAVA_HOME` and `JRE_HOME` environment variables?
+  id: totrans-124
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. 在哪里设置`JAVA_HOME`和`JRE_HOME`环境变量？
 - en: '`/root/ .bash_profile`'
+  id: totrans-125
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`/root/ .bash_profile`'
 - en: '`/root/ .env_profile`'
+  id: totrans-126
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`/root/ .env_profile`'
 - en: '`/root/ .bash_variables`'
+  id: totrans-127
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`/root/ .bash_variables`'
 - en: '`/root/ .env_variables`'
+  id: totrans-128
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`/root/ .env_variables`'
 - en: Q2\. Which are valid SVN operations?
+  id: totrans-129
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. 哪些是有效的SVN操作？
 - en: '`svn import /tmp/mytestproj/`'
+  id: totrans-130
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`svn import /tmp/mytestproj/`'
 - en: '`svn co http://localhost/repos/mytestproj`'
+  id: totrans-131
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`svn co http://localhost/repos/mytestproj`'
 - en: Both the above
+  id: totrans-132
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述两者皆是。
 - en: Q3\. Where do you configure Java and Ant in Jenkins?
+  id: totrans-133
   prefs: []
   type: TYPE_NORMAL
+  zh: Q3\. 在Jenkins中，您在哪里配置Java和Ant？
 - en: Go to the **Manage Jenkins** section and click on **Configure System**
+  id: totrans-134
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前往**管理Jenkins**部分，然后点击**系统配置**。
 - en: Go to the **Manage Jenkins** section and click on **Global Configuration**
+  id: totrans-135
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前往**管理Jenkins**部分，然后点击**全局配置**。
 - en: Summary
+  id: totrans-136
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: Hooray! We have reached the end of this chapter. We have covered how to prepare
     an environment for continuous integration by setting up a local CentOS repository,
     installing code repositories such as SVN on CentOS and Windows, and build tool
@@ -593,5 +870,7 @@
     Development Environment with code repositories so that efficient development and
     ease of `commit` operations can take place to facilitate the deployment pipeline
     process.
+  id: totrans-137
   prefs: []
   type: TYPE_NORMAL
+  zh: 好极了！我们已到达本章的结尾。我们介绍了如何通过设置本地CentOS仓库、在CentOS和Windows上安装如SVN的代码仓库以及构建工具Ant来准备持续集成的环境。我们还详细说明了如何在Jenkins中配置仓库和构建工具。最后，我们探讨了如何将集成开发环境与代码仓库集成，以便进行高效的开发和简便的`commit`操作，从而促进部署流水线流程。

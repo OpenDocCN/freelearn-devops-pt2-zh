@@ -1,14 +1,20 @@
 - en: Chapter 1. Exploring Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第 1 章 探索 Jenkins
 - en: '|   | *"Continuous effort—not strength or intelligence—is the key to unlocking
     our potential."* |   |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *"持续的努力——而非力量或智慧——是解锁我们潜能的关键。"* |   |'
 - en: '|   | --*Winston Churchill* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*温斯顿·丘吉尔* |'
 - en: Jenkins is an open source application written in Java. It is one of the most
     popular **continuous integration** (**CI**) tools used to build and test different
     kinds of projects. In this chapter, we will have a quick overview of Jenkins,
@@ -16,301 +22,431 @@
     Jenkins, we need to install it. In this chapter, we have provided a step-by-step
     guide to install Jenkins. Installing Jenkins is a very easy task and is different
     from the OS flavors.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 是一个用 Java 编写的开源应用程序，它是最受欢迎的**持续集成**（**CI**）工具之一，用于构建和测试各种项目。在本章中，我们将快速概览
+    Jenkins、其核心特性及其对 DevOps 文化的影响。在我们开始使用 Jenkins 之前，我们需要安装它。本章提供了一个详细的安装指南。安装 Jenkins
+    非常简单，且与操作系统版本无关。
 - en: We will also learn the basic configuration of Jenkins. We will take a quick
     tour of some key sections of the Jenkins UI and plugin installations as well.
     This chapter will also cover the DevOps pipeline and how the rest of the chapters
     will cover implementing it.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还将学习 Jenkins 的基本配置。我们将快速浏览 Jenkins UI 的一些关键部分和插件安装。本章还将涵盖 DevOps 流水线以及后续章节将如何实现它。
 - en: 'To be precise, we will discuss the following topics in this chapter:'
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 具体来说，本章将讨论以下主题：
 - en: Introduction to Jenkins and its features
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 介绍 Jenkins 及其特性
 - en: Installation of Jenkins on Windows and the CentOS operating system
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在 Windows 和 CentOS 操作系统上安装 Jenkins
 - en: A jump-start tour of the Jenkins dashboard
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 快速浏览 Jenkins 仪表板
 - en: How to change configuration settings in Jenkins
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 如何在 Jenkins 中更改配置设置
 - en: What is the deployment pipeline
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 什么是部署流水线
 - en: On your mark, get set, go!
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 各就各位，预备，开始！
 - en: Introduction to Jenkins and its features
+  id: totrans-12
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 介绍 Jenkins 及其特性
 - en: Let's first understand what continuous integration is. CI is one of the most
     popular application development practices in recent times. Developers integrate
     bug fix, new feature development, or innovative functionality in code repository.
     The CI tool verifies the integration process with an automated build and automated
     test execution to detect issues with the current source of an application, and
     provide quick feedback.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 首先，让我们理解什么是持续集成。CI 是近年来最流行的应用开发实践之一。开发者将错误修复、新功能开发或创新功能集成到代码仓库中。CI 工具通过自动化构建和自动化测试执行来验证集成过程，以检测应用程序当前源代码中的问题，并提供快速反馈。
 - en: '![Introduction to Jenkins and its features](img/3471_01_01.jpg)'
+  id: totrans-14
   prefs: []
   type: TYPE_IMG
+  zh: '![Jenkins 及其特性介绍](img/3471_01_01.jpg)'
 - en: Jenkins is a simple, extensible, and user-friendly open source tool that provides
     CI services for application development. Jenkins supports SCM tools such as StarTeam,
     Subversion, CVS, Git, AccuRev and so on. Jenkins can build Freestyle, Apache Ant,
     and Apache Maven-based projects.
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 是一个简单、可扩展且用户友好的开源工具，为应用程序开发提供 CI 服务。Jenkins 支持 StarTeam、Subversion、CVS、Git、AccuRev
+    等 SCM 工具。Jenkins 可以构建 Freestyle、Apache Ant 和 Apache Maven 项目。
 - en: The concept of plugins makes Jenkins more attractive, easy to learn, and easy
     to use. There are various categories of plugins available such as Source code
     management, Slave launchers and controllers, Build triggers, Build tools, Build
     notifies, Build reports, other post-build actions, External site/tool integrations,
     UI plugins, Authentication and user management, Android development, iOS development,
     .NET development, Ruby development, Library plugins, and so on.
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: 插件的概念使 Jenkins 更具吸引力，易于学习且易于使用。有多种类别的插件可用，例如源代码管理、从属启动器和控制器、构建触发器、构建工具、构建通知、构建报告、其他构建后操作、外部站点/工具集成、UI
+    插件、身份验证和用户管理、Android 开发、iOS 开发、.NET 开发、Ruby 开发、库插件等。
 - en: Jenkins defines interfaces or abstract classes that model a facet of a build
     system. Interfaces or abstract classes define an agreement on what needs to be
     implemented; Jenkins uses plugins to extend those implementations.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins 定义了接口或抽象类，这些接口或抽象类模拟了构建系统的一个方面。接口或抽象类定义了需要实现的内容；Jenkins 使用插件来扩展这些实现。
 - en: Note
+  id: totrans-18
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: To learn more about all plugins, visit [https://wiki.jenkins-ci.org/x/GIAL](https://wiki.jenkins-ci.org/x/GIAL).
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 要了解更多关于所有插件的信息，请访问 [https://wiki.jenkins-ci.org/x/GIAL](https://wiki.jenkins-ci.org/x/GIAL)。
 - en: To learn how to create a new plugin, visit [https://wiki.jenkins-ci.org/x/TYAL](https://wiki.jenkins-ci.org/x/TYAL).
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 要了解如何创建新插件，请访问 [https://wiki.jenkins-ci.org/x/TYAL](https://wiki.jenkins-ci.org/x/TYAL)。
 - en: To download different versions of plugins, visit [https://updates.jenkins-ci.org/download/plugins/](https://updates.jenkins-ci.org/download/plugins/).
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 要下载不同版本的插件，请访问[https://updates.jenkins-ci.org/download/plugins/](https://updates.jenkins-ci.org/download/plugins/)。
 - en: Features
+  id: totrans-22
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 功能
 - en: 'Jenkins is one of the most popular CI servers in the market. The reasons for
     its popularity are as follows:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins是市场上最受欢迎的CI服务器之一。其受欢迎的原因如下：
 - en: Easy installation on different operating systems.
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在不同操作系统上易于安装。
 - en: Easy upgrades—Jenkins has very speedy release cycles.
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 易于升级——Jenkins的发布周期非常快。
 - en: Simple and easy-to-use user interface.
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 简单易用的用户界面。
 - en: Easily extensible with the use of third-party plugins—over 400 plugins.
+  id: totrans-27
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过使用第三方插件轻松扩展——超过400个插件。
 - en: Easy to configure the setup environment in the user interface. It is also possible
     to customize the user interface based on likings.
+  id: totrans-28
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在用户界面中轻松配置设置环境。还可以根据喜好自定义用户界面。
 - en: The master slave architecture supports distributed builds to reduce loads on
     the CI server.
+  id: totrans-29
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 主从架构支持分布式构建，以减轻CI服务器的负载。
 - en: Jenkins is available with test harness built around JUnit; test results are
     available in graphical and tabular forms.
+  id: totrans-30
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins附带围绕JUnit构建的测试框架；测试结果以图形和表格形式提供。
 - en: Build scheduling based on the cron expression (to know more about cron, visit
     [http://en.wikipedia.org/wiki/Cron](http://en.wikipedia.org/wiki/Cron)).
+  id: totrans-31
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于cron表达式的构建调度（欲了解更多关于cron的信息，请访问[http://en.wikipedia.org/wiki/Cron](http://en.wikipedia.org/wiki/Cron)）。
 - en: Shell and Windows command execution in prebuild steps.
+  id: totrans-32
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 预构建步骤中执行Shell和Windows命令。
 - en: Notification support related to the build status.
+  id: totrans-33
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 与构建状态相关的通知支持。
 - en: Installation of Jenkins on Windows and CentOS
+  id: totrans-34
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在Windows和CentOS上安装Jenkins
 - en: Go to [https://jenkins-ci.org/](https://jenkins-ci.org/). Find the **Download
     Jenkins** section on the home page of Jenkins's website.![Installation of Jenkins
     on Windows and CentOS](img/3471_01_02.jpg)
+  id: totrans-35
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前往[https://jenkins-ci.org/](https://jenkins-ci.org/)。在Jenkins网站首页找到**下载Jenkins**部分。![在Windows和CentOS上安装Jenkins](img/3471_01_02.jpg)
 - en: Download the `war` file or native packages based on your operating system. A
     Java installation is needed to run Jenkins.
+  id: totrans-36
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据您的操作系统下载`war`文件或原生包。运行Jenkins需要Java安装。
 - en: Install Java based on your operating system and set the JAVA_HOME environment
     variable accordingly.
+  id: totrans-37
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据您的操作系统安装Java，并相应地设置JAVA_HOME环境变量。
 - en: Installing Jenkins on Windows
+  id: totrans-38
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 在Windows上安装Jenkins
 - en: Select the native package available for Windows. It will download `jenkins-1.xxx.zip`.
     In our case, it will download `jenkins-1.606.zip`. Extract it and you will get
     `setup.exe` and `jenkins-1.606.msi` files.
+  id: totrans-39
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择适用于Windows的原生包。它将下载`jenkins-1.xxx.zip`。在我们的例子中，它将下载`jenkins-1.606.zip`。解压后，您将得到`setup.exe`和`jenkins-1.606.msi`文件。
 - en: Click on `setup.exe` and perform the following steps in sequence. On the welcome
     screen, click **Next**:![Installing Jenkins on Windows](img/3471_01_03.jpg)
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击`setup.exe`，并按顺序执行以下步骤。在欢迎屏幕上，点击**下一步**：![在Windows上安装Jenkins](img/3471_01_03.jpg)
 - en: Select the destination folder and click on **Next**.
+  id: totrans-41
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择目标文件夹并点击**下一步**。
 - en: Click on **Install** to begin installation. Please wait while the Setup Wizard
     installs Jenkins.![Installing Jenkins on Windows](img/3471_01_04.jpg)
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**安装**开始安装。请等待安装向导安装Jenkins。![在Windows上安装Jenkins](img/3471_01_04.jpg)
 - en: Once the Jenkins installation is completed, click on the **Finish** button.![Installing
     Jenkins on Windows](img/3471_01_05.jpg)
+  id: totrans-43
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成Jenkins安装后，点击**完成**按钮。![在Windows上安装Jenkins](img/3471_01_05.jpg)
 - en: Verify the Jenkins installation on the Windows machine by opening URL `http://<ip_address>:8080`
     on the system where you have installed Jenkins.![Installing Jenkins on Windows](img/3471_01_06.jpg)
+  id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过在已安装Jenkins的系统上打开URL `http://<ip_address>:8080`来验证Windows机器上的Jenkins安装。![在Windows上安装Jenkins](img/3471_01_06.jpg)
 - en: Installation of Jenkins on CentOS
+  id: totrans-45
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 在CentOS上安装Jenkins
 - en: To install Jenkins on CentOS, download the Jenkins repository definition to
     your local system at `/etc/yum.repos.d/` and import the key.
+  id: totrans-46
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要在CentOS上安装Jenkins，请将Jenkins仓库定义下载到本地系统的`/etc/yum.repos.d/`目录，并导入密钥。
 - en: Use the `wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo`
     command to download `repo`.![Installation of Jenkins on CentOS](img/3471_01_07.jpg)
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用`wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo`命令下载`repo`。![在CentOS上安装Jenkins](img/3471_01_07.jpg)
 - en: Now, run `yum install Jenkins`; it will resolve dependencies and prompt for
     installation.![Installation of Jenkins on CentOS](img/3471_01_08.jpg)
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，运行`yum install Jenkins`；它将解决依赖关系并提示安装。![在CentOS上安装Jenkins](img/3471_01_08.jpg)
 - en: Reply with `y` and it will download the required package to install Jenkins
     on CentOS. Verify the Jenkins status by issuing the `service jenkins status` command.
     Initially, it will be stopped. Start Jenkins by executing `service jenkins start`
     in the terminal.![Installation of Jenkins on CentOS](img/3471_01_09.jpg)
+  id: totrans-49
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 回复`y`，它将下载所需的软件包以在CentOS上安装Jenkins。通过执行`service jenkins status`命令来验证Jenkins状态。最初，它将处于停止状态。通过在终端中执行`service
+    jenkins start`来启动Jenkins。![在CentOS上安装Jenkins](img/3471_01_09.jpg)
 - en: Verify the Jenkins installation on the CentOS machine by opening the URL `http://<ip_address>:8080`
     on the system where you have installed Jenkins.![Installation of Jenkins on CentOS](img/3471_01_10.jpg)
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 通过在已安装Jenkins的系统上打开URL `http://<ip_address>:8080`来验证CentOS机器上的Jenkins安装。![在CentOS上安装Jenkins](img/3471_01_10.jpg)
 - en: Installation of Jenkins as a web application
+  id: totrans-51
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 将Jenkins作为Web应用程序安装
 - en: Download **Java Web Archive (.war)** (latest and greatest (1.606)) from [http://jenkins-ci.org/](http://jenkins-ci.org/).
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从[http://jenkins-ci.org/](http://jenkins-ci.org/)下载**Java Web档案(.war)**（最新版本(1.606)）。
 - en: Copy `jenkins.war` into your virtual or physical machine. Open Command Prompt
     or a terminal based on the operation system. In our case, we will copy it into
     a directory of a CentOS virtual machine.![Installation of Jenkins as a web application](img/3471_01_11.jpg)
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将`jenkins.war`复制到您的虚拟或物理机中。根据操作系统打开命令提示符或终端。在我们的例子中，我们将它复制到一个CentOS虚拟机的目录中。![将Jenkins作为Web应用程序安装](img/3471_01_11.jpg)
 - en: Open Command Prompt and execute the `java –jar Jenkins.war` command. Verify
     the Jenkins installation on the system by opening the `http://<ip_address>:8080`
     URL on the system where you have installed Jenkins.![Installation of Jenkins as
     a web application](img/3471_01_12.jpg)
+  id: totrans-54
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开命令提示符并执行`java –jar Jenkins.war`命令。通过在已安装Jenkins的系统上打开`http://<ip_address>:8080`
+    URL来验证系统上的Jenkins安装。![将Jenkins作为Web应用程序安装](img/3471_01_12.jpg)
 - en: A jump-start tour of the Jenkins dashboard
+  id: totrans-55
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins仪表板的快速入门之旅
 - en: On the Jenkins dashboard, click on **Create new jobs** or on **New Item** to
     create Freestyle- or Maven-based projects for CI.![A jump-start tour of the Jenkins
     dashboard](img/3471_01_13.jpg)
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上，点击**创建新作业**或**新建项**以创建自由风格或基于Maven的CI项目。![Jenkins仪表板的快速入门之旅](img/3471_01_13.jpg)
 - en: To verify system properties, visit `http://<ip_address>:8080/systeminfo` or
     click on **Manage Jenkins**, and then click on **System Information** to get environmental
     information to assist troubleshooting.![A jump-start tour of the Jenkins dashboard](img/3471_01_14.jpg)
+  id: totrans-57
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要验证系统属性，请访问`http://<ip_address>:8080/systeminfo`，或点击**管理Jenkins**，然后点击**系统信息**以获取环境信息以协助故障排除。![Jenkins仪表板的快速入门之旅](img/3471_01_14.jpg)
 - en: How to change configuration settings in Jenkins
+  id: totrans-58
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 如何在Jenkins中更改配置设置
 - en: Click on the **Manage Jenkins** link on the dashboard to configure system, security,
     to manage plugins, slave nodes, credentials, and so on.![How to change configuration
     settings in Jenkins](img/3471_01_15.jpg)
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击仪表板上的**管理Jenkins**链接以配置系统、安全、管理插件、从节点、凭证等。![如何在Jenkins中更改配置设置](img/3471_01_15.jpg)
 - en: Click on the **Configure System** link to configure Java, Ant, Maven, and other
     third-party products' related information.![How to change configuration settings
     in Jenkins](img/3471_01_16.jpg)
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**配置系统**链接以配置Java、Ant、Maven和其他第三方产品的相关信息。![如何在Jenkins中更改配置设置](img/3471_01_16.jpg)
 - en: Jenkins uses Groovy as its scripting language. To execute the arbitrary script
     for administration/trouble-shooting/diagnostics on the Jenkins dashboard, go to
     the **Manage Jenkins** link on the dashboard, click on **Script Console**, and
     run `println(Jenkins.instance.pluginManager.plugins)`.![How to change configuration
     settings in Jenkins](img/3471_01_17.jpg)
+  id: totrans-61
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Jenkins使用Groovy作为其脚本语言。要在Jenkins仪表板上执行任意脚本进行管理/故障排除/诊断，请前往仪表板上的**管理Jenkins**链接，点击**脚本控制台**，并运行`println(Jenkins.instance.pluginManager.plugins)`。![如何在Jenkins中更改配置设置](img/3471_01_17.jpg)
 - en: To verify the system log, go to the **Manage Jenkins** link on the dashboard
     and click on the **System Log** link or visit `http://localhost:8080/log/all`.![How
     to change configuration settings in Jenkins](img/3471_01_18.jpg)
+  id: totrans-62
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要验证系统日志，请前往仪表板上的**管理Jenkins**链接，点击**系统日志**链接，或访问`http://localhost:8080/log/all`。![如何在Jenkins中更改配置设置](img/3471_01_18.jpg)
 - en: To get more information on third-party libraries—version and license information
     in Jenkins, go to the **Manage Jenkins** link on the dashboard and click on the
     **About Jenkins** link.![How to change configuration settings in Jenkins](img/3471_01_19.jpg)
+  id: totrans-63
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要获取有关Jenkins中第三方库的更多信息——版本和许可证信息，请点击仪表板上的**管理Jenkins**链接，然后点击**关于Jenkins**链接。![如何在Jenkins中更改配置设置](img/3471_01_19.jpg)
 - en: What is the deployment pipeline?
+  id: totrans-64
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 什么是部署管道？
 - en: 'The application development life cycle is a traditionally lengthy and a manual
     process. In addition, it requires effective collaboration between development
     and operations teams. The deployment pipeline is a demonstration of automation
@@ -319,144 +455,214 @@
     in different runtime environments. Effectively, the deployment pipeline is a combination
     of CI and continuous delivery, and hence is a part of DevOps practices. The following
     diagram depicts the deployment pipeline process:'
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 应用程序开发生命周期传统上是一个漫长且手动的过程。此外，它需要开发和运维团队之间的有效协作。部署管道展示了应用程序开发生命周期中涉及的自动化，包括自动化构建执行和测试执行、向利益相关者通知以及在不同运行时环境中的部署。实际上，部署管道是CI和持续交付的结合，因此是DevOps实践的一部分。下图描绘了部署管道过程：
 - en: '![What is the deployment pipeline?](img/3471_01_20.jpg)'
+  id: totrans-66
   prefs: []
   type: TYPE_IMG
+  zh: '![什么是部署管道？](img/3471_01_20.jpg)'
 - en: Members of the development team check code into a source code repository. CI
     products such as Jenkins are configured to poll changes from the code repository.
     Changes in the repository are downloaded to the local workspace and Jenkins triggers
     an automated build process, which is assisted by Ant or Maven. Automated test
     execution or unit testing, static code analysis, reporting, and notification of
     successful or failed build process are also part of the CI process.
+  id: totrans-67
   prefs: []
   type: TYPE_NORMAL
+  zh: 开发团队成员将代码检入源代码仓库。诸如Jenkins之类的CI产品被配置为从代码仓库轮询变更。仓库中的变更被下载到本地工作区，Jenkins触发自动化构建过程，该过程由Ant或Maven辅助。自动化测试执行或单元测试、静态代码分析、报告以及成功或失败的构建过程通知也是CI过程的一部分。
 - en: Once the build is successful, it can be deployed to different runtime environments
     such as testing, preproduction, production, and so on. Deploying a `war` file
     in terms of the JEE application is normally the final stage in the deployment
     pipeline.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦构建成功，它可以被部署到不同的运行时环境，如测试、预生产、生产等。在JEE应用程序中部署`war`文件通常是部署管道的最后阶段。
 - en: One of the biggest benefits of the deployment pipeline is the faster feedback
     cycle. Identification of issues in the application at early stages and no dependencies
     on manual efforts make this entire end-to-end process more effective.
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 部署管道最大的好处之一是更快的反馈循环。在应用程序早期阶段识别问题，并且不依赖于手动努力，使得整个端到端过程更加有效。
 - en: In the next chapters, we will see how Jenkins can be used for implementing CI
     practices in modernizing IT.
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 在接下来的章节中，我们将看到如何使用Jenkins来实施现代化IT中的CI实践。
 - en: Note
+  id: totrans-71
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: To read more, visit [http://martinfowler.com/bliki/DeploymentPipeline.html](http://martinfowler.com/bliki/DeploymentPipeline.html)
     and [http://www.informit.com/articles/article.aspx?p=1621865&seqNum=2](http://www.informit.com/articles/article.aspx?p=1621865&seqNum=2).
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[http://martinfowler.com/bliki/DeploymentPipeline.html](http://martinfowler.com/bliki/DeploymentPipeline.html)和[http://www.informit.com/articles/article.aspx?p=1621865&seqNum=2](http://www.informit.com/articles/article.aspx?p=1621865&seqNum=2)。
 - en: Self-test questions
+  id: totrans-73
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自测题
 - en: Q1\. What is Jenkins?
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. 什么是Jenkins？
 - en: A continuous integration product
+  id: totrans-75
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一个持续集成产品
 - en: A continuous delivery product
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一个持续交付产品
 - en: Q2\. What makes Jenkins extensible?
+  id: totrans-77
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. 是什么使得Jenkins可扩展？
 - en: Plugins
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 插件
 - en: Open Source Distribution
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 开源发布
 - en: Q3\. Which command is used to run the Jenkins installation file in the `war`
     format?
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: Q3. 使用哪个命令来运行Jenkins安装文件的`war`格式？
 - en: java –jar `Jenkins.war`
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: java –jar `Jenkins.war`
 - en: java –j `Jenkins.war`
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: java –j `Jenkins.war`
 - en: Q4\. How do we get system information on the Jenkins dashboard?
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: Q4. 如何在Jenkins仪表板上获取系统信息？
 - en: Visit `http://<ip_address>:8080/manage`
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问`http://<ip_address>:8080/manage`
 - en: Visit `http://<ip_address>:8080/systeminfo`
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问`http://<ip_address>:8080/systeminfo`
 - en: Q5\. How do we change global settings for configuration on the Jenkins dashboard?
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: Q5. 如何在Jenkins仪表板上更改全局配置设置？
 - en: Click on the **Manage Jenkins** link on the dashboard
+  id: totrans-87
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击仪表板上的**管理Jenkins**链接
 - en: Click on the **Credentials** link on the dashboard
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击仪表板上的**凭据**链接
 - en: Q6\. What is the deployment pipeline?
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: Q6. 什么是部署管道？
 - en: Continuous Integration Practices
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 持续集成实践
 - en: Continuous Delivery Practices
+  id: totrans-91
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 持续交付实践
 - en: Demonstration of automation involved in the application development life cycle
+  id: totrans-92
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 展示应用程序开发生命周期中涉及的自动化
 - en: None of the above
+  id: totrans-93
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上都不是
 - en: Q7\. Explain the benefits of the deployment pipeline?
+  id: totrans-94
   prefs: []
   type: TYPE_NORMAL
+  zh: Q7. 解释部署管道的好处是什么？
 - en: Faster feedback cycle
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更快的反馈循环
 - en: Identification of issues in an application at early stages
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在应用程序早期阶段识别问题
 - en: No dependencies on manual efforts
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 不依赖于人工努力
 - en: All of the above
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上所有
 - en: Summary
+  id: totrans-99
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: Congratulations! We reached the end of this chapter and hence we have Jenkins
     installed on our physical or virtual machine, and you are ready to go to the next
     chapter. Till now, we covered the basics of CI and the introduction to Jenkins
@@ -464,9 +670,15 @@
     platforms. We also completed a quick tour of features available in Jenkins's dashboard.
     In addition to this, we discussed the deployment pipeline and its importance in
     CI.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 恭喜！我们已到达本章末尾，因此我们已在物理或虚拟机上安装了 Jenkins，您可以准备进入下一章。至此，我们涵盖了 CI 的基础知识以及 Jenkins
+    及其特性的介绍。我们完成了 Jenkins 在 Windows 和 CentOS 平台上的安装。我们还快速浏览了 Jenkins 仪表板中可用的功能。除此之外，我们还讨论了部署管道及其在
+    CI 中的重要性。
 - en: Now that we are able to use our CI server, Jenkins, we can begin creating a
     job and verify how Jenkins works.
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 既然我们能够使用我们的 CI 服务器 Jenkins，我们可以开始创建一个作业并验证 Jenkins 的工作方式。

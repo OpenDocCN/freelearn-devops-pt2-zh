@@ -1,504 +1,732 @@
 - en: Chapter 7. Managing and Monitoring Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第7章 管理与监控Jenkins
 - en: '|   | *"Fall in the beginning + Fall often + Learn to recover quickly = Faster
     time to market"* |   |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *"开始时跌倒 + 经常跌倒 + 学会快速恢复 = 更快上市时间"* |   |'
 - en: '|   | --*Anonymous* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*匿名* |'
 - en: We learned Sonar integration with Jenkins, an overview of static code analysis
     plugins, and notification of build status in the last chapter. Now, it's time
     to focus on management and monitoring of Jenkins.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 上一章我们学习了Sonar与Jenkins的集成、静态代码分析插件概览以及构建状态的通知。现在，是时候专注于Jenkins的管理和监控了。
 - en: 'This chapter gives insight into management of Jenkins nodes and monitoring
     of them with Java Melody to provide details on utilization of resources. It also
     covers how to manage and monitor build jobs. This chapter describes basic security
     configuration in detail that is available in Jenkins for a better access control
     and authorization. The following is the list of topics that we will cover in this
     chapter:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章深入探讨了Jenkins节点的管理以及使用Java Melody监控它们，以提供资源利用情况的详细信息。还涵盖了如何管理和监控构建作业。本章详细描述了Jenkins中可用的基本安全配置，以实现更好的访问控制和授权。以下是本章将涵盖的主题列表：
 - en: Managing Jenkins master and slave nodes
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 管理Jenkins主节点和从节点
 - en: Jenkins monitoring with JavaMelody
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins监控与JavaMelody
 - en: Managing disk usage
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 管理磁盘使用
 - en: Build job-specific monitoring with the Build Monitor plugin
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用构建监控插件进行构建作业特定监控
 - en: Managing access control and authorization
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 管理访问控制和授权
 - en: Maintaining role and project-based security
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 维护基于角色和项目的权限
 - en: Managing an admin account
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 管理管理员账户
 - en: Audit Trail Plugin—an overview and usage
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 审计跟踪插件—概览与使用
 - en: Managing Jenkins master and slave nodes
+  id: totrans-13
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 管理Jenkins主节点和从节点
 - en: A master represents basic installation of Jenkins and handles all tasks for
     the build system. It can satisfy all user requests and has the capacity to build
     projects on its own. A slave is a system that is set up to reduce the burden of
     build projects from the master but delegation behavior depends on the configuration
     of each project. Delegation can be configured specifically to build job.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: 主节点代表Jenkins的基本安装，负责构建系统的所有任务。它能满足所有用户请求，并具备独立构建项目的容量。从节点是设置来减轻主节点构建项目负担的系统，但委托行为取决于每个项目的配置。委托可以具体配置为构建作业。
 - en: On the Jenkins dashboard, go to **Manage Jenkins**. Click on **Manage Nodes**
     link. It will provide information on all nodes, as shown in the following screenshot:![Managing
     Jenkins master and slave nodes](img/3471_07_01.jpg)
+  id: totrans-15
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上，前往**管理Jenkins**。点击**管理节点**链接。它将提供所有节点的信息，如下面的截图所示：![管理Jenkins主节点和从节点](img/3471_07_01.jpg)
 - en: To create a slave node, click on **New Node**.![Managing Jenkins master and
     slave nodes](img/3471_07_02.jpg)
+  id: totrans-16
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要创建从节点，点击**新建节点**。![管理Jenkins主节点和从节点](img/3471_07_02.jpg)
 - en: Provide **Name**, **Description**, **Labels** and so on. Select **Launch slave
     agents via Java Web Start** as **Launch method**. Provide **Labels**; in our case,
     it is `java8`:![Managing Jenkins master and slave nodes](img/3471_07_03.jpg)
+  id: totrans-17
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提供**名称**、**描述**、**标签**等。选择**通过Java Web Start启动从节点代理**作为**启动方法**。提供**标签**；在我们的例子中，它是`java8`：![管理Jenkins主节点和从节点](img/3471_07_03.jpg)
 - en: Click on **Save**. It will open a page that gives details on how to launch the
     slave node.![Managing Jenkins master and slave nodes](img/3471_07_04.jpg)
+  id: totrans-18
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**保存**。它将打开一个页面，详细说明如何启动从节点。![管理Jenkins主节点和从节点](img/3471_07_04.jpg)
 - en: Open terminal on the Windows machine and run `javaws http://192.168.13.128:8080/computer/WindowsNode/slave-agent.jnlp`.![Managing
     Jenkins master and slave nodes](img/3471_07_05.jpg)
+  id: totrans-19
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Windows机器上打开终端并运行`javaws http://192.168.13.128:8080/computer/WindowsNode/slave-agent.jnlp`。![管理Jenkins主节点和从节点](img/3471_07_05.jpg)
 - en: It will open a dialogue box for downloading the application.
+  id: totrans-20
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 它将打开一个下载应用程序的对话框。
 - en: '![Managing Jenkins master and slave nodes](img/3471_07_06.jpg)'
+  id: totrans-21
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![管理Jenkins主节点和从节点](img/3471_07_06.jpg)'
 - en: Run **Jenkins Remoting Agent**.![Managing Jenkins master and slave nodes](img/3471_07_07.jpg)
+  id: totrans-22
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行**Jenkins远程代理**。![管理Jenkins主节点和从节点](img/3471_07_07.jpg)
 - en: A small window for the Jenkins slave agent will open.
+  id: totrans-23
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 将打开一个小窗口用于Jenkins从节点代理。
 - en: '![Managing Jenkins master and slave nodes](img/3471_07_08.jpg)'
+  id: totrans-24
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![管理Jenkins主节点和从节点](img/3471_07_08.jpg)'
 - en: The **slave WindowsNode** will be connected via the JNLP agent.
+  id: totrans-25
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: '**从节点WindowsNode**将通过JNLP代理连接。'
 - en: '![Managing Jenkins master and slave nodes](img/3471_07_09.jpg)'
+  id: totrans-26
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![管理Jenkins主节点和从节点](img/3471_07_09.jpg)'
 - en: On the Jenkins dashboard, go to **Manage Jenkins**. Click on the **Manage Nodes**
     link. It will provide information on all nodes, as shown in the following screenshot.
     Verify both the nodes in the **Build Executor Status** section of the leftmost
     sidebar.![Managing Jenkins master and slave nodes](img/3471_07_10.jpg)
+  id: totrans-27
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 仪表板上，前往**管理 Jenkins**。点击**管理节点**链接。它将提供所有节点的信息，如下截图所示。在左侧边栏的**构建执行器状态**部分验证两个节点。![管理
+    Jenkins 主从节点](img/3471_07_10.jpg)
 - en: If we want to run a selective build job on to a specific node, then we can configure
     it build job-wise, as shown in the following screenshot. Check **Restrict where
     this project can be run** and provide **Label Expression** given to the specific
     node on the job configuration page.![Managing Jenkins master and slave nodes](img/3471_07_11.jpg)
+  id: totrans-28
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果我们想在特定节点上运行选择性构建作业，则可以按作业配置它，如下截图所示。勾选**限制此项目可运行的位置**并提供在作业配置页面上给定特定节点的**标签表达式**。![管理
+    Jenkins 主从节点](img/3471_07_11.jpg)
 - en: Click on **Build Now** to execute build. Verify the console and find building
     remotely on WindowsNode we configured in the preceding section.
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**立即构建**以执行构建。验证控制台并查找我们在前一部分中配置的 WindowsNode 上的远程构建。
 - en: It will check out the code on slave and perform operations on the specific node
     only.
+  id: totrans-30
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 它将在从节点上检出代码并在特定节点上执行操作。
 - en: '![Managing Jenkins master and slave nodes](img/3471_07_12.jpg)'
+  id: totrans-31
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![管理 Jenkins 主从节点](img/3471_07_12.jpg)'
 - en: Such configuration is useful where we want to run build job in a specific set
     of runtime environment, which is available on the specific node.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 这种配置在希望在特定节点上可用的特定运行时环境中运行构建作业时很有用。
 - en: Jenkins monitoring with JavaMelody
+  id: totrans-33
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Jenkins 监控与 JavaMelody
 - en: The Monitoring plugin provides monitoring of Jenkins with JavaMelody. It provides
     charts of a CPU, memory, system load average, HTTP response time, and so on. It
     also provides details of HTTP sessions, errors and logs, actions for GC, heap
     dump, invalidate session(s), and so on. Install the Monitoring plugin from the
     Jenkins Dashboard.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 监控插件通过 JavaMelody 提供 Jenkins 的监控。它提供 CPU、内存、系统平均负载、HTTP 响应时间等图表。还提供 HTTP 会话、错误和日志、GC
+    操作、堆转储、无效会话等的详细信息。从 Jenkins 仪表板安装监控插件。
 - en: '![Jenkins monitoring with JavaMelody](img/3471_07_13.jpg)'
+  id: totrans-35
   prefs: []
   type: TYPE_IMG
+  zh: '![Jenkins 监控与 JavaMelody](img/3471_07_13.jpg)'
 - en: On the Jenkins dashboard, click on **Manage Jenkins**. Click on **Monitoring
     of Jenkins master**, as shown in the following screenshot:![Jenkins monitoring
     with JavaMelody](img/3471_07_14.jpg)
+  id: totrans-36
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在 Jenkins 仪表板上，点击**管理 Jenkins**。点击**Jenkins 主节点监控**，如下截图所示：![Jenkins 监控与 JavaMelody](img/3471_07_14.jpg)
 - en: It will open the statistics of JavaMelody monitoring, as shown in the following
     screenshot. Observe all statistics:![Jenkins monitoring with JavaMelody](img/3471_07_15.jpg)
+  id: totrans-37
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 它将打开 JavaMelody 监控的统计信息，如下截图所示。观察所有统计信息：![Jenkins 监控与 JavaMelody](img/3471_07_15.jpg)
 - en: Scroll down the page and we will find **Statistics system errors logs**.![Jenkins
     monitoring with JavaMelody](img/3471_07_16.jpg)
+  id: totrans-38
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 向下滚动页面，我们将找到**系统错误日志统计信息**。![Jenkins 监控与 JavaMelody](img/3471_07_16.jpg)
 - en: To get more information, click on the **Details** link of any section. Statistics
     of HTTP are as shown in the following figure:![Jenkins monitoring with JavaMelody](img/3471_07_17.jpg)
+  id: totrans-39
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要获取更多信息，请点击任何部分的**详细信息**链接。HTTP 统计信息如下所示：![Jenkins 监控与 JavaMelody](img/3471_07_17.jpg)
 - en: Explore more at [https://wiki.jenkins-ci.org/display/JENKINS/Monitoring](https://wiki.jenkins-ci.org/display/JENKINS/Monitoring)
     to get more details on the Monitoring plugin.
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 更多详情请访问 [https://wiki.jenkins-ci.org/display/JENKINS/Monitoring](https://wiki.jenkins-ci.org/display/JENKINS/Monitoring)
+    了解监控插件。
 - en: Managing disk usage
+  id: totrans-41
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 管理磁盘使用
 - en: Disk Usage Plugin records disk usage. Install **Disk Usage Plugin** from the
     Jenkins dashboard.![Managing disk usage](img/3471_07_18.jpg)
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 磁盘使用插件记录磁盘使用情况。从 Jenkins 仪表板安装**磁盘使用插件**。![管理磁盘使用](img/3471_07_18.jpg)
 - en: Once the plugin is successfully installed, we will get the **Disk usage** link
     on the Manage Jenkins page, as shown in the following screenshot:![Managing disk
     usage](img/3471_07_19.jpg)
+  id: totrans-43
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 插件成功安装后，我们将在管理 Jenkins 页面获得**磁盘使用**链接，如下截图所示：![管理磁盘使用](img/3471_07_19.jpg)
 - en: The Disk Usage plugin will show project-wise details for all jobs and all workspace.
     It will also display **Disk Usage Trend**.![Managing disk usage](img/3471_07_20.jpg)
+  id: totrans-44
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 磁盘使用插件将展示所有作业和所有工作区的项目级详细信息，并显示**磁盘使用趋势**。![管理磁盘使用](img/3471_07_20.jpg)
 - en: To get more details on Disk usage plugin, visit [https://wiki.jenkins-ci.org/display/JENKINS/Disk+Usage+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Disk+Usage+Plugin).
+  id: totrans-45
   prefs: []
   type: TYPE_NORMAL
+  zh: 如需了解更多关于磁盘使用插件的详细信息，请访问[https://wiki.jenkins-ci.org/display/JENKINS/Disk+Usage+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Disk+Usage+Plugin)。
 - en: Build monitoring with Build Monitor Plugin
+  id: totrans-46
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用构建监控插件进行构建监控
 - en: '**Build Monitor Plugin** provides a detailed view of the status of selected
     Jenkins jobs. It provides the status and progress of selected jobs and names of
     people who might be responsible for "breaking the build". This plugin supports
     the Claim plugin, View Job Filters, Build Failure Analyzer, and CloudBees Folders
     plugin.'
+  id: totrans-47
   prefs: []
   type: TYPE_NORMAL
+  zh: '**构建监控插件**提供所选Jenkins任务状态的详细视图。它显示所选任务的状态和进度，以及可能负责“破坏构建”的人员姓名。此插件支持Claim插件、视图任务过滤器、构建失败分析器和CloudBees文件夹插件。'
 - en: '![Build monitoring with Build Monitor Plugin](img/3471_07_21.jpg)'
+  id: totrans-48
   prefs: []
   type: TYPE_IMG
+  zh: '![使用构建监控插件进行构建监控](img/3471_07_21.jpg)'
 - en: The Dashboard View plugin will be used for creating a view that provides details
     on build job-specific monitoring. Create a new view and select **Build Monitor
     View**.![Build monitoring with Build Monitor Plugin](img/3471_07_22.jpg)
+  id: totrans-49
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将使用Dashboard View插件创建一个视图，该视图提供构建任务特定监控的详细信息。创建新视图并选择**构建监控视图**。![使用构建监控插件进行构建监控](img/3471_07_22.jpg)
 - en: Select **Jobs** and save the details.![Build monitoring with Build Monitor Plugin](img/3471_07_23.jpg)
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择**任务**并保存详细信息。![使用构建监控插件进行构建监控](img/3471_07_23.jpg)
 - en: Click on the newly created view, and we will get a similar type of screen as
     given in the following screenshot:![Build monitoring with Build Monitor Plugin](img/3471_07_24.jpg)
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击新创建的视图，我们将看到类似于以下截图的界面：![使用构建监控插件进行构建监控](img/3471_07_24.jpg)
 - en: To get more details on plugin, visit [https://wiki.jenkins-ci.org/display/JENKINS/Build+Monitor+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Monitor+Plugin).
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 如需了解更多关于插件的详细信息，请访问[https://wiki.jenkins-ci.org/display/JENKINS/Build+Monitor+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Monitor+Plugin)。
 - en: Managing access control and authorization
+  id: totrans-53
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 访问控制与授权管理
 - en: Jenkins supports several security models, and can integrate with different user
     repositories.
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins支持多种安全模型，并能与不同的用户存储库集成。
 - en: Go to the Jenkins dashboard, click on **Manage Jenkins**, and click on **Configure
     Global Security**.
+  id: totrans-55
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到Jenkins仪表板，点击**管理Jenkins**，然后点击**配置全局安全**。
 - en: Click on **Enable security**.![Managing access control and authorization](img/3471_07_25.jpg)
+  id: totrans-56
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**启用安全**。![访问控制与授权管理](img/3471_07_25.jpg)
 - en: 'All options will be visible once we enable security, as shown in the following
     screenshot:'
+  id: totrans-57
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 一旦我们启用安全，所有选项都将可见，如下面的截图所示：
 - en: '![Managing access control and authorization](img/3471_07_26.jpg)'
+  id: totrans-58
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![访问控制与授权管理](img/3471_07_26.jpg)'
 - en: Click on **Jenkins' own user database**. Click on **Save**.![Managing access
     control and authorization](img/3471_07_27.jpg)
+  id: totrans-59
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**Jenkins自有用户数据库**。点击**保存**。![访问控制与授权管理](img/3471_07_27.jpg)
 - en: Now, click on the **sign up** link on the top-right corner. Provide **Username**,
     **Password**, **Full name**, and **E-mail address**.![Managing access control
     and authorization](img/3471_07_28.jpg)
+  id: totrans-60
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在，点击右上角的**注册**链接。提供**用户名**、**密码**、**全名**和**电子邮件地址**。![访问控制与授权管理](img/3471_07_28.jpg)
 - en: Click on the **log in** link on the dashboard.![Managing access control and
     authorization](img/3471_07_29.jpg)
+  id: totrans-61
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击仪表板上的**登录**链接。![访问控制与授权管理](img/3471_07_29.jpg)
 - en: We will get the Jenkins dashboard with the username in the top-right corner.
+  id: totrans-62
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 我们将看到右上角显示用户名的Jenkins仪表板。
 - en: '![Managing access control and authorization](img/3471_07_30.jpg)'
+  id: totrans-63
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![访问控制与授权管理](img/3471_07_30.jpg)'
 - en: Click on **People** to verify all users.![Managing access control and authorization](img/3471_07_31.jpg)
+  id: totrans-64
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**人员**以验证所有用户。![访问控制与授权管理](img/3471_07_31.jpg)
 - en: On the Jenkins dashboard, click on **Manage Jenkins**. Click on **Manage Users**.![Managing
     access control and authorization](img/3471_07_32.jpg)
+  id: totrans-65
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上，点击**管理Jenkins**。点击**管理用户**。![访问控制与授权管理](img/3471_07_32.jpg)
 - en: We can edit user details on the same page. This is a subset of users, which
     also contains auto-created users.
+  id: totrans-66
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 我们可以在同一页面上编辑用户详细信息。这是用户的一个子集，其中也包含自动创建的用户。
 - en: Maintaining roles and project-based security
+  id: totrans-67
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 维护角色和基于项目的安全性
 - en: For authorization, we can define **Matrix-based security** on the **Configure
     Global Security** page.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 对于授权，我们可以在**配置全局安全**页面上定义**基于矩阵的安全性**。
 - en: Add group or user and configure security based on different sections such as
     **Credentials**, **Slave**, **Job**, and so on.
+  id: totrans-69
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 添加组或用户，并根据不同部分如**凭证**、**从属**、**任务**等配置安全设置。
 - en: Click on **Save**.![Maintaining roles and project-based security](img/3471_07_33.jpg)
+  id: totrans-70
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击 **保存**。![维护角色和基于项目的安 全](img/3471_07_33.jpg)
 - en: 'We can use multiple users for matrix-based security, as shown in the following
     screenshot:'
+  id: totrans-71
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 我们可以使用多个用户进行基于矩阵的安全设置，如下面的截图所示：
 - en: '![Maintaining roles and project-based security](img/3471_07_34.jpg)'
+  id: totrans-72
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![维护角色和基于项目的安 全](img/3471_07_34.jpg)'
 - en: Try to access the Jenkins dashboard with a newly added user who has no rights,
     and we will find the authorization error.![Maintaining roles and project-based
     security](img/3471_07_35.jpg)
+  id: totrans-73
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 尝试使用新添加的无权限用户访问 Jenkins 仪表板，我们将发现授权错误。![维护角色和基于项目的安 全](img/3471_07_35.jpg)
 - en: Now provide overall read rights; build, read, and workspace rights for job for
     newly added users.![Maintaining roles and project-based security](img/3471_07_36.jpg)
+  id: totrans-74
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 现在为新添加的用户提供总体读取权限；构建、读取和工作区权限。![维护角色和基于项目的安 全](img/3471_07_36.jpg)
 - en: Log in with the newly added user and verify that we can see the dashboard. We
     can't see the **Manage Jenkins** link as we have provided those rights.![Maintaining
     roles and project-based security](img/3471_07_37.jpg)
+  id: totrans-75
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 使用新添加的用户登录并验证我们是否可以看到仪表板。我们看不到 **管理 Jenkins** 链接，因为我们未提供这些权限。![维护角色和基于项目的安 全](img/3471_07_37.jpg)
 - en: Click on any build job. The build link is available as we have given rights
     but the configure link is not available as rights were not given for it.![Maintaining
     roles and project-based security](img/3471_07_38.jpg)
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击任何构建作业。构建链接可用，因为我们已授予权限，但配置链接不可用，因为我们未为其授予权限。![维护角色和基于项目的安 全](img/3471_07_38.jpg)
 - en: We can also set **Project-based Matrix Authorization Strategy**.![Maintaining
     roles and project-based security](img/3471_07_39.jpg)
+  id: totrans-77
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们还可以设置 **基于项目的矩阵授权策略**。![维护角色和基于项目的安 全](img/3471_07_39.jpg)
 - en: Go to a specific build jobs' configuration and **Enable project-based security**.![Maintaining
     roles and project-based security](img/3471_07_40.jpg)
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 转到特定构建作业的配置并 **启用基于项目的安 全**。![维护角色和基于项目的安 全](img/3471_07_40.jpg)
 - en: Assign rights to different users and log in with the specific username to verify
     whether authorization strategy is working or not.![Maintaining roles and project-based
     security](img/3471_07_41.jpg)
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为不同用户分配权限，并使用特定用户名登录以验证授权策略是否正常工作。![维护角色和基于项目的安 全](img/3471_07_41.jpg)
 - en: Verify the build details also, as shown in the following screenshot:![Maintaining
     roles and project-based security](img/3471_07_42.jpg)
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 验证构建详细信息，如下面的截图所示：![维护角色和基于项目的安 全](img/3471_07_42.jpg)
 - en: We've covered basics of security configuration in Jenkins. Explore more on the
     other options as an exercise. In case, authorization is not correctly set, then
     it can be corrected by editing `config.xml`. Consider it as self-study.
+  id: totrans-81
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经介绍了 Jenkins 安全配置的基础知识。作为练习，请探索其他选项。如果授权设置不正确，可以通过编辑 `config.xml` 进行更正。将其视为自学内容。
 - en: Audit Trail Plugin – an overview and usage
+  id: totrans-82
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 审计轨迹插件 – 概览与使用
 - en: Audit Trail Plugin keeps a log of users who performed particular Jenkins operations,
     such as configuring jobs. This plugin adds an **Audit Trail** section in the main
     Jenkins configuration page.
+  id: totrans-83
   prefs: []
   type: TYPE_NORMAL
+  zh: 审计轨迹插件记录执行特定 Jenkins 操作（如配置作业）的用户。此插件在 Jenkins 主配置页面中添加了一个 **审计轨迹** 部分。
 - en: Install the **Audit Trail Plugin**.
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装 **审计轨迹插件**。
 - en: '![Audit Trail Plugin – an overview and usage](img/3471_07_43.jpg)'
+  id: totrans-85
   prefs: []
   type: TYPE_IMG
+  zh: '![审计轨迹插件 – 概览与使用](img/3471_07_43.jpg)'
 - en: 'In Jenkins configuration, configure **Loggers**, as shown in the following
     screenshot:'
+  id: totrans-86
   prefs: []
   type: TYPE_NORMAL
+  zh: 在 Jenkins 配置中，配置 **日志记录器**，如下面的截图所示：
 - en: '![Audit Trail Plugin – an overview and usage](img/3471_07_44.jpg)'
+  id: totrans-87
   prefs: []
   type: TYPE_IMG
+  zh: '![审计轨迹插件 – 概览与使用](img/3471_07_44.jpg)'
 - en: Stop the Jenkins server and start it again. Run any build job and open log files
     to verify log records.
+  id: totrans-88
   prefs: []
   type: TYPE_NORMAL
+  zh: 停止 Jenkins 服务器并重新启动。运行任何构建作业并打开日志文件以验证日志记录。
 - en: '![Audit Trail Plugin – an overview and usage](img/3471_07_45.jpg)'
+  id: totrans-89
   prefs: []
   type: TYPE_IMG
+  zh: '![审计轨迹插件 – 概览与使用](img/3471_07_45.jpg)'
 - en: To get more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin).
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 要获取更多详细信息，请访问 [https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin)。
 - en: Self-test questions
+  id: totrans-91
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自测问题
 - en: Q1\. What are the different ways to make slave node online?
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. 使从节点上线有哪些不同方式？
 - en: Launch an agent from the browser on slave
+  id: totrans-93
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从浏览器在从节点上启动代理
 - en: Run the `slave-agent.jnlp` command from the command line
+  id: totrans-94
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从命令行运行 `slave-agent.jnlp` 命令
 - en: Run `java -jar slave.jar`
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行 `java -jar slave.jar`
 - en: All of the above
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上所有
 - en: Q2\. For what options does Jenkins monitoring provide charts?
+  id: totrans-97
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. Jenkins 监控为哪些选项提供图表？
 - en: CPU
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 中央处理器
 - en: Memory
+  id: totrans-99
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 内存
 - en: System load average
+  id: totrans-100
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 系统负载平均值
 - en: HTTP response time
+  id: totrans-101
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: HTTP响应时间
 - en: All of the above
+  id: totrans-102
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上所有
 - en: Q3\. What are the options for Security Realm in Jenkins?
+  id: totrans-103
   prefs: []
   type: TYPE_NORMAL
+  zh: Q3. Jenkins中的安全领域有哪些选项？
 - en: Delegate to Servlet Container
+  id: totrans-104
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 委托给Servlet容器
 - en: Jenkins' own user database
+  id: totrans-105
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Jenkins自身的用户数据库
 - en: LDAP
+  id: totrans-106
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: LDAP
 - en: Unix user/group database
+  id: totrans-107
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: Unix用户/组数据库
 - en: All of the above
+  id: totrans-108
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上所有
 - en: Summary
+  id: totrans-109
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: Whatever good things we build end up building us. In this chapter, we covered
     concepts of master and slave nodes, how to monitor build jobs, and reporting of
     statistics with management features. We also understood how to secure Jenkins
     environment with authentication and authorization configurations by using role-based
     security. We saw how the audit trail plugin stores audit details in Jenkins.
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 无论我们构建了什么好东西，最终都会塑造我们自己。在本章中，我们介绍了主从节点的概念，如何监控构建作业，以及使用管理功能进行统计报告。我们还了解了如何通过使用基于角色的安全配置来确保Jenkins环境的安全，包括身份验证和授权。我们看到了审计跟踪插件如何在Jenkins中存储审计细节。
 - en: In the next chapter, we will cover some important plugins that add a significant
     value to Jenkins. Let's enjoy the last journey before we say goodbye.
+  id: totrans-111
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将介绍一些重要的插件，这些插件为Jenkins增加了显著的价值。在我们告别之前，让我们享受最后的旅程。

@@ -1,418 +1,618 @@
 - en: Chapter 8. Beyond Basics of Jenkins – Leveraging "Must-have" Plugins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第8章 超越Jenkins基础 —— 利用“必备”插件
 - en: '|   | *"Strength and growth come only through continuous effort and struggle."*
     |   |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *"力量和成长只来自持续不断的努力和奋斗。"* |   |'
 - en: '|   | --*Napoleon Hill* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*拿破仑·希尔* |'
 - en: In the last chapter, we covered management and monitoring along with security
     aspects in Jenkins. In security, we understood how authentication and authorization
     works. Now, it is time to recognize the value added by some important plugins.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 在上一章中，我们涵盖了Jenkins的管理、监控以及安全方面。在安全方面，我们理解了认证和授权的工作原理。现在，是时候认识一些重要插件带来的附加价值了。
 - en: 'This chapter covers advanced usage of Jenkins, which is extremely useful in
     specific scenarios. Scenario-based usage of specific plugins that help development
     and operations teams are covered here for better utilization of Jenkins. Some
     of these plugins are extremely useful in the case of notifications scenario. The
     following are the main topics that we will cover in this chapter:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章涵盖了Jenkins的高级用法，这在特定场景下极为有用。本章还涵盖了基于场景的特定插件的使用，这些插件有助于开发和运维团队更好地利用Jenkins。其中一些插件在通知场景中极为有用。以下是本章将涵盖的主要主题：
 - en: Extended E-mail Plugin
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Extended E-mail Plugin
 - en: Workspace cleanup Plugin
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Workspace cleanup Plugin
 - en: Pre-scm-buildstep Plugin
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Pre-scm-buildstep Plugin
 - en: Conditional BuildStep Plugin
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Conditional BuildStep Plugin
 - en: EnvInject Plugin
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: EnvInject Plugin
 - en: Build Pipeline Plugin
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Build Pipeline Plugin
 - en: Extended Email Plugin
+  id: totrans-11
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Extended Email Plugin
 - en: Email-ext plugin extends functionality of e-mail notifications provided by Jenkins.
     It gives more customization in terms of conditions that cause mail notifications
     and content generation.
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: Email-ext插件扩展了Jenkins提供的电子邮件通知功能。它在触发邮件通知的条件和内容生成方面提供了更多定制化选项。
 - en: You can install this plugin from the Jenkin's dashboard.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 您可以从Jenkins仪表板安装此插件。
 - en: '![Extended Email Plugin](img/3471_08_01.jpg)'
+  id: totrans-14
   prefs: []
   type: TYPE_IMG
+  zh: '![Extended Email Plugin](img/3471_08_01.jpg)'
 - en: 'Customization is available in three areas:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 定制化可在三个领域进行：
 - en: 'Triggers: We can select the conditions that cause an e-mail notification to
     be sent'
+  id: totrans-16
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 触发器：我们可以选择导致发送电子邮件通知的条件
 - en: 'Content: We can specify the content of each triggered email''s subject and
     body; we can use default environment variables within content'
+  id: totrans-17
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 内容：我们可以指定每个触发电子邮件的主题和正文内容；我们可以在内容中使用默认环境变量
 - en: 'Recipients: We can specify who should receive an e-mail when it is triggered'
+  id: totrans-18
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 收件人：我们可以指定谁应该在触发时收到电子邮件
 - en: In the Jenkins dashboard, click on **Manage Jenkins** and then click on **Configure
     System**. Go to the **Extended E-mail Notification** section and configure global
     email-ext properties that should match the settings for your SMTP mail server.
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板中，点击**管理Jenkins**，然后点击**系统配置**。前往**扩展电子邮件通知**部分，配置应与您的SMTP邮件服务器设置相匹配的全球电子邮件扩展属性。
 - en: '![Extended Email Plugin](img/3471_08_02.jpg)'
+  id: totrans-20
   prefs: []
   type: TYPE_IMG
+  zh: '![Extended Email Plugin](img/3471_08_02.jpg)'
 - en: We can also customize the subject, maximum attachment size, default content,
     and so on.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们还可以自定义主题、最大附件大小、默认内容等。
 - en: '![Extended Email Plugin](img/3471_08_03.jpg)'
+  id: totrans-22
   prefs: []
   type: TYPE_IMG
+  zh: '![Extended Email Plugin](img/3471_08_03.jpg)'
 - en: To configure Email-ext specific to build job, enable it in the project configuration
     page. Select the checkbox labeled **Editable Email Notification** in the **Post-build
     Actions**. Configure the comma- (or whitespace-) separated list of global recipients,
     subject, and content. In advanced configuration, we can configure pre-send script,
     triggers, email tokens, and so on.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在构建作业中配置特定的Email-ext，请在项目配置页面上启用它。在**构建后操作**中选择标有**可编辑邮件通知**的复选框。配置由逗号（或空格）分隔的全球收件人、主题和内容列表。在高级配置中，我们可以配置预发送脚本、触发器、电子邮件令牌等。
 - en: '![Extended Email Plugin](img/3471_08_04.jpg)'
+  id: totrans-24
   prefs: []
   type: TYPE_IMG
+  zh: '![Extended Email Plugin](img/3471_08_04.jpg)'
 - en: The pre-send script feature allows us to write a script that can modify the
     `MimeMessage` object prior to sending the message. Triggers allow us to configure
     conditions that must be met to send an e-mail. The Email-ext plugin uses tokens
     to allow dynamic data to be inserted into the recipient list, e-mail subject line,
     or the body. For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin).
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 预发送脚本功能允许我们编写一个脚本，该脚本可以在发送消息之前修改`MimeMessage`对象。触发器允许我们配置必须满足的条件以发送电子邮件。Email-ext插件使用令牌允许动态数据插入到收件人列表、电子邮件主题行或正文中。更多详情，请访问[https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin)。
 - en: Workspace cleanup Plugin
+  id: totrans-26
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Workspace cleanup Plugin
 - en: The Workspace Cleanup plugin is used to delete the workspace from Jenkins before
     the build or when a build is finished and artifacts are saved. If we want to start
     a Jenkins build with a clean workspace or we want to clean a particular directory
     before each build, then we can effectively use this plugin. Different options
     are available for deleting the workspace.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 工作区清理插件用于在构建之前或构建完成并保存工件时从Jenkins删除工作区。如果我们想在干净的工件区开始Jenkins构建，或者我们想在每次构建之前清理特定目录，那么我们可以有效地使用此插件。删除工作区有不同的选项。
 - en: You can install this plugin from the Jenkins dashboard.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在Jenkins仪表板上安装此插件。
 - en: '![Workspace cleanup Plugin](img/3471_08_05.jpg)'
+  id: totrans-29
   prefs: []
   type: TYPE_IMG
+  zh: '![工作区清理插件](img/3471_08_05.jpg)'
 - en: We can apply patterns for files to be deleted based on the status of the build
     job. We can add post-build action for workspace deletion.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们可以根据构建作业的状态应用要删除的文件的模式。我们可以添加工作区删除的后构建操作。
 - en: '![Workspace cleanup Plugin](img/3471_08_06.jpg)'
+  id: totrans-31
   prefs: []
   type: TYPE_IMG
+  zh: '![工作区清理插件](img/3471_08_06.jpg)'
 - en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Workspace+Cleanup+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Workspace+Cleanup+Plugin).
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多详情，请访问[https://wiki.jenkins-ci.org/display/JENKINS/Workspace+Cleanup+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Workspace+Cleanup+Plugin)。
 - en: Pre-scm-buildstep Plugin
+  id: totrans-33
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: Pre-scm-buildstep插件
 - en: The Pre-scm-buildstep plugin allows a specific build step to run before SCM
     checkouts in case we need to perform any build step action on the workspace considering
     any special requirements such as adding a file with some settings for the SCM,
     executing some command to create some file, cleanup, or call other scripts that
     need to be run before checking out.
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: Pre-scm-buildstep插件允许在SCM检出之前运行特定构建步骤，以防我们需要根据任何特殊要求（如添加包含SCM设置的文件、执行创建某些文件的命令、清理或调用需要在检出前运行的其他脚本）对工作区执行任何构建步骤操作。
 - en: You can install this plugin from the Jenkins dashboard.
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在Jenkins仪表板上安装此插件。
 - en: '![Pre-scm-buildstep Plugin](img/3471_08_07.jpg)'
+  id: totrans-36
   prefs: []
   type: TYPE_IMG
+  zh: '![Pre-scm-buildstep插件](img/3471_08_07.jpg)'
 - en: 'Select conditional steps from the list, as shown in the following screenshot:'
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 从列表中选择条件步骤，如下面的截图所示：
 - en: '![Pre-scm-buildstep Plugin](img/3471_08_08.jpg)'
+  id: totrans-38
   prefs: []
   type: TYPE_IMG
+  zh: '![Pre-scm-buildstep插件](img/3471_08_08.jpg)'
 - en: 'Select the conditional steps based on requirement and provide a list of commands
     based on operating systems, as shown in the following screenshot:'
+  id: totrans-39
   prefs: []
   type: TYPE_NORMAL
+  zh: 根据需求选择条件步骤，并提供基于操作系统的命令列表，如下面的截图所示：
 - en: '![Pre-scm-buildstep Plugin](img/3471_08_09.jpg)'
+  id: totrans-40
   prefs: []
   type: TYPE_IMG
+  zh: '![Pre-scm-buildstep插件](img/3471_08_09.jpg)'
 - en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/pre-scm-buildstep](https://wiki.jenkins-ci.org/display/JENKINS/pre-scm-buildstep).
+  id: totrans-41
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多详情，请访问[https://wiki.jenkins-ci.org/display/JENKINS/pre-scm-buildstep](https://wiki.jenkins-ci.org/display/JENKINS/pre-scm-buildstep)。
 - en: Conditional BuildStep Plugin
+  id: totrans-42
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 条件构建步骤插件
 - en: The Buildstep plugin allows us to wrap any number of other build steps, controlling
     their execution based on a defined condition.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 构建步骤插件允许我们包装任意数量的其他构建步骤，根据定义的条件控制它们的执行。
 - en: You can install this plugin from the Jenkins' dashboard.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 你可以在Jenkins仪表板上安装此插件。
 - en: '![Conditional BuildStep Plugin](img/3471_08_10.jpg)'
+  id: totrans-45
   prefs: []
   type: TYPE_IMG
+  zh: '![条件构建步骤插件](img/3471_08_10.jpg)'
 - en: 'This plugin defines a few core run conditions such as:'
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 此插件定义了几种核心运行条件，例如：
 - en: 'Always/Never: To disable a build step from the job configuration'
+  id: totrans-47
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 始终/从不：从作业配置中禁用构建步骤
 - en: 'Boolean condition: To execute the step if a token expands to a representation
     of true'
+  id: totrans-48
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 布尔条件：如果令牌扩展为true的表示，则执行步骤
 - en: 'Current status: To execute the build step if the current build status is within
     the configured/specific range'
+  id: totrans-49
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 当前状态：如果当前构建状态在配置/特定范围内，则执行构建步骤
 - en: 'File exists/Files match: To execute the step if a file exists, or matches a
     pattern'
+  id: totrans-50
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 文件存在/文件匹配：如果文件存在或匹配模式，则执行步骤
 - en: 'Strings match: To execute the step if the two strings are same'
+  id: totrans-51
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 字符串匹配：如果两个字符串相同，则执行步骤
 - en: 'Numerical comparison: To execute the build step depending on the result of
     comparing two numbers'
+  id: totrans-52
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 数值比较：根据比较两个数字的结果执行构建步骤
 - en: 'Regular expression match: This provides a regular expression and a label, to
     execute the build step if the expression matches the label'
+  id: totrans-53
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 正则表达式匹配：提供正则表达式和标签，如果表达式与标签匹配，则执行构建步骤
 - en: 'Time/Day of week: To execute the build job during a specified period of the
     day or day of the week'
+  id: totrans-54
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 时间/星期：在一天中的指定时间段或一周的某一天执行构建作业
 - en: 'And/Or/Not: Logical operations to enable the combining and sense inversion
     of run conditions'
+  id: totrans-55
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 与/或/非：逻辑操作，用于组合和反转运行条件的意义
 - en: 'Build cause: To execute the build step depending on the cause of the build,
     for example, triggered by timer, user, scm-change, and so on'
+  id: totrans-56
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 构建原因：根据构建原因执行构建步骤，例如，由计时器、用户、SCM 变更等触发
 - en: 'Script condition: Utilize shell script to decide whether a step should be skipped'
+  id: totrans-57
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 脚本条件：利用 shell 脚本决定是否跳过某一步骤
 - en: 'Windows Batch condition: Utilize windows batch to decide whether a step should
     be skipped'
+  id: totrans-58
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 批处理条件：利用批处理决定是否跳过某一步骤
 - en: Select the **Conditional step (single)** from the **Add build step**.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 从**添加构建步骤**中选择**条件步骤（单个）**。
 - en: '![Conditional BuildStep Plugin](img/3471_08_11.jpg)'
+  id: totrans-60
   prefs: []
   type: TYPE_IMG
+  zh: '![条件构建步骤插件](img/3471_08_11.jpg)'
 - en: Select the **Conditional steps (multiple)** from the **Add build step**. We
     can add multiple steps to condition in this conditional step.
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 从**添加构建步骤**中选择**条件步骤（多个）**。我们可以在此条件步骤中添加多个条件步骤。
 - en: '![Conditional BuildStep Plugin](img/3471_08_12.jpg)'
+  id: totrans-62
   prefs: []
   type: TYPE_IMG
+  zh: '![条件构建步骤插件](img/3471_08_12.jpg)'
 - en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin).
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多详情，请访问[https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin)。
 - en: EnvInject Plugin
+  id: totrans-64
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: EnvInject 插件
 - en: We know that different environments such as Dev, Test, and Production requires
     different configuration.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们知道，开发、测试和生产等不同环境需要不同的配置。
 - en: Install this plugin from the Jenkins dashboard.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板安装此插件。
 - en: '![EnvInject Plugin](img/3471_08_13.jpg)'
+  id: totrans-67
   prefs: []
   type: TYPE_IMG
+  zh: '![EnvInject 插件](img/3471_08_13.jpg)'
 - en: The EnvInject plugin provides the facility to have an isolated environment for
     different build jobs. The EnvInject plugin injects environment variables at node
     startup, before or after a SCM checkout for a run, as a build step for a run,
     and so on. Select **Inject environment variables to the build process** specific
     to the build job.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: EnvInject 插件提供了为不同构建作业创建隔离环境的设施。EnvInject 插件在节点启动时、SCM 签出前后、运行时的构建步骤等情况下注入环境变量。选择**向构建过程注入环境变量**，具体针对构建作业。
 - en: '![EnvInject Plugin](img/3471_08_14.jpg)'
+  id: totrans-69
   prefs: []
   type: TYPE_IMG
+  zh: '![EnvInject 插件](img/3471_08_14.jpg)'
 - en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin).
+  id: totrans-70
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多详情，请访问[https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)。
 - en: Build Pipeline Plugin
+  id: totrans-71
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 构建管道插件
 - en: Continuous Integration has become a popular practice for application development.
     The Build Pipeline plugin provides a pipeline view of upstream and downstream
     connected jobs that typically form a build pipeline with the ability to define
     manual triggers or approval process. We can create a chain of jobs by orchestrating
     version promotion through different quality gates before we deploy it in production.
+  id: totrans-72
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续集成已成为应用程序开发的流行实践。构建管道插件提供了一个管道视图，显示上游和下游连接的工作，这些工作通常形成一个构建管道，并具有定义手动触发器或审批流程的能力。我们可以在部署到生产环境之前，通过不同的质量门协调版本升级，创建一系列工作。
 - en: Install this plugin from the Jenkins dashboard.
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 从 Jenkins 仪表板安装此插件。
 - en: '![Build Pipeline Plugin](img/3471_08_15.jpg)'
+  id: totrans-74
   prefs: []
   type: TYPE_IMG
+  zh: '![构建管道插件](img/3471_08_15.jpg)'
 - en: 'We have already installed the Dashboard View plugin. We will create a pipeline
     for four build jobs. Let''s assume we have four build jobs, as shown in the following
     diagram, where the objective of each build job is mentioned:'
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已安装仪表板视图插件。我们将为四个构建作业创建一个管道。假设我们有四个构建作业，如下图所示，每个构建作业的目标如下：
 - en: '![Build Pipeline Plugin](img/3471_08_16.jpg)'
+  id: totrans-76
   prefs: []
   type: TYPE_IMG
+  zh: '![构建管道插件](img/3471_08_16.jpg)'
 - en: Create a new view and select **Build Pipeline View**.![Build Pipeline Plugin](img/3471_08_17.jpg)
+  id: totrans-77
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 创建一个新视图并选择**构建管道视图**。![构建管道插件](img/3471_08_17.jpg)
 - en: Provide a description and select the layout from the configuration on the build
     pipeline.
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在构建管道的配置中提供描述并选择布局。
 - en: Select an initial job and the number of displayed builds and save the configuration.![Build
     Pipeline Plugin](img/3471_08_18.jpg)
+  id: totrans-79
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择初始工作并设置显示的构建数量，然后保存配置。![构建管道插件](img/3471_08_18.jpg)
 - en: In a configuration of the build pipeline, select job to trigger parameterized
     build as `settle-build` job in **Post-build Actions**. It will be the first build
     job in the pipeline.![Build Pipeline Plugin](img/3471_08_19.jpg)
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在构建管道的配置中，选择触发参数化构建的工作，如**后构建操作**中的`settle-build`工作。它将是管道中的第一个构建工作。![构建管道插件](img/3471_08_19.jpg)
 - en: In a `settle-build` job, trigger the parameterized build on the `settle-aws-provisioning`
     job in **Post-build Actions**.![Build Pipeline Plugin](img/3471_08_20.jpg)
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`settle-build`作业中，在**构建后操作**中触发`settle-aws-provisioning`作业的参数化构建。![构建管道插件](img/3471_08_20.jpg)
 - en: In a `settle-aws-provisioning` job, the manual build steps for a `settle-deploy`
     job in **Post-build Actions**.![Build Pipeline Plugin](img/3471_08_21.jpg)
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`settle-aws-provisioning`作业中，在**构建后操作**中为`settle-deploy`作业执行手动构建步骤。![构建管道插件](img/3471_08_21.jpg)
 - en: In a `settle-aws-provisioning` job, trigger the parameterized build on the `settle-deploy`
     job in **Post-build Actions**. In the `settle-deploy` build job, we can write
     script or execute commands so that it can deploy `war` file to newly provisioned
     virtual machine in the cloud environment.![Build Pipeline Plugin](img/3471_08_22.jpg)
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`settle-aws-provisioning`作业中，在**构建后操作**中触发`settle-deploy`作业的参数化构建。在`settle-deploy`构建作业中，我们可以编写脚本或执行命令，以便将`war`文件部署到云环境中新配置的虚拟机上。![构建管道插件](img/3471_08_22.jpg)
 - en: Go to the dashboard view, which we created earlier, and verify the pipeline
     created after our configuration in build jobs in the previous section. The new
     build pipeline will be created as shown in the following diagram:![Build Pipeline
     Plugin](img/3471_08_23.jpg)
+  id: totrans-84
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前往我们之前创建的仪表板视图，并验证在上一节配置的构建作业后创建的管道。新的构建管道将如以下图示创建：![构建管道插件](img/3471_08_23.jpg)
 - en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin).
+  id: totrans-85
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多详情，请访问[https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin)。
 - en: Self-test questions
+  id: totrans-86
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自我测试问题
 - en: Q1\. In which areas does the Extended E-mail plugin provide customization?
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. 扩展邮件插件在哪些领域提供定制化？
 - en: Triggers
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 触发器
 - en: Content
+  id: totrans-89
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 内容
 - en: Recipients
+  id: totrans-90
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 收件人
 - en: All of the above
+  id: totrans-91
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上所有
 - en: 'Q2\. The Workspace cleanup plugin provides an option to clean the workspace
     when status of build is:'
+  id: totrans-92
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. 工作区清理插件提供了一个选项，当构建状态为：
 - en: Success
+  id: totrans-93
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 成功
 - en: Unstable
+  id: totrans-94
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 不稳定
 - en: Failure
+  id: totrans-95
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 失败
 - en: Not Built
+  id: totrans-96
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 未构建
 - en: Aborted
+  id: totrans-97
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 中止
 - en: All of the above
+  id: totrans-98
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以上所有
 - en: Summary
+  id: totrans-99
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: We learned how to use some important plugins to aid the existing features of
     Jenkins to address specific requirements. We covered all basic usage of Jenkins,
     including installing runtime environment, creating build jobs, using Jenkins on
@@ -420,9 +620,13 @@
     of this book, this seems sufficient. Next step is about provisioning resources
     dynamically in Cloud environment to achieve end to end automation in the DevOps
     journey.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们学习了如何使用一些重要插件来辅助Jenkins现有的功能，以满足特定需求。我们涵盖了Jenkins的基本使用，包括安装运行时环境、创建构建作业、使用Jenkins云、监控、管理、安全以及附加插件。对于本书的范围，这似乎已经足够。下一步是在云环境中动态配置资源，以实现DevOps旅程中的端到端自动化。
 - en: If you want a happy ending, that depends of course on where you stop your story.
     We certainly know where to stop ours!
+  id: totrans-101
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果你想要一个幸福的结局，当然这取决于你在哪里停止你的故事。我们当然知道在哪里停止我们的故事！

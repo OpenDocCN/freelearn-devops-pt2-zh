@@ -10,7 +10,7 @@
 +   [Kubernetes 微服务实用指南](docs/hsn-msvc-k8s/README.md)
 +   [JIRA 测试管理实用手册](docs/hsn-test-mgt-jira/README.md)
 +   [Jenkins 持续集成秘籍](docs/jks-ci-cb-2e/README.md)
-+   [Python 卖空算法教程](docs/jks-ess/README.md)
++   [Jenkins 基础知识](docs/jks-ess/README.md)
 +   [Kubernetes AWS 手册](docs/k8s-aws/README.md)
 +   [Kubernetes 手册](docs/k8s-bk/README.md)
 +   [Kubernetes 秘籍](docs/k8s-cb-2e/README.md)

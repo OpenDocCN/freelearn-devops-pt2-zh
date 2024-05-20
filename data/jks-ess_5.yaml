@@ -1,362 +1,521 @@
 - en: Chapter 5. Hosted Jenkins
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第5章 托管Jenkins
 - en: '|   | *"Productivity is being able to do things that you were never able to
     do before"* |   |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *"生产力就是能够做你以前从未能做的事情"* |   |'
 - en: '|   | --*Franz Kafka* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*弗朗茨·卡夫卡* |'
 - en: We have understood the concepts of continuous delivery and continuous deployment.
     We have also seen how to deploy the `war` file from Jenkins to the Tomcat server.
     Now, we will see how hosted Jenkins can be leveraged. Different service providers
     offer Jenkins as a service. We will see how OpenShift and CloudBees provide Jenkins
     to users.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经理解了持续交付和持续部署的概念。我们还看到了如何将`war`文件从Jenkins部署到Tomcat服务器。现在，我们将探讨如何利用托管的Jenkins。不同的服务提供商将Jenkins作为服务提供。我们将了解OpenShift和CloudBees如何向用户提供Jenkins。
 - en: 'This chapter describes details on how to use hosted Jenkins, which is provided
     by popular PaaS providers, such as Red Hat OpenShift and CloudBees. This chapter
     also covers details on how various customers are using Jenkins based on their
     requirements. This chapter will explore details on how to use Cloud-related plugins
     in Jenkins for effective usage of Jenkins. We will cover the following topics
     in this chapter:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章详细描述了如何使用由流行的PaaS提供商（如Red Hat OpenShift和CloudBees）提供的托管Jenkins。本章还涵盖了根据客户需求使用Jenkins的各种细节。本章将探讨如何在Jenkins中使用与云相关的插件以有效使用Jenkins。本章将涵盖以下主题：
 - en: Exploring Jenkins in OpenShift PaaS
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在OpenShift PaaS中探索Jenkins
 - en: Exploring Jenkins in the Cloud – CloudBees
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在云中探索Jenkins – CloudBees
 - en: An overview of CloudBees Enterprise Plugins
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: CloudBees企业插件概览
 - en: Jenkins case studies from CloudBees
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: CloudBees的Jenkins案例研究
 - en: Exploring Jenkins in OpenShift PaaS
+  id: totrans-9
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在OpenShift PaaS中探索Jenkins
 - en: OpenShift Online is a public PaaS—application development and hosting platform
     from Red Hat. It automates the process of provisioning and deprovisioning, management,
     and scaling of applications. This supports command-line client tools and a web
     management console to launch and manage applications easily. The Jenkins app is
     provided by OpenShift Online. OpenShift Online has a free plan.
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: OpenShift Online是Red Hat提供的公共PaaS——应用程序开发和托管平台。它自动化了应用程序的配置、取消配置、管理和扩展过程。这支持命令行客户端工具和Web管理控制台，以便轻松启动和管理应用程序。Jenkins应用由OpenShift
+    Online提供。OpenShift Online有一个免费计划。
 - en: To sign up for OpenShift Online, visit [https://www.openshift.com/app/account/new](https://www.openshift.com/app/account/new).![Exploring
     Jenkins in OpenShift PaaS](img/3471_05_01.jpg)
+  id: totrans-11
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 要注册OpenShift Online，请访问[https://www.openshift.com/app/account/new](https://www.openshift.com/app/account/new)。![在OpenShift
+    PaaS中探索Jenkins](img/3471_05_01.jpg)
 - en: Once you sign up, you will get the welcome screen at [https://openshift.redhat.com/app/console/applications](https://openshift.redhat.com/app/console/applications).
+  id: totrans-12
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 一旦注册，你将在[https://openshift.redhat.com/app/console/applications](https://openshift.redhat.com/app/console/applications)获得欢迎屏幕。
 - en: Click on **Create your first application now**.![Exploring Jenkins in OpenShift
     PaaS](img/3471_05_02.jpg)
+  id: totrans-13
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**立即创建你的第一个应用程序**。![在OpenShift PaaS中探索Jenkins](img/3471_05_02.jpg)
 - en: Choose a type of application, in our case, select **Jenkins Server**.![Exploring
     Jenkins in OpenShift PaaS](img/3471_05_03.jpg)
+  id: totrans-14
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 选择应用程序类型，在我们的例子中，选择**Jenkins服务器**。![在OpenShift PaaS中探索Jenkins](img/3471_05_03.jpg)
 - en: Give **Public URL** for your Jenkins server, as shown in the following screenshot:![Exploring
     Jenkins in OpenShift PaaS](img/3471_05_04.jpg)
+  id: totrans-15
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为你的Jenkins服务器提供**公共URL**，如下面的截图所示：![在OpenShift PaaS中探索Jenkins](img/3471_05_04.jpg)
 - en: Click on **Create Application**.![Exploring Jenkins in OpenShift PaaS](img/3471_05_05a.jpg)
+  id: totrans-16
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**创建应用程序**。![在OpenShift PaaS中探索Jenkins](img/3471_05_05a.jpg)
 - en: Click on **visit app in the browser**.![Exploring Jenkins in OpenShift PaaS](img/3471_05_05.jpg)
+  id: totrans-17
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**在浏览器中访问应用**。![在OpenShift PaaS中探索Jenkins](img/3471_05_05.jpg)
 - en: Access the Jenkins in the web browser. Then, log in with the provided credentials
     in the OpenShift dashboard.![Exploring Jenkins in OpenShift PaaS](img/3471_05_06.jpg)
+  id: totrans-18
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Web浏览器中访问Jenkins。然后，使用OpenShift仪表板提供的凭据登录。![在OpenShift PaaS中探索Jenkins](img/3471_05_06.jpg)
 - en: The following is the screenshot of the Jenkins dashboard:![Exploring Jenkins
     in OpenShift PaaS](img/3471_05_07.jpg)
+  id: totrans-19
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 以下是Jenkins仪表板的截图：![在OpenShift PaaS中探索Jenkins](img/3471_05_07.jpg)
 - en: Exploring Jenkins in the Cloud – CloudBees
+  id: totrans-20
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 在云中探索Jenkins – CloudBees
 - en: DEV@cloud is a hosted Jenkins service in a secure, multi-tenanted environment
     managed by CloudBees. It runs a specific version of Jenkins, along with a selected
     version of plugins which are well supported with that version. All updates and
     patches are managed by CloudBees, and limited customization is available.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: DEV@cloud是在CloudBees管理的安全、多租户环境中托管的Jenkins服务。它运行特定版本的Jenkins，以及与该版本良好支持的插件的选定版本。所有更新和补丁都由CloudBees管理，并且可用的自定义有限。
 - en: Go to [https://www.cloudbees.com/products/dev](https://www.cloudbees.com/products/dev)
     and subscribe.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_08.jpg)
+  id: totrans-22
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问[https://www.cloudbees.com/products/dev](https://www.cloudbees.com/products/dev)并订阅。![探索云中的Jenkins
+    – CloudBees](img/3471_05_08.jpg)
 - en: Once we complete subscription process, we will get the dashboard of CloudBees,
     as shown in following screenshot. Click on **Builds**.![Exploring Jenkins in the
     Cloud – CloudBees](img/3471_05_09.jpg)
+  id: totrans-23
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 完成订阅流程后，我们将获得CloudBees的仪表板，如下面的截图所示。点击**构建**。![探索云中的Jenkins – CloudBees](img/3471_05_09.jpg)
 - en: We will get the Jenkins dashboard, as shown in the following screenshot:![Exploring
     Jenkins in the Cloud – CloudBees](img/3471_05_10.jpg)
+  id: totrans-24
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 我们将看到Jenkins仪表板，如下面的截图所示：![探索云中的Jenkins – CloudBees](img/3471_05_10.jpg)
 - en: Click on **Manage Jenkins** to configure and install plugins.![Exploring Jenkins
     in the Cloud – CloudBees](img/3471_05_11.jpg)
+  id: totrans-25
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**管理Jenkins**以配置和安装插件。![探索云中的Jenkins – CloudBees](img/3471_05_11.jpg)
 - en: Note
+  id: totrans-26
   prefs:
   - PREF_IND
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Before configuring a build job, we need to store the source code of an application
     in the repository service provided by CloudBees. Click on **Ecosystem**, and then
     click on **Repositories**.
+  id: totrans-27
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 在配置构建任务之前，我们需要将应用程序的源代码存储在CloudBees提供的库服务中。点击**生态系统**，然后点击**库**。
 - en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_12.jpg)'
+  id: totrans-28
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![探索云中的Jenkins – CloudBees](img/3471_05_12.jpg)'
 - en: Click on the subversion repositories or **Add Repository**, and get the URL
     of the repository.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_13.jpg)
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击子版本库或**添加库**，获取库的URL。![探索云中的Jenkins – CloudBees](img/3471_05_13.jpg)
 - en: Click on the application folder to import it into the subversion repository
     provided by CloudBees. Use TortoiseSVN or any SVN client to import the code.![Exploring
     Jenkins in the Cloud – CloudBees](img/3471_05_14.jpg)
+  id: totrans-30
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击应用程序文件夹，将其导入CloudBees提供的子版本库。使用TortoiseSVN或其他SVN客户端导入代码。![探索云中的Jenkins – CloudBees](img/3471_05_14.jpg)
 - en: Provide the URL of a repository we copied from CloudBees, and click on **OK**.![Exploring
     Jenkins in the Cloud – CloudBees](img/3471_05_15.jpg)
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提供从CloudBees复制的库URL，然后点击**确定**。![探索云中的Jenkins – CloudBees](img/3471_05_15.jpg)
 - en: Provide authentication information (the username and password are same as our
     CloudBees account).
+  id: totrans-32
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提供认证信息（用户名和密码与我们的CloudBees账户相同）。
 - en: Click on **OK**.
+  id: totrans-33
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 点击**确定**。
 - en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_16.jpg)'
+  id: totrans-34
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![探索云中的Jenkins – CloudBees](img/3471_05_16.jpg)'
 - en: The import process will take some time based on the size of the source files.
+  id: totrans-35
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 导入过程将根据源文件的大小耗费一些时间。
 - en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_17.jpg)'
+  id: totrans-36
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![探索云中的Jenkins – CloudBees](img/3471_05_17.jpg)'
 - en: Verify the Repository URL on the browser, and we will find the recently imported
     project in it.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_18.jpg)
+  id: totrans-37
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在浏览器中验证库URL，我们将找到最近导入的项目。![探索云中的Jenkins – CloudBees](img/3471_05_18.jpg)
 - en: Verify the Jenkins dashboard after the successful import operation.![Exploring
     Jenkins in the Cloud – CloudBees](img/3471_05_19.jpg)
+  id: totrans-38
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 成功导入操作后，验证Jenkins仪表板。![探索云中的Jenkins – CloudBees](img/3471_05_19.jpg)
 - en: Click on **New Item** on the Jenkins dashboard. Select **Freestyle project**,
     and provide a name for a new build job. Click on **OK**.![Exploring Jenkins in
     the Cloud – CloudBees](img/3471_05_20.jpg)
+  id: totrans-39
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上点击**新建项目**。选择**自由风格项目**，并为新构建任务命名。点击**确定**。![探索云中的Jenkins – CloudBees](img/3471_05_20.jpg)
 - en: The configuration page will allow us to configure various settings specific
     to the build job.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_21.jpg)
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 配置页面将允许我们为构建任务配置各种特定设置。![探索云中的Jenkins – CloudBees](img/3471_05_21.jpg)
 - en: Configure the **Subversion** repository in the build job.![Exploring Jenkins
     in the Cloud – CloudBees](img/3471_05_22.jpg)
+  id: totrans-41
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在构建任务中配置**Subversion**库。![探索云中的Jenkins – CloudBees](img/3471_05_22.jpg)
 - en: Click on **Apply**, and then click on **Save**.![Exploring Jenkins in the Cloud
     – CloudBees](img/3471_05_23.jpg)
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**应用**，然后点击**保存**。![探索云中的Jenkins – CloudBees](img/3471_05_23.jpg)
 - en: Click on **Build Now**.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_24.jpg)
+  id: totrans-43
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**立即构建**。![在云中探索Jenkins – CloudBees](img/3471_05_24.jpg)
 - en: Verify Console Output.
+  id: totrans-44
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 验证控制台输出。
 - en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_25.jpg)'
+  id: totrans-45
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![在云中探索Jenkins – CloudBees](img/3471_05_25.jpg)'
 - en: Then, it will compile the source files, and create a `war` file based on the
     `build.xml` file, as this is an Ant-based project.
+  id: totrans-46
   prefs:
   - PREF_IND
   type: TYPE_NORMAL
+  zh: 接着，它将编译源文件，并根据`build.xml`文件创建一个`war`文件，因为这是一个基于Ant的项目。
 - en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_26.jpg)'
+  id: totrans-47
   prefs:
   - PREF_IND
   type: TYPE_IMG
+  zh: '![在云中探索Jenkins – CloudBees](img/3471_05_26.jpg)'
 - en: Verify the Jenkins dashboard for a successful build.![Exploring Jenkins in the
     Cloud – CloudBees](img/3471_05_27.jpg)
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上验证成功构建。![在云中探索Jenkins – CloudBees](img/3471_05_27.jpg)
 - en: An overview of CloudBees Enterprise Plugins
+  id: totrans-49
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: CloudBees企业插件概览
 - en: 'The following are some important CloudBees Enterprise Plugins:'
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是一些重要的CloudBees企业插件：
 - en: Workflow Plugin
+  id: totrans-51
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: '**工作流插件**'
 - en: It is a complex task to manage software delivery pipelines, and developer and
     operations teams need to manage complex jobs that can take days to complete. The
     Workflow plugin supports complex pipelines. The plugin uses Groovy DSL for workflows,
     and it also provides the facility to pause and restart jobs, to and from both
     master and slave failures.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 管理软件交付管道是一项复杂的任务，开发和运维团队需要管理可能需要数天才能完成的复杂作业。工作流插件支持复杂的管道。该插件使用Groovy DSL进行工作流，并提供从主从故障中暂停和重新启动作业的设施。
 - en: To read more on this, visit [https://www.cloudbees.com/products/cloudbees-jenkins-platform/team-edition/features/workflow-plugin](https://www.cloudbees.com/products/cloudbees-jenkins-platform/team-edition/features/workflow-plugin).
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[https://www.cloudbees.com/products/cloudbees-jenkins-platform/team-edition/features/workflow-plugin](https://www.cloudbees.com/products/cloudbees-jenkins-platform/team-edition/features/workflow-plugin)。
 - en: Checkpoints Plugin
+  id: totrans-54
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: '**检查点插件**'
 - en: Let's consider a scenario where a long running build job fails almost at its
     end phase. This can hamper delivery schedules. The Checkpoints plugin provides
     the facility to restart workflows at checkpoints. Hence, it eliminates delays
     due to master and slave failures. In addition, it can help to survive Jenkins
     and infrastructure failures.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 让我们考虑一个场景，一个长时间运行的构建作业几乎在其结束阶段失败。这可能会影响交付计划。检查点插件提供了在检查点重新启动工作流的设施。因此，它消除了由于主从故障导致的延迟。此外，它可以帮助Jenkins和基础设施故障的恢复。
 - en: To read more on this, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/checkpoints-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/checkpoints-plugin).
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[https://www.cloudbees.com/products/jenkins-enterprise/plugins/checkpoints-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/checkpoints-plugin)。
 - en: Role-based Access Control Plugin
+  id: totrans-57
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: '**基于角色的访问控制插件**'
 - en: 'Authentication and authorization plays a significant role in the security aspect.
     The authorization strategy can help to control access to Jenkins jobs effectively.
     It is also essential to set permissions at the project level and visibility. The
     **Role-based Access Control** (**RBAC**) plugin provided by CloudBees provides
     the following features:'
+  id: totrans-58
   prefs: []
   type: TYPE_NORMAL
+  zh: 认证和授权在安全方面扮演着重要角色。授权策略可以帮助有效控制对Jenkins作业的访问。在项目级别和可见性方面设置权限也很重要。CloudBees提供的**基于角色的访问控制**（**RBAC**）插件具有以下功能：
 - en: To define various security roles
+  id: totrans-59
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 定义各种安全角色
 - en: To assign rules to groups
+  id: totrans-60
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 为组分配规则
 - en: To assign roles globally or at an object level
+  id: totrans-61
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 在全球或对象级别分配角色
 - en: To delegate management of groups for specific objects to users
+  id: totrans-62
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 将特定对象的组管理委托给用户
 - en: To read more about the Role-based Access Control Plugin, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/role-based-access-control-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/role-based-access-control-plugin).
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多关于基于角色的访问控制插件的信息，请访问[https://www.cloudbees.com/products/jenkins-enterprise/plugins/role-based-access-control-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/role-based-access-control-plugin)。
 - en: High Availability Plugin
+  id: totrans-64
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: '**高可用性插件**'
 - en: The downtime of Jenkins master caused by software or hardware affects the entire
     product team. It is vital to bring Jenkins master up in quick time, and this will
     take many hours. The High Availability plugin eliminates downtime due to master
     failures, by keeping multiple masters as backups. A backup master automatically
     boots up when the failure of the master is detected. This plugin makes failure
     detection and recovery an automatic process and not manual.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins主节点的停机时间，无论是由软件还是硬件引起的，都会影响整个产品团队。快速恢复Jenkins主节点至关重要，而这通常需要数小时。高可用性插件通过保留多个主节点作为备份来消除因主节点故障导致的停机时间。当检测到主节点故障时，备份主节点会自动启动。此插件使得故障检测和恢复成为一个自动过程，而非手动操作。
 - en: To read more on this, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/high-availability-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/high-availability-plugin).
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[https://www.cloudbees.com/products/jenkins-enterprise/plugins/high-availability-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/high-availability-plugin)。
 - en: VMware ESXi/vSphere Auto-Scaling Plugin
+  id: totrans-67
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: VMware ESXi/vSphere Auto-Scaling插件
 - en: Let's consider a scenario where you need multiple slaves for Jenkins running
     in your existing infrastructure to utilize underutilized capacity of your virtualized
     infrastructure based on VMware. The VMware vCenter Auto-Scaling plugin allows
     you to create slave machines that are available in your VMware-based virtualized
     infrastructure. It is possible to configure pools of virtual machines that have
     identical and multiple VMs.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 考虑这样一个场景：您需要在现有的基于VMware的虚拟化基础设施中运行多个Jenkins从节点，以利用未充分利用的容量。VMware vCenter Auto-Scaling插件允许您在基于VMware的虚拟化基础设施中创建可用的从节点机器。可以配置具有相同配置的多个虚拟机池。
 - en: 'The following actions are allowed on VMs:'
+  id: totrans-69
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下操作可在虚拟机上执行：
 - en: Power on
+  id: totrans-70
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 开机
 - en: Power off/suspend
+  id: totrans-71
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 关机/挂起
 - en: Revert to the last snapshot
+  id: totrans-72
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 恢复到最后一个快照
 - en: To read more, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/vmware-esxivsphere-auto-scaling-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/vmware-esxivsphere-auto-scaling-plugin).
+  id: totrans-73
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[https://www.cloudbees.com/products/jenkins-enterprise/plugins/vmware-esxivsphere-auto-scaling-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/vmware-esxivsphere-auto-scaling-plugin)。
 - en: To find details on all plugins provided by CloudBees, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins](https://www.cloudbees.com/products/jenkins-enterprise/plugins).
+  id: totrans-74
   prefs: []
   type: TYPE_NORMAL
+  zh: 要查找CloudBees提供的所有插件的详细信息，请访问[https://www.cloudbees.com/products/jenkins-enterprise/plugins](https://www.cloudbees.com/products/jenkins-enterprise/plugins)。
 - en: Jenkins case studies from CloudBees
+  id: totrans-75
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: CloudBees提供的Jenkins案例研究
 - en: We will cover some case studies from CloudBees, where Jenkins is used effectively.
+  id: totrans-76
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将介绍一些CloudBees的案例研究，展示Jenkins的有效使用。
 - en: Apache jclouds
+  id: totrans-77
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: Apache jclouds
 - en: Apache jclouds is an open source multi-cloud toolkit that provides the facility
     to manage workloads on multiple clouds. It was created on the Java platform, and
     provides complete control to use cloud platform-specific features to create and
@@ -365,64 +524,93 @@
     Docker, SoftLayer, Amazon EC2, OpenStack, Rackspace, GoGrid, Azure, and Google.
     Apache jclouds has a remarkable user base such as CloudBees, Jenkins, Cloudify,
     cloudsoft, Twitter, Cloudswitch, enStratus, and so on.
+  id: totrans-78
   prefs: []
   type: TYPE_NORMAL
+  zh: Apache jclouds是一个开源的多云工具包，提供在多个云上管理工作负载的功能。它基于Java平台创建，为用户提供了使用特定云平台功能创建和管理应用程序的完整控制权。它支持跨各种云平台的无缝迁移。Apache
+    jclouds支持30个云提供商和云软件栈，如Joyent、Docker、SoftLayer、Amazon EC2、OpenStack、Rackspace、GoGrid、Azure和Google。Apache
+    jclouds拥有众多知名用户，如CloudBees、Jenkins、Cloudify、cloudsoft、Twitter、Cloudswitch、enStratus等。
 - en: Challenge
+  id: totrans-79
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 挑战
 - en: The jclouds community uses Jenkins CI for continuous integration. Day by day,
     it was getting more difficult to manage and maintain Jenkins, and it was a costly
     affair. Managing Jenkins was a time-consuming and tedious task. Most of the time
     developers were involved in the managing of Jenkins, and not in writing the code
     to make jclouds more effective.
+  id: totrans-80
   prefs: []
   type: TYPE_NORMAL
+  zh: jclouds社区使用Jenkins CI进行持续集成。随着时间的推移，管理和维护Jenkins变得越来越困难，成本也越来越高。管理Jenkins是一项耗时且繁琐的任务。大多数时候，开发者忙于管理Jenkins，而非编写代码以提升jclouds的效率。
 - en: Solution
+  id: totrans-81
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 解决方案
 - en: The jclouds team explored PaaS offerings available in the market and considered
     CloudBees, which will help them to eliminate infrastructure management and maintenance.
     It was recognized by the jclouds team that it is easy to shift the Jenkins CI
     work to DEV@cloud and immediately gain productivity benefits from developers.
     Almost 4 hours were saved weekly from the maintenance activity of Jenkins.
+  id: totrans-82
   prefs: []
   type: TYPE_NORMAL
+  zh: jclouds团队探索了市场上可用的PaaS产品，并考虑了CloudBees，这将帮助他们消除基础设施管理和维护。jclouds团队认识到，将Jenkins
+    CI工作转移到DEV@cloud很容易，并立即从开发者那里获得生产力提升。每周从Jenkins维护活动中节省了近4小时。
 - en: Benefits
+  id: totrans-83
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 优势
 - en: 100% focus on software development, by eliminating activities such as server
     reboots, server sizing, software updates, and patches, as they are automatically
     performed from within the CloudBees service
+  id: totrans-84
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过消除服务器重启、服务器规模调整、软件更新和补丁等自动从CloudBees服务内部执行的活动，实现100%专注于软件开发
 - en: 33% increase in developer productivity
+  id: totrans-85
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 开发者生产力提高了33%
 - en: Technical support from CloudBees for Jenkins CI issues
+  id: totrans-86
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: CloudBees对Jenkins CI问题的技术支持
 - en: To read more about this case study, visit [https://www.cloudbees.com/casestudy/jclouds](https://www.cloudbees.com/casestudy/jclouds).
+  id: totrans-87
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多关于此案例研究的信息，请访问[https://www.cloudbees.com/casestudy/jclouds](https://www.cloudbees.com/casestudy/jclouds)。
 - en: Global Bank
+  id: totrans-88
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 全球银行
 - en: Global Bank is one of the top Global Financial Institutions. It offers corporate
     and investment banking services, private banking services, credit card services
     and investment management. It has a substantial international presence.
+  id: totrans-89
   prefs: []
   type: TYPE_NORMAL
+  zh: 全球银行是全球顶级金融机构之一，提供企业与投资银行服务、私人银行服务、信用卡服务和投资管理。它拥有庞大的国际业务网络。
 - en: Challenge
+  id: totrans-90
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 挑战
 - en: Global Bank's existing process was suffering from a fragmented build process,
     non-approved software versions, and a lack of technical support. There was a pool
     of central control or management, and standardization of the process. Build assets
@@ -432,163 +620,242 @@
     availability of useful plugins. After using open source Jenkins, the financial
     institution faced other challenges that were not available in open source Jenkins.
     More features were needed for approvals, security, backup, and audit.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 全球银行现有的流程正遭受着分散的构建流程、未经批准的软件版本和缺乏技术支持的困扰。缺乏中央控制或管理，以及流程的标准化。构建资产并非始终可访问。需要一个具有审计能力的应用程序构建服务的自动化安全流程。Jenkins提供了标准化，以及其他集中管理的优势，如稳健性和有用的插件的可用性。在使用开源Jenkins后，该金融机构面临了开源Jenkins中不存在的其他挑战。需要更多功能来实现审批、安全、备份和审计。
 - en: Solution
+  id: totrans-92
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 解决方案
 - en: To overcome existing challenges, Global Bank evaluated and selected CloudBees
     Jenkins Enterprise, considering the additional plugins for high availability,
     backup, security, and job organization, and the ability to obtain technical support
     for open source Jenkins and open source Jenkins plugins. Global Bank utilized
     technical support from CloudBees for setting up CloudBees Jenkins Enterprise.
+  id: totrans-93
   prefs: []
   type: TYPE_NORMAL
+  zh: 为了克服现有挑战，全球银行评估并选择了CloudBees Jenkins Enterprise，考虑到其额外的高可用性、备份、安全性和作业组织插件，以及为开源Jenkins和开源Jenkins插件获取技术支持的能力。全球银行利用CloudBees的技术支持来设置CloudBees
+    Jenkins Enterprise。
 - en: Benefits
+  id: totrans-94
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 优势
 - en: RBAC Plugin provides security and additional enterprise-level functionality.
     The Folders plugin offers version control and ensures that only approved software
     versions are shared.
+  id: totrans-95
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: RBAC插件提供安全性和额外的企业级功能。Folders插件提供版本控制，并确保只有经过批准的软件版本被共享。
 - en: Half a day of development time is saved per application, by eliminating the
     need of monitoring the local instance of the build for each application.
+  id: totrans-96
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 通过消除对每个应用程序的本地构建实例进行监控的需求，每个应用程序节省了半天开发时间。
 - en: Availability of technical support capabilities.
+  id: totrans-97
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 技术支持能力的可用性。
 - en: To read more, visit [https://www.cloudbees.com/casestudy/global-bank](https://www.cloudbees.com/casestudy/global-bank).
+  id: totrans-98
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问[https://www.cloudbees.com/casestudy/global-bank](https://www.cloudbees.com/casestudy/global-bank)。
 - en: Service-Flow
+  id: totrans-99
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 服务流程
 - en: Service-Flow provides online integration services, to connect the disparate
     IT service management tools used by organizations and various stakeholders. It
     provides features to create ticket automatically, ticket information exchange,
     and ticket routing. It has adapters for many ITSM tools such as ServiceNow and
     BMC, as well as Microsoft Service Manager Fujitsu, Atos, Efecte, and Tieto.
+  id: totrans-100
   prefs: []
   type: TYPE_NORMAL
+  zh: Service-Flow 提供在线集成服务，以连接组织和各种利益相关者使用的不同 IT 服务管理工具。它提供自动创建票据、票据信息交换和票据路由的功能。它有适用于许多
+    ITSM 工具的适配器，如 ServiceNow 和 BMC，以及 Microsoft Service Manager Fujitsu、Atos、Efecte
+    和 Tieto。
 - en: Challenge
+  id: totrans-101
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 挑战
 - en: Service-Flow wanted to build its own service without using any of the generic
     integration tools for achieving agility. Service-Flow had several requirements,
     such as focus on agility, which required a platform for rapid development and
     frequent incremental updates, support for Jenkins, control over data, reliability,
     and availability.
+  id: totrans-102
   prefs: []
   type: TYPE_NORMAL
+  zh: Service-Flow 希望构建自己的服务，而不使用任何通用集成工具来实现敏捷性。Service-Flow 有多个要求，例如注重敏捷性，这需要一个支持快速开发和频繁增量更新的平台，支持
+    Jenkins，对数据进行控制，可靠性和可用性。
 - en: Solution
+  id: totrans-103
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 解决方案
 - en: Service-Flow used the CloudBees platform to build and deploy its ITSM integration
     service. DEV@cloud has been utilized by establishing the version control repository,
     coding first Java classes, setting up some basic Jenkins jobs, running unit tests,
     executing integration tests, and other quality checks. The Service-Flow service
     is in the cloud with a rapidly growing customer base by adding new features using
     the CloudBees platform.
+  id: totrans-104
   prefs: []
   type: TYPE_NORMAL
+  zh: Service-Flow 使用 CloudBees 平台构建和部署其 ITSM 集成服务。DEV@cloud 已被用于建立版本控制仓库，编写第一个 Java
+    类，设置一些基本的 Jenkins 作业，运行单元测试，执行集成测试以及其他质量检查。Service-Flow 服务在云中，通过使用 CloudBees 平台添加新功能，客户群迅速增长。
 - en: Benefits
+  id: totrans-105
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 好处
 - en: Development time reduced by 50 percent with production release in three months
+  id: totrans-106
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 开发时间减少了 50%，三个月内生产发布
 - en: Updates deployed multiple times a week without service downtime
+  id: totrans-107
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 每周多次部署更新，无需服务停机
 - en: Availability of 99.999 percent achieved in production
+  id: totrans-108
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 生产中实现了 99.999% 的可用性
 - en: To read more, visit [https://www.cloudbees.com/casestudy/service-flow](https://www.cloudbees.com/casestudy/service-flow).
+  id: totrans-109
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多信息，请访问 [https://www.cloudbees.com/casestudy/service-flow](https://www.cloudbees.com/casestudy/service-flow)。
 - en: For more case studies, visit [https://www.cloudbees.com/customers](https://www.cloudbees.com/customers).
+  id: totrans-110
   prefs: []
   type: TYPE_NORMAL
+  zh: 更多案例研究，请访问 [https://www.cloudbees.com/customers](https://www.cloudbees.com/customers)。
 - en: Self-test questions
+  id: totrans-111
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自测问题
 - en: Q1\. What is true about Workflow Plugin provided by CloudBees?
+  id: totrans-112
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. 关于 CloudBees 提供的 Workflow 插件，哪项陈述是正确的？
 - en: To pause and restart jobs, to and from both master and slave failures
+  id: totrans-113
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 从主从故障中暂停和重启作业
 - en: To manage software delivery pipelines
+  id: totrans-114
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 管理软件交付管道
 - en: It uses Groovy DSL for workflows
+  id: totrans-115
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 它使用 Groovy DSL 进行工作流程
 - en: All of the above
+  id: totrans-116
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述所有内容
 - en: Q2\. What are the features of RBAC Plugin provided by CloudBees?
+  id: totrans-117
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. CloudBees 提供的 RBAC 插件有哪些功能？
 - en: To define various security roles
+  id: totrans-118
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 定义各种安全角色
 - en: To assign rules to groups
+  id: totrans-119
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将规则分配给组
 - en: To assign role globally or at an object level
+  id: totrans-120
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 将角色全局分配或对象级别分配
 - en: All of the above
+  id: totrans-121
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述所有内容
 - en: Q3\. What actions can be performed by VMware ESXi/vSphere Auto-Scaling Plugin
     provided by CloudBees?
+  id: totrans-122
   prefs: []
   type: TYPE_NORMAL
+  zh: Q3. CloudBees 提供的 VMware ESXi/vSphere Auto-Scaling 插件可以执行哪些操作？
 - en: Power on
+  id: totrans-123
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 开机
 - en: Power off/suspend
+  id: totrans-124
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 关机/挂起
 - en: Revert to the last snapshot
+  id: totrans-125
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 恢复到最后一个快照
 - en: All of the above
+  id: totrans-126
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 上述所有内容
 - en: Summary
+  id: totrans-127
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: 'The interesting thing about the ending of a chapter is: each chapter that is
     ending leads you to a new beginning. We know how to configure, manage, and use
     Jenkins on Cloud service models such as PaaS, RedHat OpenShift, and CloudBees.
@@ -596,5 +863,9 @@
     a lot of flexibility and value. In the last section, we have all provided details
     on various case studies on how Jenkins proved to be beneficial to a lot of organizations,
     and how they leveraged functionality of Jenkins to gain a competitive edge.'
+  id: totrans-128
   prefs: []
   type: TYPE_NORMAL
+  zh: 关于章节结束的有趣之处在于：每个结束的章节都引领你走向新的开始。我们了解了如何在 PaaS、RedHat OpenShift 和 CloudBees 等云服务模型上配置、管理和使用
+    Jenkins。我们还介绍了一些来自 CloudBees 的有趣的企业插件，这些插件增加了很大的灵活性和价值。在最后一节中，我们提供了关于 Jenkins
+    如何为许多组织带来益处的各种案例研究的详细信息，以及他们如何利用 Jenkins 的功能来获得竞争优势。

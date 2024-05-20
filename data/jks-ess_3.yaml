@@ -1,19 +1,27 @@
 - en: Chapter 3. Integration of Jenkins, SVN, and Build Tools
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第3章 Jenkins、SVN与构建工具的集成
 - en: '|   | *"The barrier to change is not too little caring; it is too much complexity"*
     |   |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *"改变的障碍不是太少关心；而是太多复杂性"* |   |'
 - en: '|   | --*Bill Gates* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*比尔·盖茨* |'
 - en: We have seen how to set up an environment to use Jenkins for continuous integration,
     and we have also configured build tools in Jenkins. The integration of Eclipse
     with SVN will help developers to easily perform operations on repositories.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经了解了如何设置环境以使用Jenkins进行持续集成，并且已经在Jenkins中配置了构建工具。Eclipse与SVN的集成将帮助开发人员轻松执行仓库操作。
 - en: 'Now we are ready to create our first build job for continuous integration.
     This chapter describes in detail how to create and configure build jobs for Java
     applications using build tools such as Ant and Maven; how to run build jobs, unit
@@ -21,35 +29,50 @@
     file or `war` file for deployment, as well as a Dashboard View plugin to provide
     a customized display of build jobs and test results based on preferences. The
     following are the main points which are covered in this chapter:'
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 现在我们准备好为持续集成创建我们的第一个构建作业。本章详细描述了如何使用Ant和Maven等构建工具为Java应用程序创建和配置构建作业；如何运行构建作业、单元测试案例。它涵盖了运行构建以创建用于部署的发行文件或`war`文件的所有方面，以及提供基于偏好的构建作业和测试结果定制显示的仪表板视图插件。以下是本章涵盖的主要点：
 - en: Creating and configuring a build job for a Java application with Ant
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用Ant为Java应用程序创建和配置构建作业
 - en: Creating and configuring a build job for a Java application with Maven
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 使用Maven为Java应用程序创建和配置构建作业
 - en: Build execution with test cases
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 构建执行与测试案例
 - en: Creating and configuring a build job for a Java application with Ant
+  id: totrans-8
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Ant为Java应用程序创建和配置构建作业
 - en: Before creating and configuring a build job for a Java application, we will
     install a Dashboard View plugin to better manage builds, and display the results
     of builds and tests. We have already seen how to create a basic job in [Chapter
     2](ch02.html "Chapter 2. Installation and Configuration of Code Repository and
     Build Tools"), *Installation and Configuration of Code Repository and Build Tools*.
+  id: totrans-9
   prefs: []
   type: TYPE_NORMAL
+  zh: 在为Java应用程序创建和配置构建作业之前，我们将安装一个仪表板视图插件，以更好地管理构建，并显示构建和测试的结果。我们已经在[第2章](ch02.html
+    "第2章 代码仓库和构建工具的安装与配置")，*代码仓库和构建工具的安装与配置*中看到了如何创建基本作业。
 - en: Dashboard View Plugin
+  id: totrans-10
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 仪表板视图插件
 - en: This plugin presents a new view that provides a portal-like view for Jenkins
     build jobs. Download it from [https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View](https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View).
     It is good for showing results and trends. In addition, it also allows the user
@@ -57,60 +80,90 @@
     to the **Manage Jenkins** link and click on **Manage Plugins** and install the
     Dashboard View plugin. Verify the installation by clicking on the **Installed**
     tab.
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: 此插件提供了一个新视图，为Jenkins构建作业提供类似门户的视图。从[https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View](https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View)下载。它适合展示结果和趋势。此外，它还允许用户以有效的方式排列显示项。在Jenkins仪表板上，转到**管理Jenkins**链接，点击**管理插件**并安装Dashboard
+    View插件。通过点击**已安装**标签验证安装。
 - en: '![Dashboard View Plugin](img/3471_03_01.jpg)'
+  id: totrans-12
   prefs: []
   type: TYPE_IMG
+  zh: '![仪表板视图插件](img/3471_03_01.jpg)'
 - en: On the Jenkins dashboard, click on the plus button to create a new view. Provide
     a **View name** and select the type of view; in our case **Dashboard,** then click
     on **OK**.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上，点击加号按钮创建新视图。提供一个**视图名称**并选择视图类型；在我们的例子中是**仪表板**，然后点击**确定**。
 - en: '![Dashboard View Plugin](img/3471_03_02.jpg)'
+  id: totrans-14
   prefs: []
   type: TYPE_IMG
+  zh: '![仪表板视图插件](img/3471_03_02.jpg)'
 - en: 'Provide a **Name** and select **Jobs** that need to be included in the view,
     as shown in the following screenshot:'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: 提供一个**名称**并选择需要在视图中包含的**作业**，如下面的截图所示：
 - en: '![Dashboard View Plugin](img/3471_03_03.jpg)'
+  id: totrans-16
   prefs: []
   type: TYPE_IMG
+  zh: '![仪表板视图插件](img/3471_03_03.jpg)'
 - en: In the View configuration, click on **Add Dashboard Portlet to right column**,
     and select **Test Statistics Grid**. Add **Test Statistics Chart**. This will
     display test results in the form of statistics and chart representations of test
     results.
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: 在视图配置中，点击**右侧栏添加仪表板小部件**，并选择**测试统计网格**。添加**测试统计图**。这将显示以统计和图表形式呈现的测试结果。
 - en: '![Dashboard View Plugin](img/3471_03_04.jpg)'
+  id: totrans-18
   prefs: []
   type: TYPE_IMG
+  zh: '![仪表板视图插件](img/3471_03_04.jpg)'
 - en: Creating and configuring a build job for a Java application
+  id: totrans-19
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 为Java应用程序创建和配置构建作业
 - en: Click on **New Item** on the dashboard to create a new build for a Java application
     which uses Ant as a build tool. Enter **Item name**, and select **Freestyle project**.
     Click **OK**.
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: 在仪表板上点击**新建项**以创建一个使用Ant作为构建工具的Java应用程序的新构建。输入**项名称**，并选择**自由风格项目**。点击**确定**。
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_05.jpg)'
+  id: totrans-21
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_05.jpg)'
 - en: It will open the configuration for a new build job. In **Source Code Management**,
     select **Subversion**. Provide the **Repository URL** and **Credentials**. In
     [Chapter 2](ch02.html "Chapter 2. Installation and Configuration of Code Repository
     and Build Tools"), *Installation and Configuration of Code Repository and Build
     Tools*, we installed Subversion and also added the source code to SVN.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 它将打开新构建作业的配置。在**源代码管理**中，选择**Subversion**。提供**仓库URL**和**凭证**。在[第2章](ch02.html
+    "第2章. 代码仓库和构建工具的安装与配置")中，我们安装了Subversion并将源代码添加到了SVN。
 - en: Provide the URL you use in your browser to access the source code repository.
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 提供您在浏览器中用于访问源代码仓库的URL。
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_06.jpg)'
+  id: totrans-24
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_06.jpg)'
 - en: If **Credentials** are not available in the box, click on the **Add** button.
     Provide **Scope**, **Username**, **Password**, and **Description**, and click
     on **Add** to make it available on the list box available in the build job configuration.
@@ -119,28 +172,40 @@
     better confidentiality than global scope. Global scope credentials are available
     to the object with which the credential is associated and all objects that are
     children of that object.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果框中没有**凭证**，请点击**添加**按钮。提供**范围**、**用户名**、**密码**和**描述**，然后点击**添加**以使其在构建作业配置中的列表框中可用。**范围**决定凭证可以在哪里使用。例如，系统范围将凭证的使用限制在与凭证关联的对象上。它比全局范围提供更好的保密性。全局范围的凭证对与凭证关联的对象及其所有子对象可用。
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_07.jpg)'
+  id: totrans-26
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_07.jpg)'
 - en: In the build job configuration, go to the **Build Triggers** section and select
     the **Poll SCM** radio button. Provide the schedule detail in the *** * * * ***
     form, as shown in the following figure. It will poll the repository every minute
     to verify changes committed into the repository by developers.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 在构建作业配置中，转到**构建触发器**部分并选择**轮询SCM**单选按钮。在*** * * * ***格式中提供计划详细信息，如图所示。它将每分钟轮询仓库以验证开发人员提交到仓库的更改。
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_08.jpg)'
+  id: totrans-28
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_08.jpg)'
 - en: The **Schedule** field follows cron syntax, MINUTE HOUR Day Of the Month MONTH
     Day Of the Week.
+  id: totrans-29
   prefs: []
   type: TYPE_NORMAL
+  zh: '**计划**字段遵循cron语法，即分钟 小时 日 月 星期。'
 - en: For example, H * * * * to poll once per hour, H/15 * * * * to poll every fifteen
     minutes.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 例如，H * * * * 表示每小时轮询一次，H/15 * * * * 表示每十五分钟轮询一次。
 - en: Once **Build Triggers** and **Source Code Management** configurations are completed,
     we need to provide build tool-related details, so Jenkins can use them to execute
     once the build is triggered. Click on the **Add build step** and select **Invoke
@@ -148,247 +213,371 @@
     "Chapter 2. Installation and Configuration of Code Repository and Build Tools"),
     *Installation and Configuration of Code Repository and Build Tools* and provide
     **Targets** with the name you want to execute from the build.
+  id: totrans-31
   prefs: []
   type: TYPE_NORMAL
+  zh: 完成**构建触发器**和**源代码管理**配置后，我们需要提供与构建工具相关的详细信息，以便Jenkins在构建触发时可以使用它们来执行。点击**添加构建步骤**并选择**调用Ant**。从下拉菜单中，选择在[第2章](ch02.html
+    "第2章. 代码仓库和构建工具的安装与配置")中配置的Ant，即*代码仓库和构建工具的安装与配置*，并提供您希望从构建中执行的**目标**名称。
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_09.jpg)'
+  id: totrans-32
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_09.jpg)'
 - en: Click on the **Apply** and **Save** buttons to finalize the configuration. Click
     on the **Build Now** button on the Jenkins dashboard. It will check out all the
     latest available code in the source code repository against the local workspace
     on the machine where Jenkins is installed, as shown in the following figure. In
     the **build history** section of a specific job, click on **build number**, and
     then click on **Console Output**.
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击**应用**和**保存**按钮以完成配置。在Jenkins仪表板上点击**立即构建**按钮。它将检查源代码仓库中所有最新的可用代码，并与安装Jenkins的机器上的本地工作区进行对比，如图所示。在特定作业的**构建历史**部分，点击**构建编号**，然后点击**控制台输出**。
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_10.jpg)'
+  id: totrans-34
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_10.jpg)'
 - en: 'Once the checkout process is completed, the build file execution, based on
     the targets, will start, and the build execution will be successful if all dependencies
     and files required for the build execution are available in the local workspace,
     as shown in the following figure:'
+  id: totrans-35
   prefs: []
   type: TYPE_NORMAL
+  zh: 一旦检出过程完成，根据目标执行构建文件，如果本地工作区中所有构建执行所需的依赖项和文件都可用，则构建执行将成功，如图所示：
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_11.jpg)'
+  id: totrans-36
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_11.jpg)'
 - en: To verify the local workspace, go to the view you created, select **build job**
     and then click on **Workspace**. Verify that all files and folders are available,
     as provided by the source code repository.
+  id: totrans-37
   prefs: []
   type: TYPE_NORMAL
+  zh: 要验证本地工作区，请转到您创建的视图，选择**构建作业**，然后点击**工作区**。验证所有文件和文件夹是否都可用，如源代码仓库所提供。
 - en: '![Creating and configuring a build job for a Java application](img/3471_03_12.jpg)'
+  id: totrans-38
   prefs: []
   type: TYPE_IMG
+  zh: '![为Java应用程序创建和配置构建作业](img/3471_03_12.jpg)'
 - en: Creating and configuring a build job for a Java application with Maven
+  id: totrans-39
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 使用Maven为Java应用程序创建和配置构建作业
 - en: Click on **New Item** on the dashboard to create a new build for a Java application
     which uses Maven as a build tool. Enter the **Item name** and select **Maven project**
     from the list.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 在仪表板上点击**新建项目**，为使用Maven作为构建工具的Java应用程序创建新的构建。输入**项目名称**并从列表中选择**Maven项目**。
 - en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_13.jpg)'
+  id: totrans-41
   prefs: []
   type: TYPE_IMG
+  zh: '![使用Maven为Java应用程序创建和配置构建作业](img/3471_03_13.jpg)'
 - en: It will open the configuration for the new build job. In **Source Code Management**,
     select **Subversion**. Provide **Repository URL** and **Credentials**. In [Chapter
     2](ch02.html "Chapter 2. Installation and Configuration of Code Repository and
     Build Tools"), *Installation and Configuration of Code Repository and Build Tools*
     we installed **Subversion**, and added the source code to SVN.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 它将打开新构建作业的配置。在**源代码管理**中，选择**Subversion**。提供**仓库URL**和**凭证**。在[第2章](ch02.html
+    "第2章 代码仓库和构建工具的安装与配置")，*代码仓库和构建工具的安装与配置*中，我们安装了**Subversion**，并将源代码添加到SVN。
 - en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_14.jpg)'
+  id: totrans-43
   prefs: []
   type: TYPE_IMG
+  zh: '![使用Maven为Java应用程序创建和配置构建作业](img/3471_03_14.jpg)'
 - en: In the build job configuration, go to the **Build Triggers** section and select
     the **Poll SCM** radio button. Provide the schedule detail in *** * * * *** form,
     as shown in following figure. It will poll the repository every minute to verify
     changes committed into the repository by developers. Add the Maven build step.
     Provide the name of the build file; by default it is `pom.xml`. Provide **Goals
     and Options** and, if you keep it empty, then it will execute the default goal.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 在构建作业配置中，转到**构建触发器**部分并选择**轮询SCM**单选按钮。按照*** * * * ***格式提供计划详细信息，如图所示。它将每分钟轮询仓库以验证开发人员提交到仓库的更改。添加Maven构建步骤。提供构建文件的名称；默认情况下是`pom.xml`。提供**目标和选项**，如果留空，则将执行默认目标。
 - en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_15.jpg)'
+  id: totrans-45
   prefs: []
   type: TYPE_IMG
+  zh: '![使用Maven为Java应用程序创建和配置构建作业](img/3471_03_15.jpg)'
 - en: Click on **Build Now** to execute the build job or commit the updated code to
     the repository, and the build will be executed automatically based on our configuration
     in **Build Triggers**.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击**立即构建**以执行构建作业或提交更新的代码到仓库，构建将根据我们在**构建触发器**中的配置自动执行。
 - en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_16.jpg)'
+  id: totrans-47
   prefs: []
   type: TYPE_IMG
+  zh: '![使用Maven为Java应用程序创建和配置构建作业](img/3471_03_16.jpg)'
 - en: It will check out all the latest available code in the source code repository
     against the local workspace on the machine where Jenkins is installed, as shown
     in the following figure.
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 它将针对安装Jenkins的机器上的本地工作区，检出源代码仓库中所有最新的可用代码，如下所示。
 - en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_17.jpg)'
+  id: totrans-49
   prefs: []
   type: TYPE_IMG
+  zh: '![使用Maven为Java应用程序创建和配置构建作业](img/3471_03_17.jpg)'
 - en: Once the checkout process is completed, the build file execution based on the
     goals will start, and the build execution will be successful if all dependencies
     and files required for the build execution are available in the local workspace,
     as shown in the following figure.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 结账过程完成后，将根据目标启动构建文件执行，如果构建执行所需的所有依赖项和文件都可在本地工作区中获得，则构建执行将成功，如下所示。
 - en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_18.jpg)'
+  id: totrans-51
   prefs: []
   type: TYPE_IMG
+  zh: '![使用Maven为Java应用程序创建和配置构建作业](img/3471_03_18.jpg)'
 - en: Build execution with test cases
+  id: totrans-52
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 构建执行与测试案例
 - en: Jenkins allows JUnit-format test results to be published on the dashboard. We
     need not install any specific plugin for this. If we have test cases already written
     in JUnit, then it is easy to execute them. Make sure to create a goal or task
     in the build file for test case execution. In Build Job configuration, click on
     **Post-build Actions** and select **Publish JUnit test result report**. Provide
     the location for the **Test report XMLs** files and save the build job configuration.
+  id: totrans-53
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins允许在仪表板上发布JUnit格式的测试结果。我们无需为此安装任何特定插件。如果我们已有用JUnit编写的测试案例，则执行它们很容易。确保在构建文件中为测试案例执行创建目标或任务。在构建作业配置中，点击**构建后操作**并选择**发布JUnit测试结果报告**。提供**测试报告XMLs**文件的位置并保存构建作业配置。
 - en: '![Build execution with test cases](img/3471_03_19.jpg)'
+  id: totrans-54
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_19.jpg)'
 - en: Execute the build by clicking on **Build Now**. Once the build has finished,
     click on the **Test Result** link on the dashboard.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过点击**立即构建**来执行构建。构建完成后，点击仪表板上的**测试结果**链接。
 - en: '![Build execution with test cases](img/3471_03_20.jpg)'
+  id: totrans-56
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_20.jpg)'
 - en: Click on the package link to get detailed test results on the summary page.
+  id: totrans-57
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击包链接以在摘要页面上获取详细的测试结果。
 - en: '![Build execution with test cases](img/3471_03_21.jpg)'
+  id: totrans-58
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_21.jpg)'
 - en: Click on the class link to get detailed test results on the page.
+  id: totrans-59
   prefs: []
   type: TYPE_NORMAL
+  zh: 点击类链接以在页面上获取详细的测试结果。
 - en: '![Build execution with test cases](img/3471_03_22.jpg)'
+  id: totrans-60
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_22.jpg)'
 - en: 'Verify all tests name, the duration, and the status, as shown in the following
     figure:'
+  id: totrans-61
   prefs: []
   type: TYPE_NORMAL
+  zh: 验证所有测试名称、持续时间和状态，如下所示：
 - en: '![Build execution with test cases](img/3471_03_23.jpg)'
+  id: totrans-62
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_23.jpg)'
 - en: Verify by clicking on the individual link of each test case on the Jenkins dashboard.
+  id: totrans-63
   prefs: []
   type: TYPE_NORMAL
+  zh: 通过点击Jenkins仪表板上每个测试案例的单独链接进行验证。
 - en: '![Build execution with test cases](img/3471_03_24.jpg)'
+  id: totrans-64
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_24.jpg)'
 - en: We have already configured the Dashboard View plugin to display the Test Statistics
     Chart and the Test Trend Chart.
+  id: totrans-65
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已配置仪表板视图插件以显示测试统计图和测试趋势图。
 - en: Verify the number of successful, failed or skipped tests, as well as the percentage
     on the customized view, as shown in the following screenshot.
+  id: totrans-66
   prefs: []
   type: TYPE_NORMAL
+  zh: 验证自定义视图中的成功、失败或跳过测试的数量及百分比，如下所示。
 - en: '![Build execution with test cases](img/3471_03_25.jpg)'
+  id: totrans-67
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_25.jpg)'
 - en: Verify the Test Trend Chart on the Dashboard View.
+  id: totrans-68
   prefs: []
   type: TYPE_NORMAL
+  zh: 在仪表板视图中验证测试趋势图。
 - en: '![Build execution with test cases](img/3471_03_26.jpg)'
+  id: totrans-69
   prefs: []
   type: TYPE_IMG
+  zh: '![构建执行与测试案例](img/3471_03_26.jpg)'
 - en: Self-test questions
+  id: totrans-70
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自测问题
 - en: Q1\. What is the objective of installing the Dashboard View plugin?
+  id: totrans-71
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. 安装仪表板视图插件的目的是什么？
 - en: To have a portal-like view for Jenkins build jobs
+  id: totrans-72
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 为Jenkins构建作业提供类似门户的视图
 - en: To run test cases related to Jenkins build jobs
+  id: totrans-73
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 运行与Jenkins构建作业相关的测试案例
 - en: To display build results
+  id: totrans-74
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 显示构建结果
 - en: Q2\. Which are the fields available to create credentials for SVN?
+  id: totrans-75
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. 为SVN创建凭据时可用的字段有哪些？
 - en: '**Scope**, **Username**, **Password**, **Description**'
+  id: totrans-76
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**范围**、**用户名**、**密码**、**描述**'
 - en: '**Scope**, **Username**, **Password**'
+  id: totrans-77
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**范围**、**用户名**、**密码**'
 - en: '**Username**, **Password**, **Description**'
+  id: totrans-78
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '**用户名**、**密码**、**描述**'
 - en: Q3\. What is the meaning of * * * * * in the **Schedule of Build Trigger** section?
+  id: totrans-79
   prefs: []
   type: TYPE_NORMAL
+  zh: Q3. **构建触发器计划**部分中的*****是什么意思？
 - en: Poll SCM Every Day
+  id: totrans-80
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每日轮询SCM
 - en: Poll SCM Every Hour
+  id: totrans-81
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每小时轮询SCM
 - en: Poll SCM Every Minute
+  id: totrans-82
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每分钟轮询SCM
 - en: Poll SCM Every Second
+  id: totrans-83
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 每秒轮询SCM
 - en: Q4\. What are the names of build files in Ant and Maven respectively?
+  id: totrans-84
   prefs: []
   type: TYPE_NORMAL
+  zh: 问题4：Ant和Maven的构建文件名称分别是什么？
 - en: '`pom.xml`, `build.xml`'
+  id: totrans-85
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`pom.xml`, `build.xml`'
 - en: '`build.xml`, `pom.xml`'
+  id: totrans-86
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`build.xml`, `pom.xml`'
 - en: '`pom.xml`, `root.xml`'
+  id: totrans-87
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`pom.xml`, `root.xml`'
 - en: '`ant.xml`, `maven.xml`'
+  id: totrans-88
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: '`ant.xml`, `maven.xml`'
 - en: Summary
+  id: totrans-89
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: We are again at the part of the chapter that gives us a sense of achievement.
     In this chapter, we have covered how to customize the Jenkins dashboard and display
     test results based on the build job on the dashboard. We have also created our
     first build job for a sample Java application. We used build tools such as Ant
     and Maven for executing build and create artifacts. Finally, we have seen how
     test cases can be executed, and results can be displayed on the Jenkins portal.
+  id: totrans-90
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们再次来到本章中令人感到成就感的部分。在本章中，我们学习了如何定制Jenkins仪表板，并根据构建作业在仪表板上展示测试结果。我们还为示例Java应用程序创建了第一个构建作业。我们使用了Ant和Maven等构建工具来执行构建并创建构件。最后，我们了解了如何执行测试用例，并在Jenkins门户上显示结果。
 - en: In the next chapter, we will deploy the application to application server directly
     from Jenkins, and we will also cover an introduction to deploying applications
     on Amazon Web Services.
+  id: totrans-91
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将直接从Jenkins部署应用程序到应用服务器，并介绍在亚马逊网络服务上部署应用程序的入门知识。

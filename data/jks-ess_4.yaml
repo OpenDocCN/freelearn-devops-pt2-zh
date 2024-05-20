@@ -1,252 +1,369 @@
 - en: Chapter 4. Implementing Automated Deployment
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 第4章 实施自动化部署
 - en: '|   | *Simplicity is prerequisite for reliability* |   |'
+  id: totrans-1
   prefs: []
   type: TYPE_TB
+  zh: '|   | *简洁是可靠性的前提* |   |'
 - en: '|   | --*Edsger Dijkstra* |'
+  id: totrans-2
   prefs: []
   type: TYPE_TB
+  zh: '|   | --*艾兹格·迪科斯彻* |'
 - en: We have covered the concept of continuous integration, and we also know how
     to implement it using Jenkins. Now is the time to move to the next step in the
     application deployment pipeline, that is automated deployment. We will first understand
     the concept of continuous delivery and continuous deployment, before automated
     deployment into a Tomcat application server.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们已经介绍了持续集成的概念，并了解了如何使用Jenkins实现它。现在是时候迈向应用程序部署管道的下一步，即自动化部署。在将应用程序自动化部署到Tomcat应用服务器之前，我们将首先理解持续交付和持续部署的概念。
 - en: This chapter will take one step forward in the deployment pipeline by deploying
     artifacts in a local or remote application server. It will give an insight into
     the automated deployment and continuous delivery process.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: 本章将通过在本地或远程应用服务器上部署制品，进一步推进部署管道。它将深入了解自动化部署和持续交付流程。
 - en: Overview of continuous delivery and continuous deployment
+  id: totrans-5
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 持续交付与持续部署概述
 - en: Deploying a file from Jenkins to a Tomcat server
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 从Jenkins向Tomcat服务器部署文件
 - en: An overview of continuous delivery and continuous deployment
+  id: totrans-7
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 持续交付与持续部署概述
 - en: Continuous delivery is the extension of Continuous Integration practices. Application
     artifacts are production-ready in automated fashion but not deployed in production.
     Continuous deployment is the extension of continuous delivery, where changes in
     the application are finally deployed in production. Continuous delivery is a must
     for DevOps practices. Let's understand how to deploy application artifacts using
     Jenkins in the following sections.
+  id: totrans-8
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续交付是持续集成实践的延伸。应用程序制品以自动化方式达到生产就绪状态，但并未部署到生产环境中。持续部署是持续交付的延伸，其中应用程序的变更最终部署到生产环境中。持续交付是DevOps实践的必备条件。接下来我们将了解如何使用Jenkins部署应用程序制品。
 - en: Note
+  id: totrans-9
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: 'For more details on continuous delivery and continuous deployment, visit:'
+  id: totrans-10
   prefs: []
   type: TYPE_NORMAL
+  zh: 欲了解更多关于持续交付和持续部署的详情，请访问：
 - en: '[http://continuousdelivery.com/2010/08/continuous-delivery-vs-continuous-deployment/](http://continuousdelivery.com/2010/08/continuous-delivery-vs-continuous-deployment/)'
+  id: totrans-11
   prefs: []
   type: TYPE_NORMAL
+  zh: '[持续交付与持续部署对比](http://continuousdelivery.com/2010/08/continuous-delivery-vs-continuous-deployment/)'
 - en: '[http://martinfowler.com/books/continuousDelivery.html](http://martinfowler.com/books/continuousDelivery.html)'
+  id: totrans-12
   prefs: []
   type: TYPE_NORMAL
+  zh: '[持续交付书籍](http://martinfowler.com/books/continuousDelivery.html)'
 - en: Installing Tomcat
+  id: totrans-13
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 安装Tomcat
 - en: Tomcat is an open source web server and servlet container developed by the **Apache
     Software Foundation** (**ASF**). We will use Tomcat to deploy web applications.
+  id: totrans-14
   prefs: []
   type: TYPE_NORMAL
+  zh: Tomcat是由**Apache软件基金会**（**ASF**）开发的开源Web服务器和Servlet容器。我们将使用Tomcat来部署Web应用程序。
 - en: Go to [https://tomcat.apache.org](https://tomcat.apache.org) and download Tomcat.
     Extract all the files to a relevant folder in your system.
+  id: totrans-15
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 访问[Tomcat官网](https://tomcat.apache.org)并下载Tomcat。将所有文件解压到系统中的相关文件夹。
 - en: Change the port number in `conf/server.xml` from `8080` to `9999`.
+  id: totrans-16
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在`conf/server.xml`中将端口号从`8080`更改为`9999`。
 - en: '[PRE0]'
+  id: totrans-17
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: Open the terminal or Command Prompt based on your operating system. Go to the
     `tomcat` directory. Go to the `bin` folder, and run `startup.bat` or `startup.sh`.
     The following is an example of `startup.bat` on Windows.![Installing Tomcat](img/3471_04_01.jpg)
+  id: totrans-18
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 根据您的操作系统，打开终端或命令提示符。转到`tomcat`目录。转到`bin`文件夹，并运行`startup.bat`或`startup.sh`。以下是在Windows上运行`startup.bat`的示例。![安装Tomcat](img/3471_04_01.jpg)
 - en: Open your browser and visit `http://localhost:9999`. We can also access the
     Tomcat home page by using the IP address `http://<IP address>:9999`.![Installing
     Tomcat](img/3471_04_02.jpg)
+  id: totrans-19
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 打开浏览器并访问`http://localhost:9999`。我们也可以通过IP地址`http://<IP地址>:9999`访问Tomcat主页。![安装Tomcat](img/3471_04_02.jpg)
 - en: Deploying a war file from Jenkins to Tomcat
+  id: totrans-20
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 从Jenkins向Tomcat部署war文件
 - en: We will use the Deploy plugin available at [https://wiki.jenkins-ci.org/x/CAAjAQ](https://wiki.jenkins-ci.org/x/CAAjAQ)
     to deploy a `war` file into a specific container.
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们将使用[Jenkins部署插件](https://wiki.jenkins-ci.org/x/CAAjAQ)将`war`文件部署到特定容器中。
 - en: The Deploy plugin takes the `war`/`ear` file, and deploys it to a running local
     or remote application server at the end of a build.
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: 部署插件会获取`war`/`ear`文件，并在构建结束时将其部署到本地或远程运行的应用程序服务器上。
 - en: 'It supports the following containers:'
+  id: totrans-23
   prefs: []
   type: TYPE_NORMAL
+  zh: 它支持以下容器：
 - en: 'Tomcat: 4.x/5.x/6.x/7.x'
+  id: totrans-24
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 'Tomcat: 4.x/5.x/6.x/7.x'
 - en: 'JBoss: 3.x/4.x'
+  id: totrans-25
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 'JBoss: 3.x/4.x'
 - en: 'Glassfish: 2.x/3.x'
+  id: totrans-26
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 'Glassfish: 2.x/3.x'
 - en: To deploy a `war` file in a `Websphere` container, use the Deploy WebSphere
     plugin available at [https://wiki.jenkins-ci.org/x/UgCkAg](https://wiki.jenkins-ci.org/x/UgCkAg).
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在`Websphere`容器中部署`war`文件，请使用[https://wiki.jenkins-ci.org/x/UgCkAg](https://wiki.jenkins-ci.org/x/UgCkAg)上提供的Deploy
+    WebSphere插件。
 - en: To deploy a `war` file in a `Weblogic` container, use the WebLogic Deployer
     plugin available at [https://wiki.jenkins-ci.org/x/q4ahAw](https://wiki.jenkins-ci.org/x/q4ahAw).
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 要在`Weblogic`容器中部署`war`文件，请使用[https://wiki.jenkins-ci.org/x/q4ahAw](https://wiki.jenkins-ci.org/x/q4ahAw)上提供的WebLogic
+    Deployer插件。
 - en: On the Jenkins dashboard, go to the **Manage Jenkins** link and then click on
     **Manage Plugins** and install **Deploy plugin**.![Deploying a war file from Jenkins
     to Tomcat](img/3471_04_03.jpg)
+  id: totrans-29
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在Jenkins仪表板上，前往**管理Jenkins**链接，然后点击**管理插件**并安装**Deploy plugin**。![从Jenkins部署war文件到Tomcat](img/3471_04_03.jpg)
 - en: Wait until the installation of **Deploy Plugin** is complete.![Deploying a war
     file from Jenkins to Tomcat](img/3471_04_04.jpg)
+  id: totrans-30
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 等待**Deploy Plugin**安装完成。![从Jenkins部署war文件到Tomcat](img/3471_04_04.jpg)
 - en: Go to the Jenkins dashboard and select any build job. Click on the **Configure**
     link of the selected build job.
+  id: totrans-31
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 前往Jenkins仪表板并选择任何构建作业。点击所选构建作业的**配置**链接。
 - en: Click on the **Add post-build action** button on the configuration page of the
     relevant job and select **Deploy war/ear to container,** as shown in the following
     figure.![Deploying a war file from Jenkins to Tomcat](img/3471_04_05.jpg)
+  id: totrans-32
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在相关作业的配置页面上点击**添加构建后操作**按钮，并选择**Deploy war/ear to container**，如图所示。![从Jenkins部署war文件到Tomcat](img/3471_04_05.jpg)
 - en: It will add **Deploy war/ear to a container** in the **Post-build Actions**
     section. Provide a **war** file path that is relative to the workspace, and select
     **Tomcat 7.x** as the container from the available list box, as shown in the following
     figure.![Deploying a war file from Jenkins to Tomcat](img/3471_04_06.jpg)
+  id: totrans-33
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在**构建后操作**部分添加**Deploy war/ear to a container**。提供一个相对于工作空间的**war**文件路径，并从可用列表框中选择**Tomcat
+    7.x**作为容器，如图所示。![从Jenkins部署war文件到Tomcat](img/3471_04_06.jpg)
 - en: 'Provide **Manager user name** and **Manager password**; in `tomcat-users.xml`,
     and uncomment the following:'
+  id: totrans-34
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 提供**管理器用户名**和**管理器密码**；在`tomcat-users.xml`中，并取消以下内容的注释：
 - en: '[PRE1]'
+  id: totrans-35
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE1]'
 - en: 'Add the following in the uncommented section:'
+  id: totrans-36
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 在未注释的部分添加以下内容：
 - en: '[PRE2]'
+  id: totrans-37
   prefs:
   - PREF_IND
   type: TYPE_PRE
+  zh: '[PRE2]'
 - en: Restart Tomcat, visit `http://localhost:9999/manager/html`, and enter a username
     and password. Use the same username and password in Jenkins for Manager credentials.![Deploying
     a war file from Jenkins to Tomcat](img/3471_04_07.jpg)
+  id: totrans-38
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 重启Tomcat，访问`http://localhost:9999/manager/html`，并输入用户名和密码。在Jenkins中使用相同的用户名和密码作为管理器凭证。![从Jenkins部署war文件到Tomcat](img/3471_04_07.jpg)
 - en: Click on **Build Now**.![Deploying a war file from Jenkins to Tomcat](img/3471_04_08.jpg)
+  id: totrans-39
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 点击**立即构建**。![从Jenkins部署war文件到Tomcat](img/3471_04_08.jpg)
 - en: Once the build is complete, verify the console output of the deployment of the
     application in the Tomcat application server.![Deploying a war file from Jenkins
     to Tomcat](img/3471_04_09.jpg)
+  id: totrans-40
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 构建完成后，验证Tomcat应用服务器中应用程序部署的控制台输出。![从Jenkins部署war文件到Tomcat](img/3471_04_09.jpg)
 - en: Verify the `webapps` directory in the Tomcat installation directory.![Deploying
     a war file from Jenkins to Tomcat](img/3471_04_10.jpg)
+  id: totrans-41
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 验证Tomcat安装目录中的`webapps`目录。![从Jenkins部署war文件到Tomcat](img/3471_04_10.jpg)
 - en: Verify the Tomcat manager, and check the status of an application in the Tomcat
     application server.![Deploying a war file from Jenkins to Tomcat](img/3471_04_11.jpg)
+  id: totrans-42
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 验证Tomcat管理器，并检查Tomcat应用服务器中应用的状态。![从Jenkins部署war文件到Tomcat](img/3471_04_11.jpg)
 - en: If the Tomcat server is installed on a remote server, then use the IP address
     in the Tomcat URL, as shown in the following figure:![Deploying a war file from
     Jenkins to Tomcat](img/3471_04_12.jpg)
+  id: totrans-43
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 如果Tomcat服务器安装在远程服务器上，则在Tomcat URL中使用IP地址，如图所示：![从Jenkins部署war文件到Tomcat](img/3471_04_12.jpg)
 - en: We only need to change the Tomcat URL in case of remote deployment.
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们只需在远程部署时更改Tomcat URL。
 - en: Self-test questions
+  id: totrans-45
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 自测题
 - en: Q1\. Continuous delivery and continuous deployment are the same.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: Q1. 持续交付和持续部署是相同的。
 - en: 'True'
+  id: totrans-47
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 正确
 - en: 'False'
+  id: totrans-48
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 错误
 - en: Q2\. How do you enable Tomcat manager access?
+  id: totrans-49
   prefs: []
   type: TYPE_NORMAL
+  zh: Q2. 如何启用Tomcat管理器访问？
 - en: Start Tomcat
+  id: totrans-50
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 启动Tomcat
 - en: Modify `server.xml`
+  id: totrans-51
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改`server.xml`
 - en: Modify `tomcat-users.xml`
+  id: totrans-52
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改`tomcat-users.xml`
 - en: Modify `web.xml`
+  id: totrans-53
   prefs:
   - PREF_OL
   type: TYPE_NORMAL
+  zh: 修改`web.xml`
 - en: Summary
+  id: totrans-54
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 总结
 - en: Well done! We are at the end of the chapter; let's summarize what we have covered.
     We have understood the concept of continuous delivery and continuous deployment.
     The main concept we have covered here is the deployment of application artifacts
     in the specific application server after the build is successful.
+  id: totrans-55
   prefs: []
   type: TYPE_NORMAL
+  zh: 做得好！我们已到达本章末尾；让我们总结一下所涵盖的内容。我们已经理解了持续交付和持续部署的概念。我们在这里主要探讨的是，在构建成功后，将应用程序工件部署到特定的应用程序服务器上。
 - en: In the next chapter, we will learn how to manage Jenkins on Cloud, and look
     at some case studies.
+  id: totrans-56
   prefs: []
   type: TYPE_NORMAL
+  zh: 在下一章中，我们将学习如何在云上管理Jenkins，并探讨一些案例研究。

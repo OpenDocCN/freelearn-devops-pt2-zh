@@ -1,7 +1,9 @@
 - en: Preface
+  id: totrans-0
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 前言
 - en: DevOps is a buzz word in 2015 and will be for the coming years as per market
     trends by various research firms. In DevOps culture, business owners, development
     teams, operations teams, and QA teams collaborate to deliver outcome in a continuous
@@ -13,8 +15,10 @@
     and maintenance releases. It improves efficiency, security, reliability, predictability,
     and faster development and deployment cycles. It covers all SDLC phases from development,
     test, operations, and release.
+  id: totrans-1
   prefs: []
   type: TYPE_NORMAL
+  zh: DevOps是2015年的热门词汇，并且根据多家研究机构的市场趋势预测，未来几年仍将如此。在DevOps文化中，业务所有者、开发团队、运维团队和QA团队协同工作，以持续且高效的方式交付成果。它使组织能够更快地抓住机遇，并缩短将客户反馈纳入新功能开发或创新的时间。DevOps的最终目标是缩短从初始概念到以生产就绪应用程序形式呈现的概念结果之间的时间。DevOps关注应用程序交付、新功能开发、错误修复、测试和维护版本。它提高了效率、安全性、可靠性、可预测性以及更快的开发和部署周期。它涵盖了从开发、测试、运维到发布的所有SDLC阶段。
 - en: Continuous integration (CI) and continuous delivery (CD) are a significant part
     of the DevOps culture. Jenkins is a fully featured technology platform that enables
     users to implement CI and CD. This helps users to deliver better applications
@@ -30,8 +34,11 @@
     deployment processes, rather than worrying about manual processes. It can be used
     to build freestyle software projects based on Apache Ant and Maven 2 / Maven 3
     projects. It can also execute Windows batch commands and shell scripts.
+  id: totrans-2
   prefs: []
   type: TYPE_NORMAL
+  zh: 持续集成（CI）和持续交付（CD）是DevOps文化的重要组成部分。Jenkins是一个功能全面的技术平台，使用户能够实施CI和CD。这有助于用户通过自动化应用程序交付生命周期来提供更好的应用程序。CI包括构建、测试和打包过程的自动化。CD包括跨不同环境的应用程序交付管道。Jenkins使用户能够在敏捷环境中为软件开发利用持续集成服务。持续集成系统是敏捷团队的重要组成部分，因为它们有助于强化敏捷开发的原理。持续集成是DevOps文化的重要组成部分，因此，许多开源和商业的持续交付工具都利用Jenkins或提供集成点。Jenkins使敏捷团队能够专注于工作和创新，通过自动化构建、制品管理和部署过程，而不是担心手动过程。它可以用于基于Apache
+    Ant和Maven 2 / Maven 3项目的自由风格软件项目构建。它还可以执行Windows批处理命令和shell脚本。
 - en: There are a number of ways to install Jenkins, and it can be used across different
     platforms such as Windows and Linux. Jenkins is available in the form of native
     packages of Windows, FreeBSD, OpenBSD, Red Hat, Fedora, CentOS, Ubuntu, Debian,
@@ -45,64 +52,92 @@
     and user management (that is, Active Directory Plugin and Github OAuth Plugin),
     cluster management and distributed build (that is, Amazon EC2 Plugin and Azure
     Slave Plugin), and so on.
+  id: totrans-3
   prefs: []
   type: TYPE_NORMAL
+  zh: 安装Jenkins有多种方式，并且可以在不同的平台上使用，如Windows和Linux。Jenkins以Windows、FreeBSD、OpenBSD、Red
+    Hat、Fedora、CentOS、Ubuntu、Debian、Mac OS X、openSUSE、Solaris、OpenIndiana、Gentoo的原生包形式提供，或者以WAR文件的形式提供。使用Jenkins最快捷简便的方式是使用WAR文件。它可以通过使用插件轻松定制。有各种类型的插件可根据特定需求定制Jenkins。插件类别包括源代码管理（例如，Git插件、CVS插件、Bazaar插件）、构建触发器（例如，加速构建现在插件和构建流插件）、构建报告（例如，代码扫描器插件和磁盘使用插件）、身份验证和用户管理（例如，活动目录插件和Github
+    OAuth插件）、集群管理和分布式构建（例如，亚马逊EC2插件和Azure从属插件）等。
 - en: Jenkins is very popular among its users as it allows them to manage and control
     phases such as build, test, package, and static code analysis. It has won InfoWorld
     Bossies Award, 2011; O'Reilly Open Source Award, 2011; ALM&SCM; and so on. The
     main users of Jenkins are NASA, Linkedin, eBay, and Mozilla Foundation.
+  id: totrans-4
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins因其允许用户管理和控制构建、测试、打包和静态代码分析等阶段而深受用户欢迎。它赢得了2011年InfoWorld Bossies奖、2011年O'Reilly开源奖、ALM&SCM等奖项。Jenkins的主要用户包括NASA、Linkedin、eBay和Mozilla基金会。
 - en: 'The following are some features that make Jenkins very popular:'
+  id: totrans-5
   prefs: []
   type: TYPE_NORMAL
+  zh: 以下是使Jenkins非常受欢迎的一些特点：
 - en: An open source tool with a web-based GUI.
+  id: totrans-6
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 一个具有Web GUI的开源工具。
 - en: A Java-based continuous build system—easy to write plugins.
+  id: totrans-7
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 基于Java的持续构建系统——易于编写插件。
 - en: Highly configurable tool—a plugin-based architecture that provides support to
     many technology, repositories, build tools, and test tools.
+  id: totrans-8
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 高度可配置的工具——基于插件的架构，支持多种技术、仓库、构建工具和测试工具。
 - en: The Jenkins user community is large and active. It has more than 1,000 open
     source plugins.
+  id: totrans-9
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: Jenkins用户社区庞大且活跃，拥有超过1,000个开源插件。
 - en: This supports CI for .Net, iOS, Android, and Ruby development.
+  id: totrans-10
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 支持.Net、iOS、Android和Ruby开发的持续集成。
 - en: This supports common SCM systems such as SVN, CVS, Git, and so on.
+  id: totrans-11
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 支持常见的SCM系统，如SVN、CVS、Git等。
 - en: This supports common test frameworks such as Junit, Selenium, and so on.
+  id: totrans-12
   prefs:
   - PREF_UL
   type: TYPE_NORMAL
+  zh: 支持常见的测试框架，如Junit、Selenium等。
 - en: Jenkins speeds up the application development process through automation across
     different phases such as build, test, code analysis, and so on. It also enables
     users to achieve end-to-end automation for an application delivery life cycle.
+  id: totrans-13
   prefs: []
   type: TYPE_NORMAL
+  zh: Jenkins通过自动化跨不同阶段（如构建、测试、代码分析等）加速应用程序开发过程。它还使用户能够实现应用程序交付生命周期的端到端自动化。
 - en: What this book covers
+  id: totrans-14
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书涵盖的内容
 - en: '[Chapter 1](ch01.html "Chapter 1. Exploring Jenkins"), *Exploring Jenkins*,
     describes in detail the basics of continuous integration and provides an overview
     of Jenkins. This chapter also describes installation and configuration of Jenkins.
     It takes a jump-start tour through some of the key features of Jenkins and plugin
     installations as well. It will also cover the deployment pipeline and the rest
     of the chapters will cover implementing it.'
+  id: totrans-15
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第1章](ch01.html "第1章 探索Jenkins")，*探索Jenkins*，详细介绍了持续集成的基本概念，并提供了Jenkins的概览。本章还描述了Jenkins的安装和配置过程，并快速浏览了Jenkins的一些关键特性和插件安装。此外，本章还将涵盖部署管道的内容，而其余章节将详细介绍其实施。'
 - en: '[Chapter 2](ch02.html "Chapter 2. Installation and Configuration of Code Repository
     and Build Tools"), *Installation and Configuration of Code Repository and Build
     Tools*, describes in detail on how to prepare runtime environment for application
@@ -111,38 +146,50 @@
     as SVN and Git to create a base for continuous integration in the deployment pipeline,
     which is explained in [Chapter 1](ch01.html "Chapter 1. Exploring Jenkins"), *Exploring
     Jenkins*.'
+  id: totrans-16
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第2章](ch02.html "第2章 代码仓库和构建工具的安装与配置")，*代码仓库和构建工具的安装与配置*，详细描述了如何为应用程序生命周期管理准备运行时环境，并将其与Jenkins——一个开源的持续集成工具——进行配置。它将介绍如何将Eclipse与SVN和Git等代码仓库集成，为部署管道中的持续集成创建基础，这在[第1章](ch01.html
+    "第1章 探索Jenkins")，*探索Jenkins*中有所解释。'
 - en: '[Chapter 3](ch03.html "Chapter 3. Integration of Jenkins, SVN, and Build Tools"),
     *Integration of Jenkins, SVN, and Build Tools*, describes in detail on how to
     create and configure build jobs for Java applications, and how to run build jobs
     and unit test cases. It covers all aspects of running a build to create a distribution
     file or WAR file for deployment.'
+  id: totrans-17
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第3章](ch03.html "第3章 Jenkins、SVN与构建工具的集成")，*Jenkins、SVN与构建工具的集成*，详细描述了如何为Java应用程序创建和配置构建作业，以及如何运行构建作业和单元测试案例。它涵盖了从运行构建到创建部署所需的发行文件或WAR文件的所有方面。'
 - en: '[Chapter 4](ch04.html "Chapter 4. Implementing Automated Deployment"), *Implementing
     Automated Deployment*, covers one step forward in the deployment pipeline by deploying
     artifacts in the local or remote application server. It will give insight into
     automated deployment and continuous delivery process, and also cover how to deploy
     applications on a public cloud platform using Jenkins.'
+  id: totrans-18
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第4章](ch04.html "第4章 实施自动化部署")，*实施自动化部署*，在部署管道中向前迈进一步，通过在本地或远程应用程序服务器上部署工件。它将深入探讨自动化部署和持续交付过程，并介绍如何使用Jenkins在公共云平台上部署应用程序。'
 - en: '[Chapter 5](ch05.html "Chapter 5. Hosted Jenkins"), *Hosted Jenkins*, describes
     how to use Jenkins on Platform as a Service (PaaS) model, which is provided by
     popular PaaS providers such as Red Hat OpenShift and CloudBees. Considering CloudBees,
     it also covers details on how various customers are using Jenkins based on their
     requirements. This chapter will explore details on how to use Cloud-related plugins
     in Jenkins for an effective use of Jenkins.'
+  id: totrans-19
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第5章](ch05.html "第5章 托管Jenkins")，*托管Jenkins*，描述了如何在平台即服务（PaaS）模型上使用Jenkins，该模型由Red
+    Hat OpenShift和CloudBees等流行的PaaS提供商提供。以CloudBees为例，本章还详细介绍了不同客户如何根据其需求使用Jenkins。本章将探讨如何在Jenkins中使用与云相关的插件以有效利用Jenkins。'
 - en: '[Chapter 6](ch06.html "Chapter 6. Managing Code Quality and Notifications"),
     *Managing Code Quality and Notifications*, covers how to integrate static code
     analysis behavior into Jenkins. Code quality is an extremely vital feature that
     impacts an application''s effectiveness, and by integrating it with Sonar, CheckStyle,
     FindBug, and other tools, you can get an insight into problematic portions of
     code.'
+  id: totrans-20
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第6章](ch06.html "第6章 管理代码质量和通知")，*管理代码质量和通知*，介绍了如何将静态代码分析行为集成到Jenkins中。代码质量是影响应用程序效能的极其重要的特性，通过与Sonar、CheckStyle、FindBug等工具集成，你可以深入了解代码中的问题部分。'
 - en: '[Chapter 7](ch07.html "Chapter 7. Managing and Monitoring Jenkins"), *Managing
     and Monitoring Jenkins*, gives an insight into management of Jenkins nodes and
     monitoring them with Java Melody to provide details on utilization of resources.
@@ -150,35 +197,48 @@
     managing those configurations by keeping its backup. This chapter discusses the
     basic security configuration that is available in Jenkins for better access control
     and authorization.'
+  id: totrans-21
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第7章](ch07.html "第7章 管理和监控Jenkins")，*管理和监控Jenkins*，深入探讨了Jenkins节点的管理以及使用Java
+    Melody监控它们以提供资源利用情况的详细信息。本章还涵盖了如何监控为Java应用程序配置的构建作业，以及如何通过备份来管理这些配置。此外，本章讨论了Jenkins中可用的基本安全配置，以实现更好的访问控制和授权。'
 - en: '[Chapter 8](ch08.html "Chapter 8. Beyond Basics of Jenkins – Leveraging "Must-have"
     Plugins"), *Beyond Basics of Jenkins – Leveraging "Must-have" Plugins*, covers
     the advanced usage of Jenkins that are extremely useful in specific scenarios.
     Scenario-based use cases and usage of specific plugins that help development and
     operations teams are covered here for better utilization of Jenkins.'
+  id: totrans-22
   prefs: []
   type: TYPE_NORMAL
+  zh: '[第8章](ch08.html "第8章 超越Jenkins基础——利用“必备”插件")，*超越Jenkins基础——利用“必备”插件*，涵盖了Jenkins在特定场景下极其有用的高级用法。本章介绍了基于场景的使用案例以及有助于开发和运维团队的具体插件，以更好地利用Jenkins。'
 - en: What you need for this book
+  id: totrans-23
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书所需条件
 - en: This book assumes that you are familiar with at least Java programming language.
     Knowledge of core Java and JEE is essential. Having a strong understanding of
     program logic will provide you with the background to be productive with Jenkins
     while using plugins of writing commands for shell.
+  id: totrans-24
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书假设您至少熟悉Java编程语言。掌握核心Java和JEE知识是必要的。对程序逻辑有深刻理解将为您在使用Jenkins插件和编写shell命令时提供背景，从而提高效率。
 - en: As an application development life cycle will cover lots of tools in general,
     it is essential to have some knowledge of repositories such as SVN, Git, and so
     on; IDE tools such as Eclipse; and build tools such as Ant and Maven.
+  id: totrans-25
   prefs: []
   type: TYPE_NORMAL
+  zh: 由于应用程序开发生命周期通常会涉及许多工具，因此了解诸如SVN、Git等版本控制系统；如Eclipse等IDE工具；以及如Ant和Maven等构建工具的知识是必要的。
 - en: Knowledge of code analysis tools will make jobs easier in configuration and
     integration; however, it is not extremely vital to perform the exercises given
     in the book. Most of the configuration steps are mentioned clearly.
+  id: totrans-26
   prefs: []
   type: TYPE_NORMAL
+  zh: 了解代码分析工具将使配置和集成工作更轻松；然而，对于本书中的练习来说，这并不是极其关键的。大多数配置步骤都已清晰说明。
 - en: You will be walked through the steps required to install Jenkins on a Windows-
     and Linux-based host. In order to be immediately successful, you will need administrative
     access to a host that runs a modern version of Linux; CentOS 6.x is what will
@@ -188,16 +248,23 @@
     If you do not have access to a dedicated Linux host, a virtual host (or hosts)
     running inside of virtualization software such as VirtualBox or VMware workstation
     will work.
+  id: totrans-27
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书将引导您完成在基于Windows和Linux的主机上安装Jenkins的步骤。为了立即取得成功，您需要拥有运行现代Linux版本的宿主机的管理员权限；CentOS
+    6.x将用于演示目的。如果您是更有经验的读者，那么几乎任何最新发布的发行版都能同样适用（但您可能需要做一些本书未详细说明的额外工作）。如果您没有访问专用Linux主机的权限，虚拟主机（或多个虚拟主机）在VirtualBox或VMware工作站等虚拟化软件中运行也可以。
 - en: Additionally, you will need access to the Internet to download plugins that
     you do not already have and also have Jenkins installed.
+  id: totrans-28
   prefs: []
   type: TYPE_NORMAL
+  zh: 此外，您需要访问互联网以下载您尚未拥有的插件并安装Jenkins。
 - en: Who this book is for
+  id: totrans-29
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 本书适合的读者
 - en: This book targets developers and system administrators who are involved in the
     application development life cycle and are looking to automate it. Developers,
     technical leads, testers, and operational professionals are the target readers
@@ -206,76 +273,113 @@
     process. The reasons to jump-start Jenkins are to understand the importance of
     contribution in continuous integration, automated test case execution, and continuous
     delivery for an effective application life cycle management.
+  id: totrans-30
   prefs: []
   type: TYPE_NORMAL
+  zh: 本书面向参与应用程序开发生命周期并寻求自动化流程的开发者和系统管理员。开发者、技术负责人、测试人员和运维专业人士是本书的目标读者，旨在帮助他们快速上手Jenkins。读者了解开发和运维团队面临的问题，因为他们是应用程序生命周期管理过程中的利益相关者。启动Jenkins的原因在于理解在持续集成、自动化测试案例执行和持续交付中贡献的重要性，以实现有效的应用程序生命周期管理。
 - en: Conventions
+  id: totrans-31
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 约定
 - en: In this book, you will find a number of styles of text that distinguish between
     different kinds of information. Here are some examples of these styles, and an
     explanation of their meaning.
+  id: totrans-32
   prefs: []
   type: TYPE_NORMAL
+  zh: 在本书中，您会发现多种文本样式，用以区分不同类型的信息。以下是这些样式的示例及其含义的解释。
 - en: 'Code words in text, database table names, folder names, filenames, file extensions,
     pathnames, dummy URLs, user input, and Twitter handles are shown as follows: "Commit
     by executing `git commit -m "Initial Commit" –a`."'
+  id: totrans-33
   prefs: []
   type: TYPE_NORMAL
+  zh: 文本中的代码词汇、数据库表名、文件夹名、文件名、文件扩展名、路径名、虚拟URL、用户输入和Twitter手柄等，如下所示："通过执行`git commit
+    -m "初始提交" –a`来提交。"
 - en: 'Any command-line input or output is written as follows:'
+  id: totrans-34
   prefs: []
   type: TYPE_NORMAL
+  zh: 任何命令行输入或输出如下所示：
 - en: '[PRE0]'
+  id: totrans-35
   prefs: []
   type: TYPE_PRE
+  zh: '[PRE0]'
 - en: '**New terms** and **important words** are shown in bold. Words that you see
     on the screen, in menus or dialog boxes for example, appear in the text like this:
     "Once the build has succeeded, verify **Workspace** in the build job."'
+  id: totrans-36
   prefs: []
   type: TYPE_NORMAL
+  zh: 新术语和重要词汇以粗体显示。屏幕上出现的词汇，如菜单或对话框中的词汇，在文本中这样显示："一旦构建成功，请在构建作业中验证**工作区**。"
 - en: Note
+  id: totrans-37
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 注意
 - en: Warnings or important notes appear in a box like this.
+  id: totrans-38
   prefs: []
   type: TYPE_NORMAL
+  zh: 警告或重要提示以这样的方框形式出现。
 - en: Tip
+  id: totrans-39
   prefs:
   - PREF_H3
   type: TYPE_NORMAL
+  zh: 提示
 - en: Tips and tricks appear like this.
+  id: totrans-40
   prefs: []
   type: TYPE_NORMAL
+  zh: 提示和技巧这样显示。
 - en: Reader feedback
+  id: totrans-41
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 读者反馈
 - en: Feedback from our readers is always welcome. Let us know what you think about
     this book—what you liked or may have disliked. Reader feedback is important for
     us to develop titles that you really get the most out of.
+  id: totrans-42
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们始终欢迎读者的反馈。请告诉我们您对这本书的看法——您喜欢或可能不喜欢的地方。读者反馈对我们开发您真正能从中获得最大收益的书籍非常重要。
 - en: To send us general feedback, simply send an e-mail to `<[feedback@packtpub.com](mailto:feedback@packtpub.com)>`,
     and mention the book title via the subject of your message.
+  id: totrans-43
   prefs: []
   type: TYPE_NORMAL
+  zh: 要向我们发送一般反馈，只需向`<[feedback@packtpub.com](mailto:feedback@packtpub.com)>`发送电子邮件，并在邮件主题中提及书名。
 - en: If there is a topic that you have expertise in and you are interested in either
     writing or contributing to a book, see our author guide on [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  id: totrans-44
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您在某个主题上具有专业知识，并且有兴趣撰写或参与撰写一本书，请参阅我们的作者指南，网址为[www.packtpub.com/authors](http://www.packtpub.com/authors)。
 - en: Customer support
+  id: totrans-45
   prefs:
   - PREF_H1
   type: TYPE_NORMAL
+  zh: 客户支持
 - en: Now that you are the proud owner of a Packt book, we have a number of things
     to help you to get the most from your purchase.
+  id: totrans-46
   prefs: []
   type: TYPE_NORMAL
+  zh: 既然您自豪地拥有了一本Packt出版的书籍，我们有一系列服务帮助您充分利用您的购买。
 - en: Errata
+  id: totrans-47
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 勘误
 - en: Although we have taken every care to ensure the accuracy of our content, mistakes
     do happen. If you find a mistake in one of our books—maybe a mistake in the text
     or the code—we would be grateful if you would report this to us. By doing so,
@@ -286,33 +390,47 @@
     will be accepted and the errata will be uploaded on our website, or added to any
     list of existing errata, under the Errata section of that title. Any existing
     errata can be viewed by selecting your title from [http://www.packtpub.com/support](http://www.packtpub.com/support).
+  id: totrans-48
   prefs: []
   type: TYPE_NORMAL
+  zh: 虽然我们已经尽一切努力确保内容的准确性，但错误仍然可能发生。如果您在我们的某本书中发现了错误——可能是文本或代码中的错误——如果您能向我们报告，我们将不胜感激。这样做，您可以避免其他读者感到沮丧，并帮助我们改进本书的后续版本。如果您发现任何勘误，请通过访问[http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata)，选择您的书籍，点击**勘误提交表单**链接，并输入您的勘误详情来报告它们。一旦您的勘误被核实，您的提交将被接受，勘误将被上传到我们的网站，或添加到任何现有勘误列表中，位于该标题的勘误部分。任何现有的勘误都可以通过从[http://www.packtpub.com/support](http://www.packtpub.com/support)选择您的标题来查看。
 - en: Piracy
+  id: totrans-49
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 盗版
 - en: Piracy of copyright material on the Internet is an ongoing problem across all
     media. At Packt, we take the protection of our copyright and licenses very seriously.
     If you come across any illegal copies of our works, in any form, on the Internet,
     please provide us with the location address or website name immediately so that
     we can pursue a remedy.
+  id: totrans-50
   prefs: []
   type: TYPE_NORMAL
+  zh: 互联网上版权材料的盗版是所有媒体持续存在的问题。在Packt，我们非常重视保护我们的版权和许可。如果您在网上遇到任何形式的我们作品的非法副本，请立即提供位置地址或网站名称，以便我们可以采取补救措施。
 - en: Please contact us at `<[copyright@packtpub.com](mailto:copyright@packtpub.com)>`
     with a link to the suspected pirated material.
+  id: totrans-51
   prefs: []
   type: TYPE_NORMAL
+  zh: 请通过`<[copyright@packtpub.com](mailto:copyright@packtpub.com)>`与我们联系，并提供涉嫌盗版材料的链接。
 - en: We appreciate your help in protecting our authors, and our ability to bring
     you valuable content.
+  id: totrans-52
   prefs: []
   type: TYPE_NORMAL
+  zh: 我们感谢您帮助保护我们的作者，并使我们能够为您带来有价值的内容。
 - en: Questions
+  id: totrans-53
   prefs:
   - PREF_H2
   type: TYPE_NORMAL
+  zh: 问题
 - en: You can contact us at `<[questions@packtpub.com](mailto:questions@packtpub.com)>`
     if you are having a problem with any aspect of the book, and we will do our best
     to address it.
+  id: totrans-54
   prefs: []
   type: TYPE_NORMAL
+  zh: 如果您在阅读本书的任何方面遇到问题，可以通过`<[questions@packtpub.com](mailto:questions@packtpub.com)>`联系我们，我们将尽力为您解决。
