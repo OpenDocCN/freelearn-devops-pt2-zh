@@ -1,0 +1,472 @@
+- en: Chapter 1. Exploring Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '|   | *"Continuous effort—not strength or intelligence—is the key to unlocking
+    our potential."* |   |'
+  prefs: []
+  type: TYPE_TB
+- en: '|   | --*Winston Churchill* |'
+  prefs: []
+  type: TYPE_TB
+- en: Jenkins is an open source application written in Java. It is one of the most
+    popular **continuous integration** (**CI**) tools used to build and test different
+    kinds of projects. In this chapter, we will have a quick overview of Jenkins,
+    essential features, and its impact on DevOps culture. Before we can start using
+    Jenkins, we need to install it. In this chapter, we have provided a step-by-step
+    guide to install Jenkins. Installing Jenkins is a very easy task and is different
+    from the OS flavors.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We will also learn the basic configuration of Jenkins. We will take a quick
+    tour of some key sections of the Jenkins UI and plugin installations as well.
+    This chapter will also cover the DevOps pipeline and how the rest of the chapters
+    will cover implementing it.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'To be precise, we will discuss the following topics in this chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Introduction to Jenkins and its features
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installation of Jenkins on Windows and the CentOS operating system
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A jump-start tour of the Jenkins dashboard
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: How to change configuration settings in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: What is the deployment pipeline
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: On your mark, get set, go!
+  prefs: []
+  type: TYPE_NORMAL
+- en: Introduction to Jenkins and its features
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Let's first understand what continuous integration is. CI is one of the most
+    popular application development practices in recent times. Developers integrate
+    bug fix, new feature development, or innovative functionality in code repository.
+    The CI tool verifies the integration process with an automated build and automated
+    test execution to detect issues with the current source of an application, and
+    provide quick feedback.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Introduction to Jenkins and its features](img/3471_01_01.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Jenkins is a simple, extensible, and user-friendly open source tool that provides
+    CI services for application development. Jenkins supports SCM tools such as StarTeam,
+    Subversion, CVS, Git, AccuRev and so on. Jenkins can build Freestyle, Apache Ant,
+    and Apache Maven-based projects.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The concept of plugins makes Jenkins more attractive, easy to learn, and easy
+    to use. There are various categories of plugins available such as Source code
+    management, Slave launchers and controllers, Build triggers, Build tools, Build
+    notifies, Build reports, other post-build actions, External site/tool integrations,
+    UI plugins, Authentication and user management, Android development, iOS development,
+    .NET development, Ruby development, Library plugins, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins defines interfaces or abstract classes that model a facet of a build
+    system. Interfaces or abstract classes define an agreement on what needs to be
+    implemented; Jenkins uses plugins to extend those implementations.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: To learn more about all plugins, visit [https://wiki.jenkins-ci.org/x/GIAL](https://wiki.jenkins-ci.org/x/GIAL).
+  prefs: []
+  type: TYPE_NORMAL
+- en: To learn how to create a new plugin, visit [https://wiki.jenkins-ci.org/x/TYAL](https://wiki.jenkins-ci.org/x/TYAL).
+  prefs: []
+  type: TYPE_NORMAL
+- en: To download different versions of plugins, visit [https://updates.jenkins-ci.org/download/plugins/](https://updates.jenkins-ci.org/download/plugins/).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Features
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Jenkins is one of the most popular CI servers in the market. The reasons for
+    its popularity are as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Easy installation on different operating systems.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Easy upgrades—Jenkins has very speedy release cycles.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Simple and easy-to-use user interface.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Easily extensible with the use of third-party plugins—over 400 plugins.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Easy to configure the setup environment in the user interface. It is also possible
+    to customize the user interface based on likings.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The master slave architecture supports distributed builds to reduce loads on
+    the CI server.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins is available with test harness built around JUnit; test results are
+    available in graphical and tabular forms.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Build scheduling based on the cron expression (to know more about cron, visit
+    [http://en.wikipedia.org/wiki/Cron](http://en.wikipedia.org/wiki/Cron)).
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Shell and Windows command execution in prebuild steps.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Notification support related to the build status.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installation of Jenkins on Windows and CentOS
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Go to [https://jenkins-ci.org/](https://jenkins-ci.org/). Find the **Download
+    Jenkins** section on the home page of Jenkins's website.![Installation of Jenkins
+    on Windows and CentOS](img/3471_01_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Download the `war` file or native packages based on your operating system. A
+    Java installation is needed to run Jenkins.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Install Java based on your operating system and set the JAVA_HOME environment
+    variable accordingly.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing Jenkins on Windows
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Select the native package available for Windows. It will download `jenkins-1.xxx.zip`.
+    In our case, it will download `jenkins-1.606.zip`. Extract it and you will get
+    `setup.exe` and `jenkins-1.606.msi` files.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on `setup.exe` and perform the following steps in sequence. On the welcome
+    screen, click **Next**:![Installing Jenkins on Windows](img/3471_01_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the destination folder and click on **Next**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Install** to begin installation. Please wait while the Setup Wizard
+    installs Jenkins.![Installing Jenkins on Windows](img/3471_01_04.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once the Jenkins installation is completed, click on the **Finish** button.![Installing
+    Jenkins on Windows](img/3471_01_05.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the Jenkins installation on the Windows machine by opening URL `http://<ip_address>:8080`
+    on the system where you have installed Jenkins.![Installing Jenkins on Windows](img/3471_01_06.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installation of Jenkins on CentOS
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: To install Jenkins on CentOS, download the Jenkins repository definition to
+    your local system at `/etc/yum.repos.d/` and import the key.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Use the `wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo`
+    command to download `repo`.![Installation of Jenkins on CentOS](img/3471_01_07.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, run `yum install Jenkins`; it will resolve dependencies and prompt for
+    installation.![Installation of Jenkins on CentOS](img/3471_01_08.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Reply with `y` and it will download the required package to install Jenkins
+    on CentOS. Verify the Jenkins status by issuing the `service jenkins status` command.
+    Initially, it will be stopped. Start Jenkins by executing `service jenkins start`
+    in the terminal.![Installation of Jenkins on CentOS](img/3471_01_09.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the Jenkins installation on the CentOS machine by opening the URL `http://<ip_address>:8080`
+    on the system where you have installed Jenkins.![Installation of Jenkins on CentOS](img/3471_01_10.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installation of Jenkins as a web application
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Download **Java Web Archive (.war)** (latest and greatest (1.606)) from [http://jenkins-ci.org/](http://jenkins-ci.org/).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Copy `jenkins.war` into your virtual or physical machine. Open Command Prompt
+    or a terminal based on the operation system. In our case, we will copy it into
+    a directory of a CentOS virtual machine.![Installation of Jenkins as a web application](img/3471_01_11.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Open Command Prompt and execute the `java –jar Jenkins.war` command. Verify
+    the Jenkins installation on the system by opening the `http://<ip_address>:8080`
+    URL on the system where you have installed Jenkins.![Installation of Jenkins as
+    a web application](img/3471_01_12.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: A jump-start tour of the Jenkins dashboard
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, click on **Create new jobs** or on **New Item** to
+    create Freestyle- or Maven-based projects for CI.![A jump-start tour of the Jenkins
+    dashboard](img/3471_01_13.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To verify system properties, visit `http://<ip_address>:8080/systeminfo` or
+    click on **Manage Jenkins**, and then click on **System Information** to get environmental
+    information to assist troubleshooting.![A jump-start tour of the Jenkins dashboard](img/3471_01_14.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: How to change configuration settings in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Click on the **Manage Jenkins** link on the dashboard to configure system, security,
+    to manage plugins, slave nodes, credentials, and so on.![How to change configuration
+    settings in Jenkins](img/3471_01_15.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Configure System** link to configure Java, Ant, Maven, and other
+    third-party products' related information.![How to change configuration settings
+    in Jenkins](img/3471_01_16.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Jenkins uses Groovy as its scripting language. To execute the arbitrary script
+    for administration/trouble-shooting/diagnostics on the Jenkins dashboard, go to
+    the **Manage Jenkins** link on the dashboard, click on **Script Console**, and
+    run `println(Jenkins.instance.pluginManager.plugins)`.![How to change configuration
+    settings in Jenkins](img/3471_01_17.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To verify the system log, go to the **Manage Jenkins** link on the dashboard
+    and click on the **System Log** link or visit `http://localhost:8080/log/all`.![How
+    to change configuration settings in Jenkins](img/3471_01_18.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To get more information on third-party libraries—version and license information
+    in Jenkins, go to the **Manage Jenkins** link on the dashboard and click on the
+    **About Jenkins** link.![How to change configuration settings in Jenkins](img/3471_01_19.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: What is the deployment pipeline?
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The application development life cycle is a traditionally lengthy and a manual
+    process. In addition, it requires effective collaboration between development
+    and operations teams. The deployment pipeline is a demonstration of automation
+    involved in the application development life cycle containing the automated build
+    execution and test execution, notification to the stakeholder, and deployment
+    in different runtime environments. Effectively, the deployment pipeline is a combination
+    of CI and continuous delivery, and hence is a part of DevOps practices. The following
+    diagram depicts the deployment pipeline process:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![What is the deployment pipeline?](img/3471_01_20.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Members of the development team check code into a source code repository. CI
+    products such as Jenkins are configured to poll changes from the code repository.
+    Changes in the repository are downloaded to the local workspace and Jenkins triggers
+    an automated build process, which is assisted by Ant or Maven. Automated test
+    execution or unit testing, static code analysis, reporting, and notification of
+    successful or failed build process are also part of the CI process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once the build is successful, it can be deployed to different runtime environments
+    such as testing, preproduction, production, and so on. Deploying a `war` file
+    in terms of the JEE application is normally the final stage in the deployment
+    pipeline.
+  prefs: []
+  type: TYPE_NORMAL
+- en: One of the biggest benefits of the deployment pipeline is the faster feedback
+    cycle. Identification of issues in the application at early stages and no dependencies
+    on manual efforts make this entire end-to-end process more effective.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapters, we will see how Jenkins can be used for implementing CI
+    practices in modernizing IT.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: To read more, visit [http://martinfowler.com/bliki/DeploymentPipeline.html](http://martinfowler.com/bliki/DeploymentPipeline.html)
+    and [http://www.informit.com/articles/article.aspx?p=1621865&seqNum=2](http://www.informit.com/articles/article.aspx?p=1621865&seqNum=2).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Self-test questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Q1\. What is Jenkins?
+  prefs: []
+  type: TYPE_NORMAL
+- en: A continuous integration product
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: A continuous delivery product
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q2\. What makes Jenkins extensible?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Plugins
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Open Source Distribution
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q3\. Which command is used to run the Jenkins installation file in the `war`
+    format?
+  prefs: []
+  type: TYPE_NORMAL
+- en: java –jar `Jenkins.war`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: java –j `Jenkins.war`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q4\. How do we get system information on the Jenkins dashboard?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Visit `http://<ip_address>:8080/manage`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Visit `http://<ip_address>:8080/systeminfo`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q5\. How do we change global settings for configuration on the Jenkins dashboard?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Click on the **Manage Jenkins** link on the dashboard
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Credentials** link on the dashboard
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q6\. What is the deployment pipeline?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous Integration Practices
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Continuous Delivery Practices
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Demonstration of automation involved in the application development life cycle
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: None of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q7\. Explain the benefits of the deployment pipeline?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Faster feedback cycle
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Identification of issues in an application at early stages
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: No dependencies on manual efforts
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Congratulations! We reached the end of this chapter and hence we have Jenkins
+    installed on our physical or virtual machine, and you are ready to go to the next
+    chapter. Till now, we covered the basics of CI and the introduction to Jenkins
+    and its features. We completed the installation of Jenkins on Windows and CentOS
+    platforms. We also completed a quick tour of features available in Jenkins's dashboard.
+    In addition to this, we discussed the deployment pipeline and its importance in
+    CI.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Now that we are able to use our CI server, Jenkins, we can begin creating a
+    job and verify how Jenkins works.
+  prefs: []
+  type: TYPE_NORMAL

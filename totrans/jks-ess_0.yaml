@@ -1,0 +1,318 @@
+- en: Preface
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: DevOps is a buzz word in 2015 and will be for the coming years as per market
+    trends by various research firms. In DevOps culture, business owners, development
+    teams, operations teams, and QA teams collaborate to deliver outcome in a continuous
+    and effective manner. It enables the organizations to more quickly grab opportunities
+    and reduce the time taken to include customer feedback into new feature development
+    or innovation. The end goal of DevOps is to reduce the time between the initial
+    concept and the end result of the concept in the form of production ready applications.
+    DevOps targets application delivery, new feature development, bug fixing, testing,
+    and maintenance releases. It improves efficiency, security, reliability, predictability,
+    and faster development and deployment cycles. It covers all SDLC phases from development,
+    test, operations, and release.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Continuous integration (CI) and continuous delivery (CD) are a significant part
+    of the DevOps culture. Jenkins is a fully featured technology platform that enables
+    users to implement CI and CD. This helps users to deliver better applications
+    by automating the application delivery life cycle. CI includes automation of build,
+    test and package processes. CD includes the application delivery pipeline across
+    different environments. Jenkins enables the user to utilize continuous integration
+    services for software development in an agile environment. Continuous integration
+    systems are a vital part of the agile team because they help enforce the principles
+    of agile development. Continuous Integration is a significant part of the DevOps
+    culture, and hence, many open source and commercial tools for continuous delivery
+    utilize Jenkins or provide integration points. Jenkins enables agile teams to
+    focus on work and innovations by automating the build, artifact management, and
+    deployment processes, rather than worrying about manual processes. It can be used
+    to build freestyle software projects based on Apache Ant and Maven 2 / Maven 3
+    projects. It can also execute Windows batch commands and shell scripts.
+  prefs: []
+  type: TYPE_NORMAL
+- en: There are a number of ways to install Jenkins, and it can be used across different
+    platforms such as Windows and Linux. Jenkins is available in the form of native
+    packages of Windows, FreeBSD, OpenBSD, Red Hat, Fedora, CentOS, Ubuntu, Debian,
+    Mac OS X, openSUSE, Solaris, OpenIndiana, Gentoo, or in the form of WAR file.
+    The quickest and easiest way to use Jenkins is to use the WAR file. It can be
+    easily customized with the use of plugins. There are different kinds of plugins
+    available to customize Jenkins based on specific needs. Categories of plugins
+    include source code management (that is, Git Plugin, CVS Plugin, and Bazaar Plugin),
+    build triggers (that is, Accelerated Build Now Plugin and Build Flow Plugin),
+    build reports (that is, CodeScanner Plugin and Disk Usage Plugin), authentication
+    and user management (that is, Active Directory Plugin and Github OAuth Plugin),
+    cluster management and distributed build (that is, Amazon EC2 Plugin and Azure
+    Slave Plugin), and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins is very popular among its users as it allows them to manage and control
+    phases such as build, test, package, and static code analysis. It has won InfoWorld
+    Bossies Award, 2011; O'Reilly Open Source Award, 2011; ALM&SCM; and so on. The
+    main users of Jenkins are NASA, Linkedin, eBay, and Mozilla Foundation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following are some features that make Jenkins very popular:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: An open source tool with a web-based GUI.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: A Java-based continuous build system—easy to write plugins.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Highly configurable tool—a plugin-based architecture that provides support to
+    many technology, repositories, build tools, and test tools.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: The Jenkins user community is large and active. It has more than 1,000 open
+    source plugins.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: This supports CI for .Net, iOS, Android, and Ruby development.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: This supports common SCM systems such as SVN, CVS, Git, and so on.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: This supports common test frameworks such as Junit, Selenium, and so on.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins speeds up the application development process through automation across
+    different phases such as build, test, code analysis, and so on. It also enables
+    users to achieve end-to-end automation for an application delivery life cycle.
+  prefs: []
+  type: TYPE_NORMAL
+- en: What this book covers
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '[Chapter 1](ch01.html "Chapter 1. Exploring Jenkins"), *Exploring Jenkins*,
+    describes in detail the basics of continuous integration and provides an overview
+    of Jenkins. This chapter also describes installation and configuration of Jenkins.
+    It takes a jump-start tour through some of the key features of Jenkins and plugin
+    installations as well. It will also cover the deployment pipeline and the rest
+    of the chapters will cover implementing it.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 2](ch02.html "Chapter 2. Installation and Configuration of Code Repository
+    and Build Tools"), *Installation and Configuration of Code Repository and Build
+    Tools*, describes in detail on how to prepare runtime environment for application
+    life cycle management and configure it with Jenkins—an open source continuous
+    integration tool. It will cover how to integrate Eclipse and code repository such
+    as SVN and Git to create a base for continuous integration in the deployment pipeline,
+    which is explained in [Chapter 1](ch01.html "Chapter 1. Exploring Jenkins"), *Exploring
+    Jenkins*.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 3](ch03.html "Chapter 3. Integration of Jenkins, SVN, and Build Tools"),
+    *Integration of Jenkins, SVN, and Build Tools*, describes in detail on how to
+    create and configure build jobs for Java applications, and how to run build jobs
+    and unit test cases. It covers all aspects of running a build to create a distribution
+    file or WAR file for deployment.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 4](ch04.html "Chapter 4. Implementing Automated Deployment"), *Implementing
+    Automated Deployment*, covers one step forward in the deployment pipeline by deploying
+    artifacts in the local or remote application server. It will give insight into
+    automated deployment and continuous delivery process, and also cover how to deploy
+    applications on a public cloud platform using Jenkins.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 5](ch05.html "Chapter 5. Hosted Jenkins"), *Hosted Jenkins*, describes
+    how to use Jenkins on Platform as a Service (PaaS) model, which is provided by
+    popular PaaS providers such as Red Hat OpenShift and CloudBees. Considering CloudBees,
+    it also covers details on how various customers are using Jenkins based on their
+    requirements. This chapter will explore details on how to use Cloud-related plugins
+    in Jenkins for an effective use of Jenkins.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 6](ch06.html "Chapter 6. Managing Code Quality and Notifications"),
+    *Managing Code Quality and Notifications*, covers how to integrate static code
+    analysis behavior into Jenkins. Code quality is an extremely vital feature that
+    impacts an application''s effectiveness, and by integrating it with Sonar, CheckStyle,
+    FindBug, and other tools, you can get an insight into problematic portions of
+    code.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 7](ch07.html "Chapter 7. Managing and Monitoring Jenkins"), *Managing
+    and Monitoring Jenkins*, gives an insight into management of Jenkins nodes and
+    monitoring them with Java Melody to provide details on utilization of resources.
+    It also covers how to monitor build jobs configured for Java applications and
+    managing those configurations by keeping its backup. This chapter discusses the
+    basic security configuration that is available in Jenkins for better access control
+    and authorization.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[Chapter 8](ch08.html "Chapter 8. Beyond Basics of Jenkins – Leveraging "Must-have"
+    Plugins"), *Beyond Basics of Jenkins – Leveraging "Must-have" Plugins*, covers
+    the advanced usage of Jenkins that are extremely useful in specific scenarios.
+    Scenario-based use cases and usage of specific plugins that help development and
+    operations teams are covered here for better utilization of Jenkins.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: What you need for this book
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book assumes that you are familiar with at least Java programming language.
+    Knowledge of core Java and JEE is essential. Having a strong understanding of
+    program logic will provide you with the background to be productive with Jenkins
+    while using plugins of writing commands for shell.
+  prefs: []
+  type: TYPE_NORMAL
+- en: As an application development life cycle will cover lots of tools in general,
+    it is essential to have some knowledge of repositories such as SVN, Git, and so
+    on; IDE tools such as Eclipse; and build tools such as Ant and Maven.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Knowledge of code analysis tools will make jobs easier in configuration and
+    integration; however, it is not extremely vital to perform the exercises given
+    in the book. Most of the configuration steps are mentioned clearly.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You will be walked through the steps required to install Jenkins on a Windows-
+    and Linux-based host. In order to be immediately successful, you will need administrative
+    access to a host that runs a modern version of Linux; CentOS 6.x is what will
+    be used for demonstration purposes. If you are a more experienced reader, then
+    a recent release of almost any distribution will work just as well (but you may
+    be required to do a little bit of extra work that is not outlined in this book).
+    If you do not have access to a dedicated Linux host, a virtual host (or hosts)
+    running inside of virtualization software such as VirtualBox or VMware workstation
+    will work.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Additionally, you will need access to the Internet to download plugins that
+    you do not already have and also have Jenkins installed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Who this book is for
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: This book targets developers and system administrators who are involved in the
+    application development life cycle and are looking to automate it. Developers,
+    technical leads, testers, and operational professionals are the target readers
+    to jump-start Jenkins. Readers are aware of the issues faced by the development
+    and operations team as they are stakeholders in the application life cycle management
+    process. The reasons to jump-start Jenkins are to understand the importance of
+    contribution in continuous integration, automated test case execution, and continuous
+    delivery for an effective application life cycle management.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Conventions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: In this book, you will find a number of styles of text that distinguish between
+    different kinds of information. Here are some examples of these styles, and an
+    explanation of their meaning.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Code words in text, database table names, folder names, filenames, file extensions,
+    pathnames, dummy URLs, user input, and Twitter handles are shown as follows: "Commit
+    by executing `git commit -m "Initial Commit" –a`."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Any command-line input or output is written as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: '**New terms** and **important words** are shown in bold. Words that you see
+    on the screen, in menus or dialog boxes for example, appear in the text like this:
+    "Once the build has succeeded, verify **Workspace** in the build job."'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Warnings or important notes appear in a box like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Tip
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Tips and tricks appear like this.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Reader feedback
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Feedback from our readers is always welcome. Let us know what you think about
+    this book—what you liked or may have disliked. Reader feedback is important for
+    us to develop titles that you really get the most out of.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To send us general feedback, simply send an e-mail to `<[feedback@packtpub.com](mailto:feedback@packtpub.com)>`,
+    and mention the book title via the subject of your message.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If there is a topic that you have expertise in and you are interested in either
+    writing or contributing to a book, see our author guide on [www.packtpub.com/authors](http://www.packtpub.com/authors).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Customer support
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Now that you are the proud owner of a Packt book, we have a number of things
+    to help you to get the most from your purchase.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Errata
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Although we have taken every care to ensure the accuracy of our content, mistakes
+    do happen. If you find a mistake in one of our books—maybe a mistake in the text
+    or the code—we would be grateful if you would report this to us. By doing so,
+    you can save other readers from frustration and help us improve subsequent versions
+    of this book. If you find any errata, please report them by visiting [http://www.packtpub.com/submit-errata](http://www.packtpub.com/submit-errata),
+    selecting your book, clicking on the **errata** **submission** **form** link,
+    and entering the details of your errata. Once your errata are verified, your submission
+    will be accepted and the errata will be uploaded on our website, or added to any
+    list of existing errata, under the Errata section of that title. Any existing
+    errata can be viewed by selecting your title from [http://www.packtpub.com/support](http://www.packtpub.com/support).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Piracy
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Piracy of copyright material on the Internet is an ongoing problem across all
+    media. At Packt, we take the protection of our copyright and licenses very seriously.
+    If you come across any illegal copies of our works, in any form, on the Internet,
+    please provide us with the location address or website name immediately so that
+    we can pursue a remedy.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Please contact us at `<[copyright@packtpub.com](mailto:copyright@packtpub.com)>`
+    with a link to the suspected pirated material.
+  prefs: []
+  type: TYPE_NORMAL
+- en: We appreciate your help in protecting our authors, and our ability to bring
+    you valuable content.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Questions
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: You can contact us at `<[questions@packtpub.com](mailto:questions@packtpub.com)>`
+    if you are having a problem with any aspect of the book, and we will do our best
+    to address it.
+  prefs: []
+  type: TYPE_NORMAL

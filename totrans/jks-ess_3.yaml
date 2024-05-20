@@ -1,0 +1,394 @@
+- en: Chapter 3. Integration of Jenkins, SVN, and Build Tools
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '|   | *"The barrier to change is not too little caring; it is too much complexity"*
+    |   |'
+  prefs: []
+  type: TYPE_TB
+- en: '|   | --*Bill Gates* |'
+  prefs: []
+  type: TYPE_TB
+- en: We have seen how to set up an environment to use Jenkins for continuous integration,
+    and we have also configured build tools in Jenkins. The integration of Eclipse
+    with SVN will help developers to easily perform operations on repositories.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Now we are ready to create our first build job for continuous integration.
+    This chapter describes in detail how to create and configure build jobs for Java
+    applications using build tools such as Ant and Maven; how to run build jobs, unit
+    test cases. It covers all aspects of running a build to create a distribution
+    file or `war` file for deployment, as well as a Dashboard View plugin to provide
+    a customized display of build jobs and test results based on preferences. The
+    following are the main points which are covered in this chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Creating and configuring a build job for a Java application with Ant
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating and configuring a build job for a Java application with Maven
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Build execution with test cases
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating and configuring a build job for a Java application with Ant
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Before creating and configuring a build job for a Java application, we will
+    install a Dashboard View plugin to better manage builds, and display the results
+    of builds and tests. We have already seen how to create a basic job in [Chapter
+    2](ch02.html "Chapter 2. Installation and Configuration of Code Repository and
+    Build Tools"), *Installation and Configuration of Code Repository and Build Tools*.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Dashboard View Plugin
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: This plugin presents a new view that provides a portal-like view for Jenkins
+    build jobs. Download it from [https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View](https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View).
+    It is good for showing results and trends. In addition, it also allows the user
+    to arrange display items in an effective manner. On the Jenkins dashboard, go
+    to the **Manage Jenkins** link and click on **Manage Plugins** and install the
+    Dashboard View plugin. Verify the installation by clicking on the **Installed**
+    tab.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Dashboard View Plugin](img/3471_03_01.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: On the Jenkins dashboard, click on the plus button to create a new view. Provide
+    a **View name** and select the type of view; in our case **Dashboard,** then click
+    on **OK**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Dashboard View Plugin](img/3471_03_02.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Provide a **Name** and select **Jobs** that need to be included in the view,
+    as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Dashboard View Plugin](img/3471_03_03.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: In the View configuration, click on **Add Dashboard Portlet to right column**,
+    and select **Test Statistics Grid**. Add **Test Statistics Chart**. This will
+    display test results in the form of statistics and chart representations of test
+    results.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Dashboard View Plugin](img/3471_03_04.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating and configuring a build job for a Java application
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Click on **New Item** on the dashboard to create a new build for a Java application
+    which uses Ant as a build tool. Enter **Item name**, and select **Freestyle project**.
+    Click **OK**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_05.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: It will open the configuration for a new build job. In **Source Code Management**,
+    select **Subversion**. Provide the **Repository URL** and **Credentials**. In
+    [Chapter 2](ch02.html "Chapter 2. Installation and Configuration of Code Repository
+    and Build Tools"), *Installation and Configuration of Code Repository and Build
+    Tools*, we installed Subversion and also added the source code to SVN.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Provide the URL you use in your browser to access the source code repository.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_06.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: If **Credentials** are not available in the box, click on the **Add** button.
+    Provide **Scope**, **Username**, **Password**, and **Description**, and click
+    on **Add** to make it available on the list box available in the build job configuration.
+    **Scope** determines where credentials can be used. For example system scope restricts
+    credential usage to the object with which the credential is associated. It provides
+    better confidentiality than global scope. Global scope credentials are available
+    to the object with which the credential is associated and all objects that are
+    children of that object.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_07.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: In the build job configuration, go to the **Build Triggers** section and select
+    the **Poll SCM** radio button. Provide the schedule detail in the *** * * * ***
+    form, as shown in the following figure. It will poll the repository every minute
+    to verify changes committed into the repository by developers.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_08.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: The **Schedule** field follows cron syntax, MINUTE HOUR Day Of the Month MONTH
+    Day Of the Week.
+  prefs: []
+  type: TYPE_NORMAL
+- en: For example, H * * * * to poll once per hour, H/15 * * * * to poll every fifteen
+    minutes.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Once **Build Triggers** and **Source Code Management** configurations are completed,
+    we need to provide build tool-related details, so Jenkins can use them to execute
+    once the build is triggered. Click on the **Add build step** and select **Invoke
+    Ant**. From the drop-down menu, select Ant, configured in [Chapter 2](ch02.html
+    "Chapter 2. Installation and Configuration of Code Repository and Build Tools"),
+    *Installation and Configuration of Code Repository and Build Tools* and provide
+    **Targets** with the name you want to execute from the build.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_09.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Click on the **Apply** and **Save** buttons to finalize the configuration. Click
+    on the **Build Now** button on the Jenkins dashboard. It will check out all the
+    latest available code in the source code repository against the local workspace
+    on the machine where Jenkins is installed, as shown in the following figure. In
+    the **build history** section of a specific job, click on **build number**, and
+    then click on **Console Output**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_10.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Once the checkout process is completed, the build file execution, based on
+    the targets, will start, and the build execution will be successful if all dependencies
+    and files required for the build execution are available in the local workspace,
+    as shown in the following figure:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_11.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: To verify the local workspace, go to the view you created, select **build job**
+    and then click on **Workspace**. Verify that all files and folders are available,
+    as provided by the source code repository.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application](img/3471_03_12.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Creating and configuring a build job for a Java application with Maven
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Click on **New Item** on the dashboard to create a new build for a Java application
+    which uses Maven as a build tool. Enter the **Item name** and select **Maven project**
+    from the list.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_13.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: It will open the configuration for the new build job. In **Source Code Management**,
+    select **Subversion**. Provide **Repository URL** and **Credentials**. In [Chapter
+    2](ch02.html "Chapter 2. Installation and Configuration of Code Repository and
+    Build Tools"), *Installation and Configuration of Code Repository and Build Tools*
+    we installed **Subversion**, and added the source code to SVN.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_14.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: In the build job configuration, go to the **Build Triggers** section and select
+    the **Poll SCM** radio button. Provide the schedule detail in *** * * * *** form,
+    as shown in following figure. It will poll the repository every minute to verify
+    changes committed into the repository by developers. Add the Maven build step.
+    Provide the name of the build file; by default it is `pom.xml`. Provide **Goals
+    and Options** and, if you keep it empty, then it will execute the default goal.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_15.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Click on **Build Now** to execute the build job or commit the updated code to
+    the repository, and the build will be executed automatically based on our configuration
+    in **Build Triggers**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_16.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: It will check out all the latest available code in the source code repository
+    against the local workspace on the machine where Jenkins is installed, as shown
+    in the following figure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_17.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Once the checkout process is completed, the build file execution based on the
+    goals will start, and the build execution will be successful if all dependencies
+    and files required for the build execution are available in the local workspace,
+    as shown in the following figure.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Creating and configuring a build job for a Java application with Maven](img/3471_03_18.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Build execution with test cases
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins allows JUnit-format test results to be published on the dashboard. We
+    need not install any specific plugin for this. If we have test cases already written
+    in JUnit, then it is easy to execute them. Make sure to create a goal or task
+    in the build file for test case execution. In Build Job configuration, click on
+    **Post-build Actions** and select **Publish JUnit test result report**. Provide
+    the location for the **Test report XMLs** files and save the build job configuration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_19.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Execute the build by clicking on **Build Now**. Once the build has finished,
+    click on the **Test Result** link on the dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_20.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Click on the package link to get detailed test results on the summary page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_21.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Click on the class link to get detailed test results on the page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_22.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Verify all tests name, the duration, and the status, as shown in the following
+    figure:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_23.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Verify by clicking on the individual link of each test case on the Jenkins dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_24.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: We have already configured the Dashboard View plugin to display the Test Statistics
+    Chart and the Test Trend Chart.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Verify the number of successful, failed or skipped tests, as well as the percentage
+    on the customized view, as shown in the following screenshot.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_25.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Verify the Test Trend Chart on the Dashboard View.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build execution with test cases](img/3471_03_26.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Self-test questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Q1\. What is the objective of installing the Dashboard View plugin?
+  prefs: []
+  type: TYPE_NORMAL
+- en: To have a portal-like view for Jenkins build jobs
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To run test cases related to Jenkins build jobs
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To display build results
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q2\. Which are the fields available to create credentials for SVN?
+  prefs: []
+  type: TYPE_NORMAL
+- en: '**Scope**, **Username**, **Password**, **Description**'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Scope**, **Username**, **Password**'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '**Username**, **Password**, **Description**'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q3\. What is the meaning of * * * * * in the **Schedule of Build Trigger** section?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Poll SCM Every Day
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Poll SCM Every Hour
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Poll SCM Every Minute
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Poll SCM Every Second
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q4\. What are the names of build files in Ant and Maven respectively?
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`pom.xml`, `build.xml`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '`build.xml`, `pom.xml`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '`pom.xml`, `root.xml`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '`ant.xml`, `maven.xml`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We are again at the part of the chapter that gives us a sense of achievement.
+    In this chapter, we have covered how to customize the Jenkins dashboard and display
+    test results based on the build job on the dashboard. We have also created our
+    first build job for a sample Java application. We used build tools such as Ant
+    and Maven for executing build and create artifacts. Finally, we have seen how
+    test cases can be executed, and results can be displayed on the Jenkins portal.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will deploy the application to application server directly
+    from Jenkins, and we will also cover an introduction to deploying applications
+    on Amazon Web Services.
+  prefs: []
+  type: TYPE_NORMAL

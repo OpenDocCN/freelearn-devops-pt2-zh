@@ -1,0 +1,428 @@
+- en: Chapter 8. Beyond Basics of Jenkins – Leveraging "Must-have" Plugins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '|   | *"Strength and growth come only through continuous effort and struggle."*
+    |   |'
+  prefs: []
+  type: TYPE_TB
+- en: '|   | --*Napoleon Hill* |'
+  prefs: []
+  type: TYPE_TB
+- en: In the last chapter, we covered management and monitoring along with security
+    aspects in Jenkins. In security, we understood how authentication and authorization
+    works. Now, it is time to recognize the value added by some important plugins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This chapter covers advanced usage of Jenkins, which is extremely useful in
+    specific scenarios. Scenario-based usage of specific plugins that help development
+    and operations teams are covered here for better utilization of Jenkins. Some
+    of these plugins are extremely useful in the case of notifications scenario. The
+    following are the main topics that we will cover in this chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Extended E-mail Plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Workspace cleanup Plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Pre-scm-buildstep Plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Conditional BuildStep Plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: EnvInject Plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Build Pipeline Plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Extended Email Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Email-ext plugin extends functionality of e-mail notifications provided by Jenkins.
+    It gives more customization in terms of conditions that cause mail notifications
+    and content generation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can install this plugin from the Jenkin's dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Extended Email Plugin](img/3471_08_01.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Customization is available in three areas:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Triggers: We can select the conditions that cause an e-mail notification to
+    be sent'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Content: We can specify the content of each triggered email''s subject and
+    body; we can use default environment variables within content'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Recipients: We can specify who should receive an e-mail when it is triggered'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: In the Jenkins dashboard, click on **Manage Jenkins** and then click on **Configure
+    System**. Go to the **Extended E-mail Notification** section and configure global
+    email-ext properties that should match the settings for your SMTP mail server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Extended Email Plugin](img/3471_08_02.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: We can also customize the subject, maximum attachment size, default content,
+    and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Extended Email Plugin](img/3471_08_03.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: To configure Email-ext specific to build job, enable it in the project configuration
+    page. Select the checkbox labeled **Editable Email Notification** in the **Post-build
+    Actions**. Configure the comma- (or whitespace-) separated list of global recipients,
+    subject, and content. In advanced configuration, we can configure pre-send script,
+    triggers, email tokens, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Extended Email Plugin](img/3471_08_04.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: The pre-send script feature allows us to write a script that can modify the
+    `MimeMessage` object prior to sending the message. Triggers allow us to configure
+    conditions that must be met to send an e-mail. The Email-ext plugin uses tokens
+    to allow dynamic data to be inserted into the recipient list, e-mail subject line,
+    or the body. For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin](https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Workspace cleanup Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Workspace Cleanup plugin is used to delete the workspace from Jenkins before
+    the build or when a build is finished and artifacts are saved. If we want to start
+    a Jenkins build with a clean workspace or we want to clean a particular directory
+    before each build, then we can effectively use this plugin. Different options
+    are available for deleting the workspace.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can install this plugin from the Jenkins dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Workspace cleanup Plugin](img/3471_08_05.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: We can apply patterns for files to be deleted based on the status of the build
+    job. We can add post-build action for workspace deletion.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Workspace cleanup Plugin](img/3471_08_06.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Workspace+Cleanup+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Workspace+Cleanup+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Pre-scm-buildstep Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Pre-scm-buildstep plugin allows a specific build step to run before SCM
+    checkouts in case we need to perform any build step action on the workspace considering
+    any special requirements such as adding a file with some settings for the SCM,
+    executing some command to create some file, cleanup, or call other scripts that
+    need to be run before checking out.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can install this plugin from the Jenkins dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Pre-scm-buildstep Plugin](img/3471_08_07.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Select conditional steps from the list, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Pre-scm-buildstep Plugin](img/3471_08_08.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'Select the conditional steps based on requirement and provide a list of commands
+    based on operating systems, as shown in the following screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Pre-scm-buildstep Plugin](img/3471_08_09.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/pre-scm-buildstep](https://wiki.jenkins-ci.org/display/JENKINS/pre-scm-buildstep).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Conditional BuildStep Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Buildstep plugin allows us to wrap any number of other build steps, controlling
+    their execution based on a defined condition.
+  prefs: []
+  type: TYPE_NORMAL
+- en: You can install this plugin from the Jenkins' dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Conditional BuildStep Plugin](img/3471_08_10.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'This plugin defines a few core run conditions such as:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Always/Never: To disable a build step from the job configuration'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Boolean condition: To execute the step if a token expands to a representation
+    of true'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Current status: To execute the build step if the current build status is within
+    the configured/specific range'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'File exists/Files match: To execute the step if a file exists, or matches a
+    pattern'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Strings match: To execute the step if the two strings are same'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Numerical comparison: To execute the build step depending on the result of
+    comparing two numbers'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Regular expression match: This provides a regular expression and a label, to
+    execute the build step if the expression matches the label'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Time/Day of week: To execute the build job during a specified period of the
+    day or day of the week'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'And/Or/Not: Logical operations to enable the combining and sense inversion
+    of run conditions'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Build cause: To execute the build step depending on the cause of the build,
+    for example, triggered by timer, user, scm-change, and so on'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Script condition: Utilize shell script to decide whether a step should be skipped'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Windows Batch condition: Utilize windows batch to decide whether a step should
+    be skipped'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Select the **Conditional step (single)** from the **Add build step**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Conditional BuildStep Plugin](img/3471_08_11.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Select the **Conditional steps (multiple)** from the **Add build step**. We
+    can add multiple steps to condition in this conditional step.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Conditional BuildStep Plugin](img/3471_08_12.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: EnvInject Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We know that different environments such as Dev, Test, and Production requires
+    different configuration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Install this plugin from the Jenkins dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![EnvInject Plugin](img/3471_08_13.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: The EnvInject plugin provides the facility to have an isolated environment for
+    different build jobs. The EnvInject plugin injects environment variables at node
+    startup, before or after a SCM checkout for a run, as a build step for a run,
+    and so on. Select **Inject environment variables to the build process** specific
+    to the build job.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![EnvInject Plugin](img/3471_08_14.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Build Pipeline Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Continuous Integration has become a popular practice for application development.
+    The Build Pipeline plugin provides a pipeline view of upstream and downstream
+    connected jobs that typically form a build pipeline with the ability to define
+    manual triggers or approval process. We can create a chain of jobs by orchestrating
+    version promotion through different quality gates before we deploy it in production.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Install this plugin from the Jenkins dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build Pipeline Plugin](img/3471_08_15.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'We have already installed the Dashboard View plugin. We will create a pipeline
+    for four build jobs. Let''s assume we have four build jobs, as shown in the following
+    diagram, where the objective of each build job is mentioned:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build Pipeline Plugin](img/3471_08_16.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Create a new view and select **Build Pipeline View**.![Build Pipeline Plugin](img/3471_08_17.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide a description and select the layout from the configuration on the build
+    pipeline.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select an initial job and the number of displayed builds and save the configuration.![Build
+    Pipeline Plugin](img/3471_08_18.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In a configuration of the build pipeline, select job to trigger parameterized
+    build as `settle-build` job in **Post-build Actions**. It will be the first build
+    job in the pipeline.![Build Pipeline Plugin](img/3471_08_19.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In a `settle-build` job, trigger the parameterized build on the `settle-aws-provisioning`
+    job in **Post-build Actions**.![Build Pipeline Plugin](img/3471_08_20.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In a `settle-aws-provisioning` job, the manual build steps for a `settle-deploy`
+    job in **Post-build Actions**.![Build Pipeline Plugin](img/3471_08_21.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In a `settle-aws-provisioning` job, trigger the parameterized build on the `settle-deploy`
+    job in **Post-build Actions**. In the `settle-deploy` build job, we can write
+    script or execute commands so that it can deploy `war` file to newly provisioned
+    virtual machine in the cloud environment.![Build Pipeline Plugin](img/3471_08_22.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to the dashboard view, which we created earlier, and verify the pipeline
+    created after our configuration in build jobs in the previous section. The new
+    build pipeline will be created as shown in the following diagram:![Build Pipeline
+    Plugin](img/3471_08_23.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: For more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Self-test questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Q1\. In which areas does the Extended E-mail plugin provide customization?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Triggers
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Content
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Recipients
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Q2\. The Workspace cleanup plugin provides an option to clean the workspace
+    when status of build is:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Success
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Unstable
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Failure
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Not Built
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Aborted
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We learned how to use some important plugins to aid the existing features of
+    Jenkins to address specific requirements. We covered all basic usage of Jenkins,
+    including installing runtime environment, creating build jobs, using Jenkins on
+    Cloud, monitoring, management, security, and additional plugins. For the scope
+    of this book, this seems sufficient. Next step is about provisioning resources
+    dynamically in Cloud environment to achieve end to end automation in the DevOps
+    journey.
+  prefs: []
+  type: TYPE_NORMAL
+- en: If you want a happy ending, that depends of course on where you stop your story.
+    We certainly know where to stop ours!
+  prefs: []
+  type: TYPE_NORMAL

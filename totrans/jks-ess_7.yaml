@@ -1,0 +1,504 @@
+- en: Chapter 7. Managing and Monitoring Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '|   | *"Fall in the beginning + Fall often + Learn to recover quickly = Faster
+    time to market"* |   |'
+  prefs: []
+  type: TYPE_TB
+- en: '|   | --*Anonymous* |'
+  prefs: []
+  type: TYPE_TB
+- en: We learned Sonar integration with Jenkins, an overview of static code analysis
+    plugins, and notification of build status in the last chapter. Now, it's time
+    to focus on management and monitoring of Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This chapter gives insight into management of Jenkins nodes and monitoring
+    of them with Java Melody to provide details on utilization of resources. It also
+    covers how to manage and monitor build jobs. This chapter describes basic security
+    configuration in detail that is available in Jenkins for a better access control
+    and authorization. The following is the list of topics that we will cover in this
+    chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Managing Jenkins master and slave nodes
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins monitoring with JavaMelody
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Managing disk usage
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Build job-specific monitoring with the Build Monitor plugin
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Managing access control and authorization
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Maintaining role and project-based security
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Managing an admin account
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Audit Trail Plugin—an overview and usage
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Managing Jenkins master and slave nodes
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: A master represents basic installation of Jenkins and handles all tasks for
+    the build system. It can satisfy all user requests and has the capacity to build
+    projects on its own. A slave is a system that is set up to reduce the burden of
+    build projects from the master but delegation behavior depends on the configuration
+    of each project. Delegation can be configured specifically to build job.
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, go to **Manage Jenkins**. Click on **Manage Nodes**
+    link. It will provide information on all nodes, as shown in the following screenshot:![Managing
+    Jenkins master and slave nodes](img/3471_07_01.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To create a slave node, click on **New Node**.![Managing Jenkins master and
+    slave nodes](img/3471_07_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide **Name**, **Description**, **Labels** and so on. Select **Launch slave
+    agents via Java Web Start** as **Launch method**. Provide **Labels**; in our case,
+    it is `java8`:![Managing Jenkins master and slave nodes](img/3471_07_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**. It will open a page that gives details on how to launch the
+    slave node.![Managing Jenkins master and slave nodes](img/3471_07_04.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Open terminal on the Windows machine and run `javaws http://192.168.13.128:8080/computer/WindowsNode/slave-agent.jnlp`.![Managing
+    Jenkins master and slave nodes](img/3471_07_05.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It will open a dialogue box for downloading the application.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Managing Jenkins master and slave nodes](img/3471_07_06.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Run **Jenkins Remoting Agent**.![Managing Jenkins master and slave nodes](img/3471_07_07.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: A small window for the Jenkins slave agent will open.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Managing Jenkins master and slave nodes](img/3471_07_08.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: The **slave WindowsNode** will be connected via the JNLP agent.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Managing Jenkins master and slave nodes](img/3471_07_09.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: On the Jenkins dashboard, go to **Manage Jenkins**. Click on the **Manage Nodes**
+    link. It will provide information on all nodes, as shown in the following screenshot.
+    Verify both the nodes in the **Build Executor Status** section of the leftmost
+    sidebar.![Managing Jenkins master and slave nodes](img/3471_07_10.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: If we want to run a selective build job on to a specific node, then we can configure
+    it build job-wise, as shown in the following screenshot. Check **Restrict where
+    this project can be run** and provide **Label Expression** given to the specific
+    node on the job configuration page.![Managing Jenkins master and slave nodes](img/3471_07_11.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Build Now** to execute build. Verify the console and find building
+    remotely on WindowsNode we configured in the preceding section.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It will check out the code on slave and perform operations on the specific node
+    only.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Managing Jenkins master and slave nodes](img/3471_07_12.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Such configuration is useful where we want to run build job in a specific set
+    of runtime environment, which is available on the specific node.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins monitoring with JavaMelody
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: The Monitoring plugin provides monitoring of Jenkins with JavaMelody. It provides
+    charts of a CPU, memory, system load average, HTTP response time, and so on. It
+    also provides details of HTTP sessions, errors and logs, actions for GC, heap
+    dump, invalidate session(s), and so on. Install the Monitoring plugin from the
+    Jenkins Dashboard.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Jenkins monitoring with JavaMelody](img/3471_07_13.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: On the Jenkins dashboard, click on **Manage Jenkins**. Click on **Monitoring
+    of Jenkins master**, as shown in the following screenshot:![Jenkins monitoring
+    with JavaMelody](img/3471_07_14.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It will open the statistics of JavaMelody monitoring, as shown in the following
+    screenshot. Observe all statistics:![Jenkins monitoring with JavaMelody](img/3471_07_15.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Scroll down the page and we will find **Statistics system errors logs**.![Jenkins
+    monitoring with JavaMelody](img/3471_07_16.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To get more information, click on the **Details** link of any section. Statistics
+    of HTTP are as shown in the following figure:![Jenkins monitoring with JavaMelody](img/3471_07_17.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Explore more at [https://wiki.jenkins-ci.org/display/JENKINS/Monitoring](https://wiki.jenkins-ci.org/display/JENKINS/Monitoring)
+    to get more details on the Monitoring plugin.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Managing disk usage
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Disk Usage Plugin records disk usage. Install **Disk Usage Plugin** from the
+    Jenkins dashboard.![Managing disk usage](img/3471_07_18.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once the plugin is successfully installed, we will get the **Disk usage** link
+    on the Manage Jenkins page, as shown in the following screenshot:![Managing disk
+    usage](img/3471_07_19.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The Disk Usage plugin will show project-wise details for all jobs and all workspace.
+    It will also display **Disk Usage Trend**.![Managing disk usage](img/3471_07_20.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To get more details on Disk usage plugin, visit [https://wiki.jenkins-ci.org/display/JENKINS/Disk+Usage+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Disk+Usage+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Build monitoring with Build Monitor Plugin
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '**Build Monitor Plugin** provides a detailed view of the status of selected
+    Jenkins jobs. It provides the status and progress of selected jobs and names of
+    people who might be responsible for "breaking the build". This plugin supports
+    the Claim plugin, View Job Filters, Build Failure Analyzer, and CloudBees Folders
+    plugin.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Build monitoring with Build Monitor Plugin](img/3471_07_21.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: The Dashboard View plugin will be used for creating a view that provides details
+    on build job-specific monitoring. Create a new view and select **Build Monitor
+    View**.![Build monitoring with Build Monitor Plugin](img/3471_07_22.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select **Jobs** and save the details.![Build monitoring with Build Monitor Plugin](img/3471_07_23.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the newly created view, and we will get a similar type of screen as
+    given in the following screenshot:![Build monitoring with Build Monitor Plugin](img/3471_07_24.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To get more details on plugin, visit [https://wiki.jenkins-ci.org/display/JENKINS/Build+Monitor+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Monitor+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Managing access control and authorization
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Jenkins supports several security models, and can integrate with different user
+    repositories.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Go to the Jenkins dashboard, click on **Manage Jenkins**, and click on **Configure
+    Global Security**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Enable security**.![Managing access control and authorization](img/3471_07_25.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'All options will be visible once we enable security, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Managing access control and authorization](img/3471_07_26.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Click on **Jenkins' own user database**. Click on **Save**.![Managing access
+    control and authorization](img/3471_07_27.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now, click on the **sign up** link on the top-right corner. Provide **Username**,
+    **Password**, **Full name**, and **E-mail address**.![Managing access control
+    and authorization](img/3471_07_28.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **log in** link on the dashboard.![Managing access control and
+    authorization](img/3471_07_29.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We will get the Jenkins dashboard with the username in the top-right corner.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Managing access control and authorization](img/3471_07_30.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Click on **People** to verify all users.![Managing access control and authorization](img/3471_07_31.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, click on **Manage Jenkins**. Click on **Manage Users**.![Managing
+    access control and authorization](img/3471_07_32.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We can edit user details on the same page. This is a subset of users, which
+    also contains auto-created users.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: Maintaining roles and project-based security
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: For authorization, we can define **Matrix-based security** on the **Configure
+    Global Security** page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Add group or user and configure security based on different sections such as
+    **Credentials**, **Slave**, **Job**, and so on.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Save**.![Maintaining roles and project-based security](img/3471_07_33.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'We can use multiple users for matrix-based security, as shown in the following
+    screenshot:'
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Maintaining roles and project-based security](img/3471_07_34.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Try to access the Jenkins dashboard with a newly added user who has no rights,
+    and we will find the authorization error.![Maintaining roles and project-based
+    security](img/3471_07_35.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Now provide overall read rights; build, read, and workspace rights for job for
+    newly added users.![Maintaining roles and project-based security](img/3471_07_36.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Log in with the newly added user and verify that we can see the dashboard. We
+    can't see the **Manage Jenkins** link as we have provided those rights.![Maintaining
+    roles and project-based security](img/3471_07_37.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on any build job. The build link is available as we have given rights
+    but the configure link is not available as rights were not given for it.![Maintaining
+    roles and project-based security](img/3471_07_38.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We can also set **Project-based Matrix Authorization Strategy**.![Maintaining
+    roles and project-based security](img/3471_07_39.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to a specific build jobs' configuration and **Enable project-based security**.![Maintaining
+    roles and project-based security](img/3471_07_40.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Assign rights to different users and log in with the specific username to verify
+    whether authorization strategy is working or not.![Maintaining roles and project-based
+    security](img/3471_07_41.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the build details also, as shown in the following screenshot:![Maintaining
+    roles and project-based security](img/3471_07_42.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We've covered basics of security configuration in Jenkins. Explore more on the
+    other options as an exercise. In case, authorization is not correctly set, then
+    it can be corrected by editing `config.xml`. Consider it as self-study.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Audit Trail Plugin – an overview and usage
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Audit Trail Plugin keeps a log of users who performed particular Jenkins operations,
+    such as configuring jobs. This plugin adds an **Audit Trail** section in the main
+    Jenkins configuration page.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Install the **Audit Trail Plugin**.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Audit Trail Plugin – an overview and usage](img/3471_07_43.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: 'In Jenkins configuration, configure **Loggers**, as shown in the following
+    screenshot:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Audit Trail Plugin – an overview and usage](img/3471_07_44.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Stop the Jenkins server and start it again. Run any build job and open log files
+    to verify log records.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Audit Trail Plugin – an overview and usage](img/3471_07_45.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: To get more details, visit [https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Audit+Trail+Plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Self-test questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Q1\. What are the different ways to make slave node online?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Launch an agent from the browser on slave
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run the `slave-agent.jnlp` command from the command line
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Run `java -jar slave.jar`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q2\. For what options does Jenkins monitoring provide charts?
+  prefs: []
+  type: TYPE_NORMAL
+- en: CPU
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Memory
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: System load average
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: HTTP response time
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q3\. What are the options for Security Realm in Jenkins?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Delegate to Servlet Container
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Jenkins' own user database
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: LDAP
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Unix user/group database
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Whatever good things we build end up building us. In this chapter, we covered
+    concepts of master and slave nodes, how to monitor build jobs, and reporting of
+    statistics with management features. We also understood how to secure Jenkins
+    environment with authentication and authorization configurations by using role-based
+    security. We saw how the audit trail plugin stores audit details in Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will cover some important plugins that add a significant
+    value to Jenkins. Let's enjoy the last journey before we say goodbye.
+  prefs: []
+  type: TYPE_NORMAL

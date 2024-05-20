@@ -1,0 +1,597 @@
+- en: Chapter 2. Installation and Configuration of Code Repository and Build Tools
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '|   | *"Life is really simple, but we insist on making it complicated"* |  
+    |'
+  prefs: []
+  type: TYPE_TB
+- en: '|   | --*Confucius* |'
+  prefs: []
+  type: TYPE_TB
+- en: We looked at the deployment pipeline in the last chapter in which the source
+    code repository and automated build form a significant part. SVN, Git, CVS, and
+    StarTeam are some of the popular code repositories that manage changes to code,
+    artifacts, or documents, while Ant and Maven are popular build automation tools
+    for Java applications.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This chapter describes in detail how to prepare a runtime environment for life
+    cycle management with a Java application and configure it with Jenkins. It will
+    cover how to integrate Eclipse and code repositories such as SVN to create a base
+    for continuous integration. The following is the list of topics covered in this
+    chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Overview of a build in Jenkins and its requirements
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing Java and configuring environment variables
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: SVN installation, configuration, and operations on CentOS and Windows
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing Ant
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Configuring Ant, Maven, and JDK in Jenkins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Integrating Eclipse with code repositories
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Installing and configuring Git
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Creating a new build job in Jenkins with Git
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: An overview of a build in Jenkins and its requirements
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'To explain continuous integration, we are going to use a code repository installed
+    on a physical machine or laptop while Jenkins is installed on a virtual machine,
+    as suggested in different ways in [Chapter 1](ch01.html "Chapter 1. Exploring
+    Jenkins"), *Exploring Jenkins*. The following figure depicts the setup of the
+    runtime environment:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![An overview of a build in Jenkins and its requirements](img/3471_02_01.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: We saw in [Chapter 1](ch01.html "Chapter 1. Exploring Jenkins"), *Exploring
+    Jenkins*, that the **Manage Jenkins** link on the dashboard is used to configure
+    the system. Click on the **Configure System** link to configure Java, Ant, Maven,
+    and other third-party product-related information. We can create a virtual machine
+    with Virtual box or the VMware workstation. We need to install all required software
+    to provide a runtime environment for continuous integration. We assume that Java
+    is already installed in the system.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Java and configuring environment variables
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'If Java is not already installed in the system then you can install it as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Find the Java related packages available in CentOS repository and locate the
+    appropriate package to install.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Now install Java package available in the local repositories by executing `yum
+    install` command as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs: []
+  type: TYPE_PRE
+- en: Java is installed successfully from the local repository.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Configure environment variables
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'The following are the steps to configure the environment variables:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Set `JAVA_HOME` and `JRE_HOME` variables
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to `/root`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Press *Ctrl* + *H* to list hidden files
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Find `.bash_profile` and edit it by appending the Java path, as shown in the
+    following screenshot:![Configure environment variables](img/3471_02_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing, configuring, and operating SVN on CentOS and Windows
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Install SVN from the local repository on CentOS.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing SVN on CentOS
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'To install SVN on a CentOS machine, execute the `yum install mod_dav_svn subversion`
+    command as follows:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs: []
+  type: TYPE_PRE
+- en: Configuring SVN
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Create the password file using the `htpasswd` command. Initially use the `-cm`
+    arguments. This creates the file and also encrypts the password with MD5\. If
+    you need to add users, make sure you simply use the `-m` flag, and not the `–c`,
+    after the initial creation.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE3]'
+  prefs: []
+  type: TYPE_PRE
+- en: Now configure SVN in Apache to integrate both. Edit `/etc/httpd/conf.d/subversion.conf`.
+    The location is what Apache will pass in the URL bar.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE4]'
+  prefs: []
+  type: TYPE_PRE
+- en: Now all configurations are completed. Let's perform operations on SVN.
+  prefs: []
+  type: TYPE_NORMAL
+- en: SVN operations
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Create the actual repository to perform SVN operations on the CentOS virtual
+    machine.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE5]'
+  prefs: []
+  type: TYPE_PRE
+- en: Import a directory into SVN
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Create a sample folder structure to test SVN operations. Create the `mytestproj`
+    directory with sub-directories named `main`, `configurations`, and `resources`.
+    Create sample files in each sub-directory.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[PRE6]'
+  prefs: []
+  type: TYPE_PRE
+- en: 'Verify the repository from a web browser: `http://localhost/repos`.'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Check out from SVN
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'To check out source code from the repository, perform the following operations:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Start `httpd` service.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE7]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Check out the source code.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE8]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: You can avoid future appearances of this warning by setting the value of the
+    `store-plaintext-passwords` option to either `yes` or `no` in `/root/.subversion/servers`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE9]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: VisualSVN Server on Windows
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Download the VisualSVN server from: [https://www.visualsvn.com/server/download/](https://www.visualsvn.com/server/download/).
+    It allows you to install and manage a fully-functional Subversion server with
+    Windows.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Execute `VisualSVN-Server-x.x.x-x64.msi` and follow the wizard to install VisualSVN
+    Server.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Open VisualSVN Server Manager.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a new repository, `JenkinsTest`.![VisualSVN Server on Windows](img/3471_02_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the regular subversion repository and click on **Next >**.![VisualSVN
+    Server on Windows](img/3471_02_04.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide the **Repository Name** and click on **Next >**.![VisualSVN Server on
+    Windows](img/3471_02_05.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select **Single-project repository** and click on **>**.![VisualSVN Server on
+    Windows](img/3471_02_06.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Select the Repository Access Permissions based on your requirements and click
+    on **Create**.![VisualSVN Server on Windows](img/3471_02_07.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the created repository details and click on **Finish**.![VisualSVN Server
+    on Windows](img/3471_02_08.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the newly created repository in VisualSVN Server Manager.![VisualSVN
+    Server on Windows](img/3471_02_09.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the repository location in the browser, as shown in the following screenshot:![VisualSVN
+    Server on Windows](img/3471_02_10.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Now install SVN client from: [http://sourceforge.net/projects/tortoisesvn/](http://sourceforge.net/projects/tortoisesvn/),
+    to perform SVN operations.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Let's create a sample JEE project in Eclipse to illustrate SVN and Eclipse integration.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Open Eclipse, go to the **File** menu and click on **Dynamic Web Project**.![VisualSVN
+    Server on Windows](img/3471_02_11.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It will open a dialog box to create a **New Dynamic Web Project**.![VisualSVN
+    Server on Windows](img/3471_02_12.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create the source files and a `build` file for a simple project.![VisualSVN
+    Server on Windows](img/3471_02_13.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to **Application Directory**, right-click on it, select **TortoiseSVN**,
+    and select **Import** from the sub-menu.![VisualSVN Server on Windows](img/3471_02_14.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Enter the repository URL and click on **OK**.![VisualSVN Server on Windows](img/3471_02_15.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It will add all files from the application to SVN, as shown in the following
+    screenshot.![VisualSVN Server on Windows](img/3471_02_16.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the import by visiting the SVN repository in a browser as shown:![VisualSVN
+    Server on Windows](img/3471_02_17.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Integrating Eclipse with code repositories
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Open Eclipse IDE, go to the **Help** menu and click on **Install New Software**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add the repository by adding this URL: [http://subclipse.tigris.org/update_1.10.x](http://subclipse.tigris.org/update_1.10.x),
+    then select all packages and click on **Next >**.![Integrating Eclipse with code
+    repositories](img/3471_02_18.jpg)'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Review the items to be installed and the Review Licenses in the wizard. Accept
+    the terms of agreement and click on **Finish**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Eclipse. Go to the **Window** menu, select **Show View**, click on **Other**,
+    and find the SVN and SVN repositories.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: In the SVN repositories area, right-click and select **New**; select **Repository
+    Location…** from the sub-menu.![Integrating Eclipse with code repositories](img/3471_02_19.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Add a new SVN Repository in Eclipse with this URL: `https://<Ip address/ localhost
+    / hostname>/svn/JenkinsTest/`.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Finish**.![Integrating Eclipse with code repositories](img/3471_02_20.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the SVN repository.![Integrating Eclipse with code repositories](img/3471_02_21.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Try to integrate SVN, installed on CentOS, with Eclipse IDE, as practice.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing and configuring Ant
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Download the Ant distribution from: [https://ant.apache.org/bindownload.cgi](https://ant.apache.org/bindownload.cgi)
+    and unzip it.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Set the `ANT_HOME` and `JAVA_HOME` environment variables.![Installing and configuring
+    Ant](img/3471_02_22.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: There is an option available in Jenkins to install Ant or Maven automatically.
+    We will study this in the *Configuring Ant, Maven, and JDK in Jenkins* section.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Maven
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Download the Maven binary ZIP file from [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+    and extract it to the local system where Jenkins is installed.
+  prefs: []
+  type: TYPE_NORMAL
+- en: '![Installing Maven](img/3471_02_23.jpg)'
+  prefs: []
+  type: TYPE_IMG
+- en: Configuring Ant, Maven, and JDK in Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'Open the Jenkins dashboard in your browser with this URL: `http://<ip_address>:8080/configure`.
+    Go to the **Manage Jenkins** section and click on **Configure System**.'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configure Java, based on the installation shown in the following screenshot:![Configuring
+    Ant, Maven, and JDK in Jenkins](img/3471_02_24.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configure or install Ant automatically on the same page. Configure Maven as
+    well.![Configuring Ant, Maven, and JDK in Jenkins](img/3471_02_25.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Installing and configuring Git
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Git is a free and open source distributed version control system. In this section,
+    we will try to install and configure Git.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Open the terminal in the CentOS-based system and execute the command `yum install
+    git` in the terminal.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once it is successfully installed, verify the version with the command `git
+    --version`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide information about the user with the `git config` command so that `commit`
+    messages will be generated with the correct information attached.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide the name and e-mail address to embed into commits.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To create a workspace environment, create a directory called `git` in the home
+    directory and then create a subdirectory inside of that called `development`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Use `mkdir -p ~/git/development ; cd ~/git/development` in the terminal.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: Copy the `AntExample1` directory into the `development` folder.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Convert an existing project into a workspace environment by using the `git init`
+    command.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once the repository is initialized, add files and folders.![Installing and configuring
+    Git](img/3471_02_26.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Commit by executing `git commit -m "Initial Commit" –a`.![Installing and configuring
+    Git](img/3471_02_27.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the Git repository![Installing and configuring Git](img/3471_02_28.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the project in the Git repository.![Installing and configuring Git](img/3471_02_29.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Creating a new build job in Jenkins with Git
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, click on **Manage Jenkins** and select **Manage Plugins**.
+    Click on the **Available** tab and write `github` plugin in the search box.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click the checkbox and click on the button, **Download now and install after
+    restart**.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Restart Jenkins.![Creating a new build job in Jenkins with Git](img/3471_02_30.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Create a new **Freestyle project**. Provide **Item name** and click on **OK**.![Creating
+    a new build job in Jenkins with Git](img/3471_02_31.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configure **Git** in the **Source Code Management** section.![Creating a new
+    build job in Jenkins with Git](img/3471_02_32.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Add the **Invoke Ant** build step by clicking on **Add build step**.![Creating
+    a new build job in Jenkins with Git](img/3471_02_33.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Execute the build.![Creating a new build job in Jenkins with Git](img/3471_02_34.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Console Output** to see the progress of the build.![Creating a new
+    build job in Jenkins with Git](img/3471_02_35.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once the build has succeeded, verify **Workspace** in the build job.![Creating
+    a new build job in Jenkins with Git](img/3471_02_36.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Done!
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Self-test questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Q1\. Where to set the `JAVA_HOME` and `JRE_HOME` environment variables?
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`/root/ .bash_profile`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '`/root/ .env_profile`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '`/root/ .bash_variables`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '`/root/ .env_variables`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q2\. Which are valid SVN operations?
+  prefs: []
+  type: TYPE_NORMAL
+- en: '`svn import /tmp/mytestproj/`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '`svn co http://localhost/repos/mytestproj`'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Both the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q3\. Where do you configure Java and Ant in Jenkins?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Go to the **Manage Jenkins** section and click on **Configure System**
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to the **Manage Jenkins** section and click on **Global Configuration**
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Hooray! We have reached the end of this chapter. We have covered how to prepare
+    an environment for continuous integration by setting up a local CentOS repository,
+    installing code repositories such as SVN on CentOS and Windows, and build tool
+    Ant. We have also seen detailed instructions on how to configure repositories
+    and build tools in Jenkins. Finally, we have covered how to integrate the Integrated
+    Development Environment with code repositories so that efficient development and
+    ease of `commit` operations can take place to facilitate the deployment pipeline
+    process.
+  prefs: []
+  type: TYPE_NORMAL

@@ -1,0 +1,600 @@
+- en: Chapter 5. Hosted Jenkins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '|   | *"Productivity is being able to do things that you were never able to
+    do before"* |   |'
+  prefs: []
+  type: TYPE_TB
+- en: '|   | --*Franz Kafka* |'
+  prefs: []
+  type: TYPE_TB
+- en: We have understood the concepts of continuous delivery and continuous deployment.
+    We have also seen how to deploy the `war` file from Jenkins to the Tomcat server.
+    Now, we will see how hosted Jenkins can be leveraged. Different service providers
+    offer Jenkins as a service. We will see how OpenShift and CloudBees provide Jenkins
+    to users.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'This chapter describes details on how to use hosted Jenkins, which is provided
+    by popular PaaS providers, such as Red Hat OpenShift and CloudBees. This chapter
+    also covers details on how various customers are using Jenkins based on their
+    requirements. This chapter will explore details on how to use Cloud-related plugins
+    in Jenkins for effective usage of Jenkins. We will cover the following topics
+    in this chapter:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Exploring Jenkins in OpenShift PaaS
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exploring Jenkins in the Cloud – CloudBees
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: An overview of CloudBees Enterprise Plugins
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Jenkins case studies from CloudBees
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Exploring Jenkins in OpenShift PaaS
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: OpenShift Online is a public PaaS—application development and hosting platform
+    from Red Hat. It automates the process of provisioning and deprovisioning, management,
+    and scaling of applications. This supports command-line client tools and a web
+    management console to launch and manage applications easily. The Jenkins app is
+    provided by OpenShift Online. OpenShift Online has a free plan.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To sign up for OpenShift Online, visit [https://www.openshift.com/app/account/new](https://www.openshift.com/app/account/new).![Exploring
+    Jenkins in OpenShift PaaS](img/3471_05_01.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once you sign up, you will get the welcome screen at [https://openshift.redhat.com/app/console/applications](https://openshift.redhat.com/app/console/applications).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Create your first application now**.![Exploring Jenkins in OpenShift
+    PaaS](img/3471_05_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Choose a type of application, in our case, select **Jenkins Server**.![Exploring
+    Jenkins in OpenShift PaaS](img/3471_05_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Give **Public URL** for your Jenkins server, as shown in the following screenshot:![Exploring
+    Jenkins in OpenShift PaaS](img/3471_05_04.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Create Application**.![Exploring Jenkins in OpenShift PaaS](img/3471_05_05a.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **visit app in the browser**.![Exploring Jenkins in OpenShift PaaS](img/3471_05_05.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Access the Jenkins in the web browser. Then, log in with the provided credentials
+    in the OpenShift dashboard.![Exploring Jenkins in OpenShift PaaS](img/3471_05_06.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The following is the screenshot of the Jenkins dashboard:![Exploring Jenkins
+    in OpenShift PaaS](img/3471_05_07.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Exploring Jenkins in the Cloud – CloudBees
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: DEV@cloud is a hosted Jenkins service in a secure, multi-tenanted environment
+    managed by CloudBees. It runs a specific version of Jenkins, along with a selected
+    version of plugins which are well supported with that version. All updates and
+    patches are managed by CloudBees, and limited customization is available.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Go to [https://www.cloudbees.com/products/dev](https://www.cloudbees.com/products/dev)
+    and subscribe.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_08.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once we complete subscription process, we will get the dashboard of CloudBees,
+    as shown in following screenshot. Click on **Builds**.![Exploring Jenkins in the
+    Cloud – CloudBees](img/3471_05_09.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We will get the Jenkins dashboard, as shown in the following screenshot:![Exploring
+    Jenkins in the Cloud – CloudBees](img/3471_05_10.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Manage Jenkins** to configure and install plugins.![Exploring Jenkins
+    in the Cloud – CloudBees](img/3471_05_11.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_IND
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Before configuring a build job, we need to store the source code of an application
+    in the repository service provided by CloudBees. Click on **Ecosystem**, and then
+    click on **Repositories**.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_12.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Click on the subversion repositories or **Add Repository**, and get the URL
+    of the repository.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_13.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the application folder to import it into the subversion repository
+    provided by CloudBees. Use TortoiseSVN or any SVN client to import the code.![Exploring
+    Jenkins in the Cloud – CloudBees](img/3471_05_14.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide the URL of a repository we copied from CloudBees, and click on **OK**.![Exploring
+    Jenkins in the Cloud – CloudBees](img/3471_05_15.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Provide authentication information (the username and password are same as our
+    CloudBees account).
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **OK**.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_16.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: The import process will take some time based on the size of the source files.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_17.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Verify the Repository URL on the browser, and we will find the recently imported
+    project in it.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_18.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the Jenkins dashboard after the successful import operation.![Exploring
+    Jenkins in the Cloud – CloudBees](img/3471_05_19.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **New Item** on the Jenkins dashboard. Select **Freestyle project**,
+    and provide a name for a new build job. Click on **OK**.![Exploring Jenkins in
+    the Cloud – CloudBees](img/3471_05_20.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: The configuration page will allow us to configure various settings specific
+    to the build job.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_21.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Configure the **Subversion** repository in the build job.![Exploring Jenkins
+    in the Cloud – CloudBees](img/3471_05_22.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Apply**, and then click on **Save**.![Exploring Jenkins in the Cloud
+    – CloudBees](img/3471_05_23.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Build Now**.![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_24.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify Console Output.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_25.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Then, it will compile the source files, and create a `war` file based on the
+    `build.xml` file, as this is an Ant-based project.
+  prefs:
+  - PREF_IND
+  type: TYPE_NORMAL
+- en: '![Exploring Jenkins in the Cloud – CloudBees](img/3471_05_26.jpg)'
+  prefs:
+  - PREF_IND
+  type: TYPE_IMG
+- en: Verify the Jenkins dashboard for a successful build.![Exploring Jenkins in the
+    Cloud – CloudBees](img/3471_05_27.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: An overview of CloudBees Enterprise Plugins
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The following are some important CloudBees Enterprise Plugins:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Workflow Plugin
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: It is a complex task to manage software delivery pipelines, and developer and
+    operations teams need to manage complex jobs that can take days to complete. The
+    Workflow plugin supports complex pipelines. The plugin uses Groovy DSL for workflows,
+    and it also provides the facility to pause and restart jobs, to and from both
+    master and slave failures.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To read more on this, visit [https://www.cloudbees.com/products/cloudbees-jenkins-platform/team-edition/features/workflow-plugin](https://www.cloudbees.com/products/cloudbees-jenkins-platform/team-edition/features/workflow-plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Checkpoints Plugin
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Let's consider a scenario where a long running build job fails almost at its
+    end phase. This can hamper delivery schedules. The Checkpoints plugin provides
+    the facility to restart workflows at checkpoints. Hence, it eliminates delays
+    due to master and slave failures. In addition, it can help to survive Jenkins
+    and infrastructure failures.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To read more on this, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/checkpoints-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/checkpoints-plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Role-based Access Control Plugin
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: 'Authentication and authorization plays a significant role in the security aspect.
+    The authorization strategy can help to control access to Jenkins jobs effectively.
+    It is also essential to set permissions at the project level and visibility. The
+    **Role-based Access Control** (**RBAC**) plugin provided by CloudBees provides
+    the following features:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: To define various security roles
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To assign rules to groups
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To assign roles globally or at an object level
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To delegate management of groups for specific objects to users
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To read more about the Role-based Access Control Plugin, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/role-based-access-control-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/role-based-access-control-plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: High Availability Plugin
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: The downtime of Jenkins master caused by software or hardware affects the entire
+    product team. It is vital to bring Jenkins master up in quick time, and this will
+    take many hours. The High Availability plugin eliminates downtime due to master
+    failures, by keeping multiple masters as backups. A backup master automatically
+    boots up when the failure of the master is detected. This plugin makes failure
+    detection and recovery an automatic process and not manual.
+  prefs: []
+  type: TYPE_NORMAL
+- en: To read more on this, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/high-availability-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/high-availability-plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: VMware ESXi/vSphere Auto-Scaling Plugin
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Let's consider a scenario where you need multiple slaves for Jenkins running
+    in your existing infrastructure to utilize underutilized capacity of your virtualized
+    infrastructure based on VMware. The VMware vCenter Auto-Scaling plugin allows
+    you to create slave machines that are available in your VMware-based virtualized
+    infrastructure. It is possible to configure pools of virtual machines that have
+    identical and multiple VMs.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'The following actions are allowed on VMs:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Power on
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Power off/suspend
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Revert to the last snapshot
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To read more, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins/vmware-esxivsphere-auto-scaling-plugin](https://www.cloudbees.com/products/jenkins-enterprise/plugins/vmware-esxivsphere-auto-scaling-plugin).
+  prefs: []
+  type: TYPE_NORMAL
+- en: To find details on all plugins provided by CloudBees, visit [https://www.cloudbees.com/products/jenkins-enterprise/plugins](https://www.cloudbees.com/products/jenkins-enterprise/plugins).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Jenkins case studies from CloudBees
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We will cover some case studies from CloudBees, where Jenkins is used effectively.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Apache jclouds
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Apache jclouds is an open source multi-cloud toolkit that provides the facility
+    to manage workloads on multiple clouds. It was created on the Java platform, and
+    provides complete control to use cloud platform-specific features to create and
+    manage applications. It provides seamless portability across various cloud platforms.
+    Apache jclouds support 30 cloud providers and cloud software stacks such as Joyent,
+    Docker, SoftLayer, Amazon EC2, OpenStack, Rackspace, GoGrid, Azure, and Google.
+    Apache jclouds has a remarkable user base such as CloudBees, Jenkins, Cloudify,
+    cloudsoft, Twitter, Cloudswitch, enStratus, and so on.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Challenge
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The jclouds community uses Jenkins CI for continuous integration. Day by day,
+    it was getting more difficult to manage and maintain Jenkins, and it was a costly
+    affair. Managing Jenkins was a time-consuming and tedious task. Most of the time
+    developers were involved in the managing of Jenkins, and not in writing the code
+    to make jclouds more effective.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Solution
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: The jclouds team explored PaaS offerings available in the market and considered
+    CloudBees, which will help them to eliminate infrastructure management and maintenance.
+    It was recognized by the jclouds team that it is easy to shift the Jenkins CI
+    work to DEV@cloud and immediately gain productivity benefits from developers.
+    Almost 4 hours were saved weekly from the maintenance activity of Jenkins.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Benefits
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 100% focus on software development, by eliminating activities such as server
+    reboots, server sizing, software updates, and patches, as they are automatically
+    performed from within the CloudBees service
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 33% increase in developer productivity
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Technical support from CloudBees for Jenkins CI issues
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To read more about this case study, visit [https://www.cloudbees.com/casestudy/jclouds](https://www.cloudbees.com/casestudy/jclouds).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Global Bank
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Global Bank is one of the top Global Financial Institutions. It offers corporate
+    and investment banking services, private banking services, credit card services
+    and investment management. It has a substantial international presence.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Challenge
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Global Bank's existing process was suffering from a fragmented build process,
+    non-approved software versions, and a lack of technical support. There was a pool
+    of central control or management, and standardization of the process. Build assets
+    were not accessible all the time. There was a need for secure automated process
+    for application build services with audit capabilities. Jenkins provided standardization
+    along with other benefits of a centralized management with robustness and the
+    availability of useful plugins. After using open source Jenkins, the financial
+    institution faced other challenges that were not available in open source Jenkins.
+    More features were needed for approvals, security, backup, and audit.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Solution
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: To overcome existing challenges, Global Bank evaluated and selected CloudBees
+    Jenkins Enterprise, considering the additional plugins for high availability,
+    backup, security, and job organization, and the ability to obtain technical support
+    for open source Jenkins and open source Jenkins plugins. Global Bank utilized
+    technical support from CloudBees for setting up CloudBees Jenkins Enterprise.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Benefits
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: RBAC Plugin provides security and additional enterprise-level functionality.
+    The Folders plugin offers version control and ensures that only approved software
+    versions are shared.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Half a day of development time is saved per application, by eliminating the
+    need of monitoring the local instance of the build for each application.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Availability of technical support capabilities.
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To read more, visit [https://www.cloudbees.com/casestudy/global-bank](https://www.cloudbees.com/casestudy/global-bank).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Service-Flow
+  prefs:
+  - PREF_H2
+  type: TYPE_NORMAL
+- en: Service-Flow provides online integration services, to connect the disparate
+    IT service management tools used by organizations and various stakeholders. It
+    provides features to create ticket automatically, ticket information exchange,
+    and ticket routing. It has adapters for many ITSM tools such as ServiceNow and
+    BMC, as well as Microsoft Service Manager Fujitsu, Atos, Efecte, and Tieto.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Challenge
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Service-Flow wanted to build its own service without using any of the generic
+    integration tools for achieving agility. Service-Flow had several requirements,
+    such as focus on agility, which required a platform for rapid development and
+    frequent incremental updates, support for Jenkins, control over data, reliability,
+    and availability.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Solution
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Service-Flow used the CloudBees platform to build and deploy its ITSM integration
+    service. DEV@cloud has been utilized by establishing the version control repository,
+    coding first Java classes, setting up some basic Jenkins jobs, running unit tests,
+    executing integration tests, and other quality checks. The Service-Flow service
+    is in the cloud with a rapidly growing customer base by adding new features using
+    the CloudBees platform.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Benefits
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: Development time reduced by 50 percent with production release in three months
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Updates deployed multiple times a week without service downtime
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Availability of 99.999 percent achieved in production
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To read more, visit [https://www.cloudbees.com/casestudy/service-flow](https://www.cloudbees.com/casestudy/service-flow).
+  prefs: []
+  type: TYPE_NORMAL
+- en: For more case studies, visit [https://www.cloudbees.com/customers](https://www.cloudbees.com/customers).
+  prefs: []
+  type: TYPE_NORMAL
+- en: Self-test questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Q1\. What is true about Workflow Plugin provided by CloudBees?
+  prefs: []
+  type: TYPE_NORMAL
+- en: To pause and restart jobs, to and from both master and slave failures
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To manage software delivery pipelines
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It uses Groovy DSL for workflows
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q2\. What are the features of RBAC Plugin provided by CloudBees?
+  prefs: []
+  type: TYPE_NORMAL
+- en: To define various security roles
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To assign rules to groups
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: To assign role globally or at an object level
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q3\. What actions can be performed by VMware ESXi/vSphere Auto-Scaling Plugin
+    provided by CloudBees?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Power on
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Power off/suspend
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Revert to the last snapshot
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: All of the above
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: 'The interesting thing about the ending of a chapter is: each chapter that is
+    ending leads you to a new beginning. We know how to configure, manage, and use
+    Jenkins on Cloud service models such as PaaS, RedHat OpenShift, and CloudBees.
+    We also covered some interesting enterprise plugins from CloudBees, which add
+    a lot of flexibility and value. In the last section, we have all provided details
+    on various case studies on how Jenkins proved to be beneficial to a lot of organizations,
+    and how they leveraged functionality of Jenkins to gain a competitive edge.'
+  prefs: []
+  type: TYPE_NORMAL

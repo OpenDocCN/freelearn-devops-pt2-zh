@@ -1,0 +1,252 @@
+- en: Chapter 4. Implementing Automated Deployment
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: '|   | *Simplicity is prerequisite for reliability* |   |'
+  prefs: []
+  type: TYPE_TB
+- en: '|   | --*Edsger Dijkstra* |'
+  prefs: []
+  type: TYPE_TB
+- en: We have covered the concept of continuous integration, and we also know how
+    to implement it using Jenkins. Now is the time to move to the next step in the
+    application deployment pipeline, that is automated deployment. We will first understand
+    the concept of continuous delivery and continuous deployment, before automated
+    deployment into a Tomcat application server.
+  prefs: []
+  type: TYPE_NORMAL
+- en: This chapter will take one step forward in the deployment pipeline by deploying
+    artifacts in a local or remote application server. It will give an insight into
+    the automated deployment and continuous delivery process.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Overview of continuous delivery and continuous deployment
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: Deploying a file from Jenkins to a Tomcat server
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: An overview of continuous delivery and continuous deployment
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Continuous delivery is the extension of Continuous Integration practices. Application
+    artifacts are production-ready in automated fashion but not deployed in production.
+    Continuous deployment is the extension of continuous delivery, where changes in
+    the application are finally deployed in production. Continuous delivery is a must
+    for DevOps practices. Let's understand how to deploy application artifacts using
+    Jenkins in the following sections.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Note
+  prefs:
+  - PREF_H3
+  type: TYPE_NORMAL
+- en: 'For more details on continuous delivery and continuous deployment, visit:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[http://continuousdelivery.com/2010/08/continuous-delivery-vs-continuous-deployment/](http://continuousdelivery.com/2010/08/continuous-delivery-vs-continuous-deployment/)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: '[http://martinfowler.com/books/continuousDelivery.html](http://martinfowler.com/books/continuousDelivery.html)'
+  prefs: []
+  type: TYPE_NORMAL
+- en: Installing Tomcat
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Tomcat is an open source web server and servlet container developed by the **Apache
+    Software Foundation** (**ASF**). We will use Tomcat to deploy web applications.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Go to [https://tomcat.apache.org](https://tomcat.apache.org) and download Tomcat.
+    Extract all the files to a relevant folder in your system.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Change the port number in `conf/server.xml` from `8080` to `9999`.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE0]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Open the terminal or Command Prompt based on your operating system. Go to the
+    `tomcat` directory. Go to the `bin` folder, and run `startup.bat` or `startup.sh`.
+    The following is an example of `startup.bat` on Windows.![Installing Tomcat](img/3471_04_01.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Open your browser and visit `http://localhost:9999`. We can also access the
+    Tomcat home page by using the IP address `http://<IP address>:9999`.![Installing
+    Tomcat](img/3471_04_02.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Deploying a war file from Jenkins to Tomcat
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: We will use the Deploy plugin available at [https://wiki.jenkins-ci.org/x/CAAjAQ](https://wiki.jenkins-ci.org/x/CAAjAQ)
+    to deploy a `war` file into a specific container.
+  prefs: []
+  type: TYPE_NORMAL
+- en: The Deploy plugin takes the `war`/`ear` file, and deploys it to a running local
+    or remote application server at the end of a build.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'It supports the following containers:'
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'Tomcat: 4.x/5.x/6.x/7.x'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'JBoss: 3.x/4.x'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: 'Glassfish: 2.x/3.x'
+  prefs:
+  - PREF_UL
+  type: TYPE_NORMAL
+- en: To deploy a `war` file in a `Websphere` container, use the Deploy WebSphere
+    plugin available at [https://wiki.jenkins-ci.org/x/UgCkAg](https://wiki.jenkins-ci.org/x/UgCkAg).
+  prefs: []
+  type: TYPE_NORMAL
+- en: To deploy a `war` file in a `Weblogic` container, use the WebLogic Deployer
+    plugin available at [https://wiki.jenkins-ci.org/x/q4ahAw](https://wiki.jenkins-ci.org/x/q4ahAw).
+  prefs: []
+  type: TYPE_NORMAL
+- en: On the Jenkins dashboard, go to the **Manage Jenkins** link and then click on
+    **Manage Plugins** and install **Deploy plugin**.![Deploying a war file from Jenkins
+    to Tomcat](img/3471_04_03.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Wait until the installation of **Deploy Plugin** is complete.![Deploying a war
+    file from Jenkins to Tomcat](img/3471_04_04.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Go to the Jenkins dashboard and select any build job. Click on the **Configure**
+    link of the selected build job.
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on the **Add post-build action** button on the configuration page of the
+    relevant job and select **Deploy war/ear to container,** as shown in the following
+    figure.![Deploying a war file from Jenkins to Tomcat](img/3471_04_05.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: It will add **Deploy war/ear to a container** in the **Post-build Actions**
+    section. Provide a **war** file path that is relative to the workspace, and select
+    **Tomcat 7.x** as the container from the available list box, as shown in the following
+    figure.![Deploying a war file from Jenkins to Tomcat](img/3471_04_06.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'Provide **Manager user name** and **Manager password**; in `tomcat-users.xml`,
+    and uncomment the following:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE1]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: 'Add the following in the uncommented section:'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: '[PRE2]'
+  prefs:
+  - PREF_IND
+  type: TYPE_PRE
+- en: Restart Tomcat, visit `http://localhost:9999/manager/html`, and enter a username
+    and password. Use the same username and password in Jenkins for Manager credentials.![Deploying
+    a war file from Jenkins to Tomcat](img/3471_04_07.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Click on **Build Now**.![Deploying a war file from Jenkins to Tomcat](img/3471_04_08.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Once the build is complete, verify the console output of the deployment of the
+    application in the Tomcat application server.![Deploying a war file from Jenkins
+    to Tomcat](img/3471_04_09.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the `webapps` directory in the Tomcat installation directory.![Deploying
+    a war file from Jenkins to Tomcat](img/3471_04_10.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Verify the Tomcat manager, and check the status of an application in the Tomcat
+    application server.![Deploying a war file from Jenkins to Tomcat](img/3471_04_11.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: If the Tomcat server is installed on a remote server, then use the IP address
+    in the Tomcat URL, as shown in the following figure:![Deploying a war file from
+    Jenkins to Tomcat](img/3471_04_12.jpg)
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: We only need to change the Tomcat URL in case of remote deployment.
+  prefs: []
+  type: TYPE_NORMAL
+- en: Self-test questions
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Q1\. Continuous delivery and continuous deployment are the same.
+  prefs: []
+  type: TYPE_NORMAL
+- en: 'True'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: 'False'
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Q2\. How do you enable Tomcat manager access?
+  prefs: []
+  type: TYPE_NORMAL
+- en: Start Tomcat
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Modify `server.xml`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Modify `tomcat-users.xml`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Modify `web.xml`
+  prefs:
+  - PREF_OL
+  type: TYPE_NORMAL
+- en: Summary
+  prefs:
+  - PREF_H1
+  type: TYPE_NORMAL
+- en: Well done! We are at the end of the chapter; let's summarize what we have covered.
+    We have understood the concept of continuous delivery and continuous deployment.
+    The main concept we have covered here is the deployment of application artifacts
+    in the specific application server after the build is successful.
+  prefs: []
+  type: TYPE_NORMAL
+- en: In the next chapter, we will learn how to manage Jenkins on Cloud, and look
+    at some case studies.
+  prefs: []
+  type: TYPE_NORMAL
