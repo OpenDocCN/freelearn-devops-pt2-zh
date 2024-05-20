@@ -327,7 +327,17 @@ kubectl create deployment backend --image=nginx
 
 ![图 5.18：部署创建](img/C12607_05_18.jpg)
 
-###### ![图 5.18：部署创建 1.  通过在云 shell 中运行以下命令，将`backend`部署的副本数扩展到`10`：```    kubectl scale deployment backend --replicas=10    ```此命令增加了后端部署的副本数，如下图所示：![图 5.19：部署扩展](img/C12607_05_19.jpg)
+###### 图 5.18：部署创建
+
+1.  通过在云 shell 中运行以下命令，将`backend`部署的副本数扩展到`10`：
+
+```
+    kubectl scale deployment backend --replicas=10    
+```
+
+此命令增加了后端部署的副本数，如下图所示：
+
+![图 5.19：部署扩展](img/C12607_05_19.jpg)
 
 ###### 图 5.19：部署扩展
 
