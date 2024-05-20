@@ -538,119 +538,99 @@ Ansible 4.3 包含的 Windows 模块列表可在以下链接找到，需要注�
 
 始终重要的是查阅 playbooks 中使用的各个模块的文档。例如，查看`ansible.windows.win_copy`模块的文档，它建议在进行大文件传输时使用`ansible.windows.win_get_url`模块，因为 WinRM 传输机制效率不高。当然，如果您使用 OpenSSH 服务器代替 WinRM，则可能不适用——在撰写本文时，该模块的文档尚未更新以考虑这一点。
 
-还要注意，如果文件名包含某些特殊字符（例如方括号），则需要使用 PowerShell 转义字符````. For example, the following task would install the `c:\temp\setupdownloader_[aaff].exe` file:
-
-````进行转义。
-
-- 名称：安装软件包
-
-win_package：
-
-路径：'c:\temp\setupdownloader_`[aaff`].exe'
-
-产品 ID：{00000000-0000-0000-0000-000000000000}
-
-参数：/silent /unattended
-
-状态：存在
+还要注意，如果文件名包含某些特殊字符（例如方括号），则需要使用 PowerShell 转义字符`` ` ``进行转义。例如，以下任务将安装`c:\temp\setupdownloader_[aaff].exe`文件：
 
 ```
-
-Many other Windows modules should suffice to complete your Windows playbook needs, and, combined with these tips, you will get the end results you need, quickly and with ease.
-
-## Installing software
-
-Most Linux systems (and indeed other Unix variants) have a native package manager that makes it easy to install a wide variety of software. The `chocolatey` package manager makes this possible for Windows, and the Ansible `chocolatey.chocolatey.win_chocolatey` module makes installing software in an unattended manner with Ansible simple (note that this is not part of the `ansible.windows` collection that we have used so far, but instead lives in its own collection). 
-
-You can explore the `chocolatey` repository and find out more about it at [`chocolatey.org`](https://chocolatey.org).
-
-For example, if you wanted to roll out Adobe's Acrobat Reader across an estate of Windows machines, you could use either the `ansible.windows.win_copy` or `ansible.windows.win_get_url` modules to distribute the installer, and then the `ansible.windows.win_package` module to install it. However, the following code would perform the same task with less code:
-
+  - name: Install package
+    win_package:
+      path: 'c:\temp\setupdownloader_`[aaff`].exe'
+      product_id: {00000000-0000-0000-0000-000000000000}
+      arguments: /silent /unattended
+      state: present
 ```
 
-- 名称：安装 Acrobat Reader
+许多其他 Windows 模块足以满足您的 Windows 剧本需求，结合这些技巧，您将能够快速轻松地获得所需的结果。
 
-chocolatey.chocolatey.win_chocolatey：
+## 安装软件
 
-名称：adobereader
+大多数 Linux 系统（以及其他 Unix 变体）都有一个原生包管理器，使得安装各种软件变得容易。`chocolatey`包管理器使得 Windows 也能实现这一点，而 Ansible 的`chocolatey.chocolatey.win_chocolatey`模块使得以无人值守方式使用 Ansible 安装软件变得简单（注意，这不是我们迄今为止使用的`ansible.windows`集合的一部分，而是存在于其自己的集合中）。
 
-状态：存在
+您可以探索`chocolatey`仓库，并在[`chocolatey.org`](https://chocolatey.org)了解更多信息。
 
-```
-
-There are all manner of clever installation routines you can run using the `chocolatey.chocolatey.win_chocolatey` module – for example, you can lock a package to a specific version, install a specific architecture, and much more – the documentation  for this module includes a great many useful examples. The official Chocolatey website itself lists all the available packages – most of the common ones you would expect to need can be found there, so it should suffice for a great many installation scenarios you will come across.
-
-## Extending beyond modules
-
-Just as on any platform, there may come a time when the exact functionality required is not available from a module. Although writing a custom module (or modifying an existing one) is a viable solution to this, sometimes, a more immediate solution is required. To this end, the `ansible.windows.win_command` and `ansible.windows.win_shell` modules come to the rescue—these can be used to run literal PowerShell commands on Windows. Many examples are available in the official Ansible documentation, but the following code, for example, would create the `C:\Mastery` directory using PowerShell:
+例如，如果您想在 Windows 机器群中部署 Adobe 的 Acrobat Reader，您可以使用`ansible.windows.win_copy`或`ansible.windows.win_get_url`模块分发安装程序，然后使用`ansible.windows.win_package`模块进行安装。然而，以下代码将以更少的代码执行相同的任务：
 
 ```
-
-- 名称：使用 PowerShell 创建目录
-
-ansible.windows.win_shell: New-Item -Path C:\Mastery -ItemType Directory
-
+- name: Install Acrobat Reader
+  chocolatey.chocolatey.win_chocolatey:
+    name: adobereader
+    state: present
 ```
 
-We could even revert to the traditional `cmd` shell for this task:
+使用`chocolatey.chocolatey.win_chocolatey`模块，您可以运行各种巧妙的安装例程——例如，您可以将软件包锁定到特定版本，安装特定架构，以及更多功能——该模块的文档包含了许多有用的示例。官方 Chocolatey 网站本身列出了所有可用的软件包——大多数您期望需要的常见软件包都可以在那里找到，因此它应该满足您将遇到的大多数安装场景。
+
+## 超越模块
+
+就像在任何平台上一样，可能会遇到所需的确切功能无法从模块获得的情况。虽然编写自定义模块（或修改现有模块）是解决此问题的可行方案，但有时需要更即时的解决方案。为此，`ansible.windows.win_command`和`ansible.windows.win_shell`模块派上了用场——这些模块可以在 Windows 上运行实际的 PowerShell 命令。官方 Ansible 文档中有许多示例，但以下代码，例如，将使用 PowerShell 创建`C:\Mastery`目录：
 
 ```
-
-- 名称：使用 cmd.exe 创建目录
-
-ansible.windows.win_shell: mkdir C:\MasteryCMD
-
-参数：
-
-可执行文件：cmd
-
+    - name: Create a directory using PowerShell
+      ansible.windows.win_shell: New-Item -Path C:\Mastery -ItemType Directory
 ```
 
-With these pointers, it should be possible to create the desired functionality in just about any Windows environment.
+我们甚至可以为此任务回退到传统的`cmd` shell：
 
-That concludes our look at Windows automation with Ansible – as long as you remember to use the correct Windows native modules, you will be able to apply the rest of this book to Windows hosts just as easily as you would any given Linux host.
+```
+    - name: Create a directory using cmd.exe
+      ansible.windows.win_shell: mkdir C:\MasteryCMD
+      args:
+        executable: cmd
+```
 
-# Summary
+有了这些提示，应该可以在几乎任何 Windows 环境中创建所需的功能。
 
-Ansible handles Windows hosts as effectively as Linux (and other Unix) ones. In this chapter, we covered both how to run Ansible from a Windows host, and how to integrate Windows hosts with Ansible for automation, including the authentication mechanisms, encryption, and even the basics of Windows-specific playbooks.
+通过以上内容，我们结束了对 Windows 自动化与 Ansible 的探讨——只要您记得使用正确的 Windows 原生模块，您就能像对待任何给定的 Linux 主机一样轻松地将本书其余部分应用于 Windows 主机。
 
-You have learned that Ansible can run from a recent build of Windows that supports WSL, and how to achieve this. You have also learned how to set up Windows hosts for Ansible control and how to secure this with Kerberos authentication and encryption. You also learned how to set up and use the new and experimental support for SSH communication by Ansible with Windows hosts. Finally, you learned the basics of authoring Windows playbooks, including finding the correct modules for use with Windows hosts, escaping special characters, creating directories and copy files for the host, installing packages, and even running raw shell commands on the Windows host with Ansible. This is a sound foundation on which you will be able to build out the Windows playbooks needed to manage your own estate of Windows hosts.
+# 总结
 
-In the next chapter, we will cover the effective management of Ansible in the enterprise with AWX.
+Ansible 处理 Windows 主机与 Linux（及其他 Unix）主机同样有效。本章我们介绍了如何从 Windows 主机运行 Ansible，以及如何将 Windows 主机与 Ansible 集成以实现自动化，包括认证机制、加密，甚至 Windows 特定 playbook 的基础知识。
 
-# Questions
+你已经了解到，Ansible 可以在支持 WSL 的最新版 Windows 上运行，并学会了如何实现这一点。你还学会了如何为 Ansible 控制设置 Windows 主机，以及如何通过 Kerberos 认证和加密来确保安全。你也学会了如何设置和使用 Ansible 与 Windows 主机间的新实验性 SSH 通信支持。最后，你学习了编写 Windows playbook 的基础知识，包括找到适用于 Windows 主机的正确模块、转义特殊字符、为主机创建目录和复制文件、安装软件包，甚至使用 Ansible 在 Windows 主机上运行原始 shell 命令。这是一个坚实的基础，你可以在此基础上构建出管理自己 Windows 主机群所需的 Windows playbook。
 
-1.  Ansible can communicate with Windows hosts using:
+下一章我们将介绍如何在企业中通过 AWX 有效管理 Ansible。
+
+# 问题
+
+1.  Ansible 可以通过以下方式与 Windows 主机通信：
 
     a) SSH
 
     b) WinRM
 
-    c) Both of the above
+    c) 两者皆是
 
-2.  Ansible can reliably be run from Windows:
+1.  Ansible 可以可靠地在 Windows 上运行：
 
-    a) Natively
+    a) 原生地
 
-    b) Using Python for Windows
+    b) 使用 Python for Windows
 
-    c) Through Cygwin
+    c) 通过 Cygwin
 
-    d) Through WSL or WSL2
+    d) 通过 WSL 或 WSL2
 
-3.  The `ansible.builtin.file` module can be used to manipulate files on both Linux and Windows hosts:
-
-    a) True
-
-    b) False
-
-4.  Windows machines can have Ansible automation run on them with no initial setup:
+1.  `ansible.builtin.file`模块可用于在 Linux 和 Windows 主机上操作文件：
 
     a) True
 
     b) False
 
-5.  The package manager for Windows is called:
+1.  Windows 机器无需初始设置即可运行 Ansible 自动化：
+
+    a) True
+
+    b) False
+
+1.  Windows 的包管理器称为：
 
     a) Bournville
 
@@ -660,7 +640,7 @@ In the next chapter, we will cover the effective management of Ansible in the en
 
     d) RPM
 
-6.  Ansible modules for Windows run their commands by default using:
+1.  Windows 的 Ansible 模块默认通过以下方式运行命令：
 
     a) PowerShell
 
@@ -672,23 +652,23 @@ In the next chapter, we will cover the effective management of Ansible in the en
 
     e) Cygwin
 
-7.  You can run Windows commands directly even if a module with the functionality you need does not exist:
+1.  即使没有所需功能的模块，你也可以直接运行 Windows 命令：
 
     a) True
 
     b) False
 
-8.  When manipulating files and directories on Windows with Ansible, you should:
+1.  在使用 Ansible 操作 Windows 上的文件和目录时，你应该：
 
-    a) Use `\` for Windows path references, and `/` for files on the Linux host
+    a) 使用`\`表示 Windows 路径引用，使用`/`表示 Linux 主机上的文件
 
-    b) Use `/` for all paths
+    b) 对所有路径使用`/`
 
-9.  Special characters in Windows filenames should be escaped with:
+1.  Windows 文件名中的特殊字符应使用以下方式转义：
 
     a) `\`
 
-    b) ```
+    b) `` ` ``
 
 c）`"`
 
