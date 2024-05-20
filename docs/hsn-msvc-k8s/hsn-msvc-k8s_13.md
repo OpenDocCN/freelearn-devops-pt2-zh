@@ -605,22 +605,43 @@ apiVersion: config.istio.io/v1alpha2
        source: source.workload.name | "unknown"
        destination: destination.workload.name | "unknown"
        message: '"counting requests..."'
-     monitored_resource_type: '"UNSPECIFIED"'```
+     monitored_resource_type: '"UNSPECIFIED"'
+```
 
 现在，我们可以配置一个 Prometheus 处理器来接收指标。Prometheus 是一个编译适配器（它是 Mixer 的一部分），因此我们可以在规范中直接使用它。`spec | params | metrics` 部分包含一种 `COUNTER`，一个 Prometheus 指标名称（`request_count`），以及最重要的，我们刚刚定义的实例名称，它是指标的来源：
 
 ```
-
-Now, we can configure a Prometheus handler to receive the metrics. Prometheus is a compiled adapter (which is part of Mixer), so we can just use it in the spec. The `spec | params | metrics` section has a kind of `COUNTER`, a Prometheus metric name (`request_count`), and, most importantly, the instance name that we just defined, which is the source of the metrics:
-
+apiVersion: config.istio.io/v1alpha2
+ kind: handler
+ metadata:
+   name: request-count-handler
+   namespace: istio-system
+ spec:
+   compiledAdapter: prometheus
+   params:
+     metrics:
+     - name: request_count # Prometheus metric name
+       instance_name: request-count.instance.istio-system # Mixer instance name (fully-qualified)
+       kind: COUNTER
+       label_names:
+       - reporter
+       - source
+       - destination
+       - message
 ```
 
 最后，我们用一条规则将所有内容串联起来，如下所示：
 
 ```
-
-Finally, we tie it all together with a rule, as follows:
-
+apiVersion: config.istio.io/v1alpha2
+ kind: rule
+ metadata:
+   name: prom-request-counter
+   namespace: istio-system
+ spec:
+   actions:
+   - handler: request-count-handler
+     instances: [ request-count ]
 ```
 
 好的，Istio 确实非常强大。但有没有一些情况下你不应该使用 Istio 呢？
@@ -654,58 +675,70 @@ Istio 提供了大量价值。然而，这些价值并非没有代价。Istio �
 如您所记，在第六章，*在 Kubernetes 上保护微服务*中，我们创建了 `link-manager` 服务与 `social-graph-manager` 服务之间的相互秘密：
 
 ```
-
-Okay, so Istio is amazingly powerful. But are there any situations where you shouldn't use Istio?
-
-# When should you avoid Istio?
-
-Istio provides a lot of value. However, this value is not without a cost. The intrusive nature of Istio and its complexity have some significant downsides. You should consider these downsides before you adopt Istio:
-
-*   Additional concepts and management systems on top of the already complex Kubernetes make the learning curve very steep.
-*   Troubleshooting configuration issues is challenging.
-*   Integration with other projects might be missing or partial (for example, NATS and Telepresence).
-*   The proxies add latency and consume CPU and memory resources.
-
-If you're just starting with Kubernetes, I recommend waiting until you get the hang of it before you even consider using Istio.
-
-Now that we understand what Istio is all about, let's explore how Delinkcious can benefit from Istio.
-
-# Delinkcious on Istio
-
-With Istio, Delinkcious can potentially shed a lot of extra baggage. So, why is it a good idea to move this functionality from Delinkcious services or Go kit middleware to Istio?
-
-Well, the reason is that this functionality is often unrelated to the application domain. We invested a lot of work to carefully separate concerns and isolate the Delinkcious domain from the way they are deployed and managed. However, as long as all of those concerns are addressed by the microservices themselves, we will need to make changes to the code and rebuild them every time we want to make an operational change. Even if a lot of this is data-driven, it can make it difficult to troubleshoot and debug issues because, when a failure happens, it's not always easy to determine whether it was due to a bug in the domain code or the operational code.
-
-Let's take a look at some specific examples where Istio can simplify Delinkcious.
-
-# Removing mutual authentication between services
-
-As you may recall, in [Chapter 6](f7718dfe-8c96-495b-9089-36b9bbced4c8.xhtml), *Securing Microservices on Kubernetes*, we created a mutual secret between the `link-manager` service and the `social-graph-manager` service:
-
+$ kubectl get secret | grep mutual
+link-mutual-auth             Opaque          1      9d
+ social-graph-mutual-auth    Opaque          1      5d19h
 ```
 
 这需要大量的协调和明确的工作来编码秘密，然后将秘密挂载到容器中：
 
 ```
-
-It required a lot of coordination and explicit work to encode the secrets, and then mount the secrets into the containers:
-
+    spec:
+       containers:
+       - name: link-manager
+         image: g1g1/delinkcious-link:0.3
+         imagePullPolicy: Always
+         ports:
+         - containerPort: 8080
+         envFrom:
+         - configMapRef:
+             name: link-manager-config
+         volumeMounts:
+         - name: mutual-auth
+           mountPath: /etc/delinkcious
+           readOnly: true
+       volumes:
+       - name: mutual-auth
+         secret:
+           secretName: link-mutual-auth
 ```
 
 然后，链接管理器必须通过我们实现的 `auth_util` 包获取秘密，并将其作为请求头注入：
 
 ```
+// encodeHTTPGenericRequest is a transport/http.EncodeRequestFunc that
+ // JSON-encodes any request to the request body. Primarily useful in a client.
+ func encodeHTTPGenericRequest(_ context.Context, r *http.Request, request interface{}) error {
+     var buf bytes.Buffer
+     if err := json.NewEncoder(&buf).Encode(request); err != nil {
+         return err
+     }
+     r.Body = ioutil.NopCloser(&buf)
 
-Then, the link manager had to get the secret through the `auth_util` package we had to implement, and inject it as a header to the request:
+     if os.Getenv("DELINKCIOUS_MUTUAL_AUTH") != "false" {
+         token := auth_util.GetToken(SERVICE_NAME)
+         r.Header["Delinkcious-Caller-Token"] = []string{token}
+     }
 
+     return nil
+ }
 ```
 
 最后，社交图谱管理器必须意识到这一方案，并明确检查调用者是否被允许：
 
 ```
-
-Finally, the social graph manager has to be aware of this scheme and explicitly check whether the caller is allowed:
-
+func decodeGetFollowersRequest(_ context.Context, r *http.Request) (interface{}, error){ 
+    if os.Getenv("DELINKCIOUS_MUTUAL_AUTH") != "false" { 
+        token := r.Header["Delinkcious-Caller-Token"] 
+        if len(token) == 0 || token[0] == "" { 
+            return nil, errors.New("Missing caller token") 
+        }
+        if !auth_util.HasCaller("link-manager", token[0]) {
+         return nil, errors.New("Unauthorized caller")
+        }
+    }
+ ...
+}
 ```
 
 这涉及到大量与服务本身无关的工作。想象一下，管理数百个相互作用的微服务中的数千种方法。这种方法繁琐、易错，并且每当增加或删除交互时，都需要对两个服务进行代码更改。
@@ -713,19 +746,32 @@ Finally, the social graph manager has to be aware of this scheme and explicitly 
 使用 Istio，我们可以完全将其外部化为一个角色和一个角色绑定。以下是一个允许您调用`/following`端点的 GET 方法的角色：
 
 ```
-
-That's a lot of work that has nothing to do with the service itself. Imagine managing access to hundreds of interacting microservices with thousands of methods. This approach is cumbersome, error-prone, and requires code changes being made to two services whenever you add or remove an interaction.
-
-With Istio, we can externalize this completely as a role and a role binding. Here is a role that allows you to call the GET method of the `/following` endpoint:
-
+apiVersion: "rbac.istio.io/v1alpha1"
+ kind: ServiceRole
+ metadata:
+   name: get-following
+   namespace: default
+ spec:
+   rules:
+   - services: ["social-graph.default.svc.cluster.local"]
+     paths: ["/following"]
+     methods: ["GET"]
 ```
 
 为了仅允许链接服务调用该方法，我们可以将角色绑定到`link-manager`服务帐户作为主体用户：
 
 ```
-
-In order to allow only the link service to call the method, we can bind the role to the `link-manager` service account as the subject user:
-
+apiVersion: "rbac.istio.io/v1alpha1"
+ kind: ServiceRoleBinding
+ metadata:
+   name: get-following
+   namespace: default
+ spec:
+   subjects:
+   - user: "cluster.local/ns/default/sa/link-manager"
+   roleRef:
+     kind: ServiceRole
+     name: "get-following"
 ```
 
 如果稍后我们需要允许其他服务调用`/following`端点，我们可以向此角色绑定添加更多主体。社交服务本身不需要知道哪些服务被允许调用其方法。调用服务不需要明确提供任何凭据。服务网格会处理所有这些。
@@ -739,17 +785,21 @@ Istio 真正能帮助 Delinkcious 的另一个领域是金丝雀部署。
 `link-manager`服务在两个部署前均匀地分配了负载，实现了我们目标的 90/10 分割：
 
 ```
+$ kubectl scale --replicas=9 deployment/green-link-manager
+ deployment.extensions/green-link-manager scaled
 
-If, later, we need to allow other services to call the `/following` endpoint, we can add more subjects to this role binding. The social service itself doesn't need to know what service is allowed to call its methods. The calling services don't need to provide any credentials explicitly. The service mesh takes care of all that.
-
-Another area where Istio can really help Delinkcious is with canary deployments.
-
-# Utilizing better canary deployments
-
-In [Chapter 11](ba776b0b-35e6-4fbd-9450-78b155daa743.xhtml), *Deploying Microservices*, we used Kubernetes deployments and services to do canary deployments. In order to divert 10% of the traffic to a canary version, we scaled the current version to nine replicas and created a canary deployment, with one replica for the new version. We used the same labels (`svc: link` and `app: manager`) for both deployments.
-
-The `link-manager` service in front of both deployments distributed the load evenly between all the pods, creating the 90/10 split we were aiming for:
-
+ $ kubectl get po -l svc=link,app=manager
+ NAME                                 READY  STATUS    RESTARTS   AGE
+ green-link-manager-5874c6cd4f-2ldfn   1/1   Running   10         15h
+ green-link-manager-5874c6cd4f-9csxz   1/1   Running   0          52s
+ green-link-manager-5874c6cd4f-c5rqn   1/1   Running   0          52s
+ green-link-manager-5874c6cd4f-mvm5v   1/1   Running   10         15h
+ green-link-manager-5874c6cd4f-qn4zj   1/1   Running   0          52s
+ green-link-manager-5874c6cd4f-r2jxf   1/1   Running   0          52s
+ green-link-manager-5874c6cd4f-rtwsj   1/1   Running   0          52s
+ green-link-manager-5874c6cd4f-sw27r   1/1   Running   0          52s
+ green-link-manager-5874c6cd4f-vcj9s   1/1   Running   10         15h
+ yellow-link-manager-67847d6b85-n97b5  1/1   Running   4          6m20s
 ```
 
 这虽然可行，但它将金丝雀部署与扩展部署耦合在一起。这可能会很昂贵，特别是如果您需要运行金丝雀部署一段时间直到您确信它没问题。理想情况下，您不应该需要为了将一定百分比的流量转向新版本而创建更多的 pod。
@@ -757,11 +807,23 @@ The `link-manager` service in front of both deployments distributed the load eve
 Istio 的子集概念的流量整形能力完美地解决了这一用例。以下虚拟服务将流量按 90/10 的比例分配给名为`v0.5`的子集和另一个名为`canary`的子集：
 
 ```
-
-This works, but it couples canary deployments with scaling deployments. This can be expensive, especially if you need to run the canary deployment for a while until you are confident that it is okay. Ideally, you shouldn't need to create more pods just to divert a certain percentage of your traffic to a new version.
-
-The traffic shaping capabilities with the subset concepts of Istio address this use case perfectly. The following virtual service splits the traffic into a ratio of 90/10 between a subset called `v0.5` and another subset called `canary`:
-
+apiVersion: networking.istio.io/v1alpha3
+ kind: VirtualService
+ metadata:
+   name: social-graph-manager
+ spec:
+   hosts:
+     - social-graph-manager
+   http:
+   - route:
+     - destination:
+         host: social-graph-manager
+         subset: v0.5
+       weight: 90
+     - destination:
+         host: social-graph-manager
+         subset: canary
+       weight: 10
 ```
 
 使用 Istio 的虚拟服务和子集进行金丝雀部署对 Delinkcious 非常有利。Istio 还能帮助进行日志记录和错误报告。
@@ -791,33 +853,17 @@ The traffic shaping capabilities with the subset concepts of Istio address this 
 我在将 Istio 部署到 Delinkcious 集群时发现的一个限制是，NATS 与 Istio 不兼容，因为它需要直接连接，并且在 Envoy 代理劫持通信时会中断。解决方案是阻止 Istio 注入边车容器，并接受 NATS 将不会被管理。将`NatsCluster` CRD 添加到 Pod 规范的以下注释中为我们完成了这项工作：`sidecar.istio.io/inject: "false"`:
 
 ```
-
-Doing canary deployments with Istio's virtual services and subsets is great for Delinkcious. Istio can help with logging and error reporting, too.
-
-# Automatic logging and error reporting
-
-When running Delinkcious on GKE with the Istio add-on, you get automatic integration with Stackdriver, which is a one-stop shop for monitoring, including metrics, centralized logging, error reporting, and distributed tracing. Here is the Stackdriver log viewer for when you are searching for the `link-manager` logs:
-
-![](img/6099c1f0-231e-4ae7-ac23-1e811b7183a1.png)
-
-Alternatively, you can filter by service name through the drop-down list. Here is what it looks like when specifying the api-gateway:
-
-![](img/1e2866bd-d11d-4642-a65f-be8ee5b65c24.png)
-
-Sometimes, the error reporting view is what you need:
-
-![](img/0f5d208d-1511-4be7-ae49-cf0d143da468.png)
-
-Then, you can drill down into any error and get a lot of additional information that will help you understand what went wrong and how to fix it:
-
-![](img/87161def-792a-4732-88dc-266613cd7ba3.png)
-
-While Istio provides a lot of value and, in the case of Stackdriver, you benefit from automatic setup too, it is not always smooth riding – it has some limitations and rough edges.
-
-# Accommodating NATS
-
-One of the limitations I discovered when deploying Istio into the Delinkcious cluster is that NATS doesn't work with Istio because it requires direct connections and it breaks when the Envoy proxy hijacks the communication. The solution is to prevent Istio from injecting the sidecar container and accepting that NATS will not be managed. Adding the`NatsCluster` CRD to the following annotation to the pod spec does the work for us: `sidecar.istio.io/inject: "false"`:
-
+apiVersion: nats.io/v1alpha2
+ kind: NatsCluster
+ metadata:
+   name: nats-cluster
+ spec:
+   pod:
+     # Disable istio on nats pods
+     annotations:
+       sidecar.istio.io/inject: "false"
+   size: 1
+   version: "1.4.0"
 ```
 
 前面的代码是带有注释的完整`NatsCluster`资源定义。
@@ -827,29 +873,123 @@ One of the limitations I discovered when deploying Istio into the Delinkcious cl
 Istio 在集群中部署了大量内容，因此让我们回顾其中一些。值得庆幸的是，Istio 控制平面被隔离在其专有的`istio-system`命名空间中，但 CRD 始终是集群范围的，而 Istio 在这些方面并不吝啬：
 
 ```
+$ kubectl get crd -l k8s-app=istio -o custom-columns="NAME:.metadata.name"
 
-The preceding code is the complete `NatsCluster` resource definition with the annotation in place.
-
-# Examining the Istio footprint
-
-Istio deploys a lot of stuff into the cluster, so let's review some of it. Mercifully, the Istio control plane is isolated in its own `istio-system` namespace, but CRDs are always cluster-wide and Istio doesn't skimp on those:
-
+ NAME
+ adapters.config.istio.io
+ apikeys.config.istio.io
+ attributemanifests.config.istio.io
+ authorizations.config.istio.io
+ bypasses.config.istio.io
+ checknothings.config.istio.io
+ circonuses.config.istio.io
+ deniers.config.istio.io
+ destinationrules.networking.istio.io
+ edges.config.istio.io
+ envoyfilters.networking.istio.io
+ fluentds.config.istio.io
+ gateways.networking.istio.io
+ handlers.config.istio.io
+ httpapispecbindings.config.istio.io
+ httpapispecs.config.istio.io
+ instances.config.istio.io
+ kubernetesenvs.config.istio.io
+ kuberneteses.config.istio.io
+ listcheckers.config.istio.io
+ listentries.config.istio.io
+ logentries.config.istio.io
+ memquotas.config.istio.io
+ metrics.config.istio.io
+ noops.config.istio.io
+ opas.config.istio.io
+ prometheuses.config.istio.io
+ quotas.config.istio.io
+ quotaspecbindings.config.istio.io
+ quotaspecs.config.istio.io
+ rbacconfigs.rbac.istio.io
+ rbacs.config.istio.io
+ redisquotas.config.istio.io
+ reportnothings.config.istio.io
+ rules.config.istio.io
+ servicecontrolreports.config.istio.io
+ servicecontrols.config.istio.io
+ serviceentries.networking.istio.io
+ servicerolebindings.rbac.istio.io
+ serviceroles.rbac.istio.io
+ signalfxs.config.istio.io
+ solarwindses.config.istio.io
+ stackdrivers.config.istio.io
+ statsds.config.istio.io
+ stdios.config.istio.io
+ templates.config.istio.io
+ tracespans.config.istio.io
+ virtualservices.networking.istio.io
 ```
 
 除了所有那些 CRD 之外，Istio 将其所有组件安装到 Istio 命名空间中：
 
 ```
-
-In addition to all of those CRDs, Istio installs all its components into the Istio namespace:
-
+$ kubectl -n istio-system get all -o name
+ pod/istio-citadel-6995f7bd9-7c7x9
+ pod/istio-egressgateway-57b96d87bd-cnc2s
+ pod/istio-galley-6d7dd498f6-b29sk
+ pod/istio-ingressgateway-ddd557db7-glwm2
+ pod/istio-pilot-5765d76b8c-d9hq7
+ pod/istio-policy-5b47b88467-x7pqf
+ pod/istio-sidecar-injector-6b9fbbfcf6-fhc4k
+ pod/istio-telemetry-65dcd9ff85-bkjtd
+ pod/promsd-7b49dcb96c-wrfs8
+ service/istio-citadel
+ service/istio-egressgateway
+ service/istio-galley
+ service/istio-ingressgateway
+ service/istio-pilot
+ service/istio-policy
+ service/istio-sidecar-injector
+ service/istio-telemetry
+ service/promsd
+ deployment.apps/istio-citadel
+ deployment.apps/istio-egressgateway
+ deployment.apps/istio-galley
+ deployment.apps/istio-ingressgateway
+ deployment.apps/istio-pilot
+ deployment.apps/istio-policy
+ deployment.apps/istio-sidecar-injector
+ deployment.apps/istio-telemetry
+ deployment.apps/promsd
+ replicaset.apps/istio-citadel-6995f7bd9
+ replicaset.apps/istio-egressgateway-57b96d87bd
+ replicaset.apps/istio-galley-6d7dd498f6
+ replicaset.apps/istio-ingressgateway-ddd557db7
+ replicaset.apps/istio-pilot-5765d76b8c
+ replicaset.apps/istio-policy-5b47b88467
+ replicaset.apps/istio-sidecar-injector-6b9fbbfcf6
+ replicaset.apps/istio-telemetry-65dcd9ff85
+ replicaset.apps/promsd-7b49dcb96c
+ horizontalpodautoscaler.autoscaling/istio-egressgateway
+ horizontalpodautoscaler.autoscaling/istio-ingressgateway
+ horizontalpodautoscaler.autoscaling/istio-pilot
+ horizontalpodautoscaler.autoscaling/istio-policy
+ horizontalpodautoscaler.autoscaling/istio-telemetry
 ```
 
 最后，当然，Istio 将其边车代理安装到每个 Pod 中（除了 Nats，我们在那里禁用了它）。如您所见，默认命名空间中的每个 Pod 都有两个容器（在`READY`列下显示 2/2）。一个容器负责工作，另一个则是 Istio 代理边车容器：
 
 ```
-
-Finally, Istio, of course, installs its sidecar proxies into each pod (except Nats, where we disabled it). As you can see, each pod in the default namespace has two containers (2/2 under the `READY` column). One container does the work and the other is the Istio proxy sidecar container:
-
+$ kubectl get po
+ NAME READY STATUS RESTARTS AGE
+ api-gateway-5497d95c74-zlgnm 2/2 Running 0 4d11h
+ link-db-7445d6cbf7-wdfsb 2/2 Running 0 4d22h
+ link-manager-54968ff8cf-vtpqr 2/2 Running 1 4d13h
+ nats-cluster-1 1/1 Running 0 4d20h
+ nats-operator-55dfdc6868-2b57q 2/2 Running 3 4d22h
+ news-manager-7f447f5c9f-n2v2v 2/2 Running 1 4d20h
+ news-manager-redis-0 2/2 Running 0 4d22h
+ social-graph-db-7d8ffb877b-nrzxh 2/2 Running 0 4d11h
+ social-graph-manager-59b464456f-48lrn 2/2 Running 1 4d11h
+ trouble-64554479d-rjszv 2/2 Running 0 4d17h
+ user-db-0 2/2 Running 0 4d22h
+ user-manager-699458447-9h64n 2/2 Running 2 4d22h
 ```
 
 如果您认为 Istio 过于庞大和复杂，您可能仍希望通过追求替代方案来享受服务网格的好处。
