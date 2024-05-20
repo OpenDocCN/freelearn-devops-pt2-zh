@@ -557,7 +557,59 @@ kubectl api-versions
 
 您应该看到类似于以下内容的响应：
 
-![图 4.31：已启用的 API 资源版本列表（图像/B14870_04_31.jpg）图 4.31：已启用的 API 资源版本列表在此截图中，您可能会注意到一件有趣的事情，即某些 API 资源（例如`autoscaling`）具有多个版本；例如，对于`autoscaling`，有`v1beta1`、`v1beta2`和`v1`。那么，它们之间有什么区别，应该使用哪个版本呢？让我们再次考虑`autoscaling`的例子。此功能允许您根据特定指标扩展副本控制器（例如 Deployments、ReplicaSets 或 StatefulSets）中的 Pod 数量。例如，如果平均 CPU 负载超过 50％，则可以将 Pod 的数量从 3 个扩展到 10 个。在这种情况下，版本之间的差异是功能支持。自动缩放的稳定版本是`autoscaling/v1`，它仅支持根据平均 CPU 指标缩放 pod 的数量。自动缩放的 beta 版本是`autoscaling/v2beta1`，支持根据 CPU 和内存利用率进行缩放。beta 版本中的新版本是`autoscaling/v2beta2`，支持根据自定义指标以及 CPU 和内存进行缩放 pod 的数量。然而，由于 beta 版本仍不适用于业务关键场景，当您创建自动缩放资源时，它将使用`autoscaling/v1`版本。但是，您仍然可以通过在 YAML 文件中指定 beta 版本来使用其他版本以使用附加功能，直到所需功能添加到稳定版本为止。所有这些信息可能看起来令人不知所措。然而，Kubernetes 提供了访问所有您需要导航 API 资源的信息的方法。您可以使用 kubectl 访问 Kubernetes 文档，并获取有关各种 API 资源的必要信息。让我们看看在以下练习中如何运作。## 练习 4.02：获取有关 API 资源的信息假设我们想要创建一个 ingress 对象。在这个练习中，您不需要太多了解 ingress；我们将在接下来的章节中学习它。我们将使用 kubectl 获取有关 Ingress API 资源的更多信息，确定可用的 API 版本，并找出它属于哪些组。如果您还记得之前的部分，我们需要这些信息来填写 YAML 清单的`apiVersion`字段。然后，我们还需要获取清单文件的其他字段所需的信息：1.  首先，让我们询问我们的集群是否有与`ingresses`关键字匹配的所有可用 API 资源：```    kubectl api-resources | grep ingresses    ```这个命令将通过`ingresses`关键字过滤所有 API 资源的列表。您应该得到以下输出：```    ingresses     ing     extensions            true         Ingress    ingresses     ing     networking.k8s.io     true         Ingress    ```我们可以看到我们在两个不同的 API 组上有 ingress 资源——`extensions`和`networking.k8s.io`。1.  我们还看到了如何获取属于特定组的 API 资源。让我们检查一下我们在上一步中看到的 API 组：```    kubectl api-resources --api-group="extensions"    ```您应该得到以下输出：```    NAME       SHORTNAMES     APIGROUP     NAMESPACED      KIND    ingresses  ing            extensions   true            Ingress    ```现在，让我们检查另一个组：```    kubectl api-resources --api-group="networking.k8s.io"    ```您应该看到以下输出：![图 4.32：列出 networking.k8s.io API 组中的资源](img/B14870_04_32.jpg)
+![图 4.31：已启用的 API 资源版本列表](img/B14870_04_31.jpg)
+
+图 4.31：已启用的 API 资源版本列表
+
+在此截图中，您可能会注意到一件有趣的事情，即某些 API 资源（例如`autoscaling`）具有多个版本；例如，对于`autoscaling`，有`v1beta1`、`v1beta2`和`v1`。那么，它们之间有什么区别，应该使用哪个版本呢？
+
+让我们再次考虑`autoscaling`的例子。此功能允许您根据特定指标扩展副本控制器（例如 Deployments、ReplicaSets 或 StatefulSets）中的 Pod 数量。例如，如果平均 CPU 负载超过 50％，则可以将 Pod 的数量从 3 个扩展到 10 个。
+
+在这种情况下，版本之间的差异是功能支持。自动缩放的稳定版本是`autoscaling/v1`，它仅支持根据平均 CPU 指标缩放 pod 的数量。自动缩放的 beta 版本是`autoscaling/v2beta1`，支持根据 CPU 和内存利用率进行缩放。beta 版本中的新版本是`autoscaling/v2beta2`，支持根据自定义指标以及 CPU 和内存进行缩放 pod 的数量。然而，由于 beta 版本仍不适用于业务关键场景，当您创建自动缩放资源时，它将使用`autoscaling/v1`版本。但是，您仍然可以通过在 YAML 文件中指定 beta 版本来使用其他版本以使用附加功能，直到所需功能添加到稳定版本为止。
+
+所有这些信息可能看起来令人不知所措。然而，Kubernetes 提供了访问所有您需要导航 API 资源的信息的方法。您可以使用 kubectl 访问 Kubernetes 文档，并获取有关各种 API 资源的必要信息。让我们看看在以下练习中如何运作。
+
+## 练习 4.02：获取有关 API 资源的信息
+
+假设我们想要创建一个 ingress 对象。在这个练习中，您不需要太多了解 ingress；我们将在接下来的章节中学习它。我们将使用 kubectl 获取有关 Ingress API 资源的更多信息，确定可用的 API 版本，并找出它属于哪些组。如果您还记得之前的部分，我们需要这些信息来填写 YAML 清单的`apiVersion`字段。然后，我们还需要获取清单文件的其他字段所需的信息：
+
+1.  首先，让我们询问我们的集群是否有与`ingresses`关键字匹配的所有可用 API 资源：
+
+```
+    kubectl api-resources | grep ingresses    
+```
+
+这个命令将通过`ingresses`关键字过滤所有 API 资源的列表。您应该得到以下输出：
+
+```
+    ingresses     ing     extensions            true         Ingress
+    ingresses     ing     networking.k8s.io     true         Ingress    
+```
+
+我们可以看到我们在两个不同的 API 组上有 ingress 资源——`extensions`和`networking.k8s.io`。
+
+1.  我们还看到了如何获取属于特定组的 API 资源。让我们检查一下我们在上一步中看到的 API 组：
+
+```
+    kubectl api-resources --api-group="extensions"    
+```
+
+您应该得到以下输出：
+
+```
+    NAME       SHORTNAMES     APIGROUP     NAMESPACED      KIND
+    ingresses  ing            extensions   true            Ingress    
+```
+
+现在，让我们检查另一个组：
+
+```
+    kubectl api-resources --api-group="networking.k8s.io"    
+```
+
+您应该看到以下输出：
+
+![图 4.32：列出 networking.k8s.io API 组中的资源](img/B14870_04_32.jpg)
 
 图 4.32：列出 networking.k8s.io API 组中的资源
 
