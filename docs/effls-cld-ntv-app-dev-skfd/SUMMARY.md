@@ -5,7 +5,7 @@
 +   [第二章：使用 Kubernetes 开发云原生应用程序-开发者的噩梦](effls-cld-ntv-app-dev-skfd_03.md)
 +   [第三章：Skaffold ——轻松开发云原生 Kubernetes 应用程序](effls-cld-ntv-app-dev-skfd_04.md)
 +   [第二部分：开始使用 Skaffold](effls-cld-ntv-app-dev-skfd_05.md)
-+   [第四章：[*第四章*]：理解 Skaffold 的功能和架构](effls-cld-ntv-app-dev-skfd_06.md)
++   [第四章：理解 Skaffold 的功能和架构](effls-cld-ntv-app-dev-skfd_06.md)
 +   [第五章：安装 Skaffold 并揭秘其流水线阶段](effls-cld-ntv-app-dev-skfd_07.md)
 +   [第六章：使用 Skaffold 容器映像构建器和部署器](effls-cld-ntv-app-dev-skfd_08.md)
 +   [第三部分：使用 Skaffold 构建和部署云原生 Spring Boot 应用程序](effls-cld-ntv-app-dev-skfd_09.md)

@@ -1,4 +1,4 @@
-# Pod、Service、Replication Controller 和 Label
+# 第二章：Pod、Service、Replication Controller 和 Label
 
 本章将介绍核心 Kubernetes 构件，即**pod**、**service**、**replication controller**、**replica set**和**label**。将包括几个简单的应用示例，以演示每个构件。本章还将介绍集群的基本操作。最后，将通过几个示例介绍**健康检查**和**调度**。
 

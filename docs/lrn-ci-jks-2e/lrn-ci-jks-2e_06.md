@@ -1,4 +1,4 @@
-# 安装 SonarQube 和 Artifactory
+# 第六章：安装 SonarQube 和 Artifactory
 
 在本章中，我们将学习 SonarQube，这是一个流行的开源工具，用于静态代码分析。我们还将学习 Artifactory，这是另一个流行的开源工具，用于版本控制二进制文件。在本章中，您将学习以下主题：
 

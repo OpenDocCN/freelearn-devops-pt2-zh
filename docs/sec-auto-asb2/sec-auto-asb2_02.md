@@ -1,4 +1,4 @@
-# Ansible Tower、Jenkins 和其他自动化工具
+# 第二章：Ansible Tower、Jenkins 和其他自动化工具
 
 Ansible 很强大。一旦你意识到写下配置和提供系统的方式的无数好处，你就再也不想回去了。事实上，你可能想要继续为复杂的云环境编写 playbooks，为数据科学家部署堆栈。经验法则是，如果你可以编写脚本，你就可以为其创建一个 playbook。
 

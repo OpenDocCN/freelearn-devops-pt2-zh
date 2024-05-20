@@ -1,4 +1,4 @@
-# 使用 OCP、CoreOS 和 Tectonic 扩展 Kubernetes
+# 第十一章：使用 OCP、CoreOS 和 Tectonic 扩展 Kubernetes
 
 本章的前半部分将介绍开放标准如何鼓励多样化的容器实现生态系统。我们将查看**开放容器倡议**（**OCI**）及其提供开放容器规范的使命。本章的后半部分将介绍 CoreOS 及其作为主机操作系统的优势，包括性能和对各种容器实现的支持。此外，我们还将简要介绍 CoreOS 提供的 Tectonic 企业版。
 

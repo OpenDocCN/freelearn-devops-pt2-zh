@@ -10,7 +10,7 @@
 +   [第六章：解锁 Jinja2 模板的力量](ms-asb-4e_08.md)
 +   [第七章：控制任务条件](ms-asb-4e_09.md)
 +   [第八章：使用角色组合可重用的 Ansible 内容](ms-asb-4e_10.md)
-+   [*第九章*：故障排除 Ansible](ms-asb-4e_11.md)
++   [第九章：故障排除 Ansible](ms-asb-4e_11.md)
 +   [第十章：扩展 Ansible](ms-asb-4e_12.md)
 +   [第三部分：使用 Ansible 进行编排](ms-asb-4e_13.md)
 +   [第十一章：通过滚动部署最小化停机时间](ms-asb-4e_14.md)
