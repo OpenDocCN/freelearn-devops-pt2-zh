@@ -1,3 +1,4 @@
++   [Ansible 学习手册](README.md)
 +   [前言](lrn-asb_00.md)
 +   [第一章：Ansible 简介](lrn-asb_01.md)
 +   [第二章：安装和运行 Ansible](lrn-asb_02.md)

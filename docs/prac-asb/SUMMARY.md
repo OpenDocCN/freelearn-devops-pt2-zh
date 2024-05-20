@@ -1,3 +1,4 @@
++   [Ansible 2 实战](README.md)
 +   [前言](prac-asb_00.md)
 +   [第一部分：学习 Ansible 的基本原理](prac-asb_01.md)
 +   [第一章：开始使用 Ansible](prac-asb_02.md)

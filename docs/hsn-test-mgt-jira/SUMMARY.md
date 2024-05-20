@@ -1,3 +1,4 @@
++   [JIRA 测试管理实用手册](README.md)
 +   [前言](hsn-test-mgt-jira_00.md)
 +   [第一部分：软件质量保证简介](hsn-test-mgt-jira_01.md)
 +   [第一章：软件质量保证概述](hsn-test-mgt-jira_02.md)

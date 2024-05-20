@@ -1,3 +1,4 @@
++   [Kubernetes 研讨会](README.md)
 +   [前言](k8s-ws_00.md)
 +   [第一章： Kubernetes 和容器简介](k8s-ws_01.md)
 +   [第二章： Kubernetes 概述](k8s-ws_02.md)

@@ -1,3 +1,4 @@
++   [Ansible 快速启动指南](README.md)
 +   [前言](asb-qk-st-gd_0.md)
 +   [第一章：什么是 Ansible？](asb-qk-st-gd_1.md)
 +   [第二章：Ansible 设置和配置](asb-qk-st-gd_2.md)

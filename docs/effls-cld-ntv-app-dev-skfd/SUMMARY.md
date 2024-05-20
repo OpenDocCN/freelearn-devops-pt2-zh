@@ -1,3 +1,4 @@
++   [Skaffold：毫不费力的云原生应用开发指南](README.md)
 +   [前言](effls-cld-ntv-app-dev-skfd_00.md)
 +   [第一部分：Kubernetes 的噩梦 – Skaffold 来拯救](effls-cld-ntv-app-dev-skfd_01.md)
 +   [第一章：编码、构建、测试和重复 - 应用程序开发内部循环](effls-cld-ntv-app-dev-skfd_02.md)

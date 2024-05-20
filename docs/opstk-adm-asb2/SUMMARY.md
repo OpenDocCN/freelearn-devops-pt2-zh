@@ -1,3 +1,4 @@
++   [Ansible 2 OpenStack 管理手册](README.md)
 +   [前言](opstk-adm-asb2_00.md)
 +   [第一章：介绍 OpenStack](opstk-adm-asb2_01.md)
 +   [第二章：介绍 Ansible](opstk-adm-asb2_02.md)

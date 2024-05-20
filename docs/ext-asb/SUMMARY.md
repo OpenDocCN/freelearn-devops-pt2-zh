@@ -1,3 +1,4 @@
++   [Ansible 扩展手册](README.md)
 +   [前言](ext-asb_0.md)
 +   [第一章：使用 Ansible 入门](ext-asb_1.md)
 +   [第二章：了解 Ansible 模块](ext-asb_2.md)

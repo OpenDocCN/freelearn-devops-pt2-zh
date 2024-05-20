@@ -1,3 +1,4 @@
++   [网络自动化秘籍](README.md)
 +   [前言](net-auto-cb_00.md)
 +   [第一章：Ansible 的构建块](net-auto-cb_01.md)
 +   [第二章：使用 Ansible 管理 Cisco IOS 设备](net-auto-cb_02.md)

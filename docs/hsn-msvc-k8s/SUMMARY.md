@@ -1,3 +1,4 @@
++   [Kubernetes 微服务实用指南](README.md)
 +   [前言](hsn-msvc-k8s_00.md)
 +   [第一章：开发人员的 Kubernetes 简介](hsn-msvc-k8s_01.md)
 +   [第二章：开始使用微服务](hsn-msvc-k8s_02.md)

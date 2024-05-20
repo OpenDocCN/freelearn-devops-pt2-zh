@@ -1,3 +1,4 @@
++   [Kubernetes AWS 手册](README.md)
 +   [前言](k8s-aws_00.md)
 +   [第一章：谷歌的基础设施服务于我们其他人](k8s-aws_01.md)
 +   [第二章：启动你的引擎](k8s-aws_02.md)

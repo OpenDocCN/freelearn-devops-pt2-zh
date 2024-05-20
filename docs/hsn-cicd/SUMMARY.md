@@ -1,3 +1,4 @@
++   [持续集成和交付实用手册](README.md)
 +   [前言](hsn-cicd_00.md)
 +   [第一章：自动化测试的 CI/CD](hsn-cicd_01.md)
 +   [第二章：持续集成的基础知识](hsn-cicd_02.md)
